@@ -50,6 +50,9 @@ RUN set -ex; \
     chown -R www-data:www-data /var/www/html/src/cache /var/www/html/src/log /var/www/html/src/config; \
     chmod -R 775 /var/www/html/src/cache /var/www/html/src/log /var/www/html/src/config;
 
+# Ajouter la configuration pour ServerName
+RUN echo "ServerName cvtheque" >> /etc/apache2/apache2.conf
+
 RUN { \
         echo 'opcache.memory_consumption=128'; \
         echo 'opcache.interned_strings_buffer=8'; \
