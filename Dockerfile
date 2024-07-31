@@ -45,6 +45,7 @@ RUN set -ex; \
 COPY ./cvtheque /var/www/html
 
 RUN set -ex; \
+    mkdir -p /var/www/html/src/cache /var/www/html/src/log /var/www/html/src/config; \
     chown www-data:www-data /var/www/html; \
     chown -R www-data:www-data /var/www/html/src/cache /var/www/html/src/log /var/www/html/src/config; \
     chmod -R 775 /var/www/html/src/cache /var/www/html/src/log /var/www/html/src/config;
