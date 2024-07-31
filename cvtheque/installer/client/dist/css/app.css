@@ -1,0 +1,712 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/DatabaseConfigDialog.vue?vue&type=style&index=0&id=10db49f5&scoped=true&lang=scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+[data-v-10db49f5] .oxd-table th,[data-v-10db49f5] .oxd-table td {
+  padding: 0.1rem 0;
+}
+[data-v-10db49f5] .oxd-table tr,[data-v-10db49f5] .oxd-table tr:hover {
+  border: unset;
+  cursor: unset;
+  color: unset;
+  background-color: unset;
+}
+[data-v-10db49f5] .oxd-checkbox-wrapper span {
+  flex-shrink: 0;
+}
+[data-v-10db49f5] .oxd-checkbox-wrapper label {
+  font-weight: bold;
+}
+.orangehrm-database-config-dialog[data-v-10db49f5] {
+  font-size: 12px;
+}
+.orangehrm-database-config-dialog-title[data-v-10db49f5] {
+  font-weight: 700;
+}
+.orangehrm-database-config-dialog-content[data-v-10db49f5] {
+  padding-bottom: 1rem;
+}
+.orangehrm-database-config-dialog-table[data-v-10db49f5] {
+  margin-bottom: 2em;
+  display: table;
+  table-layout: fixed;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=443ef90c&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-443ef90c] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-443ef90c] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-443ef90c] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-443ef90c] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-443ef90c] {
+  padding: 1rem 0;
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/WelcomeScreen.vue?vue&type=style&index=1&id=443ef90c&lang=scss&scoped=true ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+[data-v-443ef90c] .oxd-radio-wrapper label {
+  font-weight: 700;
+  margin-left: -0.5rem;
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Notice.vue?vue&type=style&index=0&id=bf51ddf0&lang=scss&scoped=true ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.notice-title[data-v-bf51ddf0] {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=955de48e&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-955de48e] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-955de48e] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-955de48e] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-955de48e] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-955de48e] {
+  padding: 1rem 0;
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/DatabaseInfoScreen.vue?vue&type=style&index=1&id=955de48e&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-database-info-port[data-v-955de48e] {
+  width: 50%;
+}
+.orangehrm-database-info-error[data-v-955de48e] {
+  color: #eb0910;
+}
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/FlexTable.vue?vue&type=style&index=0&id=5cf4a4d5&scoped=true&lang=scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-flex-table[data-v-5cf4a4d5] {
+  margin-bottom: 0.75rem;
+}
+.orangehrm-flex-table-title[data-v-5cf4a4d5] {
+  font-weight: 700;
+  font-size: 16px;
+}
+.orangehrm-flex-table-value[data-v-5cf4a4d5] {
+  font-weight: 700;
+}
+.orangehrm-flex-table-value.--success[data-v-5cf4a4d5] {
+  color: #34bc40;
+}
+.orangehrm-flex-table-value.--warning[data-v-5cf4a4d5] {
+  color: #ffa62f;
+}
+.orangehrm-flex-table-value.--error[data-v-5cf4a4d5] {
+  color: #eb0910;
+}
+.orangehrm-flex-table-row[data-v-5cf4a4d5] {
+  display: flex;
+  width: 100%;
+  padding: 0.2rem 0;
+}
+.orangehrm-flex-table-content[data-v-5cf4a4d5] {
+  flex: 1;
+}
+.orangehrm-flex-table-divider[data-v-5cf4a4d5] {
+  border-top-color: #64728c;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=f761451e&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-f761451e] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-f761451e] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-f761451e] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-f761451e] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-f761451e] {
+  padding: 1rem 0;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=a51b40e2&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-a51b40e2] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-a51b40e2] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-a51b40e2] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-a51b40e2] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-a51b40e2] {
+  padding: 1rem 0;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=6e9a349f&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-6e9a349f] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-6e9a349f] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-6e9a349f] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-6e9a349f] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-6e9a349f] {
+  padding: 1rem 0;
+}
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/UpgraderCompleteScreen.vue?vue&type=style&index=1&id=6e9a349f&lang=scss&scoped=true ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-upgrader-complete[data-v-6e9a349f] {
+  padding: 0 1rem;
+  color: #64728c;
+}
+.orangehrm-upgrader-complete-button[data-v-6e9a349f] {
+  margin-right: auto;
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/InstallerTasks.vue?vue&type=style&index=0&id=3d3a7416&lang=scss&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-task-item[data-v-3d3a7416] {
+  width: 70%;
+  max-width: 320px;
+  display: flex;
+  padding: 0.5rem 0;
+  justify-content: space-between;
+  align-items: center;
+}
+.orangehrm-installer-task-item-name[data-v-3d3a7416] {
+  font-size: 16px;
+}
+.orangehrm-installer-task-item-name.--active[data-v-3d3a7416] {
+  font-weight: 700;
+}
+.orangehrm-installer-task-item-name.--error[data-v-3d3a7416] {
+  font-weight: 700;
+  color: #eb0910;
+}
+.orangehrm-installer-task-icon[data-v-3d3a7416] {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 16px;
+}
+.orangehrm-installer-task-icon.--done[data-v-3d3a7416] {
+  background-color: #76bc21;
+}
+.orangehrm-installer-task-icon.--pending[data-v-3d3a7416] {
+  background-color: #64728c;
+}
+.orangehrm-installer-task-icon.--error[data-v-3d3a7416] {
+  background-color: #eb0910;
+}
+[data-v-3d3a7416] .oxd-loading-spinner {
+  width: 10px;
+  height: 10px;
+}
+[data-v-3d3a7416] .oxd-icon {
+  color: #ffffff;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=181de1b4&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-181de1b4] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-181de1b4] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-181de1b4] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-181de1b4] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-181de1b4] {
+  padding: 1rem 0;
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/UpgradeScreen.vue?vue&type=style&index=1&id=181de1b4&scoped=true&lang=scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page-content.--center[data-v-181de1b4] {
+  text-align: center;
+}
+.orangehrm-installer-page-content.--progress[data-v-181de1b4] {
+  text-align: center;
+  font-weight: 700;
+  color: #76bc21;
+}
+.orangehrm-installer-page-content.--error[data-v-181de1b4] {
+  color: #eb0910;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=6912458d&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-6912458d] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-6912458d] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-6912458d] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-6912458d] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-6912458d] {
+  padding: 1rem 0;
+}
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/DatabaseConfigScreen.vue?vue&type=style&index=1&id=6912458d&lang=scss&scoped=true ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+[data-v-6912458d] .oxd-checkbox-wrapper span {
+  flex-shrink: 0;
+}
+[data-v-6912458d] .oxd-radio-wrapper label {
+  margin-left: -0.5rem;
+  margin-right: 1rem;
+}
+.orangehrm-database-info-row[data-v-6912458d] {
+  margin-top: 5px;
+  flex-direction: row;
+}
+.orangehrm-database-info-check[data-v-6912458d] {
+  display: flex;
+  align-items: center;
+}
+@media (min-width: 1000px) {
+.orangehrm-database-info-check[data-v-6912458d] {
+    grid-column: 3/full;
+}
+}
+.orangehrm-database-info-port[data-v-6912458d] {
+  width: 50%;
+  white-space: nowrap;
+}
+.orangehrm-database-info-error[data-v-6912458d] {
+  color: #eb0910;
+}
+@media (min-width: 1000px) {
+[data-v-6912458d] .orangehrm-database-info-user .oxd-label {
+    width: 70%;
+}
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=232fc311&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-232fc311] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-232fc311] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-232fc311] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-232fc311] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-232fc311] {
+  padding: 1rem 0;
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/AdminUserCreationScreen.vue?vue&type=style&index=1&id=232fc311&lang=scss&scoped=true ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-register-consent[data-v-232fc311] {
+  max-width: 50%;
+}
+.orangehrm-register-consent[data-v-232fc311] .oxd-checkbox-wrapper span {
+  flex-shrink: 0;
+}
+.orangehrm-register-notice[data-v-232fc311] {
+  display: flex;
+  color: #929baa;
+}
+.orangehrm-register-notice-icon[data-v-232fc311] {
+  color: inherit;
+  font-size: 16px;
+  margin-right: 0.5em;
+}
+.orangehrm-register-notice-text[data-v-232fc311] {
+  color: inherit;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=91cb61c0&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-91cb61c0] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-91cb61c0] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-91cb61c0] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-91cb61c0] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-91cb61c0] {
+  padding: 1rem 0;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=71ae73c4&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-71ae73c4] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-71ae73c4] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-71ae73c4] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-71ae73c4] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-71ae73c4] {
+  padding: 1rem 0;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=78298e25&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-78298e25] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-78298e25] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-78298e25] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-78298e25] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-78298e25] {
+  padding: 1rem 0;
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/ConfirmationScreen.vue?vue&type=style&index=1&id=78298e25&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.confirmation-text-header[data-v-78298e25] {
+  font-weight: 700;
+  font-size: 20px;
+}
+.confirmation-text-section[data-v-78298e25] {
+  font-weight: 700;
+}
+.confirmation-text-info[data-v-78298e25] {
+  font-size: 16px;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=6698d939&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-6698d939] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-6698d939] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-6698d939] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-6698d939] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-6698d939] {
+  padding: 1rem 0;
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/InstallerCompleteScreen.vue?vue&type=style&index=1&id=6698d939&lang=scss&scoped=true ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-complete-button[data-v-6698d939] {
+  margin-right: auto;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/pages/installer-page.scss?vue&type=style&index=0&id=52534b1a&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page[data-v-52534b1a] {
+  font-size: 12px;
+}
+.orangehrm-installer-page-title[data-v-52534b1a] {
+  font-weight: 700;
+  color: #ff7b1d;
+}
+.orangehrm-installer-page-content.--label[data-v-52534b1a] {
+  margin-left: 1.5rem;
+}
+.orangehrm-installer-page-row[data-v-52534b1a] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.orangehrm-installer-page-action[data-v-52534b1a] {
+  padding: 1rem 0;
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/InstallScreen.vue?vue&type=style&index=1&id=52534b1a&scoped=true&lang=scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-page-content.--center[data-v-52534b1a] {
+  text-align: center;
+}
+.orangehrm-installer-page-content.--progress[data-v-52534b1a] {
+  text-align: center;
+  font-weight: 700;
+  color: #76bc21;
+}
+.orangehrm-installer-page-content.--error[data-v-52534b1a] {
+  color: #eb0910;
+}
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/components/installer-steps.scss?vue&type=style&index=0&id=fac551a2&lang=scss&scoped=true ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer-steps[data-v-fac551a2] {
+  padding: 0;
+  list-style: none;
+  margin-top: 120px;
+}
+.orangehrm-installer-steps-item[data-v-fac551a2] {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: baseline;
+}
+.orangehrm-installer-steps-count[data-v-fac551a2], .orangehrm-installer-steps-name[data-v-fac551a2] {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 600;
+}
+.orangehrm-installer-steps-count[data-v-fac551a2] {
+  display: block;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1.4rem;
+  border: 2px solid #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+.orangehrm-installer-steps-count.--success[data-v-fac551a2] {
+  border-color: #34bc40;
+  background-color: #34bc40;
+}
+.orangehrm-installer-steps-name[data-v-fac551a2] {
+  margin-left: 1rem;
+  text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.18);
+}
+.orangehrm-installer-steps-icon[data-v-fac551a2] {
+  color: #ffffff;
+}
+.orangehrm-installer-steps-item.--active > .orangehrm-installer-steps-count[data-v-fac551a2] {
+  color: #ff8226;
+  background-color: #ffffff;
+}
+.orangehrm-installer-steps-item.--active > .orangehrm-installer-steps-name[data-v-fac551a2] {
+  font-weight: 700;
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/components/installer-layout.scss?vue&type=style&index=0&id=11cbe9d2&lang=scss&scoped=true ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-installer[data-v-11cbe9d2] {
+  height: inherit;
+  display: grid;
+  grid-template-areas: "sidebar header" "sidebar content";
+  grid-template-rows: 120px 1fr;
+  grid-template-columns: 300px auto;
+}
+.orangehrm-installer-header[data-v-11cbe9d2] {
+  grid-area: header;
+  margin-left: auto;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+}
+.orangehrm-installer-sidebar[data-v-11cbe9d2] {
+  position: relative;
+  grid-area: sidebar;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #fa9e2e 0%, #e55422 90%);
+}
+.orangehrm-installer-content[data-v-11cbe9d2] {
+  overflow-y: auto;
+  grid-area: content;
+  box-sizing: border-box;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  scrollbar-color: #cfd3de #f6f5fb;
+  scrollbar-width: thin;
+}
+.orangehrm-installer-content[data-v-11cbe9d2]::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+.orangehrm-installer-content[data-v-11cbe9d2]::-webkit-scrollbar-thumb {
+  background: #cfd3de;
+  border-radius: 20px;
+}
+.orangehrm-installer-content[data-v-11cbe9d2]::-webkit-scrollbar-track {
+  background: #f6f5fb;
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+.orangehrm-installer-content[data-v-11cbe9d2] {
+    scrollbar-face-color: #cfd3de;
+    scrollbar-track-color: #f6f5fb;
+    scrollbar-arrow-color: #929baa;
+}
+}
+.orangehrm-installer-footer[data-v-11cbe9d2] {
+  bottom: 0;
+  position: absolute;
+}
+.orangehrm-installer-guide[data-v-11cbe9d2] {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+}
+.orangehrm-installer-guide-icon[data-v-11cbe9d2] {
+  color: inherit;
+  vertical-align: middle;
+}
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/RequiredText.vue?vue&type=style&index=0&id=7c6efb9c&lang=scss&scoped=true ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-form-hint[data-v-7c6efb9c] {
+  margin-right: auto;
+  font-weight: 600;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/styles/global.scss ***!
+  \**************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "Nunito Sans", sans-serif;
+  background-color: #ffffff;
+}
+
+#app {
+  width: inherit;
+  height: inherit;
+}
+
+.orangehrm-copyright {
+  display: block;
+  font-size: 0.65rem;
+  color: #ffffff !important;
+}
+.orangehrm-copyright a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.orangehrm-left-space {
+  margin-left: 10px;
+}
+
+.orangehrm-divider {
+  margin: 0.5rem 0;
+  border-color: #e8eaef;
+}
+
+.orangehrm-full-width-grid {
+  margin: 0 -10px;
+  width: 100%;
+}
