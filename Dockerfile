@@ -65,7 +65,7 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_SERVERADMIN ${SERVER_ADMIN}
 
 # Exposer le port 80
-EXPOSE 80
+EXPOSE 3000
 
 # Commande pour lancer Apache en mode premier plan
 CMD ["apache2ctl", "-D", "FOREGROUND"]
