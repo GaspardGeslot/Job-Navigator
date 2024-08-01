@@ -64,6 +64,12 @@ ENV APACHE_RUN_DIR /var/run/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_SERVERADMIN ${SERVER_ADMIN}
 
+# Créer les répertoires Apache nécessaires
+RUN mkdir -p /var/run/apache2 /var/lock/apache2 /var/log/apache2
+
+# Modifier la configuration Apache pour écouter sur le port 8080
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
+
 # Exposer le port 80
 EXPOSE 8080
 
