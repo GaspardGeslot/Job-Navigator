@@ -4,7 +4,6 @@ lib/confs/
 src/cache/
 src/config/
 src/log/
-web/dist/
 apidoc
 logInsatall.log
 .phpunit.result.cache
