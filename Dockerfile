@@ -51,6 +51,11 @@ ENV APACHE_PID_FILE /var/run/apache2/apache2.pid
 ENV APACHE_RUN_DIR /var/run/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_SERVERADMIN ${SERVER_ADMIN}
+ENV DATABASE_HOST ${DATABASE_HOST}
+ENV DATABASE_PORT ${DATABASE_PORT}
+ENV DATABASE_NAME ${DATABASE_NAME}
+ENV DATABASE_USER ${DATABASE_USER}
+ENV DATABASE_PASSWORD ${DATABASE_PASSWORD}
 
 # Créer les répertoires Apache nécessaires
 RUN mkdir -p /var/run/apache2 /var/lock/apache2 /var/log/apache2

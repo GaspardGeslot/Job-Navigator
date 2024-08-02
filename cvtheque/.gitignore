@@ -1,6 +1,6 @@
 .vscode
-lib/confs/
-src/cache/
+#lib/confs/
+#src/cache/
 src/log/
 apidoc
 logInsatall.log
