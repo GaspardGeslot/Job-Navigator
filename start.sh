@@ -9,7 +9,8 @@ docker volume create --name cache_data || true
 mountpoint -q /var/www/html/lib || mount --bind $(docker volume inspect --format '{{ .Mountpoint }}' lib_data) /var/www/html/lib
 mountpoint -q /var/www/html/src/cache || mount --bind $(docker volume inspect --format '{{ .Mountpoint }}' cache_data) /var/www/html/src/cache
 
-# Assurer les permissions correctes
+# Assurer que le répertoire existe et définir les permissions correctes
+mkdir -p /var/www/html/lib/confs
 chown -R www-data:www-data /var/www/html/lib/confs
 chmod -R 775 /var/www/html/lib/confs
 
