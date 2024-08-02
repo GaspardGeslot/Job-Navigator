@@ -11,8 +11,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libldap2-dev \
     libicu-dev \
-    unzip \
-    apache2-utils
+    unzip
 
 # Configuration PHP et Apache
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -28,6 +27,10 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Copie des fichiers de l'application
 COPY ./cvtheque /var/www/html
+
+# Copie du script de démarrage
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # Configuration des permissions
 RUN set -ex; \
@@ -62,7 +65,7 @@ ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_PID_FILE /var/run/apache2/apache2.pid
 ENV APACHE_RUN_DIR /var/run/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
-ENV APACHE_SERVERADMIN ${SERVER_ADMIN}
+ENV APACHE_SERVERADMIN you@example.com
 
 # Créer les répertoires Apache nécessaires
 RUN mkdir -p /var/run/apache2 /var/lock/apache2 /var/log/apache2
@@ -70,8 +73,11 @@ RUN mkdir -p /var/run/apache2 /var/lock/apache2 /var/log/apache2
 # Modifier la configuration Apache pour écouter sur le port 8080
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
 
-# Exposer le port 80
+# Exposer le port 8080
 EXPOSE 8080
 
-# Commande pour lancer Apache en mode premier plan
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+# Définir les volumes pour les répertoires à préserver
+VOLUME ["/var/www/html/lib", "/var/www/html/src/cache"]
+
+# Utiliser le script de démarrage comme point d'entrée
+CMD ["/usr/local/bin/start.sh"]
