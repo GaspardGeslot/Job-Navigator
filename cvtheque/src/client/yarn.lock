@@ -5280,6 +5280,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cvtheque@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "cvtheque@workspace:."
+  dependencies:
+    "@ohrm/oxd": "npm:2.0.3"
+    "@types/hammerjs": "npm:^2.0.45"
+    "@types/jest": "npm:^27.5.2"
+    "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
+    "@typescript-eslint/parser": "npm:^5.62.0"
+    "@vue/cli-plugin-babel": "npm:~5.0.8"
+    "@vue/cli-plugin-eslint": "npm:~5.0.8"
+    "@vue/cli-plugin-typescript": "npm:~5.0.8"
+    "@vue/cli-plugin-unit-jest": "npm:~5.0.8"
+    "@vue/cli-service": "npm:~5.0.8"
+    "@vue/eslint-config-typescript": "npm:^9.1.0"
+    "@vue/test-utils": "npm:^2.4.4"
+    "@vue/vue3-jest": "npm:^27.0.0"
+    axios: "npm:^1.6.7"
+    babel-jest: "npm:^27.5.1"
+    core-js: "npm:^3.35.1"
+    date-fns: "npm:^2.30.0"
+    eslint: "npm:^7.32.0"
+    eslint-config-prettier: "npm:^8.10.0"
+    eslint-plugin-prettier: "npm:^4.2.1"
+    eslint-plugin-vue: "npm:^8.7.1"
+    hammerjs: "npm:^2.0.8"
+    intl-messageformat: "npm:^9.13.0"
+    jest: "npm:^27.5.1"
+    prettier: "npm:^2.8.8"
+    qrcode: "npm:^1.5.3"
+    sass: "npm:^1.70.0"
+    sass-loader: "npm:^12.6.0"
+    ts-jest: "npm:^27.1.5"
+    typescript: "npm:~4.5.5"
+    vue: "npm:^3.4.18"
+  languageName: unknown
+  linkType: soft
+
 "data-urls@npm:^2.0.0":
   version: 2.0.0
   resolution: "data-urls@npm:2.0.0"
@@ -9346,44 +9384,6 @@ __metadata:
   checksum: 10/8d071828f40090a8e1c6e8f350c6eb065808e9ab2b3e57fa37e0d5ae78cb46dac00117c8f12c3c8b8da2923454afbd8265e08c10b69881170c5b269f451e7fef
   languageName: node
   linkType: hard
-
-"orangehrm@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "orangehrm@workspace:."
-  dependencies:
-    "@ohrm/oxd": "npm:2.0.3"
-    "@types/hammerjs": "npm:^2.0.45"
-    "@types/jest": "npm:^27.5.2"
-    "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
-    "@typescript-eslint/parser": "npm:^5.62.0"
-    "@vue/cli-plugin-babel": "npm:~5.0.8"
-    "@vue/cli-plugin-eslint": "npm:~5.0.8"
-    "@vue/cli-plugin-typescript": "npm:~5.0.8"
-    "@vue/cli-plugin-unit-jest": "npm:~5.0.8"
-    "@vue/cli-service": "npm:~5.0.8"
-    "@vue/eslint-config-typescript": "npm:^9.1.0"
-    "@vue/test-utils": "npm:^2.4.4"
-    "@vue/vue3-jest": "npm:^27.0.0"
-    axios: "npm:^1.6.7"
-    babel-jest: "npm:^27.5.1"
-    core-js: "npm:^3.35.1"
-    date-fns: "npm:^2.30.0"
-    eslint: "npm:^7.32.0"
-    eslint-config-prettier: "npm:^8.10.0"
-    eslint-plugin-prettier: "npm:^4.2.1"
-    eslint-plugin-vue: "npm:^8.7.1"
-    hammerjs: "npm:^2.0.8"
-    intl-messageformat: "npm:^9.13.0"
-    jest: "npm:^27.5.1"
-    prettier: "npm:^2.8.8"
-    qrcode: "npm:^1.5.3"
-    sass: "npm:^1.70.0"
-    sass-loader: "npm:^12.6.0"
-    ts-jest: "npm:^27.1.5"
-    typescript: "npm:~4.5.5"
-    vue: "npm:^3.4.18"
-  languageName: unknown
-  linkType: soft
 
 "p-finally@npm:^1.0.0":
   version: 1.0.0

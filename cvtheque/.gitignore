@@ -1,6 +1,6 @@
 .vscode
-#lib/confs/
-#src/cache/
+lib/confs/
+src/cache/
 src/log/
 apidoc
 logInsatall.log
@@ -9,3 +9,5 @@ coverage/
 src/plugins/orangehrmFunctionalTestingPlugin
 .php-cs-fixer.cache
 .php-cs-fixer.php
+.yarn
+node_modules/
