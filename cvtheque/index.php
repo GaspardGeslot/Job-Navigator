@@ -26,5 +26,5 @@ include_once('./src/config/log_settings.php');
 if (!Config::isInstalled()) {
     header('Location: ./installer/index.php');
 } else {
-    header("Location: ./web/index.php/auth/login");
+    header("Location: ./web/index.php/candidature/index");
 }

@@ -1,0 +1,4 @@
+view_candidature:
+  path: /candidature/index
+  controller: Candidature\Controller\CandidatureController::handle
+  methods: [ GET ]

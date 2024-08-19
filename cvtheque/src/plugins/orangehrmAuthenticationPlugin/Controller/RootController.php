@@ -29,6 +29,6 @@ class RootController extends AbstractController implements PublicControllerInter
      */
     public function handle(Request $request)
     {
-        return $this->redirect('auth/login');
+        return $this->redirect('candidature/index');
     }
 }
