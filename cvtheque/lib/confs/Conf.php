@@ -26,16 +26,16 @@ class Conf
 
     public function __construct()
     {
-        $this->dbHost = getenv('DATABASE_HOST');
-        $this->dbPort = getenv('DATABASE_PORT');
+        $this->dbHost = 'localhost';
+        $this->dbPort = '3306';
         if (defined('ENVIRONMENT') && ENVIRONMENT == 'test') {
             $prefix = defined('TEST_DB_PREFIX') ? TEST_DB_PREFIX : '';
-            $this->dbName = $prefix . 'test_' . getenv('DATABASE_NAME');
+            $this->dbName = $prefix . 'test_orangeDBStaging';
         } else {
-            $this->dbName = getenv('DATABASE_NAME');
+            $this->dbName = 'orangeDBStaging';
         }
-        $this->dbUser = getenv('DATABASE_USER');
-        $this->dbPass = getenv('DATABASE_PASSWORD');
+        $this->dbUser = 'Olec';
+        $this->dbPass = 'Olec123!';
     }
 
     /**
