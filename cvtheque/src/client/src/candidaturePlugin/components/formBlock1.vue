@@ -54,7 +54,6 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         class="submitButton"
         type="submit"
         value="SUIVANT"
-        style="margin-top: 2rem"
       />
     </form>
   </div>
@@ -112,7 +111,7 @@ export default {
   background-size: 0.65rem auto;
 }
 #formBlock1SubmitButton {
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 .formBlock1 input::placeholder {
   text-indent: -0.75rem;
@@ -121,5 +120,10 @@ export default {
   width: 100%;
   box-sizing: border-box;
   padding-left: 1rem;
+}
+@media screen and (max-width: 450px) {
+  #formBlock1SubmitButton {
+    margin-top: 1rem;
+  }
 }
 </style>

@@ -8794,6 +8794,17 @@ p {
   flex-direction: column;
   box-sizing: border-box;
 }
+@media screen and (max-width: 450px) {
+.formTitle {
+    color: black;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 900 !important;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+}
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock1.vue?vue&type=style&index=1&id=d9bb3a7c&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -8814,7 +8825,7 @@ p {
   background-size: 0.65rem auto;
 }
 #formBlock1SubmitButton[data-v-d9bb3a7c] {
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 .formBlock1 input[data-v-d9bb3a7c]::-moz-placeholder {
   text-indent: -0.75rem;
@@ -8826,6 +8837,11 @@ p {
   width: 100%;
   box-sizing: border-box;
   padding-left: 1rem;
+}
+@media screen and (max-width: 450px) {
+#formBlock1SubmitButton[data-v-d9bb3a7c] {
+    margin-top: 1rem;
+}
 }
 
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
@@ -9043,6 +9059,17 @@ p[data-v-d99f0b7a] {
   flex-direction: column;
   box-sizing: border-box;
 }
+@media screen and (max-width: 450px) {
+.formTitle[data-v-d99f0b7a] {
+    color: black;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 900 !important;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+}
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock2.vue?vue&type=style&index=1&id=d99f0b7a&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -9216,7 +9243,7 @@ input:focus + .slider[data-v-d92e4f72] {
 input:checked + .slider[data-v-d92e4f72]:before {
   /* -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px); */
-  transform: translateX(13px);
+  transform: translateX(15px);
 }
 .slider.round[data-v-d92e4f72] {
   border-radius: 17px;
@@ -9241,6 +9268,11 @@ input:checked + .slider[data-v-d92e4f72]:before {
   width: 100%;
   box-sizing: border-box;
   padding-left: 1rem;
+}
+@media screen and (max-width: 450px) {
+.slider[data-v-d92e4f72] {
+    width: 29px;
+}
 }
 
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
@@ -9315,12 +9347,26 @@ input:checked + .slider[data-v-d92e4f72]:before {
   width: 80%;
   margin-top: 0.5rem;
 }
+@media screen and (max-width: 450px) {
+#more-social-block[data-v-d9122070] {
+    padding-left: 0.5rem;
+}
+#social-media-last-element[data-v-d9122070] {
+    display: none;
+}
+}
 
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formComponent.vue?vue&type=style&index=1&id=59201b22&scoped=true&lang=css ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 450px) {
+.formBlock[data-v-59201b22] {
+    max-width: 410px;
+}
+.formImg[data-v-59201b22] {
+    display: none;
+}
 .scroll-container[data-v-59201b22] {
     width: 100%;
 }
@@ -9341,6 +9387,9 @@ input:checked + .slider[data-v-d92e4f72]:before {
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+}
+#page-content[data-v-0c52339c] {
+  max-width: 1500px;
 }
 .mt[data-v-0c52339c] {
   margin-top: 2.5rem;
@@ -9472,6 +9521,67 @@ input:checked + .slider[data-v-d92e4f72]:before {
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+}
+@media screen and (max-width: 370px) {
+#page-content[data-v-0c52339c] {
+    max-width: 360px;
+}
+}
+@media screen and (max-width: 380px) {
+#page-content[data-v-0c52339c] {
+    max-width: 370px;
+}
+}
+@media screen and (max-width: 450px) {
+.formComponent[data-v-0c52339c] {
+    height: 100%;
+}
+#page-content[data-v-0c52339c] {
+    max-width: 430px;
+}
+.top-row[data-v-0c52339c] {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+#olecio-logo[data-v-0c52339c] {
+    display: none;
+}
+.main-title[data-v-0c52339c] {
+    padding-top: 3rem;
+    font-size: 1.85rem;
+    line-height: 2.25rem;
+    padding-right: 2.5rem;
+    margin-right: 0rem;
+}
+.bot_button[data-v-0c52339c] {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    padding-top: 0.415rem;
+    padding-bottom: 0.415rem;
+    margin-top: 1.5rem;
+}
+.top-row-logo[data-v-0c52339c] {
+    margin-left: 0 !important;
+    transform: scale(0.9);
+}
+.space-b[data-v-0c52339c] {
+    margin-left: 1rem;
+}
+.connexion_button[data-v-0c52339c] {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    padding-right: 1.15rem;
+    padding-left: 1.15rem;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    margin-top: 1.5rem;
+    margin-right: 3rem;
+    border-radius: 1.5rem;
+}
 }
 @media (min-width: 1500px) {
 .main-title[data-v-0c52339c] {

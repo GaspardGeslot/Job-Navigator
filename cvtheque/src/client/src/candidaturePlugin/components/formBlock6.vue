@@ -195,7 +195,7 @@ input:focus + .slider {
 input:checked + .slider:before {
   /* -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px); */
-  transform: translateX(13px);
+  transform: translateX(15px);
 }
 .slider.round {
   border-radius: 17px;
@@ -218,5 +218,10 @@ input:checked + .slider:before {
   width: 100%;
   box-sizing: border-box;
   padding-left: 1rem;
+}
+@media screen and (max-width: 450px) {
+  .slider {
+    width: 29px;
+  }
 }
 </style>

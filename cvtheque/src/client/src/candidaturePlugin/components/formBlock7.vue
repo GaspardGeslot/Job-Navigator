@@ -86,7 +86,11 @@
             Reblog
           </button>
         </div>
-        <div class="col" style="width: 45%; position: relative">
+        <div
+          id="more-social-block"
+          class="col"
+          style="width: 45%; position: relative"
+        >
           <button
             class="buttons"
             style="margin-top: 0.25rem; width: 4rem; gap: 4px"
@@ -128,6 +132,7 @@
               style="width: 22px; height: 22px"
             />
             <img
+              id="social-media-last-element"
               src="https://img.icons8.com/?size=100&id=13963&format=png&color=000000"
               style="width: 24px; height: 24px"
             />
@@ -223,5 +228,13 @@ export default {
   z-index: 1;
   width: 80%;
   margin-top: 0.5rem;
+}
+@media screen and (max-width: 450px) {
+  #more-social-block {
+    padding-left: 0.5rem;
+  }
+  #social-media-last-element {
+    display: none;
+  }
 }
 </style>

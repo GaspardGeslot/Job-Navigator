@@ -93,8 +93,10 @@ export default {
 
       console.log('activeForm height:', activeFormHeight);
       console.log('image height:', imageHeight);
-      if (scrollContainer.value && formImg.value) {
+      if (scrollContainer.value && formImg.value && imageHeight != 0) {
         scrollContainer.value.style.maxHeight = `${imageHeight}px`;
+      } else {
+        scrollContainer.value.style.maxHeight = `500px`;
       }
       needsScroll.value = activeFormHeight > imageHeight;
     };
@@ -153,7 +155,13 @@ export default {
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 450px) {
+  .formBlock {
+    max-width: 410px;
+  }
+  .formImg {
+    display: none;
+  }
   .scroll-container {
     width: 100%;
   }

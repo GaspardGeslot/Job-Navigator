@@ -24,7 +24,9 @@
   position: relative;
   // transition: opacity 0.5s ease;
 }
-
+#page-content {
+  max-width: 1500px;
+}
 // .VA_bg_img.faded {
 //   opacity: 0.3;
 // }
@@ -178,7 +180,75 @@
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
 }
-
+@media screen and (max-width: 370px) {
+  #page-content {
+    max-width: 360px;
+  }
+}
+@media screen and (max-width: 380px) {
+  #page-content {
+    max-width: 370px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .formComponent {
+    height: 100%;
+  }
+  #page-content {
+    max-width: 430px;
+  }
+  .top-row {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  #olecio-logo {
+    display: none;
+  }
+  .main-title {
+    padding-top: 3rem;
+    font-size: 1.85rem;
+    line-height: 2.25rem;
+    padding-right: 2.5rem;
+    margin-right: 0rem;
+  }
+  .bot_button {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    padding-top: 0.415rem;
+    padding-bottom: 0.415rem;
+    margin-top: 1.5rem;
+    //margin-left: 1.5rem;
+  }
+  .top-row-logo {
+    margin-left: 0 !important;
+    transform: scale(0.9);
+  }
+  .space-b {
+    margin-left: 1rem;
+    //justify-content: flex-start;
+  }
+  .connexion_button {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    // padding-right: 1.35rem;
+    // padding-left: 1.35rem;
+    // padding-top: 0.95rem;
+    // padding-bottom: 0.95rem;
+    // margin-top: 1.5rem;
+    // margin-right: 2rem;
+    padding-right: 1.15rem;
+    padding-left: 1.15rem;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    margin-top: 1.5rem;
+    margin-right: 3rem;
+    border-radius: 1.5rem;
+  }
+}
 @media (min-width: 1500px) {
   .main-title {
     font-size: 4rem;

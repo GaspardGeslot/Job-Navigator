@@ -1,14 +1,16 @@
 <template>
   <div class="VA_bg_img blank" :class="{faded: formVisible}">
-    <div class="col remove" style="max-width: 1500px">
+    <div id="page-content" class="col remove">
       <div class="mt space-b top-row row">
         <div class="space-b row">
           <img
+            id="olecio-logo"
             class="mr-2 mt-05 top-row-logo"
             src="https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/olecio_logo_white.png"
             style="margin-top: 0.82rem"
           />
           <img
+            id="constructys-logo"
             class="ml-6 mb-05 top-row-logo"
             src="https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/constructys_logo2.png"
             style="margin-bottom: 0.82rem"

@@ -10,6 +10,9 @@
 }
 .formBlock{
     //display: none;
+    // >img {
+    //     display: none;
+    //   }
     >*{flex:1}
     padding-top: 3.5rem;
     padding-bottom: 1.5rem;
@@ -225,4 +228,15 @@ p {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+  }
+@media screen and (max-width: 450px) {
+    .formTitle{
+        color: black;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 900 !important;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        margin-top: 0rem;
+        margin-bottom: 0rem;
+    }
   }
