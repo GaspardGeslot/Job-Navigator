@@ -110,29 +110,30 @@
             </svg>
             More
           </button>
-          <div
-            v-if="showWindow"
-            class="social-media-window row"
-            style="align-items: center; gap: 4px"
-          >
+          <div v-if="showWindow" class="social-media-window row">
             <img
+              class="social-media-window-elements"
               src="https://img.icons8.com/?size=100&id=xuvGCOXi8Wyg&format=png&color=000000"
               style="width: 24px; height: 24px"
             />
             <img
+              class="social-media-window-elements"
               src="https://img.icons8.com/?size=100&id=8weyx4k1jpJy&format=png&color=000000"
               style="width: 18px; height: 18px"
             />
             <img
+              class="social-media-window-elements"
               src="https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=000000"
               style="width: 21px; height: 21px"
             />
             <img
+              class="social-media-window-elements"
               src="https://img.icons8.com/?size=100&id=63204&format=png&color=000000"
               style="width: 22px; height: 22px"
             />
             <img
               id="social-media-last-element"
+              class="social-media-window-elements"
               src="https://img.icons8.com/?size=100&id=13963&format=png&color=000000"
               style="width: 24px; height: 24px"
             />
@@ -214,6 +215,9 @@ export default {
   transform: rotate(90deg);
 }
 .social-media-window {
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   position: absolute;
   bottom: 0;
   top: 100%;
@@ -223,13 +227,28 @@ export default {
   border: 1px solid grey;
   padding: 1rem;
   padding-left: 0.5rem;
+  padding-right: 0.5rem;
   border-radius: 0.25rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1;
   width: 80%;
   margin-top: 0.5rem;
 }
+@media screen and (max-width: 350px) {
+  .social-media-window {
+    /* padding-left: 0.75rem;
+    padding-right: 0.75rem; */
+    gap: 0px;
+  }
+  .social-media-window-elements {
+    transform: scale(0.8);
+  }
+}
 @media screen and (max-width: 450px) {
+  .social-media-window {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
   #more-social-block {
     padding-left: 0.5rem;
   }
