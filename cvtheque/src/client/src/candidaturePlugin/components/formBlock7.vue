@@ -249,11 +249,19 @@ export default {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
   }
+  #social-media-last-element {
+    display: none;
+  }
+}
+@media screen and (max-width: 800px) {
   #more-social-block {
     padding-left: 0.5rem;
   }
-  #social-media-last-element {
-    display: none;
+}
+@media screen and (min-width: 551px) and (max-width: 800px) {
+  .social-media-window {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 }
 </style>

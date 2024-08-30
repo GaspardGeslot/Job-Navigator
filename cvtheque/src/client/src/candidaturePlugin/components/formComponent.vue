@@ -159,14 +159,16 @@ export default {
   .formBlock {
     max-width: 410px;
   }
-  .formImg {
-    display: none;
-  }
   .scroll-container {
     width: 100%;
   }
   .formImg {
     background-image: none;
+  }
+}
+@media screen and (max-width: 550px) {
+  .formImg {
+    display: none;
   }
 }
 </style>
