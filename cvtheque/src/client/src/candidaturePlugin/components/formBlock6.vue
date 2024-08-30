@@ -219,7 +219,7 @@ input:checked + .slider:before {
   box-sizing: border-box;
   padding-left: 1rem;
 }
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 600px) {
   .slider {
     width: 29px;
   }
