@@ -9692,6 +9692,19 @@ input:checked + .slider[data-v-d92e4f72]:before {
     transform: scale(0.9);
 }
 }
+@media screen and (min-width: 1200px) and (max-height: 600px) {
+.main-title[data-v-0c52339c] {
+    padding-top: 2rem;
+    font-size: 3rem;
+    line-height: 3.25rem;
+}
+}
+@media screen and (min-width: 1200px) and (max-height: 520px) {
+.main-title[data-v-0c52339c] {
+    font-size: 2.5rem;
+    line-height: 2.75rem;
+}
+}
 @media (min-width: 1500px) {
 .main-title[data-v-0c52339c] {
     font-size: 4rem;
