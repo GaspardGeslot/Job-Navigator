@@ -71,4 +71,19 @@ class AuthProviderChain
         }
         return false;
     }
+
+    /**
+     * @param AuthParamsInterface $authParams
+     * @return bool
+     */
+    public function signIn(AuthParamsInterface $authParams): bool
+    {
+        array_multisort($this->priorities, SORT_DESC, $this->providers);
+        foreach ($this->providers as $authProvider) {
+            if ($authProvider->signIn($authParams)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

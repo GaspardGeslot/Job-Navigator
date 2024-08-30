@@ -1,31 +1,62 @@
 <template>
-  <candidature-layout>
-    <oxd-text class="orangehrm-candidature-title" tag="h5">
-      {{ $t('candidature.title') }}
-    </oxd-text>
-    <div class="orangehrm-candidature-form">
-      <div class="orangehrm-header-container">
-        <oxd-button
-          :label="$t('candidature.login')"
-          display-type="main"
-          @click="navigateToLogin"
-        />
+  <div class="VA_bg_img blank" :class="{faded: formVisible}">
+    <div id="page-content" class="col remove">
+      <div class="mt space-b top-row row">
+        <div class="space-b row">
+          <img
+            id="olecio-logo"
+            class="mr-2 mt-05 top-row-logo"
+            src="https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/olecio_logo_white.png"
+            style="margin-top: 0.82rem"
+          />
+          <img
+            id="constructys-logo"
+            class="ml-6 mb-05 top-row-logo"
+            src="https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/constructys_logo2.png"
+            style="margin-bottom: 0.82rem"
+          />
+        </div>
+        <div>
+          <button class="connexion_button" @click="navigateToLogin">
+            CONNEXION
+          </button>
+        </div>
+      </div>
+      <div class="row title-container">
+        <h1 class="text-white main-title">
+          Avec ou sans CV, trouvez un emploi dans le secteur de la construction.
+        </h1>
+      </div>
+      <div class="row">
+        <button class="bot_button" @click="showForm">JE POSTULE</button>
       </div>
     </div>
-  </candidature-layout>
+    <div v-if="formVisible" class="formContainer">
+      <formComponent class="formComponent" />
+    </div>
+  </div>
 </template>
 
 <script>
-import {urlFor} from '@ohrm/core/util/helper/url';
+import formComponent from '../components/formComponent.vue';
+//import {urlFor} from '@ohrm/core/util/helper/url';
 import {navigate} from '@ohrm/core/util/helper/navigation';
-import CandidatureLayout from '@/candidaturePlugin/components/CandidatureLayout.vue';
 
 export default {
+  name: 'Candidature',
   components: {
-    'candidature-layout': CandidatureLayout,
+    formComponent,
+  },
+  data() {
+    return {
+      formVisible: false,
+    };
   },
 
   methods: {
+    showForm() {
+      this.formVisible = true;
+    },
     navigateToLogin() {
       navigate('/auth/login');
     },
@@ -33,4 +64,4 @@ export default {
 };
 </script>
 
-<style src="./candidature.scss" lang="scss" scoped></style>
+<style src="./view-application.scss" lang="scss" scoped></style>

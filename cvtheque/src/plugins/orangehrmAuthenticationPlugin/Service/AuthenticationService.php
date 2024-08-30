@@ -66,6 +66,17 @@ class AuthenticationService
     }
 
     /**
+     * @param UserCredential $credentials
+     * @return bool
+     * @throws AuthenticationException
+     */
+    public function createCredentials(UserCredential $credentials): bool
+    {
+        $user = $this->getUserService()->createCredentials($credentials);
+        return $this->setCredentialsForUser($user);
+    }
+
+    /**
      * @param User $user
      */
     protected function setUserAttributes(User $user): void
@@ -73,7 +84,7 @@ class AuthenticationService
         $this->getAuthUser()->setUserId($user->getId());
         $this->getAuthUser()->setUserRoleId($user->getUserRole()->getId());
         $this->getAuthUser()->setUserRoleName($user->getUserRole()->getName());
-        if ($user->getEmployee() instanceof Employee) {
+        if ($user->getEmployee() != null && $user->getEmployee() instanceof Employee) {
             $this->getAuthUser()->setEmpNumber($user->getEmployee()->getEmpNumber());
         }
     }

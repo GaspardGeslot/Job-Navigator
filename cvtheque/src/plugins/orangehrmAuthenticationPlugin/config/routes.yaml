@@ -23,9 +23,19 @@ auth_login:
   controller: OrangeHRM\Authentication\Controller\LoginController::handle
   methods: [ GET ]
 
+auth_create_account:
+  path: /auth/createAccount
+  controller: OrangeHRM\Authentication\Controller\CreateAccountController::handle
+  methods: [ GET ]
+
 auth_validate:
   path: /auth/validate
   controller: OrangeHRM\Authentication\Controller\ValidateController::handle
+  methods: [ POST ]
+
+auth_validate_new_account:
+  path: /auth/validateNewAccount
+  controller: OrangeHRM\Authentication\Controller\ValidateNewAccountController::handle
   methods: [ POST ]
 
 auth_logout:

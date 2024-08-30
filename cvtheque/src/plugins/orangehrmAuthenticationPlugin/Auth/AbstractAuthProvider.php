@@ -31,6 +31,13 @@ abstract class AbstractAuthProvider
     abstract public function authenticate(AuthParamsInterface $authParams): bool;
 
     /**
+     * @param AuthParamsInterface $authParams
+     * @return bool
+     * @throws AuthenticationException
+     */
+    abstract public function signIn(AuthParamsInterface $authParams): bool;
+
+    /**
      * @return int
      */
     abstract public function getPriority(): int;

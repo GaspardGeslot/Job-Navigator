@@ -79,8 +79,19 @@
           />
         </oxd-form-actions>
         <div class="orangehrm-login-forgot">
-          <oxd-text class="orangehrm-login-forgot-header" @click="navigateUrl">
-            {{ $t('auth.forgot_password') }}?
+          <oxd-text
+            class="orangehrm-login-forgot-header"
+            @click="navigateUrlForgotPassword"
+          >
+            {{ $t('auth.forgot_password') }} ?
+          </oxd-text>
+        </div>
+        <div class="orangehrm-login-forgot">
+          <oxd-text
+            class="orangehrm-login-forgot-header"
+            @click="navigateUrlCreateAccount"
+          >
+            {{ $t('auth.no_account') }} ?
           </oxd-text>
         </div>
       </oxd-form>
@@ -162,8 +173,11 @@ export default {
         this.$refs.loginForm.$el.submit();
       }
     },
-    navigateUrl() {
+    navigateUrlForgotPassword() {
       navigate('/auth/requestPasswordResetCode');
+    },
+    navigateUrlCreateAccount() {
+      navigate('/auth/createAccount');
     },
   },
 };

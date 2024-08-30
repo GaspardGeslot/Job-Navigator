@@ -24,11 +24,14 @@ use OrangeHRM\Core\Dao\BaseDao;
 use OrangeHRM\Entity\Employee;
 use OrangeHRM\Entity\User;
 use OrangeHRM\Entity\UserRole;
+use OrangeHRM\Entity\UniqueId;
 use OrangeHRM\ORM\ListSorter;
 use OrangeHRM\ORM\Paginator;
+use OrangeHRM\Core\Traits\Service\DateTimeHelperTrait;
 
 class UserDao extends BaseDao
 {
+    use DateTimeHelperTrait;
     /**
      * @param User $systemUser
      * @return User
@@ -37,6 +40,69 @@ class UserDao extends BaseDao
     {
         $this->persist($systemUser);
         return $systemUser;
+    }
+
+    /**
+     * @param string $userName
+     * @param string $password
+     * @param string $role
+     */
+    public function saveNewUser(string $userName, string $password, string $role = 'ESS'): User
+    {
+        $candidateUserRole = $this->getUserRole($role);
+        $newUserEmployeeId = $this->saveNewEmployee($userName);
+
+        $user = new User();
+        $user->setUserName($userName);
+        $user->setUserPassword($password);
+        $user->setStatus(true);
+        if ($candidateUserRole != null)
+            $user->getDecorator()->setUserRoleById($candidateUserRole->getId());
+        if ($newUserEmployeeId != null)
+            $user->getDecorator()->setEmployeeByEmpNumber($newUserEmployeeId);
+        $user->setDateEntered($this->getDateTimeHelper()->getNow());
+
+        $this->persist($user);
+        return $user;
+    }
+
+    /**
+     * @param string $userName
+     * @return int
+     */
+    public function saveNewEmployee(string $userName) : ?int
+    {
+        $query = $this->createQueryBuilder(UniqueId::class, 'ui');
+        $query->andWhere('ui.tableName = :tableName');
+        $query->setParameter('tableName', 'hs_hr_employee');
+        $lastEmployee = $query->getQuery()->getOneOrNullResult();
+
+        $newEmployeeId = 1;
+        if ($lastEmployee != null)
+        {
+            $newEmployeeId = $lastEmployee->getLastId() + 1;
+            $q = $this->createQueryBuilder(UniqueId::class, 'ui');
+            $q->update()
+                ->set('ui.lastId', ':newEmployeeId')
+                ->setParameter('newEmployeeId', $newEmployeeId)
+                ->where('ui.tableName = :table')
+                ->setParameter('table', 'hs_hr_employee');
+            $q->getQuery()->execute();
+        } else {
+            $newUniqueId = new UniqueId();
+            $newUniqueId->setLastId($newEmployeeId);
+            $newUniqueId->setTableName('hs_hr_employee');
+            $this->persist($newUniqueId);
+        }
+        $newEmployee = new Employee();
+        $newEmployee->setEmployeeId(strval($newEmployeeId));
+        $newEmployee->setWorkEmail($userName);
+        $this->persist($newEmployee);
+        $queryId = $this->createQueryBuilder(Employee::class, 'e');
+        $queryId->andWhere('e.employeeId = :employeeId');
+        $queryId->setParameter('employeeId', strval($newEmployeeId));
+        $lastEmployee = $queryId->getQuery()->getOneOrNullResult();
+        return $lastEmployee != null ? $lastEmployee->getEmpNumber() : null;
     }
 
     /**

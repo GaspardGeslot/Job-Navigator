@@ -16,6 +16,7 @@
  */
 
 import Login from './pages/Login.vue';
+import CreateAccount from './pages/CreateAccount.vue';
 import Forbidden from './pages/Forbidden.vue';
 import ResetPassword from './pages/ResetPassword.vue';
 import ResetWeakPassword from './pages/ResetWeakPassword.vue';
@@ -27,6 +28,7 @@ import EmailConfigurationWarning from './pages/EmailConfigurationWarning.vue';
 
 export default {
   'auth-login': Login,
+  'auth-create-account': CreateAccount,
   'auth-forbidden': Forbidden,
   'reset-password': ResetPassword,
   'auth-admin-access': AdministratorAccess,

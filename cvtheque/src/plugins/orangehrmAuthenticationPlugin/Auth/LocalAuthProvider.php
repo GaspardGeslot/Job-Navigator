@@ -85,6 +85,22 @@ class LocalAuthProvider extends AbstractAuthProvider
     }
 
     /**
+     * @param AuthParamsInterface $authParams
+     * @return bool
+     * @throws AuthenticationException
+     * @throws PasswordEnforceException
+     */
+    public function signIn(AuthParamsInterface $authParams): bool
+    {
+        if (!$authParams->getCredential() instanceof UserCredentialInterface)
+            return false;
+        $success = $this->getAuthenticationService()->setCredentials($authParams->getCredential());
+        if ($success)
+            return false;
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential());
+    }
+
+    /**
      * @inheritDoc
      */
     public function getPriority(): int
