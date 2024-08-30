@@ -9562,9 +9562,6 @@ input:checked + .slider[data-v-d92e4f72]:before {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
 }
-#olecio-logo[data-v-0c52339c] {
-    display: none;
-}
 .main-title[data-v-0c52339c] {
     padding-top: 3rem;
     font-size: 1.85rem;
@@ -9582,10 +9579,6 @@ input:checked + .slider[data-v-d92e4f72]:before {
     padding-bottom: 0.415rem;
     margin-top: 1.5rem;
 }
-.top-row-logo[data-v-0c52339c] {
-    margin-left: 0 !important;
-    transform: scale(0.9);
-}
 .space-b[data-v-0c52339c] {
     margin-left: 1rem;
 }
@@ -9600,6 +9593,15 @@ input:checked + .slider[data-v-d92e4f72]:before {
     margin-top: 1.5rem;
     margin-right: 3rem;
     border-radius: 1.5rem;
+}
+}
+@media screen and (max-width: 800px) {
+#olecio-logo[data-v-0c52339c] {
+    display: none;
+}
+.top-row-logo[data-v-0c52339c] {
+    margin-left: 0 !important;
+    transform: scale(0.9);
 }
 }
 @media (min-width: 1500px) {

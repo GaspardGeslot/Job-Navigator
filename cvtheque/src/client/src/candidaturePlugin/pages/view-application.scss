@@ -202,9 +202,6 @@
     padding-left: 0.25rem;
     padding-right: 0.25rem;
   }
-  #olecio-logo {
-    display: none;
-  }
   .main-title {
     padding-top: 3rem;
     font-size: 1.85rem;
@@ -222,10 +219,6 @@
     padding-bottom: 0.415rem;
     margin-top: 1.5rem;
     //margin-left: 1.5rem;
-  }
-  .top-row-logo {
-    margin-left: 0 !important;
-    transform: scale(0.9);
   }
   .space-b {
     margin-left: 1rem;
@@ -248,6 +241,15 @@
     margin-top: 1.5rem;
     margin-right: 3rem;
     border-radius: 1.5rem;
+  }
+}
+@media screen and (max-width: 800px) {
+  #olecio-logo {
+    display: none;
+  }
+  .top-row-logo {
+    margin-left: 0 !important;
+    transform: scale(0.9);
   }
 }
 @media (min-width: 1500px) {
