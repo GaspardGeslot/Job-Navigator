@@ -392,6 +392,8 @@ export default {
         this.checkedJobs.pop();
         this.errorMessage =
           'Vous ne pouvez sélectionner que 5 options au total.';
+        alert(this.errorMessage);
+        //console.log(this.errorMessage);
       } else {
         this.errorMessage = '';
       }
