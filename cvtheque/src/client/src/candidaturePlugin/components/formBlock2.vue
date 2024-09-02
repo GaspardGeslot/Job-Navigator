@@ -402,6 +402,7 @@ export default {
       if (this.checkedJobs.length > 5) {
         this.errorMessage =
           'Vous ne pouvez sélectionner que 5 options au total.';
+        alert(this.errorMessage);
         return;
       }
       let situationReview = {
