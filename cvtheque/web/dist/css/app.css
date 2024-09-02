@@ -9146,6 +9146,9 @@ p[data-v-d99f0b7a] {
   padding-left: 20px;
   text-indent: -1.3rem;
 }
+.checkbox-item2 label[data-v-d982dc78] {
+  font-family: 'Telegraf', sans-serif;
+}
 .checkbox-item label[data-v-d982dc78]::before {
   content: '';
   display: inline-block;
@@ -9156,7 +9159,7 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock4.vue?vue&type=style&index=1&id=d966ad76&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
-.checkbox-item label[data-v-d966ad76] {
+.checkbox-item2 label[data-v-d966ad76] {
   font-family: 'Telegraf', sans-serif;
 }
 .adjust-margin[data-v-d966ad76] {

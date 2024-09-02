@@ -5,7 +5,7 @@
     <form class="formBlock5">
       <p class="CVText">Permis obtenus</p>
       <div class="checkbox-group">
-        <div class="checkbox-item">
+        <div class="checkbox-item2">
           <input
             id="permitA"
             v-model="checkedPermits"
@@ -15,7 +15,7 @@
           />
           <label for="permitA">Permis A</label>
         </div>
-        <div class="checkbox-item">
+        <div class="checkbox-item2">
           <input
             id="permitB"
             v-model="checkedPermits"
@@ -25,7 +25,7 @@
           />
           <label for="permitB">Permis B</label>
         </div>
-        <div class="checkbox-item">
+        <div class="checkbox-item2">
           <input
             id="permitC"
             v-model="checkedPermits"
@@ -35,7 +35,7 @@
           />
           <label for="permitC">Permis C</label>
         </div>
-        <div class="checkbox-item">
+        <div class="checkbox-item2">
           <input
             id="permitD"
             v-model="checkedPermits"
@@ -45,7 +45,7 @@
           />
           <label for="permitD">Permis D</label>
         </div>
-        <div class="checkbox-item">
+        <div class="checkbox-item2">
           <input
             id="permitL"
             v-model="checkedPermits"
@@ -55,7 +55,7 @@
           />
           <label for="permitL">Permis L</label>
         </div>
-        <div class="checkbox-item">
+        <div class="checkbox-item2">
           <input
             id="permitG"
             v-model="checkedPermits"
@@ -115,7 +115,7 @@ export default {
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
-.checkbox-item label {
+.checkbox-item2 label {
   font-family: 'Telegraf', sans-serif;
 }
 .adjust-margin {
