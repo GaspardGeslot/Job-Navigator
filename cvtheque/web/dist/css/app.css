@@ -8931,6 +8931,15 @@ p {
   box-sizing: border-box;
   padding-left: 1rem;
 }
+#postalCode[data-v-d9bb3a7c]::-webkit-outer-spin-button,
+#postalCode[data-v-d9bb3a7c]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* #postalCode {
+  appearance: none;
+  -moz-appearance: textfield;
+} */
 @media screen and (max-width: 400px) {
 .formBlock1 select[data-v-d9bb3a7c] {
     background-image: none;
