@@ -97,9 +97,12 @@ export default {
       );
       console.log(postal_code_array);
       if (postal_code_array.length != 5) {
-        console.log(postal_code_array, postal_code_array.length);
-        alert('Veuillez indiquer un code postal valide.');
-        return;
+        if (postal_code_array.length == 4) {
+          postal_code_array.unshift(0);
+        } else {
+          alert('Veuillez indiquer un code postal valide.');
+          return;
+        }
       }
       let situationReview = {
         type_de_contrat: this.type_de_contrat,
@@ -149,6 +152,15 @@ export default {
   box-sizing: border-box;
   padding-left: 1rem;
 }
+#postalCode::-webkit-outer-spin-button,
+#postalCode::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* #postalCode {
+  appearance: none;
+  -moz-appearance: textfield;
+} */
 @media screen and (max-width: 400px) {
   .formBlock1 select {
     background-image: none;
