@@ -10,7 +10,8 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
     </p>
     <form class="formBlock1">
       <select v-model="type_de_contrat">
-        <option disabled value="">Type de contrat</option>
+        <option disabled value="">Type de contrat recherché *</option>
+        <option>CDI de chantier</option>
         <option>CDI</option>
         <option>CDD</option>
         <option>Intérim</option>
@@ -20,17 +21,18 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
       <input
         id="postalCode"
         v-model="postal_code"
+        type="number"
         class="blackPlaceholder"
-        placeholder="Mon code postal"
+        placeholder="Mon code postal *"
       />
       <select v-model="availability">
-        <option disabled value="">Disponibilité</option>
+        <option disabled value="">Ma disponibilité *</option>
         <option>Immédiatement</option>
         <option>Dans 1 à 3 mois</option>
         <option>Plus de 3 mois</option>
       </select>
       <select v-model="mobility">
-        <option disabled value="">Mobilité</option>
+        <option disabled value="">Ma mobilité géographique</option>
         <option>10 kms</option>
         <option>30 kms</option>
         <option>50 kms</option>
@@ -38,16 +40,13 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>Ile-de-France</option>
         <option>France entière</option>
       </select>
-      <select v-model="education">
-        <option disabled value="">Niveau d’études</option>
+      <select id="educationForm" v-model="education">
+        <option disabled value="">Plus haut niveau de diplôme *</option>
         <option>Aucun diplôme</option>
-        <option>CFG, DNB</option>
-        <option>CAP, BEP, BT</option>
-        <option>Baccalauréat</option>
-        <option>BTS, DUT, DEUG</option>
-        <option>Licence</option>
-        <option>Maîtrise, Master</option>
-        <option>Doctorat</option>
+        <option>CAP, BEP</option>
+        <option>Bac ou équivalent</option>
+        <option>Bac +2 ou 3 (BTS, DUT, BUT, Licence...)</option>
+        <option>Bac +4, 5 ou plus (Master, Ingénieur...)</option>
       </select>
       <input
         id="formBlock1SubmitButton"
@@ -73,8 +72,33 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (this.type_de_contrat === '' || this.postal_code === '') {
+      if (
+        this.type_de_contrat === '' ||
+        this.postal_code === '' ||
+        this.availability === '' ||
+        this.education === ''
+      ) {
         alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
+        return;
+      }
+      // let arrayOfPostalCode = Array.from(this.postal_code, Number);
+      // console.log(typeof this.postal_code);
+      // console.log(arrayOfPostalCode, arrayOfPostalCode.length);
+      // if (this.postal_code != '' && arrayOfPostalCode.length < 5) {
+      //   if (arrayOfPostalCode.length < 4) return;
+      //   else if (arrayOfPostalCode.length == 4) {
+      //     arrayOfPostalCode.unshift(0);
+      //     return;
+      //   }
+      // }
+      let postal_code_array = Array.from(
+        String(Number(this.postal_code)),
+        Number,
+      );
+      console.log(postal_code_array);
+      if (postal_code_array.length != 5) {
+        console.log(postal_code_array, postal_code_array.length);
+        alert('Veuillez indiquer un code postal valide.');
         return;
       }
       let situationReview = {
@@ -110,6 +134,10 @@ export default {
   background-position: right 1rem top 50%;
   background-size: 0.65rem auto;
 }
+/* #educationForm {
+  background-image: none;
+} */
+
 #formBlock1SubmitButton {
   margin-top: 2rem;
 }
@@ -120,6 +148,17 @@ export default {
   width: 100%;
   box-sizing: border-box;
   padding-left: 1rem;
+}
+@media screen and (max-width: 400px) {
+  .formBlock1 select {
+    background-image: none;
+    padding-left: 0.5rem;
+  }
+  .formBlock1 input:not(.submitButton) {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0.5rem;
+  }
 }
 @media screen and (max-width: 450px) {
   #formBlock1SubmitButton {
