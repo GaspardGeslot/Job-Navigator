@@ -403,6 +403,7 @@ export default {
         this.errorMessage =
           'Vous ne pouvez sélectionner que 5 options au total.';
         alert(this.errorMessage);
+        console.log(this.errorMessage);
         return;
       }
       let situationReview = {
