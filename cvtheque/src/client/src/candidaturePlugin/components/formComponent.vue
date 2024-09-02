@@ -7,7 +7,7 @@
     >
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-if="currentStep === 7"
+          v-if="currentStep === 1"
           ref="formOne"
           @situation-submitted="addReview"
         />
@@ -17,28 +17,28 @@
           @situation-submitted="addReview"
         />
         <FormThree
-          v-if="currentStep === 4"
+          v-if="currentStep === 3"
           ref="formThree"
           @situation-submitted="addReview"
         />
         <FormFour
-          v-if="currentStep === 5"
+          v-if="currentStep === 4"
           ref="formFour"
           @situation-submitted="addReview"
         />
         <FormFive
-          v-if="currentStep === 6"
+          v-if="currentStep === 5"
           ref="formFive"
           @situation-submitted="addReview"
         />
         <FormSix
-          v-if="currentStep === 1"
+          v-if="currentStep === 6"
           ref="formSix"
           @situation-submitted="addReview"
         />
-        <FormSeven v-if="currentStep === 8" ref="formSix" />
+        <FormSeven v-if="currentStep === 7" ref="formSix" />
         <FormEight
-          v-if="currentStep === 3"
+          v-if="currentStep === 8"
           ref="formEight"
           @situation-submitted="addReview"
         />
