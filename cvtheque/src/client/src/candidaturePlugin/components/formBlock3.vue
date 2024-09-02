@@ -259,6 +259,7 @@ export default {
 }
 
 .checkbox-item label {
+  font-family: 'Telegraf', sans-serif;
   font-size: 0.75rem;
   display: inline-block;
   vertical-align: middle;

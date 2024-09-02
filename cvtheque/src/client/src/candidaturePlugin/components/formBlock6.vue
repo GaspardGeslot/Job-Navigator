@@ -18,15 +18,21 @@ import { inject } from 'vue';
       <input
         id="email"
         v-model="email"
+        type="email"
         class="blackPlaceholder"
         placeholder="E-mail"
       />
       <input
         id="phone"
         v-model="phone"
+        type="number"
         class="blackPlaceholder"
-        placeholder="Téléphone"
+        placeholder="Téléphone ex:0142274949"
       />
+      <!--
+      <input type="text" required />
+      <div class="placeholder">Téléphone <span>ex:0142274949</span></div>
+      -->
       <div class="AcceptanceofTerms-container">
         <div class="checkbox-container">
           <label class="switch">
@@ -101,6 +107,14 @@ export default {
     };
   },
   methods: {
+    validateEmail() {
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailPattern.test(this.email)) {
+        alert('Veuillez entrer une adresse e-mail valide.');
+        return false;
+      }
+      return true;
+    },
     onSubmit() {
       if (
         this.name === '' ||
@@ -111,6 +125,10 @@ export default {
         alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
         return;
       }
+      if (!this.validateEmail()) {
+        alert('Veuillez entrer une adresse e-mail valide.');
+        return;
+      }
       if (this.createAccount && this.password !== this.confirmPassword) {
         alert('Les mots de passe ne correspondent pas. Veuillez réessayer.');
         return;
@@ -119,6 +137,18 @@ export default {
         alert(
           'Vous devez accepter les conditions générales et la politique de confidentialité des données.',
         );
+        return;
+      }
+      this.phone = this.phone.toString();
+      //console.log(this.phone, typeof this.phone, this.phone.length);
+      if (this.phone.length == 9) {
+        console.log(this.phone, typeof this.phone);
+        this.phone = '0' + this.phone;
+        // console.log('ici');
+        // console.log(this.phone, typeof this.phone);
+      }
+      if (this.phone.length != 10) {
+        alert('Veuillez indiquer un numéro de téléphone valide.');
         return;
       }
       let productReview = {
