@@ -1,7 +1,7 @@
 <template>
   <div class="formBlockLayout" @submit.prevent="onSubmit">
-    <h3 class="formTitle">Quel poste souhaitez-vous ?</h3>
-    <p class="formSubTitle">5 choix possibles.</p>
+    <h3 class="formTitle">Quel métier vous intéresse ?</h3>
+    <p class="formSubTitle">3 choix possibles.</p>
     <form class="formBlock5">
       <p class="CVText">Métiers du gros œuvre</p>
       <div class="checkbox-group two-columns">
@@ -388,10 +388,12 @@ export default {
   },
   watch: {
     checkedJobs(newVal) {
-      if (newVal.length > 5) {
+      if (newVal.length > 3) {
         this.checkedJobs.pop();
         this.errorMessage =
-          'Vous ne pouvez sélectionner que 5 options au total.';
+          'Vous ne pouvez sélectionner que 3 options au total.';
+        alert(this.errorMessage);
+        //console.log(this.errorMessage);
       } else {
         this.errorMessage = '';
       }
@@ -399,11 +401,9 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (this.checkedJobs.length > 5) {
+      if (this.checkedJobs.length > 3) {
         this.errorMessage =
-          'Vous ne pouvez sélectionner que 5 options au total.';
-        alert(this.errorMessage);
-        console.log(this.errorMessage);
+          'Vous ne pouvez sélectionner que 3 options au total.';
         return;
       }
       let situationReview = {

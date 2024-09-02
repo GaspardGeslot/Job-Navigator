@@ -18,15 +18,21 @@ import { inject } from 'vue';
       <input
         id="email"
         v-model="email"
+        type="email"
         class="blackPlaceholder"
         placeholder="E-mail"
       />
       <input
         id="phone"
         v-model="phone"
+        type="number"
         class="blackPlaceholder"
-        placeholder="Téléphone"
+        placeholder="Téléphone ex:0142274949"
       />
+      <!--
+      <input type="text" required />
+      <div class="placeholder">Téléphone <span>ex:0142274949</span></div>
+      -->
       <div class="AcceptanceofTerms-container">
         <div class="checkbox-container">
           <label class="switch">
@@ -56,6 +62,7 @@ import { inject } from 'vue';
             required
           />
         </div>
+        <!--
         <div class="checkbox-container">
           <label class="switch short-switch">
             <input type="checkbox" @change="toggle" />
@@ -66,14 +73,16 @@ import { inject } from 'vue';
             sont intéressées par mon profil.
           </label>
         </div>
+        -->
         <div class="checkbox-container">
-          <label class="switch short-switch">
+          <label class="switch big-switch">
             <input v-model="checked" type="checkbox" @change="toggle" />
             <span class="slider round"></span>
           </label>
           <label class="AcceptanceofTermsText">
-            J’ai lu et j’accepte les conditions générales ainsi que la politique
-            de confidentialité des données.
+            J'accepte les conditions générales du service ainsi que la politique
+            de confidentialité des données. J'accepte d'être contacté par les
+            entreprises qui recrutent et qui sont interessées par mon profil
           </label>
         </div>
       </div>
@@ -98,6 +107,14 @@ export default {
     };
   },
   methods: {
+    validateEmail() {
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailPattern.test(this.email)) {
+        alert('Veuillez entrer une adresse e-mail valide.');
+        return false;
+      }
+      return true;
+    },
     onSubmit() {
       if (
         this.name === '' ||
@@ -108,6 +125,10 @@ export default {
         alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
         return;
       }
+      if (!this.validateEmail()) {
+        alert('Veuillez entrer une adresse e-mail valide.');
+        return;
+      }
       if (this.createAccount && this.password !== this.confirmPassword) {
         alert('Les mots de passe ne correspondent pas. Veuillez réessayer.');
         return;
@@ -116,6 +137,18 @@ export default {
         alert(
           'Vous devez accepter les conditions générales et la politique de confidentialité des données.',
         );
+        return;
+      }
+      this.phone = this.phone.toString();
+      //console.log(this.phone, typeof this.phone, this.phone.length);
+      if (this.phone.length == 9) {
+        console.log(this.phone, typeof this.phone);
+        this.phone = '0' + this.phone;
+        // console.log('ici');
+        // console.log(this.phone, typeof this.phone);
+      }
+      if (this.phone.length != 10) {
+        alert('Veuillez indiquer un numéro de téléphone valide.');
         return;
       }
       let productReview = {
@@ -150,8 +183,11 @@ export default {
   width: 46px;
   height: 14px;
 }
-.short-switch {
+/* .short-switch {
   width: 34.22px;
+} */
+.big-switch {
+  width: 70px;
 }
 .switch input {
   opacity: 0;
@@ -195,7 +231,7 @@ input:focus + .slider {
 input:checked + .slider:before {
   /* -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px); */
-  transform: translateX(15px);
+  transform: translateX(16px);
 }
 .slider.round {
   border-radius: 17px;
@@ -220,6 +256,11 @@ input:checked + .slider:before {
   padding-left: 1rem;
 }
 @media screen and (max-width: 450px) {
+  input:checked + .slider:before {
+    transform: translateX(15px);
+  }
+}
+@media screen and (max-width: 600px) {
   .slider {
     width: 29px;
   }

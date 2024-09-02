@@ -12,7 +12,10 @@
         class="blackPlaceholder"
         placeholder="Indiquez ici ce que vous aimez. Par exemple : travailler en équipe, être dehors, le travail manuel...."
       ></textarea>
-      <p class="CVText">Vous avez un CV ?</p>
+      <p class="CVText">
+        Vous avez un CV ? Déposez le pour les recruteurs découvrent votre
+        parcours.
+      </p>
       <InputFile @emit-input="setFile" />
       <p v-if="file" class="fileNameDisplay">{{ file.name }}</p>
       <!-- <div class="custom-file-input">

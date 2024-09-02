@@ -7,7 +7,7 @@
     >
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-if="currentStep === 1"
+          v-if="currentStep === 3"
           ref="formOne"
           @situation-submitted="addReview"
         />
@@ -17,12 +17,12 @@
           @situation-submitted="addReview"
         />
         <FormThree
-          v-if="currentStep === 3"
+          v-if="currentStep === 1"
           ref="formThree"
           @situation-submitted="addReview"
         />
         <FormFour
-          v-if="currentStep === 4"
+          v-if="currentStep === 9"
           ref="formFour"
           @situation-submitted="addReview"
         />
@@ -37,6 +37,11 @@
           @situation-submitted="addReview"
         />
         <FormSeven v-if="currentStep === 7" ref="formSix" />
+        <FormEight
+          v-if="currentStep === 8"
+          ref="formEight"
+          @situation-submitted="addReview"
+        />
       </div>
     </div>
     <img
@@ -57,6 +62,7 @@ import FormFour from './formBlock4';
 import FormFive from './formBlock5';
 import FormSix from './formBlock6';
 import FormSeven from './formBlock7';
+import FormEight from './formBlock8';
 //import ReviewList from './review_list';
 
 export default {
@@ -69,6 +75,7 @@ export default {
     FormFive,
     FormSix,
     FormSeven,
+    FormEight,
     //ReviewList,
   },
   setup() {
