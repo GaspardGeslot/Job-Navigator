@@ -18,30 +18,34 @@
       </p>
       <InputFile @emit-input="setFile" />
       <p v-if="file" class="fileNameDisplay">{{ file.name }}</p>
-      <!-- <div class="custom-file-input">
+      <!-- 
+        <div class="custom-file-input">
         <p class="CVText">Vous avez un CV ?</p>
         <input
           type="file"
           placeholder="Télécharger"
           @change="handleFileUpload"
         />
-      </div>-->
+      </div>
       <input
         class="marginButton submitButton"
         :class="{'adjust-margin': file && file.name}"
         type="submit"
         value="SUIVANT"
       />
+    -->
+      <SubmitComponent />
     </form>
   </div>
 </template>
 <script>
 import InputFile from './inputFile.vue';
-
+import SubmitComponent from './submit';
 export default {
   name: 'FormFive',
   components: {
     InputFile,
+    SubmitComponent,
   },
   emits: ['situation-submitted'],
   data() {

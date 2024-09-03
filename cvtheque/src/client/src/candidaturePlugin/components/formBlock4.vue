@@ -78,15 +78,18 @@
           <label for="vehicleNo">Non</label>
         </div>
       </div>
-
-      <input class="submitButton" type="submit" value="SUIVANT" />
+      <SubmitComponent />
     </form>
   </div>
 </template>
 
 <script>
+import SubmitComponent from './submit';
 export default {
   name: 'FormFour',
+  components: {
+    SubmitComponent,
+  },
   emits: ['situation-submitted'],
   data() {
     return {

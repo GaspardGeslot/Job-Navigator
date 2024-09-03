@@ -1,3 +1,4 @@
+import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
 <template>
   <div class="formBlockLayout" @submit.prevent="onSubmit">
     <h3 class="formTitle">Quel métier vous intéresse ?</h3>
@@ -371,14 +372,18 @@
           <label for="job6-4">Autre</label>
         </div>
       </div>
-      <input class="submitButton" type="submit" value="SUIVANT" />
+      <SubmitComponent />
     </form>
   </div>
 </template>
 
 <script>
+import SubmitComponent from './submit';
 export default {
   name: 'FormTwo',
+  components: {
+    SubmitComponent,
+  },
   emits: ['situation-submitted'],
   data() {
     return {

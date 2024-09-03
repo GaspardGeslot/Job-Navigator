@@ -7,7 +7,7 @@
     >
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-if="currentStep === 8"
+          v-if="currentStep === 1"
           ref="formOne"
           @situation-submitted="addReview"
         />
@@ -43,7 +43,7 @@
           @situation-submitted="addReview"
         />
         <FormNine
-          v-if="currentStep === 1"
+          v-if="currentStep === 8"
           ref="formNine"
           @situation-submitted="addReview"
         />

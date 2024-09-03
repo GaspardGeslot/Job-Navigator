@@ -8720,6 +8720,44 @@ p {
   font-size: 0.5rem;
   line-height: 0.8rem;
 }
+.submit-block {
+  margin-top: 2rem;
+  height: 3rem;
+}
+.previousButton {
+  background-color: #6d685f;
+  border: none;
+  width: 3.25rem;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainSubmitButton {
+  background-color: black;
+  color: white;
+  width: 85%;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.mainSubmitButtonTxt {
+  margin-left: 6.5rem;
+}
+.mainSubmitButtonSvg {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: auto;
+  width: 3rem;
+  margin-right: 0.25rem;
+}
 .submitButton {
   background-color: black;
   color: white;
@@ -8731,6 +8769,13 @@ p {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+}
+.submit-block {
+  display: flex;
+  flex-direction: row;
+}
+.previousButton {
+  width: 4rem;
 }
 .formBlockLayout {
   background-color: white;
@@ -8861,6 +8906,11 @@ p {
   box-sizing: border-box;
   padding-left: 1rem;
 }
+/* .formBlock1 > input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 1rem;
+} */
 #postalCode[data-v-d9bb3a7c]::-webkit-outer-spin-button,
 #postalCode[data-v-d9bb3a7c]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -8880,6 +8930,11 @@ p {
     box-sizing: border-box;
     padding-left: 0.5rem;
 }
+  /* .formBlock1 > input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0.5rem;
+  } */
 }
 @media screen and (max-width: 450px) {
 #formBlock1SubmitButton[data-v-d9bb3a7c] {
@@ -9012,6 +9067,44 @@ p[data-v-d99f0b7a] {
   font-size: 0.5rem;
   line-height: 0.8rem;
 }
+.submit-block[data-v-d99f0b7a] {
+  margin-top: 2rem;
+  height: 3rem;
+}
+.previousButton[data-v-d99f0b7a] {
+  background-color: #6d685f;
+  border: none;
+  width: 3.25rem;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainSubmitButton[data-v-d99f0b7a] {
+  background-color: black;
+  color: white;
+  width: 85%;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.mainSubmitButtonTxt[data-v-d99f0b7a] {
+  margin-left: 6.5rem;
+}
+.mainSubmitButtonSvg[data-v-d99f0b7a] {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: auto;
+  width: 3rem;
+  margin-right: 0.25rem;
+}
 .submitButton[data-v-d99f0b7a] {
   background-color: black;
   color: white;
@@ -9023,6 +9116,13 @@ p[data-v-d99f0b7a] {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+}
+.submit-block[data-v-d99f0b7a] {
+  display: flex;
+  flex-direction: row;
+}
+.previousButton[data-v-d99f0b7a] {
+  width: 4rem;
 }
 .formBlockLayout[data-v-d99f0b7a] {
   background-color: white;
@@ -9245,6 +9345,27 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock6.vue?vue&type=style&index=1&id=d92e4f72&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.submit-block[data-v-d92e4f72] {
+  margin-top: 1rem;
+}
+.formBlock6[data-v-d92e4f72] {
+  display: flex;
+  flex-direction: column;
+}
+.formBlock6 > *[data-v-d92e4f72]:not(.submit-block) {
+  flex: 1;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+.formBlock6 input[data-v-d92e4f72]::-moz-placeholder {
+  padding-left: 0.75rem;
+}
+.formBlock6 input[data-v-d92e4f72]::placeholder,
+.formBlock6 select[data-v-d92e4f72] {
+  padding-left: 0.75rem;
+}
 .AcceptanceofTermsText[data-v-d92e4f72] {
   padding-left: 1.5rem;
   font-family: 'Telegraf', sans-serif;
@@ -9566,6 +9687,44 @@ p[data-v-d8f5f16e] {
   font-size: 0.5rem;
   line-height: 0.8rem;
 }
+.submit-block[data-v-d8f5f16e] {
+  margin-top: 2rem;
+  height: 3rem;
+}
+.previousButton[data-v-d8f5f16e] {
+  background-color: #6d685f;
+  border: none;
+  width: 3.25rem;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainSubmitButton[data-v-d8f5f16e] {
+  background-color: black;
+  color: white;
+  width: 85%;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.mainSubmitButtonTxt[data-v-d8f5f16e] {
+  margin-left: 6.5rem;
+}
+.mainSubmitButtonSvg[data-v-d8f5f16e] {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: auto;
+  width: 3rem;
+  margin-right: 0.25rem;
+}
 .submitButton[data-v-d8f5f16e] {
   background-color: black;
   color: white;
@@ -9577,6 +9736,13 @@ p[data-v-d8f5f16e] {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+}
+.submit-block[data-v-d8f5f16e] {
+  display: flex;
+  flex-direction: row;
+}
+.previousButton[data-v-d8f5f16e] {
+  width: 4rem;
 }
 .formBlockLayout[data-v-d8f5f16e] {
   background-color: white;
@@ -9823,6 +9989,44 @@ p[data-v-d8d9c26c] {
   font-size: 0.5rem;
   line-height: 0.8rem;
 }
+.submit-block[data-v-d8d9c26c] {
+  margin-top: 2rem;
+  height: 3rem;
+}
+.previousButton[data-v-d8d9c26c] {
+  background-color: #6d685f;
+  border: none;
+  width: 3.25rem;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainSubmitButton[data-v-d8d9c26c] {
+  background-color: black;
+  color: white;
+  width: 85%;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.mainSubmitButtonTxt[data-v-d8d9c26c] {
+  margin-left: 6.5rem;
+}
+.mainSubmitButtonSvg[data-v-d8d9c26c] {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: auto;
+  width: 3rem;
+  margin-right: 0.25rem;
+}
 .submitButton[data-v-d8d9c26c] {
   background-color: black;
   color: white;
@@ -9834,6 +10038,13 @@ p[data-v-d8d9c26c] {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+}
+.submit-block[data-v-d8d9c26c] {
+  display: flex;
+  flex-direction: row;
+}
+.previousButton[data-v-d8d9c26c] {
+  width: 4rem;
 }
 .formBlockLayout[data-v-d8d9c26c] {
   background-color: white;
