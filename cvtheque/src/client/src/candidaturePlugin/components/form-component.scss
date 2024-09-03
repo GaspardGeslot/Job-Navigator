@@ -277,6 +277,9 @@ p {
     box-sizing: border-box;
   }
 @media screen and (max-width: 450px) {
+    .mainSubmitButtonTxt {
+        margin-left: 2.15rem;
+    }
     .formTitle{
         color: black;
         font-family: 'Montserrat', sans-serif;
