@@ -78,16 +78,19 @@
           <label for="vehicleNo">Non</label>
         </div>
       </div>
-
-      <input class="submitButton" type="submit" value="SUIVANT" />
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
 
 <script>
+import SubmitComponent from './submit';
 export default {
   name: 'FormFour',
-  emits: ['situation-submitted'],
+  components: {
+    SubmitComponent,
+  },
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       checkedPermits: [],
@@ -108,6 +111,9 @@ export default {
       this.$emit('situation-submitted', situationReview);
       this.checkedPermits = [];
       this.picked = null;
+    },
+    goBack() {
+      this.$emit('go-back');
     },
   },
 };

@@ -152,6 +152,11 @@ export default {
   box-sizing: border-box;
   padding-left: 1rem;
 }
+/* .formBlock1 > input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 1rem;
+} */
 #postalCode::-webkit-outer-spin-button,
 #postalCode::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -171,6 +176,11 @@ export default {
     box-sizing: border-box;
     padding-left: 0.5rem;
   }
+  /* .formBlock1 > input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0.5rem;
+  } */
 }
 @media screen and (max-width: 450px) {
   #formBlock1SubmitButton {

@@ -1,7 +1,7 @@
 import { inject } from 'vue';
 <template>
   <div class="formBlockLayout">
-    <form class="formBlock1" @submit.prevent="onSubmit">
+    <form class="formBlock6" @submit.prevent="onSubmit">
       <h3 class="formTitle">Pour finir</h3>
       <input
         id="name"
@@ -86,14 +86,18 @@ import { inject } from 'vue';
           </label>
         </div>
       </div>
-      <input class="submitButton" type="submit" value="ENVOYER" />
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
 <script>
+import SubmitComponent from './submit';
 export default {
   name: 'FormSix',
-  emits: ['situation-submitted'],
+  components: {
+    SubmitComponent,
+  },
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       name: '',
@@ -167,12 +171,33 @@ export default {
       this.email = '';
       this.phone = '';
     },
+    goBack() {
+      this.$emit('go-back');
+    },
   },
 };
 </script>
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
+.submit-block {
+  margin-top: 1rem;
+}
+.formBlock6 {
+  display: flex;
+  flex-direction: column;
+}
+.formBlock6 > *:not(.submit-block) {
+  flex: 1;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+.formBlock6 input::placeholder,
+.formBlock6 select {
+  padding-left: 0.75rem;
+}
 .AcceptanceofTermsText {
   padding-left: 1.5rem;
   font-family: 'Telegraf', sans-serif;

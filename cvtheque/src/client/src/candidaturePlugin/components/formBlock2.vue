@@ -1,3 +1,4 @@
+import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
 <template>
   <div class="formBlockLayout" @submit.prevent="onSubmit">
     <h3 class="formTitle">Quel métier vous intéresse ?</h3>
@@ -371,15 +372,19 @@
           <label for="job6-4">Autre</label>
         </div>
       </div>
-      <input class="submitButton" type="submit" value="SUIVANT" />
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
 
 <script>
+import SubmitComponent from './submit';
 export default {
   name: 'FormTwo',
-  emits: ['situation-submitted'],
+  components: {
+    SubmitComponent,
+  },
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       checkedJobs: [],
@@ -413,6 +418,9 @@ export default {
       this.$emit('situation-submitted', situationReview);
       this.checkedJobs = [];
       this.errorMessage = '';
+    },
+    goBack() {
+      this.$emit('go-back');
     },
   },
 };
