@@ -8860,6 +8860,9 @@ p {
   box-sizing: border-box;
 }
 @media screen and (max-width: 450px) {
+.mainSubmitButtonTxt {
+    margin-left: 2.15rem;
+}
 .formTitle {
     color: black;
     font-family: "Montserrat", sans-serif;
@@ -8939,6 +8942,28 @@ p {
 @media screen and (max-width: 450px) {
 #formBlock1SubmitButton[data-v-d9bb3a7c] {
     margin-top: 1rem;
+}
+}
+
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/submit.vue?vue&type=style&index=1&id=301158b2&scoped=true&lang=css ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+@media screen and (min-width: 400px) and (max-width: 450px) {
+.mainSubmitButtonTxt[data-v-301158b2] {
+    margin-left: 2.15rem;
+}
+}
+@media screen and (max-width: 350px) {
+.mainSubmitButton[data-v-301158b2] {
+    margin-left: 0.5rem;
+}
+.mainSubmitButtonTxt[data-v-301158b2] {
+    margin-left: 1rem;
+}
+.mainSubmitButtonSvg[data-v-301158b2] {
+    width: auto;
+    max-width: 3rem;
 }
 }
 
@@ -9207,6 +9232,9 @@ p[data-v-d99f0b7a] {
   box-sizing: border-box;
 }
 @media screen and (max-width: 450px) {
+.mainSubmitButtonTxt[data-v-d99f0b7a] {
+    margin-left: 2.15rem;
+}
 .formTitle[data-v-d99f0b7a] {
     color: black;
     font-family: "Montserrat", sans-serif;
@@ -9827,6 +9855,9 @@ p[data-v-d8f5f16e] {
   box-sizing: border-box;
 }
 @media screen and (max-width: 450px) {
+.mainSubmitButtonTxt[data-v-d8f5f16e] {
+    margin-left: 2.15rem;
+}
 .formTitle[data-v-d8f5f16e] {
     color: black;
     font-family: "Montserrat", sans-serif;
@@ -10129,6 +10160,9 @@ p[data-v-d8d9c26c] {
   box-sizing: border-box;
 }
 @media screen and (max-width: 450px) {
+.mainSubmitButtonTxt[data-v-d8d9c26c] {
+    margin-left: 2.15rem;
+}
 .formTitle[data-v-d8d9c26c] {
     color: black;
     font-family: "Montserrat", sans-serif;

@@ -66,3 +66,23 @@ export default {
   },
 };
 </script>
+<style src="./form-component.scss" lang="scss"></style>
+<style scoped>
+@media screen and (min-width: 400px) and (max-width: 450px) {
+  .mainSubmitButtonTxt {
+    margin-left: 2.15rem;
+  }
+}
+@media screen and (max-width: 350px) {
+  .mainSubmitButton {
+    margin-left: 0.5rem;
+  }
+  .mainSubmitButtonTxt {
+    margin-left: 1rem;
+  }
+  .mainSubmitButtonSvg {
+    width: auto;
+    max-width: 3rem;
+  }
+}
+</style>
