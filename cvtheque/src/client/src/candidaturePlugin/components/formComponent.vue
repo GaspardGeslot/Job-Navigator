@@ -14,11 +14,13 @@
         <FormTwo
           v-if="currentStep === 2"
           ref="formTwo"
+          @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormThree
           v-if="currentStep === 3"
           ref="formThree"
+          @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormFour
@@ -29,11 +31,13 @@
         <FormFive
           v-if="currentStep === 4"
           ref="formFive"
+          @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormSix
           v-if="currentStep === 5"
           ref="formSix"
+          @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormSeven v-if="currentStep === 6" ref="formSix" />
@@ -148,6 +152,14 @@ export default {
         }, 50);
       });
     };
+    const previousStep = () => {
+      currentStep.value--;
+      nextTick(() => {
+        setTimeout(() => {
+          checkScroll();
+        }, 50);
+      });
+    };
 
     onMounted(() => {
       checkScroll();
@@ -162,6 +174,7 @@ export default {
       formImg,
       addReview,
       nextStep,
+      previousStep,
     };
   },
 };

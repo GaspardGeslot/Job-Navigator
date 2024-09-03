@@ -34,7 +34,7 @@
         value="SUIVANT"
       />
     -->
-      <SubmitComponent />
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
     InputFile,
     SubmitComponent,
   },
-  emits: ['situation-submitted'],
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       motivation: '',
@@ -78,6 +78,9 @@ export default {
       this.motivation = '';
       this.file = null;
       this.fileName = '';
+    },
+    goBack() {
+      this.$emit('go-back');
     },
   },
 };

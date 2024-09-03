@@ -1,6 +1,6 @@
 <template>
   <div class="submit-block">
-    <button class="previousButton">
+    <button class="previousButton" type="button" @click="goBack">
       <svg
         width="24"
         height="24"
@@ -33,7 +33,7 @@
           </svg>
         </button>
         <input class="submitButton2" type="submit" value="SUIVANT" />
-      --><button class="mainSubmitButton">
+      --><button class="mainSubmitButton" type="submit">
       <div class="mainSubmitButtonTxt">SUIVANT</div>
       <div class="mainSubmitButtonSvg">
         <svg
@@ -58,5 +58,11 @@
 <script>
 export default {
   name: 'SubmitComponent',
+  emits: ['go-back'],
+  methods: {
+    goBack() {
+      this.$emit('go-back');
+    },
+  },
 };
 </script>

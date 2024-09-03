@@ -78,7 +78,7 @@
           <label for="vehicleNo">Non</label>
         </div>
       </div>
-      <SubmitComponent />
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -90,7 +90,7 @@ export default {
   components: {
     SubmitComponent,
   },
-  emits: ['situation-submitted'],
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       checkedPermits: [],
@@ -111,6 +111,9 @@ export default {
       this.$emit('situation-submitted', situationReview);
       this.checkedPermits = [];
       this.picked = null;
+    },
+    goBack() {
+      this.$emit('go-back');
     },
   },
 };

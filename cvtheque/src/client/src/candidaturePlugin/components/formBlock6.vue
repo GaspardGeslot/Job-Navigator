@@ -86,7 +86,7 @@ import { inject } from 'vue';
           </label>
         </div>
       </div>
-      <SubmitComponent />
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -97,7 +97,7 @@ export default {
   components: {
     SubmitComponent,
   },
-  emits: ['situation-submitted'],
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       name: '',
@@ -170,6 +170,9 @@ export default {
       this.surname = '';
       this.email = '';
       this.phone = '';
+    },
+    goBack() {
+      this.$emit('go-back');
     },
   },
 };

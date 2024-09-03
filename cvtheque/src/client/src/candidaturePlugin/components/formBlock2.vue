@@ -372,7 +372,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
           <label for="job6-4">Autre</label>
         </div>
       </div>
-      <SubmitComponent />
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -384,7 +384,7 @@ export default {
   components: {
     SubmitComponent,
   },
-  emits: ['situation-submitted'],
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       checkedJobs: [],
@@ -418,6 +418,9 @@ export default {
       this.$emit('situation-submitted', situationReview);
       this.checkedJobs = [];
       this.errorMessage = '';
+    },
+    goBack() {
+      this.$emit('go-back');
     },
   },
 };
