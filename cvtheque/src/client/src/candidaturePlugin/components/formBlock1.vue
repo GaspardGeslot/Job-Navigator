@@ -48,6 +48,12 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>Bac +2 ou 3 (BTS, DUT, BUT, Licence...)</option>
         <option>Bac +4, 5 ou plus (Master, Ingénieur...)</option>
       </select>
+      <p v-if="errors.postalCode" id="alert-msg01" class="alert-msg">
+        Veuillez indiquer un code postal valide.
+      </p>
+      <p v-if="errors.incompleteForm" id="alert-msg02" class="alert-msg">
+        L'évaluation est incomplète. Veuillez remplir tous les champs.
+      </p>
       <input
         id="formBlock1SubmitButton"
         class="submitButton"
@@ -68,18 +74,25 @@ export default {
       availability: '',
       mobility: '',
       education: '',
+      errors: {
+        postalCode: false,
+        incompleteForm: false,
+      },
     };
   },
   methods: {
     onSubmit() {
+      let hasError = false;
+      this.errors.postalCode = false;
+      this.errors.incompleteForm = false;
       if (
         this.type_de_contrat === '' ||
         this.postal_code === '' ||
         this.availability === '' ||
         this.education === ''
       ) {
-        alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
-        return;
+        this.errors.incompleteForm = true;
+        hasError = true;
       }
       // let arrayOfPostalCode = Array.from(this.postal_code, Number);
       // console.log(typeof this.postal_code);
@@ -100,9 +113,12 @@ export default {
         if (postal_code_array.length == 4) {
           postal_code_array.unshift(0);
         } else {
-          alert('Veuillez indiquer un code postal valide.');
-          return;
+          this.errors.postalCode = true;
+          hasError = true;
         }
+      }
+      if (hasError) {
+        return;
       }
       let situationReview = {
         type_de_contrat: this.type_de_contrat,

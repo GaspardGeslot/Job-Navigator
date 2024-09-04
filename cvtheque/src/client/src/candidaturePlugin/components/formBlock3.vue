@@ -296,6 +296,9 @@
           <label for="vehicleNo">Non</label>
         </div>
       </div>
+      <p v-if="errorMessage" id="alert-msg04" class="alert-msg">
+        {{ errorMessage }}
+      </p>
       <SubmitComponent @go-back="goBack" />
     </form>
   </div>
@@ -314,12 +317,15 @@ export default {
       checkedSkills: [],
       checkedPermits: [],
       picked: null,
+      errorMessage: '',
     };
   },
   methods: {
     onSubmit() {
+      this.errorMessage = '';
       if (this.picked === null) {
-        alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
+        this.errorMessage =
+          "L'évaluation est incomplète. Veuillez remplir tous les champs.";
         return;
       }
       let situationReview = {

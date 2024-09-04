@@ -86,6 +86,22 @@ import { inject } from 'vue';
           </label>
         </div>
       </div>
+      <p v-if="errors.incompleteForm" id="alert-msg05" class="alert-msg">
+        L'évaluation est incomplète. Veuillez remplir tous les champs.
+      </p>
+      <p v-if="errors.email" id="alert-msg06" class="alert-msg">
+        Veuillez entrer une adresse e-mail valide.
+      </p>
+      <p v-if="errors.password" id="alert-msg07" class="alert-msg">
+        Les mots de passe ne correspondent pas. Veuillez réessayer.
+      </p>
+      <p v-if="errors.phoneNumber" id="alert-msg08" class="alert-msg">
+        Veuillez indiquer un numéro de téléphone valide.
+      </p>
+      <p v-if="errors.checked" id="alert-msg09" class="alert-msg">
+        Vous devez accepter les conditions générales et la politique de
+        confidentialité des données.
+      </p>
       <SubmitComponent @go-back="goBack" />
     </form>
   </div>
@@ -108,6 +124,13 @@ export default {
       password: '',
       confirmPassword: '',
       checked: false,
+      errors: {
+        incompleteForm: false,
+        email: false,
+        password: false,
+        phoneNumber: false,
+        checked: false,
+      },
     };
   },
   methods: {
@@ -120,27 +143,36 @@ export default {
       return true;
     },
     onSubmit() {
+      this.errors.incompleteForm = false;
+      this.errors.email = false;
+      this.errors.password = false;
+      this.errors.phoneNumber = false;
+      this.errors.checked = false;
       if (
         this.name === '' ||
         this.surname === '' ||
         this.phone === '' ||
         this.email === ''
       ) {
-        alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
+        this.errors.incompleteForm = true;
+        //alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
         return;
       }
       if (!this.validateEmail()) {
-        alert('Veuillez entrer une adresse e-mail valide.');
+        this.errors.email = true;
+        //alert('Veuillez entrer une adresse e-mail valide.');
         return;
       }
       if (this.createAccount && this.password !== this.confirmPassword) {
-        alert('Les mots de passe ne correspondent pas. Veuillez réessayer.');
+        this.errors.password = true;
+        //alert('Les mots de passe ne correspondent pas. Veuillez réessayer.');
         return;
       }
       if (!this.checked) {
-        alert(
-          'Vous devez accepter les conditions générales et la politique de confidentialité des données.',
-        );
+        this.errors.checked = true;
+        // alert(
+        //   'Vous devez accepter les conditions générales et la politique de confidentialité des données.',
+        // );
         return;
       }
       this.phone = this.phone.toString();
@@ -152,7 +184,8 @@ export default {
         // console.log(this.phone, typeof this.phone);
       }
       if (this.phone.length != 10) {
-        alert('Veuillez indiquer un numéro de téléphone valide.');
+        this.errors.phoneNumber = true;
+        //alert('Veuillez indiquer un numéro de téléphone valide.');
         return;
       }
       let productReview = {
