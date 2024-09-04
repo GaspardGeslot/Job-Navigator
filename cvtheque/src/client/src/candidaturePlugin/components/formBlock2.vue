@@ -372,6 +372,9 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
           <label for="job6-4">Autre</label>
         </div>
       </div>
+      <p v-if="errorMessage" id="alert-msg03" class="alert-msg">
+        {{ errorMessage }}
+      </p>
       <SubmitComponent @go-back="goBack" />
     </form>
   </div>
@@ -389,6 +392,9 @@ export default {
     return {
       checkedJobs: [],
       errorMessage: '',
+      errors: {
+        tooMuchOptions: false,
+      },
     };
   },
   watch: {
@@ -397,18 +403,21 @@ export default {
         this.checkedJobs.pop();
         this.errorMessage =
           'Vous ne pouvez sélectionner que 3 options au total.';
-        alert(this.errorMessage);
+        this.errors.tooMuchOptions = true;
         //console.log(this.errorMessage);
       } else {
         this.errorMessage = '';
+        this.errors.tooMuchOptions = false;
       }
     },
   },
   methods: {
     onSubmit() {
+      this.errors.tooMuchOptions = false;
       if (this.checkedJobs.length > 3) {
         this.errorMessage =
           'Vous ne pouvez sélectionner que 3 options au total.';
+        this.errors.tooMuchOptions = true;
         return;
       }
       let situationReview = {

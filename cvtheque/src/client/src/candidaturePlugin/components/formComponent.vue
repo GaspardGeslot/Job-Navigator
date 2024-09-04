@@ -7,12 +7,12 @@
     >
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-if="currentStep === 2"
+          v-if="currentStep === 1"
           ref="formOne"
           @situation-submitted="addReview"
         />
         <FormTwo
-          v-if="currentStep === 1"
+          v-if="currentStep === 2"
           ref="formTwo"
           @go-back="previousStep"
           @situation-submitted="addReview"
