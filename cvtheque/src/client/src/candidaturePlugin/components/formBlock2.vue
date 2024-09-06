@@ -221,9 +221,9 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
             v-model="checkedJobs"
             class="custom-checkbox custom-input"
             type="checkbox"
-            value="Gestion et encadrement : Autre"
+            value="Responsable de sécurité"
           />
-          <label for="job4-3">Autre</label>
+          <label for="job4-3">Responsable de sécurité</label>
         </div>
         <div class="checkbox-item">
           <input
@@ -241,9 +241,9 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
             v-model="checkedJobs"
             class="custom-checkbox custom-input"
             type="checkbox"
-            value="Responsable de sécurité"
+            value="Gestion et encadrement : Autre"
           />
-          <label for="job4-5">Responsable de sécurité</label>
+          <label for="job4-5">Autre</label>
         </div>
       </div>
       <p class="CVText">Techniques et études</p>
