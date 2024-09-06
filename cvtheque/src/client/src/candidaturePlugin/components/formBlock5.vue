@@ -3,8 +3,7 @@
     <form class="formBlock6" @submit.prevent="onSubmit">
       <h3 class="formTitle">Facultatif (mais apprécié)</h3>
       <p class="CVText">
-        Qu'est-ce qui vous plairait dans le fait de travailler dans la
-        construction ?
+        Qu'est-ce qui vous plait dans le fait de travailler dans le BTP ?
       </p>
       <textarea
         id="review"

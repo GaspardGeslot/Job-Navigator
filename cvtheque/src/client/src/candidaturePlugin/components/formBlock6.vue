@@ -82,7 +82,7 @@ import { inject } from 'vue';
           <label class="AcceptanceofTermsText">
             J'accepte les conditions générales du service ainsi que la politique
             de confidentialité des données. J'accepte d'être contacté par les
-            entreprises qui recrutent et qui sont interessées par mon profil
+            entreprises qui recrutent et qui sont intéressées par mon profil
           </label>
         </div>
       </div>

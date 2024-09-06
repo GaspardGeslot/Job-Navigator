@@ -69,7 +69,7 @@
             value="Électricien chargé de consignations en haute tension"
           />
           <label for="H1"
-            >Électricien chargé de consignations en haute tension
+            >HC : Électricien chargé de consignations en haute tension
           </label>
         </div>
         <div class="checkbox-item">
