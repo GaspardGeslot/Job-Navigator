@@ -59,17 +59,18 @@ class AuthProviderChain
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return bool
+     * @return string
      */
-    public function authenticate(AuthParamsInterface $authParams): bool
+    public function authenticate(AuthParamsInterface $authParams): string
     {
         array_multisort($this->priorities, SORT_DESC, $this->providers);
         foreach ($this->providers as $authProvider) {
-            if ($authProvider->authenticate($authParams)) {
-                return true;
+            $token = $authProvider->authenticate($authParams);
+            if (!is_null($token)) {
+                return $token;
             }
         }
-        return false;
+        return null;
     }
 
     /**

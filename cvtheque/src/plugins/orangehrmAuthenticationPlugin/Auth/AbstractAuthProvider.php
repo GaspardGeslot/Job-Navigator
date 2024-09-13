@@ -25,10 +25,10 @@ abstract class AbstractAuthProvider
 {
     /**
      * @param AuthParamsInterface $authParams
-     * @return bool
+     * @return string
      * @throws AuthenticationException
      */
-    abstract public function authenticate(AuthParamsInterface $authParams): bool;
+    abstract public function authenticate(AuthParamsInterface $authParams): string;
 
     /**
      * @param AuthParamsInterface $authParams

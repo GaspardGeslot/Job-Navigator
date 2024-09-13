@@ -39,13 +39,18 @@
 
 <script>
 import formComponent from '../components/formComponent.vue';
-//import {urlFor} from '@ohrm/core/util/helper/url';
 import {navigate} from '@ohrm/core/util/helper/navigation';
 
 export default {
   name: 'Candidature',
   components: {
     formComponent,
+  },
+  props: {
+    options: {
+      type: Object,
+      default: () => null,
+    },
   },
   data() {
     return {
@@ -55,6 +60,7 @@ export default {
 
   methods: {
     showForm() {
+      console.log('options :', this.options);
       this.formVisible = true;
     },
     navigateToLogin() {

@@ -98,12 +98,14 @@ class ValidateController extends AbstractController implements PublicControllerI
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $success = $authProviderChain->authenticate(new AuthParams($credentials));
+            $token = $authProviderChain->authenticate(new AuthParams($credentials));
+            $success = !is_null($token);
 
             if (!$success) {
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());

@@ -48,17 +48,17 @@ class LocalAuthProvider extends AbstractAuthProvider
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return bool
+     * @return string
      * @throws AuthenticationException
      * @throws PasswordEnforceException
      */
-    public function authenticate(AuthParamsInterface $authParams): bool
+    public function authenticate(AuthParamsInterface $authParams): string
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface) {
             return false;
         }
-        $success = $this->getAuthenticationService()->setCredentials($authParams->getCredential());
-        if ($success) {
+        $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential());
+        if (!is_null($token)) {
             if ($this->getConfigService()->getConfigDao()
                     ->getValue(ConfigService::KEY_ENFORCE_PASSWORD_STRENGTH) === 'on') {
                 $passwordStrengthValidation = new PasswordStrengthValidation();
@@ -81,7 +81,7 @@ class LocalAuthProvider extends AbstractAuthProvider
                 }
             }
         }
-        return $success;
+        return $token;
     }
 
     /**
