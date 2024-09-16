@@ -47,6 +47,12 @@ export default {
   components: {
     formComponent,
   },
+  props: {
+    options: {
+      type: Object,
+      default: () => null,
+    },
+  },
   data() {
     return {
       formVisible: false,
@@ -55,6 +61,7 @@ export default {
 
   methods: {
     showForm() {
+      console.log('options :', this.options);
       this.formVisible = true;
     },
     navigateToLogin() {
