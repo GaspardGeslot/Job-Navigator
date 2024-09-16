@@ -1,21 +1,4 @@
 <?php
-/**
- * OrangeHRM is a comprehensive Human Resource Management (HRM) System that captures
- * all the essential functionalities required for any enterprise.
- * Copyright (C) 2006 OrangeHRM Inc., http://www.orangehrm.com
- *
- * OrangeHRM is free software: you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later version.
- *
- * OrangeHRM is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with OrangeHRM.
- * If not, see <https://www.gnu.org/licenses/>.
- */
-
 namespace OrangeHRM\Authentication\Controller;
 
 use OrangeHRM\Authentication\Auth\AuthProviderChain;
@@ -38,14 +21,14 @@ use OrangeHRM\Framework\Routing\UrlGenerator;
 use OrangeHRM\Framework\Services;
 use Throwable;
 
-class ValidateController extends AbstractController implements PublicControllerInterface
+class ValidateNewAccountController extends AbstractController implements PublicControllerInterface
 {
     use AuthUserTrait;
     use ServiceContainerTrait;
     use CsrfTokenManagerTrait;
     use SessionHandlingTrait;
 
-    public const PARAMETER_USERNAME = 'username';
+    public const PARAMETER_EMAIL = 'email';
     public const PARAMETER_PASSWORD = 'password';
 
     /**
@@ -82,13 +65,13 @@ class ValidateController extends AbstractController implements PublicControllerI
 
     public function handle(Request $request): RedirectResponse
     {
-        $username = $request->request->get(self::PARAMETER_USERNAME, '');
+        $email = $request->request->get(self::PARAMETER_EMAIL, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
-        $credentials = new UserCredential($username, $password);
+        $credentials = new UserCredential($email, $password);
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $loginUrl = $urlGenerator->generate('auth_login', [], UrlGenerator::ABSOLUTE_URL);
+        $createAccountUrl = $urlGenerator->generate('auth_create_account', [], UrlGenerator::ABSOLUTE_URL);
 
         try {
             $token = $request->request->get('_token');
@@ -98,30 +81,27 @@ class ValidateController extends AbstractController implements PublicControllerI
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticate(new AuthParams($credentials));
-            $success = !is_null($token);
+            $success = $authProviderChain->signIn(new AuthParams($credentials));
 
-            if (!$success) {
-                throw AuthenticationException::invalidCredentials();
-            }
+            if (!$success)
+                throw AuthenticationException::userAlreadySignedIn();
             $this->getAuthUser()->setIsAuthenticated($success);
-            $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());
             if ($e instanceof RedirectableException) {
                 return new RedirectResponse($e->getRedirectUrl());
             }
-            return new RedirectResponse($loginUrl);
+            return new RedirectResponse($createAccountUrl);
         } catch (Throwable $e) {
             $this->getAuthUser()->addFlash(
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred',
+                    'message' => 'Unexpected error occurred : ' . $e->getTraceAsString(),
                 ]
             );
-            return new RedirectResponse($loginUrl);
+            return new RedirectResponse($createAccountUrl);
         }
 
         $redirectUrl = $this->handleSessionTimeoutRedirect();

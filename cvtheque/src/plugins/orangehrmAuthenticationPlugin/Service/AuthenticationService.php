@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Authentication\Service;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Admin\Traits\Service\UserServiceTrait;
 use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Authentication\Exception\AuthenticationException;
@@ -56,13 +57,79 @@ class AuthenticationService
 
     /**
      * @param UserCredential $credentials
+     * @return string
+     * @throws AuthenticationException
+     */
+    public function setCredentials(UserCredential $credentials): string
+    {
+        $user = $this->getUserService()->getCredentials($credentials);
+        $success = $this->setCredentialsForUser($user);
+        $token = null;
+        if ($success)
+            $token = $this->setHedwigeCredentials($credentials);
+        return $token;
+    }
+
+    /**
+     * @param UserCredential $credentials
      * @return bool
      * @throws AuthenticationException
      */
-    public function setCredentials(UserCredential $credentials): bool
+    public function createCredentials(UserCredential $credentials): bool
     {
-        $user = $this->getUserService()->getCredentials($credentials);
-        return $this->setCredentialsForUser($user);
+        $user = $this->getUserService()->createCredentials($credentials);
+        $success = $this->setCredentialsForUser($user);
+        if ($success)
+            $success = $this->createHedwigeCredentials($credentials);
+        return $success;
+    }
+
+    /**
+     * @param UserCredential $credentials
+     * @return string
+     */
+    protected function setHedwigeCredentials(UserCredential $credentials) : string
+    {
+        $client = new Client();
+        $clientId = getenv('HEDWIGE_CLIENT_ID');
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('POST', "{$clientBaseUrl}/user/{$clientId}/login", [
+                'json' => [
+                    'email' => $credentials->getUsername(),
+                    'password' => $credentials->getPassword()
+                ]
+            ]);
+            return (string) $response->getBody();
+        } catch (\Exceptionon $e) {
+            return null;
+        }
+    }
+    
+    /**
+     * @param UserCredential $credentials
+     * @return bool
+     */
+    protected function createHedwigeCredentials(UserCredential $credentials) : bool
+    {
+        $client = new Client();
+        $clientId = getenv('HEDWIGE_CLIENT_ID');
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $client->request('POST', "{$clientBaseUrl}/user/{$clientId}", [
+                'json' => [
+                    'email' => $credentials->getUsername(),
+                    'password' => $credentials->getPassword()
+                ]
+            ]);
+            return true;
+        } catch (\Exceptionon $e) {
+            return false;
+        }
     }
 
     /**
@@ -73,7 +140,7 @@ class AuthenticationService
         $this->getAuthUser()->setUserId($user->getId());
         $this->getAuthUser()->setUserRoleId($user->getUserRole()->getId());
         $this->getAuthUser()->setUserRoleName($user->getUserRole()->getName());
-        if ($user->getEmployee() instanceof Employee) {
+        if ($user->getEmployee() != null && $user->getEmployee() instanceof Employee) {
             $this->getAuthUser()->setEmpNumber($user->getEmployee()->getEmpNumber());
         }
     }
