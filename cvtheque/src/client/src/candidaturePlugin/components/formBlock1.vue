@@ -22,24 +22,6 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         class="blackPlaceholder"
         placeholder="Mon code postal *"
       />
-      <!--
-
-        <option>CDI de chantier</option>
-        <option>CDI</option>
-        <option>CDD</option>
-        <option>Intérim</option>
-        <option>Alternance</option>
-        <option>Stage</option>
-        <select v-model="availability">
-        <option disabled value="">Ma disponibilité *</option>
-        <option>Immédiatement</option>
-        <option>Dans 1 à 3 mois</option>
-        <option>Plus de 3 mois</option>
-      </select>
-
-      
-      -->
-
       <select v-if="courseStarts" v-model="availability">
         <option disabled value="">Ma disponibilité *</option>
         <option

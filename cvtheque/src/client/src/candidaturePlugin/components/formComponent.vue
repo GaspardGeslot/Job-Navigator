@@ -69,6 +69,7 @@
 
 <script>
 import {ref, onMounted, onBeforeUnmount, nextTick} from 'vue';
+//import axios from 'axios';
 import FormOne from './formBlock1';
 import FormTwo from './formBlock2';
 import FormThree from './formBlock3';
@@ -109,6 +110,11 @@ export default {
     const scrollContent = ref(null);
     const formImg = ref(null);
 
+    const combineData = (dataArray) => {
+      return dataArray.reduce((acc, item) => {
+        return {...acc, ...JSON.parse(JSON.stringify(item))};
+      }, {});
+    };
     const checkScroll = () => {
       const activeForm = scrollContent.value.querySelector(
         `[ref="form${currentStep.value}"]`,
@@ -167,7 +173,14 @@ export default {
         }, 50);
       });
     };
-    const nextStep = () => {
+    const nextStep = async () => {
+      if (currentStep.value == 5) {
+        const dataToProcess = reviews.value.slice(0, 5);
+        console.log('Données extraites :', dataToProcess);
+        const combinedData = combineData(dataToProcess);
+        console.log('Données prêtes pour POST :', combinedData);
+      }
+      console.log('data: ', reviews.value[1]);
       currentStep.value++;
       nextTick(() => {
         setTimeout(() => {
