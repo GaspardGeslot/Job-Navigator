@@ -9,14 +9,11 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
       entreprises qui recrutent.
     </p>
     <form class="formBlock1">
-      <select v-model="type_de_contrat">
+      <select v-if="needs" v-model="type_de_contrat">
         <option disabled value="">Type de contrat recherché *</option>
-        <option>CDI de chantier</option>
-        <option>CDI</option>
-        <option>CDD</option>
-        <option>Intérim</option>
-        <option>Alternance</option>
-        <option>Stage</option>
+        <option v-for="(item, index) in needs" :key="index" :value="item">
+          {{ item }}
+        </option>
       </select>
       <input
         id="postalCode"
@@ -25,11 +22,33 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         class="blackPlaceholder"
         placeholder="Mon code postal *"
       />
-      <select v-model="availability">
+      <!--
+
+        <option>CDI de chantier</option>
+        <option>CDI</option>
+        <option>CDD</option>
+        <option>Intérim</option>
+        <option>Alternance</option>
+        <option>Stage</option>
+        <select v-model="availability">
         <option disabled value="">Ma disponibilité *</option>
         <option>Immédiatement</option>
         <option>Dans 1 à 3 mois</option>
         <option>Plus de 3 mois</option>
+      </select>
+
+      
+      -->
+
+      <select v-if="courseStarts" v-model="availability">
+        <option disabled value="">Ma disponibilité *</option>
+        <option
+          v-for="(item, index) in courseStarts"
+          :key="index"
+          :value="item"
+        >
+          {{ item }}
+        </option>
       </select>
       <select v-model="mobility">
         <option disabled value="">Ma mobilité géographique</option>
@@ -40,13 +59,11 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>Ile-de-France</option>
         <option>France entière</option>
       </select>
-      <select id="educationForm" v-model="education">
+      <select v-if="studyLevels" id="educationForm" v-model="education">
         <option disabled value="">Plus haut niveau de diplôme *</option>
-        <option>Aucun diplôme</option>
-        <option>CAP, BEP</option>
-        <option>Bac ou équivalent</option>
-        <option>Bac +2 ou 3 (BTS, DUT, BUT, Licence...)</option>
-        <option>Bac +4, 5 ou plus (Master, Ingénieur...)</option>
+        <option v-for="(item, index) in studyLevels" :key="index" :value="item">
+          {{ item }}
+        </option>
       </select>
       <p v-if="errors.postalCode" id="alert-msg01" class="alert-msg">
         Veuillez indiquer un code postal valide.
@@ -66,6 +83,20 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
 <script>
 export default {
   name: 'FormOne',
+  props: {
+    courseStarts: {
+      type: Array,
+      default: () => [],
+    },
+    needs: {
+      type: Array,
+      default: () => [],
+    },
+    studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+  },
   emits: ['situation-submitted'],
   data() {
     return {

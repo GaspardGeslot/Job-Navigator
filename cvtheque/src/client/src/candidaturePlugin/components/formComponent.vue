@@ -9,11 +9,15 @@
         <FormOne
           v-if="currentStep === 1"
           ref="formOne"
+          :course-starts="options.courseStarts"
+          :needs="options.needs"
+          :study-levels="options.studyLevels"
           @situation-submitted="addReview"
         />
         <FormTwo
           v-if="currentStep === 2"
           ref="formTwo"
+          :sectors="options.sectors"
           @go-back="previousStep"
           @situation-submitted="addReview"
           @skip-form-three="addReviewSkip"
@@ -89,6 +93,12 @@ export default {
     FormEight,
     FormNine,
     //ReviewList,
+  },
+  props: {
+    options: {
+      type: Object,
+      default: () => null,
+    },
   },
   setup() {
     const currentStep = ref(1);

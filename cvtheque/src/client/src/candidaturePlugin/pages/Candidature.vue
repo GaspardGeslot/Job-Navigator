@@ -32,7 +32,7 @@
       </div>
     </div>
     <div v-if="formVisible" class="formContainer">
-      <formComponent class="formComponent" />
+      <formComponent :options="options" class="formComponent" />
     </div>
   </div>
 </template>
