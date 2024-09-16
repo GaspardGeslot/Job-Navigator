@@ -57,6 +57,16 @@ class AuthenticationService
 
     /**
      * @param UserCredential $credentials
+     * @return bool
+     * @throws AuthenticationException
+     */
+    public function hasCredentials(UserCredential $credentials): bool
+    {
+        return $this->getUserService()->checkExistsUser($credentials);
+    }
+    
+    /**
+     * @param UserCredential $credentials
      * @return string
      * @throws AuthenticationException
      */

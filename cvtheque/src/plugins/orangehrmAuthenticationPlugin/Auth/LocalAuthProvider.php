@@ -94,8 +94,8 @@ class LocalAuthProvider extends AbstractAuthProvider
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
             return false;
-        $success = $this->getAuthenticationService()->setCredentials($authParams->getCredential());
-        if ($success)
+        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
+        if ($exists)
             return false;
         return $this->getAuthenticationService()->createCredentials($authParams->getCredential());
     }

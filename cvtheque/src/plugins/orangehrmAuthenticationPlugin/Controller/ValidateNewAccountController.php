@@ -98,7 +98,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred : ' . $e->getTraceAsString(),
+                    'message' => 'Unexpected error occurred',
                 ]
             );
             return new RedirectResponse($createAccountUrl);

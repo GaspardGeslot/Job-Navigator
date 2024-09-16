@@ -217,6 +217,15 @@ class UserService
     }
 
     /**
+     * @param UserCredential $credentials
+     * @return bool
+     */
+    public function checkExistsUser(UserCredential $credentials): bool
+    {
+        return !is_null($this->getUserDao()->isExistingSystemUser($credentials));
+    }
+
+    /**
      * Checks if the password hash matches the password.
      * @param string $password
      * @param string $hash
