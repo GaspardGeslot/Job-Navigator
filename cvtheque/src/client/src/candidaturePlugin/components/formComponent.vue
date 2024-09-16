@@ -16,6 +16,7 @@
           ref="formTwo"
           @go-back="previousStep"
           @situation-submitted="addReview"
+          @skip-form-three="addReviewSkip"
         />
         <FormThree
           v-if="currentStep === 3"
@@ -139,11 +140,23 @@ export default {
       }
     });
 
+    const addReviewSkip = (review) => {
+      reviews.value.push(review);
+      skipNextStep();
+    };
     const addReview = (review) => {
       reviews.value.push(review);
       nextStep();
     };
 
+    const skipNextStep = () => {
+      currentStep.value += 2;
+      nextTick(() => {
+        setTimeout(() => {
+          checkScroll();
+        }, 50);
+      });
+    };
     const nextStep = () => {
       currentStep.value++;
       nextTick(() => {
@@ -173,6 +186,8 @@ export default {
       scrollContent,
       formImg,
       addReview,
+      addReviewSkip,
+      skipNextStep,
       nextStep,
       previousStep,
     };
