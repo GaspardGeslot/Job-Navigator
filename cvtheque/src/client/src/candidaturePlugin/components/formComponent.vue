@@ -79,6 +79,7 @@ import FormSix from './formBlock6';
 import FormSeven from './formBlock7';
 import FormEight from './formBlock8';
 import FormNine from './formBlock9';
+import axios from 'axios';
 //import ReviewList from './review_list';
 
 export default {
@@ -181,6 +182,16 @@ export default {
         console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
         console.log('Données prêtes pour POST :', combinedData);
+        try {
+          const response = await axios.post('/candidature/lead', combinedData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          console.log("Réponse de l'API:", response.data);
+        } catch (error) {
+          console.error("Erreur lors de l'envoi des données:", error);
+        }
       }
       currentStep.value++;
       nextTick(() => {
