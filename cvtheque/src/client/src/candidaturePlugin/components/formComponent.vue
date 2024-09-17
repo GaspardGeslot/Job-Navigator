@@ -180,7 +180,6 @@ export default {
         const combinedData = combineData(dataToProcess);
         console.log('Données prêtes pour POST :', combinedData);
       }
-      console.log('data: ', reviews.value[1]);
       currentStep.value++;
       nextTick(() => {
         setTimeout(() => {
@@ -189,7 +188,9 @@ export default {
       });
     };
     const previousStep = () => {
+      console.log('currentStep before = ', currentStep);
       currentStep.value--;
+      console.log('currentStep after = ', currentStep);
       nextTick(() => {
         setTimeout(() => {
           checkScroll();

@@ -331,7 +331,7 @@ export default {
       let situationReview = {
         permits: this.checkedPermits,
         vehicle: this.picked,
-        Skills: this.checkedSkills,
+        skills: this.checkedSkills,
       };
       //console.log(this.checkedPermits);
       this.$emit('situation-submitted', situationReview);

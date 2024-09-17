@@ -78,7 +78,7 @@ export default {
         return;
       }
       let situationReview = {
-        Jobs: this.checkedJobs,
+        jobs: this.checkedJobs,
       };
       console.log('Jobs', this.checkedJobs);
       this.$emit('situation-submitted', situationReview);
