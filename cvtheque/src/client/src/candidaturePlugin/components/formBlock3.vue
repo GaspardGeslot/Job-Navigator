@@ -335,10 +335,10 @@ export default {
       };
       //console.log(this.checkedPermits);
       this.$emit('situation-submitted', situationReview);
-      this.checkedPermits = [];
-      this.picked = null;
+      // this.checkedPermits = [];
+      // this.picked = null;
       //console.log('skills', this.checkedSkills);
-      this.checkedSkills = [];
+      // this.checkedSkills = [];
     },
     goBack() {
       this.$emit('go-back');

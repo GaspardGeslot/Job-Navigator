@@ -199,10 +199,10 @@ export default {
         productReview.confirmPassword = this.confirmPassword;
       }
       this.$emit('situation-submitted', productReview);
-      this.firstName = '';
-      this.lastName = '';
-      this.email = '';
-      this.phone = '';
+      // this.firstName = '';
+      // this.lastName = '';
+      // this.email = '';
+      // this.phone = '';
     },
     goBack() {
       this.$emit('go-back');

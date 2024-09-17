@@ -109,8 +109,8 @@ export default {
       };
       //console.log(this.checkedPermits);
       this.$emit('situation-submitted', situationReview);
-      this.checkedPermits = [];
-      this.picked = null;
+      // this.checkedPermits = [];
+      // this.picked = null;
     },
     goBack() {
       this.$emit('go-back');

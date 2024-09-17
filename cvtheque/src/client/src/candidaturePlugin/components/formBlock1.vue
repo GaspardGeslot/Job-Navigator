@@ -143,11 +143,11 @@ export default {
         studyLevel: this.studyLevel,
       };
       this.$emit('situation-submitted', situationReview);
-      this.need = '';
-      this.postalCode = '';
-      this.courseStart = '';
-      this.mobility = '';
-      this.studyLevel = '';
+      // this.need = '';
+      // this.postalCode = '';
+      // this.courseStart = '';
+      // this.mobility = '';
+      // this.studyLevel = '';
     },
   },
 };

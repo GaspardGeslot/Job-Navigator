@@ -75,9 +75,9 @@ export default {
         fileName: this.fileName,
       };
       this.$emit('situation-submitted', productReview);
-      this.motivation = '';
-      this.file = null;
-      this.fileName = '';
+      // this.motivation = '';
+      // this.file = null;
+      // this.fileName = '';
     },
     goBack() {
       this.$emit('go-back');

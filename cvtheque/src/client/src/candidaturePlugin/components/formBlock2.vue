@@ -82,8 +82,8 @@ export default {
       };
       console.log('Jobs', this.checkedJobs);
       this.$emit('situation-submitted', situationReview);
-      this.checkedJobs = [];
-      this.errorMessage = '';
+      // this.checkedJobs = [];
+      // this.errorMessage = '';
     },
     goBack() {
       this.$emit('go-back');

@@ -7,7 +7,7 @@
     >
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-if="currentStep === 1"
+          v-show="currentStep === 1"
           ref="formOne"
           :course-starts="options.courseStarts"
           :needs="options.needs"
@@ -15,7 +15,7 @@
           @situation-submitted="addReview"
         />
         <FormTwo
-          v-if="currentStep === 2"
+          v-show="currentStep === 2"
           ref="formTwo"
           :sectors="options.sectors"
           @go-back="previousStep"
@@ -23,36 +23,36 @@
           @skip-form-three="addReviewSkip"
         />
         <FormThree
-          v-if="currentStep === 3"
+          v-show="currentStep === 3"
           ref="formThree"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormFour
-          v-if="currentStep === 9"
+          v-show="currentStep === 9"
           ref="formFour"
           @situation-submitted="addReview"
         />
         <FormFive
-          v-if="currentStep === 4"
+          v-show="currentStep === 4"
           ref="formFive"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormSix
-          v-if="currentStep === 5"
+          v-show="currentStep === 5"
           ref="formSix"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
-        <FormSeven v-if="currentStep === 6" ref="formSix" />
+        <FormSeven v-show="currentStep === 6" ref="formSix" />
         <FormEight
-          v-if="currentStep === 7"
+          v-show="currentStep === 7"
           ref="formEight"
           @situation-submitted="addReview"
         />
         <FormNine
-          v-if="currentStep === 8"
+          v-show="currentStep === 8"
           ref="formNine"
           @situation-submitted="addReview"
         />
@@ -157,11 +157,13 @@ export default {
     });
 
     const addReviewSkip = (review) => {
-      reviews.value.push(review);
+      //reviews.value.push(review);
+      reviews.value[currentStep.value - 1] = review;
       skipNextStep();
     };
     const addReview = (review) => {
-      reviews.value.push(review);
+      //reviews.value.push(review);
+      reviews.value[currentStep.value - 1] = review;
       nextStep();
     };
 
