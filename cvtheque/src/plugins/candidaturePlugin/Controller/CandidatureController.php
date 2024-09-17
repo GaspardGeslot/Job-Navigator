@@ -68,6 +68,31 @@ class CandidatureController extends AbstractVueController implements PublicContr
     /**
      * @return array|object
      */
+    public function postNewLead(Request $request): Response
+    {
+        $data = $request->getContent();
+        $parsedData = json_decode($data, true);
+
+        $client = new Client();
+        $clientId = getenv('HEDWIGE_CLIENT_ID');
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('POST', "{$clientBaseUrl}/lead", [
+                'headers' => [
+                    'Authorization' => $clientToken,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $parsedData
+            ]);
+
+            return new Response('Candidature submitted successfully', Response::HTTP_OK);
+        } catch (\Exceptionon $e) {
+            return new Response('Failed to submit candidature', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function getCandidatureOptions(): array|object
     {
         $client = new Client();

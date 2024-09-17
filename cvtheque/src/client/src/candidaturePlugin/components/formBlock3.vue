@@ -69,7 +69,7 @@
             value="Électricien chargé de consignations en haute tension"
           />
           <label for="H1"
-            >HC : Électricien chargé de consignations en haute tension
+            >Électricien chargé de consignations en haute tension
           </label>
         </div>
         <div class="checkbox-item">
@@ -331,14 +331,14 @@ export default {
       let situationReview = {
         permits: this.checkedPermits,
         vehicle: this.picked,
-        Skills: this.checkedSkills,
+        skills: this.checkedSkills,
       };
       //console.log(this.checkedPermits);
       this.$emit('situation-submitted', situationReview);
-      this.checkedPermits = [];
-      this.picked = null;
+      // this.checkedPermits = [];
+      // this.picked = null;
       //console.log('skills', this.checkedSkills);
-      this.checkedSkills = [];
+      // this.checkedSkills = [];
     },
     goBack() {
       this.$emit('go-back');

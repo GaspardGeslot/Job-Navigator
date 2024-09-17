@@ -4,14 +4,14 @@ import { inject } from 'vue';
     <form class="formBlock6" @submit.prevent="onSubmit">
       <h3 class="formTitle">Pour finir</h3>
       <input
-        id="name"
-        v-model="name"
+        id="lastName"
+        v-model="lastName"
         class="blackPlaceholder"
         placeholder="Nom"
       />
       <input
-        id="surname"
-        v-model="surname"
+        id="firstName"
+        v-model="firstName"
         class="blackPlaceholder"
         placeholder="Prénom"
       />
@@ -82,7 +82,7 @@ import { inject } from 'vue';
           <label class="AcceptanceofTermsText">
             J'accepte les conditions générales du service ainsi que la politique
             de confidentialité des données. J'accepte d'être contacté par les
-            entreprises qui recrutent et qui sont intéressées par mon profil
+            entreprises qui recrutent et qui sont interessées par mon profil
           </label>
         </div>
       </div>
@@ -116,8 +116,8 @@ export default {
   emits: ['situation-submitted', 'go-back'],
   data() {
     return {
-      name: '',
-      surname: '',
+      firstName: '',
+      lastName: '',
       email: '',
       phone: '',
       createAccount: false,
@@ -149,8 +149,8 @@ export default {
       this.errors.phoneNumber = false;
       this.errors.checked = false;
       if (
-        this.name === '' ||
-        this.surname === '' ||
+        this.firstName === '' ||
+        this.lastName === '' ||
         this.phone === '' ||
         this.email === ''
       ) {
@@ -189,20 +189,20 @@ export default {
         return;
       }
       let productReview = {
-        name: this.name,
-        surname: this.surname,
+        firstName: this.firstName,
+        lastName: this.lastName,
         email: this.email,
-        phone: this.phone,
+        phoneNumber: this.phone,
       };
       if (this.createAccount) {
         productReview.password = this.password;
         productReview.confirmPassword = this.confirmPassword;
       }
       this.$emit('situation-submitted', productReview);
-      this.name = '';
-      this.surname = '';
-      this.email = '';
-      this.phone = '';
+      // this.firstName = '';
+      // this.lastName = '';
+      // this.email = '';
+      // this.phone = '';
     },
     goBack() {
       this.$emit('go-back');

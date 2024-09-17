@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?</p>
+      <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?*</p>
       <div class="radio-group">
         <div id="radio-item-left" class="radio-item">
           <input id="vehicleYes" v-model="picked" type="radio" value="Oui" />
@@ -109,8 +109,8 @@ export default {
       };
       //console.log(this.checkedPermits);
       this.$emit('situation-submitted', situationReview);
-      this.checkedPermits = [];
-      this.picked = null;
+      // this.checkedPermits = [];
+      // this.picked = null;
     },
     goBack() {
       this.$emit('go-back');

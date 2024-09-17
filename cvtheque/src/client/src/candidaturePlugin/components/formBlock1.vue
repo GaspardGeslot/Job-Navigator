@@ -9,27 +9,28 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
       entreprises qui recrutent.
     </p>
     <form class="formBlock1">
-      <select v-model="type_de_contrat">
+      <select v-if="needs" v-model="need">
         <option disabled value="">Type de contrat recherché *</option>
-        <option>CDI de chantier</option>
-        <option>CDI</option>
-        <option>CDD</option>
-        <option>Intérim</option>
-        <option>Alternance</option>
-        <option>Stage</option>
+        <option v-for="(item, index) in needs" :key="index" :value="item">
+          {{ item }}
+        </option>
       </select>
       <input
         id="postalCode"
-        v-model="postal_code"
-        type="number"
+        v-model="postalCode"
+        type="text"
         class="blackPlaceholder"
         placeholder="Mon code postal *"
       />
-      <select v-model="availability">
+      <select v-if="courseStarts" v-model="courseStart">
         <option disabled value="">Ma disponibilité *</option>
-        <option>Immédiatement</option>
-        <option>Dans 1 à 3 mois</option>
-        <option>Plus de 3 mois</option>
+        <option
+          v-for="(item, index) in courseStarts"
+          :key="index"
+          :value="item"
+        >
+          {{ item }}
+        </option>
       </select>
       <select v-model="mobility">
         <option disabled value="">Ma mobilité géographique</option>
@@ -40,13 +41,11 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>Ile-de-France</option>
         <option>France entière</option>
       </select>
-      <select id="educationForm" v-model="education">
+      <select v-if="studyLevels" id="educationForm" v-model="studyLevel">
         <option disabled value="">Plus haut niveau de diplôme *</option>
-        <option>Aucun diplôme</option>
-        <option>CAP, BEP</option>
-        <option>Bac ou équivalent</option>
-        <option>Bac +2 ou 3 (BTS, DUT, BUT, Licence...)</option>
-        <option>Bac +4, 5 ou plus (Master, Ingénieur...)</option>
+        <option v-for="(item, index) in studyLevels" :key="index" :value="item">
+          {{ item }}
+        </option>
       </select>
       <p v-if="errors.postalCode" id="alert-msg01" class="alert-msg">
         Veuillez indiquer un code postal valide.
@@ -66,14 +65,28 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
 <script>
 export default {
   name: 'FormOne',
+  props: {
+    courseStarts: {
+      type: Array,
+      default: () => [],
+    },
+    needs: {
+      type: Array,
+      default: () => [],
+    },
+    studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+  },
   emits: ['situation-submitted'],
   data() {
     return {
-      type_de_contrat: '',
-      postal_code: '',
-      availability: '',
+      need: '',
+      postalCode: '',
+      courseStart: '',
       mobility: '',
-      education: '',
+      studyLevel: '',
       errors: {
         postalCode: false,
         incompleteForm: false,
@@ -86,32 +99,34 @@ export default {
       this.errors.postalCode = false;
       this.errors.incompleteForm = false;
       if (
-        this.type_de_contrat === '' ||
-        this.postal_code === '' ||
-        this.availability === '' ||
-        this.education === ''
+        this.need === '' ||
+        this.postalCode === '' ||
+        this.courseStart === '' ||
+        this.studyLevel === ''
       ) {
         this.errors.incompleteForm = true;
         hasError = true;
       }
-      // let arrayOfPostalCode = Array.from(this.postal_code, Number);
-      // console.log(typeof this.postal_code);
+      // let arrayOfPostalCode = Array.from(this.postalCode, Number);
+      // console.log(typeof this.postalCode);
       // console.log(arrayOfPostalCode, arrayOfPostalCode.length);
-      // if (this.postal_code != '' && arrayOfPostalCode.length < 5) {
+      // if (this.postalCode != '' && arrayOfPostalCode.length < 5) {
       //   if (arrayOfPostalCode.length < 4) return;
       //   else if (arrayOfPostalCode.length == 4) {
       //     arrayOfPostalCode.unshift(0);
       //     return;
       //   }
       // }
-      let postal_code_array = Array.from(
-        String(Number(this.postal_code)),
-        Number,
-      );
-      console.log(postal_code_array);
-      if (postal_code_array.length != 5) {
-        if (postal_code_array.length == 4) {
-          postal_code_array.unshift(0);
+      // let postalCode_array = Array.from(
+      //   String(Number(this.postalCode)),
+      //   Number,
+      // );
+      console.log(this.postalCode);
+      if (this.postalCode.length != 5) {
+        if (this.postalCode.length == 4) {
+          //this.postalCode.unshift(0);
+          this.postalCode = '0' + this.postalCode;
+          console.log('postalCode', this.postalCode);
         } else {
           this.errors.postalCode = true;
           hasError = true;
@@ -121,18 +136,18 @@ export default {
         return;
       }
       let situationReview = {
-        type_de_contrat: this.type_de_contrat,
-        postal_code: this.postal_code,
-        availability: this.availability,
+        need: this.need,
+        postalCode: this.postalCode,
+        courseStart: this.courseStart,
         mobility: this.mobility,
-        education: this.education,
+        studyLevel: this.studyLevel,
       };
       this.$emit('situation-submitted', situationReview);
-      this.type_de_contrat = '';
-      this.postal_code = '';
-      this.availability = '';
-      this.mobility = '';
-      this.education = '';
+      // this.need = '';
+      // this.postalCode = '';
+      // this.courseStart = '';
+      // this.mobility = '';
+      // this.studyLevel = '';
     },
   },
 };

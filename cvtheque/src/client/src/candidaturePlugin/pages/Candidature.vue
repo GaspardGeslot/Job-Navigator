@@ -32,13 +32,14 @@
       </div>
     </div>
     <div v-if="formVisible" class="formContainer">
-      <formComponent class="formComponent" />
+      <formComponent :options="options" class="formComponent" />
     </div>
   </div>
 </template>
 
 <script>
 import formComponent from '../components/formComponent.vue';
+//import {urlFor} from '@ohrm/core/util/helper/url';
 import {navigate} from '@ohrm/core/util/helper/navigation';
 
 export default {

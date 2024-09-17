@@ -7,47 +7,52 @@
     >
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-if="currentStep === 1"
+          v-show="currentStep === 1"
           ref="formOne"
+          :course-starts="options.courseStarts"
+          :needs="options.needs"
+          :study-levels="options.studyLevels"
           @situation-submitted="addReview"
         />
         <FormTwo
-          v-if="currentStep === 2"
+          v-show="currentStep === 2"
           ref="formTwo"
+          :sectors="options.sectors"
           @go-back="previousStep"
           @situation-submitted="addReview"
+          @skip-form-three="addReviewSkip"
         />
         <FormThree
-          v-if="currentStep === 3"
+          v-show="currentStep === 3"
           ref="formThree"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormFour
-          v-if="currentStep === 9"
+          v-show="currentStep === 9"
           ref="formFour"
           @situation-submitted="addReview"
         />
         <FormFive
-          v-if="currentStep === 4"
+          v-show="currentStep === 4"
           ref="formFive"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormSix
-          v-if="currentStep === 5"
+          v-show="currentStep === 5"
           ref="formSix"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
-        <FormSeven v-if="currentStep === 6" ref="formSix" />
+        <FormSeven v-show="currentStep === 6" ref="formSix" />
         <FormEight
-          v-if="currentStep === 7"
+          v-show="currentStep === 7"
           ref="formEight"
           @situation-submitted="addReview"
         />
         <FormNine
-          v-if="currentStep === 8"
+          v-show="currentStep === 8"
           ref="formNine"
           @situation-submitted="addReview"
         />
@@ -64,6 +69,7 @@
 
 <script>
 import {ref, onMounted, onBeforeUnmount, nextTick} from 'vue';
+//import axios from 'axios';
 import FormOne from './formBlock1';
 import FormTwo from './formBlock2';
 import FormThree from './formBlock3';
@@ -73,6 +79,7 @@ import FormSix from './formBlock6';
 import FormSeven from './formBlock7';
 import FormEight from './formBlock8';
 import FormNine from './formBlock9';
+import axios from 'axios';
 //import ReviewList from './review_list';
 
 export default {
@@ -89,6 +96,12 @@ export default {
     FormNine,
     //ReviewList,
   },
+  props: {
+    options: {
+      type: Object,
+      default: () => null,
+    },
+  },
   setup() {
     const currentStep = ref(1);
     const reviews = ref([]);
@@ -98,6 +111,11 @@ export default {
     const scrollContent = ref(null);
     const formImg = ref(null);
 
+    const combineData = (dataArray) => {
+      return dataArray.reduce((acc, item) => {
+        return {...acc, ...JSON.parse(JSON.stringify(item))};
+      }, {});
+    };
     const checkScroll = () => {
       const activeForm = scrollContent.value.querySelector(
         `[ref="form${currentStep.value}"]`,
@@ -139,12 +157,42 @@ export default {
       }
     });
 
+    const addReviewSkip = (review) => {
+      //reviews.value.push(review);
+      reviews.value[currentStep.value - 1] = review;
+      skipNextStep();
+    };
     const addReview = (review) => {
-      reviews.value.push(review);
+      //reviews.value.push(review);
+      reviews.value[currentStep.value - 1] = review;
       nextStep();
     };
 
-    const nextStep = () => {
+    const skipNextStep = () => {
+      currentStep.value += 2;
+      nextTick(() => {
+        setTimeout(() => {
+          checkScroll();
+        }, 50);
+      });
+    };
+    const nextStep = async () => {
+      if (currentStep.value == 5) {
+        const dataToProcess = reviews.value.slice(0, 5);
+        console.log('Données extraites :', dataToProcess);
+        const combinedData = combineData(dataToProcess);
+        console.log('Données prêtes pour POST :', combinedData);
+        try {
+          const response = await axios.post('/candidature/lead', combinedData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          console.log("Réponse de l'API:", response.data);
+        } catch (error) {
+          console.error("Erreur lors de l'envoi des données:", error);
+        }
+      }
       currentStep.value++;
       nextTick(() => {
         setTimeout(() => {
@@ -153,7 +201,9 @@ export default {
       });
     };
     const previousStep = () => {
+      console.log('currentStep before = ', currentStep);
       currentStep.value--;
+      console.log('currentStep after = ', currentStep);
       nextTick(() => {
         setTimeout(() => {
           checkScroll();
@@ -173,6 +223,8 @@ export default {
       scrollContent,
       formImg,
       addReview,
+      addReviewSkip,
+      skipNextStep,
       nextStep,
       previousStep,
     };

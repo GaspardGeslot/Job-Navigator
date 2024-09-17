@@ -3,7 +3,8 @@
     <form class="formBlock6" @submit.prevent="onSubmit">
       <h3 class="formTitle">Facultatif (mais apprécié)</h3>
       <p class="CVText">
-        Qu'est-ce qui vous plait dans le fait de travailler dans le BTP ?
+        Qu'est-ce qui vous plairait dans le fait de travailler dans la
+        construction ?
       </p>
       <textarea
         id="review"
@@ -74,9 +75,9 @@ export default {
         fileName: this.fileName,
       };
       this.$emit('situation-submitted', productReview);
-      this.motivation = '';
-      this.file = null;
-      this.fileName = '';
+      // this.motivation = '';
+      // this.file = null;
+      // this.fileName = '';
     },
     goBack() {
       this.$emit('go-back');
