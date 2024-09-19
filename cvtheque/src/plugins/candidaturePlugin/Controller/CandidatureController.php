@@ -3,6 +3,7 @@ namespace Candidature\Controller;
 
 use GuzzleHttp\Client;
 use OrangeHRM\Authentication\Auth\User as AuthUser;
+use Symfony\Component\HttpFoundation\Response;
 use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Authorization\Service\HomePageService;
 use OrangeHRM\Core\Vue\Component;
@@ -71,24 +72,30 @@ class CandidatureController extends AbstractVueController implements PublicContr
     public function postNewLead(Request $request): Response
     {
         $data = $request->getContent();
-        $parsedData = json_decode($data, true);
+        //$parsedData = json_decode($data, true);
 
         $client = new Client();
         $clientId = getenv('HEDWIGE_CLIENT_ID');
         $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
-
+        // echo 'HEDWIGE_URL';
+        // echo $clientBaseUrl;
+        // echo 'HEDWIGE_CLIENT_TOKEN';
+        // echo $clientToken;
         try {
+            // echo "Ceci est un message de débogage.";
+            echo $data;
             $response = $client->request('POST', "{$clientBaseUrl}/lead", [
                 'headers' => [
                     'Authorization' => $clientToken,
                     'Content-Type' => 'application/json',
                 ],
-                'json' => $parsedData
+                'body' => $data
             ]);
 
             return new Response('Candidature submitted successfully', Response::HTTP_OK);
-        } catch (\Exceptionon $e) {
+        }catch (\Exception $e) {
+            echo $e->getTraceAsString();
             return new Response('Failed to submit candidature', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

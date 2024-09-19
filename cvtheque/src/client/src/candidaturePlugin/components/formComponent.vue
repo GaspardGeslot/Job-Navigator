@@ -79,7 +79,8 @@ import FormSix from './formBlock6';
 import FormSeven from './formBlock7';
 import FormEight from './formBlock8';
 import FormNine from './formBlock9';
-import axios from 'axios';
+//import axios from 'axios';
+import {APIService} from '@/core/util/services/api.service';
 //import ReviewList from './review_list';
 
 export default {
@@ -181,17 +182,27 @@ export default {
         const dataToProcess = reviews.value.slice(0, 5);
         console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
+        delete combinedData.file;
+        delete combinedData.fileName;
         console.log('Données prêtes pour POST :', combinedData);
-        try {
-          const response = await axios.post('/candidature/lead', combinedData, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const http = new APIService(
+          window.appGlobal.baseUrl,
+          '/candidature/lead',
+        );
+        http
+          .create(combinedData)
+          .then((response) => {
+            console.log('Success:', response.data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
           });
-          console.log("Réponse de l'API:", response.data);
-        } catch (error) {
-          console.error("Erreur lors de l'envoi des données:", error);
-        }
+        // const response = await axios.post('/candidature/lead', combinedData, {
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        // });
+        // console.log("Réponse de l'API:", response.data);
       }
       currentStep.value++;
       nextTick(() => {

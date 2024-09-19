@@ -24,7 +24,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import {WebStorage} from '../helper/storage';
-import {ComponentInternalInstance, getCurrentInstance} from 'vue';
+import {ComponentInternalInstance, getCurrentInstance} from '@vue/runtime-core';
 import {reloadPage} from '@ohrm/core/util/helper/navigation';
 
 interface ErrorResponse {
