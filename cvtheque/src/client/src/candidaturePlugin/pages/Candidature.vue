@@ -32,7 +32,11 @@
       </div>
     </div>
     <div v-if="formVisible" class="formContainer">
-      <formComponent :options="options" class="formComponent" />
+      <formComponent
+        :options="options"
+        class="formComponent"
+        @close-form="hideForm"
+      />
     </div>
   </div>
 </template>
@@ -63,6 +67,9 @@ export default {
     showForm() {
       console.log('options :', this.options);
       this.formVisible = true;
+    },
+    hideForm() {
+      this.formVisible = false;
     },
     navigateToLogin() {
       navigate('/auth/login');
