@@ -10305,6 +10305,10 @@ p[data-v-d8d9c26c] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formComponent.vue?vue&type=style&index=1&id=59201b22&scoped=true&lang=css ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.formImg[data-v-59201b22],
+.scroll-container[data-v-59201b22] {
+  border-radius: 1rem;
+}
 @media screen and (max-width: 450px) {
 .formBlock[data-v-59201b22] {
     max-width: 410px;
@@ -10316,17 +10320,22 @@ p[data-v-d8d9c26c] {
     background-image: none;
 }
 }
+@media screen and (min-width: 461px) {
+.exit-button[data-v-59201b22] {
+    display: none;
+}
+}
 @media screen and (max-width: 550px) {
 .formImg[data-v-59201b22] {
     display: none;
 }
 }
 
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/pages/view-application.scss?vue&type=style&index=0&id=0c52339c&lang=scss&scoped=true ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/pages/view-application.scss?vue&type=style&index=0&lang=scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
-.VA_bg_img[data-v-0c52339c] {
+.VA_bg_img {
   background-image: url("https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/cvtheque_bg_img.png");
   width: 100%;
   height: 100vh;
@@ -10336,51 +10345,51 @@ p[data-v-d8d9c26c] {
   position: relative;
   overflow: hidden;
 }
-#page-content[data-v-0c52339c] {
+#page-content {
   max-width: 1500px;
 }
-.mt[data-v-0c52339c] {
+.mt {
   margin-top: 2.5rem;
 }
-.col[data-v-0c52339c] {
+.col {
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 1;
 }
-.row[data-v-0c52339c] {
+.row {
   display: flex;
   flex-direction: row;
 }
-.top-row[data-v-0c52339c] {
+.top-row {
   padding-left: 3rem;
   padding-right: 3rem;
 }
-.top-row-logo[data-v-0c52339c] {
+.top-row-logo {
   transform: scale(1.4);
 }
-.space-b[data-v-0c52339c] {
+.space-b {
   justify-content: space-between;
 }
-.mr-2[data-v-0c52339c] {
+.mr-2 {
   margin-right: 2rem;
 }
-.ml-6[data-v-0c52339c] {
+.ml-6 {
   margin-left: 6rem;
 }
-.mt-05[data-v-0c52339c] {
+.mt-05 {
   margin-top: 0.5rem;
 }
-.mt-075[data-v-0c52339c] {
+.mt-075 {
   margin-top: 1rem;
 }
-.mb-05[data-v-0c52339c] {
+.mb-05 {
   margin-bottom: 0.55rem;
 }
-.title-container[data-v-0c52339c] {
+.title-container {
   max-width: 60rem;
 }
-.main-title[data-v-0c52339c] {
+.main-title {
   padding-top: 5rem;
   padding-left: 2.5rem;
   padding-right: 20rem;
@@ -10388,10 +10397,10 @@ p[data-v-d8d9c26c] {
   font-size: 3.5rem;
   line-height: 3.75rem;
 }
-.text-white[data-v-0c52339c] {
+.text-white {
   color: white;
 }
-.connexion_button[data-v-0c52339c] {
+.connexion_button {
   color: white;
   background-color: #1b1f23;
   border: none;
@@ -10404,7 +10413,7 @@ p[data-v-d8d9c26c] {
   margin-right: 8rem;
   border-radius: 1.5rem;
 }
-.connexion_button[data-v-0c52339c]:hover {
+.connexion_button:hover {
   background-color: white;
   color: black;
   border: solid 2px black;
@@ -10414,7 +10423,7 @@ p[data-v-d8d9c26c] {
   padding-top: 0.825rem;
   padding-bottom: 0.825rem;
 }
-.bot_button[data-v-0c52339c] {
+.bot_button {
   background-color: white;
   color: black;
   font-weight: 700;
@@ -10429,24 +10438,24 @@ p[data-v-d8d9c26c] {
   margin-left: 2.5rem;
   border-radius: 1.5rem;
 }
-.bot_button[data-v-0c52339c]:hover {
+.bot_button:hover {
   background-color: black;
   color: white;
 }
-.bg-white[data-v-0c52339c] {
+.bg-white {
   background-color: white;
 }
-.orangehrm-buzz-layout[data-v-0c52339c] {
+.orangehrm-buzz-layout {
   justify-content: center;
   grid-template-columns: minmax(240px, 640px) minmax(0, 375px);
 }
 @media screen and (min-width: 1920px) {
-.orangehrm-buzz-layout[data-v-0c52339c] {
+.orangehrm-buzz-layout {
     gap: 2rem;
     grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(0, 375px);
 }
 }
-.formComponent[data-v-0c52339c] {
+.formComponent {
   /*position: fixed;
   top: 50%;
   left: 50%;
@@ -10458,7 +10467,7 @@ p[data-v-d8d9c26c] {
   height: 90%;
   padding: 2rem;
 }
-.formContainer[data-v-0c52339c] {
+.formContainer {
   height: 100%;
   position: absolute;
   top: 0;
@@ -10472,34 +10481,34 @@ p[data-v-d8d9c26c] {
   background-color: rgba(0, 0, 0, 0.5);
 }
 @media screen and (max-width: 370px) {
-#page-content[data-v-0c52339c] {
+#page-content {
     max-width: 360px;
 }
 }
 @media screen and (max-width: 380px) {
-#page-content[data-v-0c52339c] {
+#page-content {
     max-width: 370px;
 }
 }
 @media screen and (max-width: 450px) {
-.formComponent[data-v-0c52339c] {
+.formComponent {
     height: 100%;
 }
-#page-content[data-v-0c52339c] {
+#page-content {
     max-width: 430px;
 }
-.top-row[data-v-0c52339c] {
+.top-row {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
 }
-.main-title[data-v-0c52339c] {
+.main-title {
     padding-top: 3rem;
     font-size: 1.85rem;
     line-height: 2.25rem;
     padding-right: 2.5rem;
     margin-right: 0rem;
 }
-.bot_button[data-v-0c52339c] {
+.bot_button {
     font-size: 0.75rem;
     line-height: 1rem;
     font-weight: 700;
@@ -10509,10 +10518,10 @@ p[data-v-d8d9c26c] {
     padding-bottom: 0.415rem;
     margin-top: 1.5rem;
 }
-.space-b[data-v-0c52339c] {
+.space-b {
     margin-left: 1rem;
 }
-.connexion_button[data-v-0c52339c] {
+.connexion_button {
     font-size: 0.75rem;
     line-height: 1rem;
     font-weight: 500;
@@ -10526,51 +10535,61 @@ p[data-v-d8d9c26c] {
 }
 }
 @media screen and (max-width: 800px) {
-#olecio-logo[data-v-0c52339c] {
+#olecio-logo {
     display: none;
 }
-.top-row-logo[data-v-0c52339c] {
+.top-row-logo {
     margin-left: 0 !important;
     transform: scale(0.9);
 }
 }
 @media screen and (min-width: 1200px) and (max-height: 600px) {
-.main-title[data-v-0c52339c] {
+.main-title {
     padding-top: 2rem;
     font-size: 3rem;
     line-height: 3.25rem;
 }
 }
 @media screen and (min-width: 1200px) and (max-height: 520px) {
-.main-title[data-v-0c52339c] {
+.main-title {
     font-size: 2.5rem;
     line-height: 2.75rem;
 }
 }
 @media (min-width: 1500px) {
-.main-title[data-v-0c52339c] {
+.main-title {
     font-size: 4rem;
     line-height: 4.25rem;
 }
-.connexion_button[data-v-0c52339c] {
+.connexion_button {
     margin-right: 10rem;
 }
-.bot_button[data-v-0c52339c] {
+.bot_button {
     margin-left: 3rem;
 }
 }
 @media (min-width: 1920px) {
-.main-title[data-v-0c52339c] {
+.main-title {
     font-size: 4.5rem;
     line-height: 4.75rem;
 }
-.connexion_button[data-v-0c52339c] {
+.connexion_button {
     margin-right: 12rem;
 }
-.bot_button[data-v-0c52339c] {
+.bot_button {
     margin-left: 4rem;
 }
 }
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/pages/Candidature.vue?vue&type=style&index=1&id=0c52339c&scoped=true&lang=css ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+@media screen and (max-width: 461px) {
+.exit-button[data-v-0c52339c] {
+    display: none;
+}
+}
+
 /*!*******************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/styles/global.scss ***!
   \*******************************************************************************************************************************************************************************************************************************************/

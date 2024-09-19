@@ -32,7 +32,35 @@
       </div>
     </div>
     <div v-if="formVisible" class="formContainer">
-      <formComponent :options="options" class="formComponent" />
+      <formComponent
+        :options="options"
+        class="formComponent"
+        @close-form="hideForm"
+      />
+      <button
+        class="exit-button"
+        style="
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background-color: transparent;
+          border: none;
+        "
+        @click="hideForm"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4.70711 3.29289C4.31658 2.90237 3.68342 2.90237 3.29289 3.29289C2.90237 3.68342 2.90237 4.31658 3.29289 4.70711L10.5858 12L3.29289 19.2929C2.90237 19.6834 2.90237 20.3166 3.29289 20.7071C3.68342 21.0976 4.31658 21.0976 4.70711 20.7071L12 13.4142L19.2929 20.7071C19.6834 21.0976 20.3166 21.0976 20.7071 20.7071C21.0976 20.3166 21.0976 19.6834 20.7071 19.2929L13.4142 12L20.7071 4.70711C21.0976 4.31658 21.0976 3.68342 20.7071 3.29289C20.3166 2.90237 19.6834 2.90237 19.2929 3.29289L12 10.5858L4.70711 3.29289Z"
+            fill="white"
+          />
+        </svg>
+      </button>
     </div>
   </div>
 </template>
@@ -64,6 +92,9 @@ export default {
       console.log('options :', this.options);
       this.formVisible = true;
     },
+    hideForm() {
+      this.formVisible = false;
+    },
     navigateToLogin() {
       navigate('/auth/login');
     },
@@ -71,4 +102,11 @@ export default {
 };
 </script>
 
-<style src="./view-application.scss" lang="scss" scoped></style>
+<style src="./view-application.scss" lang="scss"></style>
+<style scoped>
+@media screen and (max-width: 461px) {
+  .exit-button {
+    display: none;
+  }
+}
+</style>
