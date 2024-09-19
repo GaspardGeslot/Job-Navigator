@@ -7,7 +7,13 @@
     >
       <button
         class="exit-button"
-        style="background-color: white; border: none"
+        style="
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background-color: transparent;
+          border: none;
+        "
         @click="closeForm"
       >
         <svg
@@ -269,6 +275,11 @@ export default {
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
+.formImg,
+.scroll-container {
+  border-radius: 1rem;
+}
+
 @media screen and (max-width: 450px) {
   .formBlock {
     max-width: 410px;
@@ -278,6 +289,11 @@ export default {
   }
   .formImg {
     background-image: none;
+  }
+}
+@media screen and (min-width: 461px) {
+  .exit-button {
+    display: none;
   }
 }
 @media screen and (max-width: 550px) {
