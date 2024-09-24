@@ -9,7 +9,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <div class="checkbox-group two-columns">
           <div
             v-for="(elem, elemIndex) in item.jobs"
-            :key="elemIndex"
+            :key="`${itemIndex}-${elemIndex}`"
             class="checkbox-item"
           >
             <input
@@ -19,7 +19,9 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
               type="checkbox"
               :value="elem"
             />
-            <label :for="`job${itemIndex}-${elemIndex}`">{{ elem }}</label>
+            <label class="jobItemTitle" :for="`job${itemIndex}-${elemIndex}`">{{
+              elem
+            }}</label>
           </div>
         </div>
       </div>
@@ -114,7 +116,10 @@ export default {
 }
 
 .checkbox-item label {
-  font-size: 0.75rem;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

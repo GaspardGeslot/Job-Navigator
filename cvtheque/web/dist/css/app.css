@@ -8599,6 +8599,15 @@ span[data-v-52bea6fe] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&lang=scss (2) ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.radio-item label,
+.checkbox-item2 label,
+.permitLabel {
+  font-family: "Telegraf", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
+  padding-left: 6px;
+}
 .bg-white {
   background-color: white;
 }
@@ -8842,7 +8851,7 @@ p {
 }
 .formBlock.row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   box-sizing: border-box;
 }
 .formBlock.row > div {
@@ -8902,7 +8911,7 @@ p {
   background-image: none;
 } */
 #formBlock1SubmitButton[data-v-d9bb3a7c] {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 .formBlock1 input[data-v-d9bb3a7c]::-moz-placeholder {
   text-indent: -0.75rem;
@@ -8977,6 +8986,15 @@ p {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d99f0b7a&lang=scss&scoped=true (2) ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.radio-item label[data-v-d99f0b7a],
+.checkbox-item2 label[data-v-d99f0b7a],
+.permitLabel[data-v-d99f0b7a] {
+  font-family: "Telegraf", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
+  padding-left: 6px;
+}
 .bg-white[data-v-d99f0b7a] {
   background-color: white;
 }
@@ -9220,7 +9238,7 @@ p[data-v-d99f0b7a] {
 }
 .formBlock.row[data-v-d99f0b7a] {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   box-sizing: border-box;
 }
 .formBlock.row > div[data-v-d99f0b7a] {
@@ -9277,7 +9295,10 @@ p[data-v-d99f0b7a] {
   font-family: 'Telegraf', sans-serif;
 }
 .checkbox-item label[data-v-d99f0b7a] {
-  font-size: 0.75rem;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -9297,10 +9318,11 @@ p[data-v-d99f0b7a] {
 }
 .checkbox-item label[data-v-d982dc78] {
   font-family: 'Telegraf', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   display: inline-block;
   vertical-align: middle;
-  padding-left: 20px;
+  padding-left: 6px;
   text-indent: -1.3rem;
 }
 .checkbox-item2 label[data-v-d982dc78] {
@@ -9316,9 +9338,6 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock4.vue?vue&type=style&index=1&id=d966ad76&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
-.checkbox-item2 label[data-v-d966ad76] {
-  font-family: 'Telegraf', sans-serif;
-}
 .adjust-margin[data-v-d966ad76] {
   margin-top: 1.5rem;
 }
@@ -9369,6 +9388,12 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock5.vue?vue&type=style&index=1&id=d94a7e74&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+#review[data-v-d94a7e74]::-moz-placeholder {
+  font-family: 'Telegraf', sans-serif;
+}
+#review[data-v-d94a7e74]::placeholder {
+  font-family: 'Telegraf', sans-serif;
+}
 .fileNameDisplay[data-v-d94a7e74] {
   text-align: center;
   margin: 0.5rem auto;
@@ -9376,10 +9401,10 @@ p[data-v-d99f0b7a] {
 .adjust-margin[data-v-d94a7e74] {
   margin-top: 0.15rem;
 }
-.CVText[data-v-d94a7e74] {
+/* .CVText {
   color: #414957;
   font-family: Nunito Sans, sans-serif;
-}
+} */
 
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock6.vue?vue&type=style&index=1&id=d92e4f72&scoped=true&lang=css ***!
@@ -9606,6 +9631,15 @@ input:checked + .slider[data-v-d92e4f72]:before {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8f5f16e&lang=scss&scoped=true (2) ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.radio-item label[data-v-d8f5f16e],
+.checkbox-item2 label[data-v-d8f5f16e],
+.permitLabel[data-v-d8f5f16e] {
+  font-family: "Telegraf", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
+  padding-left: 6px;
+}
 .bg-white[data-v-d8f5f16e] {
   background-color: white;
 }
@@ -9849,7 +9883,7 @@ p[data-v-d8f5f16e] {
 }
 .formBlock.row[data-v-d8f5f16e] {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   box-sizing: border-box;
 }
 .formBlock.row > div[data-v-d8f5f16e] {
@@ -9907,7 +9941,11 @@ p[data-v-d8f5f16e] {
   font-family: 'Telegraf', sans-serif;
 }
 .checkbox-item label[data-v-d8f5f16e] {
-  font-size: 0.75rem;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
+  padding-left: 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -9917,6 +9955,15 @@ p[data-v-d8f5f16e] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8d9c26c&lang=scss&scoped=true (2) ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.radio-item label[data-v-d8d9c26c],
+.checkbox-item2 label[data-v-d8d9c26c],
+.permitLabel[data-v-d8d9c26c] {
+  font-family: "Telegraf", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
+  padding-left: 6px;
+}
 .bg-white[data-v-d8d9c26c] {
   background-color: white;
 }
@@ -10160,7 +10207,7 @@ p[data-v-d8d9c26c] {
 }
 .formBlock.row[data-v-d8d9c26c] {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   box-sizing: border-box;
 }
 .formBlock.row > div[data-v-d8d9c26c] {

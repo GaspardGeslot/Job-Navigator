@@ -71,8 +71,9 @@
         />
         <FormSeven v-show="currentStep === 6" ref="formSix" />
         <FormEight
-          v-show="currentStep === 7"
+          v-show="currentStep === 9"
           ref="formEight"
+          @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormNine
@@ -207,6 +208,9 @@ export default {
         const dataToProcess = reviews.value.slice(0, 5);
         console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
+        //console.log('combinedData.Xp : ', combinedData.Xp);
+        console.log('combinedData.checkedEXP : ', combinedData.checkedEXP);
+        delete combinedData.checkedEXP;
         delete combinedData.file;
         delete combinedData.fileName;
         console.log('Données prêtes pour POST :', combinedData);
