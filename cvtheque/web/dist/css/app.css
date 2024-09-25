@@ -9525,8 +9525,9 @@ input:checked + .slider[data-v-d92e4f72]:before {
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
 .col[data-v-d9122070] {
-  display: flex;
-  flex-direction: column;
+  display: none;
+  /* display: flex;
+  flex-direction: column; */
 }
 .row[data-v-d9122070] {
   display: flex;
@@ -10278,6 +10279,11 @@ p[data-v-d8d9c26c] {
 .scroll-container[data-v-59201b22] {
   border-radius: 1rem;
 }
+@media screen and (max-width: 410px) {
+.formBlock[data-v-59201b22] {
+    margin-top: 3rem;
+}
+}
 @media screen and (max-width: 450px) {
 .formBlock[data-v-59201b22] {
     max-width: 410px;
@@ -10305,7 +10311,7 @@ p[data-v-d8d9c26c] {
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
 .VA_bg_img {
-  background-image: url("https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/cvtheque_bg_img.png");
+  background-color: black;
   width: 100%;
   height: 100vh;
   background-size: cover;
@@ -10313,9 +10319,6 @@ p[data-v-d8d9c26c] {
   background-repeat: no-repeat;
   position: relative;
   overflow: hidden;
-}
-#page-content {
-  max-width: 1500px;
 }
 .mt {
   margin-top: 2.5rem;
@@ -10337,6 +10340,7 @@ p[data-v-d8d9c26c] {
 .top-row-logo {
   transform: scale(1.4);
 }
+.space-b-to-center,
 .space-b {
   justify-content: space-between;
 }
@@ -10443,11 +10447,16 @@ p[data-v-d8d9c26c] {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+}
+@media screen and (min-width: 1020px) and (max-height: 700px) {
+.formContainer {
+    z-index: 2;
+}
 }
 @media screen and (max-width: 370px) {
 #page-content {
@@ -10488,7 +10497,7 @@ p[data-v-d8d9c26c] {
     margin-top: 1.5rem;
 }
 .space-b {
-    margin-left: 1rem;
+    margin-left: 3rem;
 }
 .connexion_button {
     font-size: 0.75rem;
@@ -10510,6 +10519,14 @@ p[data-v-d8d9c26c] {
 .top-row-logo {
     margin-left: 0 !important;
     transform: scale(0.9);
+}
+}
+@media screen and (min-width: 1020px) {
+.space-b-to-center {
+    justify-content: center;
+}
+.mr {
+    margin-right: 10rem;
 }
 }
 @media screen and (min-width: 1200px) and (max-height: 600px) {
@@ -10553,6 +10570,10 @@ p[data-v-d8d9c26c] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/pages/Candidature.vue?vue&type=style&index=1&id=0c52339c&scoped=true&lang=css ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.title-container[data-v-0c52339c],
+#olecio-logo[data-v-0c52339c] {
+  display: none;
+}
 @media screen and (max-width: 461px) {
 .exit-button[data-v-0c52339c] {
     display: none;

@@ -237,6 +237,7 @@ export default {
       nextTick(() => {
         setTimeout(() => {
           checkScroll();
+          scrollContainer.value.scrollTo(0, 0);
         }, 50);
       });
     };
@@ -247,6 +248,7 @@ export default {
       nextTick(() => {
         setTimeout(() => {
           checkScroll();
+          scrollContainer.value.scrollTo(0, 0);
         }, 50);
       });
     };
@@ -283,7 +285,11 @@ export default {
 .scroll-container {
   border-radius: 1rem;
 }
-
+@media screen and (max-width: 410px) {
+  .formBlock {
+    margin-top: 3rem;
+  }
+}
 @media screen and (max-width: 450px) {
   .formBlock {
     max-width: 410px;
