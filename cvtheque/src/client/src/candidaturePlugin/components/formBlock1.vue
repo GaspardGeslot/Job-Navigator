@@ -42,15 +42,13 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>France entière</option>
       </select>
       <select v-if="studyLevels" id="educationForm" v-model="studyLevel">
-        <option disabled value="">Plus haut niveau de diplôme *</option>
+        <option disabled value="">Niveau d'études *</option>
         <option v-for="(item, index) in studyLevels" :key="index" :value="item">
           {{ item }}
         </option>
       </select>
       <select v-model="checkedEXP">
-        <option disabled value="">
-          Quelle expérience professionelle avez-vous ?
-        </option>
+        <option disabled value="">Mon expérience professionnelle</option>
         <option>Ce sera ma 1ère expérience</option>
         <option>1 à 3 ans</option>
         <option>4 à 7 ans</option>

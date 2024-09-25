@@ -3,7 +3,7 @@
     <div class="select-button">
       <div>
         <span v-if="value">Selected File: {{ value.name }}</span>
-        <span v-else>Télecharger</span>
+        <span v-else>Télécharger</span>
       </div>
       <div class="download-icon-wrapper">
         <svg
