@@ -1,8 +1,8 @@
 <template>
   <div class="VA_bg_img blank" :class="{faded: formVisible}">
     <div id="page-content" class="col remove">
-      <div class="mt space-b top-row row">
-        <div class="space-b row">
+      <div class="mt space-b-to-center top-row row">
+        <div class="mr space-b row">
           <img
             id="olecio-logo"
             class="mr-2 mt-05 top-row-logo"
@@ -28,7 +28,9 @@
         </h1>
       </div>
       <div class="row">
-        <button class="bot_button" @click="showForm">JE POSTULE</button>
+        <button v-show="!formVisible" class="bot_button" @click="showForm">
+          JE POSTULE
+        </button>
       </div>
     </div>
     <div v-if="formVisible" class="formContainer">
@@ -104,6 +106,10 @@ export default {
 
 <style src="./view-application.scss" lang="scss"></style>
 <style scoped>
+.title-container,
+#olecio-logo {
+  display: none;
+}
 @media screen and (max-width: 461px) {
   .exit-button {
     display: none;

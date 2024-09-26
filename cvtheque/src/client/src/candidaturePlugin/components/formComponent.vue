@@ -71,8 +71,9 @@
         />
         <FormSeven v-show="currentStep === 6" ref="formSix" />
         <FormEight
-          v-show="currentStep === 7"
+          v-show="currentStep === 9"
           ref="formEight"
+          @go-back="previousStep"
           @situation-submitted="addReview"
         />
         <FormNine
@@ -207,6 +208,9 @@ export default {
         const dataToProcess = reviews.value.slice(0, 5);
         console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
+        //console.log('combinedData.Xp : ', combinedData.Xp);
+        console.log('combinedData.checkedEXP : ', combinedData.checkedEXP);
+        delete combinedData.checkedEXP;
         delete combinedData.file;
         delete combinedData.fileName;
         console.log('Données prêtes pour POST :', combinedData);
@@ -233,6 +237,7 @@ export default {
       nextTick(() => {
         setTimeout(() => {
           checkScroll();
+          scrollContainer.value.scrollTo(0, 0);
         }, 50);
       });
     };
@@ -243,6 +248,7 @@ export default {
       nextTick(() => {
         setTimeout(() => {
           checkScroll();
+          scrollContainer.value.scrollTo(0, 0);
         }, 50);
       });
     };
@@ -279,7 +285,11 @@ export default {
 .scroll-container {
   border-radius: 1rem;
 }
-
+@media screen and (max-width: 410px) {
+  .formBlock {
+    margin-top: 3rem;
+  }
+}
 @media screen and (max-width: 450px) {
   .formBlock {
     max-width: 410px;

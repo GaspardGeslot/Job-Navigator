@@ -88,6 +88,9 @@ export default {
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
+#review::placeholder {
+  font-family: 'Telegraf', sans-serif;
+}
 .fileNameDisplay {
   text-align: center;
   margin: 0.5rem auto;
@@ -95,8 +98,8 @@ export default {
 .adjust-margin {
   margin-top: 0.15rem;
 }
-.CVText {
+/* .CVText {
   color: #414957;
   font-family: Nunito Sans, sans-serif;
-}
+} */
 </style>

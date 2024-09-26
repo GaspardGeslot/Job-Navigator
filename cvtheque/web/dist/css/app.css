@@ -8980,7 +8980,7 @@ p {
   background-image: none;
 } */
 #formBlock1SubmitButton[data-v-d9bb3a7c] {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 .formBlock1 input[data-v-d9bb3a7c]::-moz-placeholder {
   text-indent: -0.75rem;
@@ -9355,7 +9355,10 @@ p[data-v-d99f0b7a] {
   font-family: 'Telegraf', sans-serif;
 }
 .checkbox-item label[data-v-d99f0b7a] {
-  font-size: 0.75rem;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -9375,10 +9378,11 @@ p[data-v-d99f0b7a] {
 }
 .checkbox-item label[data-v-d982dc78] {
   font-family: 'Telegraf', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   display: inline-block;
   vertical-align: middle;
-  padding-left: 20px;
+  padding-left: 6px;
   text-indent: -1.3rem;
 }
 .checkbox-item2 label[data-v-d982dc78] {
@@ -9394,9 +9398,6 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock4.vue?vue&type=style&index=1&id=d966ad76&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
-.checkbox-item2 label[data-v-d966ad76] {
-  font-family: 'Telegraf', sans-serif;
-}
 .adjust-margin[data-v-d966ad76] {
   margin-top: 1.5rem;
 }
@@ -9447,6 +9448,12 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock5.vue?vue&type=style&index=1&id=d94a7e74&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+#review[data-v-d94a7e74]::-moz-placeholder {
+  font-family: 'Telegraf', sans-serif;
+}
+#review[data-v-d94a7e74]::placeholder {
+  font-family: 'Telegraf', sans-serif;
+}
 .fileNameDisplay[data-v-d94a7e74] {
   text-align: center;
   margin: 0.5rem auto;
@@ -9454,10 +9461,10 @@ p[data-v-d99f0b7a] {
 .adjust-margin[data-v-d94a7e74] {
   margin-top: 0.15rem;
 }
-.CVText[data-v-d94a7e74] {
+/* .CVText {
   color: #414957;
   font-family: Nunito Sans, sans-serif;
-}
+} */
 
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock6.vue?vue&type=style&index=1&id=d92e4f72&scoped=true&lang=css ***!
@@ -9578,8 +9585,9 @@ input:checked + .slider[data-v-d92e4f72]:before {
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
 .col[data-v-d9122070] {
-  display: flex;
-  flex-direction: column;
+  display: none;
+  /* display: flex;
+  flex-direction: column; */
 }
 .row[data-v-d9122070] {
   display: flex;
@@ -9985,7 +9993,11 @@ p[data-v-d8f5f16e] {
   font-family: 'Telegraf', sans-serif;
 }
 .checkbox-item label[data-v-d8f5f16e] {
-  font-size: 0.75rem;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
+  padding-left: 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -10309,6 +10321,11 @@ p[data-v-d8d9c26c] {
 .scroll-container[data-v-59201b22] {
   border-radius: 1rem;
 }
+@media screen and (max-width: 410px) {
+.formBlock[data-v-59201b22] {
+    margin-top: 3rem;
+}
+}
 @media screen and (max-width: 450px) {
 .formBlock[data-v-59201b22] {
     max-width: 410px;
@@ -10336,7 +10353,7 @@ p[data-v-d8d9c26c] {
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
 .VA_bg_img {
-  background-image: url("https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/cvtheque_bg_img.png");
+  background-color: black;
   width: 100%;
   height: 100vh;
   background-size: cover;
@@ -10344,9 +10361,6 @@ p[data-v-d8d9c26c] {
   background-repeat: no-repeat;
   position: relative;
   overflow: hidden;
-}
-#page-content {
-  max-width: 1500px;
 }
 .mt {
   margin-top: 2.5rem;
@@ -10368,6 +10382,7 @@ p[data-v-d8d9c26c] {
 .top-row-logo {
   transform: scale(1.4);
 }
+.space-b-to-center,
 .space-b {
   justify-content: space-between;
 }
@@ -10474,11 +10489,16 @@ p[data-v-d8d9c26c] {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+}
+@media screen and (min-width: 1020px) and (max-height: 700px) {
+.formContainer {
+    z-index: 2;
+}
 }
 @media screen and (max-width: 370px) {
 #page-content {
@@ -10519,7 +10539,7 @@ p[data-v-d8d9c26c] {
     margin-top: 1.5rem;
 }
 .space-b {
-    margin-left: 1rem;
+    margin-left: 3rem;
 }
 .connexion_button {
     font-size: 0.75rem;
@@ -10541,6 +10561,14 @@ p[data-v-d8d9c26c] {
 .top-row-logo {
     margin-left: 0 !important;
     transform: scale(0.9);
+}
+}
+@media screen and (min-width: 1020px) {
+.space-b-to-center {
+    justify-content: center;
+}
+.mr {
+    margin-right: 10rem;
 }
 }
 @media screen and (min-width: 1200px) and (max-height: 600px) {
@@ -10584,6 +10612,10 @@ p[data-v-d8d9c26c] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/pages/Candidature.vue?vue&type=style&index=1&id=0c52339c&scoped=true&lang=css ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.title-container[data-v-0c52339c],
+#olecio-logo[data-v-0c52339c] {
+  display: none;
+}
 @media screen and (max-width: 461px) {
 .exit-button[data-v-0c52339c] {
     display: none;

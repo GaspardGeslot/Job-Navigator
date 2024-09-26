@@ -15,7 +15,8 @@
 
 
 .VA_bg_img {
-  background-image: url("https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/cvtheque_bg_img.png");
+  //background-image: url("https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/cvtheque_bg_img.png");
+  background-color: black;
   width: 100%;
   height: 100vh;
   background-size: cover;
@@ -25,9 +26,9 @@
   overflow: hidden;
   // transition: opacity 0.5s ease;
 }
-#page-content {
-  max-width: 1500px;
-}
+// #page-content {
+//   max-width: 1500px;
+// }
 // .VA_bg_img.faded {
 //   opacity: 0.3;
 // }
@@ -57,6 +58,7 @@
   transform: scale(1.4);
 }
 
+.space-b-to-center,
 .space-b {
   justify-content: space-between;
 }
@@ -176,11 +178,16 @@
   // height: 591px;
   right: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+}
+@media screen and (min-width: 1020px) and (max-height: 700px) {
+  .formContainer{
+    z-index: 2;
+  }
 }
 @media screen and (max-width: 370px) {
   #page-content {
@@ -222,7 +229,7 @@
     //margin-left: 1.5rem;
   }
   .space-b {
-    margin-left: 1rem;
+    margin-left: 3rem;
     //justify-content: flex-start;
   }
   .connexion_button {
@@ -253,6 +260,14 @@
     transform: scale(0.9);
   }
 }
+@media screen and (min-width : 1020px) {
+  .space-b-to-center {
+    justify-content: center;
+   }
+   .mr {
+    margin-right: 10rem;
+   }
+ }
 @media screen and (min-width: 1200px) and (max-height: 600px) {
   .main-title {
     padding-top: 2rem;

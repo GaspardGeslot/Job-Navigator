@@ -13,7 +13,7 @@
             type="checkbox"
             value="Permis A"
           />
-          <label for="permitA">Permis A</label>
+          <label class="permitLabel" for="permitA">Permis A</label>
         </div>
         <div class="checkbox-item2">
           <input
@@ -23,7 +23,17 @@
             type="checkbox"
             value="Permis B"
           />
-          <label for="permitB">Permis B</label>
+          <label class="permitLabel" for="permitB">Permis B</label>
+        </div>
+        <div class="checkbox-item2">
+          <input
+            id="permitBE"
+            v-model="checkedPermits"
+            class="custom-checkbox custom-input"
+            type="checkbox"
+            value="Permis BE"
+          />
+          <label class="permitLabel" for="permitBE">Permis BE</label>
         </div>
         <div class="checkbox-item2">
           <input
@@ -33,40 +43,9 @@
             type="checkbox"
             value="Permis C"
           />
-          <label for="permitC">Permis C</label>
-        </div>
-        <div class="checkbox-item2">
-          <input
-            id="permitD"
-            v-model="checkedPermits"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Permis D"
-          />
-          <label for="permitD">Permis D</label>
-        </div>
-        <div class="checkbox-item2">
-          <input
-            id="permitL"
-            v-model="checkedPermits"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Permis L"
-          />
-          <label for="permitL">Permis L</label>
-        </div>
-        <div class="checkbox-item2">
-          <input
-            id="permitG"
-            v-model="checkedPermits"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Permis G"
-          />
-          <label for="permitG">Permis G</label>
+          <label class="permitLabel" for="permitC">Permis C</label>
         </div>
       </div>
-
       <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?*</p>
       <div class="radio-group">
         <div id="radio-item-left" class="radio-item">
@@ -121,9 +100,6 @@ export default {
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
-.checkbox-item2 label {
-  font-family: 'Telegraf', sans-serif;
-}
 .adjust-margin {
   margin-top: 1.5rem;
 }
