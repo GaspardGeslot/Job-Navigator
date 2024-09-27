@@ -299,6 +299,7 @@ export default {
 @media screen and (max-width: 450px) {
   .formBlock {
     max-width: 410px;
+    margin-bottom: 0rem;
   }
   .scroll-container {
     width: 100%;
