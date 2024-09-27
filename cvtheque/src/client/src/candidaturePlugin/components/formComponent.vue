@@ -289,6 +289,7 @@ export default {
 }
 .formBlock {
   margin-top: 13rem;
+  margin-bottom: 6rem;
 }
 /* @media screen and (max-width: 460px) {
   .formBlock {
