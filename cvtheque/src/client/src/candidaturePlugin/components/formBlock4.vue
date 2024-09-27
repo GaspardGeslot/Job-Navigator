@@ -4,6 +4,7 @@
     <p class="formSubTitle">Plusieurs choix possibles.</p>
     <form class="formBlock5">
       <p class="CVText">Permis obtenus</p>
+      <!--
       <div class="checkbox-group">
         <div class="checkbox-item2">
           <input
@@ -46,6 +47,7 @@
           <label class="permitLabel" for="permitC">Permis C</label>
         </div>
       </div>
+      -->
       <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?*</p>
       <div class="radio-group">
         <div id="radio-item-left" class="radio-item">
