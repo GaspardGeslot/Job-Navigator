@@ -287,11 +287,14 @@ export default {
 .scroll-container {
   border-radius: 1rem;
 }
-@media screen and (max-width: 460px) {
+.formBlock {
+  margin-top: 13rem;
+}
+/* @media screen and (max-width: 460px) {
   .formBlock {
     margin-top: 13rem;
   }
-}
+} */
 @media screen and (max-width: 450px) {
   .formBlock {
     max-width: 410px;
