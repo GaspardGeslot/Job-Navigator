@@ -34,7 +34,9 @@ import { inject } from 'vue';
       <div class="placeholder">Téléphone <span>ex:0142274949</span></div>
       -->
       <div class="AcceptanceofTerms-container">
-        <div class="checkbox-container">
+        <!--
+
+          <div class="checkbox-container">
           <label class="switch">
             <input v-model="createAccount" type="checkbox" @change="toggle" />
             <span class="slider round"></span>
@@ -62,7 +64,8 @@ import { inject } from 'vue';
             required
           />
         </div>
-        <!--
+
+
         <div class="checkbox-container">
           <label class="switch short-switch">
             <input type="checkbox" @change="toggle" />
