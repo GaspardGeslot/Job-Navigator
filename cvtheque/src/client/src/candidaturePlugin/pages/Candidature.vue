@@ -34,12 +34,12 @@
       </div>
     </div>
     <div v-if="formVisible" class="formContainer">
-      <!--
-        <formComponent
+      <formComponent
         :options="options"
         class="formComponent"
         @close-form="hideForm"
       />
+      <!--
       <button
         class="exit-button"
         style="
@@ -70,15 +70,15 @@
 </template>
 
 <script>
-//import formComponent from '../components/formComponent.vue';
+import formComponent from '../components/formComponent.vue';
 //import {urlFor} from '@ohrm/core/util/helper/url';
 import {navigate} from '@ohrm/core/util/helper/navigation';
 
 export default {
   name: 'Candidature',
-  // components: {
-  //   formComponent,
-  // },
+  components: {
+    formComponent,
+  },
   props: {
     options: {
       type: Object,
