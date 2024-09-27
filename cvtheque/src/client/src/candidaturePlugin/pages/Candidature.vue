@@ -39,6 +39,7 @@
         class="formComponent"
         @close-form="hideForm"
       />
+      <!--
       <button
         class="exit-button"
         style="
@@ -63,6 +64,7 @@
           />
         </svg>
       </button>
+      -->
     </div>
   </div>
 </template>

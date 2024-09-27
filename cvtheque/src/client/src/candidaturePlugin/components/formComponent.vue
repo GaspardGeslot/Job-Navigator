@@ -5,6 +5,7 @@
       class="scroll-container"
       :class="{'scroll-active': needsScroll}"
     >
+      <!--
       <button
         class="exit-button"
         style="
@@ -29,6 +30,7 @@
           />
         </svg>
       </button>
+      -->
       <div ref="scrollContent" class="scroll-content">
         <FormOne
           v-show="currentStep === 1"
@@ -285,9 +287,9 @@ export default {
 .scroll-container {
   border-radius: 1rem;
 }
-@media screen and (max-width: 410px) {
+@media screen and (max-width: 460px) {
   .formBlock {
-    margin-top: 3rem;
+    margin-top: 13rem;
   }
 }
 @media screen and (max-width: 450px) {
