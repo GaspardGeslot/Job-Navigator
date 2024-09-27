@@ -31,7 +31,7 @@
       </button>
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-show="currentStep === 1"
+          v-show="currentStep === 4"
           ref="formOne"
           :course-starts="options.courseStarts"
           :needs="options.needs"
@@ -58,7 +58,7 @@
           @situation-submitted="addReview"
         />
         <FormFive
-          v-show="currentStep === 4"
+          v-show="currentStep === 1"
           ref="formFive"
           @go-back="previousStep"
           @situation-submitted="addReview"

@@ -13,34 +13,22 @@
         placeholder="Indiquez ici ce que vous aimez. Par exemple : travailler en équipe, être dehors, le travail manuel...."
       ></textarea>
       <p class="CVText">
-        Vous avez un CV ? Déposez le pour les recruteurs découvrent votre
+        Vous avez un CV ? Déposez-le pour que les recruteurs découvrent votre
         parcours.
       </p>
-      <InputFile @emit-input="setFile" />
+      <!-- Le composant InputFile émet le fichier sélectionné via @emit-input -->
+      <InputFile :allowed-file-types="['jpg', 'png']" @emit-input="setFile" />
       <p v-if="file" class="fileNameDisplay">{{ file.name }}</p>
-      <!-- 
-        <div class="custom-file-input">
-        <p class="CVText">Vous avez un CV ?</p>
-        <input
-          type="file"
-          placeholder="Télécharger"
-          @change="handleFileUpload"
-        />
-      </div>
-      <input
-        class="marginButton submitButton"
-        :class="{'adjust-margin': file && file.name}"
-        type="submit"
-        value="SUIVANT"
-      />
-    -->
       <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
+
 <script>
 import InputFile from './inputFile.vue';
 import SubmitComponent from './submit';
+import {APIService} from '@/core/util/services/api.service';
+
 export default {
   name: 'FormFive',
   components: {
@@ -51,33 +39,61 @@ export default {
   data() {
     return {
       motivation: '',
-      file: null,
-      fileName: '',
+      file: null, // Stocker le fichier ici après réception du composant enfant
+      isLoading: false,
     };
   },
   methods: {
-    setFile(file, fileName) {
-      this.file = file;
-      this.fileName = fileName;
-      console.log(this.file);
-      console.log(typeof this.file.name);
+    setFile(file) {
+      this.file = file; // Enregistrer le fichier reçu
     },
-    handleFileUpload(event) {
-      this.file = event.target.files[0];
-      //console.log(event.target.files[0]);
-      this.fileName = this.file.name;
-      console.log(this.file);
-    },
-    onSubmit() {
-      let productReview = {
-        motivation: this.motivation,
-        file: this.file,
-        fileName: this.fileName,
-      };
-      this.$emit('situation-submitted', productReview);
-      // this.motivation = '';
-      // this.file = null;
-      // this.fileName = '';
+    async onSubmit() {
+      // Vérifier si un fichier a été déposé
+      if (!this.file) {
+        // Si aucun fichier, ne pas faire la requête et simplement émettre l'événement avec uniquement la motivation
+        this.$emit('situation-submitted', {
+          motivation: this.motivation,
+          file: null,
+        });
+        this.$toast.info(
+          'Aucun fichier à envoyer, mais la motivation a été sauvegardée.',
+        );
+        return; // Stopper ici, pas de requête API
+      }
+
+      // Si un fichier a été déposé, procéder à la requête
+      const formData = new FormData();
+      formData.append('file', this.file);
+
+      this.isLoading = true;
+
+      try {
+        //const employeeId = null;
+        const http = new APIService(
+          window.appGlobal.baseUrl,
+          // api/v2/pim/employees/{empNumber}/screen/{screen}/attachments
+          `/api/v2/pim/employees/7/screen/'personal'/attachments`,
+        );
+
+        await http.create(formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        this.$toast.success('Fichier envoyé avec succès');
+
+        // Émettre l'événement avec la motivation et le fichier
+        this.$emit('situation-submitted', {
+          motivation: this.motivation,
+          file: this.file,
+        });
+      } catch (error) {
+        console.error('Erreur lors de la soumission :', error);
+        this.$toast.error('Erreur lors de la soumission');
+      } finally {
+        this.isLoading = false;
+      }
     },
     goBack() {
       this.$emit('go-back');
@@ -85,21 +101,3 @@ export default {
   },
 };
 </script>
-
-<style src="./form-component.scss" lang="scss"></style>
-<style scoped>
-#review::placeholder {
-  font-family: 'Telegraf', sans-serif;
-}
-.fileNameDisplay {
-  text-align: center;
-  margin: 0.5rem auto;
-}
-.adjust-margin {
-  margin-top: 0.15rem;
-}
-/* .CVText {
-  color: #414957;
-  font-family: Nunito Sans, sans-serif;
-} */
-</style>
