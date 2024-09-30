@@ -17,7 +17,7 @@
         parcours.
       </p>
       <!-- Le composant InputFile émet le fichier sélectionné via @emit-input -->
-      <InputFile :allowed-file-types="['jpg', 'png']" @emit-input="setFile" />
+      <InputFile @emit-input="setFile" />
       <p v-if="file" class="fileNameDisplay">{{ file.name }}</p>
       <SubmitComponent @go-back="goBack" />
     </form>
@@ -72,7 +72,7 @@ export default {
         const http = new APIService(
           window.appGlobal.baseUrl,
           // api/v2/pim/employees/{empNumber}/screen/{screen}/attachments
-          `/api/v2/pim/employees/7/screen/'personal'/attachments`,
+          `/api/v2/pim/employees/6/screen/candidature/attachments`,
         );
 
         await http.create(formData, {

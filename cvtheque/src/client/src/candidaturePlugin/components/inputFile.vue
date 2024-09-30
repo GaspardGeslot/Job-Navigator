@@ -38,12 +38,12 @@
 
 <script>
 export default {
-  props: {
-    allowedFileTypes: {
-      type: Array,
-      required: true,
-    },
-  },
+  // props: {
+  //   allowedFileTypes: {
+  //     type: Array,
+  //     required: true,
+  //   },
+  // },
   emits: ['emit-input'], // Emission de l'input pour envoyer le fichier au parent
   data() {
     return {
@@ -51,11 +51,11 @@ export default {
       errorMessage: '',
     };
   },
-  computed: {
-    acceptedFileTypes() {
-      return this.allowedFileTypes.map((type) => `.${type}`).join(',');
-    },
-  },
+  // computed: {
+  //   acceptedFileTypes() {
+  //     return this.allowedFileTypes.map((type) => `.${type}`).join(',');
+  //   },
+  // },
   methods: {
     handleFileChange(e) {
       const file = e.target.files[0];
@@ -75,14 +75,14 @@ export default {
       }
 
       // Vérification du type de fichier
-      const fileType = file.name.split('.').pop().toLowerCase();
-      if (!this.allowedFileTypes.includes(fileType)) {
-        this.errorMessage = `Type de fichier non autorisé. Types acceptés : ${this.allowedFileTypes.join(
-          ', ',
-        )}.`;
-        this.attachment = null;
-        return;
-      }
+      //const fileType = file.name.split('.').pop().toLowerCase();
+      // if (!this.allowedFileTypes.includes(fileType)) {
+      //   this.errorMessage = `Type de fichier non autorisé. Types acceptés : ${this.allowedFileTypes.join(
+      //     ', ',
+      //   )}.`;
+      //   this.attachment = null;
+      //   return;
+      // }
 
       // Si tout est valide, émettre le fichier au parent
       this.attachment = file;
