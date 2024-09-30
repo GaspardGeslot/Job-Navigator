@@ -62,7 +62,7 @@ export default {
       this.validateFile(file);
     },
     validateFile(file) {
-      const maxSize = 200000; // 200 Ko
+      const maxSize = 20000000; // 200 Ko
       this.errorMessage = ''; // Réinitialiser le message d'erreur
 
       // Vérification de la taille du fichier

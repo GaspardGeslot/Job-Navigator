@@ -27,7 +27,7 @@
 <script>
 import InputFile from './inputFile.vue';
 import SubmitComponent from './submit';
-import {APIService} from '@/core/util/services/api.service';
+//import {APIService} from '@/core/util/services/api.service';
 
 export default {
   name: 'FormFive',
@@ -53,7 +53,8 @@ export default {
         // Si aucun fichier, ne pas faire la requête et simplement émettre l'événement avec uniquement la motivation
         this.$emit('situation-submitted', {
           motivation: this.motivation,
-          file: null,
+          file: this.file,
+          //file: null,
         });
         this.$toast.info(
           'Aucun fichier à envoyer, mais la motivation a été sauvegardée.',
@@ -62,26 +63,26 @@ export default {
       }
 
       // Si un fichier a été déposé, procéder à la requête
+      console.log('this.file', this.file);
       const formData = new FormData();
       formData.append('file', this.file);
+      console.log('formData', formData);
 
       this.isLoading = true;
 
       try {
-        //const employeeId = null;
-        const http = new APIService(
-          window.appGlobal.baseUrl,
-          // api/v2/pim/employees/{empNumber}/screen/{screen}/attachments
-          `/api/v2/pim/employees/6/screen/candidature/attachments`,
-        );
+        // const http = new APIService(
+        //   window.appGlobal.baseUrl,
+        //   `/api/v2/pim/employees/6/screen/candidature/attachments`,
+        // );
 
-        await http.create(formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        // await http.create(formData, {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //   },
+        // });
 
-        this.$toast.success('Fichier envoyé avec succès');
+        // this.$toast.success('Fichier envoyé avec succès');
 
         // Émettre l'événement avec la motivation et le fichier
         this.$emit('situation-submitted', {

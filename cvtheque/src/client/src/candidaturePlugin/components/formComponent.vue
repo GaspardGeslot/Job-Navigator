@@ -31,7 +31,7 @@
       </button>
       <div ref="scrollContent" class="scroll-content">
         <FormOne
-          v-show="currentStep === 4"
+          v-show="currentStep === 1"
           ref="formOne"
           :course-starts="options.courseStarts"
           :needs="options.needs"
@@ -58,7 +58,7 @@
           @situation-submitted="addReview"
         />
         <FormFive
-          v-show="currentStep === 1"
+          v-show="currentStep === 4"
           ref="formFive"
           @go-back="previousStep"
           @situation-submitted="addReview"
@@ -208,8 +208,22 @@ export default {
         const dataToProcess = reviews.value.slice(0, 5);
         console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
-        //console.log('combinedData.Xp : ', combinedData.Xp);
         console.log('combinedData.checkedEXP : ', combinedData.checkedEXP);
+        try {
+          const httpUpload = new APIService(
+            window.appGlobal.baseUrl,
+            `/api/v2/pim/employees/6/screen/candidature/attachments`,
+          );
+
+          await httpUpload.create(combinedData.file, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        } catch (error) {
+          console.error('Error:', error);
+          return;
+        }
         delete combinedData.checkedEXP;
         delete combinedData.file;
         delete combinedData.fileName;
