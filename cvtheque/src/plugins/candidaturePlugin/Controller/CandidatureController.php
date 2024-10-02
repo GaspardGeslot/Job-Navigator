@@ -1,6 +1,20 @@
 <?php
 namespace Candidature\Controller;
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+use OrangeHRM\Core\Api\CommonParams;
+use OrangeHRM\Core\Api\V2\CrudEndpoint;
+use OrangeHRM\Core\Api\V2\Endpoint;
+use OrangeHRM\Core\Api\V2\EndpointCollectionResult;
+use OrangeHRM\Core\Api\V2\EndpointResourceResult;
+use OrangeHRM\Core\Api\V2\Model\ArrayModel;
+use OrangeHRM\Core\Api\V2\ParameterBag;
+use OrangeHRM\Core\Api\V2\RequestParams;
+use OrangeHRM\Core\Api\V2\Validator\ParamRule;
+use OrangeHRM\Core\Api\V2\Validator\ParamRuleCollection;
+use OrangeHRM\Core\Api\V2\Validator\Rule;
+use OrangeHRM\Core\Api\V2\Validator\Rules;
 use GuzzleHttp\Client;
 use OrangeHRM\Authentication\Auth\User as AuthUser;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,48 +71,71 @@ class CandidatureController extends AbstractVueController implements PublicContr
     /**
      * @inheritDoc
      */
-    public function handle(Request $request)
-    {
-        if ($this->getAuthUser()->isAuthenticated()) {
-            $homePagePath = $this->getHomePageService()->getHomePagePath();
-            return $this->redirect($homePagePath);
-        }
-        return parent::handle($request);
-    }
+    public function postNewLead(Request $request)
+{
+    error_log('postNewLead called');
 
-    /**
-     * @return array|object
-     */
-    public function postNewLead(Request $request): Response
-    {
-        $data = $request->getContent();
-        //$parsedData = json_decode($data, true);
+    $empNumber = 6;
+    $screen = 'personal';
+    echo '<pre>';
+    print_r($screen);
+    echo '</pre>';
+    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['file']['tmp_name'];
+        $fileName = $_FILES['file']['name'];
+        $fileSize = (int)$_FILES['file']['size'];  // Taille réelle du fichier
+        $fileType = $_FILES['file']['type'];
+        $fileContent = file_get_contents($fileTmpPath);
 
-        $client = new Client();
-        $clientId = getenv('HEDWIGE_CLIENT_ID');
-        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
-        $clientBaseUrl = getenv('HEDWIGE_URL');
-        // echo 'HEDWIGE_URL';
-        // echo $clientBaseUrl;
-        // echo 'HEDWIGE_CLIENT_TOKEN';
-        // echo $clientToken;
+        // error_log('File details: Name = ' . $fileName . ', Size = ' . $fileSize . ', Type = ' . $fileType);
+        // echo '<pre>';
+        // print_r($fileSize);
+        // echo '</pre>';
+        // Création de l'attachement encodé en base64
+        $base64Attachment = new \OrangeHRM\Core\Dto\Base64Attachment(
+            $fileName,
+            $fileType,
+            base64_encode($fileContent),
+            $fileSize
+        );
+        // echo '<pre>';
+        // print_r($base64Attachment);
+        // echo '</pre>';
+        
+        // Créer une instance de Request
+        $apiRequest = new \OrangeHRM\Core\Api\V2\Request($request);
+        // echo '<pre>';
+        // print_r($apiRequest);
+        // echo '</pre>';
+        // Créer une instance de EmployeeAttachmentAPI en passant l'instance de Request
+        $employeeAttachmentApi = new \OrangeHRM\Pim\Api\EmployeeAttachmentAPI($apiRequest);
+        // echo '<pre>';
+        // print_r($employeeAttachmentApi);
+        // echo '</pre>';
+
         try {
-            // echo "Ceci est un message de débogage.";
-            echo $data;
-            $response = $client->request('POST', "{$clientBaseUrl}/lead", [
-                'headers' => [
-                    'Authorization' => $clientToken,
-                    'Content-Type' => 'application/json',
-                ],
-                'body' => $data
-            ]);
-
-            return new Response('Candidature submitted successfully', Response::HTTP_OK);
-        }catch (\Exception $e) {
-            echo $e->getTraceAsString();
-            return new Response('Failed to submit candidature', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $result = $employeeAttachmentApi->createAndGetId($empNumber, $screen, $base64Attachment);
+            $attachmentId = $result->normalize()['attachmentId'];
+            echo '<pre>';
+            print_r('Attachment ID: ' . $attachmentId);
+            echo '</pre>';
+        } catch (Exception $e) {
+            $error_message = 'Error in createAndGetId: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
+            file_put_contents('/opt/lampp/logs/php_error_log', $error_message, FILE_APPEND);
+            
+            return new Response('Internal Server Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        
+        
+
+        return new Response('Lead submitted successfully with attachment ID: ' . $attachmentId, Response::HTTP_OK);
+    } else {
+        error_log('File upload error');
+        return new Response('Error: No file uploaded or file upload error', Response::HTTP_BAD_REQUEST);
     }
+}
+
+
 
     public function getCandidatureOptions(): array|object
     {

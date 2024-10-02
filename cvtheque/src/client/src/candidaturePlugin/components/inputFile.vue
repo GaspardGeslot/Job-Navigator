@@ -31,7 +31,10 @@
         </svg>
       </div>
     </div>
+    <!--
     <input type="file" :accept="acceptedFileTypes" @change="handleFileChange" />
+    -->
+    <input type="file" @change="handleFileChange" />
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </label>
 </template>

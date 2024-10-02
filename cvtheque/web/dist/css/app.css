@@ -10262,14 +10262,19 @@ p[data-v-d8d9c26c] {
 .scroll-container[data-v-59201b22] {
   border-radius: 1rem;
 }
-@media screen and (max-width: 410px) {
 .formBlock[data-v-59201b22] {
-    margin-top: 3rem;
+  margin-top: 13rem;
+  margin-bottom: 6rem;
 }
-}
+/* @media screen and (max-width: 460px) {
+  .formBlock {
+    margin-top: 13rem;
+  }
+} */
 @media screen and (max-width: 450px) {
 .formBlock[data-v-59201b22] {
     max-width: 410px;
+    margin-bottom: 0rem;
 }
 .scroll-container[data-v-59201b22] {
     width: 100%;

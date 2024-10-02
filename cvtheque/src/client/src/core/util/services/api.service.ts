@@ -24,7 +24,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import {WebStorage} from '../helper/storage';
-import {ComponentInternalInstance, getCurrentInstance} from 'vue';
+import {ComponentInternalInstance, getCurrentInstance} from '@vue/runtime-core';
 import {reloadPage} from '@ohrm/core/util/helper/navigation';
 
 interface ErrorResponse {
@@ -73,13 +73,10 @@ export class APIService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   create(data: any): Promise<AxiosResponse> {
-    console.log('on y est !');
     const headers = {
-      'Content-Type': 'application/json',
       Accept: 'application/json',
     };
-    console.log('this._apiSection', this._apiSection);
-    console.log('data', data);
+    console.log('Données prêtes pour POST :', data);
     return this._http.post(this._apiSection, data, {headers});
   }
 

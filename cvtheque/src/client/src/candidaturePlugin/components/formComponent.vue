@@ -5,6 +5,7 @@
       class="scroll-container"
       :class="{'scroll-active': needsScroll}"
     >
+      <!--
       <button
         class="exit-button"
         style="
@@ -29,6 +30,7 @@
           />
         </svg>
       </button>
+      -->
       <div ref="scrollContent" class="scroll-content">
         <FormOne
           v-show="currentStep === 1"
@@ -140,7 +142,16 @@ export default {
 
     const combineData = (dataArray) => {
       return dataArray.reduce((acc, item) => {
-        return {...acc, ...JSON.parse(JSON.stringify(item))};
+        for (const key in item) {
+          if (Object.prototype.hasOwnProperty.call(item, key)) {
+            if (item[key] instanceof File) {
+              acc[key] = item[key];
+            } else {
+              acc[key] = item[key];
+            }
+          }
+        }
+        return acc;
       }, {});
     };
     const checkScroll = () => {
@@ -208,38 +219,55 @@ export default {
         const dataToProcess = reviews.value.slice(0, 5);
         console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
+        //console.log('combinedData.Xp : ', combinedData.Xp);
         console.log('combinedData.checkedEXP : ', combinedData.checkedEXP);
-        try {
-          const httpUpload = new APIService(
-            window.appGlobal.baseUrl,
-            `/api/v2/pim/employees/6/screen/candidature/attachments`,
-          );
-
-          await httpUpload.create(combinedData.file, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-        } catch (error) {
-          console.error('Error:', error);
-          return;
-        }
         delete combinedData.checkedEXP;
-        delete combinedData.file;
+        //delete combinedData.file;
         delete combinedData.fileName;
         console.log('Données prêtes pour POST :', combinedData);
+
+        const formData = new FormData();
+        // console.log(
+        //   'combinedData.file instanceof File',
+        //   combinedData.file instanceof File,
+        // );
+        for (const key in combinedData) {
+          if (Object.prototype.hasOwnProperty.call(combinedData, key)) {
+            if (key === 'file' && combinedData[key] instanceof File) {
+              formData.append(key, combinedData[key]);
+              //console.log(`File added to FormData: ${combinedData[key].name}`);
+            } else {
+              formData.append(key, combinedData[key]);
+              //console.log(`${key} added to FormData: ${combinedData[key]}`);
+            }
+          }
+        }
+
+        // Vérifier le contenu de formData
+        // for (let pair of formData.entries()) {
+        //   console.log(pair[0] + ', ' + pair[1]);
+        // }
+
         const http = new APIService(
           window.appGlobal.baseUrl,
           '/candidature/lead',
         );
+        console.log('FormData content before submission:', [
+          ...formData.entries(),
+        ]);
+
         http
-          .create(combinedData)
+          .create(formData)
           .then((response) => {
             console.log('Success:', response.data);
           })
           .catch((error) => {
-            console.error('Error:', error);
+            console.error(
+              'Error:',
+              error.response ? error.response.data : error.message,
+            );
           });
+
         // const response = await axios.post('/candidature/lead', combinedData, {
         //   headers: {
         //     'Content-Type': 'application/json',
@@ -299,14 +327,19 @@ export default {
 .scroll-container {
   border-radius: 1rem;
 }
-@media screen and (max-width: 410px) {
-  .formBlock {
-    margin-top: 3rem;
-  }
+.formBlock {
+  margin-top: 13rem;
+  margin-bottom: 6rem;
 }
+/* @media screen and (max-width: 460px) {
+  .formBlock {
+    margin-top: 13rem;
+  }
+} */
 @media screen and (max-width: 450px) {
   .formBlock {
     max-width: 410px;
+    margin-bottom: 0rem;
   }
   .scroll-container {
     width: 100%;

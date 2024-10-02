@@ -36,6 +36,7 @@ use OrangeHRM\Entity\EmployeeAttachment;
 use OrangeHRM\Pim\Api\Model\EmployeeAttachmentModel;
 use OrangeHRM\Pim\Dto\PartialEmployeeAttachment;
 use OrangeHRM\Pim\Service\EmployeeAttachmentService;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
 {
@@ -271,6 +272,41 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
      *
      * @inheritDoc
      */
+    public function createAndGetId($empNumber, $screen, $base64Attachment, $description = null): EndpointResourceResult
+{
+    try {
+        // Logique de création
+        $employeeAttachment = new EmployeeAttachment();
+        $employeeAttachment->getDecorator()->setEmployeeByEmpNumber($empNumber);
+        $employeeAttachment->setScreen($screen);
+        $employeeAttachment->setDescription($description);
+        $this->setAttachmentAttributes($employeeAttachment, $base64Attachment, $empNumber, $screen);
+
+        $newEmployeeAttachment = $this->getEmployeeAttachmentService()->saveEmployeeAttachment($employeeAttachment);
+        $attachmentId = $newEmployeeAttachment->getAttachId();
+
+        return new EndpointResourceResult(
+            EmployeeAttachmentModel::class,
+            $this->getPartialEmployeeAttachment($employeeAttachment),
+            new ParameterBag([
+                CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
+                self::PARAMETER_SCREEN => $screen,
+                'attachmentId' => $attachmentId
+            ])
+        );
+    } catch (\Exception $e) {
+        // Capture et retour de l'erreur
+        echo '<pre>';
+        print_r('Error: ' . $e->getMessage());
+        echo '</pre>';
+        return new Response('Internal Server Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+
+
+
     public function create(): EndpointResourceResult
     {
         list($empNumber, $screen) = $this->getUrlAttributes();
@@ -310,17 +346,48 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
      */
     private function setAttachmentAttributes(
         EmployeeAttachment $employeeAttachment,
-        Base64Attachment $base64Attachment
+        Base64Attachment $base64Attachment,
+        int $empNumber,
+        string $screen
     ): EmployeeAttachment {
+        echo '<pre>';
+        print_r('Filename: ' . $base64Attachment->getFilename());
+        print_r('Size: ' . $base64Attachment->getSize());
+        print_r('File Type: ' . $base64Attachment->getFileType());
+        echo 'Content Length (base64): ' . strlen($base64Attachment->getBase64Content());
+        echo 'Content Length (decoded): ' . strlen($base64Attachment->getContent());
+        echo '</pre>';
+    
+        // Convertir explicitement la taille en entier avant l'attribution
+        $size = (int)$base64Attachment->getSize();
+    
+        // Vérifiez que la taille est bien un entier après conversion
+        if (!is_int($size)) {
+            throw new \Exception('Attachment size must be an integer');
+        }
+    
+        // Gestion du contenu binaire
+        $content = $base64Attachment->getContent();
+        if (is_string($content)) {
+            $employeeAttachment->setAttachment($content);
+        } else {
+            throw new \Exception('Attachment content must be a valid binary string');
+        }
+    
+        // Attribuer les valeurs
         $employeeAttachment->setFilename($base64Attachment->getFilename());
-        $employeeAttachment->setSize($base64Attachment->getSize());
+        $employeeAttachment->setSize($size);
         $employeeAttachment->setFileType($base64Attachment->getFileType());
-        $employeeAttachment->setAttachment($base64Attachment->getContent());
-
-        $employeeAttachment->setAttachedBy($this->getUserRoleManager()->getUser()->getId());
-        $employeeAttachment->setAttachedByName($this->getUserRoleManager()->getUser()->getUserName());
+    
+        // Au lieu de l'utilisateur connecté, utilisez `empNumber` et `screen`
+        $employeeAttachment->setAttachedBy($empNumber);  // Utilisez emp_number
+        $employeeAttachment->setAttachedByName($screen);  // Utilisez screen comme nom de l'attaché
+    
         return $employeeAttachment;
     }
+    
+    
+    
 
     /**
      * @inheritDoc

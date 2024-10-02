@@ -1,0 +1,14 @@
+.orangehrm-todo-list {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.orangehrm-todo-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.orangehrm-todo-list-item p {
+  font-size: 12px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}/*# sourceMappingURL=my-action-summary-widget.css.map */
