@@ -74,9 +74,9 @@ export class APIService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   create(data: any): Promise<AxiosResponse> {
     const headers = {
-      'Content-Type': 'application/json',
       Accept: 'application/json',
     };
+    console.log('Données prêtes pour POST :', data);
     return this._http.post(this._apiSection, data, {headers});
   }
 

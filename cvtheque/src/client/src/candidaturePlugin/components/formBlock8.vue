@@ -9,9 +9,9 @@
             v-model="checkedEXP"
             class="custom-checkbox custom-input"
             type="checkbox"
-            value="Aucune"
+            value="Ce sera ma 1ère expérience"
           />
-          <label for="xp1-1"> Aucune</label>
+          <label for="xp1-1"> Ce sera ma 1ère expérience</label>
         </div>
         <div class="checkbox-item">
           <input
@@ -29,9 +29,9 @@
             v-model="checkedEXP"
             class="custom-checkbox custom-input"
             type="checkbox"
-            value="3 à 7 ans"
+            value="4 à 7 ans"
           />
-          <label for="xp1-3"> 3 à 7 ans</label>
+          <label for="xp1-3"> 4 à 7 ans</label>
         </div>
         <div class="checkbox-item">
           <input
@@ -44,15 +44,22 @@
           <label for="xp1-4">8 ans et +</label>
         </div>
       </div>
+      <!--
       <input class="submitButton" type="submit" value="SUIVANT" />
+      -->
+      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
 
 <script>
+import SubmitComponent from './submit';
 export default {
   name: 'FormEight',
-  emits: ['situation-submitted'],
+  components: {
+    SubmitComponent,
+  },
+  emits: ['situation-submitted', 'go-back'],
   data() {
     return {
       checkedEXP: [],
@@ -79,6 +86,9 @@ export default {
       this.$emit('situation-submitted', situationReview);
       this.checkedEXP = [];
       this.errorMessage = '';
+    },
+    goBack() {
+      this.$emit('go-back');
     },
   },
 };
@@ -107,7 +117,11 @@ export default {
 }
 
 .checkbox-item label {
-  font-size: 0.75rem;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-block;
+  padding-left: 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

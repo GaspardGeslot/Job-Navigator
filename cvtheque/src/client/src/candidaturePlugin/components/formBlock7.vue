@@ -163,8 +163,9 @@ export default {
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
 .col {
-  display: flex;
-  flex-direction: column;
+  display: none;
+  /* display: flex;
+  flex-direction: column; */
 }
 .row {
   display: flex;

@@ -1,0 +1,17 @@
+::v-deep(.--status-grouped-field) {
+  display: flex;
+  max-width: 15rem;
+}
+
+.label-is-entitlement-situational {
+  display: flex;
+  align-items: center;
+}
+.label-is-entitlement-situational .--help {
+  margin-left: 5px;
+}
+
+.modal-container {
+  width: 90%;
+  max-width: 500px;
+}/*# sourceMappingURL=leave-type.css.map */

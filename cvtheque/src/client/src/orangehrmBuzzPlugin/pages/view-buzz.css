@@ -1,0 +1,10 @@
+.orangehrm-buzz-layout {
+  justify-content: center;
+  grid-template-columns: minmax(240px, 640px) minmax(0, 375px);
+}
+@media screen and (min-width: 1920px) {
+  .orangehrm-buzz-layout {
+    gap: 2rem;
+    grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(0, 375px);
+  }
+}/*# sourceMappingURL=view-buzz.css.map */

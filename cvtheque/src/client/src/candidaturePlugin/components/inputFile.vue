@@ -2,8 +2,10 @@
   <label class="file-select">
     <div class="select-button">
       <div>
-        <span v-if="value">Selected File: {{ value.name }}</span>
-        <span v-else>Télecharger</span>
+        <span v-if="attachment"
+          >Fichier sélectionné : {{ attachment.name }}</span
+        >
+        <span v-else>Télécharger</span>
       </div>
       <div class="download-icon-wrapper">
         <svg
@@ -29,19 +31,65 @@
         </svg>
       </div>
     </div>
+    <!--
+    <input type="file" :accept="acceptedFileTypes" @change="handleFileChange" />
+    -->
     <input type="file" @change="handleFileChange" />
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </label>
 </template>
 
 <script>
 export default {
-  props: {
-    value: File,
+  // props: {
+  //   allowedFileTypes: {
+  //     type: Array,
+  //     required: true,
+  //   },
+  // },
+  emits: ['emit-input'], // Emission de l'input pour envoyer le fichier au parent
+  data() {
+    return {
+      attachment: null,
+      errorMessage: '',
+    };
   },
-  emits: ['emit-input'],
+  // computed: {
+  //   acceptedFileTypes() {
+  //     return this.allowedFileTypes.map((type) => `.${type}`).join(',');
+  //   },
+  // },
   methods: {
     handleFileChange(e) {
-      this.$emit('emit-input', e.target.files[0]);
+      const file = e.target.files[0];
+      this.validateFile(file);
+    },
+    validateFile(file) {
+      const maxSize = 20000000; // 200 Ko
+      this.errorMessage = ''; // Réinitialiser le message d'erreur
+
+      // Vérification de la taille du fichier
+      if (file.size > maxSize) {
+        this.errorMessage = `La taille du fichier ne doit pas dépasser ${
+          maxSize / 1024
+        } Ko.`;
+        this.attachment = null;
+        return;
+      }
+
+      // Vérification du type de fichier
+      //const fileType = file.name.split('.').pop().toLowerCase();
+      // if (!this.allowedFileTypes.includes(fileType)) {
+      //   this.errorMessage = `Type de fichier non autorisé. Types acceptés : ${this.allowedFileTypes.join(
+      //     ', ',
+      //   )}.`;
+      //   this.attachment = null;
+      //   return;
+      // }
+
+      // Si tout est valide, émettre le fichier au parent
+      this.attachment = file;
+      this.$emit('emit-input', this.attachment); // Emission du fichier
     },
   },
 };
@@ -86,5 +134,11 @@ export default {
 
 .file-select input[type='file'] {
   display: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 </style>

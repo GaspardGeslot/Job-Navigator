@@ -1,74 +1,74 @@
-.orangehrm-candidature-form {
-  margin: 0 auto;
-  @include oxd-respond-to('xs') {
-    width: 80%;
-  }
-  @include oxd-respond-to('md') {
-    width: 60%;
-    max-width: 485px;
-  }
-}
-.orangehrm-candidature-action {
-  margin-top: 2rem;
-  justify-content: center;
-}
-.orangehrm-candidature-button {
-  flex: 1;
-  padding: 1rem 0;
-}
-.orangehrm-candidature-title {
-  text-align: center;
-  font-weight: 800;
-  margin-bottom: 1rem;
-}
-.orangehrm-candidature-pwreset {
-  margin: 1rem 0;
-  text-align: center;
-  font-weight: 600;
-  & a {
-    color: $oxd-primary-one-color;
-    text-decoration: none;
-  }
-}
+// .orangehrm-candidature-form {
+//   margin: 0 auto;
+//   @include oxd-respond-to('xs') {
+//     width: 80%;
+//   }
+//   @include oxd-respond-to('md') {
+//     width: 60%;
+//     max-width: 485px;
+//   }
+// }
+// .orangehrm-candidature-action {
+//   margin-top: 2rem;
+//   justify-content: center;
+// }
+// .orangehrm-candidature-button {
+//   flex: 1;
+//   padding: 1rem 0;
+// }
+// .orangehrm-candidature-title {
+//   text-align: center;
+//   font-weight: 800;
+//   margin-bottom: 1rem;
+// }
+// .orangehrm-candidature-pwreset {
+//   margin: 1rem 0;
+//   text-align: center;
+//   font-weight: 600;
+//   & a {
+//     color: $oxd-primary-one-color;
+//     text-decoration: none;
+//   }
+// }
 
-.orangehrm-candidature-forgot {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  font-size: 14px;
-  &-header {
-    cursor: pointer;
-    color: $oxd-primary-one-color;
-  }
-}
+// .orangehrm-candidature-forgot {
+//   display: flex;
+//   justify-content: center;
+//   margin-top: 1rem;
+//   font-size: 14px;
+//   &-header {
+//     cursor: pointer;
+//     color: $oxd-primary-one-color;
+//   }
+// }
 
-.orangehrm-demo-credentials {
-  margin: 1rem 0;
-}
+// .orangehrm-demo-credentials {
+//   margin: 1rem 0;
+// }
 
-.orangehrm-candidature-footer {
-  &-sm {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    a {
-      width: 22px;
-      height: 22px;
-      margin: 0 0.25rem;
-    }
-    .orangehrm-sm-icon {
-      width: inherit;
-      height: inherit;
-      color: rgba($oxd-interface-gray-color, 0.8);
-    }
-    @include oxd-respond-to('md') {
-      position: absolute;
-      left: 1rem;
-      bottom: 1rem;
-    }
-  }
-}
+// .orangehrm-candidature-footer {
+//   &-sm {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     a {
+//       width: 22px;
+//       height: 22px;
+//       margin: 0 0.25rem;
+//     }
+//     .orangehrm-sm-icon {
+//       width: inherit;
+//       height: inherit;
+//       color: rgba($oxd-interface-gray-color, 0.8);
+//     }
+//     @include oxd-respond-to('md') {
+//       position: absolute;
+//       left: 1rem;
+//       bottom: 1rem;
+//     }
+//   }
+// }
 
-.orangehrm-candidature-seperator {
-  margin: 0.5rem 0;
-}
+// .orangehrm-candidature-seperator {
+//   margin: 0.5rem 0;
+// }

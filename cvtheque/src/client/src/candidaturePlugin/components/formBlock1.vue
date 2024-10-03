@@ -42,10 +42,17 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>France entière</option>
       </select>
       <select v-if="studyLevels" id="educationForm" v-model="studyLevel">
-        <option disabled value="">Plus haut niveau de diplôme *</option>
+        <option disabled value="">Niveau d'études *</option>
         <option v-for="(item, index) in studyLevels" :key="index" :value="item">
           {{ item }}
         </option>
+      </select>
+      <select v-model="checkedEXP">
+        <option disabled value="">Mon expérience professionnelle</option>
+        <option>Ce sera ma 1ère expérience</option>
+        <option>1 à 3 ans</option>
+        <option>4 à 7 ans</option>
+        <option>8 ans et +</option>
       </select>
       <p v-if="errors.postalCode" id="alert-msg01" class="alert-msg">
         Veuillez indiquer un code postal valide.
@@ -87,6 +94,7 @@ export default {
       courseStart: '',
       mobility: '',
       studyLevel: '',
+      checkedEXP: '',
       errors: {
         postalCode: false,
         incompleteForm: false,
@@ -141,6 +149,7 @@ export default {
         courseStart: this.courseStart,
         mobility: this.mobility,
         studyLevel: this.studyLevel,
+        checkedEXP: this.checkedEXP,
       };
       this.$emit('situation-submitted', situationReview);
       // this.need = '';
@@ -173,7 +182,7 @@ export default {
 } */
 
 #formBlock1SubmitButton {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 .formBlock1 input::placeholder {
   text-indent: -0.75rem;
