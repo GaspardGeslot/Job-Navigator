@@ -142,7 +142,16 @@ export default {
 
     const combineData = (dataArray) => {
       return dataArray.reduce((acc, item) => {
-        return {...acc, ...JSON.parse(JSON.stringify(item))};
+        for (const key in item) {
+          if (Object.prototype.hasOwnProperty.call(item, key)) {
+            if (item[key] instanceof File) {
+              acc[key] = item[key];
+            } else {
+              acc[key] = item[key];
+            }
+          }
+        }
+        return acc;
       }, {});
     };
     const checkScroll = () => {
@@ -208,26 +217,66 @@ export default {
     const nextStep = async () => {
       if (currentStep.value == 5) {
         const dataToProcess = reviews.value.slice(0, 5);
-        console.log('Données extraites :', dataToProcess);
+        //console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
         //console.log('combinedData.Xp : ', combinedData.Xp);
-        console.log('combinedData.checkedEXP : ', combinedData.checkedEXP);
+        //console.log('combinedData.checkedEXP : ', combinedData.checkedEXP);
         delete combinedData.checkedEXP;
-        delete combinedData.file;
+        if (combinedData.file == null) {
+          delete combinedData.file;
+        }
+        //delete combinedData.file;
         delete combinedData.fileName;
-        console.log('Données prêtes pour POST :', combinedData);
+        //console.log('Données prêtes pour POST :', combinedData);
+
+        const formData = new FormData();
+
+        for (const key in combinedData) {
+          if (Object.prototype.hasOwnProperty.call(combinedData, key)) {
+            if (Array.isArray(combinedData[key])) {
+              // Sérialiser les tableaux en JSON
+              formData.append(key, JSON.stringify(combinedData[key]));
+              // console.log(
+              //   `${key} added to FormData as JSON: ${JSON.stringify(
+              //     combinedData[key],
+              //   )}`,
+              // );
+            } else if (key === 'file' && combinedData[key] instanceof File) {
+              formData.append(key, combinedData[key]);
+              // console.log(`File added to FormData: ${combinedData[key].name}`);
+            } else {
+              formData.append(key, combinedData[key]);
+              // console.log(`${key} added to FormData: ${combinedData[key]}`);
+            }
+          }
+        }
+
+        //console.log('Données formData :', formData);
+        // Vérifier le contenu de formData
+        // for (let pair of formData.entries()) {
+        //   console.log(pair[0] + ', ' + pair[1]);
+        // }
+
         const http = new APIService(
           window.appGlobal.baseUrl,
           '/candidature/lead',
         );
+        console.log('FormData content before submission:', [
+          ...formData.entries(),
+        ]);
+
         http
-          .create(combinedData)
+          .create(formData)
           .then((response) => {
             console.log('Success:', response.data);
           })
           .catch((error) => {
-            console.error('Error:', error);
+            console.error(
+              'Error:',
+              error.response ? error.response.data : error.message,
+            );
           });
+
         // const response = await axios.post('/candidature/lead', combinedData, {
         //   headers: {
         //     'Content-Type': 'application/json',

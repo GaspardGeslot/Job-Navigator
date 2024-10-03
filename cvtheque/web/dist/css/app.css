@@ -9443,28 +9443,11 @@ p[data-v-d99f0b7a] {
 .file-select input[type='file'][data-v-74155a88] {
   display: none;
 }
-
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock5.vue?vue&type=style&index=1&id=d94a7e74&scoped=true&lang=css ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-#review[data-v-d94a7e74]::-moz-placeholder {
-  font-family: 'Telegraf', sans-serif;
+.error-message[data-v-74155a88] {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
-#review[data-v-d94a7e74]::placeholder {
-  font-family: 'Telegraf', sans-serif;
-}
-.fileNameDisplay[data-v-d94a7e74] {
-  text-align: center;
-  margin: 0.5rem auto;
-}
-.adjust-margin[data-v-d94a7e74] {
-  margin-top: 0.15rem;
-}
-/* .CVText {
-  color: #414957;
-  font-family: Nunito Sans, sans-serif;
-} */
 
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock6.vue?vue&type=style&index=1&id=d92e4f72&scoped=true&lang=css ***!
