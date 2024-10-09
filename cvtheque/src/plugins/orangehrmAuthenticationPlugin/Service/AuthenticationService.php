@@ -82,16 +82,21 @@ class AuthenticationService
 
     /**
      * @param UserCredential $credentials
-     * @return bool
+     * @return string
      * @throws AuthenticationException
      */
-    public function createCredentials(UserCredential $credentials): bool
+    public function createCredentials(UserCredential $credentials): string
     {
         $user = $this->getUserService()->createCredentials($credentials);
         $success = $this->setCredentialsForUser($user);
+        $token = null;
         if ($success)
+        {
             $success = $this->createHedwigeCredentials($credentials);
-        return $success;
+            if ($success)
+                $token = $this->setHedwigeCredentials($credentials);
+        }
+        return $token;
     }
 
     /**

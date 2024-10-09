@@ -38,13 +38,13 @@
                 :rules="rules.street1"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <!--<oxd-grid-item>
               <oxd-input-field
                 v-model="contact.street2"
                 :label="$t('pim.street2')"
                 :rules="rules.street2"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
             <oxd-grid-item>
               <oxd-input-field
                 v-model="contact.city"
@@ -68,7 +68,7 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="contact.countryCode"
+                v-model="contact.country"
                 type="select"
                 :label="$t('general.country')"
                 :options="countries"
@@ -83,13 +83,13 @@
         <oxd-divider />
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+            <!--<oxd-grid-item>
               <oxd-input-field
                 v-model.trim="contact.homeTelephone"
                 :label="$t('pim.home')"
                 :rules="rules.homeTelephone"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
             <oxd-grid-item>
               <oxd-input-field
                 v-model.trim="contact.mobile"
@@ -97,13 +97,13 @@
                 :rules="rules.mobile"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <!--<oxd-grid-item>
               <oxd-input-field
                 v-model.trim="contact.workTelephone"
                 :label="$t('pim.work')"
                 :rules="rules.workTelephone"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
           </oxd-grid>
         </oxd-form-row>
 
@@ -118,6 +118,7 @@
                 v-model="contact.workEmail"
                 :label="$t('general.work_email')"
                 :rules="rules.workEmail"
+                :disabled="true"
               />
             </oxd-grid-item>
             <oxd-grid-item>
@@ -155,7 +156,7 @@ const contactDetailsModel = {
   street2: '',
   city: '',
   province: '',
-  countryCode: [],
+  country: [],
   zipCode: '',
   homeTelephone: '',
   workTelephone: '',
@@ -214,7 +215,7 @@ export default {
         otherEmail: [
           shouldNotExceedCharLength(50),
           validEmailFormat,
-          promiseDebounce(this.validateOtherEmail, 500),
+          //promiseDebounce(this.validateOtherEmail, 500),
         ],
       },
     };
@@ -239,8 +240,14 @@ export default {
         .request({
           method: 'PUT',
           data: {
-            ...this.contact,
-            countryCode: this.contact.countryCode?.id,
+            city: this.contact.city,
+            country: this.contact.country?.label,
+            mobile: this.contact.mobile,
+            otherEmail: this.contact.otherEmail,
+            province: this.contact.province,
+            street1: this.contact.street1,
+            workEmail: this.contact.workEmail,
+            zipCode: this.contact.zipCode,
           },
         })
         .then((response) => {
@@ -332,8 +339,8 @@ export default {
     updateModel(response) {
       const {data} = response.data;
       this.contact = {...contactDetailsModel, ...data};
-      this.contact.countryCode = this.countries.find(
-        (item) => item.id === data.countryCode,
+      this.contact.country = this.countries.find(
+        (item) => item.label === data.country,
       );
     },
   },

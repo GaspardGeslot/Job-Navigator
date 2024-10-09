@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Pim\Controller;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Admin\Service\CompanyStructureService;
 use OrangeHRM\Admin\Service\EmploymentStatusService;
 use OrangeHRM\Admin\Service\JobCategoryService;
@@ -122,6 +123,9 @@ class EmployeeJobController extends BaseViewEmployeeController
                 ->getTerminationReasonsArray();
             $component->addProp(new Prop('termination-reasons', Prop::TYPE_ARRAY, $terminationReasons));
 
+            $options = $this->getCandidatureOptions();
+            $component->addProp(new Prop('sectors', Prop::TYPE_ARRAY, $options['sectors']));
+
             $this->setComponent($component);
 
             $this->setPermissionsForEmployee(['job_details', 'job_attachment', 'job_custom_fields'], $empNumber);
@@ -129,6 +133,27 @@ class EmployeeJobController extends BaseViewEmployeeController
             $this->handleBadRequest();
         }
     }
+
+    public function getCandidatureOptions(): array
+    {
+        $client = new Client();
+        $clientId = getenv('HEDWIGE_CLIENT_ID');
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/options", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
+    }
+
 
     /**
      * @inheritDoc

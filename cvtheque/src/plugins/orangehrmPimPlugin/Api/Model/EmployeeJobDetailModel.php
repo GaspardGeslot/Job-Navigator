@@ -28,6 +28,7 @@ use OrangeHRM\Entity\Employee;
  *     type="object",
  *     @OA\Property(property="empNumber", type="integer"),
  *     @OA\Property(property="joinedDate", type="string", format="date"),
+ *     @OA\Property(property="jobs", type="string"),
  *     @OA\Property(property="jobTitle", type="object",
  *         @OA\Property(property="id", type="integer"),
  *         @OA\Property(property="title", type="string"),
@@ -70,6 +71,8 @@ class EmployeeJobDetailModel implements Normalizable
         $this->setFilters(
             [
                 'empNumber',
+                'joinedDate',
+                'jobs',
                 ['getDecorator', 'getJoinedDate'],
                 ['getJobTitle', 'getId'],
                 ['getJobTitle', 'getJobTitleName'],
@@ -93,6 +96,7 @@ class EmployeeJobDetailModel implements Normalizable
             [
                 'empNumber',
                 'joinedDate',
+                'jobs',
                 ['jobTitle', 'id'],
                 ['jobTitle', 'title'],
                 ['jobTitle', 'isDeleted'],

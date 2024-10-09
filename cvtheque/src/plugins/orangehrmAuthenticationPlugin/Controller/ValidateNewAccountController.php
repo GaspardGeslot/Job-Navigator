@@ -81,11 +81,14 @@ class ValidateNewAccountController extends AbstractController implements PublicC
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $success = $authProviderChain->signIn(new AuthParams($credentials));
+            
+            $token = $authProviderChain->signIn(new AuthParams($credentials));
+            $success = !is_null($token);
 
             if (!$success)
-                throw AuthenticationException::userAlreadySignedIn();
+                throw AuthenticationException::invalidCredentials();
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());
@@ -103,7 +106,6 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             );
             return new RedirectResponse($createAccountUrl);
         }
-
         $redirectUrl = $this->handleSessionTimeoutRedirect();
         if ($redirectUrl) {
             return new RedirectResponse($redirectUrl);

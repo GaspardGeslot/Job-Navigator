@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Pim\Controller;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Admin\Service\CountryService;
 use OrangeHRM\Core\Traits\ServiceContainerTrait;
 use OrangeHRM\Core\Vue\Component;
@@ -38,7 +39,15 @@ class EmployeeContactDetailsController extends BaseViewEmployeeController
 
             /** @var CountryService $countryService */
             $countryService = $this->getContainer()->get(Services::COUNTRY_SERVICE);
-            $component->addProp(new Prop('countries', Prop::TYPE_ARRAY, $countryService->getCountryArray()));
+            
+            $options = $this->getCandidatureOptions();
+            $component->addProp(new Prop('countries', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $options['countries'], array_keys($options['countries']))));
+            
             $this->setComponent($component);
 
             $this->setPermissionsForEmployee(
@@ -47,6 +56,26 @@ class EmployeeContactDetailsController extends BaseViewEmployeeController
             );
         } else {
             $this->handleBadRequest();
+        }
+    }
+
+    public function getCandidatureOptions(): array
+    {
+        $client = new Client();
+        $clientId = getenv('HEDWIGE_CLIENT_ID');
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/options", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
         }
     }
 

@@ -69,6 +69,41 @@ class Employee
     private ?string $employeeId = null;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="profile_id", type="integer", length=4, nullable=true, options={"default" : -1})
+     */
+    private ?int $profileId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="emp_course_start", type="string", length=100, nullable=true, options={"default" : ""})
+     */
+    private ?string $courseStart = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="emp_study_level", type="string", length=100, nullable=true, options={"default" : ""})
+     */
+    private ?string $studyLevel = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="emp_need", type="string", length=100, nullable=true, options={"default" : ""})
+     */
+    private ?string $need = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="emp_jobs", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $jobs = '';
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="emp_lastname", type="string", length=100, options={"default" : ""})
@@ -575,6 +610,35 @@ class Employee
     }
 
     /**
+     * @param mixed $profileInfo
+     */
+    public function setProfileInfo(mixed $profileInfo): void 
+    {
+        $this->setProfileId($profileInfo['id'] ?? $this->empNumber);
+        $this->setNeed($profileInfo['need'] ?? '');
+        $this->setStudyLevel($profileInfo['studyLevel'] ?? '');
+        $this->setCourseStart($profileInfo['courseStart'] ?? '');
+        $this->setFirstName($profileInfo['firstName'] ?? '');
+        $this->setLastName($profileInfo['lastName'] ?? '');
+        $this->setBirthday($profileInfo['birthDate'] != null ? new \DateTime($profileInfo['birthDate']) : null);
+    }
+
+    /**
+     * @param mixed $profileContact
+     */
+    public function setProfileContact(mixed $profileContact): void 
+    {
+        $this->setWorkEmail($profileContact['email'] ?? '');
+        $this->setOtherEmail($profileContact['contactEmail'] ?? '');
+        $this->setMobile($profileContact['phoneNumber'] ?? '');
+        $this->setStreet1($profileContact['address']['street'] ?? '');
+        $this->setCity($profileContact['address']['city'] ?? '');
+        $this->setProvince($profileContact['address']['state'] ?? '');
+        $this->setZipcode($profileContact['address']['postalCode'] ?? '');
+        $this->setCountry($profileContact['address']['country'] ?? '');
+    }
+
+    /**
      * @return int
      */
     public function getEmpNumber(): int
@@ -606,6 +670,86 @@ class Employee
         $this->employeeId = $employeeId;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getProfileId(): ?int
+    {
+        return $this->profileId;
+    }
+
+    /**
+     * @param int|null $profileId
+     */
+    public function setProfileId(?int $profileId): void
+    {
+        $this->profileId = $profileId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStudyLevel(): string
+    {
+        return $this->studyLevel;
+    }
+
+    /**
+     * @param string $studyLevel
+     */
+    public function setStudyLevel(string $studyLevel): void
+    {
+        $this->studyLevel = $studyLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCourseStart(): string
+    {
+        return $this->courseStart;
+    }
+
+    /**
+     * @param string $courseStart
+     */
+    public function setCourseStart(string $courseStart): void
+    {
+        $this->courseStart = $courseStart;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNeed(): string
+    {
+        return $this->need;
+    }
+
+    /**
+     * @param string $need
+     */
+    public function setNeed(string $need): void
+    {
+        $this->need = $need;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobs(): string
+    {
+        return $this->jobs;
+    }
+
+    /**
+     * @param string $jobs
+     */
+    public function setJobs(string $jobs): void
+    {
+        $this->jobs = $jobs;
+    }
+    
     /**
      * @return string
      */

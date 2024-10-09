@@ -68,7 +68,7 @@ class EmployeeContactDetailsModel implements Normalizable
                 'city',
                 'province',
                 'zipCode',
-                'countryCode',
+                'country',
                 'homeTelephone',
                 'workTelephone',
                 'mobile',

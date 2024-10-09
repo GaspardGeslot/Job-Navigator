@@ -54,7 +54,7 @@ class PIMLeftMenuService
             'data_groups' => ['contact_details', 'contact_attachment', 'contact_custom_fields'],
             'label' => 'Contact Details'
         ],
-        'viewEmergencyContacts' => [
+        /*'viewEmergencyContacts' => [
             'module' => 'pim',
             'data_groups' => ['emergency_contacts', 'emergency_attachment', 'emergency_custom_fields'],
             'label' => 'Emergency Contacts'
@@ -68,13 +68,13 @@ class PIMLeftMenuService
             'module' => 'pim',
             'data_groups' => ['immigration', 'immigration_attachment', 'immigration_custom_fields'],
             'label' => 'Immigration'
-        ],
+        ],*/
         'viewJobDetails' => [
             'module' => 'pim',
             'data_groups' => ['job_details', 'job_attachment', 'job_custom_fields'],
             'label' => 'Job'
         ],
-        'viewSalaryList' => [
+        /*'viewSalaryList' => [
             'module' => 'pim',
             'data_groups' => ['salary_details', 'salary_attachment', 'salary_custom_fields'],
             'label' => 'Salary'
@@ -107,7 +107,7 @@ class PIMLeftMenuService
             'module' => 'pim',
             'data_groups' => ['membership', 'membership_attachment', 'membership_custom_fields'],
             'label' => 'Memberships'
-        ]
+        ]*/
     ];
 
     /**

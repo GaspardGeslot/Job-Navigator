@@ -19,6 +19,7 @@
 namespace OrangeHRM\Pim\Api;
 
 use Exception;
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
 use OrangeHRM\Core\Api\V2\EndpointCollectionResult;
@@ -34,9 +35,11 @@ use OrangeHRM\Entity\Employee;
 use OrangeHRM\Pim\Api\Model\EmployeeContactDetailsModel;
 use OrangeHRM\Pim\Service\EmployeeService;
 use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
 {
+    use AuthUserTrait;
     use EmployeeServiceTrait;
 
     public const PARAMETER_EMP_NUMBER = 'empNumber';
@@ -45,7 +48,8 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_CITY = 'city';
     public const PARAMETER_PROVINCE = 'province';
     public const PARAMETER_ZIP_CODE = 'zipCode';
-    public const PARAMETER_COUNTRY = 'countryCode';
+    public const PARAMETER_COUNTRY = 'country';
+    public const PARAMETER_COUNTRY_CODE = 'countryCode';
     public const PARAMETER_HOME_TELEPHONE = 'homeTelephone';
     public const PARAMETER_WORK_TELEPHONE = 'workTelephone';
     public const PARAMETER_MOBILE = 'mobile';
@@ -58,6 +62,7 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     public const PARAM_RULE_PROVINCE_MAX_LENGTH = 100;
     public const PARAM_RULE_ZIP_CODE_MAX_LENGTH = 20;
     public const PARAM_RULE_COUNTRY_MAX_LENGTH = 100;
+    public const PARAM_RULE_COUNTRY_CODE_MAX_LENGTH = 100;
     public const PARAM_RULE_HOME_TELEPHONE_MAX_LENGTH = 25;
     public const PARAM_RULE_WORK_TELEPHONE_MAX_LENGTH = 25;
     public const PARAM_RULE_MOBILE_MAX_LENGTH = 25;
@@ -94,15 +99,33 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
      */
     public function getOne(): EndpointResourceResult
     {
-        $empNumber = $this->getRequestParams()->getInt(
-            RequestParams::PARAM_TYPE_ATTRIBUTE,
-            self::PARAMETER_EMP_NUMBER
-        );
-
+        $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        $employee->setProfileContact($this->getHedwigeContactDetails($this->getAuthUser()->getUserHedwigeToken()));
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
         return new EndpointResourceResult(EmployeeContactDetailsModel::class, $employee);
+    }
+
+    /**
+     * @param string $token
+     * @return mixed
+     */
+    protected function getHedwigeContactDetails(string $token) : mixed
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/user/contact", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**
@@ -196,10 +219,16 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
      *                 maxLength=OrangeHRM\Pim\Api\EmployeeContactDetailsAPI::PARAM_RULE_ZIP_CODE_MAX_LENGTH
      *             ),
      *             @OA\Property(
+     *                 property="country",
+     *                 description="Specify the employee's country name",
+     *                 type="string",
+     *                 maxLength=OrangeHRM\Pim\Api\EmployeeContactDetailsAPI::PARAM_RULE_COUNTRY_MAX_LENGTH
+     *             ),
+     *             @OA\Property(
      *                 property="countryCode",
      *                 description="Specify the employee's country code",
      *                 type="string",
-     *                 maxLength=OrangeHRM\Pim\Api\EmployeeContactDetailsAPI::PARAM_RULE_COUNTRY_MAX_LENGTH
+     *                 maxLength=OrangeHRM\Pim\Api\EmployeeContactDetailsAPI::PARAM_RULE_COUNTRY_CODE_MAX_LENGTH
      *             ),
      *             @OA\Property(
      *                 property="homeTelephone",
@@ -252,8 +281,46 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     public function update(): EndpointResourceResult
     {
         $employee = $this->saveContactDetails();
-
+        $profileId = $this->updateHedwigeContact($this->getAuthUser()->getUserHedwigeToken(), $employee);
+        $employee->setProfileId($profileId);
         return new EndpointResourceResult(EmployeeContactDetailsModel::class, $employee);
+    }
+
+    /**
+     * @param string $token
+     * @param Employee $employee
+     * @return int
+     */
+    protected function updateHedwigeContact(string $token, Employee $employee) : int
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        
+        $data = [
+            'contactEmail' => $employee->getOtherEmail(),
+            'phoneNumber' => $employee->getMobile(),
+            'address' => [
+                'street' => $employee->getStreet1(),
+                'city' => $employee->getCity(),
+                'state' => $employee->getProvince(),
+                'postalCode' => $employee->getZipcode(),
+                'country' => $employee->getCountry(),
+            ],
+        ];
+
+        try {
+            $response = $client->request('PUT', "{$clientBaseUrl}/user/contact", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($data)
+            ]);
+            $responseBody = $response->getBody()->getContents();
+            return (int) trim($responseBody);
+        } catch (\Exceptionon $e) {
+            return -1;
+        }
     }
 
     /**
@@ -309,8 +376,16 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::PARAMETER_COUNTRY,
+                    new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COUNTRY_MAX_LENGTH]),
-                    new Rule(Rules::COUNTRY_CODE),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COUNTRY_CODE,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COUNTRY_CODE_MAX_LENGTH]),
                 ),
                 true
             ),
@@ -357,7 +432,6 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_OTHER_EMAIL_MAX_LENGTH]),
                     new Rule(Rules::EMAIL),
-                    new Rule(Rules::CALLBACK, [[$this, 'isUniqueEmail'], 'getOtherEmail']),
                 ),
                 true
             ),
@@ -423,10 +497,6 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_BODY,
             self::PARAMETER_OTHER_EMAIL
         );
-
-        if (!empty($workEmail) && !empty($otherEmail) && $workEmail === $otherEmail) {
-            throw $this->getBadRequestException('Work Email and Other Email Cannot Be The Same');
-        }
 
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);

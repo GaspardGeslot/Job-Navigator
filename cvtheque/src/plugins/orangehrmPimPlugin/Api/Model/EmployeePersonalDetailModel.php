@@ -28,6 +28,10 @@ use OrangeHRM\Entity\Employee;
  *     schema="Pim-EmployeePersonalDetailModel",
  *     type="object",
  *     @OA\Property(property="empNumber", type="integer"),
+ *     @OA\Property(property="profileId", type="integer"),
+ *     @OA\Property(property="studyLevel", type="string"),
+ *     @OA\Property(property="courseStart", type="string"),
+ *     @OA\Property(property="need", type="string"),
  *     @OA\Property(property="lastName", type="string"),
  *     @OA\Property(property="firstName", type="string"),
  *     @OA\Property(property="middleName", type="string"),
@@ -66,6 +70,10 @@ class EmployeePersonalDetailModel implements Normalizable
         $this->setEntity($employee);
         $filter = [
             'empNumber',
+            'profileId',
+            'courseStart',
+            'studyLevel',
+            'need',
             'lastName',
             'firstName',
             'middleName',
@@ -83,6 +91,10 @@ class EmployeePersonalDetailModel implements Normalizable
 
         $attributeNames = [
             'empNumber',
+            'profileId',
+            'courseStart',
+            'studyLevel',
+            'need',
             'lastName',
             'firstName',
             'middleName',

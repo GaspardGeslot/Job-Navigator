@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Pim\Api;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\V2\Endpoint;
 use OrangeHRM\Core\Api\V2\EndpointResourceResult;
 use OrangeHRM\Core\Api\V2\RequestParams;
@@ -30,9 +31,11 @@ use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\Entity\Employee;
 use OrangeHRM\Pim\Api\Model\EmployeePersonalDetailModel;
 use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
 {
+    use AuthUserTrait;
     use EmployeeServiceTrait;
     use ConfigServiceTrait;
 
@@ -40,6 +43,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
     public const PARAMETER_LAST_NAME = 'lastName';
+    public const PARAMETER_NEED = 'need';
+    public const PARAMETER_STUDY_LEVEL = 'studyLevel';
+    public const PARAMETER_COURSE_START = 'courseStart';
     public const PARAMETER_EMPLOYEE_ID = 'employeeId';
     public const PARAMETER_OTHER_ID = 'otherId';
     public const PARAMETER_DRIVING_LICENSE_NO = 'drivingLicenseNo';
@@ -62,6 +68,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAM_RULE_MIDDLE_NAME_MAX_LENGTH = 30;
     public const PARAM_RULE_LAST_NAME_MAX_LENGTH = 30;
     public const PARAM_RULE_EMPLOYEE_ID_MAX_LENGTH = 50;
+    public const PARAM_RULE_NEED_MAX_LENGTH = 100;
+    public const PARAM_RULE_STUDY_LEVEL_MAX_LENGTH = 100;
+    public const PARAM_RULE_COURSE_START_MAX_LENGTH = 100;
     public const PARAM_RULE_OTHER_ID_MAX_LENGTH = 100;
     public const PARAM_RULE_DRIVING_LICENSE_NO_MAX_LENGTH = 100;
     public const PARAM_RULE_MARTIAL_STATUS_MAX_LENGTH = 20;
@@ -100,9 +109,33 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     {
         $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        $profile = $this->getHedwigeProfile($this->getAuthUser()->getUserHedwigeToken());
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
+        $employee->setProfileInfo($profile);
+        
         return new EndpointResourceResult(EmployeePersonalDetailModel::class, $employee);
+    }
+
+    /**
+     * @param string $token
+     * @return mixed
+     */
+    protected function getHedwigeProfile(string $token) : mixed
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/user/info", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**
@@ -140,6 +173,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
      *             @OA\Property(property="drivingLicenseExpiredDate", type="string", format="date"),
      *             @OA\Property(property="ssnNumber", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_SSN_NUMBER_MAX_LENGTH),
      *             @OA\Property(property="sinNumber", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_SIN_NUMBER_MAX_LENGTH),
+     *             @OA\Property(property="need", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_NEED_MAX_LENGTH),
+     *             @OA\Property(property="studyLevel", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_STUDY_LEVEL_MAX_LENGTH),
+     *             @OA\Property(property="courseStart", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_COURSE_START_MAX_LENGTH),
      *             @OA\Property(property="gender", type="integer"),
      *             @OA\Property(property="maritalStatus", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_MARTIAL_STATUS_MAX_LENGTH),
      *             @OA\Property(property="birthday", type="string", format="date"),
@@ -179,6 +215,15 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         );
         $employee->setLastName(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LAST_NAME)
+        );
+        $employee->setNeed(
+            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEED)
+        );
+        $employee->setStudyLevel(
+            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVEL)
+        );
+        $employee->setCourseStart(
+            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_START)
         );
         $employee->setEmployeeId(
             $this->getRequestParams()->getStringOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_EMPLOYEE_ID)
@@ -244,9 +289,46 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         }
 
         $this->getEmployeeService()->updateEmployeePersonalDetails($employee);
-
+        $profileId = $this->updateHedwigeProfile($this->getAuthUser()->getUserHedwigeToken(), $employee);
+        $employee->setProfileId($profileId);
         return new EndpointResourceResult(EmployeePersonalDetailModel::class, $employee);
     }
+
+    /**
+     * @param string $token
+     * @param Employee $employee
+     * @return int
+     */
+    protected function updateHedwigeProfile(string $token, Employee $employee) : int
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        
+        $data = [
+            'firstName' => $employee->getFirstName(),
+            'need' => $employee->getNeed(),
+            'studyLevel' => $employee->getStudyLevel(),
+            'lastName' => $employee->getLastName(),
+            'civility' => $employee->getGender(),
+            'courseStart' => $employee->getCourseStart(),
+            'birthDate' => $employee->getBirthday()->format('Y-m-d'),
+        ];
+
+        try {
+            $response = $client->request('PUT', "{$clientBaseUrl}/user/info", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($data)
+            ]);
+            $responseBody = $response->getBody()->getContents();
+            return (int) trim($responseBody);
+        } catch (\Exceptionon $e) {
+            return -1;
+        }
+    }
+
 
     /**
      * @inheritDoc
@@ -282,6 +364,30 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_LAST_NAME_MAX_LENGTH]),
                 )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_NEED,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_NEED_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_STUDY_LEVEL,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_STUDY_LEVEL_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COURSE_START,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COURSE_START_MAX_LENGTH]),
+                ),
+                true
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(

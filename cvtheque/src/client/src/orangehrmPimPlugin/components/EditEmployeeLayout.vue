@@ -52,7 +52,7 @@
             :screen="screen"
           ></profile-custom-fields>
           <profile-attachments
-            v-if="screen !== 'default'"
+            v-if="screen == 'personal'"
             :employee-id="employeeId"
             :allowed-file-types="allowedFileTypes"
             :max-file-size="maxFileSize"

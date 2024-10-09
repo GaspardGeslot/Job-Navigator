@@ -72,113 +72,113 @@ class CandidatureController extends AbstractVueController implements PublicContr
      * @inheritDoc
      */
     public function postNewLead(Request $request)
-{
-    $leadData = $request->request->all();
+    {
+        $leadData = $request->request->all();
 
-    // Désérialiser les champs qui sont des tableaux JSON
-    if (isset($leadData['jobs'])) {
-        $leadData['jobs'] = json_decode($leadData['jobs'], true);
-    }
-    if (isset($leadData['permits'])) {
-        $leadData['permits'] = json_decode($leadData['permits'], true);
-    }
-    if (isset($leadData['skills'])) {
-        $leadData['skills'] = json_decode($leadData['skills'], true);
-    }
-
-    echo '<pre>';
-    var_dump($leadData);
-    echo '</pre>';
-    
-    $empNumber = getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID');
-    $screen = 'personal';
-    $attachment_Id = 'No ID'; // Valeur par défaut si aucune pièce jointe n'est téléchargée
-
-    // Gestion de la pièce jointe
-    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['file']['tmp_name'];
-        $fileName = $_FILES['file']['name'];
-        $fileSize = (int)$_FILES['file']['size'];
-        $fileType = $_FILES['file']['type'];
-        $fileContent = file_get_contents($fileTmpPath);
-
-        $base64Attachment = new \OrangeHRM\Core\Dto\Base64Attachment(
-            $fileName,
-            $fileType,
-            $fileContent,
-            $fileSize
-        );
-
-        $apiRequest = new \OrangeHRM\Core\Api\V2\Request($request);
-        $employeeAttachmentApi = new \OrangeHRM\Pim\Api\EmployeeAttachmentAPI($apiRequest);
-
-        try {
-            $result = $employeeAttachmentApi->createAndGetId($empNumber, $screen, $base64Attachment);
-            $normalizedResult = $result->normalize();
-            $attachment_Id = $normalizedResult["id"] ?? 'No ID';
-            echo '<pre>attachment_Id';
-            var_dump($attachment_Id);
-            echo 'attachment_Id</pre>';
-            $attachment_Id = strval($attachment_Id);
-            echo '<pre>strval_attachment_Id';
-            var_dump($attachment_Id);
-            echo 'strval_attachment_Id</pre>'; // Conversion de l'ID en chaîne de caractères
-        } catch (Exception $e) {
-            $error_message = 'Error in createAndGetId: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
-            error_log($error_message); // Log the error
-            
-            return new Response('Internal Server Error during attachment creation: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        // Désérialiser les champs qui sont des tableaux JSON
+        if (isset($leadData['jobs'])) {
+            $leadData['jobs'] = json_decode($leadData['jobs'], true);
         }
-    }
+        if (isset($leadData['permits'])) {
+            $leadData['permits'] = json_decode($leadData['permits'], true);
+        }
+        if (isset($leadData['skills'])) {
+            $leadData['skills'] = json_decode($leadData['skills'], true);
+        }
 
-    // Ajout de l'ID de la pièce jointe aux données du lead
-    if ($attachment_Id !== 'No ID') {
-        $leadData['resume'] = $attachment_Id;
-    }
-
-    // Debug : Affichage des données du lead avant et après l'encodage en JSON
-    echo '<pre>';
-
-    print_r('Lead Data before submission:');
-    print_r($leadData);
-    echo '</pre>';
-
-    // Encode les données du lead en JSON
-    $leadDataJson = json_encode($leadData);
-    echo '<pre>';
-    print_r('Lead Data post json_encode:');
-    print_r($leadDataJson);
-    echo '</pre>';
-
-    // Envoi du lead avec les données encodées en JSON
-    $client = new \GuzzleHttp\Client();
-    $clientId = getenv('HEDWIGE_CLIENT_ID');
-    $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
-    $clientBaseUrl = getenv('HEDWIGE_URL');
-
-    try {
-        // Envoi de la requête
-        $response = $client->request('POST', "{$clientBaseUrl}/lead", [
-            'headers' => [
-                'Authorization' => $clientToken,
-                'Content-Type' => 'application/json',
-            ],
-            'body' => $leadDataJson // Envoi des données encodées en JSON
-        ]);
-
-        $responseBody = (string) $response->getBody();
         echo '<pre>';
-        print_r('Response from HEDWIGE: ' . $responseBody);
+        var_dump($leadData);
+        echo '</pre>';
+        
+        $empNumber = getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID');
+        $screen = 'personal';
+        $attachment_Id = 'No ID'; // Valeur par défaut si aucune pièce jointe n'est téléchargée
+
+        // Gestion de la pièce jointe
+        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['file']['tmp_name'];
+            $fileName = $_FILES['file']['name'];
+            $fileSize = (int)$_FILES['file']['size'];
+            $fileType = $_FILES['file']['type'];
+            $fileContent = file_get_contents($fileTmpPath);
+
+            $base64Attachment = new \OrangeHRM\Core\Dto\Base64Attachment(
+                $fileName,
+                $fileType,
+                $fileContent,
+                $fileSize
+            );
+
+            $apiRequest = new \OrangeHRM\Core\Api\V2\Request($request);
+            $employeeAttachmentApi = new \OrangeHRM\Pim\Api\EmployeeAttachmentAPI($apiRequest);
+
+            try {
+                $result = $employeeAttachmentApi->createAndGetId($empNumber, $screen, $base64Attachment);
+                $normalizedResult = $result->normalize();
+                $attachment_Id = $normalizedResult["id"] ?? 'No ID';
+                echo '<pre>attachment_Id';
+                var_dump($attachment_Id);
+                echo 'attachment_Id</pre>';
+                $attachment_Id = strval($attachment_Id);
+                echo '<pre>strval_attachment_Id';
+                var_dump($attachment_Id);
+                echo 'strval_attachment_Id</pre>'; // Conversion de l'ID en chaîne de caractères
+            } catch (Exception $e) {
+                $error_message = 'Error in createAndGetId: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
+                error_log($error_message); // Log the error
+                
+                return new Response('Internal Server Error during attachment creation: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        // Ajout de l'ID de la pièce jointe aux données du lead
+        if ($attachment_Id !== 'No ID') {
+            $leadData['resume'] = $attachment_Id;
+        }
+
+        // Debug : Affichage des données du lead avant et après l'encodage en JSON
+        echo '<pre>';
+
+        print_r('Lead Data before submission:');
+        print_r($leadData);
         echo '</pre>';
 
-        return new Response('Lead submitted successfully with attachment ID: ' . $attachment_Id, Response::HTTP_OK);
-    } catch (\Exception $e) {
-        $error_message = 'Error in submitting lead: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
-        error_log($error_message); // Log the error
+        // Encode les données du lead en JSON
+        $leadDataJson = json_encode($leadData);
+        echo '<pre>';
+        print_r('Lead Data post json_encode:');
+        print_r($leadDataJson);
+        echo '</pre>';
 
-        return new Response('Failed to submit lead: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        // Envoi du lead avec les données encodées en JSON
+        $client = new \GuzzleHttp\Client();
+        $clientId = getenv('HEDWIGE_CLIENT_ID');
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            // Envoi de la requête
+            $response = $client->request('POST', "{$clientBaseUrl}/lead", [
+                'headers' => [
+                    'Authorization' => $clientToken,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => $leadDataJson // Envoi des données encodées en JSON
+            ]);
+
+            $responseBody = (string) $response->getBody();
+            echo '<pre>';
+            print_r('Response from HEDWIGE: ' . $responseBody);
+            echo '</pre>';
+
+            return new Response('Lead submitted successfully with attachment ID: ' . $attachment_Id, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            $error_message = 'Error in submitting lead: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
+            error_log($error_message); // Log the error
+
+            return new Response('Failed to submit lead: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
 
     public function getCandidatureOptions(): array|object

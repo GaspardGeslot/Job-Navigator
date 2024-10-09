@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Pim\Controller;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Admin\Service\NationalityService;
 use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\Core\Vue\Component;
@@ -63,6 +64,27 @@ class EmployeePersonalDetailController extends BaseViewEmployeeController
 
             $nationalities = $this->getNationalityService()->getNationalityArray();
             $component->addProp(new Prop('nationalities', Prop::TYPE_ARRAY, $nationalities));
+            
+            $options = $this->getCandidatureOptions();
+            $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($options['studyLevels']), $options['studyLevels'])));
+            $component->addProp(new Prop('course-starts', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($options['courseStarts']), $options['courseStarts'])));
+            $component->addProp(new Prop('needs', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $options['needs'], array_keys($options['needs']))));
+
             $this->setComponent($component);
 
             $this->setPermissionsForEmployee(
@@ -76,6 +98,26 @@ class EmployeePersonalDetailController extends BaseViewEmployeeController
             );
         } else {
             $this->handleBadRequest();
+        }
+    }
+
+    public function getCandidatureOptions(): array
+    {
+        $client = new Client();
+        $clientId = getenv('HEDWIGE_CLIENT_ID');
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/options", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
         }
     }
 

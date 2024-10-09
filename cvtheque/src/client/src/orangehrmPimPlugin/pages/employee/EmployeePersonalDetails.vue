@@ -30,7 +30,6 @@
             <oxd-grid-item>
               <full-name-input
                 v-model:firstName="employee.firstName"
-                v-model:middleName="employee.middleName"
                 v-model:lastName="employee.lastName"
                 :rules="rules"
               />
@@ -56,21 +55,21 @@
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="employee.employeeId"
+                v-model="employee.profileId"
                 :label="$t('general.employee_id')"
                 :rules="rules.employeeId"
                 :disabled="!$can.update(`personal_sensitive_information`)"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <!--<oxd-grid-item>
               <oxd-input-field
                 v-model="employee.otherId"
                 :label="$t('pim.other_id')"
                 :rules="rules.otherId"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
           </oxd-grid>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="employee.drivingLicenseNo"
@@ -86,7 +85,7 @@
                 :label="$t('pim.license_expiry_date')"
               />
             </oxd-grid-item>
-          </oxd-grid>
+          </oxd-grid>-->
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item v-if="showSsnField">
               <oxd-input-field
@@ -109,7 +108,7 @@
 
         <oxd-divider />
         <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="employee.nationality"
@@ -128,14 +127,13 @@
                 :options="maritalStatuses"
               />
             </oxd-grid-item>
-          </oxd-grid>
+          </oxd-grid>-->
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <date-input
                 v-model="employee.birthday"
                 :label="$t('pim.date_of_birth')"
                 :rules="rules.birthday"
-                :disabled="!$can.update(`personal_sensitive_information`)"
               />
             </oxd-grid-item>
             <oxd-grid-item>
@@ -156,6 +154,36 @@
                   value="2"
                 />
               </oxd-input-group>
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <oxd-divider />
+        <oxd-form-row>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.need"
+                type="select"
+                :label="$t('general.need')"
+                :options="needs"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.studyLevel"
+                type="select"
+                :label="$t('general.study_level')"
+                :options="studyLevels"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.courseStart"
+                type="select"
+                :label="$t('general.course_start')"
+                :options="courseStarts"
+              />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
@@ -214,6 +242,9 @@ const employeeModel = {
   sinNumber: '',
   nationality: [],
   maritalStatus: [],
+  need: [],
+  studyLevel: [],
+  courseStart: [],
   birthday: '',
   gender: '',
   nickname: '',
@@ -233,6 +264,18 @@ export default {
       required: true,
     },
     nationalities: {
+      type: Array,
+      default: () => [],
+    },
+    studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+    needs: {
+      type: Array,
+      default: () => [],
+    },
+    courseStarts: {
       type: Array,
       default: () => [],
     },
@@ -343,6 +386,9 @@ export default {
             nationalityId: this.employee.nationality?.id,
             ssnNumber: this.showSsnField ? this.employee.ssnNumber : undefined,
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
+            need: this.employee.need?.label,
+            studyLevel: this.employee.studyLevel?.label,
+            courseStart: this.employee.courseStart?.label,
             nickname: this.showDeprecatedFields
               ? this.employee.nickname
               : undefined,
@@ -371,6 +417,13 @@ export default {
       );
       this.employee.nationality = this.nationalities.find(
         (item) => item.id === data.nationality?.id,
+      );
+      this.employee.need = this.needs.find((item) => item.label === data.need);
+      this.employee.studyLevel = this.studyLevels.find(
+        (item) => item.label === data.studyLevel,
+      );
+      this.employee.courseStart = this.courseStarts.find(
+        (item) => item.label === data.courseStart,
       );
     },
   },

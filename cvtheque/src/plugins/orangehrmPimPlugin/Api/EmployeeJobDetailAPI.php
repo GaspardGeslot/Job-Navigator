@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Pim\Api;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\Endpoint;
 use OrangeHRM\Core\Api\V2\EndpointResourceResult;
@@ -31,9 +32,11 @@ use OrangeHRM\Core\Traits\Service\DateTimeHelperTrait;
 use OrangeHRM\Entity\Employee;
 use OrangeHRM\Pim\Api\Model\EmployeeJobDetailModel;
 use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
 {
+    use AuthUserTrait;
     use EmployeeServiceTrait;
     use DateTimeHelperTrait;
 
@@ -76,8 +79,30 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
             CommonParams::PARAMETER_EMP_NUMBER
         );
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        $employee->setJobs($this->getHedwigeJobs($this->getAuthUser()->getUserHedwigeToken()));
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
         return new EndpointResourceResult(EmployeeJobDetailModel::class, $employee);
+    }
+
+    /**
+     * @param string $token
+     * @return string
+     */
+    protected function getHedwigeJobs(string $token) : string
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/user/jobs", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_encode(json_decode($response->getBody(), true)['sectors'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**

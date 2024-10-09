@@ -86,11 +86,11 @@ class LocalAuthProvider extends AbstractAuthProvider
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return bool
+     * @return string
      * @throws AuthenticationException
      * @throws PasswordEnforceException
      */
-    public function signIn(AuthParamsInterface $authParams): bool
+    public function signIn(AuthParamsInterface $authParams): string
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
             return false;

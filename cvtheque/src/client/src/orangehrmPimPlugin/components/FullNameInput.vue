@@ -29,7 +29,7 @@
       :disabled="disabled"
       @update:model-value="$emit('update:firstName', $event)"
     />
-    <oxd-input-field
+    <!--<oxd-input-field
       class="orangehrm-middlename"
       name="middleName"
       :model-value="middleName"
@@ -37,7 +37,7 @@
       :disabled="disabled"
       :placeholder="showMiddleNamePlaceholder ? $t('general.middle_name') : ''"
       @update:model-value="$emit('update:middleName', $event)"
-    />
+    />-->
     <oxd-input-field
       class="orangehrm-lastname"
       name="lastName"

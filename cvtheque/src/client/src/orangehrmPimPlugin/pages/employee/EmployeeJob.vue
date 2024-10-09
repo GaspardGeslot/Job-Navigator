@@ -18,19 +18,28 @@
  -->
 
 <template>
-  <edit-employee-layout
-    screen="job"
-    :employee-id="empNumber"
-    :max-file-size="maxFileSize"
-    :allowed-file-types="allowedFileTypes"
-  >
+  <edit-employee-layout screen="job" :employee-id="empNumber">
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
       <oxd-text tag="h6" class="orangehrm-main-title">
         {{ $t('pim.job_details') }}
       </oxd-text>
       <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
-        <oxd-form-row>
+        <oxd-form-row v-for="(item, itemIndex) in sectors" :key="itemIndex">
+          <oxd-text tag="h7" class="orangehrm-main-title">
+            {{ item.title }}
+          </oxd-text>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item
+              v-for="(elem, elemIndex) in item.jobs"
+              :key="`${itemIndex}-${elemIndex}`"
+            >
+              <oxd-input-field type="checkbox" :label="elem" />
+            </oxd-grid-item>
+          </oxd-grid>
+          <oxd-divider />
+        </oxd-form-row>
+        <!--<oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <date-input
@@ -143,7 +152,7 @@
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
-        </template>
+        </template>-->
 
         <template v-if="hasUpdatePermissions">
           <oxd-divider />
@@ -191,9 +200,9 @@
 
 <script>
 import {APIService} from '@ohrm/core/util/services/api.service';
-import FileUploadInput from '@/core/components/inputs/FileUploadInput';
+//import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import EditEmployeeLayout from '@/orangehrmPimPlugin/components/EditEmployeeLayout';
-import JobSpecDownload from '@/orangehrmPimPlugin/components/JobSpecDownload';
+//import JobSpecDownload from '@/orangehrmPimPlugin/components/JobSpecDownload';
 import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
 import TerminateModal from '@/orangehrmPimPlugin/components/TerminateModal';
 import {
@@ -206,7 +215,7 @@ import {
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import useLocale from '@/core/util/composable/useLocale';
-import {OxdSwitchInput} from '@ohrm/oxd';
+//import {OxdSwitchInput} from '@ohrm/oxd';
 
 const jobDetailsModel = {
   joinedDate: '',
@@ -228,9 +237,9 @@ const contractDetailsModel = {
 export default {
   components: {
     'edit-employee-layout': EditEmployeeLayout,
-    'oxd-switch-input': OxdSwitchInput,
-    'job-spec-download': JobSpecDownload,
-    'file-upload-input': FileUploadInput,
+    //'oxd-switch-input': OxdSwitchInput,
+    //'job-spec-download': JobSpecDownload,
+    //'file-upload-input': FileUploadInput,
     'profile-action-header': ProfileActionHeader,
     'terminate-modal': TerminateModal,
   },
@@ -272,6 +281,10 @@ export default {
       type: Number,
       required: true,
     },
+    sectors: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   setup(props) {
@@ -292,6 +305,7 @@ export default {
 
   data() {
     return {
+      checkedJobs: [],
       isLoading: false,
       showContractDetails: false,
       job: {...jobDetailsModel},
@@ -319,7 +333,17 @@ export default {
       },
     };
   },
-
+  watch: {
+    checkedJobs(newVal) {
+      if (newVal.length > 3) {
+        this.checkedJobs.pop();
+        this.errors.tooMuchOptions = true;
+      } else {
+        this.errorMessage = '';
+        this.errors.tooMuchOptions = false;
+      }
+    },
+  },
   computed: {
     selectedJobTitleId() {
       const jobTitleId = this.job.jobTitleId?.id;
@@ -470,6 +494,7 @@ export default {
 
     updateJobModel(response) {
       const {data} = response.data;
+      console.log('Jobs selected : ', data.jobs);
       this.job.joinedDate = data.joinedDate;
       this.job.jobTitleId = this.normalizedJobTitles.find(
         (item) => item.id === data.jobTitle?.id,
@@ -492,4 +517,14 @@ export default {
 };
 </script>
 
-<style src="./employee.scss" lang="scss" scoped></style>
+<style src="./employee.scss" lang="scss" scoped>
+.orangehrm-form-hint {
+  width: 100%;
+  font-weight: 600;
+  font-size: 0.75rem;
+  margin-right: auto;
+  @media screen and (min-width: 400px) {
+    width: unset;
+  }
+}
+</style>
