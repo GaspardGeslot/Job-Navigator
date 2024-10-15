@@ -1,53 +1,55 @@
 <template>
   <div class="formBlockLayout" @submit.prevent="onSubmit">
-    <h3 class="formTitle">Avez-vous des certificats ou habilitations ?</h3>
-    <p class="formSubTitle">Plusieurs choix possibles.</p>
     <form class="formBlock5">
-      <div class="checkbox-group">
-        <div class="checkbox-item">
-          <input
-            id="B0"
-            v-model="checkedSkills"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Habilitations électriques"
-          />
-          <label for="B0"> Habilitations électriques</label>
-        </div>
-        <div class="checkbox-item">
-          <input
-            id="B1"
-            v-model="checkedSkills"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="CACES"
-          />
-          <label for="B1"> CACES</label>
-        </div>
-        <div class="checkbox-item">
-          <input
-            id="B2"
-            v-model="checkedSkills"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Autre"
-          />
-          <label for="B2"> Autre</label>
-        </div>
-        <div class="checkbox-item">
-          <input
-            id="BR"
-            v-model="checkedSkills"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Non, je n’ai ni habilitations, ni certificats"
-          />
-          <label for="BR">
-            Non, je n'ai ni habilitations, ni certificats
-          </label>
-        </div>
-      </div>
-      <h3 class="formTitle" style="margin-top: 2.5rem">Permis et véhicule</h3>
+      <!--
+          <h3 class="formTitle">Avez-vous des certificats ou habilitations ?</h3>
+          <p class="formSubTitle">Plusieurs choix possibles.</p>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input
+                id="B0"
+                v-model="checkedSkills"
+                class="custom-checkbox custom-input"
+                type="checkbox"
+                value="Habilitations électriques"
+              />
+              <label for="B0"> Habilitations électriques</label>
+            </div>
+            <div class="checkbox-item">
+              <input
+                id="B1"
+                v-model="checkedSkills"
+                class="custom-checkbox custom-input"
+                type="checkbox"
+                value="CACES"
+              />
+              <label for="B1"> CACES</label>
+            </div>
+            <div class="checkbox-item">
+              <input
+                id="B2"
+                v-model="checkedSkills"
+                class="custom-checkbox custom-input"
+                type="checkbox"
+                value="Autre"
+              />
+              <label for="B2"> Autre</label>
+            </div>
+            <div class="checkbox-item">
+              <input
+                id="BR"
+                v-model="checkedSkills"
+                class="custom-checkbox custom-input"
+                type="checkbox"
+                value="Non, je n’ai ni habilitations, ni certificats"
+              />
+              <label for="BR">
+                Non, je n'ai ni habilitations, ni certificats
+              </label>
+            </div>
+          </div>
+      -->
+      <h3 class="formTitle" style="margin-top: 1rem">Permis et véhicule</h3>
       <p class="formSubTitle">Plusieurs choix possibles.</p>
       <p class="CVText">Permis obtenus</p>
       <div class="checkbox-group">
@@ -142,7 +144,7 @@ export default {
   emits: ['situation-submitted', 'go-back'],
   data() {
     return {
-      checkedSkills: [],
+      // checkedSkills: [],
       checkedPermits: [],
       picked: null,
       errorMessage: '',
@@ -159,7 +161,7 @@ export default {
       let situationReview = {
         permits: this.checkedPermits,
         vehicle: this.picked,
-        skills: this.checkedSkills,
+        // skills: this.checkedSkills,
       };
       //console.log(this.checkedPermits);
       this.$emit('situation-submitted', situationReview);
