@@ -5,8 +5,13 @@
     </h3>
     <div v-if="matchResponse && matchResponse >= 1" class="matchResponse-txt">
       Superbe nouvelle ! Nous avons déjà identifié
-      {{ matchResponse }} entreprises qui correspondent à ton profil et avons
-      partagé tes informations avec elles.
+      <span v-if="matchResponse == 1"
+        >{{ matchResponse }} entreprise qui correspond à ton profil et avons
+        partagé tes informations avec elle.</span
+      ><span v-else
+        >{{ matchResponse }} entreprises qui correspondent à ton profil et avons
+        partagé tes informations avec elles.</span
+      >
     </div>
     <p class="formSubTitle">
       Pensez à valider votre demande en cliquant sur le lien qui a vous a été
