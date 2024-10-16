@@ -86,9 +86,9 @@ class CandidatureController extends AbstractVueController implements PublicContr
             $leadData['skills'] = json_decode($leadData['skills'], true);
         }
 
-        echo '<pre>';
-        var_dump($leadData);
-        echo '</pre>';
+        // echo '<pre>';
+        // var_dump($leadData);
+        // echo '</pre>';
         
         $empNumber = getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID');
         $screen = 'personal';
@@ -116,13 +116,13 @@ class CandidatureController extends AbstractVueController implements PublicContr
                 $result = $employeeAttachmentApi->createAndGetId($empNumber, $screen, $base64Attachment);
                 $normalizedResult = $result->normalize();
                 $attachment_Id = $normalizedResult["id"] ?? 'No ID';
-                echo '<pre>attachment_Id';
-                var_dump($attachment_Id);
-                echo 'attachment_Id</pre>';
+                // echo '<pre>attachment_Id';
+                // var_dump($attachment_Id);
+                // echo 'attachment_Id</pre>';
                 $attachment_Id = strval($attachment_Id);
-                echo '<pre>strval_attachment_Id';
-                var_dump($attachment_Id);
-                echo 'strval_attachment_Id</pre>'; // Conversion de l'ID en chaîne de caractères
+                // echo '<pre>strval_attachment_Id';
+                // var_dump($attachment_Id);
+                // echo 'strval_attachment_Id</pre>';
             } catch (Exception $e) {
                 $error_message = 'Error in createAndGetId: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
                 error_log($error_message); // Log the error
@@ -137,18 +137,18 @@ class CandidatureController extends AbstractVueController implements PublicContr
         }
 
         // Debug : Affichage des données du lead avant et après l'encodage en JSON
-        echo '<pre>';
+        // echo '<pre>';
 
-        print_r('Lead Data before submission:');
-        print_r($leadData);
-        echo '</pre>';
+        // print_r('Lead Data before submission:');
+        // print_r($leadData);
+        // echo '</pre>';
 
         // Encode les données du lead en JSON
         $leadDataJson = json_encode($leadData);
-        echo '<pre>';
-        print_r('Lead Data post json_encode:');
-        print_r($leadDataJson);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r('Lead Data post json_encode:');
+        // print_r($leadDataJson);
+        // echo '</pre>';
 
         // Envoi du lead avec les données encodées en JSON
         $client = new \GuzzleHttp\Client();

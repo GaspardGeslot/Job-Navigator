@@ -270,6 +270,7 @@ export default {
           .then((response) => {
             console.log('Success 1 :', response.data);
             console.log('Success 2 :', response.data.MatchResponse);
+            console.log('Success 3 :', response);
           })
           .catch((error) => {
             console.error(
