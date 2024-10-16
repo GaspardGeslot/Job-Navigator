@@ -225,10 +225,11 @@ class ThemeService
     public function getClientLogoURL(Request $request): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        if ($this->getImageETag('client_logo') !== null) {
+        return "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/cvtheque_logo.png";
+        /*if ($this->getImageETag('client_logo') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientLogo?v=$assetsVersion";
         }
-        return $request->getBasePath() . "/images/orange.png?v=$assetsVersion";
+        return $request->getBasePath() . "/images/orange.png?v=$assetsVersion";*/
     }
 
     /**
@@ -238,10 +239,11 @@ class ThemeService
     public function getClientBannerURL(Request $request): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        if ($this->getImageETag('client_banner') !== null) {
+        return "https://www.constructys.fr/wp-content/uploads/2020/01/CONSTRUCTYS_LOGO_BD_Blanctournant-1024x653.jpg";
+        /*if ($this->getImageETag('client_banner') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientBanner?v=$assetsVersion";
         }
-        return $request->getBasePath() . "/images/orangehrm-logo.png?v=$assetsVersion";
+        return $request->getBasePath() . "/images/orangehrm-logo.png?v=$assetsVersion";*/
     }
 
     /**

@@ -18,26 +18,79 @@
  -->
 
 <template>
-  <summary-card :employee-id="employeeId" :show-back-button="true">
-    <employee-details :employee-id="employeeId"> </employee-details>
+  <summary-card
+    :company-id="companyId"
+    :company-name="companyName"
+    :company-location="companyLocation"
+    :company-matching-job-title="companyMatchingJobTitle"
+    :company-phone-number-contact="companyPhoneNumberContact"
+    :company-email-contact="companyEmailContact"
+    :show-back-button="true"
+  >
+    <company-details
+      :company-id="companyId"
+      :company-name="companyName"
+      :company-location="companyLocation"
+      :company-matching-job-title="companyMatchingJobTitle"
+      :company-phone-number-contact="companyPhoneNumberContact"
+      :company-email-contact="companyEmailContact"
+    >
+    </company-details>
   </summary-card>
 </template>
 
 <script>
 import SummaryCard from '@/orangehrmCorporateDirectoryPlugin/components/SummaryCard';
-import EmployeeDetails from '@/orangehrmCorporateDirectoryPlugin/components/EmployeeDetails';
+import CompanyDetails from '@/orangehrmCorporateDirectoryPlugin/components/CompanyDetails';
 
 export default {
   name: 'SummaryCardDetails',
   components: {
-    'employee-details': EmployeeDetails,
+    'company-details': CompanyDetails,
     'summary-card': SummaryCard,
   },
   props: {
-    employeeId: {
+    companyId: {
       type: Number,
       required: true,
     },
+    companyName: {
+      type: String,
+      required: true,
+    },
+    companyMatchingJobTitle: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    companyLocation: {
+      type: String,
+      default: '',
+    },
+    companyPhoneNumberContact: {
+      type: String,
+      default: '',
+    },
+    companyEmailContact: {
+      type: String,
+      default: '',
+    },
+  },
+  beforeMount() {
+    console.log(
+      'Company data : ',
+      this.companyId,
+      ' ; ',
+      this.companyName,
+      ' ; ',
+      this.companyLocation,
+      ' ; ',
+      this.companyMatchingJobTitle,
+      ' ; ',
+      this.companyPhoneNumberContact,
+      ' ; ',
+      this.companyEmailContact,
+    );
   },
 };
 </script>

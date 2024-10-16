@@ -15,6 +15,23 @@ apiv2_corporate_directory_employees:
   defaults:
     _api: OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI
 
+apiv2_corporate_directory_company:
+  path: /api/v2/directory/companies/{companyNumber}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI
+    _key: companyNumber
+  requirements:
+    companyNumber: '\d+'
+
+apiv2_corporate_directory_companies:
+  path: /api/v2/directory/companies
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI
+
 ##########################
 #        Screens
 ##########################

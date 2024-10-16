@@ -5406,21 +5406,21 @@
   display: block;
 }
 
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmCorporateDirectoryPlugin/components/EmployeeDetails.vue?vue&type=style&index=0&id=134567b3&lang=scss&scoped=true ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmCorporateDirectoryPlugin/components/CompanyDetails.vue?vue&type=style&index=0&id=1064ea54&lang=scss&scoped=true ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
-.orangehrm-directory-card[data-v-134567b3] {
+.orangehrm-directory-card[data-v-1064ea54] {
   height: auto;
   overflow: hidden;
   padding: 0.5rem 1rem;
 }
 @media (min-width: 800px) {
-.orangehrm-directory-card[data-v-134567b3] {
+.orangehrm-directory-card[data-v-1064ea54] {
     min-height: 280px;
 }
 }
-.orangehrm-directory-card-rounded-body[data-v-134567b3] {
+.orangehrm-directory-card-rounded-body[data-v-1064ea54] {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -5431,7 +5431,7 @@
   height: 64px;
   box-shadow: 5px 5px 5px 5px #fafafc;
 }
-.orangehrm-directory-card-hover[data-v-134567b3] {
+.orangehrm-directory-card-hover[data-v-1064ea54] {
   display: flex;
   justify-content: space-between;
   padding: 0.25rem 0.75rem;
@@ -5439,18 +5439,18 @@
   margin: auto;
 }
 @media (min-width: 800px) {
-.orangehrm-directory-card-hover[data-v-134567b3] {
+.orangehrm-directory-card-hover[data-v-1064ea54] {
     width: auto;
 }
 }
-.orangehrm-directory-card-hover-body[data-v-134567b3] {
+.orangehrm-directory-card-hover-body[data-v-1064ea54] {
   display: block;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   word-wrap: break-word;
 }
-.orangehrm-directory-card-hover-icon[data-v-134567b3] {
+.orangehrm-directory-card-hover-icon[data-v-1064ea54] {
   color: #64728c;
   font-size: 14px;
   display: flex;
@@ -5458,10 +5458,10 @@
   align-items: center;
   justify-content: center;
 }
-.orangehrm-directory-card-hover[data-v-134567b3]:hover {
+.orangehrm-directory-card-hover[data-v-1064ea54]:hover {
   background-color: #fafafc;
 }
-.orangehrm-directory-card-icon[data-v-134567b3] {
+.orangehrm-directory-card-icon[data-v-1064ea54] {
   margin: 0 0.5rem 0 0;
   color: #64728c;
   font-size: 24px;

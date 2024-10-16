@@ -18,7 +18,6 @@
 
 namespace OrangeHRM\CorporateDirectory\Api;
 
-use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -32,16 +31,14 @@ use OrangeHRM\Core\Api\V2\Validator\ParamRuleCollection;
 use OrangeHRM\Core\Api\V2\Validator\Rule;
 use OrangeHRM\Core\Api\V2\Validator\Rules;
 use OrangeHRM\Core\Traits\UserRoleManagerTrait;
-use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 use OrangeHRM\CorporateDirectory\Api\Model\EmployeeDirectoryDetailedModel;
 use OrangeHRM\CorporateDirectory\Api\Model\EmployeeDirectoryModel;
 use OrangeHRM\CorporateDirectory\Dto\EmployeeDirectorySearchFilterParams;
 use OrangeHRM\CorporateDirectory\Service\EmployeeDirectoryService;
 use OrangeHRM\Entity\Employee;
 
-class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
+class CompanyDirectoryAPI extends Endpoint implements CrudEndpoint
 {
-    use AuthUserTrait;
     use UserRoleManagerTrait;
 
     public const FILTER_EMP_NUMBER = 'empNumber';
@@ -59,12 +56,12 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
 
     /**
      * @OA\Get(
-     *     path="/api/v2/directory/employees/{empNumber}",
-     *     tags={"Directory/Employees"},
-     *     summary="Get an Employee Directory Listing",
-     *     operationId="get-an-employee-directory-listing",
+     *     path="/api/v2/directory/companies/{companyNumber}",
+     *     tags={"Directory/Companies"},
+     *     summary="Get a Company Directory Listing",
+     *     operationId="get-a-company-directory-listing",
      *     @OA\PathParameter(
-     *         name="empNumber",
+     *         name="companyNumber",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Parameter(
@@ -73,8 +70,8 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
      *         required=false,
      *         @OA\Schema(
      *             type="string",
-     *             enum={OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI::MODEL_DEFAULT, OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI::MODEL_DETAILED, OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI::MODEL_DETAILED},
-     *             default=OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI::MODEL_DEFAULT
+     *             enum={OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI::MODEL_DEFAULT, OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI::MODEL_DETAILED, OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI::MODEL_DETAILED},
+     *             default=OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI::MODEL_DEFAULT
      *         )
      *     ),
      *     @OA\Response(
@@ -105,8 +102,6 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
         );
         $employee = $this->getEmployeeDirectoryService()->getEmployeeDirectoryDao()->getEmployeeByEmpNumber($empNumber);
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
-
-        
 
         return new EndpointResourceResult($this->getModelClass(), $employee);
     }
@@ -162,12 +157,12 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
 
     /**
      * @OA\Get(
-     *     path="/api/v2/directory/employees",
-     *     tags={"Directory/Employees"},
-     *     summary="Get the Employee Directory",
-     *     operationId="get-the-employee-directory",
+     *     path="/api/v2/directory/companies",
+     *     tags={"Directory/Companies"},
+     *     summary="Get the Company Directory",
+     *     operationId="get-the-company-directory",
      *     @OA\Parameter(
-     *         name="empNumber",
+     *         name="companyNumber",
      *         in="query",
      *         required=false,
      *         @OA\Schema(type="string")
@@ -197,10 +192,10 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
      *         @OA\Schema(
      *             type="string",
      *             enum={
-     *                 OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI::MODEL_DEFAULT,
-     *                 OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI::MODEL_DETAILED
+     *                 OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI::MODEL_DEFAULT,
+     *                 OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI::MODEL_DETAILED
      *             },
-     *             default=OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI::MODEL_DEFAULT
+     *             default=OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI::MODEL_DEFAULT
      *         )
      *     ),
      *     @OA\Response(
@@ -212,8 +207,8 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
      *                 type="array",
      *                 @OA\Items(
      *                     oneOf={
-     *                         @OA\Schema(ref="#/components/schemas/CorporateDirectory-EmployeeDirectoryModel"),
-     *                         @OA\Schema(ref="#/components/schemas/CorporateDirectory-EmployeeDirectoryDetailedModel"),
+     *                         @OA\Schema(ref="#/components/schemas/CorporateDirectory-CompanyDirectoryModel"),
+     *                         @OA\Schema(ref="#/components/schemas/CorporateDirectory-CompanyDirectoryDetailedModel"),
      *                     }
      *                 )
      *             ),
@@ -260,17 +255,11 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
         $count = $this->getEmployeeDirectoryService()->getEmployeeDirectoryDao()->getEmployeeCount(
             $employeeDirectoryParamHolder
         );
-        $companiesAPI = $this->getMatchedCompanies($this->getAuthUser()->getUserHedwigeToken());
-        $companies = array();
-        foreach ($companiesAPI as $company) {
-            $emp = new Employee();
-            $emp->setCompany($company);
-            array_push($companies, $emp);
-        }
+        $companies = $this->getMatchedCompanies($this->getAuthUser()->getUserHedwigeToken());
         return new EndpointCollectionResult(
-            EmployeeDirectoryModel::class,
+            $this->getModelClass(),
             $companies,
-            new ParameterBag([CommonParams::PARAMETER_TOTAL => count($companies)])
+            new ParameterBag([CommonParams::PARAMETER_TOTAL => $count])
         );
     }
 

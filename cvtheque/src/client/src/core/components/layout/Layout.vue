@@ -12,7 +12,7 @@
       <upgrade-button v-if="showUpgrade" />
     </template>
     <template #user-actions>
-      <li>
+      <!--<li>
         <a
           href="#"
           role="menuitem"
@@ -26,7 +26,7 @@
         <a :href="supportUrl" role="menuitem" class="oxd-userdropdown-link">
           {{ $t('general.support') }}
         </a>
-      </li>
+      </li>-->
       <li v-if="updatePasswordUrl">
         <a
           :href="updatePasswordUrl"
@@ -43,11 +43,11 @@
       </li>
     </template>
     <template #nav-actions>
-      <oxd-icon-button
+      <!--<oxd-icon-button
         name="question-lg"
         :title="$t('general.help')"
         @click="onClickSupport"
-      />
+      />-->
     </template>
   </oxd-layout>
   <about v-if="showAboutModel" @close="closeAboutModel"></about>

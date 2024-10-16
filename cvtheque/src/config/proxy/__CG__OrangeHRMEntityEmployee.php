@@ -67,10 +67,10 @@ class Employee extends \OrangeHRM\Entity\Employee implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'profileId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nickName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'smoker', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ethnicRaceCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nationality', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'maritalStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ssnNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'sinNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseNo', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseExpiredDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'militaryService', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobCategory', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subDivision', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'homeTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'mobile', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaryGradeCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'joinedDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecord', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom3', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom4', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom5', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom6', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom7', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom8', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom9', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom10', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'purgedAt', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'locations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'dependents', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'emergencyContacts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'immigrationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workExperience', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'educations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'skills', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'languages', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'licenses', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'memberships', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaries', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employmentContracts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attachments', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'users', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empPicture', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subordinates', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'supervisors', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empUsTax', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeWorkShift', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attendanceRecords', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'profileId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyLogo', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyLocation', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyPhoneNumberContact', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyEmailContact', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyMatchingJobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nickName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'smoker', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ethnicRaceCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nationality', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'maritalStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ssnNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'sinNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseNo', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseExpiredDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'militaryService', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobCategory', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subDivision', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'homeTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'mobile', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaryGradeCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'joinedDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecord', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom3', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom4', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom5', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom6', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom7', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom8', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom9', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom10', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'purgedAt', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'locations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'dependents', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'emergencyContacts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'immigrationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workExperience', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'educations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'skills', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'languages', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'licenses', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'memberships', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaries', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employmentContracts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attachments', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'users', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empPicture', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subordinates', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'supervisors', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empUsTax', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeWorkShift', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attendanceRecords', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'profileId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nickName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'smoker', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ethnicRaceCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nationality', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'maritalStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ssnNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'sinNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseNo', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseExpiredDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'militaryService', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobCategory', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subDivision', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'homeTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'mobile', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaryGradeCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'joinedDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecord', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom3', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom4', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom5', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom6', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom7', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom8', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom9', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom10', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'purgedAt', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'locations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'dependents', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'emergencyContacts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'immigrationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workExperience', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'educations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'skills', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'languages', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'licenses', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'memberships', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaries', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employmentContracts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attachments', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'users', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empPicture', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subordinates', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'supervisors', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empUsTax', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeWorkShift', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attendanceRecords', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'profileId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyLogo', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyLocation', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyPhoneNumberContact', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyEmailContact', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'companyMatchingJobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nickName', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'smoker', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ethnicRaceCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'nationality', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'maritalStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'ssnNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'sinNumber', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherId', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseNo', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'drivingLicenseExpiredDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'militaryService', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empStatus', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'jobCategory', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subDivision', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'street2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'homeTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'mobile', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workTelephone', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaryGradeCode', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'joinedDate', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'otherEmail', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecord', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom1', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom2', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom3', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom4', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom5', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom6', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom7', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom8', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom9', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'custom10', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'purgedAt', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'locations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'dependents', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'emergencyContacts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'immigrationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'workExperience', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'educations', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'skills', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'languages', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'licenses', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'memberships', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'salaries', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employmentContracts', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attachments', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeTerminationRecords', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'users', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empPicture', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'subordinates', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'supervisors', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'empUsTax', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'employeeWorkShift', '' . "\0" . 'OrangeHRM\\Entity\\Employee' . "\0" . 'attendanceRecords', 'entityDecorator'];
     }
 
     /**
@@ -202,6 +202,17 @@ class Employee extends \OrangeHRM\Entity\Employee implements \Doctrine\ORM\Proxy
     /**
      * {@inheritDoc}
      */
+    public function setCompany(mixed $company): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompany', [$company]);
+
+        parent::setCompany($company);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getEmpNumber(): int
     {
         if ($this->__isInitialized__ === false) {
@@ -267,6 +278,28 @@ class Employee extends \OrangeHRM\Entity\Employee implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProfileId', [$profileId]);
 
         parent::setProfileId($profileId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompanyId(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompanyId', []);
+
+        return parent::getCompanyId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCompanyId(?int $companyId): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompanyId', [$companyId]);
+
+        parent::setCompanyId($companyId);
     }
 
     /**
@@ -355,6 +388,138 @@ class Employee extends \OrangeHRM\Entity\Employee implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJobs', [$jobs]);
 
         parent::setJobs($jobs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompanyName(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompanyName', []);
+
+        return parent::getCompanyName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCompanyName(string $companyName): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompanyName', [$companyName]);
+
+        parent::setCompanyName($companyName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompanyLogo(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompanyLogo', []);
+
+        return parent::getCompanyLogo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCompanyLogo(string $companyLogo): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompanyLogo', [$companyLogo]);
+
+        parent::setCompanyLogo($companyLogo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompanyLocation(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompanyLocation', []);
+
+        return parent::getCompanyLocation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCompanyLocation(string $companyLocation): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompanyLocation', [$companyLocation]);
+
+        parent::setCompanyLocation($companyLocation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompanyPhoneNumberContact(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompanyPhoneNumberContact', []);
+
+        return parent::getCompanyPhoneNumberContact();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCompanyPhoneNumberContact(string $companyPhoneNumberContact): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompanyPhoneNumberContact', [$companyPhoneNumberContact]);
+
+        parent::setCompanyPhoneNumberContact($companyPhoneNumberContact);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompanyEmailContact(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompanyEmailContact', []);
+
+        return parent::getCompanyEmailContact();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCompanyEmailContact(string $companyEmailContact): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompanyEmailContact', [$companyEmailContact]);
+
+        parent::setCompanyEmailContact($companyEmailContact);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompanyMatchingJobTitle(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompanyMatchingJobTitle', []);
+
+        return parent::getCompanyMatchingJobTitle();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCompanyMatchingJobTitle(string $companyMatchingJobTitle): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCompanyMatchingJobTitle', [$companyMatchingJobTitle]);
+
+        parent::setCompanyMatchingJobTitle($companyMatchingJobTitle);
     }
 
     /**

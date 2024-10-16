@@ -18,15 +18,18 @@
 
 namespace OrangeHRM\CorporateDirectory\Controller;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Admin\Service\LocationService;
 use OrangeHRM\Admin\Service\JobTitleService;
 use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class CorporateDirectoryModuleController extends AbstractVueController
 {
+    use AuthUserTrait;
     protected ?JobTitleService $jobTitleService = null;
     protected ?LocationService $locationService = null;
 
@@ -59,12 +62,36 @@ class CorporateDirectoryModuleController extends AbstractVueController
     {
         $component = new Component('corporate-directory-employee-list');
 
-        $jobTitles = $this->getJobTitleService()->getJobTitleArray();
-        $component->addProp(new Prop('job-titles', Prop::TYPE_ARRAY, $jobTitles));
+        $jobTitles = $this->getMatchedJobs($this->getAuthUser()->getUserHedwigeToken());
+        //$jobTitles = $this->getJobTitleService()->getJobTitleArray();
+        $component->addProp(new Prop('job-titles', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+            return [
+                'id' => $index,
+                'label' => $label
+            ];
+        }, $jobTitles, array_keys($jobTitles))));
 
         $locations = $this->getLocationService()->getLocationsArray();
         $component->addProp(new Prop('locations', Prop::TYPE_ARRAY, $locations));
 
         $this->setComponent($component);
+    }
+
+    public function getMatchedJobs(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/user/matching/jobs", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
     }
 }

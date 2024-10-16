@@ -22,30 +22,30 @@
     <oxd-table-filter :filter-title="$t('general.directory')">
       <oxd-form @submit-valid="onSearch" @reset="onReset">
         <oxd-form-row>
-          <oxd-grid :cols="3">
-            <oxd-grid-item>
+          <oxd-grid :cols="1">
+            <!--<oxd-grid-item>
               <employee-autocomplete
                 v-model="filters.employeeNumber"
                 :rules="rules.employee"
-                api-path="/api/v2/directory/employees"
+                api-path="/api/v2/directory/companies"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
             <oxd-grid-item>
               <oxd-input-field
-                v-model="filters.jobTitleId"
+                v-model="filters.jobTitle"
                 type="select"
                 :label="$t('general.job_title')"
                 :options="jobTitles"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <!--<oxd-grid-item>
               <oxd-input-field
                 v-model="filters.locationId"
                 type="select"
                 :label="$t('general.location')"
                 :options="locations"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
           </oxd-grid>
         </oxd-form-row>
 
@@ -74,33 +74,33 @@
         ></table-header>
         <div ref="scrollerRef" class="orangehrm-container">
           <oxd-grid :cols="colSize">
-            <oxd-grid-item
-              v-for="(employee, index) in employees"
-              :key="employee"
-            >
+            <oxd-grid-item v-for="(company, index) in companies" :key="company">
               <summary-card
                 v-if="isMobile && currentIndex === index"
-                :employee-id="employee.id"
-                :employee-name="employee.employeeName"
-                :employee-sub-unit="employee.employeeSubUnit"
-                :employee-location="employee.employeeLocation"
-                :employee-designation="employee.employeeJobTitle"
-                @click="showEmployeeDetails(index)"
+                :company-id="company.companyId"
+                :company-name="company.companyName"
+                :company-location="company.companyLocation"
+                :company-matching-job-title="company.companyMatchingJobTitle"
+                @click="showCompanyDetails(index)"
               >
-                <employee-details
-                  :employee-id="employee.id"
+                <company-details
+                  :company-id="company.companyId"
+                  :company-name="company.companyName"
+                  :company-phone-number-contact="
+                    company.companyPhoneNumberContact
+                  "
+                  :company-email-contact="company.companyEmailContact"
                   :is-mobile="isMobile"
                 >
-                </employee-details>
+                </company-details>
               </summary-card>
               <summary-card
                 v-else
-                :employee-id="employee.id"
-                :employee-name="employee.employeeName"
-                :employee-sub-unit="employee.employeeSubUnit"
-                :employee-location="employee.employeeLocation"
-                :employee-designation="employee.employeeJobTitle"
-                @click="showEmployeeDetails(index)"
+                :company-id="company.companyId"
+                :company-name="company.companyName"
+                :company-location="company.companyLocation"
+                :company-matching-job-title="company.companyMatchingJobTitle"
+                @click="showCompanyDetails(index)"
               >
               </summary-card>
             </oxd-grid-item>
@@ -114,17 +114,22 @@
       </div>
 
       <div
-        v-if="isEmployeeSelected && isMobile === false"
+        v-if="isCompanySelected && isMobile === false"
         class="orangehrm-corporate-directory-sidebar"
       >
         <oxd-grid-item>
           <summary-card-details
-            :employee-designation="employees[currentIndex].employeeJobTitle"
-            :employee-id="employees[currentIndex].id"
-            :employee-location="employees[currentIndex].employeeLocation"
-            :employee-name="employees[currentIndex].employeeName"
-            :employee-sub-unit="employees[currentIndex].employeeSubUnit"
-            @hide-details="hideEmployeeDetails()"
+            :company-id="companies[currentIndex].companyId"
+            :company-location="companies[currentIndex].companyLocation"
+            :company-name="companies[currentIndex].companyName"
+            :company-matching-job-title="
+              companies[currentIndex].companyMatchingJobTitle
+            "
+            :company-phone-number-contact="
+              companies[currentIndex].companyPhoneNumberContact
+            "
+            :company-email-contact="companies[currentIndex].companyEmailContact"
+            @hide-details="hideCompanyDetails()"
           ></summary-card-details>
         </oxd-grid-item>
       </div>
@@ -142,15 +147,15 @@ import {
   validSelection,
 } from '@/core/util/validation/rules';
 import useInfiniteScroll from '@ohrm/core/util/composable/useInfiniteScroll';
-import EmployeeAutocomplete from '@/core/components/inputs/EmployeeAutocomplete';
+//import EmployeeAutocomplete from '@/core/components/inputs/EmployeeAutocomplete';
 import SummaryCard from '@/orangehrmCorporateDirectoryPlugin/components/SummaryCard';
-import EmployeeDetails from '@/orangehrmCorporateDirectoryPlugin/components/EmployeeDetails';
+import CompanyDetails from '@/orangehrmCorporateDirectoryPlugin/components/CompanyDetails';
 import SummaryCardDetails from '@/orangehrmCorporateDirectoryPlugin/components/SummaryCardDetails';
 import {OxdSpinner, useResponsive} from '@ohrm/oxd';
 
 const defaultFilters = {
-  employeeNumber: null,
-  jobTitleId: null,
+  companyNumber: null,
+  jobTitle: null,
   locationId: null,
 };
 
@@ -160,9 +165,9 @@ export default {
   components: {
     'summary-card': SummaryCard,
     'oxd-loading-spinner': OxdSpinner,
-    'employee-details': EmployeeDetails,
+    'company-details': CompanyDetails,
     'summary-card-details': SummaryCardDetails,
-    'employee-autocomplete': EmployeeAutocomplete,
+    //'employee-autocomplete': EmployeeAutocomplete,
   },
 
   props: {
@@ -185,18 +190,16 @@ export default {
       employee: [shouldNotExceedCharLength(100), validSelection],
     };
 
-    const employeeDataNormalizer = (data) => {
+    const companyDataNormalizer = (data) => {
       return data.map((item) => {
         return {
-          id: item.empNumber,
-          employeeName:
-            `${item.firstName} ${item.middleName} ${item.lastName} ` +
-            (item.terminationId ? $t('general.past_employee') : ''),
-          employeeJobTitle: item.jobTitle?.isDeleted
-            ? `${item.jobTitle?.title} ` + $t('general.deleted')
-            : item.jobTitle?.title,
-          employeeSubUnit: item.subunit?.name,
-          employeeLocation: item.location?.name,
+          companyId: item.companyId,
+          companyName: item.companyName,
+          companyMatchingJobTitle: item.companyMatchingJobTitle,
+          companyLocation: item.companyLocation,
+          companyLogo: item.companyLogo,
+          companyPhoneNumberContact: item.companyPhoneNumberContact,
+          companyEmailContact: item.companyEmailContact,
         };
       });
     };
@@ -211,7 +214,8 @@ export default {
     const state = reactive({
       total: 0,
       offset: 0,
-      employees: [],
+      companies: [],
+      allCompanies: [],
       currentIndex: -1,
       isLoading: false,
       filters: {
@@ -225,19 +229,20 @@ export default {
         .getAll({
           limit: limit,
           offset: state.offset,
-          locationId: state.filters.locationId?.id,
-          empNumber: state.filters.employeeNumber?.id,
-          jobTitleId: state.filters.jobTitleId?.id,
+          /*locationId: state.filters.locationId?.id,
+          companyNumber: state.filters.companyNumber?.id,*/
+          jobTitle: state.filters.jobTitle,
         })
         .then((response) => {
           const {data, meta} = response.data;
           state.total = meta?.total || 0;
           if (Array.isArray(data)) {
-            state.employees = [
-              ...state.employees,
-              ...employeeDataNormalizer(data),
+            state.companies = [
+              ...state.companies,
+              ...companyDataNormalizer(data),
             ];
           }
+          state.allCompanies = state.companies;
           if (state.total === 0) {
             noRecordsFound();
           }
@@ -246,7 +251,7 @@ export default {
     };
 
     const {scrollerRef} = useInfiniteScroll(() => {
-      if (state.employees.length >= state.total) return;
+      if (state.companies.length >= state.total) return;
       state.offset += limit;
       fetchData();
     });
@@ -264,20 +269,20 @@ export default {
     isMobile() {
       return this.windowWidth < 800;
     },
-    isEmployeeSelected() {
+    isCompanySelected() {
       return this.currentIndex >= 0;
     },
     oxdGridClasses() {
       return {
         'orangehrm-container': true,
-        'orangehrm-container-min-display': this.isEmployeeSelected,
+        'orangehrm-container-min-display': this.isCompanySelected,
       };
     },
     colSize() {
       if (this.windowWidth >= 1920) {
-        return this.isEmployeeSelected ? 5 : 7;
+        return this.isCompanySelected ? 5 : 7;
       }
-      return this.isEmployeeSelected ? 3 : 4;
+      return this.isCompanySelected ? 3 : 4;
     },
   },
 
@@ -286,28 +291,39 @@ export default {
   },
 
   methods: {
-    hideEmployeeDetails() {
+    hideCompanyDetails() {
       this.currentIndex = -1;
     },
-    showEmployeeDetails(index) {
+    showCompanyDetails(index) {
       if (this.currentIndex != index) {
         this.currentIndex = index;
       } else {
-        this.hideEmployeeDetails();
+        this.hideCompanyDetails();
       }
     },
     onSearch() {
-      this.hideEmployeeDetails();
-      this.employees = [];
-      this.offset = 0;
-      this.fetchData();
+      if (
+        this.filters.jobTitle === undefined ||
+        this.filters.jobTitle?.label === undefined
+      )
+        this.onReset();
+      else {
+        this.hideCompanyDetails();
+        this.companies = this.allCompanies.filter(
+          (company) =>
+            company.companyMatchingJobTitle === this.filters.jobTitle?.label,
+        );
+        //this.companies = [];
+        //this.offset = 0;
+        //this.fetchData();
+      }
     },
     onReset() {
-      this.hideEmployeeDetails();
-      this.employees = [];
+      this.hideCompanyDetails();
+      this.companies = this.allCompanies;
       this.offset = 0;
       this.filters = {...defaultFilters};
-      this.fetchData();
+      //this.fetchData();
     },
   },
 };
