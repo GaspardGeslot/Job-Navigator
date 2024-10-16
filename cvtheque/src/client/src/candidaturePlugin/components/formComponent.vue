@@ -74,7 +74,7 @@
         <FormSeven
           v-show="currentStep === 6"
           ref="formSix"
-          @match-response="MatchResponse"
+          :match-response="matchResponse"
         />
         <FormEight
           v-show="currentStep === 9"
@@ -139,6 +139,7 @@ export default {
     const currentStep = ref(1);
     const reviews = ref([]);
     const needsScroll = ref(false);
+    const matchResponse = ref(0);
 
     const scrollContainer = ref(null);
     const scrollContent = ref(null);
@@ -275,7 +276,7 @@ export default {
             console.log('Success 1 :', response.data);
             console.log('Success 2 :', response.data.MatchResponse);
             console.log('Success 3 :', response);
-            const MatchResponse = response.data.MatchResponse;
+            matchResponse.value = response.data.MatchResponse;
           })
           .catch((error) => {
             console.error(
