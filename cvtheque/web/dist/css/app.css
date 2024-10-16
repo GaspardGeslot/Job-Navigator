@@ -9291,6 +9291,28 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock2.vue?vue&type=style&index=1&id=d99f0b7a&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.toggleShowMoreButton[data-v-d99f0b7a] {
+  background-color: white;
+  border: none;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-right: 0rem;
+  cursor: pointer;
+}
+/* .toggleShowMoreButton:hover {
+  color: grey;
+} */
+.arrow-icon[data-v-d99f0b7a] {
+  fill: black;
+  transition: fill 0.3s;
+}
+.toggleShowMoreContainer:hover .toggleShowMoreButton[data-v-d99f0b7a],
+.toggleShowMoreContainer:hover .arrow-icon[data-v-d99f0b7a] {
+  color: grey;
+  fill: grey;
+  transition: color 0.3s, fill 0.3s;
+}
 .checkbox-group.two-columns[data-v-d99f0b7a] {
   display: flex;
   flex-wrap: wrap;

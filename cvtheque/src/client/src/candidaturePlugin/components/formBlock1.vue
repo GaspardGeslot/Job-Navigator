@@ -54,6 +54,15 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>4 à 7 ans</option>
         <option>8 ans et +</option>
       </select>
+      <select v-model="BTPcheckedEXP">
+        <option disabled value="">
+          Expérience professionnelle dans le BTP
+        </option>
+        <option>Ce sera ma 1ère expérience</option>
+        <option>1 à 3 ans</option>
+        <option>4 à 7 ans</option>
+        <option>8 ans et +</option>
+      </select>
       <p v-if="errors.postalCode" id="alert-msg01" class="alert-msg">
         Veuillez indiquer un code postal valide.
       </p>
@@ -95,6 +104,7 @@ export default {
       mobility: '',
       studyLevel: '',
       checkedEXP: '',
+      BTPcheckedEXP: '',
       errors: {
         postalCode: false,
         incompleteForm: false,
@@ -150,6 +160,7 @@ export default {
         mobility: this.mobility,
         studyLevel: this.studyLevel,
         checkedEXP: this.checkedEXP,
+        BTPcheckedEXP: this.BTPcheckedEXP,
       };
       this.$emit('situation-submitted', situationReview);
       // this.need = '';
