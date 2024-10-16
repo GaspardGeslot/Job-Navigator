@@ -164,6 +164,9 @@ export default {
       showWindow: false,
     };
   },
+  mounted() {
+    console.log('MatchResponse in FormSeven:', this.matchResponse);
+  },
   methods: {
     toggleWindow() {
       this.showWindow = !this.showWindow;
