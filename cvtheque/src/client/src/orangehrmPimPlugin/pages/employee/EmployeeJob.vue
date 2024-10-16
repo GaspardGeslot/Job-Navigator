@@ -153,13 +153,9 @@
             </oxd-grid>
           </oxd-form-row>
         </template>-->
-
-        <template v-if="hasUpdatePermissions">
-          <oxd-divider />
-          <oxd-form-actions>
-            <submit-button />
-          </oxd-form-actions>
-        </template>
+        <oxd-form-actions>
+          <submit-button />
+        </oxd-form-actions>
       </oxd-form>
     </div>
 

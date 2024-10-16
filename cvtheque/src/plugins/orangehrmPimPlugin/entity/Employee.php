@@ -102,6 +102,55 @@ class Employee
      * @ORM\Column(name="emp_jobs", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $jobs = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_name", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyName = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_logo", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyLogo = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_id", type="integer", length=4, nullable=true, options={"default" : -1})
+     */
+    private ?string $companyId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_location", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyLocation = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_phone_number_contact", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyPhoneNumberContact = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_email_contact", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyEmailContact = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_matching_job_title", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyMatchingJobTitle = '';
     
     /**
      * @var string
@@ -639,6 +688,20 @@ class Employee
     }
 
     /**
+     * @param mixed $company
+     */
+    public function setCompany(mixed $company): void 
+    {
+        $this->setCompanyId($company['id'] ?? '');
+        $this->setCompanyName($company['name'] ?? '');
+        $this->setCompanyLogo($company['logo'] ?? '');
+        $this->setCompanyLocation($company['location'] ?? '');
+        $this->setCompanyPhoneNumberContact($company['phoneNumberContact'] ?? '');
+        $this->setCompanyEmailContact($company['emailContact'] ?? '');
+        $this->setCompanyMatchingJobTitle($company['matchingJobTitle'] ?? '');;
+    }
+
+    /**
      * @return int
      */
     public function getEmpNumber(): int
@@ -684,6 +747,22 @@ class Employee
     public function setProfileId(?int $profileId): void
     {
         $this->profileId = $profileId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCompanyId(): ?int
+    {
+        return $this->companyId;
+    }
+
+    /**
+     * @param int|null $companyId
+     */
+    public function setCompanyId(?int $companyId): void
+    {
+        $this->companyId = $companyId;
     }
 
     /**
@@ -748,6 +827,102 @@ class Employee
     public function setJobs(string $jobs): void
     {
         $this->jobs = $jobs;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName(): string
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * @param string $companyName
+     */
+    public function setCompanyName(string $companyName): void
+    {
+        $this->companyName = $companyName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyLogo(): string
+    {
+        return $this->companyLogo;
+    }
+
+    /**
+     * @param string $companyLogo
+     */
+    public function setCompanyLogo(string $companyLogo): void
+    {
+        $this->companyLogo = $companyLogo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyLocation(): string
+    {
+        return $this->companyLocation;
+    }
+
+    /**
+     * @param string $companyLocation
+     */
+    public function setCompanyLocation(string $companyLocation): void
+    {
+        $this->companyLocation = $companyLocation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyPhoneNumberContact(): string
+    {
+        return $this->companyPhoneNumberContact;
+    }
+
+    /**
+     * @param string $companyPhoneNumberContact
+     */
+    public function setCompanyPhoneNumberContact(string $companyPhoneNumberContact): void
+    {
+        $this->companyPhoneNumberContact = $companyPhoneNumberContact;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyEmailContact(): string
+    {
+        return $this->companyEmailContact;
+    }
+
+    /**
+     * @param string $companyEmailContact
+     */
+    public function setCompanyEmailContact(string $companyEmailContact): void
+    {
+        $this->companyEmailContact = $companyEmailContact;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyMatchingJobTitle(): string
+    {
+        return $this->companyMatchingJobTitle;
+    }
+
+    /**
+     * @param string $companyMatchingJobTitle
+     */
+    public function setCompanyMatchingJobTitle(string $companyMatchingJobTitle): void
+    {
+        $this->companyMatchingJobTitle = $companyMatchingJobTitle;
     }
     
     /**

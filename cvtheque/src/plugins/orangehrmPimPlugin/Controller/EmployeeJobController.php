@@ -137,7 +137,6 @@ class EmployeeJobController extends BaseViewEmployeeController
     public function getCandidatureOptions(): array
     {
         $client = new Client();
-        $clientId = getenv('HEDWIGE_CLIENT_ID');
         $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 

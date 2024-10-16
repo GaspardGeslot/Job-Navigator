@@ -26,11 +26,13 @@ use OrangeHRM\Entity\Employee;
  * @OA\Schema(
  *     schema="CorporateDirectory-EmployeeDirectoryModel",
  *     type="object",
- *     @OA\Property(property="empNumber", type="integer"),
- *     @OA\Property(property="lastName", type="string"),
- *     @OA\Property(property="firstName", type="string"),
- *     @OA\Property(property="middleName", type="string"),
- *     @OA\Property(property="terminationId", type="integer"),
+ *     @OA\Property(property="companyId", type="integer"),
+ *     @OA\Property(property="companyName", type="string"),
+ *     @OA\Property(property="companyLogo", type="string"),
+ *     @OA\Property(property="companyLocation", type="string"),
+ *     @OA\Property(property="companyPhoneNumberContact", type="string"),
+ *     @OA\Property(property="companyEmailContact", type="string"),
+ *     @OA\Property(property="companyMatchingJobTitle", type="string"),
  *     @OA\Property(property="jobTitle", type="object",
  *         @OA\Property(property="id", type="integer"),
  *         @OA\Property(property="title", type="string"),
@@ -58,34 +60,39 @@ class EmployeeDirectoryModel implements Normalizable
         $this->setEntity($employee);
         $this->setFilters(
             [
-                'empNumber',
-                'lastName',
-                'firstName',
-                'middleName',
-                ['getEmployeeTerminationRecord', 'getId'],
+                'companyId',
+                'companyName',
+                'companyLogo',
+                'companyLocation',
+                'companyPhoneNumberContact',
+                'companyEmailContact',
+                'companyMatchingJobTitle',
+                /*['getEmployeeTerminationRecord', 'getId'],
                 ['getJobTitle', 'getId'],
                 ['getJobTitle', 'getJobTitleName'],
                 ['getJobTitle', 'isDeleted'],
                 ['getSubDivision', 'getId'],
                 ['getSubDivision', 'getName'],
                 ['getDecorator', 'getLocation', 'getId'],
-                ['getDecorator', 'getLocation', 'getName'],
+                ['getDecorator', 'getLocation', 'getName'],*/
             ]
         );
         $this->setAttributeNames(
             [
-                'empNumber',
-                'lastName',
-                'firstName',
-                'middleName',
-                'terminationId',
-                ['jobTitle', 'id'],
+                'companyId',
+                'companyName',
+                'companyLogo',
+                'companyLocation',
+                'companyPhoneNumberContact',
+                'companyEmailContact',
+                'companyMatchingJobTitle',
+                /*['jobTitle', 'id'],
                 ['jobTitle', 'title'],
                 ['jobTitle', 'isDeleted'],
                 ['subunit', 'id'],
                 ['subunit', 'name'],
                 ['location', 'id'],
-                ['location', 'name'],
+                ['location', 'name'],*/
             ]
         );
     }

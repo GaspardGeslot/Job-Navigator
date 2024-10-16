@@ -18,21 +18,23 @@
  -->
 
 <template>
-  <oxd-divider
-    v-show="employeeWorkEmail || employeeWorkTelephone"
-  ></oxd-divider>
+  <oxd-divider v-show="companyEmailContact || companyPhoneNumberContact">
+  </oxd-divider>
   <div
-    v-show="employeeWorkEmail || employeeWorkTelephone"
+    v-show="companyEmailContact || companyPhoneNumberContact"
     class="orangehrm-directory-card-rounded-body"
   >
-    <div v-show="employeeWorkTelephone" class="orangehrm-directory-card-icon">
+    <div
+      v-show="companyPhoneNumberContact"
+      class="orangehrm-directory-card-icon"
+    >
       <oxd-icon-button
         display-type="success"
         name="telephone-fill"
         @click.stop="openClientTelephone"
       ></oxd-icon-button>
     </div>
-    <div v-show="employeeWorkEmail" class="orangehrm-directory-card-icon">
+    <div v-show="companyEmailContact" class="orangehrm-directory-card-icon">
       <oxd-icon-button
         display-type="danger"
         name="envelope-fill"
@@ -41,7 +43,7 @@
     </div>
   </div>
   <div
-    v-show="employeeWorkTelephone"
+    v-show="companyPhoneNumberContact"
     class="orangehrm-directory-card-hover"
     @mouseleave="showTelephoneClip = false"
     @mouseover="showTelephoneClip = true"
@@ -49,7 +51,7 @@
     <div class="orangehrm-directory-card-hover-body">
       <oxd-text type="toast-message">{{ $t('pim.work_telephone') }}</oxd-text>
       <oxd-text ref="cloneTelephone" type="toast-title">
-        {{ employeeWorkTelephone }}
+        {{ companyPhoneNumberContact }}
       </oxd-text>
     </div>
     <div
@@ -62,9 +64,9 @@
       ></oxd-icon-button>
     </div>
   </div>
-  <oxd-divider v-show="employeeWorkTelephone"></oxd-divider>
+  <oxd-divider v-show="companyPhoneNumberContact"></oxd-divider>
   <div
-    v-show="employeeWorkEmail"
+    v-show="companyEmailContact"
     class="orangehrm-directory-card-hover"
     @mouseleave="showEmailClip = false"
     @mouseover="showEmailClip = true"
@@ -72,7 +74,7 @@
     <div class="orangehrm-directory-card-hover-body">
       <oxd-text type="toast-message">{{ $t('general.work_email') }}</oxd-text>
       <oxd-text ref="cloneEmail" type="toast-title">
-        {{ employeeWorkEmail }}
+        {{ companyEmailContact }}
       </oxd-text>
     </div>
     <div
@@ -85,9 +87,9 @@
       ></oxd-icon-button>
     </div>
   </div>
-  <oxd-divider v-show="employeeWorkEmail"></oxd-divider>
+  <oxd-divider v-show="companyEmailContact"></oxd-divider>
   <qr-code
-    v-if="qrPayload && (employeeWorkTelephone || employeeWorkEmail)"
+    v-if="qrPayload && (companyPhoneNumberContact || companyEmailContact)"
     :value="qrPayload"
   ></qr-code>
 </template>
@@ -98,15 +100,27 @@ import {APIService} from '@/core/util/services/api.service';
 import QRCode from '@/orangehrmCorporateDirectoryPlugin/components/QRCode';
 
 export default {
-  name: 'EmployeeDetails',
+  name: 'CompanyDetails',
   components: {
     'qr-code': QRCode,
     'oxd-divider': OxdDivider,
   },
   props: {
-    employeeId: {
+    companyId: {
       type: Number,
       required: true,
+    },
+    companyName: {
+      type: String,
+      required: true,
+    },
+    companyPhoneNumberContact: {
+      type: String,
+      default: '',
+    },
+    companyEmailContact: {
+      type: String,
+      default: '',
     },
     isMobile: {
       type: Boolean,
@@ -124,58 +138,52 @@ export default {
   },
   data() {
     return {
-      employeeWorkTelephone: null,
-      employeeWorkEmail: null,
+      phoneNumberContact: null,
+      emailContact: null,
       showTelephoneClip: false,
       showEmailClip: false,
       toGoEmail: null,
       qrPayload: null,
-      employeeName: null,
+      name: null,
     };
   },
   watch: {
-    employeeId: function () {
-      this.callEmployeeDetailsApi();
+    companyId: function () {
+      this.generateQrPayload();
     },
   },
   beforeMount() {
-    this.callEmployeeDetailsApi();
+    this.generateQrPayload();
   },
   methods: {
     openClientTelephone() {
-      window.location.href = 'tel:' + this.employeeWorkTelephone;
+      window.location.href = 'tel:' + this.companyPhoneNumberContact;
     },
     openClientEmail() {
-      window.location.href = 'mailto:' + this.employeeWorkEmail;
+      window.location.href = 'mailto:' + this.companyEmailContact;
     },
     copyEmail() {
-      navigator.clipboard?.writeText(this.employeeWorkEmail);
+      navigator.clipboard?.writeText(this.companyEmailContact);
     },
     copyTelephone() {
-      navigator.clipboard?.writeText(this.employeeWorkTelephone);
+      navigator.clipboard?.writeText(this.companyPhoneNumberContact);
     },
-    callEmployeeDetailsApi() {
-      this.http.get(this.employeeId, {model: 'detailed'}).then((response) => {
+    /*createCompanyDetails() {
+      this.http.get(this.companyId, {model: 'detailed'}).then((response) => {
         const {data} = response.data;
-        this.employeeName = {
-          firstName: data.firstName,
-          middleName: data.middleName,
-          lastName: data.lastName,
-        };
-        this.employeeWorkEmail = data.contactInfo?.workEmail;
-        this.employeeWorkTelephone = data.contactInfo?.workTelephone;
+        this.name = data.name;
+        this.emailContact = data.contactInfo?.workEmail;
+        this.phoneNumberContact = data.contactInfo?.workTelephone;
         this.generateQrPayload();
       });
-    },
+    },*/
     generateQrPayload() {
       let content = '';
-      content += `N:${this.employeeName?.lastName || ''};`;
-      content += `${this.employeeName?.firstName || ''};`;
-      content += `${this.employeeName?.middleName || ''};\n`;
-      if (this.employeeWorkTelephone)
-        content += `TEL;CELL:${this.employeeWorkTelephone}\n`;
-      if (this.employeeWorkEmail)
-        content += `EMAIL;WORK;INTERNET:${this.employeeWorkEmail}\n`;
+      content += `N:${this.companyName || ''};\n`;
+      if (this.companyPhoneNumberContact)
+        content += `TEL;CELL:${this.companyPhoneNumberContact}\n`;
+      if (this.companyEmailContact)
+        content += `EMAIL;WORK;INTERNET:${this.companyEmailContact}\n`;
 
       this.qrPayload = `BEGIN:VCARD\nVERSION:3.0\n${content}END:VCARD\n`;
     },

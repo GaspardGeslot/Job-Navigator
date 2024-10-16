@@ -33,9 +33,9 @@
           @click="$emit('delete', $event)"
         />
       </div>
-      <oxd-text v-else tag="span">
+      <!--<oxd-text v-else tag="span">
         {{ $t(recordsFoundLangString, {count: total}) }}
-      </oxd-text>
+      </oxd-text>-->
     </div>
   </div>
 </template>

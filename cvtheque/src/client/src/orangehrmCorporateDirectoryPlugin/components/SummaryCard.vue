@@ -27,14 +27,18 @@
       <oxd-icon name="arrow-right"></oxd-icon>
     </div>
     <oxd-text tag="p" :class="cardTitleClasses">
-      {{ employeeName }}
+      {{ companyName }}
     </oxd-text>
-    <profile-picture :id="employeeId"></profile-picture>
-    <oxd-text v-show="employeeDesignation" tag="p" :class="cardSubTitleClasses">
-      {{ employeeDesignation }}
+    <profile-picture :id="companyId"></profile-picture>
+    <oxd-text
+      v-show="companyMatchingJobTitle"
+      tag="p"
+      :class="cardSubTitleClasses"
+    >
+      {{ companyMatchingJobTitle }}
     </oxd-text>
     <div
-      v-show="employeeSubUnit || employeeLocation"
+      v-show="employeeSubUnit || companyLocation"
       class="orangehrm-directory-card-body"
     >
       <oxd-icon
@@ -50,11 +54,11 @@
           {{ employeeSubUnit }}
         </oxd-text>
         <oxd-text
-          v-show="employeeLocation"
+          v-show="companyLocation"
           tag="p"
           :class="cardDescriptionClasses"
         >
-          {{ employeeLocation }}
+          {{ companyLocation }}
         </oxd-text>
       </div>
     </div>
@@ -74,15 +78,15 @@ export default {
     'profile-picture': ProfilePicture,
   },
   props: {
-    employeeId: {
+    companyId: {
       type: Number,
       required: true,
     },
-    employeeName: {
+    companyName: {
       type: String,
       required: true,
     },
-    employeeDesignation: {
+    companyMatchingJobTitle: {
       type: String,
       required: false,
       default: null,
@@ -91,7 +95,7 @@ export default {
       type: String,
       default: '',
     },
-    employeeLocation: {
+    companyLocation: {
       type: String,
       default: '',
     },
