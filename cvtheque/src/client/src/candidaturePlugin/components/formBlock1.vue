@@ -41,10 +41,10 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>Ile-de-France</option>
         <option>France entière</option>
       </select>
-      <select v-if="studyLevels" id="educationForm" v-model="studyLevel">
+      <select v-if="sortedStudyLevel" id="educationForm" v-model="studyLevel">
         <option disabled value="">Niveau d'études *</option>
-        <option v-for="(item, index) in studyLevels" :key="index" :value="item">
-          {{ item }}
+        <option v-for="item in studyLevels" :key="item.id" :value="item.id">
+          {{ item.label }}
         </option>
       </select>
       <select v-model="checkedEXP">
@@ -104,6 +104,7 @@ export default {
       sortedCourseStarts: [],
       mobility: '',
       studyLevel: '',
+      sortedStudyLevel: [],
       checkedEXP: '',
       BTPcheckedEXP: '',
       errors: {
@@ -114,6 +115,7 @@ export default {
   },
   created() {
     console.log('this.courseStarts', this.courseStarts);
+    console.log('this.studyLevel', this.studyLevel);
     if (
       typeof this.courseStarts === 'object' &&
       !Array.isArray(this.courseStarts)
@@ -128,6 +130,19 @@ export default {
       this.sortedCourseStarts = [...this.courseStarts].sort(
         (a, b) => a.id - b.id,
       );
+    }
+    if (
+      typeof this.studyLevel === 'object' &&
+      !Array.isArray(this.studyLevel)
+    ) {
+      this.sortedStudyLevel = Object.entries(this.studyLevel)
+        .map(([id, label]) => ({
+          id: parseInt(id),
+          label,
+        }))
+        .sort((a, b) => a.id - b.id);
+    } else if (Array.isArray(this.studyLevel)) {
+      this.sortedStudyLevel = [...this.studyLevel].sort((a, b) => a.id - b.id);
     }
   },
   methods: {
