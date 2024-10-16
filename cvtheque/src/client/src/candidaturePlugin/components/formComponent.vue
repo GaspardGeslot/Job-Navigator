@@ -271,6 +271,16 @@ export default {
             console.log('Success 1 :', response.data);
             console.log('Success 2 :', response.data.MatchResponse);
             console.log('Success 3 :', response);
+            const dataString = response.data;
+            const jsonDataString = dataString.match(/{.*}/);
+            
+            if (jsonDataString) {
+              const jsonData = JSON.parse(jsonDataString[0]);
+              console.log('MatchResponse:', jsonData.MatchResponse);
+              console.log('Attachment ID:', jsonData.attachmentId);
+            } else {
+              console.error('No JSON data found in response');
+            }
           })
           .catch((error) => {
             console.error(
