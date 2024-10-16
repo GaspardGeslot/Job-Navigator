@@ -22,14 +22,14 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         class="blackPlaceholder"
         placeholder="Mon code postal *"
       />
-      <select v-if="courseStarts" v-model="courseStart">
+      <select v-if="sortedCourseStarts" v-model="courseStart">
         <option disabled value="">Ma disponibilité *</option>
         <option
-          v-for="(item, index) in courseStarts"
-          :key="index"
-          :value="item"
+          v-for="item in sortedCourseStarts"
+          :key="item.id"
+          :value="item.id"
         >
-          {{ item }}
+          {{ item.label }}
         </option>
       </select>
       <select v-model="mobility">
@@ -101,6 +101,7 @@ export default {
       need: '',
       postalCode: '',
       courseStart: '',
+      sortedCourseStarts: [],
       mobility: '',
       studyLevel: '',
       checkedEXP: '',
@@ -110,6 +111,11 @@ export default {
         incompleteForm: false,
       },
     };
+  },
+  created() {
+    this.sortedCourseStarts = [...this.courseStarts].sort(
+      (a, b) => a.id - b.id,
+    );
   },
   methods: {
     onSubmit() {
