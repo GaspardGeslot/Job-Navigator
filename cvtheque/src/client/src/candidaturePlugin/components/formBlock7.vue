@@ -3,7 +3,7 @@
     <h3 class="formTitle" style="margin-top: 0.5rem; margin-bottom: 0.5rem">
       Candidature<br />envoyée 🚀
     </h3>
-    <div v-if="matchResponse !== null">
+    <div v-if="matchResponse && matchResponse >= 1">
       Superbe nouvelle ! Nous avons déjà identifié
       {{ matchResponse }} entreprises qui correspondent à ton profil et avons
       partagé tes informations avec elles.
