@@ -321,6 +321,7 @@ export default {
       currentStep,
       reviews,
       needsScroll,
+      matchResponse,
       scrollContainer,
       scrollContent,
       formImg,
