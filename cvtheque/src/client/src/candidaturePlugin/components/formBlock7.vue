@@ -3,6 +3,11 @@
     <h3 class="formTitle" style="margin-top: 0.5rem; margin-bottom: 0.5rem">
       Candidature<br />envoyée 🚀
     </h3>
+    <div v-if="matchResponse">
+      Superbe nouvelle ! Nous avons déjà identifié
+      {{ matchResponse }} entreprises qui correspondent à ton profil et avons
+      partagé tes informations avec elles.
+    </div>
     <p class="formSubTitle">
       Pensez à valider votre demande en cliquant sur le lien qui a vous a été
       envoyé par mail.
@@ -147,6 +152,13 @@
 <script>
 export default {
   name: 'FormSeven',
+  props: {
+    matchResponse: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+  },
   data() {
     return {
       showWindow: false,

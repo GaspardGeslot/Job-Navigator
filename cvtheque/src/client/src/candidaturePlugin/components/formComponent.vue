@@ -71,7 +71,11 @@
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
-        <FormSeven v-show="currentStep === 6" ref="formSix" />
+        <FormSeven
+          v-show="currentStep === 6"
+          ref="formSix"
+          @match-response="MatchResponse"
+        />
         <FormEight
           v-show="currentStep === 9"
           ref="formEight"
@@ -271,16 +275,7 @@ export default {
             console.log('Success 1 :', response.data);
             console.log('Success 2 :', response.data.MatchResponse);
             console.log('Success 3 :', response);
-            const dataString = response.data;
-            const jsonDataString = dataString.match(/{.*}/);
-            
-            if (jsonDataString) {
-              const jsonData = JSON.parse(jsonDataString[0]);
-              console.log('MatchResponse:', jsonData.MatchResponse);
-              console.log('Attachment ID:', jsonData.attachmentId);
-            } else {
-              console.error('No JSON data found in response');
-            }
+            const MatchResponse = response.data.MatchResponse;
           })
           .catch((error) => {
             console.error(
