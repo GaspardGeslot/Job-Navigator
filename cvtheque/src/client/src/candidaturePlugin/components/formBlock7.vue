@@ -3,7 +3,7 @@
     <h3 class="formTitle" style="margin-top: 0.5rem; margin-bottom: 0.5rem">
       Candidature<br />envoyée 🚀
     </h3>
-    <div v-if="matchResponse && matchResponse >= 1">
+    <div v-if="matchResponse && matchResponse >= 1" class="matchResponse-txt">
       Superbe nouvelle ! Nous avons déjà identifié
       {{ matchResponse }} entreprises qui correspondent à ton profil et avons
       partagé tes informations avec elles.
@@ -185,6 +185,14 @@ export default {
 .row {
   display: flex;
   flex-direction: row;
+}
+.formSubTitle,
+.matchResponse-txt {
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 #share-msg {
   margin-top: 1rem;
