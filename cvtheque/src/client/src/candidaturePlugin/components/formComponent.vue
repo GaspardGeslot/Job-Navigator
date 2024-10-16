@@ -268,8 +268,8 @@ export default {
         http
           .create(formData)
           .then((response) => {
-            console.log('Success:', response.data);
-            console.log('Success:', response.data.MatchResponse);
+            console.log('Success 1 :', response.data);
+            console.log('Success 2 :', response.data.MatchResponse);
           })
           .catch((error) => {
             console.error(
