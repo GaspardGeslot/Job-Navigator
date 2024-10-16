@@ -41,9 +41,17 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option>Ile-de-France</option>
         <option>France entière</option>
       </select>
-      <select v-if="sortedStudyLevels" id="educationForm" v-model="studyLevel">
+      <select
+        v-if="sortedStudyLevels.length"
+        id="educationForm"
+        v-model="studyLevel"
+      >
         <option disabled value="">Niveau d'études *</option>
-        <option v-for="item in studyLevels" :key="item.id" :value="item.id">
+        <option
+          v-for="item in sortedStudyLevels"
+          :key="item.id"
+          :value="item.id"
+        >
           {{ item.label }}
         </option>
       </select>
