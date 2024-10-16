@@ -83,16 +83,16 @@ export default {
   name: 'FormOne',
   props: {
     courseStarts: {
-      type: Array,
-      default: () => [],
+      type: [Array, Object],
+      default: () => ({}),
     },
     needs: {
       type: Array,
       default: () => [],
     },
     studyLevels: {
-      type: Array,
-      default: () => [],
+      type: [Array, Object],
+      default: () => ({}),
     },
   },
   emits: ['situation-submitted'],
@@ -113,9 +113,22 @@ export default {
     };
   },
   created() {
-    this.sortedCourseStarts = [...this.courseStarts].sort(
-      (a, b) => a.id - b.id,
-    );
+    console.log('this.courseStarts', this.courseStarts);
+    if (
+      typeof this.courseStarts === 'object' &&
+      !Array.isArray(this.courseStarts)
+    ) {
+      this.sortedCourseStarts = Object.entries(this.courseStarts)
+        .map(([id, label]) => ({
+          id: parseInt(id),
+          label,
+        }))
+        .sort((a, b) => a.id - b.id);
+    } else if (Array.isArray(this.courseStarts)) {
+      this.sortedCourseStarts = [...this.courseStarts].sort(
+        (a, b) => a.id - b.id,
+      );
+    }
   },
   methods: {
     onSubmit() {
