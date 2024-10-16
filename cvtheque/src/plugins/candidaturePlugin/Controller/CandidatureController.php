@@ -171,7 +171,7 @@ class CandidatureController extends AbstractVueController implements PublicContr
             print_r('Response from HEDWIGE: ' . $responseBody);
             echo '</pre>';
 
-            return new Response('Lead submitted successfully with attachment ID: ' . $attachment_Id, Response::HTTP_OK);
+            return new Response(json_encode(["MatchResponse" => intval($responseBody)]), 'Lead submitted successfully with attachment ID: ' . $attachment_Id, Response::HTTP_OK);
         } catch (\Exception $e) {
             $error_message = 'Error in submitting lead: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
             error_log($error_message); // Log the error
