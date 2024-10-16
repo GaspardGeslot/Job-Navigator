@@ -167,9 +167,9 @@ class CandidatureController extends AbstractVueController implements PublicContr
             ]);
 
             $responseBody = (string) $response->getBody();
-            echo '<pre>';
-            print_r('Response from HEDWIGE: ' . $responseBody);
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r('Response from HEDWIGE: ' . $responseBody);
+            // echo '</pre>';
             $responseData = [
                 "MatchResponse" => intval($responseBody),
                 "attachmentId" => $attachment_Id
