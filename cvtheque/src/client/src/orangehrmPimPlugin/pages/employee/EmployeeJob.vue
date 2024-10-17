@@ -24,8 +24,16 @@
         {{ $t('pim.job_details') }}
       </oxd-text>
       <oxd-divider />
-      <oxd-form :loading="isLoading" @submit-valid="onSave">
-        <oxd-form-row v-for="(item, itemIndex) in sectors" :key="itemIndex">
+      <oxd-form
+        v-if="jobsFetched.length"
+        :loading="isLoading"
+        @submit-valid="onSave"
+      >
+        <oxd-form-row
+          v-for="(item, itemIndex) in sectors"
+          :key="itemIndex"
+          style="flex-direction: row-reverse"
+        >
           <oxd-text tag="h7" class="orangehrm-main-title">
             {{ item.title }}
           </oxd-text>
@@ -33,8 +41,19 @@
             <oxd-grid-item
               v-for="(elem, elemIndex) in item.jobs"
               :key="`${itemIndex}-${elemIndex}`"
+              style="flex-direction: row-reverse"
             >
-              <oxd-input-field type="checkbox" :label="elem" />
+              <oxd-input-field
+                type="checkbox"
+                :disabled="
+                  checkedJobs.length >= 3 && !checkedJobs.includes(elem)
+                "
+                :label="elem"
+                :value="elem"
+                :checked="checkedJobs.includes(elem)"
+                style="flex-direction: row-reverse"
+                @change="toggleCheckedJob(elem)"
+              />
             </oxd-grid-item>
           </oxd-grid>
           <oxd-divider />
@@ -211,6 +230,7 @@ import {
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import useLocale from '@/core/util/composable/useLocale';
+// import {ref} from 'vue';
 //import {OxdSwitchInput} from '@ohrm/oxd';
 
 const jobDetailsModel = {
@@ -284,6 +304,7 @@ export default {
   },
 
   setup(props) {
+    // const jobsFetched = ref(0);
     const http = new APIService(
       window.appGlobal.baseUrl,
       `/api/v2/pim/employees/${props.empNumber}/job-details`,
@@ -296,11 +317,16 @@ export default {
       locale,
       jsDateFormat,
       userDateFormat,
+      jobDetailsModel,
     };
   },
 
   data() {
     return {
+      errors: {
+        tooMuchOptions: false,
+      },
+      jobsFetched: [],
       checkedJobs: [],
       isLoading: false,
       showContractDetails: false,
@@ -328,17 +354,6 @@ export default {
         ],
       },
     };
-  },
-  watch: {
-    checkedJobs(newVal) {
-      if (newVal.length > 3) {
-        this.checkedJobs.pop();
-        this.errors.tooMuchOptions = true;
-      } else {
-        this.errorMessage = '';
-        this.errors.tooMuchOptions = false;
-      }
-    },
   },
   computed: {
     selectedJobTitleId() {
@@ -377,6 +392,17 @@ export default {
       return Math.round((this.maxFileSize / (1024 * 1024)) * 100) / 100;
     },
   },
+  // watch: {
+  //   checkedJobs(newVal) {
+  //     if (newVal.length > 3) {
+  //       this.checkedJobs.pop();
+  //       this.errors.tooMuchOptions = true;
+  //     } else {
+  //       this.errorMessage = '';
+  //       this.errors.tooMuchOptions = false;
+  //     }
+  //   },
+  // },
 
   beforeMount() {
     this.isLoading = true;
@@ -400,6 +426,22 @@ export default {
   },
 
   methods: {
+    toggleCheckedJob(job) {
+      const index = this.checkedJobs.indexOf(job);
+
+      if (index >= 0) {
+        this.checkedJobs.splice(index, 1);
+        this.errors.tooMuchOptions = false;
+      } else {
+        if (this.checkedJobs.length < 3) {
+          this.checkedJobs.push(job);
+          this.errors.tooMuchOptions = false;
+        } else {
+          this.errors.tooMuchOptions = true;
+        }
+      }
+      console.log('checkedJobs', this.checkedJobs);
+    },
     onSave() {
       this.isLoading = true;
       this.http
@@ -487,10 +529,21 @@ export default {
         this.showContractDetails = false;
       }
     },
-
     updateJobModel(response) {
       const {data} = response.data;
-      console.log('Jobs selected : ', data.jobs);
+      let tempJobsFetched = [];
+      try {
+        tempJobsFetched = JSON.parse(data.jobs);
+      } catch (error) {
+        console.error('Erreur lors du parsing de jobs:', error);
+      }
+      this.jobsFetched = tempJobsFetched || [];
+      let tempCheckedJobs = this.jobsFetched.flatMap(
+        (sector) => sector.jobs || [],
+      );
+      this.checkedJobs.splice(0, this.checkedJobs.length, ...tempCheckedJobs);
+      console.log('jobsFetched', this.jobsFetched);
+      console.log('checkedJobs après splice', this.checkedJobs);
       this.job.joinedDate = data.joinedDate;
       this.job.jobTitleId = this.normalizedJobTitles.find(
         (item) => item.id === data.jobTitle?.id,

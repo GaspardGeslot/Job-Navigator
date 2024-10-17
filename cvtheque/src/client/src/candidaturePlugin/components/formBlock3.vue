@@ -49,7 +49,7 @@
             </div>
           </div>
       -->
-      <h3 class="formTitle" style="margin-top: 1rem">Permis et véhicule</h3>
+      <h3 class="formTitle" style="margin-top: 2.5rem">Permis et véhicule</h3>
       <p class="formSubTitle">Plusieurs choix possibles.</p>
       <p class="CVText">Permis obtenus</p>
       <div class="checkbox-group">
@@ -61,7 +61,7 @@
             type="checkbox"
             value="Permis A"
           />
-          <label for="permitA">Permis A</label>
+          <label class="permitLabel" for="permitA">Permis A</label>
         </div>
         <div class="checkbox-item2">
           <input
@@ -71,7 +71,17 @@
             type="checkbox"
             value="Permis B"
           />
-          <label for="permitB">Permis B</label>
+          <label class="permitLabel" for="permitB">Permis B</label>
+        </div>
+        <div class="checkbox-item2">
+          <input
+            id="permitBE"
+            v-model="checkedPermits"
+            class="custom-checkbox custom-input"
+            type="checkbox"
+            value="Permis BE"
+          />
+          <label class="permitLabel" for="permitBE">Permis BE</label>
         </div>
         <div class="checkbox-item2">
           <input
@@ -81,37 +91,7 @@
             type="checkbox"
             value="Permis C"
           />
-          <label for="permitC">Permis C</label>
-        </div>
-        <div class="checkbox-item2">
-          <input
-            id="permitD"
-            v-model="checkedPermits"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Permis D"
-          />
-          <label for="permitD">Permis D</label>
-        </div>
-        <div class="checkbox-item2">
-          <input
-            id="permitL"
-            v-model="checkedPermits"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Permis L"
-          />
-          <label for="permitL">Permis L</label>
-        </div>
-        <div class="checkbox-item2">
-          <input
-            id="permitG"
-            v-model="checkedPermits"
-            class="custom-checkbox custom-input"
-            type="checkbox"
-            value="Permis G"
-          />
-          <label for="permitG">Permis G</label>
+          <label class="permitLabel" for="permitC">Permis C</label>
         </div>
       </div>
 

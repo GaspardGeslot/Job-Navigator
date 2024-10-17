@@ -160,6 +160,20 @@
 
         <oxd-divider />
         <oxd-form-row>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.studyLevel"
+                type="select"
+                :label="$t('general.study_level')"
+                :options="studyLevels"
+              />
+              <oxd-input-field :label="$t('Diplômes et certifications')" />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-divider />
+        <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
@@ -171,22 +185,62 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="employee.studyLevel"
-                type="select"
-                :label="$t('general.study_level')"
-                :options="studyLevels"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
                 v-model="employee.courseStart"
                 type="select"
                 :label="$t('general.course_start')"
                 :options="courseStarts"
               />
             </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                :label="$t('Tranche de rémunération souhaitée')"
+              />
+            </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
+        <oxd-divider />
+        <oxd-form-row>
+          <oxd-grid-item>
+            <oxd-input-field
+              :label="$t('Description des expériences professionnelles')"
+            />
+          </oxd-grid-item>
+        </oxd-form-row>
+        <oxd-divider />
+        <oxd-form-row>
+          <oxd-text>Permis obtenus</oxd-text>
+          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                type="checkbox"
+                :label="'Permis A'"
+                :value="'Permis A'"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                type="checkbox"
+                :label="'Permis B'"
+                :value="'Permis B'"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                type="checkbox"
+                :label="'Permis BE'"
+                :value="'Permis BE'"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                type="checkbox"
+                :label="'Permis C'"
+                :value="'Permis C'"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-divider />
 
         <oxd-divider v-if="showDeprecatedFields" />
         <oxd-form-row v-if="showDeprecatedFields">
@@ -411,6 +465,7 @@ export default {
 
     updateModel(response) {
       const {data} = response.data;
+      console.log(response.data);
       this.employee = {...employeeModel, ...data};
       this.employee.maritalStatus = this.maritalStatuses.find(
         (item) => item.id === data.maritalStatus,

@@ -55,21 +55,27 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
           {{ item.label }}
         </option>
       </select>
-      <select v-model="checkedEXP">
+      <select v-if="professionalXp.length" v-model="checkedEXP">
         <option disabled value="">Mon expérience professionnelle</option>
-        <option>Ce sera ma 1ère expérience</option>
-        <option>1 à 3 ans</option>
-        <option>4 à 7 ans</option>
-        <option>8 ans et +</option>
+        <option
+          v-for="(item, index) in professionalXp"
+          :key="index"
+          :value="item"
+        >
+          {{ item }}
+        </option>
       </select>
-      <select v-model="BTPcheckedEXP">
+      <select v-if="professionalXp.length" v-model="BTPcheckedEXP">
         <option disabled value="">
           Expérience professionnelle dans le BTP
         </option>
-        <option>Ce sera ma 1ère expérience</option>
-        <option>1 à 3 ans</option>
-        <option>4 à 7 ans</option>
-        <option>8 ans et +</option>
+        <option
+          v-for="(item, index) in professionalXp"
+          :key="index"
+          :value="item"
+        >
+          {{ item }}
+        </option>
       </select>
       <p v-if="errors.postalCode" id="alert-msg01" class="alert-msg">
         Veuillez indiquer un code postal valide.
@@ -102,6 +108,10 @@ export default {
       type: [Array, Object],
       default: () => ({}),
     },
+    professionalXp: {
+      type: [Array, Object],
+      default: () => ({}),
+    },
   },
   emits: ['situation-submitted'],
   data() {
@@ -124,6 +134,7 @@ export default {
   created() {
     console.log('this.courseStarts', this.courseStarts);
     console.log('this.studyLevel', this.studyLevels);
+    console.log('professionalXp', this.professionalXp);
     if (
       typeof this.courseStarts === 'object' &&
       !Array.isArray(this.courseStarts)

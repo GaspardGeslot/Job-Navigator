@@ -38,6 +38,7 @@
           :course-starts="options.courseStarts"
           :needs="options.needs"
           :study-levels="options.studyLevels"
+          :professional-xp="options.professionalExperiences"
           @situation-submitted="addReview"
         />
         <FormTwo
