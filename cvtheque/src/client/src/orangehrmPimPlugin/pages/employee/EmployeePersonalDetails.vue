@@ -467,7 +467,7 @@ export default {
             ssnNumber: this.showSsnField ? this.employee.ssnNumber : undefined,
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
             need: this.employee.need?.label,
-            checkedPermits: this.employee.checkedPermits,
+            drivingLicense: JSON.stringify(this.employee.checkedPermits),
             studyLevel: this.employee.studyLevel?.label,
             courseStart: this.employee.courseStart?.label,
             nickname: this.showDeprecatedFields
@@ -482,6 +482,7 @@ export default {
           },
         })
         .then((response) => {
+          console.log('response HERE ', response.data);
           this.updateModel(response);
           return this.$toast.updateSuccess();
         })

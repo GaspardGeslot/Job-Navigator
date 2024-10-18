@@ -44,6 +44,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_MIDDLE_NAME = 'middleName';
     public const PARAMETER_LAST_NAME = 'lastName';
     public const PARAMETER_NEED = 'need';
+    public const PARAMETER_LICENSE = 'drivingLicense';
     public const PARAMETER_STUDY_LEVEL = 'studyLevel';
     public const PARAMETER_COURSE_START = 'courseStart';
     public const PARAMETER_EMPLOYEE_ID = 'employeeId';
@@ -219,6 +220,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $employee->setNeed(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEED)
         );
+        $employee->setDrivingLicense(
+            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LICENSE)
+        );
         $employee->setStudyLevel(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVEL)
         );
@@ -307,11 +311,12 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $data = [
             'firstName' => $employee->getFirstName(),
             'need' => $employee->getNeed(),
+            'drivingLicenses' => $employee->getDrivingLicense(),
             'studyLevel' => $employee->getStudyLevel(),
             'lastName' => $employee->getLastName(),
             'civility' => $employee->getGender(),
             'courseStart' => $employee->getCourseStart(),
-            'birthDate' => $employee->getBirthday()->format('Y-m-d'),
+            'birthDate' => $employee->getBirthday() != null ? $employee->getBirthday()->format('Y-m-d') : null,
         ];
 
         try {
@@ -370,6 +375,14 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                     self::PARAMETER_NEED,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_NEED_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    'drivingLicense',
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, 100]),
                 ),
                 true
             ),
