@@ -33,7 +33,7 @@
     ></edit-skill>
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
       <profile-action-header @click="onClickAdd">
-        {{ $t('general.skills') }}
+        {{ $t('general.certificates') }}
       </profile-action-header>
     </div>
     <table-header
@@ -135,12 +135,12 @@ export default {
         {
           name: 'name',
           slot: 'title',
-          title: this.$t('pim.skill'),
+          title: this.$t('pim.certificates'),
           style: {flex: 1},
         },
         {
           name: 'yearsOfExperience',
-          title: this.$t('pim.years_of_experience'),
+          title: this.$t('pim.certificate_title'),
           style: {flex: 1},
         },
         {

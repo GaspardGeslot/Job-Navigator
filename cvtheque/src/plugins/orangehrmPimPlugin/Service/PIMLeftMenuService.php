@@ -89,7 +89,7 @@ class PIMLeftMenuService
             'data_groups' => ['supervisor', 'subordinates', 'report-to_attachment', 'report-to_custom_fields'],
             'actions' => [],
             'label' => 'Report-to'
-        ],
+        ],*/
         'viewQualifications' => [
             'module' => 'pim',
             'data_groups' => [
@@ -103,7 +103,7 @@ class PIMLeftMenuService
             ],
             'label' => 'Qualifications'
         ],
-        'viewMemberships' => [
+        /*'viewMemberships' => [
             'module' => 'pim',
             'data_groups' => ['membership', 'membership_attachment', 'membership_custom_fields'],
             'label' => 'Memberships'
