@@ -218,6 +218,7 @@
               :key="`${elemIndex}-${elem}`"
             >
               <oxd-input-field
+                v-model="employee.checkedPermits"
                 type="checkbox"
                 :label="elem.label"
                 :value="elem.label"
@@ -317,6 +318,7 @@ const employeeModel = {
   nationality: [],
   maritalStatus: [],
   need: [],
+  checkedPermits: [],
   studyLevel: [],
   courseStart: [],
   birthday: '',
@@ -465,6 +467,7 @@ export default {
             ssnNumber: this.showSsnField ? this.employee.ssnNumber : undefined,
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
             need: this.employee.need?.label,
+            checkedPermits: this.employee.checkedPermits,
             studyLevel: this.employee.studyLevel?.label,
             courseStart: this.employee.courseStart?.label,
             nickname: this.showDeprecatedFields
