@@ -52,6 +52,7 @@
         <FormThree
           v-show="currentStep === 3"
           ref="formThree"
+          :driving-licenses="options.drivingLicenses"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />

@@ -9342,6 +9342,11 @@ p[data-v-d99f0b7a] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock3.vue?vue&type=style&index=1&id=d982dc78&scoped=true&lang=css ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.radio-group[data-v-d982dc78] {
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
 .checkbox-item[data-v-d982dc78] {
   /*display: flex;
   align-items: center;*/

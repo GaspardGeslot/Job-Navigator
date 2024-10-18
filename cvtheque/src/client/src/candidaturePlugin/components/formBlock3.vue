@@ -52,6 +52,7 @@
       <h3 class="formTitle" style="margin-top: 2.5rem">Permis et véhicule</h3>
       <p class="formSubTitle">Plusieurs choix possibles.</p>
       <p class="CVText">Permis obtenus</p>
+      <!--
       <div class="checkbox-group">
         <div class="checkbox-item2">
           <input
@@ -94,6 +95,25 @@
           <label class="permitLabel" for="permitC">Permis C</label>
         </div>
       </div>
+      -->
+      <div v-if="drivingLicenses" class="checkbox-group">
+        <div class="checkbox-item2">
+          <div
+            v-for="(elem, elemIndex) in drivingLicenses"
+            :key="`${elemIndex}-${elem}`"
+            class="checkbox-item"
+          >
+            <input
+              :key="elemIndex"
+              v-model="checkedPermits"
+              class="custom-checkbox custom-input"
+              type="checkbox"
+              :value="elem"
+            />
+            <label class="permitLabel">{{ elem }}</label>
+          </div>
+        </div>
+      </div>
 
       <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?</p>
       <div class="radio-group">
@@ -120,6 +140,12 @@ export default {
   name: 'FormThree',
   components: {
     SubmitComponent,
+  },
+  props: {
+    drivingLicenses: {
+      type: [Array, Object],
+      default: () => ({}),
+    },
   },
   emits: ['situation-submitted', 'go-back'],
   data() {
@@ -159,6 +185,11 @@ export default {
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
+.radio-group {
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
 .checkbox-item {
   /*display: flex;
   align-items: center;*/

@@ -209,6 +209,26 @@
         <oxd-divider />
         <oxd-form-row>
           <oxd-text>Permis obtenus</oxd-text>
+          <oxd-grid
+            :cols="drivingLicenses.length"
+            class="orangehrm-full-width-grid"
+          >
+            <oxd-grid-item
+              v-for="(elem, elemIndex) in drivingLicenses"
+              :key="`${elemIndex}-${elem}`"
+            >
+              <oxd-input-field
+                type="checkbox"
+                :label="elem.label"
+                :value="elem.label"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <!--
+        <oxd-divider />
+        <oxd-form-row>
+          <oxd-text>Permis obtenus</oxd-text>
           <oxd-grid :cols="4" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
@@ -240,7 +260,7 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <oxd-divider />
+        -->
 
         <oxd-divider v-if="showDeprecatedFields" />
         <oxd-form-row v-if="showDeprecatedFields">
@@ -330,6 +350,10 @@ export default {
       default: () => [],
     },
     courseStarts: {
+      type: Array,
+      default: () => [],
+    },
+    drivingLicenses: {
       type: Array,
       default: () => [],
     },

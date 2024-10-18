@@ -78,6 +78,12 @@ class EmployeePersonalDetailController extends BaseViewEmployeeController
                     'label' => $label
                 ];
             }, array_keys($options['courseStarts']), $options['courseStarts'])));
+            $component->addProp(new Prop('driving-licenses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($options['drivingLicenses']), $options['drivingLicenses'])));
             $component->addProp(new Prop('needs', Prop::TYPE_ARRAY, array_map(function($label, $index) {
                 return [
                     'id' => $index,
