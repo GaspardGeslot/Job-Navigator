@@ -92,6 +92,13 @@ class Employee
     /**
      * @var string
      *
+     * @ORM\Column(name="emp_salary", type="string", length=100, nullable=true, options={"default" : ""})
+     */
+    private ?string $salary = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="emp_driving_license", type="string", length=100, nullable=true, options={"default" : ""})
      */
     private ?string $drivingLicense = '';
@@ -674,6 +681,7 @@ class Employee
         $this->setNeed($profileInfo['need'] ?? '');
         $this->setStudyLevel($profileInfo['studyLevel'] ?? '');
         $this->setDrivingLicense($profileInfo['drivingLicense'] ?? '');
+        $this->setSalary($profileInfo['salary'] ?? '');
         $this->setCourseStart($profileInfo['courseStart'] ?? '');
         $this->setFirstName($profileInfo['firstName'] ?? '');
         $this->setLastName($profileInfo['lastName'] ?? '');
@@ -788,6 +796,23 @@ class Employee
     public function setStudyLevel(string $studyLevel): void
     {
         $this->studyLevel = $studyLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalary(): string
+    {
+        return $this->salary;
+    }
+
+
+    /**
+     * @param string $salary
+     */
+    public function setSalary(string $salary): void
+    {
+        $this->salary = $salary;
     }
     
     /**

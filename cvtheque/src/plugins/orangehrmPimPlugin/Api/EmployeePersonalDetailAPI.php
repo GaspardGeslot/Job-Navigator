@@ -45,6 +45,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_LAST_NAME = 'lastName';
     public const PARAMETER_NEED = 'need';
     public const PARAMETER_LICENSE = 'drivingLicense';
+    public const PARAMETER_SALARY = 'salary';
     public const PARAMETER_STUDY_LEVEL = 'studyLevel';
     public const PARAMETER_COURSE_START = 'courseStart';
     public const PARAMETER_EMPLOYEE_ID = 'employeeId';
@@ -223,6 +224,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $employee->setDrivingLicense(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LICENSE)
         );
+        $employee->setSalary(
+            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_SALARY)
+        );
         $employee->setStudyLevel(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVEL)
         );
@@ -312,6 +316,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             'firstName' => $employee->getFirstName(),
             'need' => $employee->getNeed(),
             'drivingLicenses' => $employee->getDrivingLicense(),
+            'salary' => $employee->getSalary(),
             'studyLevel' => $employee->getStudyLevel(),
             'lastName' => $employee->getLastName(),
             'civility' => $employee->getGender(),
@@ -381,6 +386,14 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     'drivingLicense',
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, 100]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    'salary',
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, 100]),
                 ),

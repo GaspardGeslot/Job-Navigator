@@ -193,6 +193,7 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
+                v-model="employee.salary"
                 :label="$t('Tranche de rémunération souhaitée')"
               />
             </oxd-grid-item>
@@ -319,6 +320,7 @@ const employeeModel = {
   maritalStatus: [],
   need: [],
   checkedPermits: [],
+  salary: '',
   studyLevel: [],
   courseStart: [],
   birthday: '',
@@ -468,6 +470,7 @@ export default {
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
             need: this.employee.need?.label,
             drivingLicense: JSON.stringify(this.employee.checkedPermits),
+            salary: this.employee.salary,
             studyLevel: this.employee.studyLevel?.label,
             courseStart: this.employee.courseStart?.label,
             nickname: this.showDeprecatedFields
