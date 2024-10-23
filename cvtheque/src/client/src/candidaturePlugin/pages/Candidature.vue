@@ -87,10 +87,14 @@ export default {
   },
   data() {
     return {
-      formVisible: true,
+      formVisible: false,
     };
   },
-
+  mounted() {
+    if (window.location.hash === '#apply') {
+      this.formVisible = true;
+    }
+  },
   methods: {
     showForm() {
       console.log('options :', this.options);
