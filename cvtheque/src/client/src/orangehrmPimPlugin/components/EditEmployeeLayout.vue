@@ -128,6 +128,7 @@ export default {
     );
 
     http.get(props.employeeId).then(({data}) => {
+      console.log('DATAHERE', data.data);
       employeeName.value = `${data.data.firstName} ${data.data.lastName}`;
       isCurrentEmp.value = data.data.terminationId ? false : true;
     });

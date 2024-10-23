@@ -79,8 +79,8 @@ class CandidatureController extends AbstractVueController implements PublicContr
         if (isset($leadData['jobs'])) {
             $leadData['jobs'] = json_decode($leadData['jobs'], true);
         }
-        if (isset($leadData['permits'])) {
-            $leadData['permits'] = json_decode($leadData['permits'], true);
+        if (isset($leadData['drivingLicenses'])) {
+            $leadData['drivingLicenses'] = json_decode($leadData['permits'], true);
         }
         if (isset($leadData['skills'])) {
             $leadData['skills'] = json_decode($leadData['skills'], true);

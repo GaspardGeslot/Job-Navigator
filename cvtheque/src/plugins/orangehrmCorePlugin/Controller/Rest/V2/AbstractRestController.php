@@ -137,9 +137,16 @@ abstract class AbstractRestController extends AbstractController
         $response->headers->set(Response::CONTENT_TYPE_KEY, Response::CONTENT_TYPE_JSON);
         try {
             $validationRule = $this->getValidationRule($request);
-            if ($validationRule instanceof ParamRuleCollection) {
-                Validator::validate($request->getAllParameters(), $validationRule);
-            }
+            // echo '<pre1>';
+            // var_dump($validationRule);
+            // echo '</pre1>';
+            // if ($validationRule instanceof ParamRuleCollection) {
+            // echo '<pre1111>';
+            // print_r($validationRule);
+            // print_r($request->getAllParameters());
+            // echo '</pre1111>';
+            Validator::validate($request->getAllParameters(), $validationRule);
+            // }
             switch ($httpRequest->getMethod()) {
                 case Request::METHOD_GET:
                     $response->setContent($this->handleGetRequest($request)->formatData());
@@ -147,6 +154,9 @@ abstract class AbstractRestController extends AbstractController
 
                 case Request::METHOD_POST:
                     $response->setContent($this->handlePostRequest($request)->formatData());
+                    // echo '<pre1>';
+                    // var_dump($response);
+                    // echo '</pre1>';
                     break;
 
                 case Request::METHOD_PUT:
@@ -171,6 +181,10 @@ abstract class AbstractRestController extends AbstractController
             );
             $response->setStatusCode(404);
         } catch (InvalidParamException $e) {
+            // echo '<pre1>';
+            // echo 'InvalidParamException';
+            // var_dump($e);
+            // echo '</pre1>';
             $this->getLogger()->info($e->getMessage());
             $this->getLogger()->info($e->getTraceAsString());
 

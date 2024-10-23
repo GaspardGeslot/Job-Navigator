@@ -70,7 +70,13 @@ import EditSkill from '@/orangehrmPimPlugin/components/EditSkill';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 
 const skillNormalizer = (data) => {
+  console.log('DATA', data);
+  if (!Array.isArray(data)) {
+    console.error('"Data is not an array:"', data);
+    return [];
+  }
   return data.map((item) => {
+    console.log('ITEM', item);
     return {
       id: item.skill.id,
       name: item.skill.name,

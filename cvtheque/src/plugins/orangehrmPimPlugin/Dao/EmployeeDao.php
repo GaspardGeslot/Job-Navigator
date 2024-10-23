@@ -211,7 +211,10 @@ class EmployeeDao extends BaseDao
      */
     public function saveEmployee(Employee $employee): Employee
     {
+        error_log('Entrée dans saveEmployee');
+        error_log('Persisting employee with ID: ' . $employee->getEmpNumber());
         $this->persist($employee);
+        error_log('Employee persisted');
         return $employee;
     }
 

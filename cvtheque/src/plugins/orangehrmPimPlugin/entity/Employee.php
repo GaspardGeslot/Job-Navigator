@@ -120,6 +120,13 @@ class Employee
     /**
      * @var string
      *
+     * @ORM\Column(name="emp_skills", type="VARCHAR", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $emp_skills = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="company_name", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $companyName = '';
@@ -877,6 +884,22 @@ class Employee
     public function setJobs(string $jobs): void
     {
         $this->jobs = $jobs;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmpSkills(): string
+    {
+        return $this->emp_skills;
+    }
+
+    /**
+     * @param string $emp_skills
+     */
+    public function setEmpSkills(string $emp_skills): void
+    {
+        $this->emp_skills = $emp_skills;
     }
 
     /**

@@ -100,21 +100,22 @@
         <div class="checkbox-item2">
           <div
             v-for="(elem, elemIndex) in drivingLicenses"
-            :key="`${elemIndex}-${elem}`"
+            :key="elemIndex"
             class="checkbox-item"
           >
             <input
-              :key="elemIndex"
+              :id="'permit' + elemIndex"
               v-model="checkedPermits"
               class="custom-checkbox custom-input"
               type="checkbox"
               :value="elem"
             />
-            <label class="permitLabel">{{ elem }}</label>
+            <label :for="'permit' + elemIndex" class="permitLabel">{{
+              elem
+            }}</label>
           </div>
         </div>
       </div>
-
       <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?</p>
       <div class="radio-group">
         <div id="radio-item-left" class="radio-item">
