@@ -20,19 +20,16 @@ namespace OrangeHRM\Pim\Api\Model;
 
 use OrangeHRM\Core\Api\V2\Serializer\ModelTrait;
 use OrangeHRM\Core\Api\V2\Serializer\Normalizable;
-use OrangeHRM\Entity\EmployeeSkill;
+use OrangeHRM\Entity\Employee;
+// use OrangeHRM\Entity\EmployeeSkill;
 
 /**
  * @OA\Schema(
  *     schema="Pim-EmployeeSkillModel",
  *     type="object",
- *     @OA\Property(property="yearsOfExperience", description="The employee's years of experience in the skill", type="number"),
- *     @OA\Property(property="comments", description="The employee's comment regarding the skill", type="string"),
- *     @OA\Property(property="skill", type="object",
- *         @OA\Property(property="id", description="The numerical ID of the skill", type="integer"),
- *         @OA\Property(property="name", description="The name of the skill",  type="string"),
- *         @OA\Property(property="description", description="The description of the skill", type="string")
- *     )
+ *     @OA\Property(property="type", description="The type of the skill", type="string"),
+ *     @OA\Property(property="title", description="The title of the skill", type="string"),
+ *     @OA\Property(property="description", description="The description of the skill", type="string")
  * )
  */
 class EmployeeSkillModel implements Normalizable
@@ -40,28 +37,69 @@ class EmployeeSkillModel implements Normalizable
     use ModelTrait;
 
     /**
-     * @param EmployeeSkill $employeeSkill
+     * @var string|null
      */
-    public function __construct(EmployeeSkill $employeeSkill)
+    private ?string $type;
+
+    /**
+     * @var string|null
+     */
+    private ?string $title;
+
+    /**
+     * @var string|null
+     */
+    private ?string $description;
+
+    /**
+     * @param string|object $skillDataJson
+     * Accepte soit une chaîne JSON, soit un objet contenant les données de compétence
+     */
+    public function __construct($skillDataJson)
     {
-        $this->setEntity($employeeSkill);
-        $this->setFilters(
-            [
-                'yearsOfExp',
-                'comments',
-                ['getSkill', 'getId'],
-                ['getSkill', 'getName'],
-                ['getSkill', 'getDescription']
-            ]
-        );
-        $this->setAttributeNames(
-            [
-                'yearsOfExperience',
-                'comments',
-                ['skill', 'id'],
-                ['skill', 'name'],
-                ['skill', 'description']
-            ]
-        );
+        if (is_string($skillDataJson)) {
+            $skillData = json_decode($skillDataJson, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Erreur lors de la décodification du JSON : ' . json_last_error_msg());
+            }
+        } else {
+            $skillData = (array) $skillDataJson;
+        }
+
+        $this->type = $skillData['type'] ?? null;
+        $this->title = $skillData['title'] ?? null;
+        $this->description = $skillData['description'] ?? null;
+
+        // $this->setEntity($employeeSkill);
+        // $this->setFilters(
+        //     [
+        //         'yearsOfExp',
+        //         'comments',
+        //         ['getSkill', 'getId'],
+        //         ['getSkill', 'getName'],
+        //         ['getSkill', 'getDescription']
+        //     ]
+        // );
+        // $this->setAttributeNames(
+        //     [
+        //         'yearsOfExperience',
+        //         'comments',
+        //         ['skill', 'id'],
+        //         ['skill', 'name'],
+        //         ['skill', 'description']
+        //     ]
+        // );
+    }
+
+    /**
+     * @return array
+     */
+    public function normalize(): array
+    {
+        return [
+            'type' => $this->type,
+            'title' => $this->title,
+            'description' => $this->description,
+        ];
     }
 }

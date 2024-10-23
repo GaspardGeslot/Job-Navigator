@@ -32,15 +32,21 @@ use OrangeHRM\Core\Api\V2\Validator\ParamRuleCollection;
 use OrangeHRM\Core\Api\V2\Validator\Rule;
 use OrangeHRM\Core\Api\V2\Validator\Rules;
 use OrangeHRM\Entity\EmployeeSkill;
+use OrangeHRM\Entity\Employee;
 use OrangeHRM\Pim\Api\Model\EmployeeSkillModel;
 use OrangeHRM\Pim\Dto\EmployeeSkillSearchFilterParams;
 use OrangeHRM\Pim\Service\EmployeeSkillService;
+use OrangeHRM\Pim\Service\EmployeeService;
 
 class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
 {
     public const PARAMETER_SKILL_ID = 'skillId';
     public const PARAMETER_YEARS_OF_EXP = 'yearsOfExperience';
     public const PARAMETER_COMMENTS = 'comments';
+
+    public const PARAMETER_TYPE = 'type';
+    public const PARAMETER_TITLE = 'title';
+    public const PARAMETER_DESCRIPTION = 'description';
 
     public const PARAM_RULE_YEARS_OF_EXP_MAX_LENGTH = 2;
     public const PARAM_RULE_COMMENTS_MAX_LENGTH = 100;
@@ -61,6 +67,15 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         return $this->employeeSkillService;
     }
 
+    protected ?EmployeeService $employeeService = null;
+
+    public function getEmployeeService(): EmployeeService
+    {
+        if ($this->employeeService === null) {
+            $this->employeeService = new EmployeeService();
+        }
+        return $this->employeeService;
+    }
     /**
      * @OA\Get(
      *     path="/api/v2/pim/employees/{empNumber}/skills/{id}",
@@ -101,20 +116,28 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function getOne(): EndpointResourceResult
     {
+        error_log('Entrée dans getOne');
+        echo '<pre>';
+        echo 'ICI';
+        echo '</pre>';
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_EMP_NUMBER
         );
-        $skillId = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, CommonParams::PARAMETER_ID);
-        $employeeSkill = $this->getEmployeeSkillService()->getEmployeeSkillDao()->getEmployeeSkillById(
-            $empNumber,
-            $skillId
-        );
-        $this->throwRecordNotFoundExceptionIfNotExist($employeeSkill, EmployeeSkill::class);
+
+        $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
+        
+        $skills = json_decode($employee->getEmpSkills(), true);
+        if (empty($skills)) {
+        throw new RecordNotFoundException('No skills found for this employee');
+        }
+
+        $employeeSkillModel = new EmployeeSkillModel($employee);
 
         return new EndpointResourceResult(
             EmployeeSkillModel::class,
-            $employeeSkill,
+            $employeeSkillModel->normalize(),
             new ParameterBag([CommonParams::PARAMETER_EMP_NUMBER => $empNumber])
         );
     }
@@ -230,19 +253,20 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
-     *                 property="yearsOfExperience",
-     *                 description="Specify the years of experience in the skill",
-     *                 type="integer",
-     *                 maxLength=OrangeHRM\Pim\Api\EmployeeSkillAPI::PARAM_RULE_YEARS_OF_EXP_MAX_LENGTH
+     *                 property="type",
+     *                 description="Specify the type of the skill",
+     *                 type="string"
      *             ),
      *             @OA\Property(
-     *                 property="comments",
-     *                 description="Specify the comment regarding the skill",
-     *                 type="string",
-     *                 maxLength=OrangeHRM\Pim\Api\EmployeeSkillAPI::PARAM_RULE_COMMENTS_MAX_LENGTH
+     *                 property="title",
+     *                 description="Specify the title or years of experience in the skill",
+     *                 type="string"
      *             ),
-     *             @OA\Property(property="skillId", description="Specify the numerical ID of the skill", type="integer"),
-     *             required={"skillId"}
+     *             @OA\Property(
+     *                 property="description",
+     *                 description="Specify the description or comments regarding the skill",
+     *                 type="string"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -260,17 +284,54 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      *
      * @inheritDoc
      */
+
     public function create(): EndpointResourceResult
     {
-        $employeeSkill = $this->saveEmployeeSkill();
+        // $employeeSkill = $this->saveEmployeeSkill();
+        // error_log('Entrée dans la méthode create');
+        echo '<pre>';
+        echo 'ICI';
+        echo '</pre>';
+        $empNumber = $this->getRequestParams()->getInt(
+            RequestParams::PARAM_TYPE_ATTRIBUTE,
+            CommonParams::PARAMETER_EMP_NUMBER
+        );
+        echo '<empNumber>';
+        var_dump($empNumber);
+        echo '</empNumber>';
+        $type = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'type');
+        // echo '<pre>';
+        // var_dump($type);
+        // echo '</pre>';
+        $title = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'title');
+        // echo '<pre>';
+        // var_dump($title);
+        // echo '</pre>';
+        $description = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'description');
+        $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        if (!$employee instanceof Employee) {
+            throw new \Exception('L\'employé n\'a pas pu être trouvé ou n\'est pas valide.');
+        }
+        $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
+        // echo '<pre>';
+        // echo 'LAAAAA';
+        // echo '</pre>';
+        $skillData = (object) [
+            'type' => $type,
+            'title' => $title,
+            'description' => $description,
+        ];
+        $skillDataJson = json_encode($skillData);
+        $employee->setEmpSkills($skillDataJson);
+        $newData = $employee->getEmpSkills();
+        print_r($newData);
+        $this->getEmployeeService()->saveEmployee($employee);
+        // $employeeSkill = new EmployeeSkill();
+        $employeeSkillModel = new EmployeeSkillModel($skillDataJson);
         return new EndpointResourceResult(
             EmployeeSkillModel::class,
-            $employeeSkill,
-            new ParameterBag(
-                [
-                    CommonParams::PARAMETER_EMP_NUMBER => $employeeSkill->getEmployee()->getEmpNumber(),
-                ]
-            )
+            $employeeSkillModel->normalize(),
+            new ParameterBag([CommonParams::PARAMETER_EMP_NUMBER => $empNumber])
         );
     }
 
@@ -280,9 +341,21 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForCreate(): ParamRuleCollection
     {
         return new ParamRuleCollection(
-            new ParamRule(self::PARAMETER_SKILL_ID, new Rule(Rules::REQUIRED)),
-            $this->getEmpNumberRule(),
-            ...$this->getCommonBodyValidationRules(),
+            new ParamRule(self::PARAMETER_TYPE, new Rule(Rules::REQUIRED)),
+        $this->getEmpNumberRule(),
+        // Ajout direct des règles pour `title` et `description`
+        new ParamRule(
+            'title',  // Nom du paramètre
+            new Rule(Rules::STRING_TYPE),  // Doit être une chaîne
+            new Rule(Rules::LENGTH, [0, 100])  // Doit avoir une longueur entre 1 et 100 caractères
+        ),
+        new ParamRule(
+            'description',  // Nom du paramètre
+            new Rule(Rules::STRING_TYPE),  // Doit être une chaîne
+            new Rule(Rules::LENGTH, [0, 100])  // Doit avoir une longueur entre 1 et 500 caractères
+        ),
+        // Inclusion des autres règles déjà présentes dans getCommonBodyValidationRules()
+        ...$this->getCommonBodyValidationRules(),
         );
     }
 

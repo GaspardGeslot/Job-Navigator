@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import {ref, onBeforeMount} from 'vue';
-import {APIService} from '@ohrm/core/util/services/api.service';
+import {ref} from 'vue';
+// import {APIService} from '@ohrm/core/util/services/api.service';
 export default {
   name: 'QualificationDropdown',
   props: {
@@ -32,19 +32,27 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    const options = ref([]);
-    const http = new APIService(window.appGlobal.baseUrl, props.api);
-    onBeforeMount(() => {
-      http.getAll({limit: 0}).then(({data}) => {
-        options.value = data.data.map((item) => {
-          return {
-            id: item.id,
-            label: item.name,
-          };
-        });
-      });
-    });
+  setup() {
+    const skillIdOptions = [
+      {id: '1', label: 'Travail en hauteur'},
+      {id: '2', label: 'Habilitation électrique'},
+      {id: '3', label: 'CACES'},
+      {id: '4', label: 'AIPR'},
+      {id: '5', label: 'Conduite de Grue'},
+      {id: '6', label: 'Autres'},
+    ];
+    const options = ref(skillIdOptions);
+    //const http = new APIService(window.appGlobal.baseUrl, props.api);
+    // onBeforeMount(() => {
+    //   http.getAll({limit: 0}).then(({data}) => {
+    //     options.value = data.data.map((item) => {
+    //       return {
+    //         id: item.id,
+    //         label: item.name,
+    //       };
+    //     });
+    //   });
+    // });
     return {
       options,
     };
