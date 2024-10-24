@@ -3,7 +3,7 @@
         'name' => 'orangehrm/orangehrm',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9080f8a1140533e54d183678a137c808ffdfc4c6',
+        'reference' => 'fc50489b6cbb9ef830186b6dadbafc71bfee1411',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -328,7 +328,7 @@
         'orangehrm/orangehrm' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9080f8a1140533e54d183678a137c808ffdfc4c6',
+            'reference' => 'fc50489b6cbb9ef830186b6dadbafc71bfee1411',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
