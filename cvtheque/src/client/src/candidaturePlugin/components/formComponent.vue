@@ -153,10 +153,12 @@ export default {
 
     const createSession = async () => {
       sessionId.value = uuidv4();
-      const now = new Date().toISOString();
+      const now = new Date();
+      now.setHours(now.getHours() + 2);
+      const date = now.toISOString();
       const data = {
         step: currentStep.value,
-        createdAt: now,
+        createdAt: date,
         sessionId: sessionId.value,
       };
 
