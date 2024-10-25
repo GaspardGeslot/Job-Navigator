@@ -60,4 +60,60 @@ class RegistrationEventQueueDao extends BaseDao
         $q->setMaxResults($limit);
         return $q->getQuery()->execute();
     }
+    /**
+     * Sauvegarde un événement spécifique aux sessions de formulaire.
+     *
+     * @param string $sessionId
+     * @param int $step
+     * @param \DateTime $createdAt
+     * @return RegistrationEventQueue
+     */
+    public function saveFormSessionEvent(string $sessionId, int $step, \DateTime $createdAt): RegistrationEventQueue
+    {
+        $event = new RegistrationEventQueue();
+        $event->setEventType($step);  // Enregistrer l'étape dans event_type
+        $event->setEventTime($createdAt);  // Enregistrer la date dans event_time
+        $event->setPublished(false);  // Marquer comme non publié
+
+        // Enregistrer l'ID de session dans data
+        $event->setData([
+            'sessionId' => $sessionId
+        ]);
+        // $event->setData(json_encode(['sessionId' => $sessionId]));
+        // $event->setData($sessionId);
+        // Persiste l'événement dans la base de données
+        $this->persist($event);
+
+        return $event;
+    }
+
+    /**
+     * Récupère un événement de session de formulaire par sessionId.
+     *
+     * @param string $sessionId
+     * @return RegistrationEventQueue|null
+     */
+    public function getEventBySessionId(string $sessionId): ?RegistrationEventQueue
+    {
+        $events = $this->createQueryBuilder(RegistrationEventQueue::class, 'e')
+                   ->getQuery()
+                   ->getResult();
+
+        foreach ($events as $event) {
+            $data = $event->getData();
+
+            if (is_string($data)) {
+                $data = json_decode($data, true);
+            }
+            if (isset($data['sessionId']) && $data['sessionId'] === $sessionId) {
+                return $event;
+            }
+        }
+        return null;
+    }
+
+    public function setEventQueueDao(RegistrationEventQueueDao $eventQueueDao): void
+    {
+        $this->eventQueueDao = $eventQueueDao;
+    }
 }

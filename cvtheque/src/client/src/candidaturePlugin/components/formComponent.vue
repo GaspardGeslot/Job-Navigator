@@ -112,6 +112,7 @@ import FormSix from './formBlock6';
 import FormSeven from './formBlock7';
 import FormEight from './formBlock8';
 import FormNine from './formBlock9';
+import {v4 as uuidv4} from 'uuid';
 //import axios from 'axios';
 import {APIService} from '@/core/util/services/api.service';
 //import ReviewList from './review_list';
@@ -139,6 +140,9 @@ export default {
   emits: ['close-form'],
   setup() {
     const currentStep = ref(1);
+    const highestStep = ref(1);
+    const sessionId = ref(null);
+
     const reviews = ref([]);
     const needsScroll = ref(false);
     const matchResponse = ref(0);
@@ -146,6 +150,57 @@ export default {
     const scrollContainer = ref(null);
     const scrollContent = ref(null);
     const formImg = ref(null);
+
+    const createSession = async () => {
+      sessionId.value = uuidv4();
+      const now = new Date().toISOString();
+      const data = {
+        step: currentStep.value,
+        createdAt: now,
+        sessionId: sessionId.value,
+      };
+
+      console.log('data from createSession', data);
+
+      try {
+        const http = new APIService(
+          window.appGlobal.baseUrl,
+          '/events/push/form-session',
+        );
+        const response = await http.create(data);
+        console.log('Session created:', sessionId.value);
+        console.log('Response data:', response);
+      } catch (error) {
+        console.error('Error creating session:', error);
+      }
+    };
+
+    const updateHighestStep = async () => {
+      if (currentStep.value > highestStep.value) {
+        highestStep.value = currentStep.value;
+        console.log('highestStep', highestStep.value);
+
+        const data = {
+          sessionId: sessionId.value,
+          step: highestStep.value,
+        };
+
+        try {
+          const http = new APIService(
+            window.appGlobal.baseUrl,
+            '/events/push/form-session',
+          );
+          console.log('Données envoyées pour la mise à jour:', {
+            sessionId: sessionId.value,
+            step: highestStep.value,
+          });
+          const response = await http.update(sessionId.value, data);
+          console.log('Session updated:', response);
+        } catch (error) {
+          console.error('Error updating session:', error);
+        }
+      }
+    };
 
     const combineData = (dataArray) => {
       return dataArray.reduce((acc, item) => {
@@ -193,6 +248,7 @@ export default {
       } else {
         imgElement.addEventListener('load', onImageLoad);
       }
+      createSession();
     });
 
     onBeforeUnmount(() => {
@@ -296,6 +352,7 @@ export default {
         // console.log("Réponse de l'API:", response.data);
       }
       currentStep.value++;
+      updateHighestStep();
       nextTick(() => {
         setTimeout(() => {
           checkScroll();
@@ -321,6 +378,8 @@ export default {
 
     return {
       currentStep,
+      highestStep,
+      sessionId,
       reviews,
       needsScroll,
       matchResponse,

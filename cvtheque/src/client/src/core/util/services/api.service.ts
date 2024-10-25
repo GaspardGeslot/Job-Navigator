@@ -81,7 +81,7 @@ export class APIService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update(id: number, data: any): Promise<AxiosResponse> {
+  update(id: number | string, data: any): Promise<AxiosResponse> {
     const headers = {
       'Content-Type': 'application/json',
     };

@@ -13,6 +13,16 @@ apiv2_core_about_organization:
     id: 0
     _api: OrangeHRM\Core\Api\Rest\AboutOrganizationAPI
 
+push_form_session_create:
+  path: /events/push/form-session
+  controller: OrangeHRM\Core\Registration\Controller\PushEventController::createFormSession
+  methods: [ POST ]
+
+push_form_session_update:
+  path: /events/push/form-session/{sessionId}
+  controller: OrangeHRM\Core\Registration\Controller\PushEventController::updateFormSession
+  methods: [ PUT ]
+
 push_events:
   path: /events/push
   controller: OrangeHRM\Core\Registration\Controller\PushEventController::handle

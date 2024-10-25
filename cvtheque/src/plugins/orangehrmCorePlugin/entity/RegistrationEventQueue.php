@@ -34,6 +34,7 @@ class RegistrationEventQueue
     public const UPGRADE_START = 4;
 
     public const PUBLISH_EVENT_BATCH_SIZE = 5;
+    public const FORM_SESSION_START = 6;
     public const EMPLOYEE_COUNT_CHANGE_TRACKER_SIZE = 10;
 
     /**
