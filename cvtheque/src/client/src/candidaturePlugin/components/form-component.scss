@@ -1,57 +1,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap');
 
-.bg-white{
-    background-color: white;
+.bg-white {
+  background-color: white;
 }
-.row{
-    display: flex;
-    flex-direction: row;
+.row {
+  display: flex;
+  flex-direction: row;
 }
-.formBlock{
-    //display: none;
-    // >img {
-    //     display: none;
-    //   }
-    >*{flex:1}
-    padding-top: 3.5rem;
-    padding-bottom: 1.5rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
-    overflow: visible;
+.formBlock {
+  //display: none;
+  // >img {
+  //     display: none;
+  //   }
+  > * {
+    flex: 1;
+  }
+  padding-top: 3.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  overflow: visible;
 }
-.formTitle{
-    // color: #414957;
-    // font-weight: 600;
-    // font-family: Nunito Sans, sans-serif;
-    color: black;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900 !important;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
+.formTitle {
+  // color: #414957;
+  // font-weight: 600;
+  // font-family: Nunito Sans, sans-serif;
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900 !important;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
 }
-.formSubTitle{
-    font-size: 0.75rem;
-    line-height: 1rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+.formSubTitle {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
-.CVText{
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    margin-top: 0.75rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700 !important;
-    color: black;
+.CVText {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700 !important;
+  color: black;
 }
 p {
-    font-family: 'Telegraf', sans-serif;
+  font-family: 'Telegraf', sans-serif;
 }
 .checkbox-item {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 /*
 .custom-input {
@@ -89,39 +91,39 @@ p {
     transform: translate(-50%, -50%);
   }
 */
-.radio-group{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
-#radio-item-left{
-    margin-right: 5rem;
+#radio-item-left {
+  margin-right: 5rem;
 }
-#review{
-    height: 6rem;
-    margin-bottom: 0.5rem;
+#review {
+  height: 6rem;
+  margin-bottom: 0.5rem;
 }
-#review::placeholder{
-    font-size: 0.75rem;
-    line-height: 1rem;
-    padding-left: 0.5rem;
+#review::placeholder {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding-left: 0.5rem;
 }
 .AcceptanceofTerms-container > * {
-    flex: 1;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+  flex: 1;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
-.checkbox-container{
-    display: flex;
+.checkbox-container {
+  display: flex;
 }
-.checkbox-container input[type="checkbox"] {
-    margin-right: 0.5rem;
-    // appearance: none;
-    // border-radius:50%;
+.checkbox-container input[type='checkbox'] {
+  margin-right: 0.5rem;
+  // appearance: none;
+  // border-radius:50%;
 }
-.AcceptanceofTermsText{
-    font-size: 0.5rem;
-    line-height: 0.8rem;
+.AcceptanceofTermsText {
+  font-size: 0.5rem;
+  line-height: 0.8rem;
 }
 // .custom-checkbox {
 //   appearance: none;
@@ -140,118 +142,118 @@ p {
 //   border-color: #31ea3d;
 // }
 .submit-block {
-    margin-top: 2rem;
-    height: 3rem
+  margin-top: 2rem;
+  height: 3rem;
 }
 .previousButton {
-    border-radius: 0.5rem;
-    width: 4rem;
-    background-color: #6d685f;
-    border: none;
-    width: 3.25rem;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;    
+  border-radius: 0.5rem;
+  width: 4rem;
+  background-color: #6d685f;
+  border: none;
+  width: 3.25rem;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .mainSubmitButton {
-    background-color: black;
-    color: white;
-    width: 85%;
-    margin-left: 1rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;           
+  background-color: black;
+  color: white;
+  width: 85%;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .mainSubmitButtonTxt {
-    margin-left: 6.5rem
+  margin-left: 6.5rem;
 }
 .mainSubmitButtonSvg {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    height: auto;
-    width: 3rem;
-    margin-right: 0.25rem;        
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: auto;
+  width: 3rem;
+  margin-right: 0.25rem;
 }
 .submitButton {
-    background-color: black;
-    color: white;
-    width: 45%;
-    margin: 0.5rem auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-radius: 1.5rem;
-    font-family: 'Telegraf', sans-serif;
+  background-color: black;
+  color: white;
+  width: 45%;
+  margin: 0.5rem auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.5rem;
+  font-family: 'Telegraf', sans-serif;
 }
 .submit-block {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 .alert-msg {
-    font-size: 0.75rem;
-    line-height: 1rem;
-    /* padding-top: 0.15rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  /* padding-top: 0.15rem;
     padding-bottom: 0.15rem; */
-    color: red;
-  }
-.formBlockLayout{
-    background-color: white;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 1.75rem;
-    padding-right: 1.75rem;
-    display: flex;
-    flex-direction: column;
+  color: red;
 }
-.formBlock1{
-    display: flex;
-    flex-direction: column;
+.formBlockLayout {
+  background-color: white;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+.formBlock1 {
+  display: flex;
+  flex-direction: column;
 }
 .formBlock1 > * {
-    flex: 1;
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
-    padding-top: 0.65rem;
-    padding-bottom: 0.65rem;
-  }
+  flex: 1;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
 .formBlock1 input::placeholder,
 .formBlock1 select {
   padding-left: 0.75rem;
 }
-.formBlock5{
-    display: flex;
-    flex-direction: column;
+.formBlock5 {
+  display: flex;
+  flex-direction: column;
 }
-.formBlock5 > .submitButton{
-    margin-top: 1rem;
-    padding-top: 0.7rem;
-    padding-bottom: 0.7rem;
+.formBlock5 > .submitButton {
+  margin-top: 1rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
 }
-.formBlock6{
-    display: flex;
-    flex-direction: column;
+.formBlock6 {
+  display: flex;
+  flex-direction: column;
 }
-.formBlock6 > .submitButton{
-    margin-top: 1.75rem;
-    padding-top: 0.7rem;
-    padding-bottom: 0.7rem;
+.formBlock6 > .submitButton {
+  margin-top: 1.75rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
 }
 .blackPlaceholder::placeholder {
-    color: black;
+  color: black;
 }
-.formImg{
-    max-width: 50%;
-    max-height: 100%;
-    height: auto;
-    box-sizing: border-box;
+.formImg {
+  max-width: 50%;
+  max-height: 100%;
+  height: auto;
+  box-sizing: border-box;
 }
 .formBlock.row {
   display: flex;
@@ -277,22 +279,22 @@ p {
   overflow-y: auto;
 }
 .scroll-content {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
 @media screen and (max-width: 450px) {
-    .mainSubmitButtonTxt {
-        margin-left: 2.15rem;
-    }
-    .formTitle{
-        color: black;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 900 !important;
-        font-size: 1.5rem;
-        line-height: 2rem;
-        margin-top: 0rem;
-        margin-bottom: 0rem;
-    }
+  .mainSubmitButtonTxt {
+    margin-left: 2.15rem;
   }
+  .formTitle {
+    color: black;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900 !important;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+  }
+}

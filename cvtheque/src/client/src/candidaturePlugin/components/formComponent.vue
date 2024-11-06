@@ -1,5 +1,5 @@
 <template>
-  <div class="formBlock row" style="max-width: 900px">
+  <div class="formBlock row" style="max-width: 900px; height: auto;">
     <div
       ref="scrollContainer"
       class="scroll-container"
@@ -96,6 +96,18 @@
       class="formImg"
       src="https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/formImg.png"
     />
+    <button class="closeButton" @click="$emit('close-form')"><svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4.70711 3.29289C4.31658 2.90237 3.68342 2.90237 3.29289 3.29289C2.90237 3.68342 2.90237 4.31658 3.29289 4.70711L10.5858 12L3.29289 19.2929C2.90237 19.6834 2.90237 20.3166 3.29289 20.7071C3.68342 21.0976 4.31658 21.0976 4.70711 20.7071L12 13.4142L19.2929 20.7071C19.6834 21.0976 20.3166 21.0976 20.7071 20.7071C21.0976 20.3166 21.0976 19.6834 20.7071 19.2929L13.4142 12L20.7071 4.70711C21.0976 4.31658 21.0976 3.68342 20.7071 3.29289C20.3166 2.90237 19.6834 2.90237 19.2929 3.29289L12 10.5858L4.70711 3.29289Z"
+            fill="black"
+          />
+        </svg></button>
   </div>
   <!--<ReviewList :reviews="reviews" />-->
 </template>
@@ -410,9 +422,29 @@ export default {
   border-radius: 1rem;
 }
 .formBlock {
-  margin-top: 13rem;
-  margin-bottom: 6rem;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
+.closeButton{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-top-right-radius: 1rem;
+}
+
+.closeButton:hover{
+  background-color: red;
+}
+
 /* @media screen and (max-width: 460px) {
   .formBlock {
     margin-top: 13rem;
