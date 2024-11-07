@@ -88,6 +88,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             if (!$success)
                 throw AuthenticationException::invalidCredentials();
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setIsCandidate(true);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {

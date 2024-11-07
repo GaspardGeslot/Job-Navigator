@@ -120,6 +120,13 @@ class Employee
     /**
      * @var string
      *
+     * @ORM\Column(name="emp_roles", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $roles = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="emp_skills", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $emp_skills = '';
@@ -130,6 +137,27 @@ class Employee
      * @ORM\Column(name="company_name", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $companyName = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_siret", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companySiret = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_workforce", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyWorkforce = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_naf_code", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyNafCode = '';
 
     /**
      * @var string
@@ -692,7 +720,7 @@ class Employee
         $this->setCourseStart($profileInfo['courseStart'] ?? '');
         $this->setFirstName($profileInfo['firstName'] ?? '');
         $this->setLastName($profileInfo['lastName'] ?? '');
-        $this->setBirthday($profileInfo['birthDate'] != null ? new \DateTime($profileInfo['birthDate']) : null);
+        $this->setBirthday(array_key_exists('birthdate', $profileInfo) && $profileInfo['birthDate'] != null ? new \DateTime($profileInfo['birthDate']) : null);
     }
 
     /**
@@ -715,13 +743,18 @@ class Employee
      */
     public function setCompany(mixed $company): void 
     {
-        $this->setCompanyId($company['id'] ?? '');
+        $this->setCompanyId($company['id'] ?? -1);
         $this->setCompanyName($company['name'] ?? '');
+        $this->setCompanySiret($company['siret'] ?? '');
+        $this->setCompanyNafCode($company['nafCode'] ?? '');
+        $this->setCompanyWorkforce($company['workforce'] ?? '');
         $this->setCompanyLogo($company['logo'] ?? '');
         $this->setCompanyLocation($company['location'] ?? '');
         $this->setCompanyPhoneNumberContact($company['phoneNumberContact'] ?? '');
         $this->setCompanyEmailContact($company['emailContact'] ?? '');
-        $this->setCompanyMatchingJobTitle($company['matchingJobTitle'] ?? '');;
+        $this->setCompanyMatchingJobTitle($company['matchingJobTitle'] ?? '');
+        $this->setProfileContact([]);
+        $this->setProfileInfo([]);
     }
 
     /**
@@ -889,6 +922,22 @@ class Employee
     /**
      * @return string
      */
+    public function getRoles(): string
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param string $roles
+     */
+    public function setRoles(string $roles): void
+    {
+        $this->roles = $roles ?? '';
+    }
+
+    /**
+     * @return string
+     */
     public function getEmpSkills(): string
     {
         return $this->emp_skills;
@@ -916,6 +965,54 @@ class Employee
     public function setCompanyName(string $companyName): void
     {
         $this->companyName = $companyName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanySiret(): string
+    {
+        return $this->companySiret;
+    }
+
+    /**
+     * @param string $companySiret
+     */
+    public function setCompanySiret(string $companySiret): void
+    {
+        $this->companySiret = $companySiret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyWorkforce(): string
+    {
+        return $this->companyWorkforce;
+    }
+
+    /**
+     * @param string $companyWorkforce
+     */
+    public function setCompanyWorkforce(string $companyWorkforce): void
+    {
+        $this->companyWorkforce = $companyWorkforce;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyNafCode(): string
+    {
+        return $this->companyNafCode;
+    }
+
+    /**
+     * @param string $companyNafCode
+     */
+    public function setCompanyNafCode(string $companyNafCode): void
+    {
+        $this->companyNafCode = $companyNafCode;
     }
 
     /**

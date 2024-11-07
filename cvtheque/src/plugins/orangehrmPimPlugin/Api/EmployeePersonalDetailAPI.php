@@ -28,7 +28,9 @@ use OrangeHRM\Core\Api\V2\Validator\ParamRuleCollection;
 use OrangeHRM\Core\Api\V2\Validator\Rule;
 use OrangeHRM\Core\Api\V2\Validator\Rules;
 use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
+use OrangeHRM\Core\Traits\UserRoleManagerTrait;
 use OrangeHRM\Entity\Employee;
+use OrangeHRM\Entity\UserRole;
 use OrangeHRM\Pim\Api\Model\EmployeePersonalDetailModel;
 use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
@@ -36,6 +38,7 @@ use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
 {
     use AuthUserTrait;
+    use UserRoleManagerTrait;
     use EmployeeServiceTrait;
     use ConfigServiceTrait;
 
@@ -48,6 +51,10 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_SALARY = 'salary';
     public const PARAMETER_STUDY_LEVEL = 'studyLevel';
     public const PARAMETER_COURSE_START = 'courseStart';
+    public const PARAMETER_COMPANY_NAME = 'companyName';
+    public const PARAMETER_COMPANY_SIRET = 'companySiret';
+    public const PARAMETER_COMPANY_WORKFORCE = 'companyWorkforce';
+    public const PARAMETER_COMPANY_NAF_CODE = 'companyNafCode';
     public const PARAMETER_EMPLOYEE_ID = 'employeeId';
     public const PARAMETER_OTHER_ID = 'otherId';
     public const PARAMETER_DRIVING_LICENSE_NO = 'drivingLicenseNo';
@@ -72,6 +79,10 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAM_RULE_EMPLOYEE_ID_MAX_LENGTH = 50;
     public const PARAM_RULE_NEED_MAX_LENGTH = 100;
     public const PARAM_RULE_STUDY_LEVEL_MAX_LENGTH = 100;
+    public const PARAM_RULE_COMPANY_WORKFORCE_MAX_LENGTH = 100;
+    public const PARAM_RULE_COMPANY_NAME_MAX_LENGTH = 100;
+    public const PARAM_RULE_COMPANY_SIRET_MAX_LENGTH = 100;
+    public const PARAM_RULE_COMPANY_NAF_CODE_MAX_LENGTH = 100;
     public const PARAM_RULE_COURSE_START_MAX_LENGTH = 100;
     public const PARAM_RULE_OTHER_ID_MAX_LENGTH = 100;
     public const PARAM_RULE_DRIVING_LICENSE_NO_MAX_LENGTH = 100;
@@ -114,8 +125,12 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $profile = $this->getHedwigeProfile($this->getAuthUser()->getUserHedwigeToken());
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
-        $employee->setProfileInfo($profile);
-        
+        if ($this->getAuthUser()->getIsCandidate())
+            $employee->setProfileInfo($profile);
+        else $employee->setCompany($profile);
+        $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
+        $userRoleNames = array_map(fn (UserRole $userRole) => $userRole->getName(), $userRoles);
+        $employee->setOtherId(json_encode($userRoleNames));
         return new EndpointResourceResult(EmployeePersonalDetailModel::class, $employee);
     }
 
@@ -129,7 +144,8 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $response = $client->request('GET', "{$clientBaseUrl}/user/info", [
+            $profileType = $this->getAuthUser()->getIsCandidate() ? "user" : "company";
+            $response = $client->request('GET', "{$clientBaseUrl}/{$profileType}/info", [
                 'headers' => [
                     'Authorization' => $token,
                 ]
@@ -209,37 +225,56 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
-        $employee->setFirstName(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_FIRST_NAME)
-        );
-        $employee->setMiddleName(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_MIDDLE_NAME)
-        );
-        $employee->setLastName(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LAST_NAME)
-        );
-        $employee->setNeed(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEED)
-        );
-        $employee->setDrivingLicense(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LICENSE)
-        );
-        $employee->setSalary(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_SALARY)
-        );
-        $employee->setStudyLevel(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVEL)
-        );
-        $employee->setCourseStart(
-            $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_START)
-        );
-        $employee->setEmployeeId(
+        if ($this->getAuthUser()->getIsCandidate()) {
+            $employee->setFirstName(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_FIRST_NAME)
+            );
+            $employee->setMiddleName(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_MIDDLE_NAME)
+            );
+            $employee->setLastName(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LAST_NAME)
+            );
+            $employee->setNeed(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEED)
+            );
+            $employee->setDrivingLicense(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LICENSE)
+            );
+            $employee->setSalary(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_SALARY)
+            );
+            $employee->setStudyLevel(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVEL)
+            );
+            $employee->setCourseStart(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_START)
+            );
+        } else {
+            $employee->setCompanySiret($employee->getEmployeeId());
+            $employee->setCompanyWorkforce(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_WORKFORCE)
+            );
+            $employee->setCompanyName(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_NAME)
+            );
+            $employee->setFirstName(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_NAME)
+            );
+            $employee->setCompanySiret(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_SIRET)
+            );
+            $employee->setCompanyNafCode(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_NAF_CODE)
+            );
+        }
+        /*$employee->setEmployeeId(
             $this->getRequestParams()->getStringOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_EMPLOYEE_ID)
-        );
+        );*/
         $employee->setOtherId(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_OTHER_ID)
         );
-        $employee->setDrivingLicenseNo(
+        /*$employee->setDrivingLicenseNo(
             $this->getRequestParams()->getString(
                 RequestParams::PARAM_TYPE_BODY,
                 self::PARAMETER_DRIVING_LICENSE_NO
@@ -250,17 +285,17 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                 RequestParams::PARAM_TYPE_BODY,
                 self::PARAMETER_DRIVING_LICENSE_EXPIRED_DATE
             )
-        );
+        );*/
         $employee->setGender(
             $this->getRequestParams()->getStringOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_GENDER)
         );
-        $employee->setMaritalStatus(
+        /*$employee->setMaritalStatus(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_MARTIAL_STATUS)
-        );
+        );*/
         $employee->setBirthday(
             $this->getRequestParams()->getDateTimeOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_BIRTHDAY)
         );
-        $employee->getDecorator()->setNationality(
+        /*$employee->getDecorator()->setNationality(
             $this->getRequestParams()->getIntOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NATIONALITY_ID)
         );
 
@@ -294,11 +329,15 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             $employee->setSinNumber(
                 $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_SIN_NUMBER)
             );
-        }
+        }*/
 
         $this->getEmployeeService()->updateEmployeePersonalDetails($employee);
-        $profileId = $this->updateHedwigeProfile($this->getAuthUser()->getUserHedwigeToken(), $employee);
-        $employee->setProfileId($profileId);
+        if ($this->getAuthUser()->getIsCandidate()) {
+            $profileId = $this->updateHedwigeProfile($this->getAuthUser()->getUserHedwigeToken(), $employee);
+            $employee->setProfileId($profileId);
+        } else
+            $this->updateHedwigeCompany($this->getAuthUser()->getUserHedwigeToken(), $employee);
+
         return new EndpointResourceResult(EmployeePersonalDetailModel::class, $employee);
     }
 
@@ -339,6 +378,33 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         }
     }
 
+    /**
+     * @param string $token
+     * @param Employee $employee
+     */
+    protected function updateHedwigeCompany(string $token, Employee $employee) : void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        
+        $data = [
+            'name' => $employee->getCompanyName(),
+            'nafCode' => $employee->getCompanyNafCode(),
+            'workforce' => $employee->getCompanyWorkforce(),
+        ];
+
+        try {
+            $client->request('PUT', "{$clientBaseUrl}/company/info", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($data)
+            ]);
+        } catch (\Exceptionon $e) {
+        }
+    }
+
 
     /**
      * @inheritDoc
@@ -353,12 +419,13 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                 self::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
             ),
-            $this->getValidationDecorator()->requiredParamRule(
+            $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::PARAMETER_FIRST_NAME,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_FIRST_NAME_MAX_LENGTH]),
-                )
+                ),
+                true
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
@@ -368,12 +435,13 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                 ),
                 true
             ),
-            $this->getValidationDecorator()->requiredParamRule(
+            $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::PARAMETER_LAST_NAME,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_LAST_NAME_MAX_LENGTH]),
-                )
+                ),
+                true
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
@@ -412,6 +480,38 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                     self::PARAMETER_COURSE_START,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COURSE_START_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COMPANY_WORKFORCE,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COMPANY_WORKFORCE_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COMPANY_NAME,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COMPANY_NAME_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COMPANY_SIRET,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COMPANY_SIRET_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COMPANY_NAF_CODE,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COMPANY_NAF_CODE_MAX_LENGTH]),
                 ),
                 true
             ),

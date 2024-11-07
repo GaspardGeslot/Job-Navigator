@@ -11,3 +11,4 @@ src/plugins/orangehrmFunctionalTestingPlugin
 .php-cs-fixer.php
 .yarn
 node_modules/
+.env

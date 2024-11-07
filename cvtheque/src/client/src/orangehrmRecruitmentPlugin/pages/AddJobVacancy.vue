@@ -22,6 +22,12 @@
       <oxd-text tag="h6" class="orangehrm-main-title">
         {{ $t('recruitment.add_vacancy') }}
       </oxd-text>
+      <br />
+      <oxd-text class="orangehrm-text" tag="p">
+        <i>
+          {{ $t('recruitment.select_only_conditions_for_matching') }}
+        </i>
+      </oxd-text>
       <oxd-divider />
 
       <oxd-form :loading="isLoading" @submit-valid="onSave">
@@ -34,15 +40,51 @@
               :rules="rules.name"
             />
           </oxd-grid-item>
+          <!--<oxd-grid-item>
+            <oxd-input-field
+              v-model="vacancy.numOfPositions"
+              :label="$t('recruitment.num_of_positions')"
+              :rules="rules.numOfPositions"
+            />
+          </oxd-grid-item>
           <oxd-grid-item>
             <jobtitle-dropdown
               v-model="vacancy.jobTitle"
               :rules="rules.jobTitle"
               required
             />
+          </oxd-grid-item>-->
+        </oxd-grid>
+        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="jobSector"
+              type="select"
+              :label="$t('recruitment.job_sector')"
+              :options="sectors"
+            />
+          </oxd-grid-item>
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="vacancy.jobTitle"
+              type="select"
+              :label="$t('general.job_title')"
+              :options="jobTitlesPerSector"
+              required
+            />
           </oxd-grid-item>
         </oxd-grid>
         <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="vacancy.countries"
+              type="multiselect"
+              :label="$t('general.country')"
+              :options="countries"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+        <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item class="orangehrm-grid-item-span-2">
             <oxd-input-field
               v-model="vacancy.description"
@@ -76,7 +118,7 @@
               </oxd-grid-item>
             </oxd-grid>
           </oxd-grid-item>
-        </oxd-grid>
+        </oxd-grid>-->
         <oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item class="orangerhrm-switch-wrapper">
             <oxd-text class="orangehrm-text" tag="p">
@@ -86,7 +128,99 @@
           </oxd-grid-item>
         </oxd-grid>
         <br />
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('pim.work_experience') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in professionalExperiences"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedProfessionalExperiences"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('pim.driving_licences') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in drivingLicenses"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedDrivingLicences"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('general.need_search') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in needs"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedNeeds"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('general.course_start_option') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in courseStarts"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedCourseStarts"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('general.study_level') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in studyLevels"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedStudyLevels"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <br />
+        <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item class="orangerhrm-switch-wrapper">
             <oxd-text class="orangehrm-text" tag="p">
               {{ $t('recruitment.publish_in_rss_feed_and_web_page') }}
@@ -108,7 +242,7 @@
               />
             </div>
           </oxd-grid-item>
-        </oxd-grid>
+        </oxd-grid>-->
         <br />
         <oxd-divider />
         <oxd-form-actions>
@@ -135,16 +269,22 @@ import {
   shouldNotExceedCharLength,
   numberShouldBeBetweenMinAndMaxValue,
 } from '@ohrm/core/util/validation/rules';
-import EmployeeAutocomplete from '@/core/components/inputs/EmployeeAutocomplete';
+/*import EmployeeAutocomplete from '@/core/components/inputs/EmployeeAutocomplete';
 import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
-import VacancyLinkCard from '../components/VacancyLinkCard.vue';
+import VacancyLinkCard from '../components/VacancyLinkCard.vue';*/
 import {OxdSwitchInput} from '@ohrm/oxd';
 import useServerValidation from '@/core/util/composable/useServerValidation';
 
 const vacancyModel = {
   jobTitle: null,
   name: '',
+  countries: [],
   hiringManager: null,
+  checkedProfessionalExperiences: [],
+  checkedDrivingLicences: [],
+  checkedNeeds: [],
+  checkedCourseStarts: [],
+  checkedStudyLevels: [],
   numOfPositions: '',
   description: '',
   status: true,
@@ -156,11 +296,41 @@ const basePath = `${window.location.protocol}//${window.location.host}${window.a
 export default {
   components: {
     'oxd-switch-input': OxdSwitchInput,
-    'employee-autocomplete': EmployeeAutocomplete,
+    /*'employee-autocomplete': EmployeeAutocomplete,
     'jobtitle-dropdown': JobtitleDropdown,
-    'vacancy-link-card': VacancyLinkCard,
+    'vacancy-link-card': VacancyLinkCard,*/
   },
 
+  props: {
+    professionalExperiences: {
+      type: Array,
+      default: () => [],
+    },
+    needs: {
+      type: Array,
+      default: () => [],
+    },
+    drivingLicenses: {
+      type: Array,
+      default: () => [],
+    },
+    courseStarts: {
+      type: Array,
+      default: () => [],
+    },
+    studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+    countries: {
+      type: Array,
+      default: () => [],
+    },
+    sectors: {
+      type: Array,
+      default: () => [],
+    },
+  },
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
@@ -178,13 +348,15 @@ export default {
   },
   data() {
     return {
+      jobSector: '',
+      jobTitlesPerSector: [],
       isLoading: false,
       vacancy: {...vacancyModel},
       rules: {
         jobTitle: [required],
         name: [
           required,
-          this.vacancyNameUniqueValidation,
+          //this.vacancyNameUniqueValidation,
           shouldNotExceedCharLength(50),
         ],
         hiringManager: [required, validSelection],
@@ -204,27 +376,56 @@ export default {
       webUrl: `${basePath}/recruitmentApply/jobs.html`,
     };
   },
+  watch: {
+    jobSector(newVal) {
+      if (newVal) {
+        const selectedSector = this.sectors.find(
+          (sector) => sector.label === newVal.label,
+        );
+        this.jobTitlesPerSector = selectedSector
+          ? selectedSector.jobs.map((job, index) => {
+              return {id: index, label: job};
+            })
+          : [];
+      } else this.jobTitlesPerSector = [];
+    },
+  },
   methods: {
     onCancel() {
       navigate('/recruitment/viewJobVacancy');
     },
     onSave() {
+      console.log('Test');
       this.isLoading = true;
-      this.vacancy = {
+      const vacancy = {
         name: this.vacancy.name,
-        jobTitleId: this.vacancy.jobTitle.id,
-        employeeId: this.vacancy.hiringManager.id,
+        //jobTitleId: this.vacancy.jobTitle?.id,
+        jobTitle: this.vacancy.jobTitle?.label,
+        countries: JSON.stringify(
+          this.vacancy.countries?.map((country) => {
+            return country.label;
+          }),
+        ),
+        professionalExperiences: JSON.stringify(
+          this.vacancy.checkedProfessionalExperiences,
+        ),
+        drivingLicenses: JSON.stringify(this.vacancy.checkedDrivingLicences),
+        needs: JSON.stringify(this.vacancy.checkedNeeds),
+        courseStarts: JSON.stringify(this.vacancy.checkedCourseStarts),
+        studyLevels: JSON.stringify(this.vacancy.checkedStudyLevels),
+        //employeeId: this.vacancy.hiringManager?.id,
         numOfPositions: this.vacancy.numOfPositions
           ? parseInt(this.vacancy.numOfPositions)
           : null,
-        description: this.vacancy.description,
+        //description: this.vacancy.description,
         status: this.vacancy.status,
-        isPublished: this.vacancy.isPublished,
+        //isPublished: this.vacancy.isPublished,
       };
-      this.http.create({...this.vacancy}).then((response) => {
-        const {data} = response.data;
+      console.log('Data : ', vacancy);
+      this.http.create({...vacancy}).then((response) => {
+        //const {data} = response.data;
         this.$toast.saveSuccess();
-        navigate('/recruitment/addJobVacancy/{id}', {id: data.id});
+        navigate('/recruitment/viewJobVacancy');
       });
     },
   },

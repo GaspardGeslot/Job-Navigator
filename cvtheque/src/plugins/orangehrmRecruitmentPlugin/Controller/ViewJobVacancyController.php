@@ -18,15 +18,46 @@
 
 namespace OrangeHRM\Recruitment\Controller;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Vue\Component;
+use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class ViewJobVacancyController extends AbstractVueController
 {
+    use AuthUserTrait;
+
     public function preRender(Request $request): void
     {
         $component = new Component('view-job-vacancy');
+
+        $options = $this->getMatchings($this->getAuthUser()->getUserHedwigeToken());
+
+        $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, array_map(function($item) {
+            return [
+                'id' => $item['id'],
+                'label' => $item['title'] ?? ''
+            ];
+        }, $options)));
+
         $this->setComponent($component);
+    }
+
+    protected function getMatchings(string $token) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/matching/company", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+        }
     }
 }

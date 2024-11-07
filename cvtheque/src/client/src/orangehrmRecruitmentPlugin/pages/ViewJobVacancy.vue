@@ -21,11 +21,16 @@
     <oxd-table-filter :filter-title="$t('general.vacancies')">
       <oxd-form @submit-valid="filterItems">
         <oxd-form-row>
-          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
-              <jobtitle-dropdown v-model="filters.jobTitleId" />
+              <oxd-input-field
+                v-model="matchingSelected"
+                type="select"
+                :label="$t('recruitment.need_title')"
+                :options="matchings"
+              />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <!--<oxd-grid-item>
               <vacancy-dropdown
                 v-model="filters.vacancyId"
                 :label="$t('recruitment.vacancy')"
@@ -42,13 +47,20 @@
                 :clear="false"
                 :options="statusOptions"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
           </oxd-grid>
         </oxd-form-row>
 
         <oxd-divider />
 
         <oxd-form-actions>
+          <oxd-button
+            v-if="canUpdate"
+            class="orangehrm-right-space"
+            display-type="secondary"
+            :label="$t('general.update')"
+            @click="onClickEdit"
+          />
           <oxd-button
             display-type="ghost"
             :label="$t('general.reset')"
@@ -73,12 +85,12 @@
           @click="onClickAdd"
         />
       </div>
-      <table-header
+      <!--<table-header
         :selected="checkedItems.length"
         :loading="isLoading"
         :total="total"
         @delete="onClickDeleteSelected"
-      ></table-header>
+      ></table-header>-->
       <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
@@ -89,8 +101,8 @@
           :clickable="false"
           :loading="isLoading"
           row-decorator="oxd-table-decorator-card"
-          class="orangehrm-vacancy-list"
         />
+        <!--class="orangehrm-vacancy-list"-->
       </div>
       <div class="orangehrm-bottom-container">
         <oxd-pagination
@@ -109,38 +121,68 @@ import {computed, ref} from 'vue';
 import usePaginate from '@ohrm/core/util/composable/usePaginate';
 import {navigate} from '@ohrm/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
+import useDateFormat from '@/core/util/composable/useDateFormat';
 import useSort from '@ohrm/core/util/composable/useSort';
 import usei18n from '@/core/util/composable/usei18n';
+import useLocale from '@/core/util/composable/useLocale';
+import {formatDate, parseDate} from '@ohrm/core/util/helper/datefns';
 import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
-import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
+/*import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
 import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown.vue';
-import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';
+import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';*/
 
 const defaultFilters = {
   jobTitleId: null,
   hiringManagerId: null,
   vacancyId: null,
   status: null,
+  matchingId: null,
 };
 const defaultSortOrder = {
-  'vacancy.name': 'ASC',
-  'vacancy.status': 'DEFAULT',
-  'jobTitle.jobTitleName': 'DEFAULT',
-  'hiringManager.lastName': 'DEFAULT',
+  'vacancy.name': 'DEFAULT',
+  'candidate.lastName': 'DEFAULT',
+  'candidate.dateOfApplication': 'DESC',
+  'candidateVacancy.status': 'DEFAULT',
 };
 export default {
   name: 'ViewJobVacancy',
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
-    'jobtitle-dropdown': JobtitleDropdown,
+    /*'jobtitle-dropdown': JobtitleDropdown,
     'vacancy-dropdown': VacancyDropdown,
-    'hiring-manager-dropdown': HiringManagerDropdown,
+    'hiring-manager-dropdown': HiringManagerDropdown,*/
   },
 
-  setup() {
+  props: {
+    matchings: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
+  watch: {
+    matchingSelected(newVal) {
+      this.canUpdate = newVal;
+    },
+  },
+
+  setup(props) {
     const {$t} = usei18n();
+    const {locale} = useLocale();
+    const {jsDateFormat, userDateFormat} = useDateFormat();
     const {$tEmpName} = useEmployeeNameTranslate();
+    const statuses = [
+      {id: 1, label: $t('recruitment.application_initiated')},
+      {id: 2, label: $t('recruitment.shortlisted')},
+      {id: 3, label: $t('leave.rejected')},
+      {id: 4, label: $t('recruitment.interview_scheduled')},
+      {id: 5, label: $t('recruitment.interview_passed')},
+      {id: 6, label: $t('recruitment.interview_failed')},
+      {id: 7, label: $t('recruitment.job_offered')},
+      {id: 8, label: $t('recruitment.offer_declined')},
+      {id: 9, label: $t('recruitment.hired')},
+    ];
     const filters = ref({...defaultFilters});
     const {sortDefinition, sortField, sortOrder, onSort} = useSort({
       sortDefinition: defaultSortOrder,
@@ -158,7 +200,31 @@ export default {
       };
     });
 
-    const userdataNormalizer = (data) => {
+    const candidateDataNormalizer = (data) => {
+      return data.map((item) => {
+        return {
+          id: item.id,
+          vacancy:
+            item.vacancy?.status === false
+              ? `${item.vacancy?.name} (${$t('general.closed')})`
+              : item.vacancy?.name,
+          candidate: `${item.firstName} ${item.middleName || ''} ${
+            item.lastName
+          }`,
+          dateOfApplication: formatDate(
+            parseDate(item.dateOfApplication),
+            jsDateFormat,
+            {locale},
+          ),
+          status:
+            statuses.find((status) => status.id === item.status?.id)?.label ||
+            '',
+          resume: item.hasAttachment,
+          isSelectable: item.deletable,
+        };
+      });
+    };
+    /*const userdataNormalizer = (data) => {
       return data.map((item) => {
         return {
           id: item.id,
@@ -173,11 +239,11 @@ export default {
           status: item.status ? $t('general.active') : $t('general.closed'),
         };
       });
-    };
+    };*/
 
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/recruitment/vacancies',
+      '/api/v2/recruitment/candidates',
     );
     const {
       showPaginator,
@@ -190,7 +256,7 @@ export default {
       execQuery,
     } = usePaginate(http, {
       query: serializedFilters,
-      normalizer: userdataNormalizer,
+      normalizer: candidateDataNormalizer,
     });
     onSort(execQuery);
 
@@ -211,7 +277,9 @@ export default {
 
   data() {
     return {
-      headers: [
+      canUpdate: false,
+      matchingSelected: null,
+      /*headers: [
         {
           name: 'vacancy',
           slot: 'title',
@@ -259,6 +327,41 @@ export default {
             },
           },
         },
+      ],*/
+      headers: [
+        {
+          name: 'vacancy',
+          title: this.$t('recruitment.vacancy'),
+          sortField: 'vacancy.name',
+          style: {flex: 1},
+        },
+        {
+          name: 'candidate',
+          slot: 'title',
+          title: this.$t('recruitment.candidate'),
+          sortField: 'candidate.lastName',
+          style: {flex: 1},
+        },
+        {
+          name: 'dateOfApplication',
+          title: this.$t('recruitment.date_of_application'),
+          sortField: 'candidate.dateOfApplication',
+          style: {flex: 1},
+        },
+        {
+          name: 'status',
+          title: this.$t('general.status'),
+          sortField: 'candidateVacancy.status',
+          style: {flex: 1},
+        },
+        {
+          name: 'actions',
+          slot: 'action',
+          title: this.$t('general.actions'),
+          style: {flex: 1},
+          cellType: 'oxd-table-cell-actions',
+          cellRenderer: this.cellRenderer,
+        },
       ],
       statusOptions: [
         {id: true, param: 'active', label: this.$t('general.active')},
@@ -270,11 +373,54 @@ export default {
   },
 
   methods: {
+    cellRenderer(...[, , , row]) {
+      const cellConfig = {
+        view: {
+          onClick: this.onClickCandidate,
+          props: {
+            name: 'eye-fill',
+          },
+        },
+      };
+      /*if (row.isSelectable) {
+        cellConfig.delete = {
+          onClick: this.onClickDelete,
+          component: 'oxd-icon-button',
+          props: {
+            name: 'trash',
+          },
+        };
+      }*/
+      if (row.resume) {
+        cellConfig.download = {
+          onClick: this.onDownload,
+          props: {
+            name: 'download',
+          },
+        };
+      }
+      return {
+        props: {
+          header: {
+            cellConfig,
+          },
+        },
+      };
+    },
+    onClickCandidate(item) {
+      navigate('/recruitment/addCandidate/{id}', {id: item.id});
+    },
     onClickAdd() {
       navigate('/recruitment/addJobVacancy');
     },
     onClickEdit(item) {
       navigate('/recruitment/addJobVacancy/{id}', {id: item.id});
+    },
+    onDownload(item) {
+      if (!item?.id) return;
+      const fileUrl = 'recruitment/viewCandidateAttachment/candidateId';
+      const downUrl = `${window.appGlobal.baseUrl}/${fileUrl}/${item.id}`;
+      window.open(downUrl, '_blank');
     },
 
     onClickDelete(item) {

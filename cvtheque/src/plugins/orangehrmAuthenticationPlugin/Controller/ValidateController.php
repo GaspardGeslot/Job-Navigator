@@ -105,6 +105,7 @@ class ValidateController extends AbstractController implements PublicControllerI
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setIsCandidate(false);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {

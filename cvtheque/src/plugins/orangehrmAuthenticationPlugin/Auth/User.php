@@ -29,6 +29,7 @@ class User
     public const SESSION_TIMEOUT_REDIRECT_URL = 'redirect_uri';
     public const IS_AUTHENTICATED = 'user.is_authenticated';
     public const HAS_ADMIN_ACCESS = 'user.has_admin_access';
+    public const IS_CANDIDATE = 'user.is_candidate';
     public const ADMIN_ACCESS_FORWARD_URL = 'admin_access.forward_url';
     public const ADMIN_ACCESS_BACK_URL = 'admin_access.back_url';
     public const USER_ID = 'user.user_id';
@@ -259,5 +260,21 @@ class User
     public function setHasAdminAccess(bool $status = true): void
     {
         $this->setAttribute(self::HAS_ADMIN_ACCESS, $status);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsCandidate(): bool
+    {
+        return $this->getAttribute(self::IS_CANDIDATE, false);
+    }
+
+    /**
+     * @param bool $isCandidate
+     */
+    public function setIsCandidate(bool $isCandidate = true): void
+    {
+        $this->setAttribute(self::IS_CANDIDATE, $isCandidate);
     }
 }

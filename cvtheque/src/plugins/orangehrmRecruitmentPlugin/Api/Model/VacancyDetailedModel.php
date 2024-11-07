@@ -56,35 +56,35 @@ class VacancyDetailedModel implements Normalizable
         $this->setFilters([
             'id',
             'name',
-            'description',
+            //'description',
             'numOfPositions',
             'status',
             ['isPublished'],
-            ['getJobTitle', 'getId'],
+            /*['getJobTitle', 'getId'],
             ['getJobTitle', 'getJobTitleName'],
             ['getJobTitle', 'isDeleted'],
             ['getHiringManager', 'getEmpNumber'],
             ['getHiringManager', 'getFirstName'],
             ['getHiringManager', 'getMiddleName'],
             ['getHiringManager', 'getLastName'],
-            ['getHiringManager', 'getEmployeeTerminationRecord', 'getId'],
+            ['getHiringManager', 'getEmployeeTerminationRecord', 'getId'],*/
         ]);
 
         $this->setAttributeNames([
             'id',
             'name',
-            'description',
+            //'description',
             'numOfPositions',
             'status',
             'isPublished',
-            ['jobTitle', 'id'],
+            /*['jobTitle', 'id'],
             ['jobTitle', 'title'],
             ['jobTitle', 'isDeleted'],
             ['hiringManager', 'id'],
             ['hiringManager', 'firstName'],
             ['hiringManager', 'middleName'],
             ['hiringManager', 'lastName'],
-            ['hiringManager', 'terminationId'],
+            ['hiringManager', 'terminationId'],*/
         ]);
     }
 }

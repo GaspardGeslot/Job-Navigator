@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Recruitment\Api;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -42,9 +43,11 @@ use OrangeHRM\Recruitment\Api\Model\VacancyModel;
 use OrangeHRM\Recruitment\Api\Model\VacancySummaryModel;
 use OrangeHRM\Recruitment\Dto\VacancySearchFilterParams;
 use OrangeHRM\Recruitment\Traits\Service\VacancyServiceTrait;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class VacancyAPI extends Endpoint implements CrudEndpoint
 {
+    use AuthUserTrait;
     use VacancyServiceTrait;
     use DateTimeHelperTrait;
     use UserRoleManagerTrait;
@@ -58,6 +61,13 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     public const FILTER_MODEL = 'model';
 
     public const PARAMETER_NAME = 'name';
+    public const PARAMETER_JOB_TITLE = 'jobTitle';
+    public const PARAMETER_COUNTRIES = 'countries';
+    public const PARAMETER_PROFESSIONAL_EXPERIENCES = 'professionalExperiences';
+    public const PARAMETER_DRIVING_LICENSES = 'drivingLicenses';
+    public const PARAMETER_NEEDS = 'needs';
+    public const PARAMETER_COURSE_STARTS = 'courseStarts';
+    public const PARAMETER_STUDY_LEVELS = 'studyLevels';
     public const PARAMETER_DESCRIPTION = 'description';
     public const PARAMETER_NUM_OF_POSITIONS = 'numOfPositions';
     public const PARAMETER_STATUS = 'status';
@@ -370,10 +380,51 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     {
         $vacancy = new Vacancy();
         $vacancy->setDefinedTime($this->getDateTimeHelper()->getNow());
-        $this->setVacancy($vacancy);
+        /*$this->setVacancy($vacancy);*/
+        $vacancy->setName(
+            $this->getRequestParams()->getString(
+                RequestParams::PARAM_TYPE_BODY,
+                self::PARAMETER_NAME
+            )
+        );
+        $vacancy->setUpdatedTime($this->getDateTimeHelper()->getNow());
         $vacancy = $this->getVacancyService()->getVacancyDao()->saveJobVacancy($vacancy);
 
+        $this->createHedwigeMatching($this->getAuthUser()->getUserHedwigeToken());
+
         return new EndpointResourceResult(VacancyDetailedModel::class, $vacancy);
+    }
+
+    /**
+     * @param string $token
+     */
+    protected function createHedwigeMatching(string $token) : void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        
+        $data = [
+            'title' => $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NAME),
+            'active' => $this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true),
+            'jobs' => [$this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_JOB_TITLE)],
+            'needs' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEEDS), true),
+            'levels' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVELS), true),
+            'courseStarts' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_STARTS), true),
+            'countries' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COUNTRIES), true),
+            'professionalExperiences' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_PROFESSIONAL_EXPERIENCES), true),
+            'drivingLicenses' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_DRIVING_LICENSES), true),
+        ];
+
+        try {
+            $client->request('POST', "{$clientBaseUrl}/matching/company", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($data)
+            ]);
+        } catch (\Exceptionon $e) {
+        }
     }
 
     /**
@@ -467,7 +518,56 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
                 self::PARAMETER_STATUS,
                 new Rule(Rules::BOOL_TYPE),
             ),
-            new ParamRule(
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_NUM_OF_POSITIONS,
+                    new Rule(Rules::INT_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAMETER_RULE_NO_OF_POSITIONS_MAX_LENGTH])
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_JOB_TITLE,
+                    new Rule(Rules::STRING_TYPE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COUNTRIES,
+                    new Rule(Rules::STRING_TYPE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_PROFESSIONAL_EXPERIENCES,
+                    new Rule(Rules::STRING_TYPE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_DRIVING_LICENSES,
+                    new Rule(Rules::STRING_TYPE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_NEEDS,
+                    new Rule(Rules::STRING_TYPE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COURSE_STARTS,
+                    new Rule(Rules::STRING_TYPE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_STUDY_LEVELS,
+                    new Rule(Rules::STRING_TYPE),
+                )
+            ),
+            /*new ParamRule(
                 self::PARAMETER_JOB_TITLE_ID,
                 new Rule(Rules::POSITIVE),
                 new Rule(Rules::ENTITY_ID_EXISTS, [JobTitle::class]),
@@ -483,18 +583,11 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
                 ),
                 true
             ),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_NUM_OF_POSITIONS,
-                    new Rule(Rules::INT_TYPE),
-                    new Rule(Rules::LENGTH, [null, self::PARAMETER_RULE_NO_OF_POSITIONS_MAX_LENGTH])
-                )
-            ),
             new ParamRule(
                 self::PARAMETER_EMPLOYEE_ID,
                 new Rule(Rules::POSITIVE),
                 new Rule(Rules::ENTITY_ID_EXISTS, [Employee::class])
-            ),
+            ),*/
         ];
     }
 
