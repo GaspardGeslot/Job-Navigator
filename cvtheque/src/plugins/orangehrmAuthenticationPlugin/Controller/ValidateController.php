@@ -114,16 +114,16 @@ class ValidateController extends AbstractController implements PublicControllerI
                 return new RedirectResponse($e->getRedirectUrl());
             }
             return new RedirectResponse($loginUrl);
-        }/* catch (Throwable $e) {
+        } catch (Throwable $e) {
             $this->getAuthUser()->addFlash(
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred : ', $e->getTraceAsString(),
+                    'message' => 'Unexpected error occurred',
                 ]
             );
             return new RedirectResponse($loginUrl);
-        }*/
+        }
 
         $redirectUrl = $this->handleSessionTimeoutRedirect();
         if ($redirectUrl) {

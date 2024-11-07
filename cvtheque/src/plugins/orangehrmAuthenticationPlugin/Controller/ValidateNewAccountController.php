@@ -67,7 +67,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
     {
         $email = $request->request->get(self::PARAMETER_EMAIL, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
-        $credentials = new UserCredential($email, $password);
+        $credentials = new UserCredential($email, $password, 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
