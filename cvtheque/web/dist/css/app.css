@@ -6441,6 +6441,84 @@
     margin-right: 0.5rem;
 }
 }
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmAuthenticationPlugin/pages/login.scss?vue&type=style&index=0&id=d5024cf2&lang=scss&scoped=true ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-login-form[data-v-d5024cf2] {
+  margin: 0 auto;
+}
+@media (min-width: 0px) {
+.orangehrm-login-form[data-v-d5024cf2] {
+    width: 80%;
+}
+}
+@media (min-width: 800px) {
+.orangehrm-login-form[data-v-d5024cf2] {
+    width: 60%;
+    max-width: 485px;
+}
+}
+.orangehrm-login-action[data-v-d5024cf2] {
+  margin-top: 2rem;
+  justify-content: center;
+}
+.orangehrm-login-button[data-v-d5024cf2] {
+  flex: 1;
+  padding: 1rem 0;
+}
+.orangehrm-login-title[data-v-d5024cf2] {
+  text-align: center;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+.orangehrm-login-pwreset[data-v-d5024cf2] {
+  margin: 1rem 0;
+  text-align: center;
+  font-weight: 600;
+}
+.orangehrm-login-pwreset a[data-v-d5024cf2] {
+  color: var(--oxd-primary-one-color);
+  text-decoration: none;
+}
+.orangehrm-login-forgot[data-v-d5024cf2] {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  font-size: 14px;
+}
+.orangehrm-login-forgot-header[data-v-d5024cf2] {
+  cursor: pointer;
+  color: var(--oxd-primary-one-color);
+}
+.orangehrm-demo-credentials[data-v-d5024cf2] {
+  margin: 1rem 0;
+}
+.orangehrm-login-footer-sm[data-v-d5024cf2] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.orangehrm-login-footer-sm a[data-v-d5024cf2] {
+  width: 22px;
+  height: 22px;
+  margin: 0 0.25rem;
+}
+.orangehrm-login-footer-sm .orangehrm-sm-icon[data-v-d5024cf2] {
+  width: inherit;
+  height: inherit;
+  color: rgba(146, 155, 170, 0.8);
+}
+@media (min-width: 800px) {
+.orangehrm-login-footer-sm[data-v-d5024cf2] {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+}
+}
+.orangehrm-login-seperator[data-v-d5024cf2] {
+  margin: 0.5rem 0;
+}
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmDashboardPlugin/components/base-widget.scss?vue&type=style&index=0&id=e838762c&lang=scss&scoped=true ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -8810,7 +8888,7 @@ p {
   font-size: 0.75rem;
   line-height: 1rem;
   /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
+    padding-bottom: 0.15rem; */
   color: red;
 }
 .formBlockLayout {
@@ -9188,7 +9266,7 @@ p[data-v-d99f0b7a] {
   font-size: 0.75rem;
   line-height: 1rem;
   /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
+    padding-bottom: 0.15rem; */
   color: red;
 }
 .formBlockLayout[data-v-d99f0b7a] {
@@ -9843,7 +9921,7 @@ p[data-v-d8f5f16e] {
   font-size: 0.75rem;
   line-height: 1rem;
   /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
+    padding-bottom: 0.15rem; */
   color: red;
 }
 .formBlockLayout[data-v-d8f5f16e] {
@@ -10158,7 +10236,7 @@ p[data-v-d8d9c26c] {
   font-size: 0.75rem;
   line-height: 1rem;
   /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
+    padding-bottom: 0.15rem; */
   color: red;
 }
 .formBlockLayout[data-v-d8d9c26c] {
@@ -10292,9 +10370,28 @@ p[data-v-d8d9c26c] {
   border-radius: 1rem;
 }
 .formBlock[data-v-59201b22] {
-  margin-top: 13rem;
-  margin-bottom: 6rem;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
+.closeButton[data-v-59201b22]{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-top-right-radius: 1rem;
+}
+.closeButton[data-v-59201b22]:hover{
+  background-color: red;
+}
+
 /* @media screen and (max-width: 460px) {
   .formBlock {
     margin-top: 13rem;
@@ -10590,6 +10687,216 @@ p[data-v-d8d9c26c] {
 .title-container[data-v-0c52339c],
 #olecio-logo[data-v-0c52339c] {
   display: none;
+}
+.formContainer[data-v-0c52339c] {
+  z-index: 10;
+}
+.exit-button[data-v-0c52339c]{
+  position: relative;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+#accueil[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #1b1f23;
+  color: white;
+}
+.accueilLogo[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  height: 20%;
+  gap: 4rem;
+}
+.jobNavigatorLogo[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem;
+  gap: 1rem;
+  align-items: center;
+  color: #f7e28f;
+}
+#logoConstructys[data-v-0c52339c] {
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+}
+.accueilGauche[data-v-0c52339c] {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+}
+.accueilBouton[data-v-0c52339c] {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 3rem 4rem;
+  gap: 1rem;
+  height: 100%;
+}
+.accueilBouton button[data-v-0c52339c] {
+  height: 3rem;
+  width: 60%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.accueilBouton button[data-v-0c52339c]:hover {
+  background-color: #e54021;
+  color: white;
+}
+.accueilDroite[data-v-0c52339c] {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.accueilNav[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  align-self: end;
+  padding-right: 4rem;
+}
+.accueilNav a[data-v-0c52339c] {
+  margin: 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+.accueilDroite video[data-v-0c52339c] {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 10%;
+  margin-right: 4rem;
+  margin-top: 1rem;
+  height: 70%;
+}
+#comment[data-v-0c52339c] {
+  height: 100vh;
+  background-color: #f4f1ed;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.commentGauche[data-v-0c52339c],
+.aProposDroite[data-v-0c52339c] {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 4rem;
+  justify-content: center;
+}
+.commentBouton[data-v-0c52339c],
+.aProposBouton[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.commentBouton button[data-v-0c52339c],
+.aProposBouton button[data-v-0c52339c] {
+  height: 3rem;
+  width: 45%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: #e54021;
+  color: white;
+}
+.commentBouton button[data-v-0c52339c]:hover,
+.aProposBouton button[data-v-0c52339c]:hover {
+  background-color: white;
+  color: black;
+}
+#comment img[data-v-0c52339c],
+#aPropos img[data-v-0c52339c] {
+  margin: 8rem;
+  width: 30%;
+}
+#aPropos[data-v-0c52339c] {
+  height: 100vh;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Responsivité pour les écrans de taille moyenne (tablettes) */
+@media (max-width: 900px) {
+#accueil[data-v-0c52339c],
+  #comment[data-v-0c52339c] {
+    flex-direction: column;
+    height: auto;
+}
+.accueilGauche[data-v-0c52339c] {
+    width: 100%;
+}
+.accueilLogo[data-v-0c52339c] {
+    gap: 0;
+    height: 5rem;
+    justify-content: space-evenly;
+}
+.accueilBouton[data-v-0c52339c] {
+    width: 100%;
+    margin: 0rem;
+    padding: 2rem;
+    align-items: center;
+    text-align: center;
+    height: auto;
+}
+.jobNavigatorLogo[data-v-0c52339c] {
+    margin: 2rem 0;
+}
+#logoConstructys[data-v-0c52339c] {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    -o-object-fit: contain;
+       object-fit: contain;
+}
+.accueilNav[data-v-0c52339c] {
+    display: none;
+}
+.accueilDroite[data-v-0c52339c] {
+    width: 100%;
+}
+.accueilDroite video[data-v-0c52339c] {
+    padding: 2rem;
+    border-radius: 5rem;
+    margin: 2rem;
+    height: 70%;
+}
+#aPropos[data-v-0c52339c] {
+    height: auto;
+    flex-direction: column-reverse;
+}
+.commentGauche[data-v-0c52339c],
+  .aProposDroite[data-v-0c52339c] {
+    box-sizing: border-box;
+    width: 100%;
+    gap: 2rem;
+    padding: 2rem;
+    text-align: center;
+}
+.commentBouton[data-v-0c52339c],
+  .aProposBouton[data-v-0c52339c] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+#comment img[data-v-0c52339c],
+  #aPropos img[data-v-0c52339c] {
+    margin: 1rem;
+    width: 40%;
+    align-self: center;
+}
 }
 @media screen and (max-width: 461px) {
 .exit-button[data-v-0c52339c] {
