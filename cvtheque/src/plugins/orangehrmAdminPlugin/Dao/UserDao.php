@@ -49,15 +49,15 @@ class UserDao extends BaseDao
      */
     public function saveNewUser(string $userName, string $password, string $role = 'ESS'): User
     {
-        $candidateUserRole = $this->getUserRole($role);
+        $userRole = $this->getUserRole($role);
         $newUserEmployeeId = $this->saveNewEmployee($userName);
 
         $user = new User();
         $user->setUserName($userName);
         $user->setUserPassword($password);
         $user->setStatus(true);
-        if ($candidateUserRole != null)
-            $user->getDecorator()->setUserRoleById($candidateUserRole->getId());
+        if ($userRole != null)
+            $user->getDecorator()->setUserRoleById($userRole->getId());
         if ($newUserEmployeeId != null)
             $user->getDecorator()->setEmployeeByEmpNumber($newUserEmployeeId);
         $user->setDateEntered($this->getDateTimeHelper()->getNow());
@@ -111,9 +111,17 @@ class UserDao extends BaseDao
      */
     public function isExistingSystemUser(UserCredential $credentials): ?User
     {
+        $userRole = $this->getUserRole($credentials->getRole());
         $query = $this->createQueryBuilder(User::class, 'u');
-        $query->andWhere('u.userName = :username')
-            ->setParameter('username', $credentials->getUsername());
+        if ($userRole != null) {
+            $query->andWhere('u.userName = :username')
+                ->andWhere('u.userRole = :userrole')
+                ->setParameter('username', $credentials->getUsername())
+                ->setParameter('userrole', $userRole);
+        } else {
+            $query->andWhere('u.userName = :username')
+                ->setParameter('username', $credentials->getUsername());
+        }
         $query->andWhere($query->expr()->isNotNull('u.userPassword'));
         $query->andWhere('u.deleted = :deleted')
             ->setParameter('deleted', false);

@@ -67,10 +67,10 @@ class AuthenticationService
     
     /**
      * @param UserCredential $credentials
-     * @return string
+     * @return ?string
      * @throws AuthenticationException
      */
-    public function setCredentials(UserCredential $credentials): string
+    public function setCredentials(UserCredential $credentials): ?string
     {
         $user = $this->getUserService()->getCredentials($credentials);
         $success = $this->setCredentialsForUser($user);
@@ -85,7 +85,7 @@ class AuthenticationService
      * @return string
      * @throws AuthenticationException
      */
-    public function createCredentials(UserCredential $credentials): string
+    public function createCredentials(UserCredential $credentials): ?string
     {
         $user = $this->getUserService()->createCredentials($credentials);
         $success = $this->setCredentialsForUser($user);
@@ -103,7 +103,7 @@ class AuthenticationService
      * @param UserCredential $credentials
      * @return string
      */
-    protected function setHedwigeCredentials(UserCredential $credentials) : string
+    protected function setHedwigeCredentials(UserCredential $credentials) : ?string
     {
         $client = new Client();
         $clientId = getenv('HEDWIGE_CLIENT_ID');

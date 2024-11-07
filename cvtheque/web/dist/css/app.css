@@ -10376,7 +10376,7 @@ p[data-v-d8d9c26c] {
   margin: 0;
   padding: 0;
 }
-.closeButton[data-v-59201b22]{
+.closeButton[data-v-59201b22] {
   position: absolute;
   right: 0px;
   top: 0px;
@@ -10388,7 +10388,7 @@ p[data-v-d8d9c26c] {
   font-size: 1.5rem;
   border-top-right-radius: 1rem;
 }
-.closeButton[data-v-59201b22]:hover{
+.closeButton[data-v-59201b22]:hover {
   background-color: red;
 }
 
@@ -10691,7 +10691,7 @@ p[data-v-d8d9c26c] {
 .formContainer[data-v-0c52339c] {
   z-index: 10;
 }
-.exit-button[data-v-0c52339c]{
+.exit-button[data-v-0c52339c] {
   position: relative;
   top: 10px;
   right: 10px;

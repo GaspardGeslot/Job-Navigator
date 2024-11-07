@@ -99,7 +99,7 @@
             class="orangehrm-login-forgot-header"
             @click="navigateUrlLoginCompany"
           >
-            {{ $t('Connexion entreprise') }}
+            {{ $t('auth.connection_company') }}
           </oxd-text>
         </div>
       </oxd-form>

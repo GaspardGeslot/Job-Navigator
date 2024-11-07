@@ -20,7 +20,7 @@
 <template>
   <login-layout>
     <oxd-text class="orangehrm-login-title" tag="h5">
-      {{ $t('Connexion Entreprise') }}
+      {{ $t('auth.login') }}
     </oxd-text>
     <div class="orangehrm-login-form">
       <div class="orangehrm-login-error">
@@ -50,9 +50,9 @@
           <oxd-input-field
             v-model="username"
             name="username"
-            :label="$t(`Numéro de SIRET`)"
+            :label="$t('auth.siret')"
             label-icon="person"
-            :placeholder="$t(`Numéro de SIRET`)"
+            :placeholder="$t('auth.siret')"
             :rules="rules.username"
             autofocus
           />
@@ -62,9 +62,9 @@
           <oxd-input-field
             v-model="password"
             name="password"
-            :label="$t('Code adhérent')"
+            :label="$t('auth.adherent_code_constructys')"
             label-icon="key"
-            :placeholder="$t('Code adhérent')"
+            :placeholder="$t('auth.adherent_code_constructys')"
             type="password"
             :rules="rules.password"
           />
@@ -91,7 +91,7 @@
             class="orangehrm-login-forgot-header"
             @click="navigateUrlConnexion"
           >
-            {{ $t('Connexion utilisateur') }}
+            {{ $t('auth.connection_candidate') }}
           </oxd-text>
         </div>
       </oxd-form>

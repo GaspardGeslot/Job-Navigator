@@ -22,15 +22,18 @@ class UserCredential implements UserCredentialInterface
 {
     private ?string $username = null;
     private ?string $password = null;
+    private ?string $role = null;
 
     /**
      * @param string|null $username
      * @param string|null $password
+     * @param string|null $password
      */
-    public function __construct(?string $username = null, ?string $password = null)
+    public function __construct(?string $username = null, ?string $password = null, ?string $role = null)
     {
         $this->username = $username;
         $this->password = $password;
+        $this->role = $role;
     }
 
     /**
@@ -63,5 +66,21 @@ class UserCredential implements UserCredentialInterface
     public function setPassword(?string $password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string|null $role
+     */
+    public function setRole(?string $role): void
+    {
+        $this->role = $role;
     }
 }

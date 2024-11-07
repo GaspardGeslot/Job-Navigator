@@ -126,13 +126,13 @@
       </div>
     </div>
     <img
-      src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/testImage1.png"
+      src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/image_puzzle.png"
       alt="image random"
     />
   </div>
   <div id="aPropos">
     <img
-      src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/testImage1.png"
+      src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/image_women.png"
       alt="Image random"
     />
     <div class="aProposDroite">
@@ -205,7 +205,7 @@ export default {
   z-index: 10;
 }
 
-.exit-button{
+.exit-button {
   position: relative;
   top: 10px;
   right: 10px;

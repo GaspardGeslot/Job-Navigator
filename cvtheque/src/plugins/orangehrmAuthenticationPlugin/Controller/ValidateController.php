@@ -84,7 +84,7 @@ class ValidateController extends AbstractController implements PublicControllerI
     {
         $username = $request->request->get(self::PARAMETER_USERNAME, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
-        $credentials = new UserCredential($username, $password);
+        $credentials = new UserCredential($username, $password, 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
@@ -105,7 +105,7 @@ class ValidateController extends AbstractController implements PublicControllerI
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
-            $this->getAuthUser()->setIsCandidate(false);
+            $this->getAuthUser()->setIsCandidate(true);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
@@ -114,16 +114,16 @@ class ValidateController extends AbstractController implements PublicControllerI
                 return new RedirectResponse($e->getRedirectUrl());
             }
             return new RedirectResponse($loginUrl);
-        } catch (Throwable $e) {
+        }/* catch (Throwable $e) {
             $this->getAuthUser()->addFlash(
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred',
+                    'message' => 'Unexpected error occurred : ', $e->getTraceAsString(),
                 ]
             );
             return new RedirectResponse($loginUrl);
-        }
+        }*/
 
         $redirectUrl = $this->handleSessionTimeoutRedirect();
         if ($redirectUrl) {
