@@ -354,8 +354,8 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $data = [
             'firstName' => $employee->getFirstName(),
             'need' => $employee->getNeed(),
-            'drivingLicenses' => $employee->getDrivingLicense(),
-            'salary' => $employee->getSalary(),
+            'drivingLicenses' => json_decode($employee->getDrivingLicense(), true),
+            'salaryExpectation' => $employee->getSalary(),
             'studyLevel' => $employee->getStudyLevel(),
             'lastName' => $employee->getLastName(),
             'civility' => $employee->getGender(),

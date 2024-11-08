@@ -123,6 +123,7 @@ export default {
     },
   },
   mounted() {
+    console.log('Sectors : ', this.sectors);
     this.showMore = new Array(this.sectors.length).fill(false);
   },
   methods: {

@@ -712,11 +712,11 @@ class Employee
      */
     public function setProfileInfo(mixed $profileInfo): void 
     {
-        $this->setProfileId($profileInfo['id'] ?? $this->empNumber);
+        $this->setProfileId($profileInfo['id'] ?? $this->empNumber ?? null);
         $this->setNeed($profileInfo['need'] ?? '');
         $this->setStudyLevel($profileInfo['studyLevel'] ?? '');
         $this->setDrivingLicense($profileInfo['drivingLicense'] ?? '');
-        $this->setSalary($profileInfo['salary'] ?? '');
+        $this->setSalary($profileInfo['salaryExpectation'] ?? '');
         $this->setCourseStart($profileInfo['courseStart'] ?? '');
         $this->setFirstName($profileInfo['firstName'] ?? '');
         $this->setLastName($profileInfo['lastName'] ?? '');

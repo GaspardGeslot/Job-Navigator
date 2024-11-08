@@ -78,6 +78,18 @@ class Candidate
     private ?string $contactNumber = null;
 
     /**
+     * @var int|null
+     * @ORM\Column(name="lead_id", type="int", length=13, nullable=true)
+     */
+    private ?int $leadId = null;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="job_title", type="string", length=300, nullable=true)
+     */
+    private ?string $jobTitle = null;
+
+    /**
      * @var int
      * @ORM\Column(name="status", type="integer", length=4)
      * @deprecated
@@ -158,6 +170,21 @@ class Candidate
         $this->candidateVacancy = new ArrayCollection();
         $this->candidateAttachment = new ArrayCollection();
         $this->candidateHistory = new ArrayCollection();
+    }
+
+    /**
+     * @param mixed $leadInfo
+     */
+    public function setLeadInfo(mixed $leadInfo): void 
+    {
+        $this->setId($leadInfo['id']);
+        $this->setLeadId($leadInfo['id']);
+        $this->setJobTitle($leadInfo['job'] ?? '');
+        $this->setFirstName($leadInfo['firstName'] ?? '');
+        $this->setLastName($leadInfo['lastName'] ?? '');
+        $this->setEmail($leadInfo['email'] ?? '');
+        $this->setContactNumber($leadInfo['phoneNumber'] ?? '');
+        $this->setDateOfApplication(array_key_exists('date', $leadInfo) && $leadInfo['date'] != null ? new \DateTime($leadInfo['date']) : null);
     }
 
     /**
@@ -254,6 +281,40 @@ class Candidate
     public function setContactNumber(?string $contactNumber): void
     {
         $this->contactNumber = $contactNumber;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJobTitle(): ?string
+    {
+        return $this->jobTitle;
+    }
+
+    /**
+     * @param string|null $jobTitle
+     */
+    public function setJobTitle(?string $jobTitle): void
+    {
+        $this->jobTitle = $jobTitle;
+    }
+
+    /**
+     * @return int
+     * @deprecated
+     */
+    public function getLeadId(): int
+    {
+        return $this->leadId;
+    }
+
+    /**
+     * @param int $leadId
+     * @deprecated
+     */
+    public function setLeadId(int $leadId): void
+    {
+        $this->leadId = $leadId;
     }
 
     /**

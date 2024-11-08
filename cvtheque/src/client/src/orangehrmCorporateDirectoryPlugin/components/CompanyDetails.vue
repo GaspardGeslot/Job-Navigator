@@ -72,7 +72,7 @@
     @mouseover="showEmailClip = true"
   >
     <div class="orangehrm-directory-card-hover-body">
-      <oxd-text type="toast-message">{{ $t('general.work_email') }}</oxd-text>
+      <oxd-text type="toast-message">{{ $t('general.other_email') }}</oxd-text>
       <oxd-text ref="cloneEmail" type="toast-title">
         {{ companyEmailContact }}
       </oxd-text>

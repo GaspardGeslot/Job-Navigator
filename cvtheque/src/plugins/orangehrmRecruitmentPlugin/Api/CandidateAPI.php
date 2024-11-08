@@ -20,6 +20,7 @@ namespace OrangeHRM\Recruitment\Api;
 
 use DateTime;
 use Exception;
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -64,6 +65,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     use AuthUserTrait;
     use UserRoleManagerTrait;
 
+    public const FILTER_MATCHING_ID = 'matchingId';
     public const FILTER_JOB_TITLE_ID = 'jobTitleId';
     public const FILTER_CANDIDATE_ID = 'candidateId';
     public const FILTER_VACANCY_ID = 'vacancyId';
@@ -290,17 +292,48 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                 self::FILTER_CANDIDATE_NAME
             )
         );
-        $candidates = $this->getCandidateService()->getCandidateDao()->getCandidatesList(
+        /*$candidates = $this->getCandidateService()->getCandidateDao()->getCandidatesList(
             $candidateSearchFilterParamHolder
+        );*/
+
+        $matchingId = $this->getRequestParams()->getIntOrNull(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_MATCHING_ID
         );
 
-        $count = $this->getCandidateService()->getCandidateDao()->getCandidatesCount($candidateSearchFilterParamHolder);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId);
+
+        $candidates = array();
+        foreach ($leads as $lead) {
+            $candidate = new Candidate();
+            $candidate->setLeadInfo($lead);
+            array_push($candidates, $candidate);
+        }
+
+        $count = count($leads); //$this->getCandidateService()->getCandidateDao()->getCandidatesCount($candidateSearchFilterParamHolder);
 
         return new EndpointCollectionResult(
             $this->getModelClass(),
             $candidates,
             new ParameterBag([CommonParams::PARAMETER_TOTAL => $count])
         );
+    }
+
+    protected function getLeads(string $token, ?int $matchingId = null) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $url = $matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**
@@ -388,6 +421,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                     self::FILTER_CANDIDATE_ID,
                     new Rule(Rules::POSITIVE),
                     new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_MATCHING_ID,
+                    new Rule(Rules::POSITIVE)
                 )
             ),
             $this->getValidationDecorator()->notRequiredParamRule(

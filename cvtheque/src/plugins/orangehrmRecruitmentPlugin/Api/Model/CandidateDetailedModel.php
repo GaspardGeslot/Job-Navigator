@@ -100,16 +100,22 @@ class CandidateDetailedModel implements Normalizable
         $vacancy = !is_null($candidateVacancy) ? $candidateVacancy->getVacancy() : null;
 
         return [
-            'id' => $this->candidate->getId(),
-            'firstName' => $this->candidate->getFirstName(),
-            'middleName' => $this->candidate->getMiddleName(),
-            'lastName' => $this->candidate->getLastName(),
-            'email' => $this->candidate->getEmail(),
-            'contactNumber' => $this->candidate->getContactNumber(),
             'comment' => $this->candidate->getComment(),
-            'keywords' => $this->candidate->getKeywords(),
-            'modeOfApplication' => $this->candidate->getModeOfApplication(),
+            'consentToKeepData' => $this->candidate->isConsentToKeepData(),
+            'contactNumber' => $this->candidate->getContactNumber(),
             'dateOfApplication' => $this->candidate->getDecorator()->getDateOfApplication(),
+            'email' => $this->candidate->getEmail(),
+            'firstName' => $this->candidate->getFirstName(),
+            'hasAttachment' => $hasCandidateAttachment,
+            'id' => $this->candidate->getId(),
+            'jobTitle' => $this->candidate->getJobTitle(),
+            'keywords' => $this->candidate->getKeywords(),
+            'lastName' => $this->candidate->getLastName(),
+            'leadId' => $this->candidate->getLeadId(),
+            'middleName' => $this->candidate->getMiddleName(),
+            //'modeOfApplication' => $this->candidate->getModeOfApplication(),
+            'status' => is_null($candidateVacancy) ? null :
+                $candidateVacancy->getDecorator()->getCandidateVacancyStatus(),
             'vacancy' => is_null($vacancy) ? null :
                 [
                     'id' => $vacancy->getId(),
@@ -130,11 +136,7 @@ class CandidateDetailedModel implements Normalizable
                             $vacancy->getHiringManager()->getEmployeeTerminationRecord()->getId()
                         ,
                     ]
-                ],
-            'status' => is_null($candidateVacancy) ? null :
-                $candidateVacancy->getDecorator()->getCandidateVacancyStatus(),
-            'hasAttachment' => $hasCandidateAttachment,
-            'consentToKeepData' => $this->candidate->isConsentToKeepData()
+                ]
         ];
     }
 }

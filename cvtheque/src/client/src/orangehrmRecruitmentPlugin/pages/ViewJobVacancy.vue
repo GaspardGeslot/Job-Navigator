@@ -24,7 +24,7 @@
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="matchingSelected"
+                v-model="filters.matchingSelected"
                 type="select"
                 :label="$t('recruitment.need_title')"
                 :options="matchings"
@@ -65,12 +65,14 @@
             display-type="ghost"
             :label="$t('general.reset')"
             @click="onClickReset"
+            :disabled="!canUpdate"
           />
           <oxd-button
             class="orangehrm-left-space"
             display-type="secondary"
             :label="$t('general.search')"
             type="submit"
+            :disabled="!canUpdate"
           />
         </oxd-form-actions>
       </oxd-form>
@@ -117,7 +119,7 @@
 </template>
 
 <script>
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import usePaginate from '@ohrm/core/util/composable/usePaginate';
 import {navigate} from '@ohrm/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
@@ -133,15 +135,14 @@ import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDrop
 import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';*/
 
 const defaultFilters = {
+  matchingSelected: null,
   jobTitleId: null,
   hiringManagerId: null,
-  vacancyId: null,
+  jobTitle: null,
   status: null,
-  matchingId: null,
 };
 const defaultSortOrder = {
-  'vacancy.name': 'DEFAULT',
-  'candidate.lastName': 'DEFAULT',
+  'candidate.jobTitle': 'DEFAULT',
   'candidate.dateOfApplication': 'DESC',
   'candidateVacancy.status': 'DEFAULT',
 };
@@ -160,10 +161,23 @@ export default {
       default: () => [],
     },
   },
-
+  /*mounted() {
+    if (this.filters?.value) {
+      this.$watch(
+        () => this.filters.value.matchingSelected,
+        (newVal) => {
+          this.canUpdate = !!newVal;
+        },
+      );
+    }
+  },*/
   watch: {
-    matchingSelected(newVal) {
-      this.canUpdate = newVal;
+    'filters.matchingSelected': {
+      handler(newVal) {
+        this.canUpdate = newVal;
+      },
+      immediate: true,
+      deep: true,
     },
   },
 
@@ -190,6 +204,7 @@ export default {
 
     const serializedFilters = computed(() => {
       return {
+        matchingId: filters.value.matchingSelected?.id,
         vacancyId: filters.value.vacancyId?.id,
         jobTitleId: filters.value.jobTitleId?.id,
         hiringManagerId: filters.value.hiringManagerId?.id,
@@ -203,11 +218,8 @@ export default {
     const candidateDataNormalizer = (data) => {
       return data.map((item) => {
         return {
-          id: item.id,
-          vacancy:
-            item.vacancy?.status === false
-              ? `${item.vacancy?.name} (${$t('general.closed')})`
-              : item.vacancy?.name,
+          id: item.leadId,
+          jobTitle: item.jobTitle,
           candidate: `${item.firstName} ${item.middleName || ''} ${
             item.lastName
           }`,
@@ -216,6 +228,7 @@ export default {
             jsDateFormat,
             {locale},
           ),
+          email: item.email,
           status:
             statuses.find((status) => status.id === item.status?.id)?.label ||
             '',
@@ -330,22 +343,26 @@ export default {
       ],*/
       headers: [
         {
-          name: 'vacancy',
-          title: this.$t('recruitment.vacancy'),
-          sortField: 'vacancy.name',
+          name: 'jobTitle',
+          title: this.$t('general.job_title'),
+          sortField: 'candidate.jobTitle',
           style: {flex: 1},
         },
         {
           name: 'candidate',
           slot: 'title',
           title: this.$t('recruitment.candidate'),
-          sortField: 'candidate.lastName',
           style: {flex: 1},
         },
         {
           name: 'dateOfApplication',
           title: this.$t('recruitment.date_of_application'),
           sortField: 'candidate.dateOfApplication',
+          style: {flex: 1},
+        },
+        {
+          name: 'email',
+          title: this.$t('general.other_email'),
           style: {flex: 1},
         },
         {
@@ -358,7 +375,7 @@ export default {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 1},
+          style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellRenderer: this.cellRenderer,
         },
@@ -408,7 +425,7 @@ export default {
       };
     },
     onClickCandidate(item) {
-      navigate('/recruitment/addCandidate/{id}', {id: item.id});
+      navigate('/recruitment/viewCandidate/{id}', {id: item.leadId});
     },
     onClickAdd() {
       navigate('/recruitment/addJobVacancy');

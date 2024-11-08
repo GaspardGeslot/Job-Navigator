@@ -67,10 +67,10 @@ class Candidate extends \OrangeHRM\Entity\Candidate implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
     }
 
     /**
@@ -177,6 +177,17 @@ class Candidate extends \OrangeHRM\Entity\Candidate implements \Doctrine\ORM\Pro
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function setLeadInfo(mixed $leadInfo): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLeadInfo', [$leadInfo]);
+
+        parent::setLeadInfo($leadInfo);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -311,6 +322,50 @@ class Candidate extends \OrangeHRM\Entity\Candidate implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setContactNumber', [$contactNumber]);
 
         parent::setContactNumber($contactNumber);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getJobTitle(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJobTitle', []);
+
+        return parent::getJobTitle();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setJobTitle(?string $jobTitle): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJobTitle', [$jobTitle]);
+
+        parent::setJobTitle($jobTitle);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLeadId(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLeadId', []);
+
+        return parent::getLeadId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLeadId(int $leadId): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLeadId', [$leadId]);
+
+        parent::setLeadId($leadId);
     }
 
     /**

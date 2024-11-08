@@ -424,7 +424,7 @@ export default {
       navigate('/recruitment/addCandidate');
     },
     onClickEdit(item) {
-      navigate('/recruitment/addCandidate/{id}', {id: item.id});
+      navigate('/recruitment/viewCandidate/{id}', {id: item.id});
     },
     onClickDeleteSelected() {
       const ids = this.checkedItems.map((index) => {

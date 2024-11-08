@@ -24,11 +24,8 @@
         {{ $t('pim.job_details') }}
       </oxd-text>
       <oxd-divider />
-      <oxd-form
-        v-if="jobsFetched.length"
-        :loading="isLoading"
-        @submit-valid="onSave"
-      >
+      <!--v-if="jobsFetched.length"-->
+      <oxd-form :loading="isLoading" @submit-valid="onSave">
         <oxd-form-row
           v-for="(item, itemIndex) in sectors"
           :key="itemIndex"
@@ -178,6 +175,7 @@
       </oxd-form>
     </div>
 
+    <!--
     <oxd-divider v-if="hasUpdatePermissions && !isLoading" />
 
     <div
@@ -210,6 +208,7 @@
       :termination-id="termination.id"
       @close="closeTerminateModal"
     ></terminate-modal>
+    -->
   </edit-employee-layout>
 </template>
 
@@ -217,9 +216,9 @@
 import {APIService} from '@ohrm/core/util/services/api.service';
 //import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import EditEmployeeLayout from '@/orangehrmPimPlugin/components/EditEmployeeLayout';
-//import JobSpecDownload from '@/orangehrmPimPlugin/components/JobSpecDownload';
+/*import JobSpecDownload from '@/orangehrmPimPlugin/components/JobSpecDownload';
 import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
-import TerminateModal from '@/orangehrmPimPlugin/components/TerminateModal';
+import TerminateModal from '@/orangehrmPimPlugin/components/TerminateModal';*/
 import {
   required,
   maxFileSize,
@@ -253,11 +252,11 @@ const contractDetailsModel = {
 export default {
   components: {
     'edit-employee-layout': EditEmployeeLayout,
-    //'oxd-switch-input': OxdSwitchInput,
-    //'job-spec-download': JobSpecDownload,
-    //'file-upload-input': FileUploadInput,
+    /*'oxd-switch-input': OxdSwitchInput,
+    'job-spec-download': JobSpecDownload,
+    'file-upload-input': FileUploadInput,
     'profile-action-header': ProfileActionHeader,
-    'terminate-modal': TerminateModal,
+    'terminate-modal': TerminateModal,*/
   },
 
   props: {
@@ -411,7 +410,7 @@ export default {
       .then((response) => {
         this.updateJobModel(response);
       })
-      .then(() => {
+      /*.then(() => {
         return this.http.request({
           method: 'GET',
           url: `/api/v2/pim/employees/${this.empNumber}/employment-contract`,
@@ -419,7 +418,7 @@ export default {
       })
       .then((response) => {
         this.updateContractModel(response);
-      })
+      })*/
       .finally(() => {
         this.isLoading = false;
       });
@@ -458,7 +457,8 @@ export default {
         })
         .then((response) => {
           this.updateJobModel(response);
-          return this.http.request({
+          return this.$toast.updateSuccess();
+          /*return this.http.request({
             method: 'PUT',
             url: `/api/v2/pim/employees/${this.empNumber}/employment-contract`,
             data: {
@@ -471,14 +471,14 @@ export default {
                 ? this.contract.newAttachment
                 : undefined,
             },
-          });
+          });*/
         })
-        .then((response) => {
+        /*.then((response) => {
           if (response) {
             this.updateContractModel(response);
           }
           return this.$toast.updateSuccess();
-        })
+        })*/
         .then(() => {
           this.isLoading = false;
         });

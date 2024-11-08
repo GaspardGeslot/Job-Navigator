@@ -74,7 +74,7 @@
             />
           </oxd-grid-item>
         </oxd-grid>
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+        <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item>
             <oxd-input-field
               v-model="vacancy.countries"
@@ -84,7 +84,7 @@
             />
           </oxd-grid-item>
         </oxd-grid>
-        <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
+        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item class="orangehrm-grid-item-span-2">
             <oxd-input-field
               v-model="vacancy.description"
@@ -278,7 +278,6 @@ import useServerValidation from '@/core/util/composable/useServerValidation';
 const vacancyModel = {
   jobTitle: null,
   name: '',
-  countries: [],
   hiringManager: null,
   checkedProfessionalExperiences: [],
   checkedDrivingLicences: [],
@@ -319,10 +318,6 @@ export default {
       default: () => [],
     },
     studyLevels: {
-      type: Array,
-      default: () => [],
-    },
-    countries: {
       type: Array,
       default: () => [],
     },
@@ -401,11 +396,11 @@ export default {
         name: this.vacancy.name,
         //jobTitleId: this.vacancy.jobTitle?.id,
         jobTitle: this.vacancy.jobTitle?.label,
-        countries: JSON.stringify(
+        /*countries: JSON.stringify(
           this.vacancy.countries?.map((country) => {
             return country.label;
           }),
-        ),
+        ),*/
         professionalExperiences: JSON.stringify(
           this.vacancy.checkedProfessionalExperiences,
         ),

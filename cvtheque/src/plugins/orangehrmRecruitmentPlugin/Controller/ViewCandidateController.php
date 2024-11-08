@@ -23,40 +23,62 @@ use OrangeHRM\Core\Traits\Controller\VueComponentPermissionTrait;
 use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\Recruitment\Service\CandidateService;
 use OrangeHRM\Recruitment\Traits\Service\CandidateServiceTrait;
+use OrangeHRM\Recruitment\Service\RecruitmentAttachmentService;
 
 class ViewCandidateController extends AbstractVueController
 {
     use VueComponentPermissionTrait;
     use CandidateServiceTrait;
+    use ConfigServiceTrait;
 
     /**
      * @inheritDoc
      */
     public function preRender(Request $request): void
     {
-        $component = new Component('view-candidates-list');
+        if ($request->attributes->has('id')) {
+            $id = $request->attributes->getInt('id');
+            $component = new Component('view-candidate-profile');
+            $component->addProp(new Prop('updatable', Prop::TYPE_BOOLEAN, false));
+            $component->addProp(new Prop('candidate-id', Prop::TYPE_NUMBER, $id));
 
-        if ($request->query->has('statusId')) {
-            $statusId = $request->query->getInt('statusId');
-            $candidateStatus = array_map(function ($key, $value) {
-                return [
-                    'id' => $key,
-                    'label' => $value,
-                ];
-            }, array_keys(CandidateService::STATUS_MAP), CandidateService::STATUS_MAP);
+            $component->addProp(
+                new Prop('max-file-size', Prop::TYPE_NUMBER, $this->getConfigService()->getMaxAttachmentSize())
+            );
 
             $component->addProp(
                 new Prop(
-                    'status',
-                    Prop::TYPE_OBJECT,
-                    $candidateStatus[$statusId - 1],
+                    'allowed-file-types',
+                    Prop::TYPE_ARRAY,
+                    RecruitmentAttachmentService::ALLOWED_CANDIDATE_ATTACHMENT_FILE_TYPES
                 )
             );
-        }
+        } else {
+            $component = new Component('view-candidates-list');
 
+            if ($request->query->has('statusId')) {
+                $statusId = $request->query->getInt('statusId');
+                $candidateStatus = array_map(function ($key, $value) {
+                    return [
+                        'id' => $key,
+                        'label' => $value,
+                    ];
+                }, array_keys(CandidateService::STATUS_MAP), CandidateService::STATUS_MAP);
+
+                $component->addProp(
+                    new Prop(
+                        'status',
+                        Prop::TYPE_OBJECT,
+                        $candidateStatus[$statusId - 1],
+                    )
+                );
+            }
+            
+            $this->setPermissions(['recruitment_candidates']);
+        }
         $this->setComponent($component);
-        $this->setPermissions(['recruitment_candidates']);
     }
 }
