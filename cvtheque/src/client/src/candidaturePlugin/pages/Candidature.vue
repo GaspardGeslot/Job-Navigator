@@ -199,6 +199,18 @@ export default {
 
 <style src="./view-application.scss" lang="scss"></style>
 <style scoped>
+* {
+  font-family: 'DM Sans', sans-serif;
+}
+
+h1{
+  font-size: 4rem;
+  
+}
+p{
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
 .title-container,
 #olecio-logo {
   display: none;
@@ -261,7 +273,7 @@ export default {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  margin: 3rem 4rem;
+  margin: 0rem 4rem;
   gap: 1rem;
   height: 100%;
 }
@@ -290,7 +302,10 @@ export default {
   display: flex;
   flex-direction: row;
   align-self: end;
-  padding-right: 4rem;
+  padding-right: 5rem;
+  height: 4rem;
+  align-items: center;
+  font-weight: bold;
 }
 
 .accueilNav a {
@@ -304,7 +319,6 @@ export default {
   background-color: white;
   border-radius: 10%;
   margin-right: 4rem;
-  margin-top: 1rem;
   height: 70%;
 }
 
@@ -318,10 +332,10 @@ export default {
 
 .commentGauche,
 .aProposDroite {
-  width: 50%;
+  box-sizing: border-box;
+  width: 55%;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
   padding: 4rem;
   justify-content: center;
 }
@@ -331,6 +345,7 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .commentBouton button,
@@ -353,8 +368,9 @@ export default {
 
 #comment img,
 #aPropos img {
-  margin: 8rem;
-  width: 30%;
+  margin: auto;
+  width: auto;
+  height: 80%;
 }
 
 #aPropos {
