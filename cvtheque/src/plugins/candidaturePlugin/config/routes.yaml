@@ -7,3 +7,8 @@ postNewLead:
   path: /candidature/lead
   controller: Candidature\Controller\CandidatureController::postNewLead
   methods: [ POST ]
+
+createNewAccount:
+  path: /candidature/account
+  controller: Candidature\Controller\CandidatureController::createNewAccount
+  methods: [ POST ]
