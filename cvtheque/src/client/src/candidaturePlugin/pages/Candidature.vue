@@ -138,9 +138,8 @@
     <div class="aProposDroite">
       <h1>A propos</h1>
       <p>
-        Olecio met à disposition des adhérents de Constructys Ile-de-France Job
-        Navigator, un outil de gestion et suivi des candidatures pensé pour
-        faciliter le recrutement dans les secteurs en tension.
+        Face aux besoins immenses de facilitation de la rencontre entre l’offre et la demande, 
+        Olecio développe une approche complète pour faciliter la concrétisation des projets professionnels et les besoins en ressources humaines des organisations.
       </p>
       <div class="aProposBouton">
         <button @click="navigateToLoginCompany">Je suis une entreprise</button>
@@ -202,12 +201,18 @@ export default {
 
 h1{
   font-size: 4rem;
-  
 }
-p{
+#aPropos p{
   font-size: 1.3rem;
   margin-bottom: 1rem;
+  line-height: 150%;
 }
+
+#comment p{
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
 .title-container,
 #olecio-logo {
   display: none;

@@ -10690,9 +10690,14 @@ p[data-v-d8d9c26c] {
 h1[data-v-0c52339c]{
   font-size: 4rem;
 }
-p[data-v-0c52339c]{
+#aPropos p[data-v-0c52339c]{
   font-size: 1.3rem;
   margin-bottom: 1rem;
+  line-height: 150%;
+}
+#comment p[data-v-0c52339c]{
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
 }
 .title-container[data-v-0c52339c],
 #olecio-logo[data-v-0c52339c] {
