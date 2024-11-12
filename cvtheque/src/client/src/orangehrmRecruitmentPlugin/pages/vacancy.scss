@@ -13,6 +13,16 @@
 // You should have received a copy of the GNU General Public License along with OrangeHRM.
 // If not, see <https://www.gnu.org/licenses/>.
 
+.boutonTri{
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+  margin-left: 1rem;
+}
+
 .user-form-header {
   display: flex;
   padding: 1rem;
@@ -82,3 +92,24 @@
   border-radius: 0.5rem;
   background-color: $oxd-interface-gray-lighten-2-color;
 }
+
+@media (max-width: 1000px) {
+  .orangehrm-header-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+  }
+  
+  .boutonTriBloc{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .boutonTri{
+    margin: 0;
+  }
+}
+
