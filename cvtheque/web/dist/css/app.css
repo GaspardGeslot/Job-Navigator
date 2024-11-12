@@ -8814,6 +8814,7 @@ p {
   color: red;
 }
 .formBlockLayout {
+  max-height: 550px;
   background-color: white;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -9192,6 +9193,7 @@ p[data-v-d99f0b7a] {
   color: red;
 }
 .formBlockLayout[data-v-d99f0b7a] {
+  max-height: 550px;
   background-color: white;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -9847,6 +9849,7 @@ p[data-v-d8f5f16e] {
   color: red;
 }
 .formBlockLayout[data-v-d8f5f16e] {
+  max-height: 550px;
   background-color: white;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -10162,6 +10165,7 @@ p[data-v-d8d9c26c] {
   color: red;
 }
 .formBlockLayout[data-v-d8d9c26c] {
+  max-height: 550px;
   background-color: white;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -10330,7 +10334,7 @@ p[data-v-d8d9c26c] {
 .VA_bg_img {
   background-color: black;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

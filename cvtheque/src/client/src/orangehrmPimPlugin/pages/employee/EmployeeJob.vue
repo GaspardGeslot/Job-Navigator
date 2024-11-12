@@ -178,9 +178,10 @@
       </oxd-form>
     </div>
 
+    <!--
     <oxd-divider v-if="hasUpdatePermissions && !isLoading" />
 
-    <div
+<div
       v-if="hasUpdatePermissions && !isLoading"
       class="orangehrm-horizontal-padding orangehrm-vertical-padding"
     >
@@ -210,6 +211,7 @@
       :termination-id="termination.id"
       @close="closeTerminateModal"
     ></terminate-modal>
+    -->
   </edit-employee-layout>
 </template>
 
@@ -218,8 +220,8 @@ import {APIService} from '@ohrm/core/util/services/api.service';
 //import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import EditEmployeeLayout from '@/orangehrmPimPlugin/components/EditEmployeeLayout';
 //import JobSpecDownload from '@/orangehrmPimPlugin/components/JobSpecDownload';
-import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
-import TerminateModal from '@/orangehrmPimPlugin/components/TerminateModal';
+// import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
+// import TerminateModal from '@/orangehrmPimPlugin/components/TerminateModal';
 import {
   required,
   maxFileSize,
@@ -256,8 +258,8 @@ export default {
     //'oxd-switch-input': OxdSwitchInput,
     //'job-spec-download': JobSpecDownload,
     //'file-upload-input': FileUploadInput,
-    'profile-action-header': ProfileActionHeader,
-    'terminate-modal': TerminateModal,
+    // 'profile-action-header': ProfileActionHeader,
+    // 'terminate-modal': TerminateModal,
   },
 
   props: {
@@ -277,26 +279,26 @@ export default {
       type: Array,
       default: () => [],
     },
-    subunits: {
-      type: Array,
-      default: () => [],
-    },
-    employmentStatuses: {
-      type: Array,
-      default: () => [],
-    },
-    terminationReasons: {
-      type: Array,
-      default: () => [],
-    },
-    allowedFileTypes: {
-      type: Array,
-      required: true,
-    },
-    maxFileSize: {
-      type: Number,
-      required: true,
-    },
+    // subunits: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // employmentStatuses: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // terminationReasons: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // allowedFileTypes: {
+    //   type: Array,
+    //   required: true,
+    // },
+    // maxFileSize: {
+    //   type: Number,
+    //   required: true,
+    // },
     sectors: {
       type: Array,
       default: () => [],
@@ -444,20 +446,40 @@ export default {
     },
     onSave() {
       this.isLoading = true;
+      // const encodedJobs = this.checkedJobs.map((job) =>
+      //   encodeURIComponent(job),
+      // );
+
+      // const newData = JSON.parse(JSON.stringify(this.checkedJobs));
+      const newData = {
+        ...this.job,
+        jobs: this.checkedJobs,
+        jobTitleId: this.job.jobTitleId?.id ?? null,
+        jobCategoryId: this.job.jobCategoryId?.id ?? null,
+        subunitId: this.job.subunitId?.id ?? null,
+        empStatusId: this.job.empStatusId?.id ?? null,
+        locationId: this.job.locationId?.id ?? null,
+      };
+
+      // jobTitleId: this.job.jobTitleId?.id ?? null,
+      // jobCategoryId: this.job.jobCategoryId?.id ?? null,
+      // subunitId: this.job.subunitId?.id ?? null,
+      // empStatusId: this.job.empStatusId?.id ?? null,
+      // locationId: this.job.locationId?.id ?? null,
+      console.log('"JOBS HERE : "', this.checkedJobs);
+      console.log('data HERE : ', newData);
+      console.log("Données envoyées à l'API:", JSON.stringify(newData));
       this.http
-        .request({
-          method: 'PUT',
-          data: {
-            ...this.job,
-            jobTitleId: this.job.jobTitleId?.id,
-            jobCategoryId: this.job.jobCategoryId?.id,
-            subunitId: this.job.subunitId?.id,
-            empStatusId: this.job.empStatusId?.id,
-            locationId: this.job.locationId?.id,
-          },
-        })
+        // .request({
+        //   method: 'PUT',
+        //   data: newData,
+        // })
+        .update(null, newData)
         .then((response) => {
-          this.updateJobModel(response);
+          console.log('RESPONSE HERE ', response);
+          // this.updateJobModel(response);
+          /*
+        
           return this.http.request({
             method: 'PUT',
             url: `/api/v2/pim/employees/${this.empNumber}/employment-contract`,
@@ -471,14 +493,21 @@ export default {
                 ? this.contract.newAttachment
                 : undefined,
             },
-          });
+          });*/
         })
-        .then((response) => {
-          if (response) {
-            this.updateContractModel(response);
+        .catch((error) => {
+          if (error.response) {
+            console.error('Erreur API :', error.response.data);
+          } else {
+            console.error('Erreur réseau ou autre:', error);
           }
-          return this.$toast.updateSuccess();
         })
+        // .then((response) => {
+        //   if (response) {
+        //     this.updateContractModel(response);
+        //   }
+        //   return this.$toast.updateSuccess();
+        // })
         .then(() => {
           this.isLoading = false;
         });

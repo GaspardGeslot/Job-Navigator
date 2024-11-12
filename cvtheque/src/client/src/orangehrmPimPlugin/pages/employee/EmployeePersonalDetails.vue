@@ -158,6 +158,7 @@
           </oxd-grid>
         </oxd-form-row>
 
+        <!--
         <oxd-divider />
         <oxd-form-row>
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
@@ -172,6 +173,7 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
+        -->
         <oxd-divider />
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">

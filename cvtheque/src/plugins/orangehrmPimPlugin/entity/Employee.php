@@ -871,11 +871,29 @@ class Employee
     }
 
     /**
+     * @return array
+     */
+    public function getJobsArray(): array
+    {
+    // Si `jobs` est stocké sous forme de chaîne JSON, décodez-la.
+    return $this->jobs ? json_decode($this->jobs, true) : [];
+    }
+
+    /**
      * @return string
      */
     public function getJobs(): string
     {
         return $this->jobs;
+    }
+
+    /**
+     * @param array $jobs
+     */
+    public function setJobsArray(array $jobs): void
+    {
+        // Convertit le tableau en une chaîne JSON.
+        $this->jobs = json_encode($jobs);
     }
 
     /**

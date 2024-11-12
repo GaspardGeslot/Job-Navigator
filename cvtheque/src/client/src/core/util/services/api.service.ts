@@ -81,10 +81,14 @@ export class APIService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update(id: number | string, data: any): Promise<AxiosResponse> {
+  update(id: number | string | null, data: any): Promise<AxiosResponse> {
     const headers = {
       'Content-Type': 'application/json',
     };
+    console.log('on passe serviceAPI');
+    console.log('data ', data);
+    if (!id) return this._http.put(`${this._apiSection}`, data, {headers});
+    console.log('ça deconne ici');
     return this._http.put(`${this._apiSection}/${id}`, data, {headers});
   }
 

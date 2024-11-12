@@ -131,10 +131,7 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
      */
     private function getUrlAttributes(): array
     {
-        $empNumber = $this->getRequestParams()->getInt(
-            RequestParams::PARAM_TYPE_ATTRIBUTE,
-            CommonParams::PARAMETER_EMP_NUMBER
-        );
+        $empNumber = getenv('HEDWIGE_CLIENT_ID');
         $screen = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_SCREEN);
         $id = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
