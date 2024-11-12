@@ -3481,6 +3481,15 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=5dfa7e3a&lang=scss&scoped=true ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.boutonTri[data-v-5dfa7e3a] {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+  margin-left: 1rem;
+}
 .user-form-header[data-v-5dfa7e3a] {
   display: flex;
   padding: 1rem;
@@ -3551,10 +3560,36 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
+@media (max-width: 1000px) {
+.orangehrm-header-container[data-v-5dfa7e3a] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+}
+.boutonTriBloc[data-v-5dfa7e3a] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.boutonTri[data-v-5dfa7e3a] {
+    margin: 0;
+}
+}
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=6f04c618&lang=scss&scoped=true ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.boutonTri[data-v-6f04c618] {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+  margin-left: 1rem;
+}
 .user-form-header[data-v-6f04c618] {
   display: flex;
   padding: 1rem;
@@ -3625,6 +3660,23 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
+@media (max-width: 1000px) {
+.orangehrm-header-container[data-v-6f04c618] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+}
+.boutonTriBloc[data-v-6f04c618] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.boutonTri[data-v-6f04c618] {
+    margin: 0;
+}
+}
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/VacancyLinkCard.vue?vue&type=style&index=0&id=daba02d0&lang=scss&scoped=true ***!
   \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -3655,6 +3707,15 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=35ae5cdf&lang=scss&scoped=true ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.boutonTri[data-v-35ae5cdf] {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+  margin-left: 1rem;
+}
 .user-form-header[data-v-35ae5cdf] {
   display: flex;
   padding: 1rem;
@@ -3724,6 +3785,23 @@
   padding: 0.5rem;
   border-radius: 0.5rem;
   background-color: #e8eaef;
+}
+@media (max-width: 1000px) {
+.orangehrm-header-container[data-v-35ae5cdf] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+}
+.boutonTriBloc[data-v-35ae5cdf] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.boutonTri[data-v-35ae5cdf] {
+    margin: 0;
+}
 }
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/InterviewerAutocomplete.vue?vue&type=style&index=0&id=2f4a5c49&lang=scss&scoped=true ***!

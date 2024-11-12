@@ -86,6 +86,10 @@
           display-type="secondary"
           @click="onClickAdd"
         />
+        <div class="boutonTriBloc">
+          <button @click="sortByName" class="boutonTri">Trier par nom métier ⇅</button>
+          <button @click="sortByDate" class="boutonTri">Trier par date ⇅</button>
+        </div>
       </div>
       <!--<table-header
         :selected="checkedItems.length"
@@ -96,7 +100,6 @@
       <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
-          v-model:order="sortDefinition"
           :headers="headers"
           :items="items?.data"
           :selectable="true"
@@ -104,6 +107,7 @@
           :loading="isLoading"
           row-decorator="oxd-table-decorator-card"
         />
+
         <!--class="orangehrm-vacancy-list"-->
       </div>
       <div class="orangehrm-bottom-container">
@@ -292,6 +296,8 @@ export default {
     return {
       canUpdate: false,
       matchingSelected: null,
+      isDateAscending: true,
+      isNomAscending: false,
       /*headers: [
         {
           name: 'vacancy',
@@ -389,7 +395,35 @@ export default {
     };
   },
 
+  watch: {
+    // Surveille items.data pour exécuter le tri une fois les données chargées
+    'items.data': function(newData) {
+      if (newData && newData.length > 0) { // Vérifie que les données sont chargées
+        this.sortByDate();
+      }
+    }
+  },
+
   methods: {
+    sortByDate() {
+      // Change l'ordre de tri
+      this.isDateAscending = !this.isDateAscending;
+
+      // Trie les éléments en fonction de l'ordre défini
+      this.items.data.sort((a, b) => {
+        const dateA = new Date(a.dateOfApplication);
+        const dateB = new Date(b.dateOfApplication);
+
+        return this.isDateAscending ? dateA - dateB : dateB - dateA;
+      });
+    },
+    sortByName() {
+      this.isNomAscending = !this.isNomAscending;
+      this.items.data.sort((a, b) => {
+        return this.isNomAscending
+          ? a.jobTitle.localeCompare(b.jobTitle) : b.jobTitle.localeCompare(a.jobTitle);
+      });
+    },
     cellRenderer(...[, , , row]) {
       const cellConfig = {
         view: {
