@@ -1,5 +1,5 @@
 <template>
-  <div class="formBlock row" style="max-width: 900px; height: auto">
+  <div class="formBlock row" style="width: 900px; height: auto">
     <div
       ref="scrollContainer"
       class="scroll-container"
@@ -70,6 +70,8 @@
         <FormSix
           v-show="currentStep === 5"
           ref="formSix"
+          :cannot-create-account="cannotCreateAccount"
+          @send-lead="nextStep"
           @go-back="previousStep"
           @situation-submitted="addReview"
         />
@@ -78,7 +80,8 @@
           ref="formSix"
           :match-response="matchResponse"
         />
-        <FormEight
+        <!--
+          <FormEight
           v-show="currentStep === 9"
           ref="formEight"
           @go-back="previousStep"
@@ -89,6 +92,11 @@
           ref="formNine"
           @situation-submitted="addReview"
         />
+        <p v-if="cannotCreateAccount" class="alert-msg">
+          La création de compte a échoué. Veuillez réessayer.
+        </p>
+        <h1>{{ cannotCreateAccount }}</h1>
+        -->
       </div>
     </div>
     <img
@@ -106,7 +114,7 @@
       >
         <path
           d="M4.70711 3.29289C4.31658 2.90237 3.68342 2.90237 3.29289 3.29289C2.90237 3.68342 2.90237 4.31658 3.29289 4.70711L10.5858 12L3.29289 19.2929C2.90237 19.6834 2.90237 20.3166 3.29289 20.7071C3.68342 21.0976 4.31658 21.0976 4.70711 20.7071L12 13.4142L19.2929 20.7071C19.6834 21.0976 20.3166 21.0976 20.7071 20.7071C21.0976 20.3166 21.0976 19.6834 20.7071 19.2929L13.4142 12L20.7071 4.70711C21.0976 4.31658 21.0976 3.68342 20.7071 3.29289C20.3166 2.90237 19.6834 2.90237 19.2929 3.29289L12 10.5858L4.70711 3.29289Z"
-          fill="black"
+          fill="white"
         />
       </svg>
     </button>
@@ -124,8 +132,8 @@ import FormFour from './formBlock4';
 import FormFive from './formBlock5';
 import FormSix from './formBlock6';
 import FormSeven from './formBlock7';
-import FormEight from './formBlock8';
-import FormNine from './formBlock9';
+// import FormEight from './formBlock8';
+// import FormNine from './formBlock9';
 import {v4 as uuidv4} from 'uuid';
 //import axios from 'axios';
 import {APIService} from '@/core/util/services/api.service';
@@ -141,8 +149,8 @@ export default {
     FormFive,
     FormSix,
     FormSeven,
-    FormEight,
-    FormNine,
+    // FormEight,
+    // FormNine,
     //ReviewList,
   },
   props: {
@@ -153,6 +161,7 @@ export default {
   },
   emits: ['close-form'],
   setup() {
+    const cannotCreateAccount = ref(false);
     const currentStep = ref(1);
     const highestStep = ref(1);
     const sessionId = ref(null);
@@ -247,6 +256,7 @@ export default {
       console.log('image height:', imageHeight);
       if (scrollContainer.value && formImg.value && imageHeight != 0) {
         scrollContainer.value.style.maxHeight = `${imageHeight}px`;
+        scrollContainer.value.style.height = `${imageHeight}px`;
       } else {
         scrollContainer.value.style.maxHeight = `500px`;
       }
@@ -294,79 +304,63 @@ export default {
       });
     };
     const nextStep = async () => {
+      cannotCreateAccount.value = false;
       if (currentStep.value == 5) {
         const dataToProcess = reviews.value.slice(0, 5);
-        //console.log('Données extraites :', dataToProcess);
         const combinedData = combineData(dataToProcess);
-        //console.log('combinedData.Xp : ', combinedData.Xp);
-        //console.log('combinedData.checkedEXP : ', combinedData.checkedEXP);
         delete combinedData.checkedEXP;
         if (combinedData.file == null) {
           delete combinedData.file;
         }
-        //delete combinedData.file;
         delete combinedData.fileName;
-        //console.log('Données prêtes pour POST :', combinedData);
 
         const formData = new FormData();
-
+        if (combinedData.password == '') delete combinedData.password;
         for (const key in combinedData) {
           if (Object.prototype.hasOwnProperty.call(combinedData, key)) {
             if (Array.isArray(combinedData[key])) {
               // Sérialiser les tableaux en JSON
               formData.append(key, JSON.stringify(combinedData[key]));
-              // console.log(
-              //   `${key} added to FormData as JSON: ${JSON.stringify(
-              //     combinedData[key],
-              //   )}`,
-              // );
             } else if (key === 'file' && combinedData[key] instanceof File) {
               formData.append(key, combinedData[key]);
-              // console.log(`File added to FormData: ${combinedData[key].name}`);
             } else {
               formData.append(key, combinedData[key]);
-              // console.log(`${key} added to FormData: ${combinedData[key]}`);
             }
           }
         }
 
-        //console.log('Données formData :', formData);
-        // Vérifier le contenu de formData
-        // for (let pair of formData.entries()) {
-        //   console.log(pair[0] + ', ' + pair[1]);
-        // }
+        if (formData.has('password')) {
+          try {
+            console.log('password here', formData.get('password'));
+            const http = new APIService(
+              window.appGlobal.baseUrl,
+              '/candidature/account',
+            );
+            console.log('FormData content before submission:', [
+              ...formData.entries(),
+            ]);
 
-        const http = new APIService(
-          window.appGlobal.baseUrl,
-          '/candidature/lead',
-        );
-        console.log('FormData content before submission:', [
-          ...formData.entries(),
-        ]);
+            const response = await http.create(formData);
+            console.log('RESPONSE HERE !!!! ', response);
 
-        http
-          .create(formData)
-          .then((response) => {
-            // console.log('Success 1 :', response.data);
-            // console.log('Success 2 :', response.data.MatchResponse);
-            // console.log('Success 3 :', response);
-            matchResponse.value = response.data.MatchResponse;
-            console.log('matchResponse.value in formComp', matchResponse.value);
-          })
-          .catch((error) => {
+            // Si la création de compte réussit, passez à la création de lead
+            await createLead(formData);
+          } catch (error) {
             console.error(
               'Error:',
               error.response ? error.response.data : error.message,
             );
-          });
-
-        // const response = await axios.post('/candidature/lead', combinedData, {
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        // });
-        // console.log("Réponse de l'API:", response.data);
+            // Si la création de compte échoue, ne passez pas à la création de lead
+            cannotCreateAccount.value = true;
+            return;
+          }
+        } else {
+          console.log('no need to create account');
+          // Si aucun mot de passe n'est présent, passez directement à la création de lead
+          await createLead(formData);
+        }
       }
+
       currentStep.value++;
       updateHighestStep();
       nextTick(() => {
@@ -376,6 +370,29 @@ export default {
         }, 50);
       });
     };
+
+    async function createLead(formData) {
+      const leadHttp = new APIService(
+        window.appGlobal.baseUrl,
+        '/candidature/lead',
+      );
+      console.log('FormData content before submission:', [
+        ...formData.entries(),
+      ]);
+
+      try {
+        const leadResponse = await leadHttp.create(formData);
+        console.log('Lead RESPONSE HERE !!!! ', leadResponse);
+        matchResponse.value = leadResponse.data.MatchResponse;
+        console.log('matchResponse.value in formComp', matchResponse.value);
+      } catch (error) {
+        console.error(
+          'Error:',
+          error.response ? error.response.data : error.message,
+        );
+      }
+    }
+
     const previousStep = () => {
       console.log('currentStep before = ', currentStep);
       currentStep.value--;
@@ -393,6 +410,7 @@ export default {
     });
 
     return {
+      cannotCreateAccount,
       currentStep,
       highestStep,
       sessionId,

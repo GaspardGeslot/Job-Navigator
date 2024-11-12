@@ -8,6 +8,7 @@
       </p>
       <textarea
         id="review"
+        v-model="motivation"
         class="blackPlaceholder"
         placeholder="Indiquez ici ce que vous aimez. Par exemple : travailler en équipe, être dehors, le travail manuel...."
       ></textarea>
@@ -37,7 +38,7 @@ export default {
   emits: ['situation-submitted', 'go-back'],
   data() {
     return {
-      //motivation: '',
+      motivation: '',
       file: null, // Stocker le fichier ici après réception du composant enfant
       isLoading: false,
     };
@@ -51,7 +52,7 @@ export default {
       if (!this.file) {
         // Si aucun fichier, ne pas faire la requête et simplement émettre l'événement avec uniquement la motivation
         this.$emit('situation-submitted', {
-          //motivation: this.motivation,
+          motivation: this.motivation,
           file: this.file,
           //file: null,
         });
@@ -85,7 +86,7 @@ export default {
 
         // Émettre l'événement avec la motivation et le fichier
         this.$emit('situation-submitted', {
-          //motivation: this.motivation,
+          motivation: this.motivation,
           file: this.file,
         });
       } catch (error) {

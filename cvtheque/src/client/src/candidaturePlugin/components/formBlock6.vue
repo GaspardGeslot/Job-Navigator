@@ -36,7 +36,22 @@ import { inject } from 'vue';
       <div class="AcceptanceofTerms-container">
         <!--
 
-          <div class="checkbox-container">
+          
+        
+
+
+        <div class="checkbox-container">
+          <label class="switch short-switch">
+            <input type="checkbox" @change="toggle" />
+            <span class="slider round"></span>
+          </label>
+          <label class="AcceptanceofTermsText">
+            J’accepte d’être contacté par des entreprises qui recrutent et qui
+            sont intéressées par mon profil.
+          </label>
+        </div>
+        -->
+        <div class="checkbox-container">
           <label class="switch">
             <input v-model="createAccount" type="checkbox" @change="toggle" />
             <span class="slider round"></span>
@@ -64,19 +79,6 @@ import { inject } from 'vue';
             required
           />
         </div>
-
-
-        <div class="checkbox-container">
-          <label class="switch short-switch">
-            <input type="checkbox" @change="toggle" />
-            <span class="slider round"></span>
-          </label>
-          <label class="AcceptanceofTermsText">
-            J’accepte d’être contacté par des entreprises qui recrutent et qui
-            sont intéressées par mon profil.
-          </label>
-        </div>
-        -->
         <div class="checkbox-container">
           <label class="switch big-switch">
             <input v-model="checked" type="checkbox" @change="toggle" />
@@ -105,6 +107,13 @@ import { inject } from 'vue';
         Vous devez accepter les conditions générales et la politique de
         confidentialité des données.
       </p>
+      <p v-if="cannotCreateAccount" class="alert-msg">
+        Cette adresse mail est déjà liée à un compte, veuillez renseigner une
+        autre adresse ou vous
+        <a style="text-decoration: underline" @click="sendLeadAndRedirect">
+          connecter à votre compte
+        </a>
+      </p>
       <SubmitComponent @go-back="goBack" />
     </form>
   </div>
@@ -116,7 +125,13 @@ export default {
   components: {
     SubmitComponent,
   },
-  emits: ['situation-submitted', 'go-back'],
+  props: {
+    cannotCreateAccount: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ['situation-submitted', 'go-back', 'send-lead'],
   data() {
     return {
       firstName: '',
@@ -199,13 +214,24 @@ export default {
       };
       if (this.createAccount) {
         productReview.password = this.password;
-        productReview.confirmPassword = this.confirmPassword;
+        // productReview.confirmPassword = this.confirmPassword;
       }
       this.$emit('situation-submitted', productReview);
       // this.firstName = '';
       // this.lastName = '';
       // this.email = '';
       // this.phone = '';
+    },
+    sendLeadAndRedirect() {
+      this.password = '';
+      this.confirmPassword = '';
+      this.onSubmit();
+      window.location.href =
+        'https://demo.jobnavigator.fr/web/index.php/auth/login';
+      // window.open(
+      //   'https://demo.jobnavigator.fr/web/index.php/auth/login',
+      //   '_blank',
+      // );
     },
     goBack() {
       this.$emit('go-back');

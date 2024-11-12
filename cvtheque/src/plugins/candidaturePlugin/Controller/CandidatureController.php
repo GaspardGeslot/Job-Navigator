@@ -167,9 +167,9 @@ class CandidatureController extends AbstractVueController implements PublicContr
             ]);
 
             $responseBody = (string) $response->getBody();
-            // echo '<pre>';
-            // print_r('Response from HEDWIGE: ' . $responseBody);
-            // echo '</pre>';
+            echo '<pre>';
+            print_r('Response from HEDWIGE: ' . $responseBody);
+            echo '</pre>';
             $responseData = [
                 "MatchResponse" => intval($responseBody),
                 "attachmentId" => $attachment_Id
@@ -187,6 +187,21 @@ class CandidatureController extends AbstractVueController implements PublicContr
         }
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function createNewAccount(Request $request)
+    {
+        $isValid = $request->request->get('password');
+        echo '<pre>';
+        print_r('password in request: ' . $isValid);
+        echo '</pre>';
+        if ($isValid) {
+            return new Response('Password is missing', Response::HTTP_CONFLICT);
+        } else {
+            return new Response('Password is present', Response::HTTP_OK);
+        }
+    }
 
     public function getCandidatureOptions(): array|object
     {
