@@ -102,7 +102,10 @@
         <a href="#comment">Comment ça marche ?</a>
         <a href="#aPropos">A propos</a>
       </div>
-      <video controls src=""></video>
+      <video
+        controls
+        src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/embauche-video.mp4"
+      ></video>
     </div>
   </div>
 
