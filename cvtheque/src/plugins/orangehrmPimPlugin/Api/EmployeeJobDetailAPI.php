@@ -137,6 +137,7 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
      *             @OA\Property(property="jobCategoryId", type="integer"),
      *             @OA\Property(property="subunitId", type="integer"),
      *             @OA\Property(property="locationId", type="integer")
+     *             @OA\Property(property="jobs", type="array", @OA\Items(type="string"))
      *         )
      *     ),
      *     @OA\Response(response="200",
@@ -155,64 +156,144 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
      */
     public function update(): EndpointResourceResult
     {
-        $empNumber = $this->getRequestParams()->getInt(
-            RequestParams::PARAM_TYPE_ATTRIBUTE,
-            CommonParams::PARAMETER_EMP_NUMBER
-        );
-        $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
-        $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
-        $joinedDate = $this->getRequestParams()->getDateTimeOrNull(
-            RequestParams::PARAM_TYPE_BODY,
-            self::PARAMETER_JOINED_DATE
-        );
-        $jobTitleId = $this->getRequestParams()->getIntOrNull(
-            RequestParams::PARAM_TYPE_BODY,
-            self::PARAMETER_JOB_TITLE_ID
-        );
-        $empStatusId = $this->getRequestParams()->getIntOrNull(
-            RequestParams::PARAM_TYPE_BODY,
-            self::PARAMETER_EMP_STATUS_ID
-        );
-        $jobCategoryId = $this->getRequestParams()->getIntOrNull(
-            RequestParams::PARAM_TYPE_BODY,
-            self::PARAMETER_JOB_CATEGORY_ID
-        );
-        $subunitId = $this->getRequestParams()->getIntOrNull(
-            RequestParams::PARAM_TYPE_BODY,
-            self::PARAMETER_SUBUNIT_ID
-        );
-        $locationId = $this->getRequestParams()->getIntOrNull(
-            RequestParams::PARAM_TYPE_BODY,
-            self::PARAMETER_LOCATION_ID
-        );
+    $empNumber = $this->getRequestParams()->getInt(
+        RequestParams::PARAM_TYPE_ATTRIBUTE,
+        CommonParams::PARAMETER_EMP_NUMBER
+    );
+    $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+    $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
-        $currentJoinedDate = $employee->getJoinedDate();
-        $employee->setJoinedDate($joinedDate);
-        $employee->getDecorator()->setJobTitleById($jobTitleId);
-        $employee->getDecorator()->setEmpStatusById($empStatusId);
-        $employee->getDecorator()->setJobCategoryById($jobCategoryId);
-        $employee->getDecorator()->setSubunitById($subunitId);
-        $employee->getDecorator()->setLocationById($locationId);
+    $jobs = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, 'jobs');
 
-        $this->getEmployeeService()->updateEmployeeJobDetails($employee);
+    if (is_array($jobs)) {
+        $jobs = array_map('strval', $jobs);
+    } else {
+        $jobs = [];
+    }
 
-        if (!$this->getDateTimeHelper()->isDatesEqual($currentJoinedDate, $employee->getJoinedDate(), true)) {
-            $this->getEmployeeService()->dispatchJoinedDateChangedEvent($employee, $currentJoinedDate);
-        }
+    $employee->setJobs(json_encode($jobs));
+
+    $sendJobs = $employee->getJobs();
+    error_log($sendJobs);
+    $client = new Client();
+    $clientBaseUrl = getenv('HEDWIGE_URL');
+
+    $token = $this->getAuthUser()->getUserHedwigeToken();
+    
+    try {
+        $response = $client->request('PUT', "{$clientBaseUrl}/user/jobs", [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => $sendJobs
+        ]);
+        $responseContent = $response->getBody()->getContents();
+        error_log("Réponse Hedwige : " . $responseContent);
+
+        $employee->setJobs($sendJobs);
 
         return new EndpointResourceResult(EmployeeJobDetailModel::class, $employee);
+    } catch (\Exception $e) {
+        error_log("Erreur lors de la requête PUT Hedwige : " . $e->getMessage());
+
+        throw $e;
     }
+
+    return new EndpointResourceResult(EmployeeJobDetailModel::class, $employee);
+
+    }
+        // $empNumber = $this->getRequestParams()->getInt(
+        //     RequestParams::PARAM_TYPE_ATTRIBUTE,
+        //     CommonParams::PARAMETER_EMP_NUMBER
+        // );
+        // error_log("Received empNumber: " . $empNumber);
+        // echo'<empNumber>';
+        // var_dump($empNumber);
+        // print_r($empNumber);
+        // echo'</empNumber>';
+        // $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        // $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
+
+        // $jobs = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, 'jobs');
+
+        // error_log("Received jobs: " . json_encode($jobs));
+
+        // if (!is_array($jobs) || empty($jobs)) {
+        //     throw new \Exception("Invalid 'jobs' data: expected a non-empty array.");
+        // }
+        
+        // $employee->setJobs(json_encode($jobs));
+        // error_log("Set jobs successfully");
+        
+        // echo'<jobs>';
+        // print_r($employee->getJobs());
+        // echo'</jobs>';
+
+        // $joinedDate = $this->getRequestParams()->getDateTimeOrNull(
+        //     RequestParams::PARAM_TYPE_BODY,
+        //     self::PARAMETER_JOINED_DATE
+        // );
+        // $jobTitleId = $this->getRequestParams()->getIntOrNull(
+        //     RequestParams::PARAM_TYPE_BODY,
+        //     self::PARAMETER_JOB_TITLE_ID
+        // );
+        // $empStatusId = $this->getRequestParams()->getIntOrNull(
+        //     RequestParams::PARAM_TYPE_BODY,
+        //     self::PARAMETER_EMP_STATUS_ID
+        // );
+        // $jobCategoryId = $this->getRequestParams()->getIntOrNull(
+        //     RequestParams::PARAM_TYPE_BODY,
+        //     self::PARAMETER_JOB_CATEGORY_ID
+        // );
+        // $subunitId = $this->getRequestParams()->getIntOrNull(
+        //     RequestParams::PARAM_TYPE_BODY,
+        //     self::PARAMETER_SUBUNIT_ID
+        // );
+        // $locationId = $this->getRequestParams()->getIntOrNull(
+        //     RequestParams::PARAM_TYPE_BODY,
+        //     self::PARAMETER_LOCATION_ID
+        // );
+
+        // $currentJoinedDate = $employee->getJoinedDate();
+        // $employee->setJoinedDate($joinedDate);
+        // $employee->getDecorator()->setJobTitleById($jobTitleId);
+        // $employee->getDecorator()->setEmpStatusById($empStatusId);
+        // $employee->getDecorator()->setJobCategoryById($jobCategoryId);
+        // $employee->getDecorator()->setSubunitById($subunitId);
+        // $employee->getDecorator()->setLocationById($locationId);
+
+        // $this->getEmployeeService()->updateEmployeeJobDetails($employee);
+        // echo'ICI';
+        // var_dump([
+        //     'empNumber' => $empNumber,
+        //     'joinedDate' => $joinedDate,
+        //     'jobTitleId' => $jobTitleId,
+        //     'empStatusId' => $empStatusId,
+        // ]);
+        // echo'ICI';
+
+        // if (!$this->getDateTimeHelper()->isDatesEqual($currentJoinedDate, $employee->getJoinedDate(), true)) {
+        //     $this->getEmployeeService()->dispatchJoinedDateChangedEvent($employee, $currentJoinedDate);
+        // }
+
+        // return new EndpointResourceResult(EmployeeJobDetailModel::class, $employee);
+    // }
 
     /**
      * @inheritDoc
      */
     public function getValidationRuleForUpdate(): ParamRuleCollection
     {
-        return new ParamRuleCollection(
+        $rules = new ParamRuleCollection(
             new ParamRule(
                 CommonParams::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
+            ),
+            new ParamRule(
+                'jobs',
+                new Rule(Rules::REQUIRED),
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
@@ -251,6 +332,10 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
                 )
             ),
         );
+
+        error_log("Règles de validation pour update : " . json_encode($rules));
+
+        return $rules;
     }
 
     /**
