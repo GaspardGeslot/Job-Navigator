@@ -36,6 +36,9 @@
 
       <oxd-form :loading="isLoading" @submit-valid="onSave">
         <oxd-form-row>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('general.candidate_info') }}
+          </oxd-text>
           <oxd-grid :cols="1" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <full-name-input
@@ -45,12 +48,11 @@
                 :rules="rules"
                 :label="$t('general.full_name')"
                 :disabled="!editable"
-                required
               />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row>
+        <!--<oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <vacancy-dropdown
@@ -62,49 +64,125 @@
               />
             </oxd-grid-item>
           </oxd-grid>
-        </oxd-form-row>
+        </oxd-form-row>-->
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="profile.email"
                 :label="$t('general.email')"
-                :placeholder="$t('general.type_here')"
                 :rules="rules.email"
                 :disabled="!editable"
-                required
               />
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
                 v-model="profile.contactNumber"
                 :label="$t('recruitment.contact_number')"
-                :placeholder="$t('general.type_here')"
                 :rules="rules.contactNumber"
                 :disabled="!editable"
               />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <date-input
+                v-model="profile.birthday"
+                :label="$t('pim.date_of_birth')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
 
         <oxd-divider></oxd-divider>
         <oxd-form-row>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('pim.job_details') }}
+          </oxd-text>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item
+              v-for="(job, jobIndex) in profile.jobs"
+              :key="jobIndex"
+            >
+              <oxd-input-field :value="job" :disabled="!editable" />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <oxd-divider></oxd-divider>
+        <oxd-form-row>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('pim.contact_details') }}
+          </oxd-text>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.street1"
+                :label="$t('pim.street1')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.city"
+                :label="$t('general.city')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.zipCode"
+                :label="$t('general.zip_postal_code')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <oxd-divider></oxd-divider>
+        <oxd-form-row>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('general.candidature') }}
+          </oxd-text>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item v-if="profile.resume">
               <file-upload-input
                 v-model:newFile="attachment.newAttachment"
                 v-model:method="attachment.method"
                 :label="$t('recruitment.resume')"
-                :button-label="$t('general.browse')"
                 :file="attachment.oldAttachment"
-                :rules="rules.resume"
-                :hint="
-                  $t('general.accept_custom_format_file_up_to_n_mb', {
-                    count: formattedFileSize,
-                  })
-                "
                 :disabled="!editable"
                 :url="getResumeUrl"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <date-input
+                v-model="profile.dateOfApplication"
+                :label="$t('recruitment.date_of_application')"
+                :rules="rules.applicationDate"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.salary"
+                :label="$t('pim.salary_expectation')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item
+              class="orangehrm-save-candidate-page --span-column-2"
+            >
+              <oxd-input-field
+                v-model="profile.motivation"
+                :label="$t('general.motivation')"
+                type="textarea"
+                :disabled="!editable"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -112,6 +190,93 @@
         <oxd-divider></oxd-divider>
 
         <oxd-form-row>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('general.candidat_details') }}
+          </oxd-text>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.need"
+                :label="$t('general.need')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.courseStart"
+                :label="$t('general.course_start')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.studyLevel"
+                :label="$t('general.study_level')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <oxd-divider></oxd-divider>
+        <oxd-form-row>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('pim.driving_licences') }}
+          </oxd-text>
+          <oxd-grid
+            :cols="
+              profile.drivingLicenses.length <= 3
+                ? 3
+                : profile.drivingLicenses.length
+            "
+            class="orangehrm-full-width-grid"
+          >
+            <oxd-grid-item
+              v-for="(item, itemIndex) in profile.drivingLicenses"
+              :key="itemIndex"
+            >
+              <oxd-input-field :value="item" :disabled="!editable" />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item class="orangerhrm-switch-wrapper">
+              <oxd-text class="orangehrm-input-title" tag="h6">
+                {{ $t('pim.has_personal_vehicule') }}
+              </oxd-text>
+              <oxd-switch-input
+                v-model="profile.hasPersonalVehicle"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <oxd-divider></oxd-divider>
+        <oxd-form-row>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('general.memberships') }}
+          </oxd-text>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.professionalExperience"
+                :label="$t('pim.work_experience_global')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.specificProfessionalExperience"
+                :label="$t('pim.work_experience_btp')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <!--<oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item
               class="orangehrm-save-candidate-page --span-column-2"
@@ -168,7 +333,7 @@
         <oxd-form-actions v-if="editable">
           <required-text></required-text>
           <submit-button :label="$t('general.save')" />
-        </oxd-form-actions>
+        </oxd-form-actions>-->
       </oxd-form>
     </div>
 
@@ -198,7 +363,7 @@ import DateInput from '@/core/components/inputs/DateInput';
 import {APIService} from '@/core/util/services/api.service';
 import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import FullNameInput from '@/orangehrmPimPlugin/components/FullNameInput';
-import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown';
+//import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog';
 import {OxdSwitchInput} from '@ohrm/oxd';
@@ -213,6 +378,21 @@ const CandidateProfileModel = {
   keywords: '',
   dateOfApplication: null,
   consentToKeepData: false,
+  jobs: [],
+  street1: '',
+  city: '',
+  zipCode: '',
+  motivation: '',
+  need: '',
+  studyLevel: '',
+  courseStart: '',
+  birthday: null,
+  drivingLicenses: [],
+  salary: '',
+  professionalExperience: '',
+  specificProfessionalExperience: '',
+  hasPersonalVehicle: false,
+  resume: null,
 };
 
 const CandidateAttachmentModel = {
@@ -233,7 +413,7 @@ export default {
     DateInput,
     'oxd-switch-input': OxdSwitchInput,
     'full-name-input': FullNameInput,
-    'vacancy-dropdown': VacancyDropdown,
+    //'vacancy-dropdown': VacancyDropdown,
     'file-upload-input': FileUploadInput,
     'confirmation-dialog': ConfirmationDialog,
   },
@@ -274,10 +454,10 @@ export default {
       vacancy: {...VacancyModel},
       attachment: {...CandidateAttachmentModel},
       rules: {
-        firstName: [required, shouldNotExceedCharLength(30)],
-        lastName: [required, shouldNotExceedCharLength(30)],
+        firstName: [shouldNotExceedCharLength(30)],
+        lastName: [shouldNotExceedCharLength(30)],
         middleName: [shouldNotExceedCharLength(30)],
-        email: [required, validEmailFormat, shouldNotExceedCharLength(50)],
+        email: [validEmailFormat, shouldNotExceedCharLength(50)],
         contactNumber: [validPhoneNumberFormat, shouldNotExceedCharLength(25)],
         keywords: [shouldNotExceedCharLength(250)],
         applicationDate: [validDateFormat(this.userDateFormat)],
@@ -350,11 +530,12 @@ export default {
     },
     getResumeUrl() {
       return urlFor(
-        '/recruitment/viewCandidateAttachment/candidateId/{candidateId}',
-        {candidateId: this.candidate.id},
+        '/recruitment/viewCandidateAttachment/candidateId/{attachmentId}',
+        {attachmentId: this.profile.resume},
       );
     },
     fetchCandidate() {
+      console.log('Candidate : ', this.candidate);
       this.isLoading = true;
       this.profile.firstName = this.candidate.firstName;
       this.profile.middleName = this.candidate.middleName;
@@ -365,7 +546,48 @@ export default {
       this.profile.dateOfApplication = this.candidate.dateOfApplication;
       this.profile.comment = this.candidate.comment;
       this.profile.consentToKeepData = this.candidate.consentToKeepData;
-      const {vacancy} = this.candidate;
+      this.profile.jobs = this.candidate.jobs
+        ? JSON.parse(this.candidate.jobs)
+        : [];
+      this.profile.street1 = this.candidate.street1;
+      this.profile.city = this.candidate.city;
+      this.profile.zipCode = this.candidate.zipcode;
+      this.profile.motivation = this.candidate.motivation;
+      this.profile.need = this.candidate.need;
+      this.profile.studyLevel = this.candidate.studyLevel;
+      this.profile.courseStart = this.candidate.courseStart;
+      this.profile.birthday = this.candidate.birthday;
+      this.profile.salary = this.candidate.salary;
+      this.profile.drivingLicenses = this.candidate.drivingLicense
+        ? JSON.parse(this.candidate.drivingLicense)
+        : [];
+      this.profile.professionalExperience =
+        this.candidate.professionalExperience;
+      this.profile.specificProfessionalExperience =
+        this.candidate.specificProfessionalExperience;
+      this.profile.hasPersonalVehicle = this.candidate.hasPersonalVehicule;
+      this.profile.resume = this.candidate.resume;
+      if (this.candidate.resume) {
+        this.http
+          .request({
+            method: 'GET',
+            url: `/api/v2/recruitment/candidate/${this.candidate.resume}/attachment`,
+          })
+          .then(({data: {data}}) => {
+            this.attachment.id = data.id;
+            this.attachment.newAttachment = null;
+            this.attachment.oldAttachment = {
+              id: data.id,
+              filename: data.attachment.fileName,
+              fileType: data.attachment.fileType,
+              fileSize: data.attachment.fileSize,
+            };
+            this.attachment.method = 'keepCurrent';
+          });
+      } else {
+        this.attachment = {...CandidateAttachmentModel};
+      }
+      /*const {vacancy} = this.candidate;
       if (vacancy) {
         this.vacancy = {
           id: vacancy.id,
@@ -394,7 +616,7 @@ export default {
           });
       } else {
         this.attachment = {...CandidateAttachmentModel};
-      }
+      }*/
       this.isLoading = false;
     },
   },

@@ -811,9 +811,28 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_ID
         );
-        $candidate = $this->getCandidateService()->getCandidateDao()->getCandidateById($id);
-        $this->throwRecordNotFoundExceptionIfNotExist($candidate, Candidate::class);
+        /*$candidate = $this->getCandidateService()->getCandidateDao()->getCandidateById($id);
+        $this->throwRe<cordNotFoundExceptionIfNotExist($candidate, Candidate::class)*/
+        $lead = $this->getLead($this->getAuthUser()->getUserHedwigeToken(), $id);
+        $candidate = new Candidate();
+        $candidate->setLeadInfo($lead);
         return new EndpointResourceResult(CandidateDetailedModel::class, $candidate);
+    }
+
+    protected function getLead(string $token, int $leadId) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/lead/{$leadId}", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**

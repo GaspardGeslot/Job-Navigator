@@ -67,10 +67,10 @@ class Candidate extends \OrangeHRM\Entity\Candidate implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'salary', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'drivingLicense', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'hasPersonalVehicule', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'motivation', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'certificates', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'resume', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'salary', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'drivingLicense', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'hasPersonalVehicule', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'motivation', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'certificates', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'resume', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
     }
 
     /**
@@ -344,6 +344,424 @@ class Candidate extends \OrangeHRM\Entity\Candidate implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJobTitle', [$jobTitle]);
 
         parent::setJobTitle($jobTitle);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getJobs(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJobs', []);
+
+        return parent::getJobs();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setJobs(?string $jobs): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJobs', [$jobs]);
+
+        parent::setJobs($jobs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStudyLevel(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStudyLevel', []);
+
+        return parent::getStudyLevel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStudyLevel(string $studyLevel): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStudyLevel', [$studyLevel]);
+
+        parent::setStudyLevel($studyLevel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSalary(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSalary', []);
+
+        return parent::getSalary();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSalary(string $salary): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSalary', [$salary]);
+
+        parent::setSalary($salary);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDrivingLicense(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDrivingLicense', []);
+
+        return parent::getDrivingLicense();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDrivingLicense(string $drivingLicense): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDrivingLicense', [$drivingLicense]);
+
+        parent::setDrivingLicense($drivingLicense);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCourseStart(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCourseStart', []);
+
+        return parent::getCourseStart();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCourseStart(string $courseStart): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCourseStart', [$courseStart]);
+
+        parent::setCourseStart($courseStart);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNeed(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNeed', []);
+
+        return parent::getNeed();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNeed(string $need): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNeed', [$need]);
+
+        parent::setNeed($need);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGender(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGender', []);
+
+        return parent::getGender();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setGender(?int $gender): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGender', [$gender]);
+
+        parent::setGender($gender);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBirthday(): ?\DateTime
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBirthday', []);
+
+        return parent::getBirthday();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setBirthday(?\DateTime $birthday): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBirthday', [$birthday]);
+
+        parent::setBirthday($birthday);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStreet1(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStreet1', []);
+
+        return parent::getStreet1();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStreet1(?string $street1): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStreet1', [$street1]);
+
+        parent::setStreet1($street1);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCity(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCity', []);
+
+        return parent::getCity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCity(?string $city): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCity', [$city]);
+
+        parent::setCity($city);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCountry(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCountry', []);
+
+        return parent::getCountry();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCountry(?string $country): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCountry', [$country]);
+
+        parent::setCountry($country);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProvince(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProvince', []);
+
+        return parent::getProvince();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setProvince(?string $province): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProvince', [$province]);
+
+        parent::setProvince($province);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getZipcode(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getZipcode', []);
+
+        return parent::getZipcode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setZipcode(?string $zipcode): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setZipcode', [$zipcode]);
+
+        parent::setZipcode($zipcode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProfessionalExperience(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProfessionalExperience', []);
+
+        return parent::getProfessionalExperience();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setProfessionalExperience(?string $professionalExperience): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProfessionalExperience', [$professionalExperience]);
+
+        parent::setProfessionalExperience($professionalExperience);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSpecificProfessionalExperience(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSpecificProfessionalExperience', []);
+
+        return parent::getSpecificProfessionalExperience();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSpecificProfessionalExperience(?string $specificProfessionalExperience): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSpecificProfessionalExperience', [$specificProfessionalExperience]);
+
+        parent::setSpecificProfessionalExperience($specificProfessionalExperience);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHasPersonalVehicule(): ?bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHasPersonalVehicule', []);
+
+        return parent::getHasPersonalVehicule();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setHasPersonalVehicule(?bool $hasPersonalVehicule): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHasPersonalVehicule', [$hasPersonalVehicule]);
+
+        parent::setHasPersonalVehicule($hasPersonalVehicule);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMotivation(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMotivation', []);
+
+        return parent::getMotivation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMotivation(?string $motivation): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMotivation', [$motivation]);
+
+        parent::setMotivation($motivation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCertificates(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCertificates', []);
+
+        return parent::getCertificates();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCertificates(?string $certificates): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCertificates', [$certificates]);
+
+        parent::setCertificates($certificates);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResume(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResume', []);
+
+        return parent::getResume();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setResume(?int $resume): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setResume', [$resume]);
+
+        parent::setResume($resume);
     }
 
     /**

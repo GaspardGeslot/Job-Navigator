@@ -18,30 +18,30 @@
  -->
 
 <template>
-  <recruitment-status v-if="candidate" :candidate="candidate">
-  </recruitment-status>
+  <!--<recruitment-status v-if="candidate" :candidate="candidate">
+  </recruitment-status>-->
   <candidate-profile
     v-if="candidate"
     :candidate="candidate"
     :allowed-file-types="allowedFileTypes"
     :max-file-size="maxFileSize"
     :updatable="updatable"
-    @update="onCandidateUpdate"
+    @update="onCandidsateUpdate"
   ></candidate-profile>
-  <history-table v-if="candidate" :candidate="candidate"></history-table>
+  <!--<history-table v-if="candidate" :candidate="candidate"></history-table>-->
 </template>
 
 <script>
 import {APIService} from '@/core/util/services/api.service';
-import RecruitmentStatus from '@/orangehrmRecruitmentPlugin/components/RecruitmentStatus';
+//import RecruitmentStatus from '@/orangehrmRecruitmentPlugin/components/RecruitmentStatus';
 import CandidateProfile from '@/orangehrmRecruitmentPlugin/components/CandidateProfile';
-import HistoryTable from '@/orangehrmRecruitmentPlugin/components/HistoryTable';
+//import HistoryTable from '@/orangehrmRecruitmentPlugin/components/HistoryTable';
 
 export default {
   components: {
-    'history-table': HistoryTable,
+    //'history-table': HistoryTable,
     'candidate-profile': CandidateProfile,
-    'recruitment-status': RecruitmentStatus,
+    //'recruitment-status': RecruitmentStatus,
   },
   props: {
     candidateId: {

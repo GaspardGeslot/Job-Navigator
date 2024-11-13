@@ -425,7 +425,7 @@ export default {
       };
     },
     onClickCandidate(item) {
-      navigate('/recruitment/viewCandidate/{id}', {id: item.leadId});
+      navigate('/recruitment/viewCandidate/{id}', {id: item.id});
     },
     onClickAdd() {
       navigate('/recruitment/addJobVacancy');

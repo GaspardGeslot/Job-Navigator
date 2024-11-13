@@ -180,6 +180,17 @@ class CandidateAttachment extends \OrangeHRM\Entity\CandidateAttachment implemen
     /**
      * {@inheritDoc}
      */
+    public function setAttachmentByEmployee(?\OrangeHRM\Entity\EmployeeAttachment $attachment): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAttachmentByEmployee', [$attachment]);
+
+        parent::setAttachmentByEmployee($attachment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId(): int
     {
         if ($this->__isInitialized__ === false) {

@@ -54,4 +54,12 @@ class CandidateDecorator
     {
         return $this->getDateTimeHelper()->formatDate($this->candidate->getDateOfApplication());
     }
+
+    /**
+     * @return string
+     */
+    public function getBirthday(): string
+    {
+        return $this->getDateTimeHelper()->formatDate($this->candidate->getBirthday());
+    }
 }
