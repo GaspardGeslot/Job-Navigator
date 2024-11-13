@@ -76,15 +76,34 @@ export class APIService {
     const headers = {
       Accept: 'application/json',
     };
+    console.log('Données prêtes pour POST :', data);
     return this._http.post(this._apiSection, data, {headers});
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update(id: number | string, data: any): Promise<AxiosResponse> {
+  update(id: number | string | null, data: any): Promise<AxiosResponse> {
     const headers = {
       'Content-Type': 'application/json',
     };
+    console.log('on passe serviceAPI');
+    console.log('data ', data);
+    console.log('id ', id);
+    if (!id) {
+      console.log('this._apiSection', this._apiSection);
+      return this._http.put(`${this._apiSection}`, data, {headers});
+    }
+    console.log('ça deconne ici');
     return this._http.put(`${this._apiSection}/${id}`, data, {headers});
+  }
+
+  updateJobs(id: number, data: any): Promise<AxiosResponse> {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    console.log('this._apiSection', this._apiSection);
+    console.log('data ', data);
+    console.log('id ', id);
+    return this._http.put(`${this._apiSection}`, data, {headers});
   }
 
   delete(id: number): Promise<AxiosResponse> {
