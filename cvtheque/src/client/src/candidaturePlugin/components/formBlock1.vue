@@ -132,9 +132,9 @@ export default {
     };
   },
   created() {
-    console.log('this.courseStarts', this.courseStarts);
-    console.log('this.studyLevel', this.studyLevels);
-    console.log('professionalXp', this.professionalXp);
+    // console.log('this.courseStarts', this.courseStarts);
+    // console.log('this.studyLevel', this.studyLevels);
+    // console.log('professionalXp', this.professionalXp);
     if (
       typeof this.courseStarts === 'object' &&
       !Array.isArray(this.courseStarts)
@@ -194,12 +194,12 @@ export default {
       //   String(Number(this.postalCode)),
       //   Number,
       // );
-      console.log(this.postalCode);
+      // console.log(this.postalCode);
       if (this.postalCode.length != 5) {
         if (this.postalCode.length == 4) {
           //this.postalCode.unshift(0);
           this.postalCode = '0' + this.postalCode;
-          console.log('postalCode', this.postalCode);
+          // console.log('postalCode', this.postalCode);
         } else {
           this.errors.postalCode = true;
           hasError = true;
