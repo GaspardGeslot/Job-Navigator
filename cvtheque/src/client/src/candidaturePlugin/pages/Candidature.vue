@@ -141,8 +141,10 @@
     <div class="aProposDroite">
       <h1>A propos</h1>
       <p>
-        Face aux besoins immenses de facilitation de la rencontre entre l’offre et la demande, 
-        Olecio développe une approche complète pour faciliter la concrétisation des projets professionnels et les besoins en ressources humaines des organisations.
+        Face aux besoins immenses de facilitation de la rencontre entre l’offre
+        et la demande, Olecio développe une approche complète pour faciliter la
+        concrétisation des projets professionnels et les besoins en ressources
+        humaines des organisations.
       </p>
       <div class="aProposBouton">
         <button @click="navigateToLoginCompany">Je suis une entreprise</button>
@@ -202,16 +204,16 @@ export default {
   font-family: 'DM Sans', sans-serif;
 }
 
-h1{
+h1 {
   font-size: 4rem;
 }
-#aPropos p{
+#aPropos p {
   font-size: 1.3rem;
   margin-bottom: 1rem;
   line-height: 150%;
 }
 
-#comment p{
+#comment p {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }

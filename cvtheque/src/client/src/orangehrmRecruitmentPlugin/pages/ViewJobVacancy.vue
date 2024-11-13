@@ -87,8 +87,12 @@
           @click="onClickAdd"
         />
         <div class="boutonTriBloc">
-          <button @click="sortByName" class="boutonTri">Trier par nom métier ⇅</button>
-          <button @click="sortByDate" class="boutonTri">Trier par date ⇅</button>
+          <button @click="sortByName" class="boutonTri">
+            Trier par nom métier ⇅
+          </button>
+          <button @click="sortByDate" class="boutonTri">
+            Trier par date ⇅
+          </button>
         </div>
       </div>
       <!--<table-header
@@ -183,6 +187,13 @@ export default {
       immediate: true,
       deep: true,
     },
+    // Surveille items.data pour exécuter le tri une fois les données chargées
+    'items.data': function (newData) {
+      if (newData && newData.length > 0) {
+        // Vérifie que les données sont chargées
+        this.sortByDate();
+      }
+    },
   },
 
   setup(props) {
@@ -216,6 +227,7 @@ export default {
         sortField: sortField.value,
         sortOrder: sortOrder.value,
         model: 'detailed',
+        
       };
     });
 
@@ -395,15 +407,6 @@ export default {
     };
   },
 
-  watch: {
-    // Surveille items.data pour exécuter le tri une fois les données chargées
-    'items.data': function(newData) {
-      if (newData && newData.length > 0) { // Vérifie que les données sont chargées
-        this.sortByDate();
-      }
-    }
-  },
-
   methods: {
     sortByDate() {
       // Change l'ordre de tri
@@ -421,7 +424,8 @@ export default {
       this.isNomAscending = !this.isNomAscending;
       this.items.data.sort((a, b) => {
         return this.isNomAscending
-          ? a.jobTitle.localeCompare(b.jobTitle) : b.jobTitle.localeCompare(a.jobTitle);
+          ? a.jobTitle.localeCompare(b.jobTitle)
+          : b.jobTitle.localeCompare(a.jobTitle);
       });
     },
     cellRenderer(...[, , , row]) {

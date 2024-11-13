@@ -77,6 +77,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     public const FILTER_METHOD_OF_APPLICATION = 'methodOfApplication';
     public const FILTER_CANDIDATE_NAME = 'candidateName';
     public const FILTER_MODEL = 'model';
+    public const FILTER_ALL_LEADS = 'allLeads';
 
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
@@ -121,6 +122,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
      *         required=false,
      *         @OA\Schema(type="integer")
      *     ),
+    *       @OA\Parameter(
+    *         name="allLeads",
+    *         in="query",
+    *         required=false,
+    *         @OA\Schema(type="string")
+    *     ),
      *     @OA\Parameter(
      *         name="jobTitleId",
      *         in="query",
@@ -301,7 +308,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_MATCHING_ID
         );
 
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId);
+        $allLeads = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_ALL_LEADS
+        );
+
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads);
 
         $candidates = array();
         foreach ($leads as $lead) {
@@ -319,12 +331,18 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         );
     }
 
-    protected function getLeads(string $token, ?int $matchingId = null) : array
+    protected function getLeads(string $token, ?int $matchingId = null, ?string $allLeads = null) : array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         try {
             $url = $matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads";
+            if($allLeads){
+                $url = "{$clientBaseUrl}/client/leads";
+            }
+            else{
+                $url = $matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads";
+            }
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
@@ -427,6 +445,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                 new ParamRule(
                     self::FILTER_MATCHING_ID,
                     new Rule(Rules::POSITIVE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_ALL_LEADS,
+                    new Rule(Rules::STRING_TYPE)
                 )
             ),
             $this->getValidationDecorator()->notRequiredParamRule(

@@ -22,11 +22,23 @@
     <oxd-table-filter :filter-title="$t('general.candidates')">
       <oxd-form @submit-valid="filterItems" @reset="onReset">
         <oxd-form-row>
-          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <jobtitle-dropdown v-model="filters.jobTitle"></jobtitle-dropdown>
             </oxd-grid-item>
             <oxd-grid-item>
+              <jobtitle-dropdown label="Type de contrat recherché"></jobtitle-dropdown>
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <jobtitle-dropdown label="Niveau d'étude"></jobtitle-dropdown>
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <jobtitle-dropdown label="Disponibilité"></jobtitle-dropdown>
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <jobtitle-dropdown label="Expérience pro"></jobtitle-dropdown>
+            </oxd-grid-item>
+            <!-- <oxd-grid-item>
               <vacancy-dropdown v-model="filters.vacancy"></vacancy-dropdown>
             </oxd-grid-item>
             <oxd-grid-item>
@@ -36,10 +48,10 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <candidate-status-dropdown v-model="filters.status" />
-            </oxd-grid-item>
+            </oxd-grid-item> -->
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row>
+        <!-- <oxd-form-row>
           <oxd-grid :cols="4" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <candidate-autocomplete
@@ -85,7 +97,7 @@
               />
             </oxd-grid-item>
           </oxd-grid>
-        </oxd-form-row>
+        </oxd-form-row> -->
         <oxd-divider />
 
         <oxd-form-actions>
@@ -290,6 +302,7 @@ export default {
         model: 'list',
         sortField: sortField.value,
         sortOrder: sortOrder.value,
+        allLeads: 'candidat',
       };
     });
 
