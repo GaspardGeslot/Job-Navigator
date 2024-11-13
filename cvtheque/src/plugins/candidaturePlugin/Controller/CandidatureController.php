@@ -3,11 +3,13 @@ namespace Candidature\Controller;
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+use OrangeHRM\Authentication\Auth\AuthProviderChain;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
 use OrangeHRM\Core\Api\V2\EndpointCollectionResult;
 use OrangeHRM\Core\Api\V2\EndpointResourceResult;
+use OrangeHRM\Authentication\Service\LoginService;
 use OrangeHRM\Core\Api\V2\Model\ArrayModel;
 use OrangeHRM\Core\Api\V2\ParameterBag;
 use OrangeHRM\Core\Api\V2\RequestParams;
@@ -17,6 +19,8 @@ use OrangeHRM\Core\Api\V2\Validator\Rule;
 use OrangeHRM\Core\Api\V2\Validator\Rules;
 use GuzzleHttp\Client;
 use OrangeHRM\Authentication\Auth\User as AuthUser;
+use OrangeHRM\Authentication\Dto\AuthParams;
+use OrangeHRM\Authentication\Dto\UserCredential;
 use Symfony\Component\HttpFoundation\Response;
 use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Authorization\Service\HomePageService;
@@ -26,17 +30,37 @@ use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 use OrangeHRM\CorporateBranding\Traits\ThemeServiceTrait;
 use OrangeHRM\Core\Controller\PublicControllerInterface;
 use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Authentication\Exception\UserAlreadyEnrolledException;
+use OrangeHRM\Authentication\Exception\AuthenticationException;
+use OrangeHRM\Framework\Services;
+use OrangeHRM\Core\Traits\ServiceContainerTrait;
 
 class CandidatureController extends AbstractVueController implements PublicControllerInterface
 {
+    use ServiceContainerTrait;
     use AuthUserTrait;
     use ThemeServiceTrait;
+
+    /**
+     * @var null|LoginService
+     */
+    protected ?LoginService $loginService = null;
 
     /**
      * @var HomePageService|null
      */
     protected ?HomePageService $homePageService = null;
 
+    /**
+     * @return LoginService
+     */
+    public function getLoginService(): LoginService
+    {
+        if (is_null($this->loginService)) {
+            $this->loginService = new LoginService();
+        }
+        return $this->loginService;
+    }
     
     /**
      * @return HomePageService
@@ -192,15 +216,30 @@ class CandidatureController extends AbstractVueController implements PublicContr
      */
     public function createNewAccount(Request $request)
     {
-        $isValid = $request->request->get('password');
-        echo '<pre>';
-        print_r('password in request: ' . $isValid);
-        echo '</pre>';
-        if ($isValid) {
-            return new Response('Password is missing', Response::HTTP_CONFLICT);
-        } else {
-            return new Response('Password is present', Response::HTTP_OK);
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
+        $credentials = new UserCredential($email, $password, 'ESS');
+
+        try {
+
+            /** @var AuthProviderChain $authProviderChain */
+            $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
+            
+            $token = $authProviderChain->signInFromCandidature(new AuthParams($credentials));
+            $success = !is_null($token);
+
+            if (!$success)
+                throw AuthenticationException::invalidCredentials();
+            $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setIsCandidate(true);
+            $this->getAuthUser()->setUserHedwigeToken($token);
+            $this->getLoginService()->addLogin($credentials);
+        } catch (UserAlreadyEnrolledException $e) {
+            return new Response('User already enrolled', Response::HTTP_CONFLICT);
+        } catch (Throwable $e) {
+            return new Response('Unexpected error occurred', Response::HTTP_BAD_REQUEST);
         }
+        return new Response('User enrolled successfully', Response::HTTP_OK);
     }
 
     public function getCandidatureOptions(): array|object

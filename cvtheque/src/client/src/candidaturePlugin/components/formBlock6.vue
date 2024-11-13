@@ -173,37 +173,26 @@ export default {
         this.email === ''
       ) {
         this.errors.incompleteForm = true;
-        //alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
         return;
       }
       if (!this.validateEmail()) {
         this.errors.email = true;
-        //alert('Veuillez entrer une adresse e-mail valide.');
         return;
       }
       if (this.createAccount && this.password !== this.confirmPassword) {
         this.errors.password = true;
-        //alert('Les mots de passe ne correspondent pas. Veuillez réessayer.');
         return;
       }
       if (!this.checked) {
         this.errors.checked = true;
-        // alert(
-        //   'Vous devez accepter les conditions générales et la politique de confidentialité des données.',
-        // );
         return;
       }
       this.phone = this.phone.toString();
-      //console.log(this.phone, typeof this.phone, this.phone.length);
       if (this.phone.length == 9) {
-        // console.log(this.phone, typeof this.phone);
         this.phone = '0' + this.phone;
-        // console.log('ici');
-        // console.log(this.phone, typeof this.phone);
       }
       if (this.phone.length != 10) {
         this.errors.phoneNumber = true;
-        //alert('Veuillez indiquer un numéro de téléphone valide.');
         return;
       }
       let productReview = {
@@ -214,7 +203,6 @@ export default {
       };
       if (this.createAccount) {
         productReview.password = this.password;
-        // productReview.confirmPassword = this.confirmPassword;
       }
       this.$emit('situation-submitted', productReview);
       // this.firstName = '';
@@ -226,12 +214,7 @@ export default {
       this.password = '';
       this.confirmPassword = '';
       this.onSubmit();
-      window.location.href =
-        'https://demo.jobnavigator.fr/web/index.php/auth/login';
-      // window.open(
-      //   'https://demo.jobnavigator.fr/web/index.php/auth/login',
-      //   '_blank',
-      // );
+      window.location.href = `${window.location.origin}/web/index.php/auth/login`;
     },
     goBack() {
       this.$emit('go-back');

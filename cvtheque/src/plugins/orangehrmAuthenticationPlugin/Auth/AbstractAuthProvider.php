@@ -38,6 +38,15 @@ abstract class AbstractAuthProvider
     abstract public function signIn(AuthParamsInterface $authParams): ?string;
 
     /**
+     * @param AuthParamsInterface $authParams
+     * @return ?string
+     * @throws AuthenticationException
+     * @throws PasswordEnforceException
+     * @throws UserAlreadyEnrolledException
+     */
+    abstract public function signInFromCandidature(AuthParamsInterface $authParams): ?string;
+
+    /**
      * @return int
      */
     abstract public function getPriority(): int;

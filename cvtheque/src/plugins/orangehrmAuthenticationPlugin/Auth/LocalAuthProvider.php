@@ -20,6 +20,7 @@ namespace OrangeHRM\Authentication\Auth;
 
 use OrangeHRM\Authentication\Dto\AuthParamsInterface;
 use OrangeHRM\Authentication\Dto\UserCredentialInterface;
+use OrangeHRM\Authentication\Exception\UserAlreadyEnrolledException;
 use OrangeHRM\Authentication\Exception\AuthenticationException;
 use OrangeHRM\Authentication\Exception\PasswordEnforceException;
 use OrangeHRM\Authentication\Service\AuthenticationService;
@@ -97,6 +98,23 @@ class LocalAuthProvider extends AbstractAuthProvider
         $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
         if ($exists)
             return false;
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential());
+    }
+
+    /**
+     * @param AuthParamsInterface $authParams
+     * @return ?string
+     * @throws AuthenticationException
+     * @throws PasswordEnforceException
+     * @throws UserAlreadyEnrolledException
+     */
+    public function signInFromCandidature(AuthParamsInterface $authParams): ?string
+    {
+        if (!$authParams->getCredential() instanceof UserCredentialInterface)
+            return false;
+        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
+        if ($exists)
+            throw new UserAlreadyEnrolledException();
         return $this->getAuthenticationService()->createCredentials($authParams->getCredential());
     }
 

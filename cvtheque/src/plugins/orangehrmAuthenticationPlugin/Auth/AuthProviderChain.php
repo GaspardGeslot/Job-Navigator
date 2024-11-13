@@ -87,4 +87,19 @@ class AuthProviderChain
         }
         return null;
     }
+
+    /**
+     * @param AuthParamsInterface $authParams
+     * @return string
+     */
+    public function signInFromCandidature(AuthParamsInterface $authParams): string
+    {
+        array_multisort($this->priorities, SORT_DESC, $this->providers);
+        foreach ($this->providers as $authProvider) {
+            $token = $authProvider->signInFromCandidature($authParams);
+            if (!is_null($token))
+                return $token;
+        }
+        return null;
+    }
 }
