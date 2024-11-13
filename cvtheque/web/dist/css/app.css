@@ -10765,15 +10765,15 @@ p[data-v-d8d9c26c] {
 *[data-v-0c52339c] {
   font-family: 'DM Sans', sans-serif;
 }
-h1[data-v-0c52339c]{
+h1[data-v-0c52339c] {
   font-size: 4rem;
 }
-#aPropos p[data-v-0c52339c]{
+#aPropos p[data-v-0c52339c] {
   font-size: 1.3rem;
   margin-bottom: 1rem;
   line-height: 150%;
 }
-#comment p[data-v-0c52339c]{
+#comment p[data-v-0c52339c] {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
@@ -10798,7 +10798,8 @@ h1[data-v-0c52339c]{
   height: 100vh;
   background-color: #1b1f23;
 }
-#accueil h1[data-v-0c52339c], #accueil a[data-v-0c52339c]{
+#accueil h1[data-v-0c52339c],
+#accueil a[data-v-0c52339c] {
   color: white;
 }
 .accueilLogo[data-v-0c52339c] {
