@@ -1,7 +1,10 @@
 <template>
   <div class="formBlockLayout">
     <form class="formBlock6" @submit.prevent="onSubmit">
-      <h3 class="formTitle">Facultatif (mais apprécié)</h3>
+      <h3 class="formTitle" style="margin-top: 1rem">
+        Facultatif (mais apprécié)
+      </h3>
+      <SubmitComponent @go-back="goBack" />
       <p class="CVText">
         Qu'est-ce qui vous plairait dans le fait de travailler dans la
         construction ?
@@ -19,7 +22,6 @@
       <!-- Le composant InputFile émet le fichier sélectionné via @emit-input -->
       <InputFile @emit-input="setFile" />
       <p v-if="file" class="fileNameDisplay">{{ file.name }}</p>
-      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -63,10 +65,10 @@ export default {
       }
 
       // Si un fichier a été déposé, procéder à la requête
-      console.log('this.file', this.file);
+      // console.log('this.file', this.file);
       const formData = new FormData();
       formData.append('file', this.file);
-      console.log('formData', formData);
+      // console.log('formData', formData);
 
       this.isLoading = true;
 
@@ -90,7 +92,7 @@ export default {
           file: this.file,
         });
       } catch (error) {
-        console.error('Erreur lors de la soumission :', error);
+        // console.error('Erreur lors de la soumission :', error);
         this.$toast.error('Erreur lors de la soumission');
       } finally {
         this.isLoading = false;

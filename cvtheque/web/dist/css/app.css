@@ -8813,7 +8813,8 @@ p {
   line-height: 0.8rem;
 }
 .submit-block {
-  margin-top: 2rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
   height: 3rem;
 }
 .previousButton {
@@ -9191,7 +9192,8 @@ p[data-v-d99f0b7a] {
   line-height: 0.8rem;
 }
 .submit-block[data-v-d99f0b7a] {
-  margin-top: 2rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
   height: 3rem;
 }
 .previousButton[data-v-d99f0b7a] {

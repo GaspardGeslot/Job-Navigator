@@ -3,6 +3,30 @@ import { inject } from 'vue';
   <div class="formBlockLayout">
     <form class="formBlock6" @submit.prevent="onSubmit">
       <h3 class="formTitle">Pour finir</h3>
+      <SubmitComponent @go-back="goBack" />
+      <p v-if="errors.incompleteForm" id="alert-msg05" class="alert-msg">
+        L'évaluation est incomplète. Veuillez remplir tous les champs.
+      </p>
+      <p v-if="errors.email" id="alert-msg06" class="alert-msg">
+        Veuillez entrer une adresse e-mail valide.
+      </p>
+      <p v-if="errors.password" id="alert-msg07" class="alert-msg">
+        Les mots de passe ne correspondent pas. Veuillez réessayer.
+      </p>
+      <p v-if="errors.phoneNumber" id="alert-msg08" class="alert-msg">
+        Veuillez indiquer un numéro de téléphone valide.
+      </p>
+      <p v-if="errors.checked" id="alert-msg09" class="alert-msg">
+        Vous devez accepter les conditions générales et la politique de
+        confidentialité des données.
+      </p>
+      <p v-if="cannotCreateAccount" class="alert-msg">
+        Cette adresse mail est déjà liée à un compte, veuillez renseigner une
+        autre adresse ou vous
+        <a style="text-decoration: underline" @click="sendLeadAndRedirect">
+          connecter à votre compte
+        </a>
+      </p>
       <input
         id="lastName"
         v-model="lastName"
@@ -91,30 +115,6 @@ import { inject } from 'vue';
           </label>
         </div>
       </div>
-      <p v-if="errors.incompleteForm" id="alert-msg05" class="alert-msg">
-        L'évaluation est incomplète. Veuillez remplir tous les champs.
-      </p>
-      <p v-if="errors.email" id="alert-msg06" class="alert-msg">
-        Veuillez entrer une adresse e-mail valide.
-      </p>
-      <p v-if="errors.password" id="alert-msg07" class="alert-msg">
-        Les mots de passe ne correspondent pas. Veuillez réessayer.
-      </p>
-      <p v-if="errors.phoneNumber" id="alert-msg08" class="alert-msg">
-        Veuillez indiquer un numéro de téléphone valide.
-      </p>
-      <p v-if="errors.checked" id="alert-msg09" class="alert-msg">
-        Vous devez accepter les conditions générales et la politique de
-        confidentialité des données.
-      </p>
-      <p v-if="cannotCreateAccount" class="alert-msg">
-        Cette adresse mail est déjà liée à un compte, veuillez renseigner une
-        autre adresse ou vous
-        <a style="text-decoration: underline" @click="sendLeadAndRedirect">
-          connecter à votre compte
-        </a>
-      </p>
-      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -196,7 +196,7 @@ export default {
       this.phone = this.phone.toString();
       //console.log(this.phone, typeof this.phone, this.phone.length);
       if (this.phone.length == 9) {
-        console.log(this.phone, typeof this.phone);
+        // console.log(this.phone, typeof this.phone);
         this.phone = '0' + this.phone;
         // console.log('ici');
         // console.log(this.phone, typeof this.phone);

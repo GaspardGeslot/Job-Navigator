@@ -1,8 +1,11 @@
 <template>
   <div class="formBlockLayout" @submit.prevent="onSubmit">
-    <h3 class="formTitle">Quel métier vous intéresse ?</h3>
-    <p class="formSubTitle">3 choix possibles.</p>
+    <h3 class="formTitle" style="margin-top: 1rem">
+      Quel métier vous intéresse ?
+    </h3>
     <form v-if="sectors" class="formBlock5">
+      <SubmitComponent @go-back="goBack" />
+      <p class="formSubTitle">3 choix possibles.</p>
       <div v-for="(item, itemIndex) in sectors" :key="itemIndex">
         <p class="CVText">{{ item.title }}</p>
         <div class="checkbox-group two-columns">
@@ -76,7 +79,6 @@
       <p v-if="errorMessage" id="alert-msg03" class="alert-msg">
         {{ errorMessage }}
       </p>
-      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -123,7 +125,7 @@ export default {
     },
   },
   mounted() {
-    console.log('Sectors : ', this.sectors);
+    // console.log('Sectors : ', this.sectors);
     this.showMore = new Array(this.sectors.length).fill(false);
   },
   methods: {
@@ -138,7 +140,7 @@ export default {
       const situationReview = {
         jobs: this.checkedJobs,
       };
-      console.log('Jobs', this.checkedJobs);
+      // console.log('Jobs', this.checkedJobs);
       this.$emit('situation-submitted', situationReview);
     },
     goBack() {

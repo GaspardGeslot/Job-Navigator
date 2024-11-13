@@ -49,7 +49,11 @@
             </div>
           </div>
       -->
-      <h3 class="formTitle" style="margin-top: 2.5rem">Permis et véhicule</h3>
+      <h3 class="formTitle" style="margin-top: 1rem">Permis et véhicule</h3>
+      <SubmitComponent @go-back="goBack" />
+      <p v-if="errorMessage" id="alert-msg04" class="alert-msg">
+        {{ errorMessage }}
+      </p>
       <p class="formSubTitle">Plusieurs choix possibles.</p>
       <p class="CVText">Permis obtenus</p>
       <!--
@@ -127,10 +131,6 @@
           <label for="vehicleNo">Non</label>
         </div>
       </div>
-      <p v-if="errorMessage" id="alert-msg04" class="alert-msg">
-        {{ errorMessage }}
-      </p>
-      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
