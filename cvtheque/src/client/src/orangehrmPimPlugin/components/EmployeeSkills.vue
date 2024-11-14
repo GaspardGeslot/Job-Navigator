@@ -32,6 +32,7 @@
       @close="onEditModalClose"
     ></edit-skill>
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
+      <p>{{ items.data }}</p>
       <profile-action-header @click="onClickAdd">
         {{ $t('general.certificates') }}
       </profile-action-header>
@@ -70,12 +71,12 @@ import EditSkill from '@/orangehrmPimPlugin/components/EditSkill';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 
 const skillNormalizer = (data) => {
+  console.log('Data from backend:', data);
   return data.map((item) => {
     return {
-      id: item.skill.id,
-      name: item.skill.name,
-      yearsOfExperience: item.yearsOfExperience,
-      comments: item.comments,
+      type: item.type || 'Unknown Type',
+      title: item.title || 'No Title',
+      description: item.description || 'No Description',
     };
   });
 };
@@ -133,15 +134,19 @@ export default {
     return {
       headers: [
         {
-          name: 'name',
-          slot: 'title',
-          title: this.$t('pim.certificates'),
+          name: 'type',
+          title: this.$t('pim.certificate_type'),
           style: {flex: 1},
         },
         {
-          name: 'yearsOfExperience',
+          name: 'title',
           title: this.$t('pim.certificate_title'),
           style: {flex: 1},
+        },
+        {
+          name: 'description',
+          title: this.$t('pim.certificate_description'),
+          style: {flex: 2},
         },
         {
           name: 'actions',
@@ -224,7 +229,11 @@ export default {
     },
     onClickEdit(item) {
       this.showSaveModal = false;
-      this.editModalState = item;
+      this.editModalState = {
+        type: item.type,
+        title: item.title,
+        description: item.description,
+      };
       this.showEditModal = true;
     },
     onSaveModalClose() {

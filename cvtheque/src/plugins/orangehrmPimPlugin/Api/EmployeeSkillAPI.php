@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Pim\Api;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -37,9 +38,14 @@ use OrangeHRM\Pim\Api\Model\EmployeeSkillModel;
 use OrangeHRM\Pim\Dto\EmployeeSkillSearchFilterParams;
 use OrangeHRM\Pim\Service\EmployeeSkillService;
 use OrangeHRM\Pim\Service\EmployeeService;
+use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
 {
+    use AuthUserTrait;
+    use EmployeeServiceTrait;
+
     public const PARAMETER_SKILL_ID = 'skillId';
     public const PARAMETER_YEARS_OF_EXP = 'yearsOfExperience';
     public const PARAMETER_COMMENTS = 'comments';
@@ -198,32 +204,74 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
-        $employeeSkillSearchParams = new EmployeeSkillSearchFilterParams();
-        $this->setSortingAndPaginationParams($employeeSkillSearchParams);
+        $limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 10);
+        $offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
 
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_EMP_NUMBER
         );
-        $employeeSkillSearchParams->setEmpNumber($empNumber);
 
-        $employeeSkills = $this->getEmployeeSkillService()->getEmployeeSkillDao()->searchEmployeeSkill(
-            $employeeSkillSearchParams
-        );
+        $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
+        $certificates = $this->getHedwigeCertificates($this->getAuthUser()->getUserHedwigeToken());
+
+        // Log the raw certificates
+        error_log('Certificates: ' . json_encode($certificates, JSON_PRETTY_PRINT));
+
+        // Map certificates to EmployeeSkillModel and normalize them
+        $normalizedSkills = array_map(fn($cert) => (new EmployeeSkillModel($cert))->normalize(), $certificates);
+
+        // Log normalized data for debugging
+        error_log('Normalized Skills: ' . json_encode($normalizedSkills, JSON_PRETTY_PRINT));
+
+        // Return the EndpointCollectionResult
         return new EndpointCollectionResult(
             EmployeeSkillModel::class,
-            $employeeSkills,
-            new ParameterBag(
-                [
-                    CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
-                    CommonParams::PARAMETER_TOTAL => $this->getEmployeeSkillService()->getEmployeeSkillDao(
-                    )->getSearchEmployeeSkillsCount(
-                        $employeeSkillSearchParams
-                    )
-                ]
-            )
+            $normalizedSkills,
+            new ParameterBag([
+                'limit' => $limit,
+                'offset' => $offset,
+                'total' => count($normalizedSkills),
+            ])
         );
+    }
+
+
+
+        // return new EndpointCollectionResult(
+        //     EmployeeSkillModel::class,
+        //     $employeeSkills,
+        //     new ParameterBag(
+        //         [
+        //             CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
+        //             CommonParams::PARAMETER_TOTAL => $this->getEmployeeSkillService()->getEmployeeSkillDao(
+        //             )->getSearchEmployeeSkillsCount(
+        //                 $employeeSkillSearchParams
+        //             )
+        //         ]
+        //     )
+        // );
+
+    protected function getHedwigeCertificates(string $token) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/user/certificates", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            $data = json_decode($response->getBody(), true);
+            error_log('certificates : ' . print_r($data['certificates'], true));
+            return $data['certificates'] ?? [];
+            // return json_encode(json_decode($response->getBody(), true)['certificates'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**
@@ -232,8 +280,8 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForGetAll(): ParamRuleCollection
     {
         return new ParamRuleCollection(
-            $this->getEmpNumberRule(),
-            ...$this->getSortingAndPaginationParamsRules(EmployeeSkillSearchFilterParams::ALLOWED_SORT_FIELDS)
+            $this->getEmpNumberRule()
+            // ...$this->getSortingAndPaginationParamsRules(EmployeeSkillSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
     }
 
@@ -355,7 +403,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
             new Rule(Rules::LENGTH, [0, 100])  // Doit avoir une longueur entre 1 et 500 caractères
         ),
         // Inclusion des autres règles déjà présentes dans getCommonBodyValidationRules()
-        ...$this->getCommonBodyValidationRules(),
+        // ...$this->getCommonBodyValidationRules(),
         );
     }
 
@@ -457,7 +505,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         return new ParamRuleCollection(
             new ParamRule(CommonParams::PARAMETER_ID, new Rule(Rules::REQUIRED)),
             $this->getEmpNumberRule(),
-            ...$this->getCommonBodyValidationRules(),
+            // ...$this->getCommonBodyValidationRules(),
         );
     }
 

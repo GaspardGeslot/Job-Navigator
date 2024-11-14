@@ -54,7 +54,10 @@ export class APIService {
     this._ignorePathRegex = new RegExp(ignorePath);
   }
 
-  getAll(params?: object): Promise<AxiosResponse> {
+  getAll(params?: any): Promise<AxiosResponse> {
+    console.log('dans le get all');
+    console.log('params ', params);
+    params = null;
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
