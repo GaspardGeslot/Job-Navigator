@@ -336,13 +336,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         try {
-            $url = $matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads";
-            if($allLeads){
-                $url = "{$clientBaseUrl}/client/leads";
-            }
-            else{
-                $url = $matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads";
-            }
+            $url = $allLeads ? "{$clientBaseUrl}/client/leads" : ($matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads");
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,

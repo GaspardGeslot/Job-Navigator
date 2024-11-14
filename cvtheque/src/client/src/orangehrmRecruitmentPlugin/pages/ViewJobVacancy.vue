@@ -227,7 +227,6 @@ export default {
         sortField: sortField.value,
         sortOrder: sortOrder.value,
         model: 'detailed',
-        
       };
     });
 
@@ -363,7 +362,6 @@ export default {
         {
           name: 'jobTitle',
           title: this.$t('general.job_title'),
-          sortField: 'candidate.jobTitle',
           style: {flex: 1},
         },
         {
@@ -375,7 +373,6 @@ export default {
         {
           name: 'dateOfApplication',
           title: this.$t('recruitment.date_of_application'),
-          sortField: 'candidate.dateOfApplication',
           style: {flex: 1},
         },
         {
@@ -386,7 +383,6 @@ export default {
         {
           name: 'status',
           title: this.$t('general.status'),
-          sortField: 'candidateVacancy.status',
           style: {flex: 1},
         },
         {
@@ -469,7 +465,9 @@ export default {
       navigate('/recruitment/addJobVacancy');
     },
     onClickEdit(item) {
-      navigate('/recruitment/addJobVacancy/{id}', {id: item.id});
+      navigate('/recruitment/addJobVacancy/{id}', {
+        id: this.filters.matchingSelected?.id,
+      });
     },
     onDownload(item) {
       if (!item?.id) return;

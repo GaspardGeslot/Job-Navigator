@@ -24,19 +24,56 @@
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
-              <jobtitle-dropdown v-model="filters.jobTitle"></jobtitle-dropdown>
+              <oxd-input-field
+                v-model="jobSector"
+                type="select"
+                :label="$t('recruitment.job_sector')"
+                :options="sectors"
+              />
             </oxd-grid-item>
             <oxd-grid-item>
-              <jobtitle-dropdown label="Type de contrat recherché"></jobtitle-dropdown>
+              <oxd-input-field
+                v-model="jobTitleFilter"
+                type="select"
+                :label="$t('general.job_title')"
+                :options="jobTitlesPerSector"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="needFilter"
+                type="select"
+                :label="$t('general.need')"
+                :options="needs"
+              />
             </oxd-grid-item>
             <oxd-grid-item>
-              <jobtitle-dropdown label="Niveau d'étude"></jobtitle-dropdown>
+              <oxd-input-field
+                v-model="studyLevelFilter"
+                type="select"
+                :label="$t('general.study_level')"
+                :options="studyLevels"
+              />
             </oxd-grid-item>
             <oxd-grid-item>
-              <jobtitle-dropdown label="Disponibilité"></jobtitle-dropdown>
+              <oxd-input-field
+                v-model="courseStartFilter"
+                type="select"
+                :label="$t('general.course_start')"
+                :options="courseStarts"
+              />
             </oxd-grid-item>
             <oxd-grid-item>
-              <jobtitle-dropdown label="Expérience pro"></jobtitle-dropdown>
+              <oxd-input-field
+                v-model="courseStartFilter"
+                type="select"
+                :label="$t('pim.work_experience_global')"
+                :options="professionalExperiences"
+              />
             </oxd-grid-item>
             <!-- <oxd-grid-item>
               <vacancy-dropdown v-model="filters.vacancy"></vacancy-dropdown>
@@ -112,7 +149,7 @@
     </oxd-table-filter>
     <br />
     <div class="orangehrm-paper-container">
-      <div
+      <!--<div
         v-if="$can.create('recruitment_candidates')"
         class="orangehrm-header-container"
       >
@@ -129,7 +166,7 @@
         :loading="isLoading"
         :show-divider="$can.create('recruitment_candidates')"
         @delete="onClickDeleteSelected"
-      ></table-header>
+      ></table-header>-->
       <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
@@ -170,13 +207,13 @@ import {APIService} from '@/core/util/services/api.service';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import usePaginate from '@ohrm/core/util/composable/usePaginate';
 import {formatDate, parseDate} from '@ohrm/core/util/helper/datefns';
-import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
-import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown';
+//import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
+//import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown';
 import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
-import CandidateAutocomplete from '@/orangehrmRecruitmentPlugin/components/CandidateAutocomplete';
-import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';
-import CandidateStatusDropdown from '@/orangehrmRecruitmentPlugin/components/CandidateStatusDropdown';
+//import CandidateAutocomplete from '@/orangehrmRecruitmentPlugin/components/CandidateAutocomplete';
+//import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';
+//import CandidateStatusDropdown from '@/orangehrmRecruitmentPlugin/components/CandidateStatusDropdown';
 
 const defaultFilters = {
   jobTitle: null,
@@ -200,12 +237,12 @@ const defaultSortOrder = {
 
 export default {
   components: {
-    'vacancy-dropdown': VacancyDropdown,
-    'jobtitle-dropdown': JobtitleDropdown,
+    //'vacancy-dropdown': VacancyDropdown,
+    //'jobtitle-dropdown': JobtitleDropdown,
     'delete-confirmation': DeleteConfirmationDialog,
-    'candidate-autocomplete': CandidateAutocomplete,
-    'hiring-manager-dropdown': HiringManagerDropdown,
-    'candidate-status-dropdown': CandidateStatusDropdown,
+    //'candidate-autocomplete': CandidateAutocomplete,
+    //'hiring-manager-dropdown': HiringManagerDropdown,
+    //'candidate-status-dropdown': CandidateStatusDropdown,
   },
 
   props: {
@@ -214,8 +251,47 @@ export default {
       required: false,
       default: null,
     },
+    studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+    needs: {
+      type: Array,
+      default: () => [],
+    },
+    courseStarts: {
+      type: Array,
+      default: () => [],
+    },
+    professionalExperiences: {
+      type: Array,
+      default: () => [],
+    },
+    sectors: {
+      type: Array,
+      default: () => [],
+    },
   },
-
+  watch: {
+    jobSector(newVal) {
+      if (newVal) {
+        const selectedSector = this.sectors.find(
+          (sector) => sector.label === newVal.label,
+        );
+        this.jobTitlesPerSector = selectedSector
+          ? selectedSector.jobs.map((job, index) => {
+              return {id: index, label: job};
+            })
+          : [];
+      } else this.jobTitlesPerSector = [];
+    },
+    'items.data': function (newData) {
+      if (newData && newData.length > 0) {
+        // Vérifie que les données sont chargées
+        this.sortByDate();
+      }
+    },
+  },
   setup(props) {
     const {$t} = usei18n();
     const {locale} = useLocale();
@@ -235,25 +311,17 @@ export default {
     const candidateDataNormalizer = (data) => {
       return data.map((item) => {
         return {
-          id: item.id,
-          vacancy:
-            item.vacancy?.status === false
-              ? `${item.vacancy?.name} (${$t('general.closed')})`
-              : item.vacancy?.name,
+          id: item.leadId,
+          jobTitle: item.jobTitle,
           candidate: `${item.firstName} ${item.middleName || ''} ${
             item.lastName
           }`,
-          manager: item?.vacancy?.hiringManager?.id
-            ? $tEmpName(item.vacancy.hiringManager, {
-                includeMiddle: true,
-                excludePastEmpTag: false,
-              })
-            : $t('general.deleted'),
           dateOfApplication: formatDate(
             parseDate(item.dateOfApplication),
             jsDateFormat,
             {locale},
           ),
+          email: item.email,
           status:
             statuses.find((status) => status.id === item.status?.id)?.label ||
             '',
@@ -299,7 +367,7 @@ export default {
         toDate: filters.value.toDate,
         status: filters.value.status?.id,
         methodOfApplication: filters.value.methodOfApplication?.id,
-        model: 'list',
+        model: 'detailed',
         sortField: sortField.value,
         sortOrder: sortOrder.value,
         allLeads: 'candidat',
@@ -344,44 +412,41 @@ export default {
   },
   data() {
     return {
+      jobSector: '',
+      jobTitlesPerSector: [],
       checkedItems: [],
       headers: [
         {
-          name: 'vacancy',
-          title: this.$t('recruitment.vacancy'),
-          sortField: 'vacancy.name',
+          name: 'jobTitle',
+          title: this.$t('general.job_title'),
           style: {flex: 1},
         },
         {
           name: 'candidate',
           slot: 'title',
           title: this.$t('recruitment.candidate'),
-          sortField: 'candidate.lastName',
-          style: {flex: 1},
-        },
-        {
-          name: 'manager',
-          title: this.$t('recruitment.hiring_manager'),
-          sortField: 'hiringManager.lastName',
           style: {flex: 1},
         },
         {
           name: 'dateOfApplication',
           title: this.$t('recruitment.date_of_application'),
-          sortField: 'candidate.dateOfApplication',
+          style: {flex: 1},
+        },
+        {
+          name: 'email',
+          title: this.$t('general.other_email'),
           style: {flex: 1},
         },
         {
           name: 'status',
           title: this.$t('general.status'),
-          sortField: 'candidateVacancy.status',
           style: {flex: 1},
         },
         {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 1},
+          style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellRenderer: this.cellRenderer,
         },
@@ -399,6 +464,26 @@ export default {
     };
   },
   methods: {
+    sortByDate() {
+      // Change l'ordre de tri
+      this.isDateAscending = !this.isDateAscending;
+
+      // Trie les éléments en fonction de l'ordre défini
+      this.items.data.sort((a, b) => {
+        const dateA = new Date(a.dateOfApplication);
+        const dateB = new Date(b.dateOfApplication);
+
+        return this.isDateAscending ? dateA - dateB : dateB - dateA;
+      });
+    },
+    sortByName() {
+      this.isNomAscending = !this.isNomAscending;
+      this.items.data.sort((a, b) => {
+        return this.isNomAscending
+          ? a.jobTitle.localeCompare(b.jobTitle)
+          : b.jobTitle.localeCompare(a.jobTitle);
+      });
+    },
     cellRenderer(...[, , , row]) {
       const cellConfig = {
         view: {
@@ -408,7 +493,7 @@ export default {
           },
         },
       };
-      if (row.isSelectable) {
+      /*if (row.isSelectable) {
         cellConfig.delete = {
           onClick: this.onClickDelete,
           component: 'oxd-icon-button',
@@ -424,7 +509,7 @@ export default {
             name: 'download',
           },
         };
-      }
+      }*/
       return {
         props: {
           header: {

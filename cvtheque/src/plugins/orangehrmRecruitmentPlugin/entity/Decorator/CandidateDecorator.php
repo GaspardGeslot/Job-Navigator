@@ -52,7 +52,7 @@ class CandidateDecorator
      */
     public function getDateOfApplication(): string
     {
-        return $this->getDateTimeHelper()->formatDate($this->candidate->getDateOfApplication());
+        return $this->candidate->getDateOfApplication() ? $this->getDateTimeHelper()->formatDate($this->candidate->getDateOfApplication()) : '';
     }
 
     /**
@@ -60,6 +60,6 @@ class CandidateDecorator
      */
     public function getBirthday(): string
     {
-        return $this->getDateTimeHelper()->formatDate($this->candidate->getBirthday());
+        return $this->candidate->getBirthday() ? $this->getDateTimeHelper()->formatDate($this->candidate->getBirthday()) : '';
     }
 }

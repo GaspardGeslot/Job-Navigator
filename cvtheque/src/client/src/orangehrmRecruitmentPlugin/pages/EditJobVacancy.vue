@@ -22,9 +22,157 @@
       <oxd-text tag="h6" class="orangehrm-main-title">
         {{ $t('recruitment.edit_vacancy') }}
       </oxd-text>
+      <br />
+      <oxd-text class="orangehrm-text" tag="p">
+        <i>
+          {{ $t('recruitment.select_only_conditions_for_matching') }}
+        </i>
+      </oxd-text>
       <oxd-divider />
-
       <oxd-form :loading="isLoading" @submit-valid="onSave">
+        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="vacancy.name"
+              :label="$t('recruitment.vacancy_name')"
+              required
+              :rules="rules.name"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="jobSector"
+              type="select"
+              :label="$t('recruitment.job_sector')"
+              :options="sectors"
+            />
+          </oxd-grid-item>
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="vacancy.jobTitle"
+              type="select"
+              :label="$t('general.job_title')"
+              :options="jobTitlesPerSector"
+              required
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid-item class="orangerhrm-switch-wrapper">
+            <oxd-text class="orangehrm-text" tag="p">
+              {{ $t('general.active') }}
+            </oxd-text>
+            <oxd-switch-input v-model="vacancy.status" />
+          </oxd-grid-item>
+        </oxd-grid>
+        <br />
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('pim.work_experience') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in professionalExperiences"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedProfessionalExperiences"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('pim.driving_licences') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in drivingLicenses"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedDrivingLicences"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('general.need_search') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in needs"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedNeeds"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('general.course_start_option') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in courseStarts"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedCourseStarts"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('general.study_level') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in studyLevels"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedStudyLevels"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+        <br />
+        <br />
+        <oxd-divider />
+        <oxd-form-actions>
+          <required-text />
+          <oxd-button
+            display-type="ghost"
+            :label="$t('general.cancel')"
+            @click="onCancel"
+          />
+          <submit-button />
+        </oxd-form-actions>
+      </oxd-form>
+    </div>
+    <!--<oxd-form :loading="isLoading" @submit-valid="onSave">
         <oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item>
             <oxd-input-field
@@ -264,14 +412,14 @@
       <delete-confirmation ref="deleteDialog"></delete-confirmation>
       <br />
       <br />
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
 import {APIService} from '@/core/util/services/api.service';
 import {navigate} from '@ohrm/core/util/helper/navigation';
-import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
-import FileUploadInput from '@/core/components/inputs/FileUploadInput';
+//import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
+//import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import {
   required,
   numericOnly,
@@ -281,9 +429,9 @@ import {
   shouldNotExceedCharLength,
   numberShouldBeBetweenMinAndMaxValue,
 } from '@ohrm/core/util/validation/rules';
-import EmployeeAutocomplete from '@/core/components/inputs/EmployeeAutocomplete';
+/*import EmployeeAutocomplete from '@/core/components/inputs/EmployeeAutocomplete';
 import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
-import VacancyLinkCard from '../components/VacancyLinkCard.vue';
+import VacancyLinkCard from '../components/VacancyLinkCard.vue';*/
 import {OxdSwitchInput} from '@ohrm/oxd';
 import useServerValidation from '@/core/util/composable/useServerValidation';
 
@@ -291,10 +439,15 @@ const vacancyModel = {
   jobTitle: null,
   name: '',
   hiringManager: null,
+  checkedProfessionalExperiences: [],
+  checkedDrivingLicences: [],
+  checkedNeeds: [],
+  checkedCourseStarts: [],
+  checkedStudyLevels: [],
   numOfPositions: '',
   description: '',
-  status: false,
-  isPublished: false,
+  status: true,
+  isPublished: true,
 };
 
 const VacancyAttachmentModel = {
@@ -324,15 +477,39 @@ const attachmentNormalizer = (data) => {
 export default {
   components: {
     'oxd-switch-input': OxdSwitchInput,
-    'employee-autocomplete': EmployeeAutocomplete,
+    /*'employee-autocomplete': EmployeeAutocomplete,
     'jobtitle-dropdown': JobtitleDropdown,
     'vacancy-link-card': VacancyLinkCard,
     'delete-confirmation': DeleteConfirmationDialog,
-    'file-upload-input': FileUploadInput,
+    'file-upload-input': FileUploadInput,*/
   },
 
   props: {
-    vacancyId: {
+    professionalExperiences: {
+      type: Array,
+      default: () => [],
+    },
+    needs: {
+      type: Array,
+      default: () => [],
+    },
+    drivingLicenses: {
+      type: Array,
+      default: () => [],
+    },
+    courseStarts: {
+      type: Array,
+      default: () => [],
+    },
+    studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+    sectors: {
+      type: Array,
+      default: () => [],
+    },
+    matchingId: {
       type: String,
       required: true,
     },
@@ -358,7 +535,7 @@ export default {
     const vacancyNameUniqueValidation = createUniqueValidator(
       'Vacancy',
       'name',
-      {entityId: props.vacancyId},
+      {entityId: props.matchingId},
     );
     return {
       http,
@@ -484,7 +661,7 @@ export default {
     this.isLoadingTable = true;
 
     this.http
-      .get(this.vacancyId)
+      .get(this.matchingId)
       .then((response) => {
         const {data} = response.data;
         this.currentName = data.name;
@@ -507,17 +684,17 @@ export default {
               label: data.jobTitle.title,
             };
       })
-      .then(() => {
+      /*.then(() => {
         this.httpAttachments
           .request({
             method: 'GET',
-            url: `/api/v2/recruitment/vacancies/${this.vacancyId}/attachments`,
+            url: `/api/v2/recruitment/vacancies/${this.matchingId}/attachments`,
           })
           .then((response) => {
             const {data} = response.data;
             this.attachments = attachmentNormalizer(data);
           });
-      })
+      })*/
       .finally(() => {
         this.isLoadingTable = false;
         this.isLoading = false;
@@ -531,25 +708,38 @@ export default {
       this.isLoading = true;
       this.vacancy = {
         name: this.vacancy.name,
-        jobTitleId: this.vacancy.jobTitle.id,
-        employeeId: this.vacancy.hiringManager.id,
+        //jobTitleId: this.vacancy.jobTitle?.id,
+        jobTitle: this.vacancy.jobTitle?.label,
+        /*countries: JSON.stringify(
+          this.vacancy.countries?.map((country) => {
+            return country.label;
+          }),
+        ),*/
+        professionalExperiences: JSON.stringify(
+          this.vacancy.checkedProfessionalExperiences,
+        ),
+        drivingLicenses: JSON.stringify(this.vacancy.checkedDrivingLicences),
+        needs: JSON.stringify(this.vacancy.checkedNeeds),
+        courseStarts: JSON.stringify(this.vacancy.checkedCourseStarts),
+        studyLevels: JSON.stringify(this.vacancy.checkedStudyLevels),
+        //employeeId: this.vacancy.hiringManager?.id,
         numOfPositions: this.vacancy.numOfPositions
           ? parseInt(this.vacancy.numOfPositions)
           : null,
-        description: this.vacancy.description,
+        //description: this.vacancy.description,
         status: this.vacancy.status,
-        isPublished: this.vacancy.isPublished,
+        //isPublished: this.vacancy.isPublished,
       };
       this.http
-        .update(this.vacancyId, {...this.vacancy})
+        .update(this.matchingId, {...this.vacancy})
         .then(() => {
           return this.$toast.saveSuccess();
         })
         .then(() => {
-          navigate('/recruitment/addJobVacancy/{id}', {id: this.vacancyId});
+          navigate('/recruitment/viewJobVacancy');
         });
     },
-    onSaveAttachment() {
+    /*onSaveAttachment() {
       this.isLoadingAttachment = true;
       this.isLoadingTable = true;
       this.httpAttachments
@@ -570,7 +760,7 @@ export default {
           this.isLoadingAttachment = false;
           this.isLoadingTable = false;
         });
-    },
+    },*/
     onClickDelete(item) {
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
@@ -605,7 +795,7 @@ export default {
           });
       }
     },
-    resetDataTable() {
+    /*resetDataTable() {
       this.checkedItems = [];
       this.httpAttachments
         .request({
@@ -616,7 +806,7 @@ export default {
           const {data} = response.data;
           this.attachments = attachmentNormalizer(data);
         });
-    },
+    },*/
     onClickAdd() {
       this.isEditClicked = false;
       this.isAddClicked = true;
@@ -635,7 +825,7 @@ export default {
       this.isAddClicked = false;
       this.isEditClicked = true;
     },
-    onUpdateAttachment() {
+    /*onUpdateAttachment() {
       this.isLoadingAttachment = true;
       this.isLoadingTable = true;
       this.httpAttachments
@@ -663,7 +853,7 @@ export default {
           this.isLoadingAttachment = false;
           this.isLoadingTable = false;
         });
-    },
+    },*/
     updateVisibility() {
       this.isAddClicked = false;
       this.isEditClicked = false;
