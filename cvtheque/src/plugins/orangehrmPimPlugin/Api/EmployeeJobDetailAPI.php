@@ -165,17 +165,22 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
     $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
     $jobs = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, 'jobs');
+    // error_log('Jobs reçus brut : ' . print_r($jobs, true));
 
-    if (is_array($jobs)) {
-        $jobs = array_map('strval', $jobs);
-    } else {
-        $jobs = [];
+    if (!is_array($jobs)) {
+        throw new \InvalidArgumentException("Le paramètre `jobs` doit être un tableau.");
     }
 
-    $employee->setJobs(json_encode($jobs));
+    $jobs = array_map(function ($job) {
+        return html_entity_decode($job, ENT_QUOTES, 'UTF-8');
+    }, $jobs);
+
+    // error_log('Jobs après traitement : ' . print_r($jobs, true));
+
+    $employee->setJobs(json_encode($jobs, JSON_UNESCAPED_UNICODE));
 
     $sendJobs = $employee->getJobs();
-    error_log($sendJobs);
+    error_log('$sendJobs' . $sendJobs);
     $client = new Client();
     $clientBaseUrl = getenv('HEDWIGE_URL');
 
