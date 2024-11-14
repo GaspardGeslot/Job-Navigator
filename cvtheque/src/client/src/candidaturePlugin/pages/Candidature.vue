@@ -241,8 +241,8 @@ h1 {
   flex-direction: row;
   height: 100vh;
   background-color: #1b1f23;
-  color: black;
 }
+
 #accueil h1,
 #accueil a {
   color: white;
