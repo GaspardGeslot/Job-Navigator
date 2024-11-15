@@ -120,9 +120,33 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_ID
         );
-        $vacancy = $this->getVacancyService()->getVacancyDao()->getVacancyById($id);
-        $this->throwRecordNotFoundExceptionIfNotExist($vacancy, Vacancy::class);
+        /*$vacancy = $this->getVacancyService()->getVacancyDao()->getVacancyById($id);
+        $this->throwRecordNotFoundExceptionIfNotExist($vacancy, Vacancy::class);*/
+
+        $matching = $this->getHedwigeMatching($this->getAuthUser()->getUserHedwigeToken(), $id);
+        $vacancy = new Vacancy();
+        $vacancy->setMatching($matching);
+
         return new EndpointResourceResult(VacancyDetailedModel::class, $vacancy);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getHedwigeMatching(string $token, int $matchingId) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/matching/{$matchingId}", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**

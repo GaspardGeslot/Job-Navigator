@@ -63,11 +63,54 @@ class Vacancy
      * @ORM\Column(name="name", type="string", length=100)
      */
     private string $name;
+    
     /**
      * @var string |null
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private ?string $description;
+
+    /**
+     * @var string |null
+     * @ORM\Column(name="jobs", type="text", nullable=true)
+     */
+    private ?string $jobs;
+
+    /**
+     * @var string |null
+     * @ORM\Column(name="needs", type="text", nullable=true)
+     */
+    private ?string $needs;
+
+    /**
+     * @var string |null
+     * @ORM\Column(name="levels", type="text", nullable=true)
+     */
+    private ?string $levels;
+
+    /**
+     * @var string |null
+     * @ORM\Column(name="course_starts", type="text", nullable=true)
+     */
+    private ?string $courseStarts;
+
+    /**
+     * @var string |null
+     * @ORM\Column(name="countries", type="text", nullable=true)
+     */
+    private ?string $countries;
+
+    /**
+     * @var string |null
+     * @ORM\Column(name="professional_experiences", type="text", nullable=true)
+     */
+    private ?string $professionalExperiences;
+
+    /**
+     * @var string |null
+     * @ORM\Column(name="driving_licenses", type="text", nullable=true)
+     */
+    private ?string $drivingLicenses;
 
     /**
      * @var int |null
@@ -98,6 +141,20 @@ class Vacancy
      * @ORM\Column(name="updated_time", type="datetime")
      */
     private DateTime $updatedTime;
+
+    public function setMatching(mixed $matching): void
+    {
+        $this->setId($matching['id']);
+        $this->setName($matching['title']);
+        $this->setJobs(json_encode($matching['jobs'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setNeeds(json_encode($matching['needs'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setLevels(json_encode($matching['levels'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setCourseStarts(json_encode($matching['courseStarts'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setCountries(json_encode($matching['countries'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setProfessionalExperiences(json_encode($matching['professionalExperiences'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setDrivingLicenses(json_encode($matching['drivingLicenses'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setStatus($matching['active']);
+    }
 
     /**
      * @return int
@@ -178,6 +235,118 @@ class Vacancy
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJobs(): ?string
+    {
+        return $this->jobs;
+    }
+
+    /**
+     * @param string|null $jobs
+     */
+    public function setJobs(?string $jobs): void
+    {
+        $this->jobs = $jobs;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNeeds(): ?string
+    {
+        return $this->needs;
+    }
+
+    /**
+     * @param string|null $needs
+     */
+    public function setNeeds(?string $needs): void
+    {
+        $this->needs = $needs;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLevels(): ?string
+    {
+        return $this->levels;
+    }
+
+    /**
+     * @param string|null $levels
+     */
+    public function setLevels(?string $levels): void
+    {
+        $this->levels = $levels;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCourseStarts(): ?string
+    {
+        return $this->courseStarts;
+    }
+
+    /**
+     * @param string|null $courseStarts
+     */
+    public function setCourseStarts(?string $courseStarts): void
+    {
+        $this->courseStarts = $courseStarts;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCountries(): ?string
+    {
+        return $this->countries;
+    }
+
+    /**
+     * @param string|null $countries
+     */
+    public function setCountries(?string $countries): void
+    {
+        $this->countries = $countries;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getProfessionalExperiences(): ?string
+    {
+        return $this->professionalExperiences;
+    }
+
+    /**
+     * @param string|null $professionalExperiences
+     */
+    public function setProfessionalExperiences(?string $professionalExperiences): void
+    {
+        $this->professionalExperiences = $professionalExperiences;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDrivingLicenses(): ?string
+    {
+        return $this->drivingLicenses;
+    }
+
+    /**
+     * @param string|null $drivingLicenses
+     */
+    public function setDrivingLicenses(?string $drivingLicenses): void
+    {
+        $this->drivingLicenses = $drivingLicenses;
     }
 
     /**

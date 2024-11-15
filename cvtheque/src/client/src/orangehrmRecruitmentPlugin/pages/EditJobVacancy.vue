@@ -36,7 +36,6 @@
               v-model="vacancy.name"
               :label="$t('recruitment.vacancy_name')"
               required
-              :rules="rules.name"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -51,7 +50,7 @@
           </oxd-grid-item>
           <oxd-grid-item>
             <oxd-input-field
-              v-model="vacancy.jobTitle"
+              v-model="vacancy.jobSelected"
               type="select"
               :label="$t('general.job_title')"
               :options="jobTitlesPerSector"
@@ -437,6 +436,7 @@ import useServerValidation from '@/core/util/composable/useServerValidation';
 
 const vacancyModel = {
   jobTitle: null,
+  jobSelected: null,
   name: '',
   hiringManager: null,
   checkedProfessionalExperiences: [],
@@ -545,6 +545,8 @@ export default {
   },
   data() {
     return {
+      jobSector: null,
+      jobTitlesPerSector: [],
       isLoading: false,
       isLoadingAttachment: false,
       isLoadingTable: false,
@@ -663,13 +665,33 @@ export default {
     this.http
       .get(this.matchingId)
       .then((response) => {
+        console.log('Data : ', response.data);
         const {data} = response.data;
         this.currentName = data.name;
         this.vacancy.name = data.name;
         this.vacancy.description = data.description;
         this.vacancy.numOfPositions = data.numOfPositions || '';
         this.vacancy.status = data.status;
-        this.vacancy.isPublished = data.isPublished;
+        this.vacancy.checkedProfessionalExperiences = JSON.parse(
+          data.professionalExperiences,
+        );
+        this.vacancy.checkedNeeds = JSON.parse(data.needs);
+        this.vacancy.checkedStudyLevels = JSON.parse(data.levels);
+        this.vacancy.checkedCourseStarts = JSON.parse(data.courseStarts);
+        this.vacancy.checkedDrivingLicences = JSON.parse(data.drivingLicenses);
+        const firstJob =
+          data.jobs && data.jobs.length > 0 ? JSON.parse(data.jobs)[0] : null;
+        if (this.sectors && firstJob) {
+          this.sectors.forEach((sector) => {
+            const jobIndex = sector.jobs.findIndex((job) => job === firstJob);
+            if (jobIndex !== -1) {
+              this.vacancy.jobSelected = {id: jobIndex, label: firstJob};
+              this.jobSector = sector;
+              return;
+            }
+          });
+        }
+        /*this.vacancy.isPublished = data.isPublished;
         this.vacancy.hiringManager = data.hiringManager.id
           ? {
               id: data.hiringManager.id,
@@ -682,7 +704,7 @@ export default {
           : {
               id: data.jobTitle.id,
               label: data.jobTitle.title,
-            };
+            };*/
       })
       /*.then(() => {
         this.httpAttachments
@@ -699,6 +721,20 @@ export default {
         this.isLoadingTable = false;
         this.isLoading = false;
       });
+  },
+  watch: {
+    jobSector(newVal) {
+      if (newVal) {
+        const selectedSector = this.sectors.find(
+          (sector) => sector.label === newVal.label,
+        );
+        this.jobTitlesPerSector = selectedSector
+          ? selectedSector.jobs.map((job, index) => {
+              return {id: index, label: job};
+            })
+          : [];
+      } else this.jobTitlesPerSector = [];
+    },
   },
   methods: {
     onCancel() {

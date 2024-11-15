@@ -390,7 +390,6 @@ export default {
       navigate('/recruitment/viewJobVacancy');
     },
     onSave() {
-      console.log('Test');
       this.isLoading = true;
       const vacancy = {
         name: this.vacancy.name,
@@ -416,7 +415,6 @@ export default {
         status: this.vacancy.status,
         //isPublished: this.vacancy.isPublished,
       };
-      console.log('Data : ', vacancy);
       this.http.create({...vacancy}).then((response) => {
         //const {data} = response.data;
         this.$toast.saveSuccess();

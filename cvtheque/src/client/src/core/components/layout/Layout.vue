@@ -26,7 +26,7 @@
         <a :href="supportUrl" role="menuitem" class="oxd-userdropdown-link">
           {{ $t('general.support') }}
         </a>
-      </li>-->
+      </li>
       <li v-if="updatePasswordUrl">
         <a
           :href="updatePasswordUrl"
@@ -35,7 +35,7 @@
         >
           {{ $t('general.change_password') }}
         </a>
-      </li>
+      </li>-->
       <li>
         <a :href="logoutUrl" role="menuitem" class="oxd-userdropdown-link">
           {{ $t('general.logout') }}
