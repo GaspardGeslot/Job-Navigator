@@ -68,8 +68,7 @@ class EmployeeSkillModel implements Normalizable
             throw new \InvalidArgumentException('Invalid data type. Expected JSON string or array.');
         }
 
-        // Log the received data for debugging
-        error_log('EmployeeSkillModel: Received skill data: ' . json_encode($skillData, JSON_PRETTY_PRINT));
+        // error_log('EmployeeSkillModel: Received skill data: ' . json_encode($skillData, JSON_PRETTY_PRINT));
 
         $this->type = $skillData['type'] ?? null;
         $this->title = $skillData['title'] ?? null;
@@ -89,8 +88,7 @@ class EmployeeSkillModel implements Normalizable
             'description' => $this->description,
         ];
 
-        // Log the normalized data for debugging
-        error_log('EmployeeSkillModel: Normalized data: ' . json_encode($normalized, JSON_PRETTY_PRINT));
+        // error_log('EmployeeSkillModel: Normalized data: ' . json_encode($normalized, JSON_PRETTY_PRINT));
 
         return $normalized;
     }
@@ -108,8 +106,7 @@ class EmployeeSkillModel implements Normalizable
             'description' => $this->description,
         ];
 
-        // Log the array conversion for debugging
-        error_log('EmployeeSkillModel: toArray result: ' . json_encode($array, JSON_PRETTY_PRINT));
+        // error_log('EmployeeSkillModel: toArray result: ' . json_encode($array, JSON_PRETTY_PRINT));
 
         return $array;
     }

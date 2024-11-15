@@ -130,7 +130,6 @@ export default {
         })
         .then((response) => {
           console.log('Response du serveur : ', response);
-          console.log('ça fonctionne');
           return this.$toast.saveSuccess();
         })
         .then(() => {

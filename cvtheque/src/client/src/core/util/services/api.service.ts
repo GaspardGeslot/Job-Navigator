@@ -55,8 +55,7 @@ export class APIService {
   }
 
   getAll(params?: any): Promise<AxiosResponse> {
-    console.log('dans le get all');
-    console.log('params ', params);
+    // console.log('params ', params);
     params = null;
     const headers = {
       'Content-Type': 'application/json',
@@ -110,6 +109,7 @@ export class APIService {
   }
 
   delete(id: number): Promise<AxiosResponse> {
+    console.log('delete');
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -118,6 +118,8 @@ export class APIService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deleteAll(data?: any): Promise<AxiosResponse> {
+    console.log('deleteAll');
+    console.log('data here ', data);
     const headers = {
       'Content-Type': 'application/json',
     };

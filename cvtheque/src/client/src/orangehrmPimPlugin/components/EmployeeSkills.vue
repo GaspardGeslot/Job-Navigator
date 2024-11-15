@@ -32,7 +32,6 @@
       @close="onEditModalClose"
     ></edit-skill>
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
-      <p>{{ items.data }}</p>
       <profile-action-header @click="onClickAdd">
         {{ $t('general.certificates') }}
       </profile-action-header>
@@ -71,7 +70,7 @@ import EditSkill from '@/orangehrmPimPlugin/components/EditSkill';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 
 const skillNormalizer = (data) => {
-  console.log('Data from backend:', data);
+  // console.log('Data from backend:', data);
   return data.map((item) => {
     return {
       type: item.type || 'Unknown Type',
@@ -135,17 +134,17 @@ export default {
       headers: [
         {
           name: 'type',
-          title: this.$t('pim.certificate_type'),
+          title: this.$t('Compétence'),
           style: {flex: 1},
         },
         {
           name: 'title',
-          title: this.$t('pim.certificate_title'),
+          title: this.$t('Expérience'),
           style: {flex: 1},
         },
         {
           name: 'description',
-          title: this.$t('pim.certificate_description'),
+          title: this.$t('Commentaires'),
           style: {flex: 2},
         },
         {
@@ -186,6 +185,7 @@ export default {
 
   methods: {
     onClickDeleteSelected() {
+      console.log('onClickDeleteSelected');
       const ids = this.checkedItems.map((index) => {
         return this.items?.data[index].id;
       });
@@ -196,19 +196,20 @@ export default {
       });
     },
     onClickDelete(item) {
+      console.log('onClickDelete');
+      console.log('item', item);
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems([item.id]);
+          this.deleteItems([{type: item.type, title: item.title}]);
         }
       });
     },
     deleteItems(items) {
+      console.log('deleteItems');
       if (items instanceof Array) {
         this.isLoading = true;
         this.http
-          .deleteAll({
-            ids: items,
-          })
+          .deleteAll(items[0])
           .then(() => {
             return this.$toast.deleteSuccess();
           })
