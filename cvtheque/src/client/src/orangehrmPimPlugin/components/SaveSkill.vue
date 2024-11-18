@@ -32,6 +32,7 @@
               :label="$t(`Compétence`)"
               :rules="rules.type"
               :api="api"
+              :certificate-options="certificateOptions"
               required
             ></qualification-dropdown>
           </oxd-grid-item>
@@ -100,6 +101,10 @@ export default {
     },
     api: {
       type: String,
+      required: true,
+    },
+    certificateOptions: {
+      type: Array,
       required: true,
     },
   },

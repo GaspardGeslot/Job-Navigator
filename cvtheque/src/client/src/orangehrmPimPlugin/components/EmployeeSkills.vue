@@ -23,6 +23,7 @@
       v-if="showSaveModal"
       :http="http"
       :api="skillsEndpoint"
+      :certificate-options="certificateOptions"
       @close="onSaveModalClose"
     ></save-skill>
     <edit-skill
@@ -93,6 +94,10 @@ export default {
   props: {
     employeeId: {
       type: String,
+      required: true,
+    },
+    certificateOptions: {
+      type: Array,
       required: true,
     },
   },
