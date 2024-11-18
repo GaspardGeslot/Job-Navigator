@@ -347,7 +347,6 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_COURSE_START
         );
 
-        // Pour vérifier les valeurs
         // error_log('------------------------');
         // error_log($jobSector);
         // error_log($professionalExperienceFilter);

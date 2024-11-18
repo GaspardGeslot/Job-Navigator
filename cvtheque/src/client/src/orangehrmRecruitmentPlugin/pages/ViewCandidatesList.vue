@@ -142,8 +142,10 @@
             type="reset"
             display-type="ghost"
             :label="$t('general.reset')"
+            :disabled="!canUpdate"
+            @click="resetFiltre"
           />
-          <submit-button :label="$t('general.search')" @click="rechercherMetier"/>
+          <submit-button :label="$t('general.search')" :disabled="!canUpdate"/>
         </oxd-form-actions>
       </oxd-form>
     </oxd-table-filter>
@@ -274,6 +276,11 @@ export default {
   },
   watch: {
     jobSector(newVal) {
+      if (newVal === null && this.needFilter == null && this.studyLevelFilter == null && this.courseStartFilter == null && this.professionalExperienceFilter == null) {
+          this.canUpdate = false;
+        } else {
+          this.canUpdate = true;
+        }
       if (newVal) {
         const selectedSector = this.sectors.find(
           (sector) => sector.label === newVal.label,
@@ -283,13 +290,46 @@ export default {
               return {id: index, label: job};
             })
           : [];
-      } else this.jobTitlesPerSector = [];
+      } else{
+        this.jobTitlesPerSector = [];
+        this.jobTitleFilter = null;
+      } 
     },
     'items.data': function (newData) {
       if (newData && newData.length > 0) {
         // Vérifie que les données sont chargées
         this.sortByDate();
       }
+    },
+    needFilter(newVal){
+      if (newVal === null && this.studyLevelFilter == null && this.courseStartFilter == null && this.professionalExperienceFilter == null && this.jobSector == null) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
+    },
+    studyLevelFilter(newVal) {
+        if (newVal === null && this.needFilter == null && this.courseStartFilter == null && this.professionalExperienceFilter == null && this.jobSector == null) {
+          this.canUpdate = false;
+        } else {
+          this.canUpdate = true;
+        }
+    },
+    courseStartFilter(newVal) {
+        if (newVal === null && this.needFilter == null && this.studyLevelFilter == null && this.professionalExperienceFilter == null && this.jobSector == null) {
+          this.canUpdate = false;
+        } else {
+          this.canUpdate = true;
+        }
+        console.log(this.canUpdate); // Pour vérifier la valeur de canUpdate
+    },
+    professionalExperienceFilter(newVal){
+        if (newVal === null && this.needFilter == null && this.studyLevelFilter == null && this.courseStartFilter == null && this.jobSector == null) {
+          this.canUpdate = false;
+        } else {
+          this.canUpdate = true;
+        }
+        console.log(this.canUpdate); // Pour vérifier la valeur de canUpdate
     },
   },
   setup(props) {
@@ -433,7 +473,7 @@ export default {
     return {
       jobTitlesPerSector: [],
       checkedItems: [],
-      
+      canUpdate: false,
       headers: [
         {
           name: 'jobTitle',
@@ -483,8 +523,17 @@ export default {
     };
   },
   methods: {
-    rechercherMetier() {
-      
+    async resetFiltre(){
+      await this.resetFiltreValeur();
+      this.canUpdate = false;
+    },
+    resetFiltreValeur(){
+      this.jobSector = '';
+      this.professionalExperienceFilter = null;
+      this.jobTitleFilter = null;
+      this.needFilter = null;
+      this.studyLevelFilter = null;
+      this.courseStartFilter = null;
     },
     sortByDate() {
       // Change l'ordre de tri
