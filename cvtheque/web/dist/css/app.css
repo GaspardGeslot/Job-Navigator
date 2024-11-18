@@ -8772,7 +8772,7 @@ p {
   margin-right: 5rem;
 }
 #review {
-  height: 6rem;
+  height: 12rem;
   margin-bottom: 0.5rem;
 }
 #review::-moz-placeholder {
@@ -9151,7 +9151,7 @@ p[data-v-d99f0b7a] {
   margin-right: 5rem;
 }
 #review[data-v-d99f0b7a] {
-  height: 6rem;
+  height: 12rem;
   margin-bottom: 0.5rem;
 }
 #review[data-v-d99f0b7a]::-moz-placeholder {
@@ -10122,6 +10122,13 @@ h1[data-v-0c52339c] {
   flex-direction: column;
   width: 50%;
 }
+.accueilDroiteVideo[data-v-0c52339c]{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
 .accueilNav[data-v-0c52339c] {
   display: flex;
   flex-direction: row;
@@ -10139,9 +10146,9 @@ h1[data-v-0c52339c] {
 .accueilDroite video[data-v-0c52339c] {
   padding: 2rem;
   background-color: white;
-  border-radius: 10%;
+  border-radius: 3rem;
   margin-right: 4rem;
-  height: 70%;
+  height: auto;
 }
 #comment[data-v-0c52339c] {
   height: 100vh;
@@ -10203,6 +10210,9 @@ h1[data-v-0c52339c] {
     flex-direction: column;
     height: auto;
 }
+h1[data-v-0c52339c] {
+    font-size: 2.5rem;
+}
 .accueilGauche[data-v-0c52339c] {
     width: 100%;
 }
@@ -10237,10 +10247,9 @@ h1[data-v-0c52339c] {
     width: 100%;
 }
 .accueilDroite video[data-v-0c52339c] {
-    padding: 2rem;
-    border-radius: 5rem;
+    border-radius: 3rem;
     margin: 2rem;
-    height: 70%;
+    padding: 1rem
 }
 #aPropos[data-v-0c52339c] {
     height: auto;
