@@ -22,6 +22,7 @@ use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Entity\EmployeeLanguage;
 use OrangeHRM\Framework\Http\Request;
+use GuzzleHttp\Client;
 
 class EmployeeQualificationsController extends BaseViewEmployeeController
 {
@@ -51,9 +52,12 @@ class EmployeeQualificationsController extends BaseViewEmployeeController
                 array_keys(EmployeeLanguage::COMPETENCIES)
             );
 
+            $certificateOptions = $this->getCertificateOptions();
+
             $component->addProp(new Prop('emp-number', Prop::TYPE_NUMBER, $empNumber));
             $component->addProp(new Prop('fluencies', Prop::TYPE_ARRAY, $fluencies));
             $component->addProp(new Prop('competencies', Prop::TYPE_ARRAY, $competencies));
+            $component->addProp(new Prop('certificate-options', Prop::TYPE_ARRAY, $certificateOptions));
 
             $this->setComponent($component);
 
@@ -72,6 +76,25 @@ class EmployeeQualificationsController extends BaseViewEmployeeController
             );
         } else {
             $this->handleBadRequest();
+        }
+    }
+
+    public function getCertificateOptions(): array
+    {
+        $client = new Client();
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/certificates", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return [];
         }
     }
 

@@ -32,6 +32,7 @@
               :label="$t(`Compétence`)"
               :rules="rules.type"
               :api="api"
+              :certificate-options="certificateOptions"
               required
             ></qualification-dropdown>
           </oxd-grid-item>
@@ -102,6 +103,10 @@ export default {
       type: String,
       required: true,
     },
+    certificateOptions: {
+      type: Array,
+      required: true,
+    },
   },
 
   emits: ['close'],
@@ -130,7 +135,6 @@ export default {
         })
         .then((response) => {
           console.log('Response du serveur : ', response);
-          console.log('ça fonctionne');
           return this.$toast.saveSuccess();
         })
         .then(() => {

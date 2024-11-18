@@ -54,7 +54,9 @@ export class APIService {
     this._ignorePathRegex = new RegExp(ignorePath);
   }
 
-  getAll(params?: object): Promise<AxiosResponse> {
+  getAll(params?: any): Promise<AxiosResponse> {
+    // console.log('params ', params);
+    params = null;
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -107,6 +109,7 @@ export class APIService {
   }
 
   delete(id: number): Promise<AxiosResponse> {
+    console.log('delete');
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -115,6 +118,8 @@ export class APIService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deleteAll(data?: any): Promise<AxiosResponse> {
+    console.log('deleteAll');
+    console.log('data here ', data);
     const headers = {
       'Content-Type': 'application/json',
     };

@@ -23,14 +23,17 @@
       v-if="showSaveModal"
       :http="http"
       :api="skillsEndpoint"
+      :certificate-options="certificateOptions"
       @close="onSaveModalClose"
     ></save-skill>
+    <!--
     <edit-skill
       v-if="showEditModal"
       :http="http"
       :data="editModalState"
       @close="onEditModalClose"
     ></edit-skill>
+    -->
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
       <profile-action-header @click="onClickAdd">
         {{ $t('general.certificates') }}
@@ -66,16 +69,16 @@ import usePaginate from '@ohrm/core/util/composable/usePaginate';
 import {APIService} from '@ohrm/core/util/services/api.service';
 import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
 import SaveSkill from '@/orangehrmPimPlugin/components/SaveSkill';
-import EditSkill from '@/orangehrmPimPlugin/components/EditSkill';
+// import EditSkill from '@/orangehrmPimPlugin/components/EditSkill';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 
 const skillNormalizer = (data) => {
+  // console.log('Data from backend:', data);
   return data.map((item) => {
     return {
-      id: item.skill.id,
-      name: item.skill.name,
-      yearsOfExperience: item.yearsOfExperience,
-      comments: item.comments,
+      type: item.type || 'Unknown Type',
+      title: item.title || 'No Title',
+      description: item.description || 'No Description',
     };
   });
 };
@@ -86,13 +89,17 @@ export default {
   components: {
     'profile-action-header': ProfileActionHeader,
     'save-skill': SaveSkill,
-    'edit-skill': EditSkill,
+    // 'edit-skill': EditSkill,
     'delete-confirmation': DeleteConfirmationDialog,
   },
 
   props: {
     employeeId: {
       type: String,
+      required: true,
+    },
+    certificateOptions: {
+      type: Array,
       required: true,
     },
   },
@@ -133,15 +140,19 @@ export default {
     return {
       headers: [
         {
-          name: 'name',
-          slot: 'title',
-          title: this.$t('pim.certificates'),
+          name: 'type',
+          title: this.$t('Compétence'),
           style: {flex: 1},
         },
         {
-          name: 'yearsOfExperience',
-          title: this.$t('pim.certificate_title'),
+          name: 'title',
+          title: this.$t('Expérience'),
           style: {flex: 1},
+        },
+        {
+          name: 'description',
+          title: this.$t('Commentaires'),
+          style: {flex: 2},
         },
         {
           name: 'actions',
@@ -157,12 +168,12 @@ export default {
                 name: 'trash',
               },
             },
-            edit: {
-              onClick: this.onClickEdit,
-              props: {
-                name: 'pencil-fill',
-              },
-            },
+            // edit: {
+            //   onClick: this.onClickEdit,
+            //   props: {
+            //     name: 'pencil-fill',
+            //   },
+            // },
           },
         },
       ],
@@ -181,6 +192,7 @@ export default {
 
   methods: {
     onClickDeleteSelected() {
+      console.log('onClickDeleteSelected');
       const ids = this.checkedItems.map((index) => {
         return this.items?.data[index].id;
       });
@@ -191,19 +203,20 @@ export default {
       });
     },
     onClickDelete(item) {
+      console.log('onClickDelete');
+      console.log('item', item);
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems([item.id]);
+          this.deleteItems([{type: item.type, title: item.title}]);
         }
       });
     },
     deleteItems(items) {
+      console.log('deleteItems');
       if (items instanceof Array) {
         this.isLoading = true;
         this.http
-          .deleteAll({
-            ids: items,
-          })
+          .deleteAll(items[0])
           .then(() => {
             return this.$toast.deleteSuccess();
           })
@@ -224,7 +237,11 @@ export default {
     },
     onClickEdit(item) {
       this.showSaveModal = false;
-      this.editModalState = item;
+      this.editModalState = {
+        type: item.type,
+        title: item.title,
+        description: item.description,
+      };
       this.showEditModal = true;
     },
     onSaveModalClose() {

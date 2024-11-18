@@ -67,10 +67,10 @@ class Vacancy extends \OrangeHRM\Entity\Vacancy implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'hiringManager', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'name', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'numOfPositions', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'isPublished', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'definedTime', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'updatedTime', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'hiringManager', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'name', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'needs', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'levels', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'courseStarts', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'countries', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'professionalExperiences', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'drivingLicenses', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'numOfPositions', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'isPublished', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'definedTime', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'updatedTime', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'hiringManager', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'name', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'numOfPositions', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'isPublished', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'definedTime', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'updatedTime', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'hiringManager', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'name', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'needs', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'levels', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'courseStarts', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'countries', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'professionalExperiences', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'drivingLicenses', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'numOfPositions', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'isPublished', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'definedTime', '' . "\0" . 'OrangeHRM\\Entity\\Vacancy' . "\0" . 'updatedTime', 'entityDecorator'];
     }
 
     /**
@@ -177,6 +177,17 @@ class Vacancy extends \OrangeHRM\Entity\Vacancy implements \Doctrine\ORM\Proxy\P
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function setMatching(mixed $matching): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMatching', [$matching]);
+
+        parent::setMatching($matching);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -289,6 +300,160 @@ class Vacancy extends \OrangeHRM\Entity\Vacancy implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDescription', [$description]);
 
         parent::setDescription($description);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getJobs(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJobs', []);
+
+        return parent::getJobs();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setJobs(?string $jobs): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJobs', [$jobs]);
+
+        parent::setJobs($jobs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNeeds(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNeeds', []);
+
+        return parent::getNeeds();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNeeds(?string $needs): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNeeds', [$needs]);
+
+        parent::setNeeds($needs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLevels(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLevels', []);
+
+        return parent::getLevels();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLevels(?string $levels): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLevels', [$levels]);
+
+        parent::setLevels($levels);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCourseStarts(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCourseStarts', []);
+
+        return parent::getCourseStarts();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCourseStarts(?string $courseStarts): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCourseStarts', [$courseStarts]);
+
+        parent::setCourseStarts($courseStarts);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCountries(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCountries', []);
+
+        return parent::getCountries();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCountries(?string $countries): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCountries', [$countries]);
+
+        parent::setCountries($countries);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProfessionalExperiences(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProfessionalExperiences', []);
+
+        return parent::getProfessionalExperiences();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setProfessionalExperiences(?string $professionalExperiences): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProfessionalExperiences', [$professionalExperiences]);
+
+        parent::setProfessionalExperiences($professionalExperiences);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDrivingLicenses(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDrivingLicenses', []);
+
+        return parent::getDrivingLicenses();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDrivingLicenses(?string $drivingLicenses): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDrivingLicenses', [$drivingLicenses]);
+
+        parent::setDrivingLicenses($drivingLicenses);
     }
 
     /**

@@ -21,7 +21,6 @@ namespace OrangeHRM\Pim\Api\Model;
 use OrangeHRM\Core\Api\V2\Serializer\ModelTrait;
 use OrangeHRM\Core\Api\V2\Serializer\Normalizable;
 use OrangeHRM\Entity\Employee;
-// use OrangeHRM\Entity\EmployeeSkill;
 
 /**
  * @OA\Schema(
@@ -52,54 +51,63 @@ class EmployeeSkillModel implements Normalizable
     private ?string $description;
 
     /**
-     * @param string|object $skillDataJson
-     * Accepte soit une chaîne JSON, soit un objet contenant les données de compétence
+     * Constructor for EmployeeSkillModel.
+     *
+     * @param string|array $skillDataJson JSON string or array containing skill data.
      */
     public function __construct($skillDataJson)
     {
         if (is_string($skillDataJson)) {
             $skillData = json_decode($skillDataJson, true);
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \Exception('Erreur lors de la décodification du JSON : ' . json_last_error_msg());
+                throw new \InvalidArgumentException('Invalid JSON: ' . json_last_error_msg());
             }
+        } elseif (is_array($skillDataJson)) {
+            $skillData = $skillDataJson;
         } else {
-            $skillData = (array) $skillDataJson;
+            throw new \InvalidArgumentException('Invalid data type. Expected JSON string or array.');
         }
+
+        // error_log('EmployeeSkillModel: Received skill data: ' . json_encode($skillData, JSON_PRETTY_PRINT));
 
         $this->type = $skillData['type'] ?? null;
         $this->title = $skillData['title'] ?? null;
         $this->description = $skillData['description'] ?? null;
-
-        // $this->setEntity($employeeSkill);
-        // $this->setFilters(
-        //     [
-        //         'yearsOfExp',
-        //         'comments',
-        //         ['getSkill', 'getId'],
-        //         ['getSkill', 'getName'],
-        //         ['getSkill', 'getDescription']
-        //     ]
-        // );
-        // $this->setAttributeNames(
-        //     [
-        //         'yearsOfExperience',
-        //         'comments',
-        //         ['skill', 'id'],
-        //         ['skill', 'name'],
-        //         ['skill', 'description']
-        //     ]
-        // );
     }
 
     /**
-     * @return array
+     * Normalize the model to an array.
+     *
+     * @return array Normalized data.
      */
     public function normalize(): array
     {
-        return [
+        $normalized = [
             'type' => $this->type,
             'title' => $this->title,
             'description' => $this->description,
         ];
+
+        // error_log('EmployeeSkillModel: Normalized data: ' . json_encode($normalized, JSON_PRETTY_PRINT));
+
+        return $normalized;
+    }
+
+    /**
+     * Convert the model to an array for compatibility with other parts of the system.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $array = [
+            'type' => $this->type,
+            'title' => $this->title,
+            'description' => $this->description,
+        ];
+
+        // error_log('EmployeeSkillModel: toArray result: ' . json_encode($array, JSON_PRETTY_PRINT));
+
+        return $array;
     }
 }

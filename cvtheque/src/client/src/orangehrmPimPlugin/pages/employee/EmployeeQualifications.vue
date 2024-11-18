@@ -10,7 +10,10 @@
       :employee-id="empNumber"
     ></employee-work-experience>
     <employee-education :employee-id="empNumber"></employee-education>-->
-    <employee-skills :employee-id="empNumber"></employee-skills>
+    <employee-skills
+      :employee-id="empNumber"
+      :certificate-options="certificateOptions"
+    ></employee-skills>
     <!--<employee-languages
       :employee-id="empNumber"
       :fluencies="fluencies"
@@ -47,6 +50,10 @@ export default {
       required: true,
     },
     competencies: {
+      type: Array,
+      required: true,
+    },
+    certificateOptions: {
       type: Array,
       required: true,
     },
