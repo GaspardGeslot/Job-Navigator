@@ -22,7 +22,7 @@
     <oxd-table-filter :filter-title="$t('general.candidates')">
       <oxd-form @submit-valid="filterItems" @reset="onReset">
         <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="jobSector"
@@ -42,7 +42,7 @@
           </oxd-grid>
         </oxd-form-row>
         <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="needFilter"
@@ -69,7 +69,7 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="courseStartFilter"
+                v-model="professionalExperienceFilter"
                 type="select"
                 :label="$t('pim.work_experience_global')"
                 :options="professionalExperiences"
@@ -415,6 +415,11 @@ export default {
       jobSector: '',
       jobTitlesPerSector: [],
       checkedItems: [],
+      professionalExperienceFilter: null,
+      jobTitleFilter: null,
+      needFilter: null,
+      studyLevelFilter: null,
+      courseStartFilter: null,
       headers: [
         {
           name: 'jobTitle',
