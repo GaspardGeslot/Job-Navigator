@@ -26,12 +26,14 @@
       :certificate-options="certificateOptions"
       @close="onSaveModalClose"
     ></save-skill>
+    <!--
     <edit-skill
       v-if="showEditModal"
       :http="http"
       :data="editModalState"
       @close="onEditModalClose"
     ></edit-skill>
+    -->
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
       <profile-action-header @click="onClickAdd">
         {{ $t('general.certificates') }}
@@ -67,7 +69,7 @@ import usePaginate from '@ohrm/core/util/composable/usePaginate';
 import {APIService} from '@ohrm/core/util/services/api.service';
 import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
 import SaveSkill from '@/orangehrmPimPlugin/components/SaveSkill';
-import EditSkill from '@/orangehrmPimPlugin/components/EditSkill';
+// import EditSkill from '@/orangehrmPimPlugin/components/EditSkill';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 
 const skillNormalizer = (data) => {
@@ -87,7 +89,7 @@ export default {
   components: {
     'profile-action-header': ProfileActionHeader,
     'save-skill': SaveSkill,
-    'edit-skill': EditSkill,
+    // 'edit-skill': EditSkill,
     'delete-confirmation': DeleteConfirmationDialog,
   },
 
@@ -166,12 +168,12 @@ export default {
                 name: 'trash',
               },
             },
-            edit: {
-              onClick: this.onClickEdit,
-              props: {
-                name: 'pencil-fill',
-              },
-            },
+            // edit: {
+            //   onClick: this.onClickEdit,
+            //   props: {
+            //     name: 'pencil-fill',
+            //   },
+            // },
           },
         },
       ],
