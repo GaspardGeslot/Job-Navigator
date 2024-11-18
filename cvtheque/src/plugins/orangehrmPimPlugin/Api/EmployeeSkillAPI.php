@@ -18,7 +18,6 @@
 
 namespace OrangeHRM\Pim\Api;
 
-use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -38,14 +37,9 @@ use OrangeHRM\Pim\Api\Model\EmployeeSkillModel;
 use OrangeHRM\Pim\Dto\EmployeeSkillSearchFilterParams;
 use OrangeHRM\Pim\Service\EmployeeSkillService;
 use OrangeHRM\Pim\Service\EmployeeService;
-use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
-use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
 {
-    use AuthUserTrait;
-    use EmployeeServiceTrait;
-
     public const PARAMETER_SKILL_ID = 'skillId';
     public const PARAMETER_YEARS_OF_EXP = 'yearsOfExperience';
     public const PARAMETER_COMMENTS = 'comments';
@@ -204,71 +198,32 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
-        $limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 10);
-        $offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
+        $employeeSkillSearchParams = new EmployeeSkillSearchFilterParams();
+        $this->setSortingAndPaginationParams($employeeSkillSearchParams);
 
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_EMP_NUMBER
         );
+        $employeeSkillSearchParams->setEmpNumber($empNumber);
 
-        $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
-        $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
-
-        $certificates = $this->getHedwigeCertificates($this->getAuthUser()->getUserHedwigeToken());
-
-        // error_log('Certificates: ' . json_encode($certificates, JSON_PRETTY_PRINT));
-
-        // Map certificates to EmployeeSkillModel and normalize them
-        $normalizedSkills = array_map(fn($cert) => (new EmployeeSkillModel($cert))->normalize(), $certificates);
-
-        // error_log('Normalized Skills: ' . json_encode($normalizedSkills, JSON_PRETTY_PRINT));
+        $employeeSkills = $this->getEmployeeSkillService()->getEmployeeSkillDao()->searchEmployeeSkill(
+            $employeeSkillSearchParams
+        );
 
         return new EndpointCollectionResult(
             EmployeeSkillModel::class,
-            $normalizedSkills,
-            new ParameterBag([
-                'limit' => $limit,
-                'offset' => $offset,
-                'total' => count($normalizedSkills),
-            ])
-        );
-    }
-
-
-
-        // return new EndpointCollectionResult(
-        //     EmployeeSkillModel::class,
-        //     $employeeSkills,
-        //     new ParameterBag(
-        //         [
-        //             CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
-        //             CommonParams::PARAMETER_TOTAL => $this->getEmployeeSkillService()->getEmployeeSkillDao(
-        //             )->getSearchEmployeeSkillsCount(
-        //                 $employeeSkillSearchParams
-        //             )
-        //         ]
-        //     )
-        // );
-        
-    protected function getHedwigeCertificates(string $token) : array
-    {
-        $client = new Client();
-        $clientBaseUrl = getenv('HEDWIGE_URL');
-
-        try {
-            $response = $client->request('GET', "{$clientBaseUrl}/user/certificates", [
-                'headers' => [
-                    'Authorization' => $token,
+            $employeeSkills,
+            new ParameterBag(
+                [
+                    CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
+                    CommonParams::PARAMETER_TOTAL => $this->getEmployeeSkillService()->getEmployeeSkillDao(
+                    )->getSearchEmployeeSkillsCount(
+                        $employeeSkillSearchParams
+                    )
                 ]
-            ]);
-            $data = json_decode($response->getBody(), true);
-            // error_log('certificates : ' . print_r($data['certificates'], true));
-            return $data['certificates'] ?? [];
-            // return json_encode(json_decode($response->getBody(), true)['certificates'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        } catch (\Exceptionon $e) {
-            return null;
-        }
+            )
+        );
     }
 
     /**
@@ -277,8 +232,8 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForGetAll(): ParamRuleCollection
     {
         return new ParamRuleCollection(
-            $this->getEmpNumberRule()
-            // ...$this->getSortingAndPaginationParamsRules(EmployeeSkillSearchFilterParams::ALLOWED_SORT_FIELDS)
+            $this->getEmpNumberRule(),
+            ...$this->getSortingAndPaginationParamsRules(EmployeeSkillSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
     }
 
@@ -333,84 +288,51 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     public function create(): EndpointResourceResult
     {
         // $employeeSkill = $this->saveEmployeeSkill();
-        error_log('Entrée dans la méthode create');
-
-        try {
-            $empNumber = $this->getRequestParams()->getInt(
-                RequestParams::PARAM_TYPE_ATTRIBUTE,
-                CommonParams::PARAMETER_EMP_NUMBER
-            );
-
-            $type = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'type');
-
-            $title = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'title');
-
-            $description = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'description');
-            $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
-            if (!$employee instanceof Employee) {
-                throw new \Exception('L\'employé n\'a pas pu être trouvé ou n\'est pas valide.');
-            }
-            $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
-
-            $skillData = (object) [
-                'type' => $type,
-                'title' => $title,
-                'description' => $description,
-            ];
-            $skillDataJson = json_encode($skillData);
-            error_log('$skillDataJson' . $skillDataJson);
-            $postCertificate = $this->postHedwigeCertificate($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
-            error_log('Création réussie.');
-            return new EndpointResourceResult(
-                EmployeeSkillModel::class,
-                ['message' => 'Compétence ajoutée avec succès.'],
-                new ParameterBag([
-                    'status' => 'success'
-                ])
-            );
-        } catch (\Exception $e) {
-            error_log('Erreur lors de la création : ' . $e->getMessage());
-            return new EndpointResourceResult(
-                EmployeeSkillModel::class,
-                ['message' => 'Erreur : ' . $e->getMessage()],
-                new ParameterBag([
-                    'status' => 'error'
-                ])
-            );
+        // error_log('Entrée dans la méthode create');
+        echo '<pre>';
+        echo 'ICI';
+        echo '</pre>';
+        $empNumber = $this->getRequestParams()->getInt(
+            RequestParams::PARAM_TYPE_ATTRIBUTE,
+            CommonParams::PARAMETER_EMP_NUMBER
+        );
+        echo '<empNumber>';
+        var_dump($empNumber);
+        echo '</empNumber>';
+        $type = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'type');
+        // echo '<pre>';
+        // var_dump($type);
+        // echo '</pre>';
+        $title = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'title');
+        // echo '<pre>';
+        // var_dump($title);
+        // echo '</pre>';
+        $description = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'description');
+        $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+        if (!$employee instanceof Employee) {
+            throw new \Exception('L\'employé n\'a pas pu être trouvé ou n\'est pas valide.');
         }
-    }
-
-    protected function postHedwigeCertificate(string $token, string $data): array
-    {
-        $client = new Client();
-        $clientBaseUrl = getenv('HEDWIGE_URL');
-    
-        try {
-            // Décoder les données pour vérifier qu'elles sont valides JSON
-            $decodedData = json_decode($data, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \InvalidArgumentException('Invalid JSON data provided: ' . json_last_error_msg());
-            }
-
-            $response = $client->request('POST', "{$clientBaseUrl}/user/certificate", [
-                'headers' => [
-                    'Authorization' => $token,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $decodedData,
-            ]);
-    
-            $responseData = json_decode($response->getBody(), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
-            }
-            error_log('Réponse reçue : ' . print_r($responseData, true));
-    
-            return $responseData['certificates'] ?? [];
-        } catch (\Exception $e) {
-            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
-            return [];
-        }
+        $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
+        // echo '<pre>';
+        // echo 'LAAAAA';
+        // echo '</pre>';
+        $skillData = (object) [
+            'type' => $type,
+            'title' => $title,
+            'description' => $description,
+        ];
+        $skillDataJson = json_encode($skillData);
+        $employee->setEmpSkills($skillDataJson);
+        $newData = $employee->getEmpSkills();
+        print_r($newData);
+        $this->getEmployeeService()->saveEmployee($employee);
+        // $employeeSkill = new EmployeeSkill();
+        $employeeSkillModel = new EmployeeSkillModel($skillDataJson);
+        return new EndpointResourceResult(
+            EmployeeSkillModel::class,
+            $employeeSkillModel->normalize(),
+            new ParameterBag([CommonParams::PARAMETER_EMP_NUMBER => $empNumber])
+        );
     }
 
     /**
@@ -430,10 +352,10 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         new ParamRule(
             'description',  // Nom du paramètre
             new Rule(Rules::STRING_TYPE),  // Doit être une chaîne
-            new Rule(Rules::LENGTH, [0, 100])  // Doit avoir une longueur entre 1 et 500 caractères
+            new Rule(Rules::LENGTH, [0, 300])
         ),
         // Inclusion des autres règles déjà présentes dans getCommonBodyValidationRules()
-        // ...$this->getCommonBodyValidationRules(),
+        ...$this->getCommonBodyValidationRules(),
         );
     }
 
@@ -535,7 +457,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         return new ParamRuleCollection(
             new ParamRule(CommonParams::PARAMETER_ID, new Rule(Rules::REQUIRED)),
             $this->getEmpNumberRule(),
-            // ...$this->getCommonBodyValidationRules(),
+            ...$this->getCommonBodyValidationRules(),
         );
     }
 
@@ -560,85 +482,21 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function delete(): EndpointResourceResult
     {
-        try {
-            $empNumber = $this->getRequestParams()->getInt(
-                RequestParams::PARAM_TYPE_ATTRIBUTE,
-                CommonParams::PARAMETER_EMP_NUMBER
-            );
-
-            $type = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'type');
-            $title = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'title');
-
-            $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
-            if (!$employee instanceof Employee) {
-                throw new \Exception('L\'employé n\'a pas pu être trouvé ou n\'est pas valide.');
-            }
-            $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
-
-            $skillData = (object) [
-                'type' => $type,
-                'title' => $title,
-            ];
-            $skillDataJson = json_encode($skillData);
-            // error_log('$skillDataJson (pour suppression) : ' . $skillDataJson);
-
-            $deleteResponse = $this->deleteHedwigeCertificate($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
-
-            if (isset($deleteResponse['response'])) {
-                // error_log('Suppression réussie.');
-                return new EndpointResourceResult(
-                    EmployeeSkillModel::class,
-                    ['message' => 'Compétence supprimée avec succès.'],
-                    new ParameterBag(['status' => 'success'])
-                );
-            } elseif ($deleteResponse['status'] === 'error') {
-                throw new \Exception('Échec de la suppression : ' . ($deleteResponse['message'] ?? 'Erreur inconnue.'));
-            } else {
-                throw new \Exception('Réponse inattendue lors de la suppression.');
-            }
-        } catch (\Exception $e) {
-            // error_log('Erreur lors de la suppression : ' . $e->getMessage());
-            return new EndpointResourceResult(
-                EmployeeSkillModel::class,
-                ['message' => 'Erreur : ' . $e->getMessage()],
-                new ParameterBag(['status' => 'error'])
-            );
-        }
-    }
-
-    protected function deleteHedwigeCertificate(string $token, string $data): array
-    {
-        $client = new Client();
-        $clientBaseUrl = getenv('HEDWIGE_URL');
-    
-        try {
-            $decodedData = json_decode($data, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \InvalidArgumentException('Invalid JSON data provided: ' . json_last_error_msg());
-            }
-
-            $response = $client->request('DELETE', "{$clientBaseUrl}/user/certificate", [
-                'headers' => [
-                    'Authorization' => $token,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $decodedData,
-            ]);
-    
-            $responseData = json_decode($response->getBody(), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
-            }
-            // error_log('Réponse reçue : ' . print_r($responseData, true));
-    
-            return ['response' => ['message' => 'Suppression effectuée.']];
-        } catch (\Exception $e) {
-            // error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
-            return [
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
-        }
+        $empNumber = $this->getRequestParams()->getInt(
+            RequestParams::PARAM_TYPE_ATTRIBUTE,
+            CommonParams::PARAMETER_EMP_NUMBER
+        );
+        $ids = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, CommonParams::PARAMETER_IDS);
+        $this->getEmployeeSkillService()->getEmployeeSkillDao()->deleteEmployeeSkills($empNumber, $ids);
+        return new EndpointResourceResult(
+            ArrayModel::class,
+            $ids,
+            new ParameterBag(
+                [
+                    CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
+                ]
+            )
+        );
     }
 
     /**
@@ -646,19 +504,9 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function getValidationRuleForDelete(): ParamRuleCollection
     {
-        // return new ParamRuleCollection(
-        //     $this->getEmpNumberRule(),
-        //     new ParamRule(CommonParams::PARAMETER_IDS),
-        // );
-
         return new ParamRuleCollection(
-            new ParamRule(self::PARAMETER_TYPE, new Rule(Rules::REQUIRED)),
             $this->getEmpNumberRule(),
-            new ParamRule(
-                'title',
-                new Rule(Rules::STRING_TYPE),
-                new Rule(Rules::LENGTH, [0, 100])
-            ),
+            new ParamRule(CommonParams::PARAMETER_IDS),
         );
     }
 

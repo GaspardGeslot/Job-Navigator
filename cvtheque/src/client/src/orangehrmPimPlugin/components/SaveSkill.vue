@@ -118,7 +118,7 @@ export default {
       rules: {
         type: [required],
         title: [shouldNotExceedCharLength(100)],
-        description: [shouldNotExceedCharLength(100)],
+        description: [shouldNotExceedCharLength(300)],
       },
     };
   },

@@ -78,7 +78,8 @@ export class APIService {
     const headers = {
       Accept: 'application/json',
     };
-    console.log('Données prêtes pour POST :', data);
+    // console.log('Données prêtes pour POST :', data);
+    // console.log('data.description :', data.description.length);
     return this._http.post(this._apiSection, data, {headers});
   }
 
