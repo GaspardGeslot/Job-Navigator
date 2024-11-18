@@ -376,7 +376,6 @@ export default {
     const needFilter = ref(null);
     const studyLevelFilter = ref(null);
     const courseStartFilter = ref(null);
-
     const {$t} = usei18n();
     const {locale} = useLocale();
     const {jsDateFormat, userDateFormat} = useDateFormat();
