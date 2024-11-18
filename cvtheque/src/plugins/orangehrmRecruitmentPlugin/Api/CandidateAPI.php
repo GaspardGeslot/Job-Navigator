@@ -79,6 +79,13 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     public const FILTER_MODEL = 'model';
     public const FILTER_ALL_LEADS = 'allLeads';
 
+    public const FILTER_JOB_SECTOR = 'jobSector';
+    public const FILTER_PROFESSIONAL_EXPERIENCE = 'professionalExperienceFilter';
+    public const FILTER_JOB_TITLE = 'jobTitleFilter';
+    public const FILTER_NEED = 'needFilter';
+    public const FILTER_STUDY_LEVEL = 'studyLevelFilter';
+    public const FILTER_COURSE_START = 'courseStartFilter';
+
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
     public const PARAMETER_LAST_NAME = 'lastName';
@@ -313,6 +320,42 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_ALL_LEADS
         );
 
+        $jobSector = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_JOB_SECTOR
+        );
+        
+        $professionalExperienceFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_PROFESSIONAL_EXPERIENCE
+        );
+        
+        $jobTitleFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_JOB_TITLE
+        );
+        $needFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_NEED
+        );
+        $studyLevelFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_STUDY_LEVEL
+        );
+        $courseStartFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_COURSE_START
+        );
+
+        // Pour vérifier les valeurs
+        // error_log('------------------------');
+        // error_log($jobSector);
+        // error_log($professionalExperienceFilter);
+        // error_log($jobTitleFilter);
+        // error_log($studyLevelFilter);
+        // error_log($courseStartFilter);
+        // error_log($needFilter);
+
         $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads);
 
         $candidates = array();
@@ -444,6 +487,42 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::FILTER_ALL_LEADS,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_JOB_SECTOR,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_PROFESSIONAL_EXPERIENCE,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_JOB_TITLE,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_NEED,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_STUDY_LEVEL,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_COURSE_START,
                     new Rule(Rules::STRING_TYPE)
                 )
             ),

@@ -143,7 +143,7 @@
             display-type="ghost"
             :label="$t('general.reset')"
           />
-          <submit-button :label="$t('general.search')" />
+          <submit-button :label="$t('general.search')" @click="rechercherMetier"/>
         </oxd-form-actions>
       </oxd-form>
     </oxd-table-filter>
@@ -292,6 +292,13 @@ export default {
     },
   },
   setup(props) {
+    const jobSector = ref('');
+    const professionalExperienceFilter = ref(null);
+    const jobTitleFilter = ref(null);
+    const needFilter = ref(null);
+    const studyLevelFilter = ref(null);
+    const courseStartFilter = ref(null);
+    
     const {$t} = usei18n();
     const {locale} = useLocale();
     const {jsDateFormat, userDateFormat} = useDateFormat();
@@ -371,6 +378,12 @@ export default {
         sortField: sortField.value,
         sortOrder: sortOrder.value,
         allLeads: 'candidat',
+        ...(jobSector.value ? { jobSector: jobSector.value.label } : {}),
+        ...(professionalExperienceFilter.value ? { professionalExperienceFilter: professionalExperienceFilter.value.label } : {}),
+        ...(jobTitleFilter.value ? { jobTitleFilter: jobTitleFilter.value.label } : {}),
+        ...(needFilter.value ? { needFilter: needFilter.value.label } : {}),
+        ...(studyLevelFilter.value ? { studyLevelFilter: studyLevelFilter.value.label } : {}),
+        ...(courseStartFilter.value ? { courseStartFilter: courseStartFilter.value.label } : {}),
       };
     });
 
@@ -408,18 +421,19 @@ export default {
       filters,
       sortDefinition,
       rules,
+      needFilter,
+      jobSector,
+      professionalExperienceFilter,
+      jobTitleFilter,
+      studyLevelFilter,
+      courseStartFilter,
     };
   },
   data() {
     return {
-      jobSector: '',
       jobTitlesPerSector: [],
       checkedItems: [],
-      professionalExperienceFilter: null,
-      jobTitleFilter: null,
-      needFilter: null,
-      studyLevelFilter: null,
-      courseStartFilter: null,
+      
       headers: [
         {
           name: 'jobTitle',
@@ -469,6 +483,9 @@ export default {
     };
   },
   methods: {
+    rechercherMetier() {
+      
+    },
     sortByDate() {
       // Change l'ordre de tri
       this.isDateAscending = !this.isDateAscending;
