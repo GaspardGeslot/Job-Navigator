@@ -173,7 +173,6 @@
           v-model:order="sortDefinition"
           :headers="headers"
           :items="items?.data"
-          :selectable="true"
           :clickable="false"
           :loading="isLoading"
           row-decorator="oxd-table-decorator-card"
@@ -310,8 +309,9 @@ export default {
     ];
     const candidateDataNormalizer = (data) => {
       return data.map((item) => {
+        console.log('Data : ', item);
         return {
-          id: item.leadId,
+          id: item.id,
           jobTitle: item.jobTitle,
           candidate: `${item.firstName} ${item.middleName || ''} ${
             item.lastName
@@ -522,8 +522,7 @@ export default {
       navigate('/recruitment/addCandidate');
     },
     onClickEdit(item) {
-      console.log('Item : ', item);
-      //navigate('/recruitment/viewCandidate/{id}', {id: item.id});
+      navigate('/recruitment/viewCandidate/{id}', {id: item.id});
     },
     onClickDeleteSelected() {
       const ids = this.checkedItems.map((index) => {

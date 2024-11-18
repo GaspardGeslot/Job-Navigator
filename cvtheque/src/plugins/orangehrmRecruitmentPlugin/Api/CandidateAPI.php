@@ -325,7 +325,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         $count = count($leads); //$this->getCandidateService()->getCandidateDao()->getCandidatesCount($candidateSearchFilterParamHolder);
 
         return new EndpointCollectionResult(
-            $this->getModelClass(),
+            CandidateDetailedModel::class,
             $candidates,
             new ParameterBag([CommonParams::PARAMETER_TOTAL => $count])
         );

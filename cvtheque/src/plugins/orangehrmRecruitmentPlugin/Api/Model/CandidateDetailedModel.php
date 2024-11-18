@@ -100,41 +100,39 @@ class CandidateDetailedModel implements Normalizable
         $vacancy = !is_null($candidateVacancy) ? $candidateVacancy->getVacancy() : null;
 
         return [
+            'birthday' => $this->candidate->getDecorator()->getBirthday(),
+            'certificates' => $this->candidate->getCertificates(),
+            'city' => $this->candidate->getCity(),
             'comment' => $this->candidate->getComment(),
             'consentToKeepData' => $this->candidate->isConsentToKeepData(),
             'contactNumber' => $this->candidate->getContactNumber(),
+            'country' => $this->candidate->getCountry(),
+            'courseStart' => $this->candidate->getCourseStart(),
             'dateOfApplication' => $this->candidate->getDecorator()->getDateOfApplication(),
+            'drivingLicense' => $this->candidate->getDrivingLicense(),
             'email' => $this->candidate->getEmail(),
             'firstName' => $this->candidate->getFirstName(),
+            'gender' => $this->candidate->getGender(),
             'hasAttachment' => $hasCandidateAttachment,
+            'hasPersonalVehicule' => $this->candidate->getHasPersonalVehicule(),
             'id' => $this->candidate->getId(),
             'jobTitle' => $this->candidate->getJobTitle(),
             'jobs' => $this->candidate->getJobs(),
-            'courseStart' => $this->candidate->getCourseStart(),
-            'studyLevel' => $this->candidate->getStudyLevel(),
-            'need' => $this->candidate->getNeed(),
-            'salary' => $this->candidate->getSalary(),
-            'drivingLicense' => $this->candidate->getDrivingLicense(),
-            'gender' => $this->candidate->getGender(),
-            'street1' => $this->candidate->getStreet1(),
-            'city' => $this->candidate->getCity(),
-            'birthday' => $this->candidate->getDecorator()->getBirthday(),
-            'country' => $this->candidate->getCountry(),
-            'zipcode' => $this->candidate->getZipcode(),
-            'province' => $this->candidate->getProvince(),
-            'professionalExperience' => $this->candidate->getProfessionalExperience(),
-            'specificProfessionalExperience' => $this->candidate->getSpecificProfessionalExperience(),
-            'hasPersonalVehicule' => $this->candidate->getHasPersonalVehicule(),
-            'motivation' => $this->candidate->getMotivation(),
-            'certificates' => $this->candidate->getCertificates(),
             'keywords' => $this->candidate->getKeywords(),
             'lastName' => $this->candidate->getLastName(),
-            'resume' => $this->candidate->getResume(),
             'leadId' => $this->candidate->getLeadId(),
             'middleName' => $this->candidate->getMiddleName(),
-            //'modeOfApplication' => $this->candidate->getModeOfApplication(),
+            'motivation' => $this->candidate->getMotivation(),
+            'need' => $this->candidate->getNeed(),
+            'professionalExperience' => $this->candidate->getProfessionalExperience(),
+            'province' => $this->candidate->getProvince(),
+            'resume' => $this->candidate->getResume(),
+            'salary' => $this->candidate->getSalary(),
+            'specificProfessionalExperience' => $this->candidate->getSpecificProfessionalExperience(),
             'status' => is_null($candidateVacancy) ? null :
                 $candidateVacancy->getDecorator()->getCandidateVacancyStatus(),
+            'street1' => $this->candidate->getStreet1(),
+            'studyLevel' => $this->candidate->getStudyLevel(),
             'vacancy' => is_null($vacancy) ? null :
                 [
                     'id' => $vacancy->getId(),
@@ -155,7 +153,9 @@ class CandidateDetailedModel implements Normalizable
                             $vacancy->getHiringManager()->getEmployeeTerminationRecord()->getId()
                         ,
                     ]
-                ]
+                    ],
+            'zipcode' => $this->candidate->getZipcode(),
+            //'modeOfApplication' => $this->candidate->getModeOfApplication(),
         ];
     }
 }
