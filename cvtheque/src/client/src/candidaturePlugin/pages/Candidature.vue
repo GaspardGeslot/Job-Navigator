@@ -102,10 +102,12 @@
         <a href="#comment">Comment ça marche ?</a>
         <a href="#aPropos">A propos</a>
       </div>
+      <div class="accueilDroiteVideo">
       <video
         controls
         src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/embauche-video.mp4"
       ></video>
+    </div>
     </div>
   </div>
 
@@ -305,6 +307,14 @@ h1 {
   width: 50%;
 }
 
+.accueilDroiteVideo{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
 .accueilNav {
   display: flex;
   flex-direction: row;
@@ -324,9 +334,9 @@ h1 {
 .accueilDroite video {
   padding: 2rem;
   background-color: white;
-  border-radius: 10%;
+  border-radius: 3rem;
   margin-right: 4rem;
-  height: 70%;
+  height: auto;
 }
 
 #comment {
@@ -396,6 +406,10 @@ h1 {
     height: auto;
   }
 
+  h1 {
+    font-size: 2.5rem;
+  }
+
   .accueilGauche {
     width: 100%;
   }
@@ -436,10 +450,9 @@ h1 {
   }
 
   .accueilDroite video {
-    padding: 2rem;
-    border-radius: 5rem;
+    border-radius: 3rem;
     margin: 2rem;
-    height: 70%;
+    padding: 1rem
   }
 
   #aPropos {
