@@ -145,7 +145,7 @@
             :disabled="!canUpdate"
             @click="resetFiltre"
           />
-          <submit-button :label="$t('general.search')" :disabled="!canUpdate"/>
+          <submit-button :label="$t('general.search')" :disabled="!canUpdate" />
         </oxd-form-actions>
       </oxd-form>
     </oxd-table-filter>
@@ -276,11 +276,6 @@ export default {
   },
   watch: {
     jobSector(newVal) {
-      if (newVal === null && this.needFilter == null && this.studyLevelFilter == null && this.courseStartFilter == null && this.professionalExperienceFilter == null) {
-          this.canUpdate = false;
-        } else {
-          this.canUpdate = true;
-        }
       if (newVal) {
         const selectedSector = this.sectors.find(
           (sector) => sector.label === newVal.label,
@@ -290,10 +285,10 @@ export default {
               return {id: index, label: job};
             })
           : [];
-      } else{
+      } else {
         this.jobTitlesPerSector = [];
         this.jobTitleFilter = null;
-      } 
+      }
     },
     'items.data': function (newData) {
       if (newData && newData.length > 0) {
@@ -301,35 +296,69 @@ export default {
         this.sortByDate();
       }
     },
-    needFilter(newVal){
-      if (newVal === null && this.studyLevelFilter == null && this.courseStartFilter == null && this.professionalExperienceFilter == null && this.jobSector == null) {
+    jobTitleFilter(newVal) {
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.courseStartFilter == null &&
+        this.professionalExperienceFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
+    },
+    needFilter(newVal) {
+      if (
+        newVal === null &&
+        this.studyLevelFilter == null &&
+        this.courseStartFilter == null &&
+        this.professionalExperienceFilter == null &&
+        this.jobTitleFilter == null
+      ) {
         this.canUpdate = false;
       } else {
         this.canUpdate = true;
       }
     },
     studyLevelFilter(newVal) {
-        if (newVal === null && this.needFilter == null && this.courseStartFilter == null && this.professionalExperienceFilter == null && this.jobSector == null) {
-          this.canUpdate = false;
-        } else {
-          this.canUpdate = true;
-        }
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.courseStartFilter == null &&
+        this.professionalExperienceFilter == null &&
+        this.jobTitleFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
     },
     courseStartFilter(newVal) {
-        if (newVal === null && this.needFilter == null && this.studyLevelFilter == null && this.professionalExperienceFilter == null && this.jobSector == null) {
-          this.canUpdate = false;
-        } else {
-          this.canUpdate = true;
-        }
-        console.log(this.canUpdate); // Pour vérifier la valeur de canUpdate
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.studyLevelFilter == null &&
+        this.professionalExperienceFilter == null &&
+        this.jobTitleFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
     },
-    professionalExperienceFilter(newVal){
-        if (newVal === null && this.needFilter == null && this.studyLevelFilter == null && this.courseStartFilter == null && this.jobSector == null) {
-          this.canUpdate = false;
-        } else {
-          this.canUpdate = true;
-        }
-        console.log(this.canUpdate); // Pour vérifier la valeur de canUpdate
+    professionalExperienceFilter(newVal) {
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.studyLevelFilter == null &&
+        this.courseStartFilter == null &&
+        this.jobTitleFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
     },
   },
   setup(props) {
@@ -339,7 +368,7 @@ export default {
     const needFilter = ref(null);
     const studyLevelFilter = ref(null);
     const courseStartFilter = ref(null);
-    
+
     const {$t} = usei18n();
     const {locale} = useLocale();
     const {jsDateFormat, userDateFormat} = useDateFormat();
@@ -418,12 +447,23 @@ export default {
         sortField: sortField.value,
         sortOrder: sortOrder.value,
         allLeads: 'candidat',
-        ...(jobSector.value ? { jobSector: jobSector.value.label } : {}),
-        ...(professionalExperienceFilter.value ? { professionalExperienceFilter: professionalExperienceFilter.value.label } : {}),
-        ...(jobTitleFilter.value ? { jobTitleFilter: jobTitleFilter.value.label } : {}),
-        ...(needFilter.value ? { needFilter: needFilter.value.label } : {}),
-        ...(studyLevelFilter.value ? { studyLevelFilter: studyLevelFilter.value.label } : {}),
-        ...(courseStartFilter.value ? { courseStartFilter: courseStartFilter.value.label } : {}),
+        ...(jobSector.value ? {jobSector: jobSector.value.label} : {}),
+        ...(professionalExperienceFilter.value
+          ? {
+              professionalExperienceFilter:
+                professionalExperienceFilter.value.label,
+            }
+          : {}),
+        ...(jobTitleFilter.value
+          ? {jobTitleFilter: jobTitleFilter.value.label}
+          : {}),
+        ...(needFilter.value ? {needFilter: needFilter.value.label} : {}),
+        ...(studyLevelFilter.value
+          ? {studyLevelFilter: studyLevelFilter.value.label}
+          : {}),
+        ...(courseStartFilter.value
+          ? {courseStartFilter: courseStartFilter.value.label}
+          : {}),
       };
     });
 
@@ -523,11 +563,12 @@ export default {
     };
   },
   methods: {
-    async resetFiltre(){
+    async resetFiltre() {
       await this.resetFiltreValeur();
+      await this.execQuery();
       this.canUpdate = false;
     },
-    resetFiltreValeur(){
+    resetFiltreValeur() {
       this.jobSector = '';
       this.professionalExperienceFilter = null;
       this.jobTitleFilter = null;

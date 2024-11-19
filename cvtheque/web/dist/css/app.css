@@ -10122,7 +10122,7 @@ h1[data-v-0c52339c] {
   flex-direction: column;
   width: 50%;
 }
-.accueilDroiteVideo[data-v-0c52339c]{
+.accueilDroiteVideo[data-v-0c52339c] {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -10249,7 +10249,7 @@ h1[data-v-0c52339c] {
 .accueilDroite video[data-v-0c52339c] {
     border-radius: 3rem;
     margin: 2rem;
-    padding: 1rem
+    padding: 1rem;
 }
 #aPropos[data-v-0c52339c] {
     height: auto;

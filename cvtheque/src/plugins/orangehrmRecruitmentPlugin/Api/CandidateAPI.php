@@ -347,16 +347,15 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_COURSE_START
         );
 
-        // error_log('------------------------');
-        // error_log($jobSector);
-        // error_log($professionalExperienceFilter);
-        // error_log($jobTitleFilter);
-        // error_log($studyLevelFilter);
-        // error_log($courseStartFilter);
-        // error_log($needFilter);
+        error_log('------------------------');
+        error_log($jobSector);
+        error_log($professionalExperienceFilter);
+        error_log($jobTitleFilter);
+        error_log($studyLevelFilter);
+        error_log($courseStartFilter);
+        error_log($needFilter);
 
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads);
-
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter);
         $candidates = array();
         foreach ($leads as $lead) {
             $candidate = new Candidate();
@@ -373,12 +372,27 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         );
     }
 
-    protected function getLeads(string $token, ?int $matchingId = null, ?string $allLeads = null) : array
+    protected function getLeads(string $token, ?int $matchingId = null, ?string $allLeads = null, ?string $jobTitleFilter = '', ?string $needFilter = '', ?string $studyLevelFilter = '', ?string $courseStartFilter = '', ?string $professionalExperienceFilter = '') : array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         try {
-            $url = $allLeads ? "{$clientBaseUrl}/client/leads" : ($matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads");
+            $url = $allLeads ? "{$clientBaseUrl}/client/leads?" : ($matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads");
+            if ($jobTitleFilter !== '') {
+                $url .= 'job=' . urlencode($jobTitleFilter) . '&';
+            }
+            if ($needFilter !== '') {
+                $url .= 'need=' . urlencode($needFilter) . '&';
+            }
+            if ($studyLevelFilter !== '') {
+                $url .= 'studyLevel=' . urlencode($studyLevelFilter) . '&';
+            }
+            if ($courseStartFilter !== '') {
+                $url .= 'courseStart=' . urlencode($courseStartFilter) . '&';
+            }
+            if ($professionalExperienceFilter !== '') {
+                $url .= 'professionalExperience=' . urlencode($professionalExperienceFilter) . '&';
+            }
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
