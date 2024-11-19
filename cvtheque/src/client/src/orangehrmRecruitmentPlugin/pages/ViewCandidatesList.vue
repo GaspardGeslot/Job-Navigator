@@ -284,11 +284,6 @@ export default {
   },
   watch: {
     jobSector(newVal) {
-      if (newVal === null && this.needFilter == null && this.studyLevelFilter == null && this.courseStartFilter == null && this.professionalExperienceFilter == null) {
-          this.canUpdate = false;
-        } else {
-          this.canUpdate = true;
-        }
       if (newVal) {
         const selectedSector = this.sectors.find(
           (sector) => sector.label === newVal.label,
@@ -381,7 +376,6 @@ export default {
     const needFilter = ref(null);
     const studyLevelFilter = ref(null);
     const courseStartFilter = ref(null);
-    const {$t} = usei18n();
     const {locale} = useLocale();
     const {jsDateFormat, userDateFormat} = useDateFormat();
     const {$tEmpName} = useEmployeeNameTranslate();
