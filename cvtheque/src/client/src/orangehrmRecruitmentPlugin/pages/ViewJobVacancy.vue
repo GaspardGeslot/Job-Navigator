@@ -64,8 +64,8 @@
           <oxd-button
             display-type="ghost"
             :label="$t('general.reset')"
-            @click="onClickReset"
             :disabled="!canUpdate"
+            @click="onClickReset"
           />
           <oxd-button
             class="orangehrm-left-space"
@@ -87,10 +87,10 @@
           @click="onClickAdd"
         />
         <div class="boutonTriBloc">
-          <button @click="sortByName" class="boutonTri">
+          <button class="boutonTri" @click="sortByName">
             Trier par nom métier ⇅
           </button>
-          <button @click="sortByDate" class="boutonTri">
+          <button class="boutonTri" @click="sortByDate">
             Trier par date ⇅
           </button>
         </div>
