@@ -223,13 +223,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="membershipId", type="integer"),
-     *             @OA\Property(property="subscriptionFee", type="number"),
-     *             @OA\Property(property="subscriptionPaidBy", type="string"),
-     *             @OA\Property(property="currencyTypeId", type="string"),
-     *             @OA\Property(property="subscriptionCommenceDate", type="string", format="date"),
-     *             @OA\Property(property="subscriptionRenewalDate", type="string", format="date"),
-     *             required={"membershipId"}
+     *             @OA\Property(property="title", type="string", maxLength=100),
+     *             @OA\Property(property="description", type="string", maxLength=300),
+     *             @OA\Property(property="year", type="integer", format="int32"),
+     *             required={"title", "year"}
      *         )
      *     ),
      *     @OA\Response(
@@ -244,10 +241,12 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      *         )
      *     )
      * )
+
      * @inheritDoc
      */
     public function create(): EndpointResourceResult
     {
+        error_log('dans le create()');
         $employeeMembership = $this->saveEmployeeMembership();
         return new EndpointResourceResult(
             EmployeeMembershipModel::class,
@@ -275,46 +274,47 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      */
     private function getCommonBodyValidationRules(): array
     {
+        error_log('on est ici');
         return [
-            new ParamRule(self::PARAMETER_MEMBERSHIP_ID, new Rule(Rules::REQUIRED), new Rule(Rules::POSITIVE)),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_FEE,
-                    new Rule(Rules::NOT_EMPTY),
-                    new Rule(Rules::NUMBER),
-                    new Rule(Rules::BETWEEN, [0, 1000000000]),
-                ),
+            new ParamRule(
+                'title',
+                new Rule(Rules::STRING_TYPE),
+                new Rule(Rules::LENGTH, [null, 100]) // Longueur maximale
             ),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_PAID_BY,
-                    new Rule(Rules::STRING_TYPE),
-                    new Rule(Rules::IN, [[EmployeeMembership::COMPANY,EmployeeMembership::INDIVIDUAL]]),
-                ),
+            new ParamRule(
+                'description',
+                new Rule(Rules::STRING_TYPE),
+                new Rule(Rules::LENGTH, [null, 300]) // Longueur maximale
             ),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_CURRENCY,
-                    new Rule(Rules::CURRENCY),
-                ),
-            ),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_COMMENCE_DATE,
-                    new Rule(Rules::API_DATE),
-                ),
-            ),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_RENEWAL_DATE,
-                    new Rule(Rules::API_DATE),
-                    new Rule(
-                        Rules::GREATER_THAN,
-                        [$this->getRequestParams()->getDateTimeOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_SUBSCRIPTION_COMMENCE_DATE)]
-                    )
-                ),
-            ),
+            // $this->getValidationDecorator()->notRequiredParamRule(
+            //     new ParamRule(
+            //         'year',
+            //         new Rule(Rules::POSITIVE), // Doit être un entier positif
+            //         new Rule(Rules::LENGTH, [4, 4]) // Longueur de 4 caractères
+            //     )
+            // ),
         ];
+        // return [
+        //     $this->getValidationDecorator()->notRequiredParamRule(
+        //         new ParamRule(
+        //             self::PARAMETER_SUBSCRIPTION_PAID_BY,
+        //             new Rule(Rules::STRING_TYPE),
+        //             new Rule(Rules::IN, [[EmployeeMembership::COMPANY,EmployeeMembership::INDIVIDUAL]]),
+        //         ),
+        //     ),
+        //     $this->getValidationDecorator()->notRequiredParamRule(
+        //         new ParamRule(
+        //             self::PARAMETER_SUBSCRIPTION_CURRENCY,
+        //             new Rule(Rules::CURRENCY),
+        //         ),
+        //     ),
+        //     $this->getValidationDecorator()->notRequiredParamRule(
+        //         new ParamRule(
+        //             self::PARAMETER_SUBSCRIPTION_COMMENCE_DATE,
+        //             new Rule(Rules::API_DATE),
+        //         ),
+        //     ),
+        // ];
     }
 
     /**

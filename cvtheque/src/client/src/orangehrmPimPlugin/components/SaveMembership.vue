@@ -20,58 +20,33 @@
 <template>
   <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
     <oxd-text tag="h6" class="orangehrm-main-title">
-      {{ $t('general.add_membership') }}
+      {{ $t('Ajouter une expérience professionnelle') }}
     </oxd-text>
     <oxd-divider />
     <oxd-form :loading="isLoading" @submit-valid="onSave">
       <oxd-form-row>
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+        <oxd-grid :cols="2" class="orangehrm-full-width-grid">
           <oxd-grid-item>
             <oxd-input-field
-              v-model="membership.membership"
-              type="select"
-              :label="$t('pim.membership')"
-              :options="memberships"
-              :rules="rules.membership"
+              v-model="membership.title"
+              :label="$t('Titre')"
+              required
+            />
+          </oxd-grid-item>
+
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="membership.year"
+              v-numeric-only
+              :label="$t('Année')"
+              placeholder="yyyy"
               required
             />
           </oxd-grid-item>
           <oxd-grid-item>
             <oxd-input-field
-              v-model="membership.subscriptionPaidBy"
-              type="select"
-              :label="$t('pim.subscription_paid_by')"
-              :options="paidBy"
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="membership.subscriptionFee"
-              :label="$t('pim.subscription_amount')"
-              :rules="rules.subscriptionFee"
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="membership.currencyType"
-              type="select"
-              :label="$t('general.currency')"
-              :options="currencies"
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <date-input
-              v-model="membership.subscriptionCommenceDate"
-              :label="$t('pim.subscription_commence_date')"
-              :rules="rules.subscriptionCommenceDate"
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <date-input
-              v-model="membership.subscriptionRenewalDate"
-              :label="$t('pim.subscription_renewal_date')"
-              :years="yearArray"
-              :rules="rules.subscriptionRenewalDate"
+              v-model="membership.description"
+              :label="$t('description')"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -93,27 +68,45 @@
 </template>
 
 <script>
-import {
-  required,
-  validDateFormat,
-  endDateShouldBeAfterStartDate,
-  digitsOnlyWithDecimalPoint,
-  maxCurrency,
-} from '@ohrm/core/util/validation/rules';
-import {yearRange} from '@ohrm/core/util/helper/year-range';
+// eslint-disable-next-line prettier/prettier
+// import 
+// required,
+// validDateFormat,
+// endDateShouldBeAfterStartDate,
+// digitsOnlyWithDecimalPoint,
+// maxCurrency,
+// '@ohrm/core/util/validation/rules';
+// import {yearRange} from '@ohrm/core/util/helper/year-range';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 
-const membershipModel = {
-  membershipId: [],
-  subscriptionFee: '',
-  subscriptionPaidBy: null,
-  currencyTypeId: [],
-  subscriptionCommenceDate: '',
-  subscriptionRenewalDate: '',
+// const membershipModel = {
+//   membershipId: [],
+//   subscriptionFee: '',
+//   subscriptionPaidBy: null,
+//   currencyTypeId: [],
+//   subscriptionCommenceDate: '',
+//   subscriptionRenewalDate: '',
+// };
+const proXPModel = {
+  title: '',
+  year: '',
+  description: '',
 };
 
 export default {
   name: 'SaveMembership',
+  directives: {
+    numericOnly: {
+      mounted(el) {
+        el.addEventListener('input', (event) => {
+          const value = event.target.value;
+          if (!/^\d*$/.test(value)) {
+            event.target.value = value.replace(/\D/g, '');
+          }
+        });
+      },
+    },
+  },
 
   props: {
     http: {
@@ -147,41 +140,62 @@ export default {
   data() {
     return {
       isLoading: false,
-      membership: {...membershipModel},
-      yearArray: [...yearRange()],
+      membership: {...proXPModel},
+      // yearArray: [...yearRange()],
       rules: {
-        membership: [required],
-        subscriptionCommenceDate: [validDateFormat(this.userDateFormat)],
-        subscriptionRenewalDate: [
-          validDateFormat(this.userDateFormat),
-          endDateShouldBeAfterStartDate(
-            () => this.membership.subscriptionCommenceDate,
-            this.$t('pim.renewal_date_should_be_after_the_commencing_date'),
-          ),
-        ],
-        subscriptionFee: [digitsOnlyWithDecimalPoint, maxCurrency(1000000000)],
+        // membership: [required],
+        // subscriptionCommenceDate: [validDateFormat(this.userDateFormat)],
+        // subscriptionRenewalDate: [
+        //   validDateFormat(this.userDateFormat),
+        //   endDateShouldBeAfterStartDate(
+        //     () => this.membership.subscriptionCommenceDate,
+        //     this.$t('pim.renewal_date_should_be_after_the_commencing_date'),
+        //   ),
+        // ],
+        // subscriptionFee: [digitsOnlyWithDecimalPoint, maxCurrency(1000000000)],
       },
     };
   },
 
   methods: {
     onSave() {
+      // const data = {
+      //   title: String(this.membership.title),
+      //   year: Number(this.membership.year),
+      //   description: String(this.membership.description),
+      // };
       this.isLoading = true;
       this.http
         .create({
-          subscriptionFee: this.membership.subscriptionFee,
-          subscriptionCommenceDate: this.membership.subscriptionCommenceDate,
-          subscriptionRenewalDate: this.membership.subscriptionRenewalDate,
-          membershipId: this.membership.membership.id,
-          subscriptionPaidBy: this.membership.subscriptionPaidBy?.id,
-          currencyTypeId: this.membership.currencyType?.id,
+          title: String(this.membership.title),
+          year: Number(this.membership.year),
+          description: String(this.membership.description),
         })
+        // subscriptionFee: this.membership.subscriptionFee,
+        // subscriptionCommenceDate: this.membership.subscriptionCommenceDate,
+        // subscriptionRenewalDate: this.membership.subscriptionRenewalDate,
+        // membershipId: this.membership.membership.id,
+        // subscriptionPaidBy: this.membership.subscriptionPaidBy?.id,
+        // currencyTypeId: this.membership.currencyType?.id,
+
         .then(() => {
           return this.$toast.saveSuccess();
         })
         .then(() => {
-          this.membership = {...membershipModel};
+          this.membership = {...proXPModel};
           this.onCancel();
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error('Erreur lors de la requête:', error.response.data);
+          } else if (error.request) {
+            console.error('Aucune réponse du serveur:', error.request);
+          } else {
+            console.error(
+              'Erreur lors de la configuration de la requête:',
+              error.message || 'Erreur inconnue',
+            );
+          }
         });
     },
     onCancel() {

@@ -26,19 +26,9 @@ use OrangeHRM\Entity\EmployeeMembership;
  * @OA\Schema(
  *     schema="Pim-EmployeeMembershipModel",
  *     type="object",
- *     @OA\Property(property="id", type="integer"),
- *     @OA\Property(property="membership", type="object",
- *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="name", type="string")
- *     ),
- *     @OA\Property(property="subscriptionFee", type="number"),
- *     @OA\Property(property="subscriptionPaidBy", type="string"),
- *     @OA\Property(property="currencyType", type="object",
- *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="name", type="string")
- *     ),
- *     @OA\Property(property="subscriptionCommenceDate", type="string", format="date"),
- *     @OA\Property(property="subscriptionRenewalDate", type="string", format="date")
+ *     @OA\Property(property="title", type="string", maxLength=100),
+ *     @OA\Property(property="description", type="string", maxLength=300),
+ *     @OA\Property(property="year", type="integer", format="int32")
  * )
  */
 class EmployeeMembershipModel implements Normalizable
@@ -53,28 +43,16 @@ class EmployeeMembershipModel implements Normalizable
         $this->setEntity($employeeMembership);
         $this->setFilters(
             [
-                'id',
-                ['getMembership', 'getId'],
-                ['getMembership', 'getName'],
-                'subscriptionFee',
-                'subscriptionPaidBy',
-                'subscriptionCurrency',
-                ['getDecorator', 'getCurrencyName'],
-                ['getDecorator', 'getSubscriptionCommenceDate'],
-                ['getDecorator', 'getSubscriptionRenewalDate'],
+                'title',
+                'description',
+                'year',
             ]
         );
         $this->setAttributeNames(
             [
-                'id',
-                ['membership', 'id'],
-                ['membership', 'name'],
-                'subscriptionFee',
-                'subscriptionPaidBy',
-                ['currencyType', 'id'],
-                ['currencyType', 'name'],
-                'subscriptionCommenceDate',
-                'subscriptionRenewalDate',
+                'title',
+                'description',
+                'year',
             ]
         );
     }
