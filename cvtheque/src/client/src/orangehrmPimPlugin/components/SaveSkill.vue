@@ -20,7 +20,7 @@
 <template>
   <div class="orangehrm-horizontal-padding orangehrm-top-padding">
     <oxd-text tag="h6" class="orangehrm-main-title">{{
-      $t('general.add_skill')
+      $t('general.add_certificate')
     }}</oxd-text>
     <oxd-divider />
     <oxd-form :loading="isLoading" @submit-valid="onSave">
@@ -29,7 +29,7 @@
           <oxd-grid-item>
             <qualification-dropdown
               v-model="skill.type"
-              :label="$t(`Compétence`)"
+              :label="$t('general.type')"
               :rules="rules.type"
               :api="api"
               :certificate-options="certificateOptions"
@@ -39,7 +39,7 @@
           <oxd-grid-item>
             <oxd-input-field
               v-model="skill.title"
-              :label="$t(`Années d'expérience`)"
+              :label="$t('pim.certificate_title')"
               :rules="rules.title"
             />
           </oxd-grid-item>
@@ -52,7 +52,7 @@
             <oxd-input-field
               v-model="skill.description"
               type="textarea"
-              :label="$t(`Commentaires`)"
+              :label="$t('general.description')"
               :rules="rules.description"
             />
           </oxd-grid-item>

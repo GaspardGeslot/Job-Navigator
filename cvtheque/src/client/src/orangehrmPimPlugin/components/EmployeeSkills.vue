@@ -50,7 +50,6 @@
         v-model:selected="checkedItems"
         :headers="headers"
         :items="items?.data"
-        :selectable="true"
         :clickable="false"
         :loading="isLoading"
         :disabled="isDisabled"
@@ -141,17 +140,17 @@ export default {
       headers: [
         {
           name: 'type',
-          title: this.$t('Compétence'),
+          title: this.$t('general.type'),
           style: {flex: 1},
         },
         {
           name: 'title',
-          title: this.$t('Expérience'),
+          title: this.$t('pim.certificate_title'),
           style: {flex: 1},
         },
         {
           name: 'description',
-          title: this.$t('Commentaires'),
+          title: this.$t('general.description'),
           style: {flex: 2},
         },
         {
@@ -192,7 +191,6 @@ export default {
 
   methods: {
     onClickDeleteSelected() {
-      console.log('onClickDeleteSelected');
       const ids = this.checkedItems.map((index) => {
         return this.items?.data[index].id;
       });
@@ -203,8 +201,6 @@ export default {
       });
     },
     onClickDelete(item) {
-      console.log('onClickDelete');
-      console.log('item', item);
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
           this.deleteItems([{type: item.type, title: item.title}]);
@@ -212,7 +208,6 @@ export default {
       });
     },
     deleteItems(items) {
-      console.log('deleteItems');
       if (items instanceof Array) {
         this.isLoading = true;
         this.http
