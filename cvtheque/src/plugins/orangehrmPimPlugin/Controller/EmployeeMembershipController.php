@@ -47,13 +47,13 @@ class EmployeeMembershipController extends BaseViewEmployeeController
         return $this->membershipService;
     }
 
-    /**
-     * @return PayGradeService
-     */
-    public function getPayGradeService(): PayGradeService
-    {
-        return $this->getContainer()->get(Services::PAY_GRADE_SERVICE);
-    }
+    // /**
+    //  * @return PayGradeService
+    //  */
+    // public function getPayGradeService(): PayGradeService
+    // {
+    //     return $this->getContainer()->get(Services::PAY_GRADE_SERVICE);
+    // }
 
     /**
      * @inheritDoc
@@ -64,14 +64,14 @@ class EmployeeMembershipController extends BaseViewEmployeeController
         if ($empNumber) {
             $component = new Component('employee-membership');
             $component->addProp(new Prop('emp-number', Prop::TYPE_NUMBER, $empNumber));
-            $currencies = $this->getPayGradeService()->getCurrencyArray();
+            // $currencies = $this->getPayGradeService()->getCurrencyArray();
             $memberships = $this->getMembershipService()->getMembershipArray();
-            $paidBy = [
-                ["id" => EmployeeMembership::COMPANY, "label" => EmployeeMembership::COMPANY],
-                ["id" => EmployeeMembership::INDIVIDUAL, "label" => EmployeeMembership::INDIVIDUAL]
-            ];
-            $component->addProp(new Prop('currencies', Prop::TYPE_ARRAY, $currencies));
-            $component->addProp(new Prop('paid-by', Prop::TYPE_ARRAY, $paidBy));
+            // $paidBy = [
+            //     ["id" => EmployeeMembership::COMPANY, "label" => EmployeeMembership::COMPANY],
+            //     ["id" => EmployeeMembership::INDIVIDUAL, "label" => EmployeeMembership::INDIVIDUAL]
+            // ];
+            // $component->addProp(new Prop('currencies', Prop::TYPE_ARRAY, $currencies));
+            // $component->addProp(new Prop('paid-by', Prop::TYPE_ARRAY, $paidBy));
             $component->addProp(new Prop('memberships', Prop::TYPE_ARRAY, $memberships));
             $this->setComponent($component);
 

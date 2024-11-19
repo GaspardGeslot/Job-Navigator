@@ -104,11 +104,11 @@ class PIMLeftMenuService
             ],
             'label' => 'Qualifications'
         ],
-        /*'viewMemberships' => [
+        'viewMemberships' => [
             'module' => 'pim',
             'data_groups' => ['membership', 'membership_attachment', 'membership_custom_fields'],
             'label' => 'Memberships'
-        ]*/
+        ]
     ];
 
     private array $availableActionsCompany = [
