@@ -56,7 +56,7 @@ export class APIService {
 
   getAll(params?: any): Promise<AxiosResponse> {
     // console.log('params ', params);
-    params = null;
+    //params = null;
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
