@@ -137,7 +137,6 @@
         </oxd-form-row> -->
         <oxd-divider />
 
-
         <oxd-form-actions>
           <oxd-button
             type="reset"
@@ -171,13 +170,11 @@
         @delete="onClickDeleteSelected"
       ></table-header>-->
       <div class="boutonTriBloc">
-          <button class="boutonTri" @click="sortByName">
-            Trier par nom métier ⇅
-          </button>
-          <button class="boutonTri" @click="sortByDate">
-            Trier par date ⇅
-          </button>
-        </div>
+        <button class="boutonTri" @click="sortByName">
+          Trier par nom métier ⇅
+        </button>
+        <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
+      </div>
       <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
@@ -392,7 +389,6 @@ export default {
     ];
     const candidateDataNormalizer = (data) => {
       return data.map((item) => {
-        console.log('Data : ', item);
         return {
           id: item.id,
           jobTitle: item.jobTitle,
@@ -701,7 +697,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .boutonTri {
   border-radius: 2rem;
   height: 2rem;
