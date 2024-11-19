@@ -55,6 +55,8 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_COUNTRY_CODE = 'countryCode';
     public const PARAMETER_HOME_TELEPHONE = 'homeTelephone';
     public const PARAMETER_WORK_TELEPHONE = 'workTelephone';
+    public const PARAMETER_ALLOW_CONTACT_VIA_EMAIL = 'allowContactViaEmail';
+    public const PARAMETER_ALLOW_CONTACT_VIA_PHONE = 'allowContactViaPhone';
     public const PARAMETER_MOBILE = 'mobile';
     public const PARAMETER_WORK_EMAIL = 'workEmail';
     public const PARAMETER_OTHER_EMAIL = 'otherEmail';
@@ -294,7 +296,9 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     public function update(): EndpointResourceResult
     {
         $employee = $this->saveContactDetails();
-        $profileId = $this->updateHedwigeContact($this->getAuthUser()->getUserHedwigeToken(), $employee);
+        if ($this->getAuthUser()->getIsCandidate())
+            $profileId = $this->updateHedwigeContact($this->getAuthUser()->getUserHedwigeToken(), $employee);
+        else $profileId = $this->updateHedwigeCompanyContact($this->getAuthUser()->getUserHedwigeToken(), $employee);
         $employee->setProfileId($profileId);
         return new EndpointResourceResult(EmployeeContactDetailsModel::class, $employee);
     }
@@ -323,6 +327,45 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
 
         try {
             $response = $client->request('PUT', "{$clientBaseUrl}/user/contact", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($data)
+            ]);
+            $responseBody = $response->getBody()->getContents();
+            return (int) trim($responseBody);
+        } catch (\Exceptionon $e) {
+            return -1;
+        }
+    }
+
+    /**
+     * @param string $token
+     * @param Employee $employee
+     * @return int
+     */
+    protected function updateHedwigeCompanyContact(string $token, Employee $employee) : int
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        
+        $data = [
+            'contactEmail' => $employee->getOtherEmail(),
+            'phoneNumber' => $employee->getMobile(),
+            'allowContactViaEmail' => $employee->getCompanyAllowContactViaEmail(),
+            'allowContactViaPhone' => $employee->getCompanyAllowContactViaPhone(),
+            'address' => [
+                'street' => $employee->getStreet1(),
+                'city' => $employee->getCity(),
+                'state' => $employee->getProvince(),
+                'postalCode' => $employee->getZipcode(),
+                'country' => $employee->getCountry(),
+            ],
+        ];
+
+        try {
+            $response = $client->request('PUT', "{$clientBaseUrl}/company/contact", [
                 'headers' => [
                     'Authorization' => $token,
                     'Content-Type' => 'application/json',
@@ -448,6 +491,20 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
                 ),
                 true
             ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ALLOW_CONTACT_VIA_EMAIL,
+                    new Rule(Rules::BOOL_TYPE),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ALLOW_CONTACT_VIA_PHONE,
+                    new Rule(Rules::BOOL_TYPE),
+                ),
+                true
+            ),
         );
     }
 
@@ -510,6 +567,14 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_BODY,
             self::PARAMETER_OTHER_EMAIL
         );
+        $allowContactViaEmail = $this->getRequestParams()->getBoolean(
+            RequestParams::PARAM_TYPE_BODY,
+            self::PARAMETER_ALLOW_CONTACT_VIA_EMAIL
+        );
+        $allowContactViaPhone = $this->getRequestParams()->getBoolean(
+            RequestParams::PARAM_TYPE_BODY,
+            self::PARAMETER_ALLOW_CONTACT_VIA_PHONE
+        );
 
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
@@ -525,6 +590,8 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
         $employee->setMobile($mobile);
         $employee->setWorkEmail($workEmail);
         $employee->setOtherEmail($otherEmail);
+        $employee->setCompanyAllowContactViaEmail($allowContactViaEmail);
+        $employee->setCompanyAllowContactViaPhone($allowContactViaPhone);
         return $this->getEmployeeService()->saveEmployee($employee);
     }
 

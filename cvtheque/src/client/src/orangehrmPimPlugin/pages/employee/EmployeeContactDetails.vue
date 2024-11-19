@@ -280,8 +280,8 @@ export default {
             street1: this.contact.street1,
             workEmail: this.contact.workEmail,
             zipCode: this.contact.zipCode,
-            allowContactViaPhone: this.contact.allowContactViaPhone,
-            allowContactViaEmail: this.contact.allowContactViaEmail,
+            allowContactViaPhone: this.contact.companyAllowContactViaPhone,
+            allowContactViaEmail: this.contact.companyAllowContactViaEmail,
           },
         })
         .then((response) => {
