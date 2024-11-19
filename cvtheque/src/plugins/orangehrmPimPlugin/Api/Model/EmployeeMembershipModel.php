@@ -16,44 +16,58 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OrangeHRM\Pim\Api\Model;
+ namespace OrangeHRM\Pim\Api\Model;
 
-use OrangeHRM\Core\Api\V2\Serializer\ModelTrait;
-use OrangeHRM\Core\Api\V2\Serializer\Normalizable;
-use OrangeHRM\Entity\EmployeeMembership;
-
-/**
- * @OA\Schema(
- *     schema="Pim-EmployeeMembershipModel",
- *     type="object",
- *     @OA\Property(property="title", type="string", maxLength=100),
- *     @OA\Property(property="description", type="string", maxLength=300),
- *     @OA\Property(property="year", type="integer", format="int32")
- * )
- */
-class EmployeeMembershipModel implements Normalizable
-{
-    use ModelTrait;
-
-    /**
-     * @param EmployeeMembership $employeeMembership
-     */
-    public function __construct(EmployeeMembership $employeeMembership)
-    {
-        $this->setEntity($employeeMembership);
-        $this->setFilters(
-            [
-                'title',
-                'description',
-                'year',
-            ]
-        );
-        $this->setAttributeNames(
-            [
-                'title',
-                'description',
-                'year',
-            ]
-        );
-    }
-}
+ use OrangeHRM\Core\Api\V2\Serializer\ModelTrait;
+ use OrangeHRM\Core\Api\V2\Serializer\Normalizable;
+ use OrangeHRM\Entity\EmployeeMembership;
+ 
+ /**
+  * @OA\Schema(
+  *     schema="Pim-EmployeeMembershipModel",
+  *     type="object",
+  *     @OA\Property(property="title", type="string", maxLength=100),
+  *     @OA\Property(property="description", type="string", maxLength=300),
+  *     @OA\Property(property="year", type="integer", format="int32")
+  * )
+  */
+  class EmployeeMembershipModel implements Normalizable
+  {
+      use ModelTrait;
+  
+      private ?string $title;
+      private ?string $description;
+      private ?int $year;
+  
+      /**
+       * @param EmployeeMembership|array $data
+       */
+      public function __construct($data)
+      {
+          if ($data instanceof EmployeeMembership) {
+              $this->setEntity($data);
+              $this->title = $data->getTitle();
+              $this->description = $data->getDescription();
+              $this->year = $data->getYear();
+          } elseif (is_array($data)) {
+              $this->title = $data['title'] ?? null;
+              $this->description = $data['description'] ?? null;
+              $this->year = $data['year'] ?? null;
+          } else {
+              throw new \InvalidArgumentException('Invalid data type for EmployeeMembershipModel constructor');
+          }
+  
+          $this->setFilters(['title', 'description', 'year']);
+          $this->setAttributeNames(['title', 'description', 'year']);
+      }
+  
+      public function normalize(): array
+      {
+          return [
+              'title' => $this->title,
+              'description' => $this->description,
+              'year' => $this->year,
+          ];
+      }
+  }
+  
