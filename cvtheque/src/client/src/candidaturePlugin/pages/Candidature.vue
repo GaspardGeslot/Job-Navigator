@@ -103,11 +103,11 @@
         <a href="#aPropos">A propos</a>
       </div>
       <div class="accueilDroiteVideo">
-      <video
-        controls
-        src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/embauche-video.mp4"
-      ></video>
-    </div>
+        <video
+          controls
+          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/embauche-video.mp4"
+        ></video>
+      </div>
     </div>
   </div>
 
@@ -307,7 +307,7 @@ h1 {
   width: 50%;
 }
 
-.accueilDroiteVideo{
+.accueilDroiteVideo {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -452,7 +452,7 @@ h1 {
   .accueilDroite video {
     border-radius: 3rem;
     margin: 2rem;
-    padding: 1rem
+    padding: 1rem;
   }
 
   #aPropos {
