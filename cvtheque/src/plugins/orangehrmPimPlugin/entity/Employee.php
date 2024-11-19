@@ -207,6 +207,18 @@ class Employee
      * @ORM\Column(name="company_matching_job_title", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $companyMatchingJobTitle = '';
+
+    /**
+     * @var bool
+     * @ORM\Column(name="company_allow_contact_via_email", type="boolean", options={"default" : 1})
+     */
+    private bool $companyAllowContactViaEmail = true;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="company_allow_contact_via_phone", type="boolean", options={"default" : 1})
+     */
+    private bool $companyAllowContactViaPhone = true;
     
     /**
      * @var string
@@ -721,7 +733,7 @@ class Employee
     {
         $this->setProfileId($profileInfo['id'] ?? $this->empNumber ?? null);
         $this->setNeed($profileInfo['need'] ?? '');
-        $this->setResume($profileInfo['resume'] != null ? (int) $profileInfo['resume'] : -1);
+        $this->setResume(array_key_exists('resume', $profileInfo) && $profileInfo['resume'] != null ? (int) $profileInfo['resume'] : -1);
         $this->setStudyLevel($profileInfo['studyLevel'] ?? '');
         $this->setDrivingLicense($profileInfo['drivingLicense'] ?? '');
         $this->setSalary($profileInfo['salaryExpectation'] ?? '');
@@ -744,6 +756,21 @@ class Employee
         $this->setProvince($profileContact['address']['state'] ?? '');
         $this->setZipcode($profileContact['address']['postalCode'] ?? '');
         $this->setCountry($profileContact['address']['country'] ?? '');
+    }
+
+    /**
+     * @param mixed $profileContact
+     */
+    public function setCompanyContact(mixed $companyContact): void 
+    {
+        $this->setOtherEmail($companyContact['contactEmail'] ?? '');
+        $this->setMobile($companyContact['phoneNumber'] ?? '');
+        $this->setStreet1($companyContact['address']['street'] ?? '');
+        $this->setCity($companyContact['address']['city'] ?? '');
+        $this->setProvince($companyContact['address']['state'] ?? '');
+        $this->setZipcode($companyContact['address']['postalCode'] ?? '');
+        $this->setCompanyAllowContactViaEmail($companyContact['allowContactViaEmail'] ?? true);
+        $this->setCompanyAllowContactViaPhone($companyContact['allowContactViaPhone'] ?? true);
     }
 
     /**
@@ -1117,6 +1144,38 @@ class Employee
     public function setCompanyMatchingJobTitle(string $companyMatchingJobTitle): void
     {
         $this->companyMatchingJobTitle = $companyMatchingJobTitle;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCompanyAllowContactViaEmail(): bool
+    {
+        return $this->companyAllowContactViaEmail;
+    }
+
+    /**
+     * @param bool $companyAllowContactViaEmail
+     */
+    public function setCompanyAllowContactViaEmail(bool $companyAllowContactViaEmail): void
+    {
+        $this->companyAllowContactViaEmail = $companyAllowContactViaEmail;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCompanyAllowContactViaPhone(): bool
+    {
+        return $this->companyAllowContactViaPhone;
+    }
+
+    /**
+     * @param bool $companyAllowContactViaPhone
+     */
+    public function setCompanyAllowContactViaPhone(bool $companyAllowContactViaPhone): void
+    {
+        $this->companyAllowContactViaPhone = $companyAllowContactViaPhone;
     }
     
     /**

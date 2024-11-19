@@ -66,14 +66,14 @@
                 :rules="rules.zipCode"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <!--<oxd-grid-item>
               <oxd-input-field
                 v-model="contact.country"
                 type="select"
                 :label="$t('general.country')"
                 :options="countries"
               />
-            </oxd-grid-item>
+            </oxd-grid-item>-->
           </oxd-grid>
         </oxd-form-row>
 
@@ -105,6 +105,19 @@
               />
             </oxd-grid-item>-->
           </oxd-grid>
+          <oxd-grid
+            :cols="3"
+            class="orangehrm-full-width-grid"
+            v-if="!isCandidate"
+          >
+            <oxd-grid-item class="orangerhrm-switch-wrapper">
+              <oxd-text class="orangehrm-text" tag="p">
+                {{ $t('pim.allow_contact_via_phone') }}
+              </oxd-text>
+              <oxd-switch-input v-model="contact.companyAllowContactViaPhone" />
+            </oxd-grid-item>
+          </oxd-grid>
+          <br />
         </oxd-form-row>
 
         <oxd-text class="orangehrm-sub-title" tag="h6">{{
@@ -113,7 +126,7 @@
         <oxd-divider />
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isCandidate">
               <oxd-input-field
                 v-model="contact.workEmail"
                 :label="$t('general.work_email')"
@@ -129,6 +142,19 @@
               />
             </oxd-grid-item>
           </oxd-grid>
+          <oxd-grid
+            :cols="3"
+            class="orangehrm-full-width-grid"
+            v-if="!isCandidate"
+          >
+            <oxd-grid-item class="orangerhrm-switch-wrapper">
+              <oxd-text class="orangehrm-text" tag="p">
+                {{ $t('pim.allow_contact_via_email') }}
+              </oxd-text>
+              <oxd-switch-input v-model="contact.companyAllowContactViaEmail" />
+            </oxd-grid-item>
+          </oxd-grid>
+          <br />
         </oxd-form-row>
 
         <oxd-divider />
@@ -150,6 +176,7 @@ import {
   validEmailFormat,
 } from '@ohrm/core/util/validation/rules';
 import {promiseDebounce} from '@ohrm/oxd';
+import {OxdSwitchInput} from '@ohrm/oxd';
 
 const contactDetailsModel = {
   street1: '',
@@ -163,11 +190,15 @@ const contactDetailsModel = {
   mobile: '',
   workEmail: '',
   otherEmail: '',
+  companyAllowContactViaEmail: true,
+  companyAllowContactViaPhone: true,
+  otherId: null,
 };
 
 export default {
   components: {
     'edit-employee-layout': EditEmployeeLayout,
+    'oxd-switch-input': OxdSwitchInput,
   },
 
   props: {
@@ -218,6 +249,7 @@ export default {
           //promiseDebounce(this.validateOtherEmail, 500),
         ],
       },
+      isCandidate: true,
     };
   },
 
@@ -248,6 +280,8 @@ export default {
             street1: this.contact.street1,
             workEmail: this.contact.workEmail,
             zipCode: this.contact.zipCode,
+            allowContactViaPhone: this.contact.allowContactViaPhone,
+            allowContactViaEmail: this.contact.allowContactViaEmail,
           },
         })
         .then((response) => {
@@ -338,7 +372,13 @@ export default {
 
     updateModel(response) {
       const {data} = response.data;
+      console.log('Data : ', data);
       this.contact = {...contactDetailsModel, ...data};
+      this.isCandidate = this.contact.otherId
+        ? JSON.parse(this.contact.otherId).includes(
+            process.env.VUE_APP_CANDIDATE_ROLE_NAME,
+          )
+        : false;
       this.contact.country = this.countries.find(
         (item) => item.label === data.country,
       );
@@ -346,3 +386,5 @@ export default {
   },
 };
 </script>
+
+<style src="./employee.scss" lang="scss" scoped></style>

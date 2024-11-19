@@ -32,14 +32,17 @@ use OrangeHRM\Core\Api\V2\Validator\ParamRuleCollection;
 use OrangeHRM\Core\Api\V2\Validator\Rule;
 use OrangeHRM\Core\Api\V2\Validator\Rules;
 use OrangeHRM\Entity\Employee;
+use OrangeHRM\Entity\UserRole;
 use OrangeHRM\Pim\Api\Model\EmployeeContactDetailsModel;
 use OrangeHRM\Pim\Service\EmployeeService;
 use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
+use OrangeHRM\Core\Traits\UserRoleManagerTrait;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
 {
     use AuthUserTrait;
+    use UserRoleManagerTrait;
     use EmployeeServiceTrait;
 
     public const PARAMETER_EMP_NUMBER = 'empNumber';
@@ -101,8 +104,17 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     {
         $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
-        $employee->setProfileContact($this->getHedwigeContactDetails($this->getAuthUser()->getUserHedwigeToken()));
+        $contact = $this->getHedwigeContactDetails($this->getAuthUser()->getUserHedwigeToken());
+        
+        if ($this->getAuthUser()->getIsCandidate())
+            $employee->setProfileContact($contact);
+        else $employee->setCompanyContact($contact);
+        
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
+
+        $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
+        $userRoleNames = array_map(fn (UserRole $userRole) => $userRole->getName(), $userRoles);
+        $employee->setOtherId(json_encode($userRoleNames));
 
         return new EndpointResourceResult(EmployeeContactDetailsModel::class, $employee);
     }
@@ -117,7 +129,8 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $response = $client->request('GET', "{$clientBaseUrl}/user/contact", [
+            $profileType = $this->getAuthUser()->getIsCandidate() ? "user" : "company";
+            $response = $client->request('GET', "{$clientBaseUrl}/{$profileType}/contact", [
                 'headers' => [
                     'Authorization' => $token,
                 ]

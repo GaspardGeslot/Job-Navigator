@@ -204,8 +204,8 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
-        $limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 10);
-        $offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
+        //$limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 10);
+        //$offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
 
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
@@ -228,13 +228,12 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
             EmployeeSkillModel::class,
             $normalizedSkills,
             new ParameterBag([
-                'limit' => $limit,
-                'offset' => $offset,
+                //'limit' => $limit,
+                //'offset' => $offset,
                 'total' => count($normalizedSkills),
             ])
         );
     }
-
 
 
         // return new EndpointCollectionResult(
@@ -277,8 +276,8 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForGetAll(): ParamRuleCollection
     {
         return new ParamRuleCollection(
-            $this->getEmpNumberRule()
-            // ...$this->getSortingAndPaginationParamsRules(EmployeeSkillSearchFilterParams::ALLOWED_SORT_FIELDS)
+            $this->getEmpNumberRule(),
+             ...$this->getSortingAndPaginationParamsRules(EmployeeSkillSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
     }
 

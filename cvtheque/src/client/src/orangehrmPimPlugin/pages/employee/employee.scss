@@ -98,3 +98,22 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
+
+.orangerhrm-switch-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  @include oxd-respond-to('sm') {
+    max-width: 50%;
+  }
+  @include oxd-respond-to('md') {
+    max-width: 100%;
+  }
+}
+
+.orangehrm-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: $oxd-interface-gray-darken-1-color;
+}

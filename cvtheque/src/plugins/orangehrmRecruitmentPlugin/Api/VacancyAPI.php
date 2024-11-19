@@ -416,6 +416,15 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
 
         $this->createHedwigeMatching($this->getAuthUser()->getUserHedwigeToken());
 
+        $vacancy->setJobs($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_JOB_TITLE));
+        $vacancy->setNeeds($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEEDS));
+        $vacancy->setLevels($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVELS));
+        $vacancy->setCourseStarts($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_STARTS));
+        $vacancy->setCountries($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COUNTRIES));
+        $vacancy->setProfessionalExperiences($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_PROFESSIONAL_EXPERIENCES));
+        $vacancy->setDrivingLicenses($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_DRIVING_LICENSES));
+        $vacancy->setStatus($this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true));
+
         return new EndpointResourceResult(VacancyDetailedModel::class, $vacancy);
     }
 
