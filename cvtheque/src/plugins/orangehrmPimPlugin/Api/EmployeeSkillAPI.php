@@ -430,7 +430,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         new ParamRule(
             'description',  // Nom du paramètre
             new Rule(Rules::STRING_TYPE),  // Doit être une chaîne
-            new Rule(Rules::LENGTH, [0, 100])  // Doit avoir une longueur entre 1 et 500 caractères
+            new Rule(Rules::LENGTH, [0, 300])  // Doit avoir une longueur entre 1 et 500 caractères
         ),
         // Inclusion des autres règles déjà présentes dans getCommonBodyValidationRules()
         // ...$this->getCommonBodyValidationRules(),

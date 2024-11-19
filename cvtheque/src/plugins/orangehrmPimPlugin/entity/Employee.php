@@ -134,7 +134,7 @@ class Employee
     /**
      * @var string
      *
-     * @ORM\Column(name="emp_skills", type="string", length=300, nullable=true, options={"default" : ""})
+     * @ORM\Column(name="emp_skills", type="string", length=400, nullable=true, options={"default" : ""})
      */
     private ?string $emp_skills = '';
 
