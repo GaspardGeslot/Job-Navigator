@@ -137,6 +137,7 @@
         </oxd-form-row> -->
         <oxd-divider />
 
+
         <oxd-form-actions>
           <oxd-button
             type="reset"
@@ -169,6 +170,14 @@
         :show-divider="$can.create('recruitment_candidates')"
         @delete="onClickDeleteSelected"
       ></table-header>-->
+      <div class="boutonTriBloc">
+          <button class="boutonTri" @click="sortByName">
+            Trier par nom métier ⇅
+          </button>
+          <button class="boutonTri" @click="sortByDate">
+            Trier par date ⇅
+          </button>
+        </div>
       <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
@@ -693,3 +702,15 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+
+.boutonTri {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+  margin: 1rem 1rem;
+}
+</style>
