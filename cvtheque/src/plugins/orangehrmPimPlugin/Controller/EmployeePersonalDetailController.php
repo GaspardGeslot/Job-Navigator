@@ -25,6 +25,7 @@ use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
+use OrangeHRM\Recruitment\Service\RecruitmentAttachmentService;
 
 class EmployeePersonalDetailController extends BaseViewEmployeeController
 {
@@ -109,6 +110,18 @@ class EmployeePersonalDetailController extends BaseViewEmployeeController
                     ];
                 }, $options['nafCodes'], array_keys($options['nafCodes']))));
             }
+
+            $component->addProp(
+                new Prop('max-file-size', Prop::TYPE_NUMBER, $this->getConfigService()->getMaxAttachmentSize())
+            );
+
+            $component->addProp(
+                new Prop(
+                    'allowed-file-types',
+                    Prop::TYPE_ARRAY,
+                    RecruitmentAttachmentService::ALLOWED_CANDIDATE_ATTACHMENT_FILE_TYPES
+                )
+            );
 
             $this->setComponent($component);
 

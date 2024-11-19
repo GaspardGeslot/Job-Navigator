@@ -137,22 +137,28 @@ apiv2_pim_employees_salary_components:
     empNumber: '\d+'
 
 apiv2_pim_employees_attachment:
-  path: /api/v2/pim/employees/{empNumber}/screen/{screen}/attachments/{id}
+  path: /api/v2/pim/attachments/{attachmentId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Pim\Api\EmployeeAttachmentAPI
-  requirements:
-    empNumber: '\d+'
+    _key: attachmentId
 
 apiv2_pim_employees_attachments:
-  path: /api/v2/pim/employees/{empNumber}/screen/{screen}/attachments
+  path: /api/v2/pim/attachments
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
-  methods: [ GET, POST, DELETE ]
+  methods: [ POST, DELETE ]
   defaults:
     _api: OrangeHRM\Pim\Api\EmployeeAttachmentAPI
-  requirements:
-    empNumber: '\d+'
+
+#apiv2_pim_employees_attachments:
+#  path: /api/v2/pim/employees/{empNumber}/screen/{screen}/attachments
+#  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+#  methods: [ GET, POST, DELETE ]
+#  defaults:
+#    _api: OrangeHRM\Pim\Api\EmployeeAttachmentAPI
+#  requirements:
+#    empNumber: '\d+'
 
 apiv2_pim_employee_emergency_contact:
   path: /api/v2/pim/employees/{empNumber}/emergency-contacts/{id}
@@ -526,7 +532,7 @@ pim_employee_picture:
   methods: [ GET ]
 
 pim_employee_attachment:
-  path: /pim/viewAttachment/empNumber/{empNumber}/attachId/{attachId}
+  path: /pim/viewAttachment/attachId/{attachId}
   controller: OrangeHRM\Pim\Controller\File\EmployeeAttachmentController::handle
   methods: [ GET ]
 

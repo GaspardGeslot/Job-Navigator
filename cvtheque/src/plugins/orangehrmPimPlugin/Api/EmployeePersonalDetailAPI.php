@@ -30,9 +30,12 @@ use OrangeHRM\Core\Api\V2\Validator\Rules;
 use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\Core\Traits\UserRoleManagerTrait;
 use OrangeHRM\Entity\Employee;
+use OrangeHRM\Entity\EmployeeAttachment;
+use OrangeHRM\Core\Dto\Base64Attachment;
 use OrangeHRM\Entity\UserRole;
 use OrangeHRM\Pim\Api\Model\EmployeePersonalDetailModel;
 use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
+use OrangeHRM\Pim\Service\EmployeeAttachmentService;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
@@ -47,6 +50,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_MIDDLE_NAME = 'middleName';
     public const PARAMETER_LAST_NAME = 'lastName';
     public const PARAMETER_NEED = 'need';
+    public const PARAMETER_ATTACHMENT = 'attachment';
+    public const PARAMETER_ATTACHMENT_METHOD = 'attachmentMethod';
+    public const PARAMETER_ATTACHMENT_ID = 'attachmentId';
     public const PARAMETER_LICENSE = 'drivingLicense';
     public const PARAMETER_SALARY = 'salary';
     public const PARAMETER_STUDY_LEVEL = 'studyLevel';
@@ -73,6 +79,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_SSN_NUMBER = 'ssnNumber';
     public const PARAMETER_SIN_NUMBER = 'sinNumber';
 
+    public const PARAM_RULE_ATTACHMENT_FILE_NAME_MAX_LENGTH = 100;
     public const PARAM_RULE_FIRST_NAME_MAX_LENGTH = 30;
     public const PARAM_RULE_MIDDLE_NAME_MAX_LENGTH = 30;
     public const PARAM_RULE_LAST_NAME_MAX_LENGTH = 30;
@@ -91,6 +98,22 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAM_RULE_MILITARY_SERVICE_MAX_LENGTH = 100;
     public const PARAM_RULE_SSN_NUMBER_MAX_LENGTH = 100;
     public const PARAM_RULE_SIN_NUMBER_MAX_LENGTH = 100;
+
+    /**
+     * @var EmployeeAttachmentService|null
+     */
+    protected ?EmployeeAttachmentService $employeeAttachmentService = null;
+
+    /**
+     * @return EmployeeAttachmentService
+     */
+    public function getEmployeeAttachmentService(): EmployeeAttachmentService
+    {
+        if (!$this->employeeAttachmentService instanceof EmployeeAttachmentService) {
+            $this->employeeAttachmentService = new EmployeeAttachmentService();
+        }
+        return $this->employeeAttachmentService;
+    }
 
     /**
      * @OA\Get(
@@ -250,6 +273,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             $employee->setCourseStart(
                 $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_START)
             );
+
         } else {
             $employee->setCompanySiret($employee->getEmployeeId());
             $employee->setCompanyWorkforce(
@@ -335,6 +359,34 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         if ($this->getAuthUser()->getIsCandidate()) {
             $profileId = $this->updateHedwigeProfile($this->getAuthUser()->getUserHedwigeToken(), $employee);
             $employee->setProfileId($profileId);
+            
+            $attachmentMethod = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_METHOD);
+            $attachmentId = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_ID);
+            if ($attachmentMethod && $attachmentMethod !== 'keepCurrent') {
+                if ($attachmentMethod === 'deleteCurrent') {
+                    $this->getEmployeeAttachmentService()->deleteEmployeeAttachments(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal', [$attachmentId]);
+                    $this->removeHedwigeResume($this->getAuthUser()->getUserHedwigeToken());
+                    $employee->setResume(-1);
+                } else {
+                    $base64Attachment = $this->getRequestParams()->getAttachmentOrNull(
+                        RequestParams::PARAM_TYPE_BODY,
+                        self::PARAMETER_ATTACHMENT
+                    );
+                    if (!is_null($base64Attachment))
+                    {
+                        if ($attachmentId && $attachmentId != -1)
+                            $this->getEmployeeAttachmentService()->deleteEmployeeAttachments(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal', [$attachmentId]);
+                        $employeeAttachment = new EmployeeAttachment();
+                        $employeeAttachment->getDecorator()->setEmployeeByEmpNumber(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'));
+                        $employeeAttachment->setScreen("personal");
+                        $this->setAttachmentAttributesForCreateAndGetId($employeeAttachment, $base64Attachment, getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal');
+                        $newEmployeeAttachment = $this->getEmployeeAttachmentService()->saveEmployeeAttachment($employeeAttachment);
+                        $attachmentId = $newEmployeeAttachment->getAttachId();
+                        $this->updateHedwigeResume($this->getAuthUser()->getUserHedwigeToken(), $attachmentId);
+                    }
+                    $employee->setResume($attachmentId);
+                }
+            } else $employee->setResume($attachmentId);
         } else
             $this->updateHedwigeCompany($this->getAuthUser()->getUserHedwigeToken(), $employee);
 
@@ -405,6 +457,43 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         }
     }
 
+    /**
+     * @param string $token
+     * @param int $attachmentId
+     */
+    protected function updateHedwigeResume(string $token, int $attachmentId) : void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $client->request('POST', "{$clientBaseUrl}/user/resume?resumeId={$attachmentId}", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+        } catch (\Exceptionon $e) {
+        }
+    }
+
+    /**
+     * @param string $token
+     */
+    protected function removeHedwigeResume(string $token) : void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $client->request('DELETE', "{$clientBaseUrl}/user/resume", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+        } catch (\Exceptionon $e) {
+        }
+    }
+
 
     /**
      * @inheritDoc
@@ -453,6 +542,20 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
+                    self::PARAMETER_ATTACHMENT_METHOD,
+                    new Rule(Rules::STRING_TYPE),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ATTACHMENT_ID,
+                    new Rule(Rules::INT_TYPE),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
                     'drivingLicense',
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, 100]),
@@ -480,6 +583,16 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                     self::PARAMETER_COURSE_START,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COURSE_START_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ATTACHMENT,
+                    new Rule(
+                        Rules::BASE_64_ATTACHMENT,
+                        [null, null, self::PARAM_RULE_ATTACHMENT_FILE_NAME_MAX_LENGTH]
+                    )
                 ),
                 true
             ),
@@ -637,5 +750,43 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public function getValidationRuleForDelete(): ParamRuleCollection
     {
         throw $this->getNotImplementedException();
+    }
+
+    /**
+     * @param EmployeeAttachment $employeeAttachment
+     * @param Base64Attachment $base64Attachment
+     * @return EmployeeAttachment
+     */
+    private function setAttachmentAttributesForCreateAndGetId(
+        EmployeeAttachment $employeeAttachment,
+        Base64Attachment $base64Attachment,
+        int $empNumber,
+        string $screen
+    ): EmployeeAttachment {
+
+        $size = (int)$base64Attachment->getSize();
+    
+        if (!is_int($size)) {
+            throw new \Exception('Attachment size must be an integer');
+        }
+        if ($base64Attachment->getSize() > 10485760) {
+            throw new Exception('File size exceeds the limit of 10 MB.');
+        }
+
+        $content = $base64Attachment->getContent();
+        if (is_string($content)) {
+            $employeeAttachment->setAttachment($content);
+        } else {
+            throw new \Exception('Attachment content must be a valid binary string');
+        }
+    
+        $employeeAttachment->setFilename($base64Attachment->getFilename());
+        $employeeAttachment->setSize($size);
+        $employeeAttachment->setFileType($base64Attachment->getFileType());
+    
+        $employeeAttachment->setAttachedBy($empNumber);
+        $employeeAttachment->setAttachedByName($screen);
+    
+        return $employeeAttachment;
     }
 }

@@ -71,13 +71,28 @@
                 :rules="rules.employeeId"
                 :disabled="!$can.update(`personal_sensitive_information`)"
               />
-              <!--<oxd-grid-item>
-              <oxd-input-field
-                v-model="employee.otherId"
-                :label="$t('pim.other_id')"
-                :rules="rules.otherId"
+            </oxd-grid-item>
+          </oxd-grid>
+          <oxd-grid
+            v-if="isCandidate"
+            :cols="2"
+            class="orangehrm-full-width-grid"
+          >
+            <oxd-grid-item>
+              <file-upload-input
+                v-model:newFile="attachment.newAttachment"
+                v-model:method="attachment.method"
+                :label="$t('recruitment.resume')"
+                :button-label="$t('general.browse')"
+                :file="attachment.oldAttachment"
+                :rules="rules.resume"
+                :hint="
+                  $t('general.accept_custom_format_file_up_to_n_mb', {
+                    count: formattedFileSize,
+                  })
+                "
+                :url="getResumeUrl"
               />
-            </oxd-grid-item>-->
             </oxd-grid-item>
           </oxd-grid>
           <oxd-grid v-else :cols="3" class="orangehrm-full-width-grid">
@@ -341,6 +356,7 @@
 </template>
 
 <script>
+import {urlFor} from '@ohrm/core/util/helper/url';
 import {APIService} from '@ohrm/core/util/services/api.service';
 import EditEmployeeLayout from '@/orangehrmPimPlugin/components/EditEmployeeLayout';
 import FullNameInput from '@/orangehrmPimPlugin/components/FullNameInput';
@@ -348,8 +364,11 @@ import {
   required,
   shouldNotExceedCharLength,
   validDateFormat,
+  maxFileSize,
+  validFileTypes,
 } from '@ohrm/core/util/validation/rules';
 import useDateFormat from '@/core/util/composable/useDateFormat';
+import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 
 const employeeModel = {
   firstName: '',
@@ -377,12 +396,21 @@ const employeeModel = {
   companySiret: '',
   companyWorkforce: [],
   companyNafCode: [],
+  resume: null,
+};
+
+const EmployeeAttachmentModel = {
+  id: null,
+  oldAttachment: {},
+  newAttachment: null,
+  method: 'replaceCurrent',
 };
 
 export default {
   components: {
     'edit-employee-layout': EditEmployeeLayout,
     'full-name-input': FullNameInput,
+    'file-upload-input': FileUploadInput,
   },
 
   props: {
@@ -430,6 +458,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    allowedFileTypes: {
+      type: Array,
+      required: true,
+    },
+    maxFileSize: {
+      type: Number,
+      required: true,
+    },
   },
 
   setup(props) {
@@ -449,6 +485,7 @@ export default {
     return {
       isLoading: false,
       employee: {...employeeModel},
+      attachment: {...EmployeeAttachmentModel},
       rules: {
         firstName: [required, shouldNotExceedCharLength(30)],
         companyName: [required, shouldNotExceedCharLength(50)],
@@ -463,6 +500,10 @@ export default {
         militaryService: [shouldNotExceedCharLength(30)],
         birthday: [validDateFormat(this.userDateFormat)],
         drivingLicenseExpiredDate: [validDateFormat(this.userDateFormat)],
+        resume: [
+          maxFileSize(this.maxFileSize),
+          validFileTypes(this.allowedFileTypes),
+        ],
       },
       maritalStatuses: [
         {id: 'Single', label: this.$t('pim.single')},
@@ -472,7 +513,11 @@ export default {
       isCandidate: true,
     };
   },
-
+  computed: {
+    formattedFileSize() {
+      return Math.round((this.maxFileSize / (1024 * 1024)) * 100) / 100;
+    },
+  },
   beforeMount() {
     this.isLoading = true;
     this.http
@@ -484,7 +529,7 @@ export default {
           url: '/api/v2/pim/employees',
         });
       })
-      .then((response) => {
+      /*.then((response) => {
         const {data} = response.data;
         this.rules.employeeId.push((v) => {
           const index = data.findIndex(
@@ -501,7 +546,7 @@ export default {
             return true;
           }
         });
-      })
+      })*/
       .finally(() => {
         this.isLoading = false;
       });
@@ -509,6 +554,7 @@ export default {
 
   methods: {
     onSave() {
+      console.log('Attachment : ', this.attachment);
       this.isLoading = true;
       this.http
         .request({
@@ -532,6 +578,9 @@ export default {
             salary: this.employee.salary,
             studyLevel: this.employee.studyLevel?.label,
             courseStart: this.employee.courseStart?.label,
+            attachment: this.attachment.newAttachment,
+            attachmentMethod: this.attachment.method,
+            attachmentId: this.attachment.id,
             companyName: this.employee.companyName,
             companyNafCode: this.employee.companyNafCode?.label,
             companyWorkforce: this.employee.companyWorkforce?.label,
@@ -578,6 +627,26 @@ export default {
         this.employee.courseStart = this.courseStarts.find(
           (item) => item.label === data.courseStart,
         );
+        if (this.employee.resume && this.employee.resume != -1) {
+          this.http
+            .request({
+              method: 'GET',
+              url: `/api/v2/pim/attachments/` + this.employee.resume,
+            })
+            .then(({data: {data}}) => {
+              this.attachment.id = data.id;
+              this.attachment.newAttachment = null;
+              this.attachment.oldAttachment = {
+                id: data.id,
+                filename: data.attachment.fileName,
+                fileType: data.attachment.fileType,
+                fileSize: data.attachment.fileSize,
+              };
+              this.attachment.method = 'keepCurrent';
+            });
+        } else {
+          this.attachment = {...EmployeeAttachmentModel};
+        }
       } else {
         this.employee.companyWorkforce = this.workforces.find(
           (item) => item.label === data.companyWorkforce,
@@ -586,6 +655,11 @@ export default {
           (item) => item.label === data.companyNafCode,
         );
       }
+    },
+    getResumeUrl() {
+      return urlFor('/pim/viewAttachment/attachId/{attachId}', {
+        attachId: this.employee.resume,
+      });
     },
   },
 };

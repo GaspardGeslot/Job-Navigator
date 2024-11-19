@@ -48,21 +48,22 @@ class EmployeeAttachmentController extends AbstractFileController
      */
     public function handle(Request $request): Response
     {
-        $empNumber = $request->attributes->get('empNumber');
+        //$empNumber = $request->attributes->get('empNumber');
         $attachId = $request->attributes->get('attachId');
 
         $response = $this->getResponse();
 
-        if ($empNumber && $attachId) {
-            $attachment = $this->getEmployeeAttachmentService()->getAccessibleEmployeeAttachment($empNumber, $attachId);
-            if ($attachment instanceof EmployeeAttachment) {
+        if ($attachId) {
+            $employeeAttachment = $this->getEmployeeAttachmentService()->getEmployeeAttachment(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), $attachId);
+            
+            if ($employeeAttachment instanceof EmployeeAttachment) {
                 $this->setCommonHeadersToResponse(
-                    $attachment->getFilename(),
-                    $attachment->getFileType(),
-                    $attachment->getSize(),
+                    $employeeAttachment->getFilename(),
+                    $employeeAttachment->getFileType(),
+                    $employeeAttachment->getSize(),
                     $response
                 );
-                $response->setContent($attachment->getDecorator()->getAttachment());
+                $response->setContent($employeeAttachment->getDecorator()->getAttachment());
                 return $response;
             }
         }

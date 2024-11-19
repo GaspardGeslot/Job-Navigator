@@ -111,6 +111,13 @@ class Employee
     private ?string $need = '';
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="emp_resume", type="integer", length=100, nullable=true)
+     */
+    private ?int $resume;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="emp_jobs", type="string", length=300, nullable=true, options={"default" : ""})
@@ -714,6 +721,7 @@ class Employee
     {
         $this->setProfileId($profileInfo['id'] ?? $this->empNumber ?? null);
         $this->setNeed($profileInfo['need'] ?? '');
+        $this->setResume($profileInfo['resume'] != null ? (int) $profileInfo['resume'] : -1);
         $this->setStudyLevel($profileInfo['studyLevel'] ?? '');
         $this->setDrivingLicense($profileInfo['drivingLicense'] ?? '');
         $this->setSalary($profileInfo['salaryExpectation'] ?? '');
@@ -901,6 +909,22 @@ class Employee
     public function setNeed(string $need): void
     {
         $this->need = $need;
+    }
+
+    /**
+     * @return ?int
+     */
+    public function getResume(): ?int
+    {
+        return $this->resume;
+    }
+
+    /**
+     * @param ?int $resume
+     */
+    public function setResume(?int $resume): void
+    {
+        $this->resume = $resume;
     }
 
     /**

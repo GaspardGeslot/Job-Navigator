@@ -18,11 +18,13 @@
 
 namespace OrangeHRM\Pim\Api;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
 use OrangeHRM\Core\Api\V2\EndpointCollectionResult;
 use OrangeHRM\Core\Api\V2\EndpointResourceResult;
+use OrangeHRM\Core\Api\V2\EndpointResult;
 use OrangeHRM\Core\Api\V2\Model\ArrayModel;
 use OrangeHRM\Core\Api\V2\ParameterBag;
 use OrangeHRM\Core\Api\V2\RequestParams;
@@ -35,15 +37,20 @@ use OrangeHRM\Core\Traits\UserRoleManagerTrait;
 use OrangeHRM\Entity\EmployeeAttachment;
 use OrangeHRM\Pim\Api\Model\EmployeeAttachmentModel;
 use OrangeHRM\Pim\Dto\PartialEmployeeAttachment;
+use OrangeHRM\Recruitment\Dto\RecruitmentAttachment;
+use OrangeHRM\Recruitment\Api\Model\CandidateAttachmentModel;
 use OrangeHRM\Pim\Service\EmployeeAttachmentService;
 use Symfony\Component\HttpFoundation\Response;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
 {
+    use AuthUserTrait;
     use UserRoleManagerTrait;
 
     public const PARAMETER_SCREEN = 'screen';
     public const PARAMETER_ATTACHMENT = 'attachment';
+    public const PARAMETER_ATTACHMENT_ID = 'attachmentId';
     public const PARAMETER_DESCRIPTION = 'description';
 
     public const PARAM_RULE_ATTACHMENT_FILE_NAME_MAX_LENGTH = 100;
@@ -67,7 +74,7 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
 
     /**
      * @OA\Get(
-     *     path="/api/v2/pim/employees/{empNumber}/screen/{screen}/attachments/{id}",
+     *     path="/api/v2/pim/attachments/{attachmentId}",
      *     tags={"PIM/Employee Attachment"},
      *     summary="Get an Employee's Attachment on a Screen",
      *     operationId="get-an-employees-attachment-on-a-screen",
@@ -108,22 +115,20 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
      *
      * @inheritDoc
      */
-    public function getOne(): EndpointResourceResult
+    public function getOne(): EndpointResult
     {
-        list($empNumber, $screen, $id) = $this->getUrlAttributes();
-        $partialEmployeeAttachment = $this->getEmployeeAttachmentService()->getEmployeeAttachmentDetails($empNumber, $id, $screen);
-        $this->throwRecordNotFoundExceptionIfNotExist($partialEmployeeAttachment, PartialEmployeeAttachment::class);
-
-        return new EndpointResourceResult(
-            EmployeeAttachmentModel::class,
-            $partialEmployeeAttachment,
-            new ParameterBag(
-                [
-                    CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
-                    self::PARAMETER_SCREEN => $screen,
-                ]
-            )
+        //list($empNumber, $screen, $id) = $this->getUrlAttributes();
+        $id = $this->getRequestParams()->getInt(
+            RequestParams::PARAM_TYPE_ATTRIBUTE,
+            self::PARAMETER_ATTACHMENT_ID
         );
+        /*$partialEmployeeAttachment = $this->getEmployeeAttachmentService()->getEmployeeAttachmentDetails($empNumber, $id, $screen);
+        $this->throwRecordNotFoundExceptionIfNotExist($partialEmployeeAttachment, PartialEmployeeAttachment::class);*/
+
+        $employeeAttachment = $this->getEmployeeAttachmentService()->getEmployeeAttachment(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), $id);
+        $candidateAttachment = !$employeeAttachment ? new RecruitmentAttachment() : new RecruitmentAttachment($employeeAttachment->getAttachId(), $employeeAttachment->getFilename(), $employeeAttachment->getFileType(), (string) $employeeAttachment->getSize(), null, null);
+
+        return new EndpointResourceResult(CandidateAttachmentModel::class, $candidateAttachment);
     }
 
     /**
@@ -148,10 +153,13 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
      */
     public function getValidationRuleForGetOne(): ParamRuleCollection
     {
-        return new ParamRuleCollection(
+        /*return new ParamRuleCollection(
             new ParamRule(CommonParams::PARAMETER_ID, new Rule(Rules::POSITIVE)),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),
+        );*/
+        return new ParamRuleCollection(
+            new ParamRule(self::PARAMETER_ATTACHMENT_ID),
         );
     }
 
@@ -227,7 +235,7 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
 
     /**
      * @OA\Post(
-     *     path="/api/v2/pim/employees/{empNumber}/screen/{screen}/attachments",
+     *     path="/api/v2/pim/attachments",
      *     tags={"PIM/Employee Attachment"},
      *     summary="Add an Attachment to an Employee on a Screen",
      *     operationId="add-an-attachment-to-an-employee-on-a-screen",
@@ -272,12 +280,12 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
      *
      * @inheritDoc
      */
-    public function createAndGetId($empNumber, $screen, $base64Attachment, $description = null): EndpointResourceResult
+    public function createAndGetId($empNumber, $screen = 'personal', $base64Attachment, $description = null): EndpointResourceResult
 {
     try {
         // Logique de création
         $employeeAttachment = new EmployeeAttachment();
-        $employeeAttachment->getDecorator()->setEmployeeByEmpNumber($empNumber);
+        $employeeAttachment->getDecorator()->setEmployeeByEmpNumber(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'));
         $employeeAttachment->setScreen($screen);
         $employeeAttachment->setDescription($description);
         $this->setAttachmentAttributesForCreateAndGetId($employeeAttachment, $base64Attachment, $empNumber, $screen);
@@ -289,6 +297,7 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
         print_r('Attachment ID: ' . $newEmployeeAttachment->getAttachId());
         print_r('attachmentId: ' . $attachmentId);
         echo '</pre>';
+
         $result = new EndpointResourceResult(
             EmployeeAttachmentModel::class,
             $this->getPartialEmployeeAttachment($employeeAttachment),
@@ -313,23 +322,22 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
 
 
 
-
     public function create(): EndpointResourceResult
     {
-        list($empNumber, $screen) = $this->getUrlAttributes();
+        //list($empNumber, $screen) = $this->getUrlAttributes();
         $attachment = $this->getRequestParams()->getAttachment(
             RequestParams::PARAM_TYPE_BODY,
             self::PARAMETER_ATTACHMENT
         );
-        $description = $this->getRequestParams()->getStringOrNull(
+        /*$description = $this->getRequestParams()->getStringOrNull(
             RequestParams::PARAM_TYPE_BODY,
             self::PARAMETER_DESCRIPTION
-        );
+        );*/
 
         $employeeAttachment = new EmployeeAttachment();
-        $employeeAttachment->getDecorator()->setEmployeeByEmpNumber($empNumber);
-        $employeeAttachment->setScreen($screen);
-        $employeeAttachment->setDescription($description);
+        $employeeAttachment->getDecorator()->setEmployeeByEmpNumber(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'));
+        $employeeAttachment->setScreen("personal");
+        //$employeeAttachment->setDescription($description);
         $this->setAttachmentAttributes($employeeAttachment, $attachment);
 
         $this->getEmployeeAttachmentService()->saveEmployeeAttachment($employeeAttachment);
