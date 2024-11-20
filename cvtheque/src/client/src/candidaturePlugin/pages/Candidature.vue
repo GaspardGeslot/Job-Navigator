@@ -184,7 +184,7 @@ export default {
   },
   methods: {
     showForm() {
-      console.log('options :', this.options);
+      //console.log('options :', this.options);
       this.formVisible = true;
     },
     hideForm() {
