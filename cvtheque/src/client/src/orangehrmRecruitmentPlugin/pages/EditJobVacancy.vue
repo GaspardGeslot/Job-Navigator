@@ -742,10 +742,11 @@ export default {
     },
     onSave() {
       this.isLoading = true;
+      console.log("---", this.vacancy.jobSelected?.label)
       this.vacancy = {
         name: this.vacancy.name,
         //jobTitleId: this.vacancy.jobTitle?.id,
-        jobTitle: this.vacancy.jobTitle?.label,
+        jobTitle: this.vacancy.jobSelected?.label,
         /*countries: JSON.stringify(
           this.vacancy.countries?.map((country) => {
             return country.label;
@@ -766,6 +767,7 @@ export default {
         status: this.vacancy.status,
         //isPublished: this.vacancy.isPublished,
       };
+      console.log(this.vacancy);
       this.http
         .update(this.matchingId, {...this.vacancy})
         .then(() => {
