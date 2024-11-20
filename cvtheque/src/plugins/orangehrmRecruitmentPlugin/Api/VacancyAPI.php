@@ -670,11 +670,70 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     public function update(): EndpointResult
     {
         $id = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, CommonParams::PARAMETER_ID);
-        $vacancy = $this->getVacancyService()->getVacancyDao()->getVacancyById($id);
-        $this->throwRecordNotFoundExceptionIfNotExist($vacancy, Vacancy::class);
-        $this->setVacancy($vacancy);
-        $this->getVacancyService()->getVacancyDao()->saveJobVacancy($vacancy);
+        // $vacancy = $this->getVacancyService()->getVacancyDao()->getVacancyById($id);
+        // $this->throwRecordNotFoundExceptionIfNotExist($vacancy, Vacancy::class);
+        // $this->setVacancy($vacancy);
+        // $this->getVacancyService()->getVacancyDao()->saveJobVacancy($vacancy);
+        // return new EndpointResourceResult(VacancyDetailedModel::class, $vacancy);
+
+
+        $vacancy = new Vacancy();
+        $vacancy->setDefinedTime($this->getDateTimeHelper()->getNow());
+        /*$this->setVacancy($vacancy);*/
+        $vacancy->setName(
+            $this->getRequestParams()->getString(
+                RequestParams::PARAM_TYPE_BODY,
+                self::PARAMETER_NAME
+            )
+        );
+        $vacancy->setUpdatedTime($this->getDateTimeHelper()->getNow());
+        $vacancy = $this->getVacancyService()->getVacancyDao()->saveJobVacancy($vacancy);
+
+        $this->updateHedwigeMatching($this->getAuthUser()->getUserHedwigeToken(), $id);
+
+        $vacancy->setJobs($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_JOB_TITLE));
+        $vacancy->setNeeds($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEEDS));
+        $vacancy->setLevels($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVELS));
+        $vacancy->setCourseStarts($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_STARTS));
+        $vacancy->setCountries($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COUNTRIES));
+        $vacancy->setProfessionalExperiences($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_PROFESSIONAL_EXPERIENCES));
+        $vacancy->setDrivingLicenses($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_DRIVING_LICENSES));
+        $vacancy->setStatus($this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true));
+
         return new EndpointResourceResult(VacancyDetailedModel::class, $vacancy);
+    }
+
+    /**
+     * @param string $token
+     */
+    protected function updateHedwigeMatching(string $token, int $id) : void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        
+        $data = [
+            'title' => $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NAME),
+            'active' => $this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true),
+            'jobs' => [$this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_JOB_TITLE)],
+            'needs' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEEDS), true),
+            'levels' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVELS), true),
+            'courseStarts' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COURSE_STARTS), true),
+            'countries' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COUNTRIES), true),
+            'professionalExperiences' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_PROFESSIONAL_EXPERIENCES), true),
+            'drivingLicenses' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_DRIVING_LICENSES), true),
+        ];
+        error_log(json_encode($data));
+        try {
+            $client->request('PUT', "{$clientBaseUrl}/matching/{$id}/company", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($data)
+            ]);
+        } catch (\Exceptionon $e) {
+        }
+        error_log("test2");
     }
 
     /**

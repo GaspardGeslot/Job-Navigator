@@ -71,6 +71,7 @@
               :label="$t('general.job_title')"
               :options="jobTitlesPerSector"
               required
+              :rules="rules.jobTitle"
             />
           </oxd-grid-item>
         </oxd-grid>
