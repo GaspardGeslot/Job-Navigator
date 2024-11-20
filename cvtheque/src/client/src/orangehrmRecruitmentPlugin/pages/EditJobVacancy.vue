@@ -665,7 +665,7 @@ export default {
     this.http
       .get(this.matchingId)
       .then((response) => {
-        console.log('Data : ', response.data);
+        //console.log('Data : ', response.data);
         const {data} = response.data;
         this.currentName = data.name;
         this.vacancy.name = data.name;
@@ -742,7 +742,6 @@ export default {
     },
     onSave() {
       this.isLoading = true;
-      console.log("---", this.vacancy.jobSelected?.label)
       this.vacancy = {
         name: this.vacancy.name,
         //jobTitleId: this.vacancy.jobTitle?.id,
@@ -767,7 +766,6 @@ export default {
         status: this.vacancy.status,
         //isPublished: this.vacancy.isPublished,
       };
-      console.log(this.vacancy);
       this.http
         .update(this.matchingId, {...this.vacancy})
         .then(() => {

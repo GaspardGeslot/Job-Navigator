@@ -170,9 +170,6 @@
         @delete="onClickDeleteSelected"
       ></table-header>-->
       <div class="boutonTriBloc">
-        <button class="boutonTri" @click="sortByName">
-          Trier par nom métier ⇅
-        </button>
         <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
       </div>
       <div class="orangehrm-container">
@@ -392,7 +389,7 @@ export default {
       return data.map((item) => {
         return {
           id: item.id,
-          jobTitle: item.jobTitle,
+          jobTitle: JSON.parse(item.jobs).join(', '),
           candidate: `${item.firstName} ${item.middleName || ''} ${
             item.lastName
           }`,
@@ -590,14 +587,6 @@ export default {
         const dateB = new Date(b.dateOfApplication);
 
         return this.isDateAscending ? dateA - dateB : dateB - dateA;
-      });
-    },
-    sortByName() {
-      this.isNomAscending = !this.isNomAscending;
-      this.items.data.sort((a, b) => {
-        return this.isNomAscending
-          ? a.jobTitle.localeCompare(b.jobTitle)
-          : b.jobTitle.localeCompare(a.jobTitle);
       });
     },
     cellRenderer(...[, , , row]) {

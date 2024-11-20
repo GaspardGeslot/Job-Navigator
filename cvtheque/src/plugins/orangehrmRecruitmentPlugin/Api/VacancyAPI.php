@@ -722,7 +722,6 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             'professionalExperiences' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_PROFESSIONAL_EXPERIENCES), true),
             'drivingLicenses' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_DRIVING_LICENSES), true),
         ];
-        error_log(json_encode($data));
         try {
             $client->request('PUT', "{$clientBaseUrl}/matching/{$id}/company", [
                 'headers' => [
@@ -733,7 +732,6 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             ]);
         } catch (\Exceptionon $e) {
         }
-        error_log("test2");
     }
 
     /**
