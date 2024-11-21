@@ -182,7 +182,7 @@ export default {
       );
       if (existingSkill) {
         this.titleErrorMessage = this.$t(
-          'Un skill avec ce titre existe déjà. Veuillez utiliser un autre titre.',
+          'Une expérience avec ce titre existe déjà. Veuillez utiliser un autre titre.',
         );
         this.isLoading = false;
         return;
