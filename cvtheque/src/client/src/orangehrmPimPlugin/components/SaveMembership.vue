@@ -32,6 +32,12 @@
               :label="$t('Poste occupé')"
               required
             />
+            <oxd-text
+              v-if="titleErrorMessage"
+              class="error-text orangehrm-vertical-padding"
+              style="color: red"
+              >{{ titleErrorMessage }}</oxd-text
+            >
           </oxd-grid-item>
 
           <oxd-grid-item>
@@ -124,6 +130,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    skills: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   emits: ['close'],
@@ -140,6 +150,7 @@ export default {
     return {
       isLoading: false,
       membership: {...proXPModel},
+      titleErrorMessage: '',
       // yearArray: [...yearRange()],
       rules: {
         // membership: [required],
@@ -163,6 +174,19 @@ export default {
       //   year: Number(this.membership.year),
       //   description: String(this.membership.description),
       // };
+      this.titleErrorMessage = '';
+      const existingSkill = this.skills.find(
+        (skill) =>
+          skill.title.toLowerCase() ===
+          this.membership.title.trim().toLowerCase(),
+      );
+      if (existingSkill) {
+        this.titleErrorMessage = this.$t(
+          'Un skill avec ce titre existe déjà. Veuillez utiliser un autre titre.',
+        );
+        this.isLoading = false;
+        return;
+      }
       this.isLoading = true;
       this.http
         .create({

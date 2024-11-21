@@ -62,6 +62,7 @@
       :currencies="currencies"
       :paid-by="paidBy"
       :memberships="memberships"
+      :skills="items.skills"
       @close="onSaveModalClose"
     ></save-membership>
     <!--
