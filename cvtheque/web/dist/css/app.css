@@ -4051,6 +4051,42 @@
   width: 10rem;
   margin: 1rem 1rem;
 }
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/RecruitmentStatus.vue?vue&type=style&index=0&id=73067c41&lang=scss&scoped=true ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-recruitment[data-v-73067c41] {
+  display: flex;
+  justify-content: space-between;
+}
+.orangehrm-recruitment-actions[data-v-73067c41] {
+  gap: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 120px;
+  margin-left: 60px;
+  justify-content: flex-end;
+}
+.orangehrm-recruitment-actions[data-v-73067c41] .oxd-button--medium {
+  width: 100%;
+}
+@media (min-width: 800px) {
+.orangehrm-recruitment-actions[data-v-73067c41] {
+    margin-left: unset;
+    max-width: unset;
+}
+.orangehrm-recruitment-actions[data-v-73067c41] .oxd-button--medium {
+    width: unset;
+}
+}
+[data-v-73067c41] .oxd-input-group {
+  margin-bottom: 1rem;
+}
+@media (min-width: 800px) {
+[data-v-73067c41] .oxd-input-group {
+    margin-bottom: 0;
+}
+}
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/CandidateProfile.vue?vue&type=style&index=0&id=5a8e0a3a&scoped=true&lang=scss ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

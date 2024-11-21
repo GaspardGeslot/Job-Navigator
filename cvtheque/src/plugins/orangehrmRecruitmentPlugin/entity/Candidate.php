@@ -213,6 +213,18 @@ class Candidate
      * @ORM\Column(name="emp_certificates", type="string", nullable=true, options={"default" : ""})
      */
     private ?string $certificates = '';
+    
+    /**
+     * @var string
+     * @ORM\Column(name="candidature_status", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $candidatureStatus = '';
+
+    /**
+     * @var int
+     * @ORM\Column(name="matching_id", type="integer", nullable=true)
+     */
+    private ?int $matchingId = null;
 
     /**
      * @var int
@@ -333,6 +345,8 @@ class Candidate
         $this->setMotivation($leadInfo['motivation'] ?? '');
         $this->setCertificates(json_encode($leadInfo['certificates'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $this->setResume(array_key_exists('resume', $leadInfo) && $leadInfo['resume'] != null ? (int) $leadInfo['resume'] : null);
+        $this->setCandidatureStatus($leadInfo['candidatureStatus'] ?? '');
+        $this->setMatchingId($leadInfo['matchingId'] ?? null);
     }
 
     /**
@@ -735,6 +749,38 @@ class Candidate
     public function setCertificates(?string $certificates): void
     {
         $this->certificates = $certificates;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCandidatureStatus(): string
+    {
+        return $this->candidatureStatus;
+    }
+
+    /**
+     * @param string $candidatureStatus
+     */
+    public function setCandidatureStatus(string $candidatureStatus): void
+    {
+        $this->candidatureStatus = $candidatureStatus;
+    }
+
+/**
+     * @return int|null
+     */
+    public function getMatchingId(): ?int
+    {
+        return $this->matchingId;
+    }
+
+    /**
+     * @param int|null $matchingId
+     */
+    public function setMatchingId(?int $matchingId): void
+    {
+        $this->matchingId = $matchingId;
     }
 
     /**

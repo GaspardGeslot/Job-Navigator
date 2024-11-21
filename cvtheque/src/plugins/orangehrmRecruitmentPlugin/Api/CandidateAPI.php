@@ -347,14 +347,6 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_COURSE_START
         );
 
-        error_log('------------------------');
-        error_log($jobSector);
-        error_log($professionalExperienceFilter);
-        error_log($jobTitleFilter);
-        error_log($studyLevelFilter);
-        error_log($courseStartFilter);
-        error_log($needFilter);
-
         $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter);
         $candidates = array();
         foreach ($leads as $lead) {
@@ -921,20 +913,26 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_ID
         );
+
+        $matchingId = $this->getRequestParams()->getIntOrNull(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_MATCHING_ID
+        );
         /*$candidate = $this->getCandidateService()->getCandidateDao()->getCandidateById($id);
         $this->throwRe<cordNotFoundExceptionIfNotExist($candidate, Candidate::class)*/
-        $lead = $this->getLead($this->getAuthUser()->getUserHedwigeToken(), $id);
+        $lead = $this->getLead($this->getAuthUser()->getUserHedwigeToken(), $id, $matchingId);
         $candidate = new Candidate();
         $candidate->setLeadInfo($lead);
         return new EndpointResourceResult(CandidateDetailedModel::class, $candidate);
     }
 
-    protected function getLead(string $token, int $leadId) : array
+    protected function getLead(string $token, int $leadId, ?int $matchingId) : array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         try {
-            $response = $client->request('GET', "{$clientBaseUrl}/lead/{$leadId}", [
+            $url = $matchingId ? "{$clientBaseUrl}/lead/{$leadId}/matching/{$matchingId}" : "{$clientBaseUrl}/lead/{$leadId}";
+            $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
                 ]
@@ -954,6 +952,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 CommonParams::PARAMETER_ID,
                 new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_MATCHING_ID,
+                    new Rule(Rules::POSITIVE)
+                )
             )
         );
     }

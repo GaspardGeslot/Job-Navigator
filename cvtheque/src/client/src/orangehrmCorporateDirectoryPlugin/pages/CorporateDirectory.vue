@@ -81,6 +81,7 @@
                 :company-name="company.companyName"
                 :company-location="company.companyLocation"
                 :company-matching-job-title="company.companyMatchingJobTitle"
+                :candidature-status="company.candidatureStatus"
                 @click="showCompanyDetails(index)"
               >
                 <company-details
@@ -90,6 +91,7 @@
                     company.companyPhoneNumberContact
                   "
                   :company-email-contact="company.companyEmailContact"
+                  :candidature-status="company.candidatureStatus"
                   :is-mobile="isMobile"
                 >
                 </company-details>
@@ -100,6 +102,7 @@
                 :company-name="company.companyName"
                 :company-location="company.companyLocation"
                 :company-matching-job-title="company.companyMatchingJobTitle"
+                :candidature-status="company.candidatureStatus"
                 @click="showCompanyDetails(index)"
               >
               </summary-card>
@@ -129,6 +132,7 @@
               companies[currentIndex].companyPhoneNumberContact
             "
             :company-email-contact="companies[currentIndex].companyEmailContact"
+            :candidature-status="companies[currentIndex].candidatureStatus"
             @hide-details="hideCompanyDetails()"
           ></summary-card-details>
         </oxd-grid-item>
@@ -200,6 +204,7 @@ export default {
           companyLogo: item.companyLogo,
           companyPhoneNumberContact: item.companyPhoneNumberContact,
           companyEmailContact: item.companyEmailContact,
+          candidatureStatus: item.candidatureStatus,
         };
       });
     };

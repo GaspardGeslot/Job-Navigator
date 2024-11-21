@@ -101,6 +101,7 @@ class CandidateDetailedModel implements Normalizable
 
         return [
             'birthday' => $this->candidate->getDecorator()->getBirthday(),
+            'candidatureStatus' => $this->candidate->getCandidatureStatus(),
             'certificates' => $this->candidate->getCertificates(),
             'city' => $this->candidate->getCity(),
             'comment' => $this->candidate->getComment(),
@@ -121,6 +122,7 @@ class CandidateDetailedModel implements Normalizable
             'keywords' => $this->candidate->getKeywords(),
             'lastName' => $this->candidate->getLastName(),
             'leadId' => $this->candidate->getLeadId(),
+            'matchingId' => $this->candidate->getMatchingId(),
             'middleName' => $this->candidate->getMiddleName(),
             'motivation' => $this->candidate->getMotivation(),
             'need' => $this->candidate->getNeed(),

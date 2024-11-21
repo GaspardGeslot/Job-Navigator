@@ -540,11 +540,11 @@ export default {
           title: this.$t('general.other_email'),
           style: {flex: 1},
         },
-        {
+        /*{
           name: 'status',
           title: this.$t('general.status'),
           style: {flex: 1},
-        },
+        },*/
         {
           name: 'actions',
           slot: 'action',

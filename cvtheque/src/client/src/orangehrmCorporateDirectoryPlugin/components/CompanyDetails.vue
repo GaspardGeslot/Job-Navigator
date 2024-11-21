@@ -126,6 +126,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    candidatureStatus: {
+      type: String,
+      default: null,
+    },
   },
   setup() {
     const http = new APIService(

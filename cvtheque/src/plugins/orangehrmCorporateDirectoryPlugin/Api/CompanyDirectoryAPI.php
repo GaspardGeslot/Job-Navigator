@@ -259,7 +259,7 @@ class CompanyDirectoryAPI extends Endpoint implements CrudEndpoint
         return new EndpointCollectionResult(
             $this->getModelClass(),
             $companies,
-            new ParameterBag([CommonParams::PARAMETER_TOTAL => $count])
+            new ParameterBag([CommonParams::PARAMETER_TOTAL => count($companies)])
         );
     }
 

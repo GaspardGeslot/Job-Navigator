@@ -28,23 +28,30 @@ use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\Recruitment\Service\CandidateService;
 use OrangeHRM\Recruitment\Traits\Service\CandidateServiceTrait;
 use OrangeHRM\Recruitment\Service\RecruitmentAttachmentService;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class ViewCandidateController extends AbstractVueController
 {
     use VueComponentPermissionTrait;
     use CandidateServiceTrait;
     use ConfigServiceTrait;
+    use AuthUserTrait;
 
     /**
      * @inheritDoc
      */
     public function preRender(Request $request): void
     {
-        if ($request->attributes->has('id')) {
-            $id = $request->attributes->getInt('id');
+        if ($request->attributes->has('id')
+            || ($request->attributes->has('leadId')
+            && $request->attributes->has('matchingId'))) {
+
+            $leadId = $request->attributes->has('leadId') ? $request->attributes->getInt('leadId') : $request->attributes->getInt('id');
+            $matchingId = $request->attributes->has('matchingId') ? $request->attributes->getInt('matchingId') : null;
             $component = new Component('view-candidate-profile');
             $component->addProp(new Prop('updatable', Prop::TYPE_BOOLEAN, false));
-            $component->addProp(new Prop('candidate-id', Prop::TYPE_NUMBER, $id));
+            $component->addProp(new Prop('candidate-id', Prop::TYPE_NUMBER, $leadId));
+            $component->addProp(new Prop('matching-id', Prop::TYPE_NUMBER, $matchingId));
 
             $component->addProp(
                 new Prop('max-file-size', Prop::TYPE_NUMBER, $this->getConfigService()->getMaxAttachmentSize())
@@ -57,6 +64,17 @@ class ViewCandidateController extends AbstractVueController
                     RecruitmentAttachmentService::ALLOWED_CANDIDATE_ATTACHMENT_FILE_TYPES
                 )
             );
+
+            $options = $this->getHedwigeStatusOptions($this->getAuthUser()->getUserHedwigeToken());
+            $component->addProp(new Prop('candidature-statuses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($options), $options)));
+
+            if ($matchingId)
+                $this->visualizeCandidatureHedwige($this->getAuthUser()->getUserHedwigeToken(), $leadId, $matchingId);
         } else {
             $component = new Component('view-candidates-list');
 
@@ -134,6 +152,39 @@ class ViewCandidateController extends AbstractVueController
             return json_decode($response->getBody(), true);
         } catch (\Exceptionon $e) {
             return new \stdClass();
+        }
+    }
+
+    public function getHedwigeStatusOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/candidature-status", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
+    }
+
+    public function visualizeCandidatureHedwige(string $token, int $leadId, int $matchingId): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $client->request('PUT', "{$clientBaseUrl}/lead/{$leadId}/matching/{$matchingId}/visualize", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+        } catch (\Exceptionon $e) {
         }
     }
 }

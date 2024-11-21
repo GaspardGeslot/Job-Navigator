@@ -67,10 +67,10 @@ class Candidate extends \OrangeHRM\Entity\Candidate implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'salary', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'drivingLicense', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'hasPersonalVehicule', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'motivation', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'certificates', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'resume', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'salary', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'drivingLicense', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'hasPersonalVehicule', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'motivation', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'certificates', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidatureStatus', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'matchingId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'resume', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'salary', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'drivingLicense', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'hasPersonalVehicule', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'motivation', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'certificates', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'resume', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'firstName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'middleName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'lastName', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'email', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'contactNumber', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'leadId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobTitle', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'jobs', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'courseStart', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'studyLevel', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'salary', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'drivingLicense', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'need', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'gender', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'birthday', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'street1', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'city', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'country', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'zipcode', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'province', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'hasPersonalVehicule', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'motivation', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'certificates', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidatureStatus', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'matchingId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'resume', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'comment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'modeOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'dateOfApplication', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvFileId', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'cvTextVersion', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'keywords', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'addedPerson', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'consentToKeepData', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateVacancy', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateAttachment', '' . "\0" . 'OrangeHRM\\Entity\\Candidate' . "\0" . 'candidateHistory', 'entityDecorator'];
     }
 
     /**
@@ -740,6 +740,50 @@ class Candidate extends \OrangeHRM\Entity\Candidate implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCertificates', [$certificates]);
 
         parent::setCertificates($certificates);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCandidatureStatus(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCandidatureStatus', []);
+
+        return parent::getCandidatureStatus();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCandidatureStatus(string $candidatureStatus): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCandidatureStatus', [$candidatureStatus]);
+
+        parent::setCandidatureStatus($candidatureStatus);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMatchingId(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMatchingId', []);
+
+        return parent::getMatchingId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMatchingId(?int $matchingId): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMatchingId', [$matchingId]);
+
+        parent::setMatchingId($matchingId);
     }
 
     /**

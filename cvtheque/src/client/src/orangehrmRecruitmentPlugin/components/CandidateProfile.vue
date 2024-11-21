@@ -99,8 +99,15 @@
 
         <oxd-divider></oxd-divider>
         <oxd-form-row>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
+          <oxd-text
+            v-if="profile.jobs.length > 1"
+            class="orangehrm-sub-title"
+            tag="h6"
+          >
             {{ $t('pim.job_details') }}
+          </oxd-text>
+          <oxd-text v-else class="orangehrm-sub-title" tag="h6">
+            {{ $t('general.job_title') }}
           </oxd-text>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item
@@ -535,7 +542,6 @@ export default {
       );
     },
     fetchCandidate() {
-      console.log('Candidate : ', this.candidate);
       this.isLoading = true;
       this.profile.firstName = this.candidate.firstName;
       this.profile.middleName = this.candidate.middleName;
@@ -546,9 +552,12 @@ export default {
       this.profile.dateOfApplication = this.candidate.dateOfApplication;
       this.profile.comment = this.candidate.comment;
       this.profile.consentToKeepData = this.candidate.consentToKeepData;
-      this.profile.jobs = this.candidate.jobs
-        ? JSON.parse(this.candidate.jobs)
-        : [];
+      this.profile.jobs =
+        this.candidate.jobs && JSON.parse(this.candidate.jobs).length > 0
+          ? JSON.parse(this.candidate.jobs)
+          : this.candidate.jobTitle
+          ? [this.candidate.jobTitle]
+          : [];
       this.profile.street1 = this.candidate.street1;
       this.profile.city = this.candidate.city;
       this.profile.zipCode = this.candidate.zipcode;

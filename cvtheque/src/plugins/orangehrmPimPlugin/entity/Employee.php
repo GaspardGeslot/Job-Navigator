@@ -219,6 +219,12 @@ class Employee
      * @ORM\Column(name="company_allow_contact_via_phone", type="boolean", options={"default" : 1})
      */
     private bool $companyAllowContactViaPhone = true;
+
+    /**
+     * @var string
+     * @ORM\Column(name="candidature_status", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $candidatureStatus = '';
     
     /**
      * @var string
@@ -788,6 +794,7 @@ class Employee
         $this->setCompanyPhoneNumberContact($company['phoneNumberContact'] ?? '');
         $this->setCompanyEmailContact($company['emailContact'] ?? '');
         $this->setCompanyMatchingJobTitle($company['matchingJobTitle'] ?? '');
+        $this->setCandidatureStatus($company['candidatureStatus'] ?? '');
         $this->setProfileContact([]);
         $this->setProfileInfo([]);
     }
@@ -1176,6 +1183,22 @@ class Employee
     public function setCompanyAllowContactViaPhone(bool $companyAllowContactViaPhone): void
     {
         $this->companyAllowContactViaPhone = $companyAllowContactViaPhone;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getCandidatureStatus(): string
+    {
+        return $this->candidatureStatus;
+    }
+
+    /**
+     * @param string $candidatureStatus
+     */
+    public function setCandidatureStatus(string $candidatureStatus): void
+    {
+        $this->candidatureStatus = $candidatureStatus;
     }
     
     /**

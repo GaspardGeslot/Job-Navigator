@@ -24,36 +24,45 @@
         {{ $t('recruitment.application_stage') }}
       </oxd-text>
       <oxd-divider />
-      <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+      <oxd-grid :cols="2" class="orangehrm-full-width-grid">
         <oxd-grid-item>
           <oxd-input-group :label="$t('general.name')">
             <oxd-text tag="p">
-              {{ candidateName }}
+              {{ this.profile.candidateName }}
             </oxd-text>
           </oxd-input-group>
         </oxd-grid-item>
-        <oxd-grid-item>
-          <oxd-input-group :label="$t('recruitment.vacancy')">
+        <oxd-grid-item v-if="this.profile.jobTitle">
+          <oxd-input-group :label="$t('general.job_title')">
             <oxd-text tag="p">
-              {{ vacancyName ? vacancyName : 'N/A' }}
+              {{ this.profile.jobTitle }}
             </oxd-text>
           </oxd-input-group>
         </oxd-grid-item>
-        <oxd-grid-item>
+        <!--<oxd-grid-item>
           <oxd-input-group :label="$t('recruitment.hiring_manager')">
             <oxd-text tag="p">
               {{ hiringManagerName ? hiringManagerName : 'N/A' }}
             </oxd-text>
           </oxd-input-group>
-        </oxd-grid-item>
+        </oxd-grid-item>-->
       </oxd-grid>
       <oxd-divider />
-      <div class="orangehrm-recruitment">
-        <div v-if="recruitmentStatus" class="orangehrm-recruitment-status">
-          <oxd-text type="subtitle-2">
-            {{ $t('general.status') }}: {{ recruitmentStatus }}
-          </oxd-text>
-        </div>
+      <oxd-grid
+        v-if="candidate.candidatureStatus"
+        :cols="2"
+        class="orangehrm-full-width-grid"
+      >
+        <oxd-grid-item>
+          <oxd-input-field
+            v-model="candidatureStatus"
+            type="select"
+            :label="$t('general.status')"
+            :options="candidatureStatuses"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <!--<div class="orangehrm-recruitment">
         <div class="orangehrm-recruitment-actions">
           <oxd-button
             v-if="hasWorkflow(3)"
@@ -104,7 +113,16 @@
             @click="doWorkflow(9)"
           />
         </div>
-      </div>
+      </div>-->
+      <oxd-form-actions>
+        <oxd-button
+          v-if="canUpdate"
+          class="orangehrm-right-space"
+          display-type="secondary"
+          :label="$t('general.update')"
+          @click="onClickEdit"
+        />
+      </oxd-form-actions>
     </oxd-form>
   </div>
 </template>
@@ -114,12 +132,26 @@ import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
 import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
 
+const CandidateProfileModel = {
+  candidateName: '',
+  jobTitle: null,
+  candidatureStatus: null,
+};
+
 export default {
   name: 'RecruitmentStatus',
   props: {
+    matchingId: {
+      type: Number,
+      required: true,
+    },
     candidate: {
       type: Object,
       required: true,
+    },
+    candidatureStatuses: {
+      type: Array,
+      default: () => [],
     },
   },
   setup() {
@@ -136,6 +168,9 @@ export default {
   },
   data() {
     return {
+      profile: {...CandidateProfileModel},
+      canUpdate: false,
+      candidatureStatus: null,
       isLoading: false,
       statuses: [
         {id: 1, label: this.$t('recruitment.application_initiated')},
@@ -152,7 +187,7 @@ export default {
     };
   },
   computed: {
-    recruitmentStatus() {
+    /*recruitmentStatus() {
       return (
         this.statuses.find((item) => item.id === this.candidate.status?.id)
           ?.label || null
@@ -177,15 +212,21 @@ export default {
             excludePastEmpTag: false,
           })
         : undefined;
-    },
+    },*/
   },
   watch: {
     candidate() {
-      this.getAllowedActions();
+      this.candidatureStatus = this.candidatureStatuses.find(
+        (item) => item.label === this.profile.candidatureStatus,
+      );
+    },
+    candidatureStatus(newVal) {
+      this.canUpdate =
+        newVal && newVal.label !== this.profile.candidatureStatus;
     },
   },
   beforeMount() {
-    this.getAllowedActions();
+    this.fetchCandidate();
   },
   methods: {
     hasWorkflow(actionId) {
@@ -214,6 +255,29 @@ export default {
         })
         .finally(() => {
           this.isLoading = false;
+        });
+    },
+    fetchCandidate() {
+      this.profile.candidateName = `${this.candidate.firstName} ${
+        this.candidate?.middleName || ''
+      } ${this.candidate.lastName}`;
+      this.profile.jobTitle = this.candidate.jobTitle;
+      this.profile.candidatureStatus = this.candidate.candidatureStatus;
+      this.candidatureStatus = this.candidatureStatuses.find(
+        (item) => item.label === this.candidate.candidatureStatus,
+      );
+    },
+    onClickEdit() {
+      this.isLoading = true;
+      this.http
+        .request({
+          method: 'PUT',
+          url: `/api/v2/recruitment/candidates/${this.candidate?.id}/matching/${this.matchingId}/status/${this.candidatureStatus?.id}`,
+        })
+        .finally(() => {
+          this.profile.candidatureStatus = this.candidatureStatus?.label;
+          this.isLoading = false;
+          this.canUpdate = false;
         });
     },
   },

@@ -26,6 +26,7 @@
     :company-phone-number-contact="companyPhoneNumberContact"
     :company-email-contact="companyEmailContact"
     :show-back-button="true"
+    :candidature-status="candidatureStatus"
   >
     <company-details
       :company-id="companyId"
@@ -34,6 +35,7 @@
       :company-matching-job-title="companyMatchingJobTitle"
       :company-phone-number-contact="companyPhoneNumberContact"
       :company-email-contact="companyEmailContact"
+      :candidature-status="candidatureStatus"
     >
     </company-details>
   </summary-card>
@@ -75,22 +77,10 @@ export default {
       type: String,
       default: '',
     },
-  },
-  beforeMount() {
-    console.log(
-      'Company data : ',
-      this.companyId,
-      ' ; ',
-      this.companyName,
-      ' ; ',
-      this.companyLocation,
-      ' ; ',
-      this.companyMatchingJobTitle,
-      ' ; ',
-      this.companyPhoneNumberContact,
-      ' ; ',
-      this.companyEmailContact,
-    );
+    candidatureStatus: {
+      type: String,
+      default: null,
+    },
   },
 };
 </script>

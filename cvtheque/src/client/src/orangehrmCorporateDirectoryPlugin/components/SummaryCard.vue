@@ -62,6 +62,9 @@
         </oxd-text>
       </div>
     </div>
+    <oxd-text v-show="candidatureStatus" tag="p" :class="cardSubTitleClasses">
+      {{ $t('general.status') }}: {{ candidatureStatus }}
+    </oxd-text>
     <slot></slot>
   </oxd-sheet>
 </template>
@@ -102,6 +105,10 @@ export default {
     showBackButton: {
       type: Boolean,
       default: false,
+    },
+    candidatureStatus: {
+      type: String,
+      default: null,
     },
   },
   emits: ['hide-details'],

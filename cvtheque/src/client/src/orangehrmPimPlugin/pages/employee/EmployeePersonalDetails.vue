@@ -606,7 +606,6 @@ export default {
 
     updateModel(response) {
       const {data} = response.data;
-      console.log('Data : ', data);
       this.employee = {...employeeModel, ...data};
       this.isCandidate = JSON.parse(this.employee.otherId).includes(
         process.env.VUE_APP_CANDIDATE_ROLE_NAME,

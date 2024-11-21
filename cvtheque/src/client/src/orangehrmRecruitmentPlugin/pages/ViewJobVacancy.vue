@@ -244,11 +244,13 @@ export default {
             {locale},
           ),
           email: item.email,
-          status:
+          /*status:
             statuses.find((status) => status.id === item.status?.id)?.label ||
-            '',
+            '',*/
+          status: item.candidatureStatus,
           resume: item.hasAttachment,
           isSelectable: item.deletable,
+          matchingId: item.matchingId,
         };
       });
     };
@@ -459,7 +461,15 @@ export default {
       };
     },
     onClickCandidate(item) {
-      navigate('/recruitment/viewCandidate/{id}', {id: item.id});
+      !item.matchingId
+        ? navigate('/recruitment/viewCandidate/{id}', {id: item.id})
+        : navigate(
+            '/recruitment/viewCandidate/{leadId}/matching/{matchingId}',
+            {
+              leadId: item.id,
+              matchingId: item.matchingId,
+            },
+          );
     },
     onClickAdd() {
       navigate('/recruitment/addJobVacancy');

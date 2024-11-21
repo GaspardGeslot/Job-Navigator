@@ -225,7 +225,7 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
-        $employeeDirectoryParamHolder = new EmployeeDirectorySearchFilterParams();
+       /* $employeeDirectoryParamHolder = new EmployeeDirectorySearchFilterParams();
         $this->setSortingAndPaginationParams($employeeDirectoryParamHolder);
 
         $empNumber = $this->getRequestParams()->getIntOrNull(
@@ -259,7 +259,7 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
         );
         $count = $this->getEmployeeDirectoryService()->getEmployeeDirectoryDao()->getEmployeeCount(
             $employeeDirectoryParamHolder
-        );
+        );*/
         $companiesAPI = $this->getMatchedCompanies($this->getAuthUser()->getUserHedwigeToken());
         $companies = array();
         foreach ($companiesAPI as $company) {

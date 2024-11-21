@@ -74,6 +74,13 @@ apiv2_recruitment_candidate_status:
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateStatusAPI
 
+apiv2_recruitment_candidature_status:
+  path: /api/v2/recruitment/candidates/{candidateId}/matching/{matchingId}/status/{candidatureStatusId}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ PUT ]
+  defaults:
+    _api: OrangeHRM\Recruitment\Api\CandidateStatusAPI
+
 apiv2_recruitment_hiring_managers:
   path: /api/v2/recruitment/hiring-managers
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
@@ -258,6 +265,11 @@ recruitment_save_candidates:
 
 recruitment_view_candidate_profile:
   path: /recruitment/viewCandidate/{id}
+  controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
+  methods: [ GET ]
+
+recruitment_view_candidate_profile_by_matching:
+  path: /recruitment/viewCandidate/{leadId}/matching/{matchingId}
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
 
