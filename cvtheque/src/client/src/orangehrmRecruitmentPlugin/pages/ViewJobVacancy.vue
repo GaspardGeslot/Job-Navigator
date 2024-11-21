@@ -57,6 +57,13 @@
           <oxd-button
             v-if="canUpdate"
             class="orangehrm-right-space"
+            :label="$t('performance.delete')"
+            display-type="danger"
+            @click="onClickDelete"
+          />
+          <oxd-button
+            v-if="canUpdate"
+            class="orangehrm-right-space"
             display-type="secondary"
             :label="$t('general.update')"
             @click="onClickEdit"
@@ -486,12 +493,14 @@ export default {
       window.open(downUrl, '_blank');
     },
 
-    onClickDelete(item) {
-      this.$refs.deleteDialog.showDialog().then((confirmation) => {
-        if (confirmation === 'ok') {
-          this.deleteData([item.id]);
-        }
-      });
+    onClickDelete() {
+      if (this.filters.matchingSelected) {
+        this.$refs.deleteDialog.showDialog().then((confirmation) => {
+          if (confirmation === 'ok') {
+            this.deleteData([this.filters.matchingSelected.id]);
+          }
+        });
+      }
     },
     onClickDeleteSelected() {
       const ids = this.checkedItems.map((index) => {
@@ -507,7 +516,10 @@ export default {
     async deleteData(items) {
       if (items instanceof Array) {
         this.isLoading = true;
-        this.http
+        new APIService(
+          window.appGlobal.baseUrl,
+          '/api/v2/recruitment/vacancies',
+        )
           .deleteAll({
             ids: items,
           })
@@ -515,8 +527,8 @@ export default {
             return this.$toast.deleteSuccess();
           })
           .then(() => {
+            navigate('/recruitment/viewJobVacancy');
             this.isLoading = false;
-            this.resetDataTable();
           });
       }
     },

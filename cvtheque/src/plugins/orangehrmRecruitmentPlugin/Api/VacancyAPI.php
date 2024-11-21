@@ -763,12 +763,29 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
      */
     public function delete(): EndpointResult
     {
-        $ids = $this->getVacancyService()->getVacancyDao()->getExistingVacancyIds(
-            $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, CommonParams::PARAMETER_IDS)
-        );
-        $this->throwRecordNotFoundExceptionIfEmptyIds($ids);
-        $this->getVacancyService()->getVacancyDao()->deleteVacancies($ids);
+        $ids = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, CommonParams::PARAMETER_IDS);
+        error_log($message);
+        /*$this->throwRecordNotFoundExceptionIfEmptyIds($ids);
+        $this->getVacancyService()->getVacancyDao()->deleteVacancies($ids);*/
+        $this->deleteHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken(), $ids);
         return new EndpointResourceResult(ArrayModel::class, $ids);
+    }
+
+    public function deleteHedwigeMatchings(string $token, array $ids) : void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        foreach ($ids as $id) {
+            try {
+                $client->request('DELETE', "{$clientBaseUrl}/matching/{$id}", [
+                    'headers' => [
+                        'Authorization' => $token
+                    ]
+                ]);
+            } catch (\Exceptionon $e) {
+            }
+        }
     }
 
     /**
