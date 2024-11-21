@@ -225,7 +225,7 @@ class ThemeService
     public function getClientLogoURL(Request $request): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        return "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/cvtheque_logo.png";
+        return "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_logo_small.png";
         /*if ($this->getImageETag('client_logo') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientLogo?v=$assetsVersion";
         }

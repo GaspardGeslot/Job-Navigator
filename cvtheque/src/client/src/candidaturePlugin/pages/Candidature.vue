@@ -79,10 +79,10 @@
       <div class="accueilLogo">
         <div class="jobNavigatorLogo">
           <img
-            src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/JobNavigatorLogo.png"
+            src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_banner_white.png"
             alt="logoJobNavigator"
+            style="height: 75px; width: 300px"
           />
-          <p>Job Navigator</p>
         </div>
         <img
           id="logoConstructys"
