@@ -96,6 +96,7 @@ export class APIService {
       return this._http.put(`${this._apiSection}`, data, {headers});
     }
     console.log('ça deconne ici');
+    console.log('this._apiSection', this._apiSection);
     return this._http.put(`${this._apiSection}/${id}`, data, {headers});
   }
 
@@ -121,6 +122,7 @@ export class APIService {
   deleteAll(data?: any): Promise<AxiosResponse> {
     console.log('deleteAll');
     console.log('data here ', data);
+    console.log('this._apiSection', this._apiSection);
     const headers = {
       'Content-Type': 'application/json',
     };

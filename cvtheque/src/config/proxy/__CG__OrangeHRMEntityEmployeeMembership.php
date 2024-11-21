@@ -67,10 +67,10 @@ class EmployeeMembership extends \OrangeHRM\Entity\EmployeeMembership implements
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
     }
 
     /**
@@ -224,7 +224,7 @@ class EmployeeMembership extends \OrangeHRM\Entity\EmployeeMembership implements
     /**
      * {@inheritDoc}
      */
-    public function getYear(): ?int
+    public function getYear(): ?string
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getYear', []);
@@ -235,12 +235,56 @@ class EmployeeMembership extends \OrangeHRM\Entity\EmployeeMembership implements
     /**
      * {@inheritDoc}
      */
-    public function setYear(?int $year): void
+    public function setYear(?string $year): void
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setYear', [$year]);
 
         parent::setYear($year);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProfessionalExperience(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProfessionalExperience', []);
+
+        return parent::getProfessionalExperience();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setProfessionalExperience(?string $professionalExperience): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProfessionalExperience', [$professionalExperience]);
+
+        parent::setProfessionalExperience($professionalExperience);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSpecificProfessionalExperience(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSpecificProfessionalExperience', []);
+
+        return parent::getSpecificProfessionalExperience();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSpecificProfessionalExperience(?string $specificProfessionalExperience): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSpecificProfessionalExperience', [$specificProfessionalExperience]);
+
+        parent::setSpecificProfessionalExperience($specificProfessionalExperience);
     }
 
     /**

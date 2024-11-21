@@ -222,7 +222,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         // Map certificates to EmployeeSkillModel and normalize them
         $normalizedSkills = array_map(fn($cert) => (new EmployeeSkillModel($cert))->normalize(), $certificates);
 
-        // error_log('Normalized Skills: ' . json_encode($normalizedSkills, JSON_PRETTY_PRINT));
+        error_log('Normalized Skills: ' . json_encode($normalizedSkills, JSON_PRETTY_PRINT));
 
         return new EndpointCollectionResult(
             EmployeeSkillModel::class,

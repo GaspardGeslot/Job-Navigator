@@ -48,7 +48,7 @@ async function fetchData(
 ): Promise<ServerResponse> {
   try {
     const response: AxiosResponse = await http.getAll(params);
-    // console.log('Raw response data:', JSON.stringify(response, null, 2));
+    //console.log('Raw response data:', JSON.stringify(response, null, 2));
 
     return {
       data: response.data.data,
@@ -118,12 +118,14 @@ export default function usePaginate(
     const pageParams = getPageParams(pageSize, state.currentPage);
     const queryParams = getQueryParams(query);
     state.response = await fetchData(http, {...pageParams, ...queryParams});
-    // console.log('Raw response data:', JSON.stringify(state.response, null, 2));
+    console.log('Raw response data:', JSON.stringify(state.response, null, 2));
 
     if (!state.response.error) {
       const {data, ...rest} = state.response;
       const formattedData = normalizer(data);
+      console.log('formattedData', formattedData);
       state.response = {data: formattedData, ...rest};
+      console.log('state.response', state.response);
     }
     if (state.response.meta) {
       state.total = state.response.meta.total;
@@ -140,6 +142,7 @@ export default function usePaginate(
         noRecordsFound();
       }
     }
+    console.log('data:', JSON.stringify(state.response, null, 2));
     state.isLoading = false;
   };
 
