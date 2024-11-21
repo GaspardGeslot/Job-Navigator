@@ -97,8 +97,13 @@ trait NormalizerTrait
 
         $normalizedArray = [];
         foreach ($this->data as $data) {
-            $model = $this->getInitializedModelInstance($data);
-            $normalizedArray[] = $model->toArray();
+            if ($data instanceof $this->modelClass) {
+                // error_log('Skipping re-initialization of model: ' . get_class($data));
+                $normalizedArray[] = $data->toArray();
+            } else {
+                $model = $this->getInitializedModelInstance($data);
+                $normalizedArray[] = $model->toArray();
+            }
         }
         return $normalizedArray;
     }
@@ -125,6 +130,10 @@ trait NormalizerTrait
      */
     private function getInitializedModelInstance($data): Normalizable
     {
+        if ($data instanceof $this->modelClass) {
+            // error_log('Model already initialized: ' . get_class($data));
+            return $data;
+        }
         if ($this->getClassHelper()->hasClassImplements($this->modelClass, ModelConstructorArgsAwareInterface::class)) {
             return (new ReflectionClass($this->modelClass))->newInstanceArgs($data);
         }

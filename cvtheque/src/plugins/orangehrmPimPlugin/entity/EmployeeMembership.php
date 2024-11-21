@@ -67,21 +67,35 @@
       *
       * @ORM\Column(name="title", type="string", length=100, nullable=true)
       */
-     private ?string $title;
+     private ?string $title = null;
  
      /**
       * @var string|null
       *
       * @ORM\Column(name="description", type="string", length=300, nullable=true)
       */
-     private ?string $description;
+     private ?string $description = null;
+
+    /**
+    * @var string|null
+    *
+    * @ORM\Column(name="professional_experience", type="string", length=100, nullable=true)
+    */
+    private ?string $professionalExperience = null;
+
+    /**
+     * @var string|null
+     * 
+     * @ORM\Column(name="specific_professional_experience", type="string", length=100, nullable=true)
+     */
+    private ?string $specificProfessionalExperience = null;
  
      /**
-      * @var int|null
+      * @var string|null
       *
-      * @ORM\Column(name="year", type="integer", nullable=true)
+      * @ORM\Column(name="year", type="string", length=100)
       */
-     private ?int $year;
+     private ?string $year = null;
  
      // Méthodes Getter et Setter pour les nouvelles colonnes
  
@@ -105,15 +119,35 @@
          $this->description = $description;
      }
  
-     public function getYear(): ?int
+     public function getYear(): ?string
      {
          return $this->year;
      }
  
-     public function setYear(?int $year): void
+     public function setYear(?string $year): void
      {
          $this->year = $year;
      }
+
+     public function getProfessionalExperience(): ?string
+    {
+        return $this->professionalExperience;
+    }
+
+    public function setProfessionalExperience(?string $professionalExperience): void
+    {
+        $this->professionalExperience = $professionalExperience;
+    }
+
+    public function getSpecificProfessionalExperience(): ?string
+    {
+        return $this->specificProfessionalExperience;
+    }
+
+    public function setSpecificProfessionalExperience(?string $specificProfessionalExperience): void
+    {
+        $this->specificProfessionalExperience = $specificProfessionalExperience;
+    }
  
      // Méthodes existantes (inchangées)
      public function getId(): int

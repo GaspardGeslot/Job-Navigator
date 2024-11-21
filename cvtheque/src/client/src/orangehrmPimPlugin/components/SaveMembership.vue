@@ -29,7 +29,7 @@
           <oxd-grid-item>
             <oxd-input-field
               v-model="membership.title"
-              :label="$t('Titre')"
+              :label="$t('Poste occupé')"
               required
             />
           </oxd-grid-item>
@@ -37,16 +37,15 @@
           <oxd-grid-item>
             <oxd-input-field
               v-model="membership.year"
-              v-numeric-only
               :label="$t('Année')"
-              placeholder="yyyy"
+              placeholder="yyyy - yyyy"
               required
             />
           </oxd-grid-item>
           <oxd-grid-item>
             <oxd-input-field
               v-model="membership.description"
-              :label="$t('description')"
+              :label="$t('Description')"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -95,18 +94,18 @@ const proXPModel = {
 
 export default {
   name: 'SaveMembership',
-  directives: {
-    numericOnly: {
-      mounted(el) {
-        el.addEventListener('input', (event) => {
-          const value = event.target.value;
-          if (!/^\d*$/.test(value)) {
-            event.target.value = value.replace(/\D/g, '');
-          }
-        });
-      },
-    },
-  },
+  // directives: {
+  //   numericOnly: {
+  //     mounted(el) {
+  //       el.addEventListener('input', (event) => {
+  //         const value = event.target.value;
+  //         if (!/^\d*$/.test(value)) {
+  //           event.target.value = value.replace(/\D/g, '');
+  //         }
+  //       });
+  //     },
+  //   },
+  // },
 
   props: {
     http: {
@@ -168,7 +167,7 @@ export default {
       this.http
         .create({
           title: String(this.membership.title),
-          year: Number(this.membership.year),
+          year: String(this.membership.year),
           description: String(this.membership.description),
         })
         // subscriptionFee: this.membership.subscriptionFee,
