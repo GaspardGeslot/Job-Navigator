@@ -276,7 +276,7 @@ export default {
         },
         {
           name: 'year',
-          title: this.$t('Année'),
+          title: this.$t('Période'),
           style: {flex: 1},
         },
         {

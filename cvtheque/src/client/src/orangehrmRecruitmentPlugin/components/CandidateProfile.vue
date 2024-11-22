@@ -282,7 +282,28 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-
+        <oxd-form-row>
+          <div class="orangehrm-container">
+            <oxd-card-table
+              :headers="skillheaders"
+              :items="formattedSkills"
+              row-decorator="oxd-table-decorator-card"
+            />
+          </div>
+        </oxd-form-row>
+        <oxd-divider></oxd-divider>
+        <oxd-form-row>
+          <oxd-text tag="h6" class="orangehrm-sub-title">{{
+            $t('Certificats/Habilitations')
+          }}</oxd-text>
+          <div class="orangehrm-container">
+            <oxd-card-table
+              :headers="certificateheaders"
+              :items="formattedCertificates"
+              row-decorator="oxd-table-decorator-card"
+            />
+          </div>
+        </oxd-form-row>
         <!--<oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item
@@ -374,6 +395,7 @@ import FullNameInput from '@/orangehrmPimPlugin/components/FullNameInput';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog';
 import {OxdSwitchInput} from '@ohrm/oxd';
+import {ref, computed} from 'vue';
 
 const CandidateProfileModel = {
   firstName: '',
@@ -444,17 +466,76 @@ export default {
     },
   },
   emits: ['update'],
-  setup() {
+  setup(props) {
+    const rawSkills = ref([]);
+    const rawCertificates = ref([]);
+
+    rawSkills.value = JSON.parse(props.candidate.skills);
+    rawCertificates.value = JSON.parse(props.candidate.certificates);
+
+    const formattedSkills = computed(() => {
+      console.log('rawSkills', rawSkills);
+      return rawSkills.value.map((skill) => ({
+        title: skill.title || '',
+        year: skill.period || '',
+        description: skill.description || '',
+      }));
+    });
+
+    const formattedCertificates = computed(() => {
+      return rawCertificates.value.map((cert) => ({
+        type: cert.type || '',
+        title: cert.title || '',
+        description: cert.description || '',
+      }));
+    });
+
     const http = new APIService(window.appGlobal.baseUrl, '/');
     const {userDateFormat} = useDateFormat();
 
     return {
       http,
       userDateFormat,
+      formattedSkills,
+      formattedCertificates,
     };
   },
   data() {
     return {
+      certificateheaders: [
+        {
+          name: 'type',
+          title: this.$t('general.type'),
+          style: {flex: 1},
+        },
+        {
+          name: 'title',
+          title: this.$t('pim.certificate_title'),
+          style: {flex: 1},
+        },
+        {
+          name: 'description',
+          title: this.$t('general.description'),
+          style: {flex: 2},
+        },
+      ],
+      skillheaders: [
+        {
+          name: 'title',
+          title: this.$t('Poste occupé'),
+          style: {flex: 1},
+        },
+        {
+          name: 'year',
+          title: this.$t('Période'),
+          style: {flex: 1},
+        },
+        {
+          name: 'description',
+          title: this.$t('general.description'),
+          style: {flex: 2},
+        },
+      ],
       editable: false,
       isLoading: false,
       profile: {...CandidateProfileModel},

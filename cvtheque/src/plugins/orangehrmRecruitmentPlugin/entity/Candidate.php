@@ -194,6 +194,13 @@ class Candidate
     private ?string $specificProfessionalExperience = '';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="skills", type="string", length=400, nullable=true, options={"default" : ""})
+     */
+    private ?string $skills = '';
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="emp_has_personal_vehicule", type="boolean", nullable=true)
@@ -341,6 +348,7 @@ class Candidate
         $this->setZipcode($leadInfo['postalCode'] ?? '');
         $this->setProfessionalExperience($leadInfo['professionalExperience'] ?? '');
         $this->setSpecificProfessionalExperience($leadInfo['specificProfessionalExperience'] ?? '');
+        $this->setCandidateSkills($leadInfo['skills'] ?? '');
         $this->setHasPersonalVehicule($leadInfo['hasPersonalVehicle'] ?? false);
         $this->setMotivation($leadInfo['motivation'] ?? '');
         $this->setCertificates(json_encode($leadInfo['certificates'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
@@ -701,6 +709,22 @@ class Candidate
     public function setSpecificProfessionalExperience(?string $specificProfessionalExperience): void
     {
         $this->specificProfessionalExperience = $specificProfessionalExperience;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCandidateSkills(): string
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @param string $emp_skills
+     */
+    public function setCandidateSkills(string $skills): void
+    {
+        $this->skills = $skills;
     }
 
     /**
