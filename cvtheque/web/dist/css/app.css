@@ -532,6 +532,9 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmAdminPlugin/components/InlineColorInput.vue?vue&type=style&index=0&id=282a7d50&lang=scss&scoped=true ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.oxd-brand-banner img[data-v-16e446b0]{
+  height:auto;
+}
 [data-v-282a7d50] .oxd-input-group__label-wrapper {
   display: none;
 }
@@ -10515,6 +10518,11 @@ h1[data-v-0c52339c] {
   display: flex;
   flex-direction: row;
 }
+#logoJobNavigatorHomepage[data-v-0c52339c] {
+  margin-top: 0.5rem;
+  height: auto;
+  width: 20rem;
+}
 
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
@@ -10594,6 +10602,11 @@ h1[data-v-0c52339c] {
 @media screen and (max-width: 461px) {
 .exit-button[data-v-0c52339c] {
     display: none;
+}
+#logoJobNavigatorHomepage[data-v-0c52339c] {
+    margin-top: 0.75rem;
+    height: auto;
+    width: 10rem;
 }
 }
 

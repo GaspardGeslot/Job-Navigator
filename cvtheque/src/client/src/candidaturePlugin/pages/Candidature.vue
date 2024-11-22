@@ -79,9 +79,9 @@
       <div class="accueilLogo">
         <div class="jobNavigatorLogo">
           <img
+            id="logoJobNavigatorHomepage"
             src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_banner_white.png"
             alt="logoJobNavigator"
-            style="height: 75px; width: 300px"
           />
         </div>
         <img
@@ -397,6 +397,11 @@ h1 {
   display: flex;
   flex-direction: row;
 }
+#logoJobNavigatorHomepage {
+  margin-top: 0.5rem;
+  height: auto;
+  width: 20rem;
+}
 
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
@@ -489,6 +494,11 @@ h1 {
 @media screen and (max-width: 461px) {
   .exit-button {
     display: none;
+  }
+  #logoJobNavigatorHomepage {
+    margin-top: 0.75rem;
+    height: auto;
+    width: 10rem;
   }
 }
 </style>
