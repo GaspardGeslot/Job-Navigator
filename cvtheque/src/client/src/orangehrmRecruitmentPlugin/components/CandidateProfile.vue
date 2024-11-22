@@ -282,7 +282,7 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row>
+        <oxd-form-row v-if="formattedSkills && formattedSkills.length > 0">
           <div class="orangehrm-container">
             <oxd-card-table
               :headers="skillheaders"
@@ -291,8 +291,8 @@
             />
           </div>
         </oxd-form-row>
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
+        <oxd-form-row v-if="formattedCertificates && formattedCertificates.length > 0">
+          <oxd-divider></oxd-divider>
           <oxd-text tag="h6" class="orangehrm-sub-title">{{
             $t('Certificats/Habilitations')
           }}</oxd-text>
@@ -474,20 +474,23 @@ export default {
     rawCertificates.value = JSON.parse(props.candidate.certificates);
 
     const formattedSkills = computed(() => {
-      console.log('rawSkills', rawSkills);
-      return rawSkills.value.map((skill) => ({
-        title: skill.title || '',
-        year: skill.period || '',
-        description: skill.description || '',
-      }));
+      return rawSkills.value
+        ? rawSkills.value.map((skill) => ({
+            title: skill.title || '',
+            year: skill.period || '',
+            description: skill.description || '',
+          }))
+        : [];
     });
 
     const formattedCertificates = computed(() => {
-      return rawCertificates.value.map((cert) => ({
-        type: cert.type || '',
-        title: cert.title || '',
-        description: cert.description || '',
-      }));
+      return rawCertificates.value
+        ? rawCertificates.value.map((cert) => ({
+            type: cert.type || '',
+            title: cert.title || '',
+            description: cert.description || '',
+          }))
+        : [];
     });
 
     const http = new APIService(window.appGlobal.baseUrl, '/');

@@ -952,7 +952,8 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         return new ParamRuleCollection(
             new ParamRule(
                 CommonParams::PARAMETER_ID,
-                new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
+                new Rule(Rules::POSITIVE)
+                //new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
