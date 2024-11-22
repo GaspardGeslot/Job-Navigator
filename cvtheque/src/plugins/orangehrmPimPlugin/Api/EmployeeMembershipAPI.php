@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Pim\Api;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -34,9 +35,14 @@ use OrangeHRM\Entity\EmployeeMembership;
 use OrangeHRM\Pim\Api\Model\EmployeeMembershipModel;
 use OrangeHRM\Pim\Dto\EmployeeMembershipSearchFilterParams;
 use OrangeHRM\Pim\Service\EmployeeMembershipService;
+use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
 {
+    use AuthUserTrait;
+    use EmployeeServiceTrait;
+
     public const PARAMETER_MEMBERSHIP_ID = 'membershipId';
     public const PARAMETER_SUBSCRIPTION_FEE = 'subscriptionFee';
     public const PARAMETER_SUBSCRIPTION_PAID_BY = 'subscriptionPaidBy';
@@ -170,30 +176,94 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
+        $limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 50);
+        $offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
+
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_EMP_NUMBER
         );
-        $employeeMembershipSearchParams = new EmployeeMembershipSearchFilterParams();
-        $this->setSortingAndPaginationParams($employeeMembershipSearchParams);
-        $employeeMembershipSearchParams->setEmpNumber($empNumber);
 
-        $employeeMemberships = $this->getEmployeeMembershipService()->getEmployeeMembershipDao()->searchEmployeeMembership(
-            $employeeMembershipSearchParams
+        $experiences = $this->getHedwigeExperiences($this->getAuthUser()->getUserHedwigeToken());
+        // error_log('Raw experiences: ' . json_encode($experiences));
+
+        if (!is_array($experiences)) {
+            throw new \RuntimeException('Invalid data format received for experiences.');
+        }
+
+        // error_log('Response structure: ' . json_encode($experiences, JSON_PRETTY_PRINT));
+
+        $employeeMemberships = array_map(function ($experience) use ($experiences) {
+            $employeeMembership = new EmployeeMembership();
+        
+            // Données spécifiques à chaque expérience
+            $employeeMembership->setTitle($experience['title'] ?? null);
+            $employeeMembership->setDescription($experience['description'] ?? null);
+            $employeeMembership->setYear($experience['period'] ?? null); // "period" utilisé comme "year"
+        
+            // Données globales
+            $employeeMembership->setProfessionalExperience($experiences['professionalExperience'] ?? null);
+            $employeeMembership->setSpecificProfessionalExperience($experiences['specificProfessionalExperience'] ?? null);
+        
+            return $employeeMembership;
+        }, $experiences['skills'] ?? []); // Itère sur "skills"
+        
+        // if (!empty($employeeMemberships)) {
+        //     foreach ($employeeMemberships as $membership) {
+        //         error_log('ProfessionalExperience: ' . $membership->getProfessionalExperience());
+        //         error_log('SpecificProfessionalExperience: ' . $membership->getSpecificProfessionalExperience());
+        //         error_log('Title: ' . $membership->getTitle());
+        //         error_log('Description: ' . $membership->getDescription());
+        //     }
+        // }
+        // error_log('Transformed EmployeeMembership objects: ' . json_encode($employeeMemberships, JSON_PRETTY_PRINT));
+
+        $employeeMembershipModels = array_map(
+            fn($membership) => $membership instanceof EmployeeMembershipModel 
+                ? $membership 
+                : new EmployeeMembershipModel($membership),
+            $employeeMemberships
         );
+        $normalizedResults = array_map(fn($model) => $model->normalize(), $employeeMembershipModels);
 
-        return new EndpointCollectionResult(
+        // error_log('Normalized memberships: ' . json_encode($normalizedResults, JSON_PRETTY_PRINT));
+
+        $result = new EndpointCollectionResult(
             EmployeeMembershipModel::class,
-            $employeeMemberships,
-            new ParameterBag(
-                [
-                    CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
-                    CommonParams::PARAMETER_TOTAL => $this->getEmployeeMembershipService()->getEmployeeMembershipDao()->getSearchEmployeeMembershipsCount(
-                        $employeeMembershipSearchParams
-                    )
-                ]
-            )
+            $employeeMembershipModels, // Normalized data
+            new ParameterBag([
+                'limit' => $limit,
+                'offset' => $offset,
+                'total' => count($normalizedResults),
+            ])
         );
+
+        // error_log('Returning result: ' . json_encode([
+        //     'data' => $result
+        // ], JSON_PRETTY_PRINT));
+
+        return $result;
+    }
+
+
+    protected function getHedwigeExperiences(string $token) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/user/skills", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            // error_log('response' . $response->getBody());
+            $data = json_decode($response->getBody(), true);
+
+            return $data;
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**
@@ -223,13 +293,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="membershipId", type="integer"),
-     *             @OA\Property(property="subscriptionFee", type="number"),
-     *             @OA\Property(property="subscriptionPaidBy", type="string"),
-     *             @OA\Property(property="currencyTypeId", type="string"),
-     *             @OA\Property(property="subscriptionCommenceDate", type="string", format="date"),
-     *             @OA\Property(property="subscriptionRenewalDate", type="string", format="date"),
-     *             required={"membershipId"}
+     *             @OA\Property(property="title", type="string", maxLength=100),
+     *             @OA\Property(property="description", type="string", maxLength=300),
+     *             @OA\Property(property="year", type="integer", format="int32"),
+     *             required={"title", "year"}
      *         )
      *     ),
      *     @OA\Response(
@@ -244,16 +311,87 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      *         )
      *     )
      * )
+
      * @inheritDoc
      */
     public function create(): EndpointResourceResult
     {
-        $employeeMembership = $this->saveEmployeeMembership();
-        return new EndpointResourceResult(
-            EmployeeMembershipModel::class,
-            $employeeMembership,
-            new ParameterBag([CommonParams::PARAMETER_EMP_NUMBER => $employeeMembership->getEmployee()->getEmpNumber()])
-        );
+        try {
+            $empNumber = $this->getRequestParams()->getInt(
+                RequestParams::PARAM_TYPE_ATTRIBUTE,
+                CommonParams::PARAMETER_EMP_NUMBER
+            );
+
+            $title = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'title');
+
+            $year = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'year');
+
+            $description = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'description');
+
+            $skillData = (object) [
+                'title' => $title,
+                'period' => $year,
+                'description' => $description,
+            ];
+            $skillDataJson = json_encode($skillData);
+            // error_log('$skillDataJson' . $skillDataJson);
+            $postExperience = $this->postHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
+            // error_log('Création réussie.');
+            $employeeMembership = new EmployeeMembership();
+            $employeeMembership->setTitle($skillData->title ?? null);
+            $employeeMembership->setYear($skillData->year ?? null);
+            $employeeMembership->setDescription($skillData->description ?? null);
+            $employeeMembership->setProfessionalExperience($professionalExperience ?? null);
+            $employeeMembership->setSpecificProfessionalExperience($specificProfessionalExperience ?? null);
+
+            return new EndpointResourceResult(
+                EmployeeMembershipModel::class,
+                $employeeMembership,
+                new ParameterBag(['status' => 'success'])
+            );
+        } catch (\Exception $e) {
+            error_log('Erreur lors de la création : ' . $e->getMessage());
+            return new EndpointResourceResult(
+                EmployeeMembershipModel::class,
+                ['message' => 'Erreur : ' . $e->getMessage()],
+                new ParameterBag([
+                    'status' => 'error'
+                ])
+            );
+        }
+    }
+
+    protected function postHedwigeExperience(string $token, string $data): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+    
+        try {
+            // Décoder les données pour vérifier qu'elles sont valides JSON
+            $decodedData = json_decode($data, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \InvalidArgumentException('Invalid JSON data provided: ' . json_last_error_msg());
+            }
+
+            $response = $client->request('POST', "{$clientBaseUrl}/user/skill", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $decodedData,
+            ]);
+    
+            $responseData = json_decode($response->getBody(), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
+            }
+            // error_log('Réponse reçue : ' . print_r($responseData, true));
+    
+            return $responseData['certificates'] ?? [];
+        } catch (\Exception $e) {
+            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -266,55 +404,83 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 CommonParams::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
             ),
-            ...$this->getCommonBodyValidationRules(),
+            ...$this->getCommonBodyValidationRules('POST'),
         );
     }
 
     /**
      * @return ParamRule[]
      */
-    private function getCommonBodyValidationRules(): array
+    private function getCommonBodyValidationRules(string $httpMethod): array
     {
-        return [
-            new ParamRule(self::PARAMETER_MEMBERSHIP_ID, new Rule(Rules::REQUIRED), new Rule(Rules::POSITIVE)),
-            $this->getValidationDecorator()->notRequiredParamRule(
+        error_log('on est ici');
+        if ($httpMethod === 'POST') {
+            return [
                 new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_FEE,
-                    new Rule(Rules::NOT_EMPTY),
-                    new Rule(Rules::NUMBER),
-                    new Rule(Rules::BETWEEN, [0, 1000000000]),
-                ),
-            ),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_PAID_BY,
+                    'title',
                     new Rule(Rules::STRING_TYPE),
-                    new Rule(Rules::IN, [[EmployeeMembership::COMPANY,EmployeeMembership::INDIVIDUAL]]),
+                    new Rule(Rules::LENGTH, [null, 100])
                 ),
-            ),
-            $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_CURRENCY,
-                    new Rule(Rules::CURRENCY),
+                    'description',
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, 300])
                 ),
-            ),
-            $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_COMMENCE_DATE,
-                    new Rule(Rules::API_DATE),
+                    'year',
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, 100])
                 ),
-            ),
-            $this->getValidationDecorator()->notRequiredParamRule(
-                new ParamRule(
-                    self::PARAMETER_SUBSCRIPTION_RENEWAL_DATE,
-                    new Rule(Rules::API_DATE),
-                    new Rule(
-                        Rules::GREATER_THAN,
-                        [$this->getRequestParams()->getDateTimeOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_SUBSCRIPTION_COMMENCE_DATE)]
+                // $this->getValidationDecorator()->notRequiredParamRule(
+                //     new ParamRule(
+                //         'year',
+                //         new Rule(Rules::POSITIVE), // Doit être un entier positif
+                //         new Rule(Rules::LENGTH, [4, 4]) // Longueur de 4 caractères
+                //     )
+                // ),
+            ];
+        }
+        if ($httpMethod === 'PUT') {
+            error_log('dans la validation du update');
+            return [
+                $this->getValidationDecorator()->notRequiredParamRule(
+                    new ParamRule(
+                        'professionalExperience',
+                        new Rule(Rules::STRING_TYPE),
+                        new Rule(Rules::LENGTH, [null, 100])
                     )
                 ),
-            ),
-        ];
+                $this->getValidationDecorator()->notRequiredParamRule(
+                    new ParamRule(
+                        'specificProfessionalExperience',
+                        new Rule(Rules::STRING_TYPE),
+                        new Rule(Rules::LENGTH, [null, 100])
+                    )
+                ),
+            ];
+        }
+        return [];
+        // return [
+        //     $this->getValidationDecorator()->notRequiredParamRule(
+        //         new ParamRule(
+        //             self::PARAMETER_SUBSCRIPTION_PAID_BY,
+        //             new Rule(Rules::STRING_TYPE),
+        //             new Rule(Rules::IN, [[EmployeeMembership::COMPANY,EmployeeMembership::INDIVIDUAL]]),
+        //         ),
+        //     ),
+        //     $this->getValidationDecorator()->notRequiredParamRule(
+        //         new ParamRule(
+        //             self::PARAMETER_SUBSCRIPTION_CURRENCY,
+        //             new Rule(Rules::CURRENCY),
+        //         ),
+        //     ),
+        //     $this->getValidationDecorator()->notRequiredParamRule(
+        //         new ParamRule(
+        //             self::PARAMETER_SUBSCRIPTION_COMMENCE_DATE,
+        //             new Rule(Rules::API_DATE),
+        //         ),
+        //     ),
+        // ];
     }
 
     /**
@@ -360,12 +526,92 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      */
     public function update(): EndpointResourceResult
     {
-        $employeeMembership = $this->saveEmployeeMembership();
-        return new EndpointResourceResult(
-            EmployeeMembershipModel::class,
-            $employeeMembership,
-            new ParameterBag([CommonParams::PARAMETER_EMP_NUMBER => $employeeMembership->getEmployee()->getEmpNumber()])
-        );
+        error_log('dans le update');
+        try {
+            $empNumber = $this->getRequestParams()->getInt(
+                RequestParams::PARAM_TYPE_ATTRIBUTE,
+                CommonParams::PARAMETER_EMP_NUMBER
+            );
+
+            $professionalExperience = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'professionalExperience');
+
+            $specificProfessionalExperience = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'specificProfessionalExperience');
+
+            $skillData = (object) [
+                'professionalExperience' => $professionalExperience,
+                'specificProfessionalExperience' => $specificProfessionalExperience,
+            ];
+            $skillDataJson = json_encode($skillData);
+            error_log('$skillDataJson' . $skillDataJson);
+            $putExperience = $this->putHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
+            error_log('Modification réussie.');
+            $employeeMembership = new EmployeeMembership();
+            $employeeMembership->setTitle($skillData->title ?? null);
+            $employeeMembership->setYear($skillData->year ?? null);
+            $employeeMembership->setDescription($skillData->description ?? null);
+            $employeeMembership->setProfessionalExperience($professionalExperience ?? null);
+            $employeeMembership->setSpecificProfessionalExperience($specificProfessionalExperience ?? null);
+
+            // $employeeMembership = new EmployeeMembership();
+            // $employeeMembership->setTitle($skillData->title);
+            // $employeeMembership->setYear($skillData->year);
+            // $employeeMembership->setDescription($skillData->description);
+
+            return new EndpointResourceResult(
+                EmployeeMembershipModel::class,
+                $employeeMembership,
+                new ParameterBag(['message' => 'Update successful', 'response' => $employeeMembership]),
+                new ParameterBag(['status' => 'success'])
+            );
+        } catch (\Exception $e) {
+            error_log('Erreur lors de la création : ' . $e->getMessage());
+            return new EndpointResourceResult(
+                EmployeeMembershipModel::class,
+                ['message' => 'Erreur : ' . $e->getMessage()],
+                new ParameterBag([
+                    'status' => 'error'
+                ])
+            );
+        }
+        // $employeeMembership = $this->saveEmployeeMembership();
+        // return new EndpointResourceResult(
+        //     EmployeeMembershipModel::class,
+        //     $employeeMembership,
+        //     new ParameterBag([CommonParams::PARAMETER_EMP_NUMBER => $employeeMembership->getEmployee()->getEmpNumber()])
+        // );
+    }
+
+    protected function putHedwigeExperience(string $token, string $data): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+    
+        try {
+            // Décoder les données pour vérifier qu'elles sont valides JSON
+            $decodedData = json_decode($data, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \InvalidArgumentException('Invalid JSON data provided: ' . json_last_error_msg());
+            }
+
+            $response = $client->request('PUT', "{$clientBaseUrl}/user/professional-experiences", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $decodedData,
+            ]);
+    
+            $responseData = json_decode($response->getBody(), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
+            }
+            error_log('Réponse reçue : ' . print_r($responseData, true));
+    
+            return $responseData['certificates'] ?? [];
+        } catch (\Exception $e) {
+            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -378,11 +624,11 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 CommonParams::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
             ),
-            new ParamRule(
-                CommonParams::PARAMETER_ID,
-                new Rule(Rules::POSITIVE)
-            ),
-            ...$this->getCommonBodyValidationRules(),
+            // new ParamRule(
+            //     CommonParams::PARAMETER_ID,
+            //     new Rule(Rules::POSITIVE)
+            // ),
+            ...$this->getCommonBodyValidationRules('PUT'),
         );
     }
 
@@ -404,25 +650,96 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      */
     public function delete(): EndpointResourceResult
     {
-        $empNumber = $this->getRequestParams()->getInt(
-            RequestParams::PARAM_TYPE_ATTRIBUTE,
-            CommonParams::PARAMETER_EMP_NUMBER
-        );
-        $ids = $this->getEmployeeMembershipService()->getEmployeeMembershipDao()->getExistingEmployeeMembershipIdsForEmpNumber(
-            $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, CommonParams::PARAMETER_IDS),
-            $empNumber
-        );
-        $this->throwRecordNotFoundExceptionIfEmptyIds($ids);
-        $this->getEmployeeMembershipService()->getEmployeeMembershipDao()->deleteEmployeeMemberships($empNumber, $ids);
-        return new EndpointResourceResult(
-            ArrayModel::class,
-            $ids,
-            new ParameterBag(
-                [
-                    CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
-                ]
-            )
-        );
+        try {
+            $empNumber = $this->getRequestParams()->getInt(
+                RequestParams::PARAM_TYPE_ATTRIBUTE,
+                CommonParams::PARAMETER_EMP_NUMBER
+            );
+
+            $decodedData = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, 'ids');
+            foreach ($decodedData as $item) {
+                $title = $item['title'] ?? null;
+                if (!$title) {
+                    throw new \InvalidArgumentException('Title is missing in request data');
+                }
+            }
+            // $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
+            // if (!$employee instanceof Employee) {
+            //     throw new \Exception('L\'employé n\'a pas pu être trouvé ou n\'est pas valide.');
+            // }
+            // $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
+
+            $skillData = (object) [
+                'title' => $title,
+            ];
+            $skillDataJson = json_encode($skillData);
+            // error_log('$skillDataJson (pour suppression) : ' . $skillDataJson);
+
+            $deleteResponse = $this->deleteHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
+
+            if (isset($deleteResponse['response'])) {
+                // error_log('Suppression réussie.');
+                return new EndpointResourceResult(
+                    EmployeeMembershipModel::class,
+                    ['message' => 'Compétence supprimée avec succès.'],
+                    new ParameterBag(['status' => 'success'])
+                );
+            } elseif ($deleteResponse['status'] === 'error') {
+                throw new \Exception('Échec de la suppression : ' . ($deleteResponse['message'] ?? 'Erreur inconnue.'));
+            } else {
+                throw new \Exception('Réponse inattendue lors de la suppression.');
+            }
+        } catch (\Exception $e) {
+            error_log('Erreur lors de la suppression : ' . $e->getMessage());
+            return new EndpointResourceResult(
+                EmployeeMembershipModel::class,
+                ['message' => 'Erreur : ' . $e->getMessage()],
+                new ParameterBag(['status' => 'error'])
+            );
+        }
+        // return new EndpointResourceResult(
+        //     ArrayModel::class,
+        //     $ids,
+        //     new ParameterBag(
+        //         [
+        //             CommonParams::PARAMETER_EMP_NUMBER => $empNumber,
+        //         ]
+        //     )
+        // );
+    }
+
+    protected function deleteHedwigeExperience(string $token, string $data): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+    
+        try {
+            $decodedData = json_decode($data, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \InvalidArgumentException('Invalid JSON data provided: ' . json_last_error_msg());
+            }
+            $response = $client->request('DELETE', "{$clientBaseUrl}/user/skill", [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $decodedData,
+            ]);
+    
+            $responseData = json_decode($response->getBody(), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
+            }
+            // error_log('Réponse reçue : ' . print_r($responseData, true));
+    
+            return ['response' => ['message' => 'Suppression effectuée.']];
+        } catch (\Exception $e) {
+            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ];
+        }
     }
 
     /**

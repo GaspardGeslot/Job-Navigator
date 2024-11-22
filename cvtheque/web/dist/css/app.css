@@ -10515,6 +10515,11 @@ h1[data-v-0c52339c] {
   display: flex;
   flex-direction: row;
 }
+#logoJobNavigatorHomepage[data-v-0c52339c] {
+  margin-top: 0.5rem;
+  height: auto;
+  width: 20rem;
+}
 
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
@@ -10594,6 +10599,11 @@ h1[data-v-0c52339c] {
 @media screen and (max-width: 461px) {
 .exit-button[data-v-0c52339c] {
     display: none;
+}
+#logoJobNavigatorHomepage[data-v-0c52339c] {
+    margin-top: 0.75rem;
+    height: auto;
+    width: 10rem;
 }
 }
 

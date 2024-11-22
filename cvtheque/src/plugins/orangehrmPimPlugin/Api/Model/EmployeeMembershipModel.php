@@ -16,66 +16,69 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OrangeHRM\Pim\Api\Model;
+ namespace OrangeHRM\Pim\Api\Model;
 
-use OrangeHRM\Core\Api\V2\Serializer\ModelTrait;
-use OrangeHRM\Core\Api\V2\Serializer\Normalizable;
-use OrangeHRM\Entity\EmployeeMembership;
-
-/**
- * @OA\Schema(
- *     schema="Pim-EmployeeMembershipModel",
- *     type="object",
- *     @OA\Property(property="id", type="integer"),
- *     @OA\Property(property="membership", type="object",
- *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="name", type="string")
- *     ),
- *     @OA\Property(property="subscriptionFee", type="number"),
- *     @OA\Property(property="subscriptionPaidBy", type="string"),
- *     @OA\Property(property="currencyType", type="object",
- *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="name", type="string")
- *     ),
- *     @OA\Property(property="subscriptionCommenceDate", type="string", format="date"),
- *     @OA\Property(property="subscriptionRenewalDate", type="string", format="date")
- * )
- */
-class EmployeeMembershipModel implements Normalizable
-{
-    use ModelTrait;
-
-    /**
-     * @param EmployeeMembership $employeeMembership
-     */
-    public function __construct(EmployeeMembership $employeeMembership)
+ use OrangeHRM\Core\Api\V2\Serializer\ModelTrait;
+ use OrangeHRM\Core\Api\V2\Serializer\Normalizable;
+ use OrangeHRM\Entity\EmployeeMembership;
+ 
+ /**
+  * @OA\Schema(
+  *     schema="Pim-EmployeeMembershipModel",
+  *     type="object",
+  *     @OA\Property(property="title", type="string", maxLength=100),
+  *     @OA\Property(property="description", type="string", maxLength=300),
+  *     @OA\Property(property="year", type="string", , maxLength=100),
+  *     @OA\Property(property="professionalExperience", type="string", maxLength=100),
+  *     @OA\Property(property="specificProfessionalExperience", type="string", maxLength=100)
+  * )
+  */
+  class EmployeeMembershipModel implements Normalizable
+  {
+      use ModelTrait;
+  
+      private ?string $title;
+      private ?string $description;
+      private ?string $year;
+      private ?string $professionalExperience;
+      private ?string $specificProfessionalExperience;
+  
+      /**
+       * @param EmployeeMembership|array $data
+       */
+      public function __construct($data)
     {
-        $this->setEntity($employeeMembership);
-        $this->setFilters(
-            [
-                'id',
-                ['getMembership', 'getId'],
-                ['getMembership', 'getName'],
-                'subscriptionFee',
-                'subscriptionPaidBy',
-                'subscriptionCurrency',
-                ['getDecorator', 'getCurrencyName'],
-                ['getDecorator', 'getSubscriptionCommenceDate'],
-                ['getDecorator', 'getSubscriptionRenewalDate'],
-            ]
-        );
-        $this->setAttributeNames(
-            [
-                'id',
-                ['membership', 'id'],
-                ['membership', 'name'],
-                'subscriptionFee',
-                'subscriptionPaidBy',
-                ['currencyType', 'id'],
-                ['currencyType', 'name'],
-                'subscriptionCommenceDate',
-                'subscriptionRenewalDate',
-            ]
-        );
+        if ($data instanceof EmployeeMembership) {
+            $this->setEntity($data);
+            $this->title = $data->getTitle() ?? null;
+            $this->description = $data->getDescription() ?? null;
+            $this->year = $data->getYear() ?? null;
+            $this->professionalExperience = $data->getProfessionalExperience() ?? null;
+            $this->specificProfessionalExperience = $data->getSpecificProfessionalExperience() ?? null;
+        } elseif (is_array($data)) {
+            $this->title = $data['title'] ?? null;
+            $this->description = $data['description'] ?? null;
+            $this->year = $data['year'] ?? null;
+            $this->professionalExperience = $data['professionalExperience'] ?? null;
+            $this->specificProfessionalExperience = $data['specificProfessionalExperience'] ?? null;
+        } else {
+            throw new \InvalidArgumentException('Invalid data type for EmployeeMembershipModel constructor');
+        }
+
+        $this->setFilters(['title', 'description', 'year', 'professionalExperience', 'specificProfessionalExperience']);
+        $this->setAttributeNames(['title', 'description', 'year', 'professionalExperience', 'specificProfessionalExperience']);
     }
-}
+
+  
+      public function normalize(): array
+      {
+          return [
+              'title' => $this->title,
+              'description' => $this->description,
+              'year' => $this->year,
+              'professionalExperience' => $this->professionalExperience,
+              'specificProfessionalExperience' => $this->specificProfessionalExperience,
+          ];
+      }
+  }
+  

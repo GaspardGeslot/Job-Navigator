@@ -204,8 +204,8 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
-        //$limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 10);
-        //$offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
+        $limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 50);
+        $offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
 
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
@@ -222,7 +222,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         // Map certificates to EmployeeSkillModel and normalize them
         $normalizedSkills = array_map(fn($cert) => (new EmployeeSkillModel($cert))->normalize(), $certificates);
 
-        // error_log('Normalized Skills: ' . json_encode($normalizedSkills, JSON_PRETTY_PRINT));
+        error_log('Normalized Skills: ' . json_encode($normalizedSkills, JSON_PRETTY_PRINT));
 
         return new EndpointCollectionResult(
             EmployeeSkillModel::class,
