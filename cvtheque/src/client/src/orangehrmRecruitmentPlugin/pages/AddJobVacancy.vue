@@ -150,24 +150,6 @@
 
         <oxd-divider />
         <oxd-text class="orangehrm-sub-title" tag="h6">
-          {{ $t('pim.driving_licences') }}
-        </oxd-text>
-        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-          <oxd-grid-item
-            v-for="(elem, elemIndex) in drivingLicenses"
-            :key="`${elemIndex}-${elem}`"
-          >
-            <oxd-input-field
-              v-model="vacancy.checkedDrivingLicences"
-              type="checkbox"
-              :label="elem.label"
-              :value="elem.label"
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-
-        <oxd-divider />
-        <oxd-text class="orangehrm-sub-title" tag="h6">
           {{ $t('general.need_search') }}
         </oxd-text>
         <oxd-grid :cols="4" class="orangehrm-full-width-grid">
@@ -213,6 +195,24 @@
           >
             <oxd-input-field
               v-model="vacancy.checkedStudyLevels"
+              type="checkbox"
+              :label="elem.label"
+              :value="elem.label"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+
+        <oxd-divider />
+        <oxd-text class="orangehrm-sub-title" tag="h6">
+          {{ $t('pim.license') }}
+        </oxd-text>
+        <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid-item
+            v-for="(elem, elemIndex) in drivingLicenses"
+            :key="`${elemIndex}-${elem}`"
+          >
+            <oxd-input-field
+              v-model="vacancy.checkedDrivingLicences"
               type="checkbox"
               :label="elem.label"
               :value="elem.label"

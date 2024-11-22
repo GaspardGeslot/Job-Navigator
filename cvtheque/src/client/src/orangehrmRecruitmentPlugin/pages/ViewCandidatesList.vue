@@ -63,7 +63,7 @@
               <oxd-input-field
                 v-model="courseStartFilter"
                 type="select"
-                :label="$t('general.course_start')"
+                :label="$t('general.course_start_option')"
                 :options="courseStarts"
               />
             </oxd-grid-item>

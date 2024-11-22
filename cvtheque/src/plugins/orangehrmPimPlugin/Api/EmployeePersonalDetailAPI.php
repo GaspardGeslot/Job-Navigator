@@ -59,6 +59,8 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_COURSE_START = 'courseStart';
     public const PARAMETER_COMPANY_NAME = 'companyName';
     public const PARAMETER_COMPANY_SIRET = 'companySiret';
+    public const PARAMETER_COMPANY_WEBSITE = 'companyWebsite';
+    public const PARAMETER_COMPANY_PRESENTATION = 'companyPresentation';
     public const PARAMETER_COMPANY_WORKFORCE = 'companyWorkforce';
     public const PARAMETER_COMPANY_NAF_CODE = 'companyNafCode';
     public const PARAMETER_EMPLOYEE_ID = 'employeeId';
@@ -89,6 +91,8 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAM_RULE_COMPANY_WORKFORCE_MAX_LENGTH = 100;
     public const PARAM_RULE_COMPANY_NAME_MAX_LENGTH = 100;
     public const PARAM_RULE_COMPANY_SIRET_MAX_LENGTH = 100;
+    public const PARAM_RULE_COMPANY_WEBSITE_MAX_LENGTH = 300;
+    public const PARAM_RULE_COMPANY_PRESENTATION_MAX_LENGTH = 1000;
     public const PARAM_RULE_COMPANY_NAF_CODE_MAX_LENGTH = 100;
     public const PARAM_RULE_COURSE_START_MAX_LENGTH = 100;
     public const PARAM_RULE_OTHER_ID_MAX_LENGTH = 100;
@@ -288,6 +292,12 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             $employee->setCompanySiret(
                 $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_SIRET)
             );
+            $employee->setCompanyPresentation(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_PRESENTATION)
+            );
+            $employee->setCompanyWebsite(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_WEBSITE)
+            );
             $employee->setCompanyNafCode(
                 $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_NAF_CODE)
             );
@@ -443,6 +453,8 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             'name' => $employee->getCompanyName(),
             'nafCode' => $employee->getCompanyNafCode(),
             'workforce' => $employee->getCompanyWorkforce(),
+            'website' => $employee->getCompanyWebsite(),
+            'presentation' => $employee->getCompanyPresentation(),
         ];
 
         try {
@@ -617,6 +629,22 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                     self::PARAMETER_COMPANY_SIRET,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COMPANY_SIRET_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COMPANY_PRESENTATION,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COMPANY_PRESENTATION_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_COMPANY_WEBSITE,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COMPANY_WEBSITE_MAX_LENGTH]),
                 ),
                 true
             ),

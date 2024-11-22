@@ -377,6 +377,14 @@ export const validPhoneNumberFormat = function (
   );
 };
 
+export const validWebsiteFormat = function (value: string): boolean | string {
+  return (
+    !value ||
+    /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w\-./?%&=]*)?$/.test(value) ||
+    translate('general.invalid_website_format')
+  );
+};
+
 /**
  * @param {string} endDate
  * @param {string|undefined} message

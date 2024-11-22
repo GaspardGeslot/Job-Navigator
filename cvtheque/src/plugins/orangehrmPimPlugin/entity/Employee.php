@@ -169,6 +169,20 @@ class Employee
     /**
      * @var string
      *
+     * @ORM\Column(name="company_website", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyWebsite = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_presentation", type="string", length=1000, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyPresentation = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="company_logo", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $companyLogo = '';
@@ -787,6 +801,8 @@ class Employee
         $this->setCompanyId($company['id'] ?? -1);
         $this->setCompanyName($company['name'] ?? '');
         $this->setCompanySiret($company['siret'] ?? '');
+        $this->setCompanyWebsite($company['website'] ?? '');
+        $this->setCompanyPresentation($company['presentation'] ?? '');
         $this->setCompanyNafCode($company['nafCode'] ?? '');
         $this->setCompanyWorkforce($company['workforce'] ?? '');
         $this->setCompanyLogo($company['logo'] ?? '');
@@ -1039,6 +1055,38 @@ class Employee
     public function setCompanySiret(string $companySiret): void
     {
         $this->companySiret = $companySiret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyPresentation(): string
+    {
+        return $this->companyPresentation;
+    }
+
+    /**
+     * @param string $companyPresentation
+     */
+    public function setCompanyPresentation(string $companyPresentation): void
+    {
+        $this->companyPresentation = $companyPresentation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyWebsite(): string
+    {
+        return $this->companyWebsite;
+    }
+
+    /**
+     * @param string $companyWebsite
+     */
+    public function setCompanyWebsite(string $companyWebsite): void
+    {
+        $this->companyWebsite = $companyWebsite;
     }
 
     /**

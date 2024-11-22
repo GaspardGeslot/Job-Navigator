@@ -25,20 +25,42 @@
       </oxd-text>
       <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
-        <oxd-form-row>
+        <oxd-form-row v-if="isCandidate">
           <oxd-grid :cols="1" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <full-name-input
-                v-if="isCandidate"
                 v-model:firstName="employee.firstName"
                 v-model:lastName="employee.lastName"
                 :rules="rules"
               />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row v-else>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
               <oxd-input-field
-                v-else
                 v-model="employee.companyName"
                 :label="$t('company.name')"
                 :rule="rules.companyName"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.companyWebsite"
+                :label="$t('pim.web_site')"
+                :rule="rules.website"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+            <oxd-grid-item
+              class="orangehrm-save-candidate-page --span-column-2"
+            >
+              <oxd-input-field
+                v-model="employee.companyPresentation"
+                :label="$t('pim.presentation')"
+                type="textarea"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -366,6 +388,7 @@ import {
   validDateFormat,
   maxFileSize,
   validFileTypes,
+  validWebsiteFormat,
 } from '@ohrm/core/util/validation/rules';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import FileUploadInput from '@/core/components/inputs/FileUploadInput';
@@ -394,6 +417,8 @@ const employeeModel = {
   militaryService: '',
   companyName: '',
   companySiret: '',
+  companyWebsite: '',
+  companyPresentation: '',
   companyWorkforce: [],
   companyNafCode: [],
   resume: null,
@@ -499,6 +524,7 @@ export default {
         nickname: [shouldNotExceedCharLength(30)],
         militaryService: [shouldNotExceedCharLength(30)],
         birthday: [validDateFormat(this.userDateFormat)],
+        website: [validWebsiteFormat()],
         drivingLicenseExpiredDate: [validDateFormat(this.userDateFormat)],
         resume: [
           maxFileSize(this.maxFileSize),
@@ -584,6 +610,8 @@ export default {
             companyNafCode: this.employee.companyNafCode?.label,
             companyWorkforce: this.employee.companyWorkforce?.label,
             companySiret: this.employee.companySiret,
+            companyWebsite: this.employee.companyWebsite,
+            companyPresentation: this.employee.companyPresentation,
             nickname: this.showDeprecatedFields
               ? this.employee.nickname
               : undefined,
