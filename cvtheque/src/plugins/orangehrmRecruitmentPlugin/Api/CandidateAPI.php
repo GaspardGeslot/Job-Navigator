@@ -921,6 +921,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         /*$candidate = $this->getCandidateService()->getCandidateDao()->getCandidateById($id);
         $this->throwRe<cordNotFoundExceptionIfNotExist($candidate, Candidate::class)*/
         $lead = $this->getLead($this->getAuthUser()->getUserHedwigeToken(), $id, $matchingId);
+        $lead['skills'] = json_encode($lead['skills'], JSON_THROW_ON_ERROR);
         $candidate = new Candidate();
         $candidate->setLeadInfo($lead);
         return new EndpointResourceResult(CandidateDetailedModel::class, $candidate);

@@ -131,6 +131,7 @@ class CandidateDetailedModel implements Normalizable
             'resume' => $this->candidate->getResume(),
             'salary' => $this->candidate->getSalary(),
             'specificProfessionalExperience' => $this->candidate->getSpecificProfessionalExperience(),
+            'skills' => $this->candidate->getCandidateSkills(),
             'status' => is_null($candidateVacancy) ? null :
                 $candidateVacancy->getDecorator()->getCandidateVacancyStatus(),
             'street1' => $this->candidate->getStreet1(),
