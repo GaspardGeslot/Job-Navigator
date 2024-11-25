@@ -206,6 +206,7 @@
                 :rules="rules.birthday"
               />
             </oxd-grid-item>
+            <!--
             <oxd-grid-item>
               <oxd-input-group
                 :label="$t('pim.gender')"
@@ -225,6 +226,7 @@
                 />
               </oxd-input-group>
             </oxd-grid-item>
+            -->
           </oxd-grid>
           <oxd-grid v-else :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
@@ -249,7 +251,9 @@
                   :label="$t('general.study_level')"
                   :options="studyLevels"
                 />
+                <!--
                 <oxd-input-field :label="$t('pim.degree_and_certification')" />
+                -->
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
@@ -280,11 +284,25 @@
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
+          <!--
           <oxd-divider />
           <oxd-form-row>
             <oxd-grid-item>
               <oxd-input-field
                 :label="$t('pim.professional_experience_description')"
+              />
+            </oxd-grid-item>
+          </oxd-form-row>
+          -->
+          <oxd-divider />
+          <oxd-form-row>
+            <oxd-grid-item
+              class="orangehrm-save-candidate-page --span-column-2"
+            >
+              <oxd-input-field
+                v-model="employee.motivation"
+                :label="$t('Motivation')"
+                type="textarea"
               />
             </oxd-grid-item>
           </oxd-form-row>
@@ -407,6 +425,7 @@ const employeeModel = {
   maritalStatus: [],
   need: [],
   checkedPermits: [],
+  motivation: '',
   salary: '',
   studyLevel: [],
   courseStart: [],
@@ -549,6 +568,7 @@ export default {
     this.http
       .getAll()
       .then((response) => {
+        // console.log('response:', response);
         this.updateModel(response);
         return this.http.request({
           method: 'GET',
@@ -580,6 +600,8 @@ export default {
 
   methods: {
     onSave() {
+      // console.log('motivation on save', this.employee.motivation);
+      // console.log('type of motivation', typeof this.employee.motivation);
       this.isLoading = true;
       this.http
         .request({
@@ -600,6 +622,7 @@ export default {
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
             need: this.employee.need?.label,
             drivingLicense: JSON.stringify(this.employee.checkedPermits),
+            motivation: this.employee.motivation,
             salary: this.employee.salary,
             studyLevel: this.employee.studyLevel?.label,
             courseStart: this.employee.courseStart?.label,
@@ -635,6 +658,16 @@ export default {
     updateModel(response) {
       const {data} = response.data;
       this.employee = {...employeeModel, ...data};
+      if (data.drivingLicense && data.drivingLicense != '') {
+        try {
+          this.employee.checkedPermits = JSON.parse(data.drivingLicense);
+        } catch (e) {
+          console.error('Invalid JSON in drivingLicense:', data.drivingLicense);
+          this.employee.checkedPermits = [];
+        }
+      } else {
+        this.employee.checkedPermits = [];
+      }
       this.isCandidate = JSON.parse(this.employee.otherId).includes(
         process.env.VUE_APP_CANDIDATE_ROLE_NAME,
       );
