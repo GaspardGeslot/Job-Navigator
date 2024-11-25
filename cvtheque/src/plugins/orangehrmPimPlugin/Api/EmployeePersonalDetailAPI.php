@@ -54,6 +54,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_ATTACHMENT_METHOD = 'attachmentMethod';
     public const PARAMETER_ATTACHMENT_ID = 'attachmentId';
     public const PARAMETER_LICENSE = 'drivingLicense';
+    public const PARAMETER_MOTIVATION = 'motivation';
     public const PARAMETER_SALARY = 'salary';
     public const PARAMETER_STUDY_LEVEL = 'studyLevel';
     public const PARAMETER_COURSE_START = 'courseStart';
@@ -146,11 +147,13 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $profile = $this->getHedwigeProfile($this->getAuthUser()->getUserHedwigeToken());
+        
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
         if ($this->getAuthUser()->getIsCandidate())
             $employee->setProfileInfo($profile);
         else $employee->setCompany($profile);
+        // error_log('$employee find motivation' . $employee->getMotivation());
         $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
         $userRoleNames = array_map(fn (UserRole $userRole) => $userRole->getName(), $userRoles);
         $employee->setOtherId(json_encode($userRoleNames));
@@ -244,6 +247,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
      */
     public function update(): EndpointResourceResult
     {
+        // error_log('find motivation' . $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_MOTIVATION));
         $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
@@ -263,6 +267,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             );
             $employee->setDrivingLicense(
                 $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_LICENSE)
+            );
+            $employee->setMotivation(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_MOTIVATION)
             );
             $employee->setSalary(
                 $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_SALARY)
@@ -402,11 +409,11 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        
         $data = [
             'firstName' => $employee->getFirstName(),
             'need' => $employee->getNeed(),
-            'drivingLicenses' => json_decode($employee->getDrivingLicense(), true),
+            'drivingLicenses' => $employee->getDrivingLicense() && $employee->getDrivingLicense() != '' ? json_decode($employee->getDrivingLicense(), true) : [],
+            'motivation' => $employee->getMotivation(),
             'salaryExpectation' => $employee->getSalary(),
             'studyLevel' => $employee->getStudyLevel(),
             'lastName' => $employee->getLastName(),
@@ -559,6 +566,14 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                     'drivingLicense',
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, 100]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    'motivation',
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, 2000]),
                 ),
                 true
             ),

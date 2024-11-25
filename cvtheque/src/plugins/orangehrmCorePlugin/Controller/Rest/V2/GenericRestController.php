@@ -109,7 +109,7 @@ class GenericRestController extends AbstractRestController
      */
     protected function handlePostRequest(Request $request): Response
     {
-        error_log("problem here - post");
+        // error_log("problem here - post");
         if ($this->apiEndpoint instanceof CollectionEndpoint) {
             $result = $this->apiEndpoint->create();
             return new Response(...$this->getPreparedResponseParamsFromResult($result));
@@ -134,7 +134,7 @@ class GenericRestController extends AbstractRestController
      */
     protected function handlePutRequest(Request $request): Response
     {
-        error_log("problem here - put");
+        // error_log("problem here - put");
         if ($this->apiEndpoint instanceof ResourceEndpoint) {
             $result = $this->apiEndpoint->update();
             return new Response(...$this->getPreparedResponseParamsFromResult($result));
@@ -159,7 +159,7 @@ class GenericRestController extends AbstractRestController
      */
     protected function handleDeleteRequest(Request $request): Response
     {
-        error_log("problem here - delete");
+        // error_log("problem here - delete");
         if ($this->apiEndpoint instanceof CollectionEndpoint || $this->apiEndpoint instanceof ResourceEndpoint) {
             $result = $this->apiEndpoint->delete();
             return new Response(...$this->getPreparedResponseParamsFromResult($result));
