@@ -78,6 +78,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     public const FILTER_CANDIDATE_NAME = 'candidateName';
     public const FILTER_MODEL = 'model';
     public const FILTER_ALL_LEADS = 'allLeads';
+    public const FILTER_STATUS_JOB = "statusJob";
 
     public const FILTER_JOB_SECTOR = 'jobSector';
     public const FILTER_PROFESSIONAL_EXPERIENCE = 'professionalExperienceFilter';
@@ -347,7 +348,14 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_COURSE_START
         );
 
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter);
+        $statusJob = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_STATUS_JOB
+        );
+
+        error_log($statusJob);
+
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $statusJob);
         $candidates = array();
         foreach ($leads as $lead) {
             $candidate = new Candidate();
@@ -364,12 +372,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         );
     }
 
-    protected function getLeads(string $token, ?int $matchingId = null, ?string $allLeads = null, ?string $jobTitleFilter = '', ?string $needFilter = '', ?string $studyLevelFilter = '', ?string $courseStartFilter = '', ?string $professionalExperienceFilter = '') : array
+    protected function getLeads(string $token, ?int $matchingId = null, ?string $allLeads = null, ?string $jobTitleFilter = '', ?string $needFilter = '', ?string $studyLevelFilter = '', ?string $courseStartFilter = '', ?string $professionalExperienceFilter = '', ?string $statusJob = '') : array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         try {
-            $url = $allLeads ? "{$clientBaseUrl}/client/leads?" : ($matchingId ? "{$clientBaseUrl}/company/leads/matching/{$matchingId}" : "{$clientBaseUrl}/company/leads");
+            $url = $allLeads ? "{$clientBaseUrl}/client/leads?" : "{$clientBaseUrl}/company/leads?";
             if ($jobTitleFilter !== '') {
                 $url .= 'job=' . urlencode($jobTitleFilter) . '&';
             }
@@ -385,6 +393,13 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             if ($professionalExperienceFilter !== '') {
                 $url .= 'professionalExperience=' . urlencode($professionalExperienceFilter) . '&';
             }
+            if ($matchingId && $matchingId != ''){
+                $url .= 'matchingId=' . urlencode($matchingId) . '&';
+            }
+            if ($statusJob != ''){
+                $url .= 'status=' . urlencode($statusJob) . '&';
+            }
+                
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
@@ -528,6 +543,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::FILTER_COURSE_START,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_STATUS_JOB,
                     new Rule(Rules::STRING_TYPE)
                 )
             ),

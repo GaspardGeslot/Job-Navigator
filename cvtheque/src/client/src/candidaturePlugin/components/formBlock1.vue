@@ -33,7 +33,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         </option>
       </select>
       <select v-model="mobility">
-        <option disabled value="">Ma mobilité géographique</option>
+        <option class="placeholder-option" disabled value="">Ma mobilité géographique</option>
         <option>10 kms</option>
         <option>30 kms</option>
         <option>50 kms</option>
@@ -88,6 +88,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         class="submitButton"
         type="submit"
         value="SUIVANT"
+        :disabled="validationSuivant"
       />
     </form>
   </div>
@@ -125,11 +126,28 @@ export default {
       sortedStudyLevels: [],
       checkedEXP: '',
       BTPcheckedEXP: '',
+      validationSuivant: true,
       errors: {
         postalCode: false,
         incompleteForm: false,
       },
     };
+  },
+  watch: {
+    isFormValid(newVal) {
+      this.validationSuivant = !newVal; 
+    },
+  },
+  computed: {
+    // Propriété calculée pour vérifier si le formulaire est valide
+    isFormValid() {
+      return (
+        this.need !== '' &&
+        this.postalCode !== '' &&
+        this.courseStart !== '' &&
+        this.studyLevel !== ''
+      );
+    },
   },
   created() {
     // console.log('this.courseStarts', this.courseStarts);

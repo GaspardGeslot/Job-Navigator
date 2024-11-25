@@ -30,6 +30,7 @@
                 :options="matchings"
               />
             </oxd-grid-item>
+            
             <!--<oxd-grid-item>
               <vacancy-dropdown
                 v-model="filters.vacancyId"
@@ -49,6 +50,36 @@
               />
             </oxd-grid-item>-->
           </oxd-grid>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="filters.statusJobSelected"
+                type="select"
+                :label="$t('general.status')"
+                :options="candidatureStatuses"
+              />
+            </oxd-grid-item>
+            
+            <!--<oxd-grid-item>
+              <vacancy-dropdown
+                v-model="filters.vacancyId"
+                :label="$t('recruitment.vacancy')"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <hiring-manager-dropdown v-model="filters.hiringManagerId" />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="filters.status"
+                type="select"
+                :label="$t('general.status')"
+                :clear="false"
+                :options="statusOptions"
+              />
+            </oxd-grid-item>-->
+          </oxd-grid>
+          
         </oxd-form-row>
 
         <oxd-divider />
@@ -155,6 +186,7 @@ const defaultFilters = {
   hiringManagerId: null,
   jobTitle: null,
   status: null,
+  statusJobSelected: null,
 };
 const defaultSortOrder = {
   'candidate.jobTitle': 'DEFAULT',
@@ -175,6 +207,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    candidatureStatuses: {
+      type: Array,
+      default: () => [],
+    },
   },
   /*mounted() {
     if (this.filters?.value) {
@@ -188,6 +224,13 @@ export default {
   },*/
   watch: {
     'filters.matchingSelected': {
+      handler(newVal) {
+        this.canUpdate = newVal;
+      },
+      immediate: true,
+      deep: true,
+    },
+    'filters.statusJobSelected': {
       handler(newVal) {
         this.canUpdate = newVal;
       },
@@ -234,6 +277,7 @@ export default {
         sortField: sortField.value,
         sortOrder: sortOrder.value,
         model: 'detailed',
+        statusJob: filters.value.statusJobSelected?.label,
       };
     });
 
@@ -316,6 +360,7 @@ export default {
     return {
       canUpdate: false,
       matchingSelected: null,
+      statusJobSelected: null,
       isDateAscending: true,
       isNomAscending: false,
       /*headers: [
@@ -416,7 +461,6 @@ export default {
     sortByDate() {
       // Change l'ordre de tri
       this.isDateAscending = !this.isDateAscending;
-
       // Trie les éléments en fonction de l'ordre défini
       this.items.data.sort((a, b) => {
         const dateA = new Date(a.dateOfApplication);

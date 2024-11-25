@@ -9142,6 +9142,11 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
+}
+.mainSubmitButton:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .mainSubmitButtonTxt {
   margin-left: 6.5rem;
@@ -9165,6 +9170,11 @@ p {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+  cursor: pointer;
+}
+.submitButton:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .submit-block {
   display: flex;
@@ -9521,6 +9531,11 @@ p[data-v-d99f0b7a] {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
+}
+.mainSubmitButton[data-v-d99f0b7a]:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .mainSubmitButtonTxt[data-v-d99f0b7a] {
   margin-left: 6.5rem;
@@ -9544,6 +9559,11 @@ p[data-v-d99f0b7a] {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+  cursor: pointer;
+}
+.submitButton[data-v-d99f0b7a]:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .submit-block[data-v-d99f0b7a] {
   display: flex;
@@ -10027,6 +10047,34 @@ input:checked + .slider[data-v-d92e4f72]:before {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formComponent.vue?vue&type=style&index=1&id=59201b22&scoped=true&lang=css ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.loading-circle-container[data-v-59201b22] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+.loading-circle[data-v-59201b22] {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.2);
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin-59201b22 1s linear infinite;
+}
+@keyframes spin-59201b22 {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
 .formImg[data-v-59201b22],
 .scroll-container[data-v-59201b22] {
   border-radius: 1rem;

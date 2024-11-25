@@ -33,7 +33,7 @@
           </svg>
         </button>
         <input class="submitButton2" type="submit" value="SUIVANT" />
-      --><button class="mainSubmitButton" type="submit">
+      --><button class="mainSubmitButton" :disabled="isDisabled" type="submit">
       <div class="mainSubmitButtonTxt">SUIVANT</div>
       <div class="mainSubmitButtonSvg">
         <svg
@@ -59,6 +59,12 @@
 export default {
   name: 'SubmitComponent',
   emits: ['go-back'],
+  props: {
+    isDisabled: {
+      type: Boolean,
+      default: true,
+    },
+  },
   methods: {
     goBack() {
       this.$emit('go-back');

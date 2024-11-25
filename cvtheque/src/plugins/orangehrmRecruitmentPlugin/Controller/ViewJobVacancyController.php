@@ -42,6 +42,15 @@ class ViewJobVacancyController extends AbstractVueController
             ];
         }, $options)));
 
+        
+        $options = $this->getHedwigeStatusOptions($this->getAuthUser()->getUserHedwigeToken());
+        $component->addProp(new Prop('candidature-statuses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($options), $options)));
+
         $this->setComponent($component);
     }
 
@@ -58,6 +67,24 @@ class ViewJobVacancyController extends AbstractVueController
             ]);
             return json_decode($response->getBody(), true);
         } catch (\Exceptionon $e) {
+        }
+    }
+
+    public function getHedwigeStatusOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/candidature-status", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
         }
     }
 }
