@@ -4,7 +4,7 @@
       Quel métier vous intéresse ?
     </h3>
     <form v-if="sectors" class="formBlock5">
-      <SubmitComponent @go-back="goBack" />
+      <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant"/>
       <p class="formSubTitle">3 choix possibles.</p>
       <div v-for="(item, itemIndex) in sectors" :key="itemIndex">
         <p class="CVText">{{ item.title }}</p>
@@ -106,6 +106,7 @@ export default {
       errors: {
         tooMuchOptions: false,
       },
+      validationSuivant: true,
     };
   },
   watch: {
@@ -118,6 +119,12 @@ export default {
       } else {
         this.errorMessage = '';
         this.errors.tooMuchOptions = false;
+      }
+      if(newVal.length < 1){
+        this.validationSuivant = true;
+      }
+      else{
+        this.validationSuivant = false;
       }
     },
     sectors(newVal) {

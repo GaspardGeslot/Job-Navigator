@@ -50,7 +50,7 @@
           </div>
       -->
       <h3 class="formTitle" style="margin-top: 1rem">Permis et véhicule</h3>
-      <SubmitComponent @go-back="goBack" />
+      <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant"/>
       <p v-if="errorMessage" id="alert-msg04" class="alert-msg">
         {{ errorMessage }}
       </p>
@@ -120,7 +120,7 @@
           </div>
         </div>
       </div>
-      <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?</p>
+      <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ? *</p>
       <div class="radio-group">
         <div id="radio-item-left" class="radio-item">
           <input id="vehicleYes" v-model="picked" type="radio" value="Oui" />
@@ -155,7 +155,13 @@ export default {
       checkedPermits: [],
       picked: null,
       errorMessage: '',
+      validationSuivant: true,
     };
+  },
+  watch: {
+    picked(newVal){
+      this.validationSuivant = !newVal;
+    }
   },
   methods: {
     onSubmit() {

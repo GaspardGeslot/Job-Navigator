@@ -170,6 +170,11 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
+  &:disabled{
+    opacity: 10%;
+    cursor: not-allowed;
+  }
 }
 .mainSubmitButtonTxt {
   margin-left: 6.5rem;
@@ -193,6 +198,12 @@ p {
   align-items: center;
   border-radius: 1.5rem;
   font-family: 'Telegraf', sans-serif;
+  cursor: pointer;
+
+  &:disabled{
+    opacity: 10%;
+    cursor: not-allowed;
+  }
 }
 .submit-block {
   display: flex;

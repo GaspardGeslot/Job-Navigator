@@ -4,7 +4,7 @@
       <h3 class="formTitle" style="margin-top: 1rem">
         Facultatif (mais apprécié)
       </h3>
-      <SubmitComponent @go-back="goBack" />
+      <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant"/>
       <p class="CVText">
         Qu'est-ce qui vous plairait dans le fait de travailler dans la
         construction ?
@@ -43,6 +43,7 @@ export default {
       motivation: '',
       file: null, // Stocker le fichier ici après réception du composant enfant
       isLoading: false,
+      validationSuivant: false,
     };
   },
   methods: {
@@ -58,9 +59,9 @@ export default {
           file: this.file,
           //file: null,
         });
-        this.$toast.info(
-          'Aucun fichier à envoyer, mais la motivation a été sauvegardée.',
-        );
+        // this.$toast.info(
+        //   'Aucun fichier à envoyer, mais la motivation a été sauvegardée.',
+        // );
         return; // Stopper ici, pas de requête API
       }
 

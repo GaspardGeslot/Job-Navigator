@@ -1,5 +1,8 @@
 <template>
   <div class="formBlock row" style="width: 900px; height: auto">
+    <div v-if="isLoading" class="loading-circle-container">
+      <div class="loading-circle"></div>
+    </div>
     <div
       ref="scrollContainer"
       class="scroll-container"
@@ -173,6 +176,8 @@ export default {
     const scrollContainer = ref(null);
     const scrollContent = ref(null);
     const formImg = ref(null);
+
+    const isLoading = ref(false);
 
     const createSession = async () => {
       sessionId.value = uuidv4();
@@ -381,10 +386,12 @@ export default {
       ]);
 
       try {
+        isLoading.value = true;
         const leadResponse = await leadHttp.create(formData);
         console.log('Lead RESPONSE HERE !!!! ', leadResponse);
         matchResponse.value = leadResponse.data.MatchResponse;
         console.log('matchResponse.value in formComp', matchResponse.value);
+        isLoading.value = false;
       } catch (error) {
         console.error(
           'Error:',
@@ -425,6 +432,7 @@ export default {
       skipNextStep,
       nextStep,
       previousStep,
+      isLoading,
     };
   },
   methods: {
@@ -437,6 +445,36 @@ export default {
 
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
+.loading-circle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+.loading-circle {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.2);
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .formImg,
 .scroll-container {
   border-radius: 1rem;
