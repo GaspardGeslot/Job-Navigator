@@ -180,6 +180,7 @@
          $this->membership = $membership;
      }
  
+     /*
      public function getSubscriptionFee(): ?string
      {
          return $this->subscriptionFee;
@@ -229,5 +230,6 @@
      {
          $this->subscriptionRenewalDate = $subscriptionRenewalDate;
      }
+    */
  }
  
