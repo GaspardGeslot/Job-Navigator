@@ -74,7 +74,7 @@
 
 <script>
 // eslint-disable-next-line prettier/prettier
-// import 
+// import
 // required,
 // validDateFormat,
 // endDateShouldBeAfterStartDate,
