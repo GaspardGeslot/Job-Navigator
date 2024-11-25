@@ -291,7 +291,9 @@
             />
           </div>
         </oxd-form-row>
-        <oxd-form-row v-if="formattedCertificates && formattedCertificates.length > 0">
+        <oxd-form-row
+          v-if="formattedCertificates && formattedCertificates.length > 0"
+        >
           <oxd-divider></oxd-divider>
           <oxd-text tag="h6" class="orangehrm-sub-title">{{
             $t('Certificats/Habilitations')
