@@ -99,17 +99,39 @@ class CandidatureController extends AbstractVueController implements PublicContr
     {
         $leadData = $request->request->all();
 
+        error_log('$leadData ' . json_encode($leadData));
+
+        $keyMapping = [
+            'BTPcheckedEXP' => 'specificProfessionalExperience',
+            'checkedEXP' => 'professionalExperience',
+            'permits' => 'drivingLicenses',
+            'vehicle' => 'hasPersonalVehicle',
+        ];
+
         // Désérialiser les champs qui sont des tableaux JSON
         if (isset($leadData['jobs'])) {
             $leadData['jobs'] = json_decode($leadData['jobs'], true);
         }
-        if (isset($leadData['drivingLicenses'])) {
-            $leadData['drivingLicenses'] = json_decode($leadData['permits'], true);
-        }
+        // if (isset($leadData['drivingLicenses'])) {
+        //     $leadData['drivingLicenses'] = json_decode($leadData['permits'], true);
+        // }
         if (isset($leadData['skills'])) {
             $leadData['skills'] = json_decode($leadData['skills'], true);
         }
 
+        foreach ($keyMapping as $oldKey => $newKey) {
+            if (isset($leadData[$oldKey])) {
+                if ($oldKey === 'permits') {
+                    // Désérialiser en tableau si ce n'est pas déjà un tableau
+                    $leadData[$newKey] = is_array($leadData[$oldKey])
+                        ? $leadData[$oldKey]
+                        : json_decode($leadData[$oldKey], true);
+                } else {
+                    $leadData[$newKey] = $leadData[$oldKey];
+                }
+                unset($leadData[$oldKey]); // Supprime l'ancienne clé
+            }
+        }
         // echo '<pre>';
         // var_dump($leadData);
         // echo '</pre>';
@@ -169,6 +191,7 @@ class CandidatureController extends AbstractVueController implements PublicContr
 
         // Encode les données du lead en JSON
         $leadDataJson = json_encode($leadData);
+        error_log('$leadDataJson ' . $leadDataJson);
         // echo '<pre>';
         // print_r('Lead Data post json_encode:');
         // print_r($leadDataJson);

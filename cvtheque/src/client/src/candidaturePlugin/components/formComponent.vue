@@ -313,7 +313,7 @@ export default {
       if (currentStep.value == 5) {
         const dataToProcess = reviews.value.slice(0, 5);
         const combinedData = combineData(dataToProcess);
-        delete combinedData.checkedEXP;
+        // delete combinedData.checkedEXP;
         if (combinedData.file == null) {
           delete combinedData.file;
         }
