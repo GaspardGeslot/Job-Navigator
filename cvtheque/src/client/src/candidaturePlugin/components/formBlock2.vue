@@ -5,6 +5,7 @@
     </h3>
     <form v-if="sectors" class="formBlock5">
       <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant" />
+      <p class="formSubTitle">1 choix minimum.</p>
       <p class="formSubTitle">3 choix possibles.</p>
       <div v-for="(item, itemIndex) in sectors" :key="itemIndex">
         <p class="CVText">{{ item.title }}</p>
