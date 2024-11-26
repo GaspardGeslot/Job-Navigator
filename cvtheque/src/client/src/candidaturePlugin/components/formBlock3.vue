@@ -123,11 +123,11 @@
       <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?</p>
       <div class="radio-group">
         <div id="radio-item-left" class="radio-item">
-          <input id="vehicleYes" v-model="picked" type="radio" value="Oui" />
+          <input id="vehicleYes" v-model="picked" type="radio" value="true" />
           <label for="vehicleYes">Oui</label>
         </div>
         <div class="radio-item">
-          <input id="vehicleNo" v-model="picked" type="radio" value="Non" />
+          <input id="vehicleNo" v-model="picked" type="radio" value="false" />
           <label for="vehicleNo">Non</label>
         </div>
       </div>

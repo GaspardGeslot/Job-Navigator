@@ -27,7 +27,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option
           v-for="item in sortedCourseStarts"
           :key="item.id"
-          :value="item.id"
+          :value="item.label"
         >
           {{ item.label }}
         </option>
@@ -50,7 +50,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option
           v-for="item in sortedStudyLevels"
           :key="item.id"
-          :value="item.id"
+          :value="item.label"
         >
           {{ item.label }}
         </option>
