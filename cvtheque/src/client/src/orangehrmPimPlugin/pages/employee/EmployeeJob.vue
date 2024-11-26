@@ -24,11 +24,7 @@
         {{ $t('pim.job_details') }}
       </oxd-text>
       <oxd-divider />
-      <oxd-form
-        v-if="jobsFetched.length"
-        :loading="isLoading"
-        @submit-valid="onSave"
-      >
+      <oxd-form :loading="isLoading" @submit-valid="onSave">
         <oxd-form-row
           v-for="(item, itemIndex) in sectors"
           :key="itemIndex"
@@ -311,7 +307,6 @@ export default {
       window.appGlobal.baseUrl,
       `/api/v2/pim/employees/${props.empNumber}/job-details`,
     );
-    console.log('empNumber', props.empNumber);
     const {jsDateFormat, userDateFormat} = useDateFormat();
     const {locale} = useLocale();
 
@@ -444,7 +439,6 @@ export default {
           this.errors.tooMuchOptions = true;
         }
       }
-      console.log('checkedJobs', this.checkedJobs);
     },
     onSave() {
       this.isLoading = true;
@@ -468,13 +462,6 @@ export default {
       // subunitId: this.job.subunitId?.id ?? null,
       // empStatusId: this.job.empStatusId?.id ?? null,
       // locationId: this.job.locationId?.id ?? null,
-      console.log('"JOBS HERE : "', this.checkedJobs);
-      console.log('data HERE : ', this.checkedJobs);
-      console.log('empNumber HERE:', this.empNumberInternal);
-      console.log(
-        "Données envoyées à l'API:",
-        JSON.parse(JSON.stringify(this.checkedJobs)),
-      );
       this.http
         // .request({
         //   method: 'PUT',
@@ -483,10 +470,9 @@ export default {
         .updateJobs(this.empNumberInternal, {
           jobs: this.checkedJobs,
         })
-        .then((response) => {
-          console.log('RESPONSE HERE ', response);
-          // this.updateJobModel(response);
-          /*
+        /*.then((response) => {
+           this.updateJobModel(response);
+          
         
           return this.http.request({
             method: 'PUT',
@@ -501,21 +487,19 @@ export default {
                 ? this.contract.newAttachment
                 : undefined,
             },
-          });*/
+          });
         })
         .catch((error) => {
-          if (error.response) {
-            console.error('Erreur API :', error.response);
-          } else {
-            console.error('Erreur réseau ou autre:', error);
-          }
         })
         // .then((response) => {
         //   if (response) {
         //     this.updateContractModel(response);
         //   }
         //   return this.$toast.updateSuccess();
-        // })
+        // })*/
+        .then(() => {
+          return this.$toast.saveSuccess();
+        })
         .then(() => {
           this.isLoading = false;
         });
@@ -571,16 +555,14 @@ export default {
       let tempJobsFetched = [];
       try {
         tempJobsFetched = JSON.parse(data.jobs);
-      } catch (error) {
-        console.error('Erreur lors du parsing de jobs:', error);
+      } catch {
+        tempJobsFetched = [];
       }
       this.jobsFetched = tempJobsFetched || [];
       let tempCheckedJobs = this.jobsFetched.flatMap(
         (sector) => sector.jobs || [],
       );
       this.checkedJobs.splice(0, this.checkedJobs.length, ...tempCheckedJobs);
-      console.log('jobsFetched', this.jobsFetched);
-      console.log('checkedJobs après splice', this.checkedJobs);
       this.job.joinedDate = data.joinedDate;
       this.job.jobTitleId = this.normalizedJobTitles.find(
         (item) => item.id === data.jobTitle?.id,
@@ -588,7 +570,7 @@ export default {
       this.job.jobCategoryId = this.jobCategories.find(
         (item) => item.id === data.jobCategory?.id,
       );
-      this.job.subunitId = this.subunits.find(
+      /*this.job.subunitId = this.subunits.find(
         (item) => item.id === data.subunit?.id,
       );
       this.job.empStatusId = this.employmentStatuses.find(
@@ -596,7 +578,7 @@ export default {
       );
       this.job.locationId = this.locations.find(
         (item) => item.id === data.location?.id,
-      );
+      );*/
       this.termination = data.employeeTerminationRecord;
     },
   },

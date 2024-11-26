@@ -50,30 +50,23 @@
             </oxd-grid-item>-->
           </oxd-grid>
         </oxd-form-row>
-
-        <oxd-divider />
-
         <oxd-form-actions>
           <oxd-button
             v-if="canUpdate"
-            class="orangehrm-right-space"
             :label="$t('performance.delete')"
             display-type="danger"
             @click="onClickDelete"
           />
           <oxd-button
             v-if="canUpdate"
-            class="orangehrm-right-space"
-            display-type="secondary"
+            class="orangehrm-left-space"
+            display-type="ghost"
             :label="$t('general.update')"
             @click="onClickEdit"
           />
-          <oxd-button
-            display-type="ghost"
-            :label="$t('general.reset')"
-            :disabled="!canUpdate"
-            @click="onClickReset"
-          />
+        </oxd-form-actions>
+        <oxd-divider />
+        <oxd-form-actions>
           <oxd-button
             class="orangehrm-left-space"
             display-type="secondary"
@@ -88,7 +81,7 @@
     <div class="orangehrm-paper-container">
       <div class="orangehrm-header-container">
         <oxd-button
-          :label="$t('general.add')"
+          :label="$t('recruitment.add_matching')"
           icon-name="plus"
           display-type="secondary"
           @click="onClickAdd"
@@ -108,12 +101,12 @@
         :total="total"
         @delete="onClickDeleteSelected"
       ></table-header>-->
-      <div class="orangehrm-container">
+      <div class="orangehrm-container" v-if="isSearching">
         <oxd-card-table
           v-model:selected="checkedItems"
           :headers="headers"
           :items="items?.data"
-          :selectable="true"
+          :selectable="false"
           :clickable="false"
           :loading="isLoading"
           row-decorator="oxd-table-decorator-card"
@@ -314,6 +307,7 @@ export default {
 
   data() {
     return {
+      isSearching: false,
       canUpdate: false,
       matchingSelected: null,
       isDateAscending: true,
@@ -537,9 +531,11 @@ export default {
       await this.execQuery();
     },
     async filterItems() {
+      this.isSearching = this.filters.matchingSelected;
       await this.execQuery();
     },
     onClickReset() {
+      this.isSearching = false;
       this.filters = {...defaultFilters};
       this.filterItems();
     },
