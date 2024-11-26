@@ -152,21 +152,21 @@ export default {
       validationSuivant: true,
     };
   },
-  computed:{
-    isFormValid(){
-      return(
+  computed: {
+    isFormValid() {
+      return (
         this.lastName !== '' &&
         this.firstName !== '' &&
         this.email !== '' &&
         this.phone !== '' &&
         this.checked === true
       );
-    }
+    },
   },
-  watch:{
-    isFormValid(newVal){
+  watch: {
+    isFormValid(newVal) {
       this.validationSuivant = !newVal;
-    }
+    },
   },
   methods: {
     validateEmail() {
