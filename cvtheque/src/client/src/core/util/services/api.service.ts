@@ -76,8 +76,6 @@ export class APIService {
     const headers = {
       Accept: 'application/json',
     };
-    console.log('Données prêtes pour POST :', data);
-    console.log('apiSection :', this._apiSection);
     return this._http.post(this._apiSection, data, {headers});
   }
 
@@ -86,15 +84,9 @@ export class APIService {
     const headers = {
       'Content-Type': 'application/json',
     };
-    console.log('on passe serviceAPI');
-    console.log('data ', data);
-    console.log('id ', id);
     if (!id) {
-      console.log('this._apiSection', this._apiSection);
       return this._http.put(`${this._apiSection}`, data, {headers});
     }
-    console.log('ça deconne ici');
-    console.log('this._apiSection', this._apiSection);
     return this._http.put(`${this._apiSection}/${id}`, data, {headers});
   }
 
@@ -102,14 +94,10 @@ export class APIService {
     const headers = {
       'Content-Type': 'application/json',
     };
-    console.log('this._apiSection', this._apiSection);
-    console.log('data ', data);
-    console.log('id ', id);
     return this._http.put(`${this._apiSection}`, data, {headers});
   }
 
   delete(id: number): Promise<AxiosResponse> {
-    console.log('delete');
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -118,9 +106,6 @@ export class APIService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deleteAll(data?: any): Promise<AxiosResponse> {
-    console.log('deleteAll');
-    console.log('data here ', data);
-    console.log('this._apiSection', this._apiSection);
     const headers = {
       'Content-Type': 'application/json',
     };
