@@ -99,7 +99,7 @@ class CandidatureController extends AbstractVueController implements PublicContr
     {
         $leadData = $request->request->all();
 
-        error_log('$leadData ' . json_encode($leadData));
+        // error_log('$leadData ' . json_encode($leadData));
 
         $keyMapping = [
             'BTPcheckedEXP' => 'specificProfessionalExperience',
@@ -191,7 +191,7 @@ class CandidatureController extends AbstractVueController implements PublicContr
 
         // Encode les données du lead en JSON
         $leadDataJson = json_encode($leadData);
-        error_log('$leadDataJson ' . $leadDataJson);
+        // error_log('$leadDataJson ' . $leadDataJson);
         // echo '<pre>';
         // print_r('Lead Data post json_encode:');
         // print_r($leadDataJson);

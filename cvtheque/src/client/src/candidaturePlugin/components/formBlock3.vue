@@ -50,7 +50,7 @@
           </div>
       -->
       <h3 class="formTitle" style="margin-top: 1rem">Permis et véhicule</h3>
-      <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant" />
+      <SubmitComponent :is-disabled="validationSuivant" @go-back="goBack" />
       <p v-if="errorMessage" id="alert-msg04" class="alert-msg">
         {{ errorMessage }}
       </p>

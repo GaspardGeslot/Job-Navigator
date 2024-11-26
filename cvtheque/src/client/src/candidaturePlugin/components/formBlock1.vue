@@ -135,11 +135,6 @@ export default {
       },
     };
   },
-  watch: {
-    isFormValid(newVal) {
-      this.validationSuivant = !newVal;
-    },
-  },
   computed: {
     // Propriété calculée pour vérifier si le formulaire est valide
     isFormValid() {
@@ -149,6 +144,11 @@ export default {
         this.courseStart !== '' &&
         this.studyLevel !== ''
       );
+    },
+  },
+  watch: {
+    isFormValid(newVal) {
+      this.validationSuivant = !newVal;
     },
   },
   created() {

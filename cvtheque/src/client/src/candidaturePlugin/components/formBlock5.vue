@@ -4,7 +4,7 @@
       <h3 class="formTitle" style="margin-top: 1rem">
         Facultatif (mais apprécié)
       </h3>
-      <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant" />
+      <SubmitComponent :is-disabled="validationSuivant" @go-back="goBack" />
       <p class="CVText">
         Qu'est-ce qui vous plairait dans le fait de travailler dans la
         construction ?

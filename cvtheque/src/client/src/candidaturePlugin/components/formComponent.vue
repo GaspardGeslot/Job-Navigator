@@ -190,16 +190,17 @@ export default {
         sessionId: sessionId.value,
       };
 
-      console.log('data from createSession', data);
+      //console.log('data from createSession', data);
 
       try {
         const http = new APIService(
           window.appGlobal.baseUrl,
           '/events/push/form-session',
         );
-        const response = await http.create(data);
-        console.log('Session created:', sessionId.value);
-        console.log('Response data:', response);
+        await http.create(data);
+        // const response = await http.create(data);
+        // console.log('Session created:', sessionId.value);
+        // console.log('Response data:', response);
       } catch (error) {
         console.error('Error creating session:', error);
       }
@@ -208,7 +209,7 @@ export default {
     const updateHighestStep = async () => {
       if (currentStep.value > highestStep.value) {
         highestStep.value = currentStep.value;
-        console.log('highestStep', highestStep.value);
+        //console.log('highestStep', highestStep.value);
 
         const data = {
           sessionId: sessionId.value,
@@ -220,12 +221,13 @@ export default {
             window.appGlobal.baseUrl,
             '/events/push/form-session',
           );
-          console.log('Données envoyées pour la mise à jour:', {
-            sessionId: sessionId.value,
-            step: highestStep.value,
-          });
-          const response = await http.update(sessionId.value, data);
-          console.log('Session updated:', response);
+          // console.log('Données envoyées pour la mise à jour:', {
+          //   sessionId: sessionId.value,
+          //   step: highestStep.value,
+          // });
+          await http.update(sessionId.value, data);
+          // const response = await http.update(sessionId.value, data);
+          // console.log('Session updated:', response);
         } catch (error) {
           console.error('Error updating session:', error);
         }
@@ -257,8 +259,8 @@ export default {
         ? formImg.value.getBoundingClientRect().height
         : 0;
 
-      console.log('activeForm height:', activeFormHeight);
-      console.log('image height:', imageHeight);
+      // console.log('activeForm height:', activeFormHeight);
+      // console.log('image height:', imageHeight);
       if (scrollContainer.value && formImg.value && imageHeight != 0) {
         scrollContainer.value.style.maxHeight = `${imageHeight}px`;
         scrollContainer.value.style.height = `${imageHeight}px`;
@@ -336,17 +338,18 @@ export default {
 
         if (formData.has('password')) {
           try {
-            console.log('password here', formData.get('password'));
+            //console.log('password here', formData.get('password'));
             const http = new APIService(
               window.appGlobal.baseUrl,
               '/candidature/account',
             );
-            console.log('FormData content before submission:', [
-              ...formData.entries(),
-            ]);
+            // console.log('FormData content before submission:', [
+            //   ...formData.entries(),
+            // ]);
 
-            const response = await http.create(formData);
-            console.log('RESPONSE HERE !!!! ', response);
+            await http.create(formData);
+            //const response = await http.create(formData);
+            //console.log('RESPONSE HERE !!!! ', response);
 
             // Si la création de compte réussit, passez à la création de lead
             await createLead(formData);
@@ -360,7 +363,7 @@ export default {
             return;
           }
         } else {
-          console.log('no need to create account');
+          //console.log('no need to create account');
           // Si aucun mot de passe n'est présent, passez directement à la création de lead
           await createLead(formData);
         }
@@ -381,16 +384,16 @@ export default {
         window.appGlobal.baseUrl,
         '/candidature/lead',
       );
-      console.log('FormData content before submission:', [
-        ...formData.entries(),
-      ]);
+      // console.log('FormData content before submission:', [
+      //   ...formData.entries(),
+      // ]);
 
       try {
         isLoading.value = true;
         const leadResponse = await leadHttp.create(formData);
-        console.log('Lead RESPONSE HERE !!!! ', leadResponse);
+        //console.log('Lead RESPONSE HERE !!!! ', leadResponse);
         matchResponse.value = leadResponse.data.MatchResponse;
-        console.log('matchResponse.value in formComp', matchResponse.value);
+        //console.log('matchResponse.value in formComp', matchResponse.value);
         isLoading.value = false;
       } catch (error) {
         console.error(
@@ -401,9 +404,9 @@ export default {
     }
 
     const previousStep = () => {
-      console.log('currentStep before = ', currentStep);
+      //console.log('currentStep before = ', currentStep);
       currentStep.value--;
-      console.log('currentStep after = ', currentStep);
+      //console.log('currentStep after = ', currentStep);
       nextTick(() => {
         setTimeout(() => {
           checkScroll();

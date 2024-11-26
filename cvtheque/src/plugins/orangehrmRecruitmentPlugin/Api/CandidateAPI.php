@@ -353,7 +353,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_STATUS_JOB
         );
 
-        error_log($statusJob);
+        // error_log($statusJob);
 
         $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $statusJob);
         $candidates = array();
