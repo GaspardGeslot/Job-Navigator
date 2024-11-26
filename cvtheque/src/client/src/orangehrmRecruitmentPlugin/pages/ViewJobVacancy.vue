@@ -30,7 +30,7 @@
                 :options="matchings"
               />
             </oxd-grid-item>
-            
+
             <!--<oxd-grid-item>
               <vacancy-dropdown
                 v-model="filters.vacancyId"
@@ -59,7 +59,7 @@
                 :options="candidatureStatuses"
               />
             </oxd-grid-item>
-            
+
             <!--<oxd-grid-item>
               <vacancy-dropdown
                 v-model="filters.vacancyId"
@@ -79,7 +79,6 @@
               />
             </oxd-grid-item>-->
           </oxd-grid>
-          
         </oxd-form-row>
 
         <oxd-divider />

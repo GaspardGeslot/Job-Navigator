@@ -3,7 +3,7 @@ import { inject } from 'vue';
   <div class="formBlockLayout">
     <form class="formBlock6" @submit.prevent="onSubmit">
       <h3 class="formTitle">Pour finir</h3>
-      <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant"/>
+      <SubmitComponent @go-back="goBack" :is-disabled="validationSuivant" />
       <p v-if="errors.incompleteForm" id="alert-msg05" class="alert-msg">
         L'évaluation est incomplète. Veuillez remplir tous les champs.
       </p>
@@ -149,7 +149,7 @@ export default {
         phoneNumber: false,
         checked: false,
       },
-      validationSuivant:false,
+      validationSuivant: false,
     };
   },
   methods: {
