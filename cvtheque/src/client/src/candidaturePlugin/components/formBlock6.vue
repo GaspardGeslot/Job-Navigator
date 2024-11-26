@@ -149,8 +149,24 @@ export default {
         phoneNumber: false,
         checked: false,
       },
-      validationSuivant: false,
+      validationSuivant: true,
     };
+  },
+  computed:{
+    isFormValid(){
+      return(
+        this.lastName !== '' &&
+        this.firstName !== '' &&
+        this.email !== '' &&
+        this.phone !== '' &&
+        this.checked === true
+      );
+    }
+  },
+  watch:{
+    isFormValid(newVal){
+      this.validationSuivant = !newVal;
+    }
   },
   methods: {
     validateEmail() {
