@@ -33,7 +33,9 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         </option>
       </select>
       <select v-model="mobility">
-        <option class="placeholder-option" disabled value="">Ma mobilité géographique</option>
+        <option class="placeholder-option" disabled value="">
+          Ma mobilité géographique
+        </option>
         <option>10 kms</option>
         <option>30 kms</option>
         <option>50 kms</option>
@@ -135,7 +137,7 @@ export default {
   },
   watch: {
     isFormValid(newVal) {
-      this.validationSuivant = !newVal; 
+      this.validationSuivant = !newVal;
     },
   },
   computed: {
