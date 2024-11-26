@@ -329,10 +329,14 @@
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
 <<<<<<< HEAD
+<<<<<<< HEAD
             'reference' => '940ec73d1e065ba98fc9cbfdeb9e8602bd421a26',
 =======
             'reference' => 'e075aa39026f5a3ee21d2ffdfee9f7fc3da4364c',
 >>>>>>> cb40402d (formCandidature + Besoin recrutement)
+=======
+            'reference' => 'e075aa39026f5a3ee21d2ffdfee9f7fc3da4364c',
+>>>>>>> 893bb621b545fa2bac1d2370bc3b5c9f9079f0c0
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
