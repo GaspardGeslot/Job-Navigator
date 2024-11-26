@@ -157,7 +157,7 @@ export default {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {'flex-basis': '10em'},
+          style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellConfig: {
             delete: {

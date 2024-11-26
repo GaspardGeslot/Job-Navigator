@@ -95,7 +95,7 @@
         v-model:selected="checkedItems"
         :headers="headers"
         :items="items?.skills"
-        :selectable="true"
+        :selectable="false"
         :disabled="isDisabled"
         :clickable="false"
         :loading="isLoading"
@@ -161,17 +161,12 @@ export default {
   },
 
   setup(props) {
-    console.log('infoOptions', props.infoOptions.professionalExperiences);
     const formattedOptions = computed(() =>
       props.infoOptions.professionalExperiences.map((option, index) => ({
         id: index, // Identifiant unique pour chaque option
         label: option, // Label affiché dans la liste déroulante
       })),
     );
-    const submit = () => {
-      console.log('Selected BTP Experience:', BTPSelectedExperience.value);
-      console.log('Selected Experience:', defaultSelectedExperience.value);
-    };
 
     const defaultSelectedExperience = ref(null);
     const BTPSelectedExperience = ref(null);
@@ -183,7 +178,6 @@ export default {
     // const {locale} = useLocale();
 
     const membershipNormalizer = (data) => {
-      console.log('membershipNormalizer', data);
       return {
         professionalExperience: data[0]?.professionalExperience ?? null,
         specificProfessionalExperience:
@@ -218,11 +212,7 @@ export default {
     watch(response, (newResponse) => {
       if (newResponse?.data) {
         items.value = newResponse.data;
-        console.log('Updated items:', items.value);
         const findOption = (value) => {
-          console.log('formattedOptions.value', formattedOptions.value);
-          console.log('formattedOptions', formattedOptions);
-          console.log('value', value);
           const foundOption =
             formattedOptions.value.find((option) => option.label === value) ||
             null;
@@ -235,17 +225,6 @@ export default {
         BTPSelectedExperience.value = findOption(
           items.value.specificProfessionalExperience,
         );
-        console.log(
-          'defaultSelectedExperience:',
-          defaultSelectedExperience.value,
-        );
-        console.log('BTPSelectedExperience:', BTPSelectedExperience.value);
-        console.log(
-          'specificProfessionalExperience:',
-          items.value.specificProfessionalExperience,
-        );
-      } else {
-        console.error('Invalid response structure:', newResponse);
       }
     });
 
@@ -262,7 +241,7 @@ export default {
       formattedOptions,
       defaultSelectedExperience,
       BTPSelectedExperience,
-      submit,
+      //submit,
     };
   },
 
@@ -282,13 +261,13 @@ export default {
         {
           name: 'description',
           title: this.$t('Description'),
-          style: {flex: 1},
+          style: {flex: 2},
         },
         {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 1},
+          style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellConfig: {
             delete: {
@@ -325,27 +304,14 @@ export default {
       this.isLoading = true;
       this.http
         .update('', {
-          professionalExperience: this.defaultSelectedExperience.label,
-          specificProfessionalExperience: this.BTPSelectedExperience.label,
+          professionalExperience: this.defaultSelectedExperience?.label,
+          specificProfessionalExperience: this.BTPSelectedExperience?.label,
         })
         .then(() => {
-          console.log('it works');
           return this.$toast.saveSuccess();
         })
         .then(() => {
           this.isLoading = false;
-        })
-        .catch((error) => {
-          if (error.response) {
-            console.error('Erreur lors de la requête:', error.response.data);
-          } else if (error.request) {
-            console.error('Aucune réponse du serveur:', error.request);
-          } else {
-            console.error(
-              'Erreur lors de la configuration de la requête:',
-              error.message || 'Erreur inconnue',
-            );
-          }
         });
     },
     onClickDeleteSelected() {
