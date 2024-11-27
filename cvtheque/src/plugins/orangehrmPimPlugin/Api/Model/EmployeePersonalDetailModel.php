@@ -75,6 +75,7 @@ class EmployeePersonalDetailModel implements Normalizable
         $showSin = $this->getConfigService()->showPimSIN();
         $this->setEntity($employee);
         $filter = [
+            ['getDecorator', 'getBirthday'],
             'empNumber',
             'profileId',
             'courseStart',
@@ -100,13 +101,13 @@ class EmployeePersonalDetailModel implements Normalizable
             ['getDecorator', 'getDrivingLicenseExpiredDate'],
             'gender',
             'maritalStatus',
-            ['getDecorator', 'getBirthday'],
             ['getEmployeeTerminationRecord', 'getId'],
             ['getNationality', 'getId'],
             ['getNationality', 'getName'],
         ];
 
         $attributeNames = [
+            'birthday',
             'empNumber',
             'profileId',
             'courseStart',
@@ -131,7 +132,6 @@ class EmployeePersonalDetailModel implements Normalizable
             'drivingLicenseExpiredDate',
             'gender',
             'maritalStatus',
-            'birthday',
             'terminationId',
             'roles',
             ['nationality', 'id'],

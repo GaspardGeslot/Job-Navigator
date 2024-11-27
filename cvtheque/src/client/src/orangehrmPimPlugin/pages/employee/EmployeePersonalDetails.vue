@@ -657,6 +657,7 @@ export default {
 
     updateModel(response) {
       const {data} = response.data;
+      console.log('Data : ', data);
       this.employee = {...employeeModel, ...data};
       if (data.drivingLicense && data.drivingLicense != '') {
         try {

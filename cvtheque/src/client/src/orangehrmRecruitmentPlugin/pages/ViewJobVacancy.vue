@@ -50,7 +50,11 @@
               />
             </oxd-grid-item>-->
           </oxd-grid>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+          <oxd-grid
+            :cols="2"
+            class="orangehrm-full-width-grid"
+            v-if="canUpdate"
+          >
             <oxd-grid-item>
               <oxd-input-field
                 v-model="filters.statusJobSelected"

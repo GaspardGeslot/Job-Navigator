@@ -768,7 +768,7 @@ class Employee
         $this->setCourseStart($profileInfo['courseStart'] ?? '');
         $this->setFirstName($profileInfo['firstName'] ?? '');
         $this->setLastName($profileInfo['lastName'] ?? '');
-        $this->setBirthday(array_key_exists('birthdate', $profileInfo) && $profileInfo['birthDate'] != null ? new \DateTime($profileInfo['birthDate']) : null);
+        $this->setBirthday(array_key_exists('birthDate', $profileInfo) && $profileInfo['birthDate'] != null ? new \DateTime($profileInfo['birthDate']) : null);
     }
 
     /**
