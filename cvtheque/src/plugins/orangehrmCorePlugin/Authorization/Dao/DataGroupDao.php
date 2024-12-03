@@ -81,7 +81,7 @@ class DataGroupDao extends BaseDao
                 $roleNames[] = $role;
             }
         }
-
+        
         $q = $this->createQueryBuilder(DataGroupPermission::class, 'dgp');
         $q->leftJoin('dgp.dataGroup', 'dg');
         $q->leftJoin('dgp.userRole', 'ur');

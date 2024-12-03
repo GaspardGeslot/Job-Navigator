@@ -92,6 +92,14 @@
     v-if="qrPayload && (companyPhoneNumberContact || companyEmailContact)"
     :value="qrPayload"
   ></qr-code>
+  <oxd-divider v-show="companyEmailContact"></oxd-divider>
+  <div style="text-align: center">
+    <oxd-button
+      display-type="secondary"
+      :label="$t('general.show_more')"
+      @click="$emit('see-details', false)"
+    />
+  </div>
 </template>
 
 <script>
@@ -159,6 +167,7 @@ export default {
   beforeMount() {
     this.generateQrPayload();
   },
+  emits: ['see-details'],
   methods: {
     openClientTelephone() {
       window.location.href = 'tel:' + this.companyPhoneNumberContact;

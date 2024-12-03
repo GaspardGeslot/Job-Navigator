@@ -791,7 +791,7 @@ class Candidate
         $this->candidatureStatus = $candidatureStatus;
     }
 
-/**
+    /**
      * @return int|null
      */
     public function getMatchingId(): ?int

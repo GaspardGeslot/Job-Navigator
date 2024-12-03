@@ -25,8 +25,12 @@
       </oxd-text>
       <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
-        <oxd-form-row v-if="isCandidate">
-          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+        <oxd-form-row>
+          <oxd-grid
+            v-if="isCandidate"
+            :cols="1"
+            class="orangehrm-full-width-grid"
+          >
             <oxd-grid-item>
               <full-name-input
                 v-model:firstName="employee.firstName"
@@ -35,14 +39,13 @@
               />
             </oxd-grid-item>
           </oxd-grid>
-        </oxd-form-row>
-        <oxd-form-row v-else>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+          <oxd-grid v-else :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="employee.companyName"
                 :label="$t('company.name')"
-                :rule="rules.companyName"
+                :rules="rules.companyName"
+                required
               />
             </oxd-grid-item>
             <oxd-grid-item>
@@ -80,12 +83,8 @@
         </oxd-form-row>
 
         <oxd-divider />
-        <oxd-form-row>
-          <oxd-grid
-            v-if="isCandidate"
-            :cols="3"
-            class="orangehrm-full-width-grid"
-          >
+        <oxd-form-row v-if="isCandidate">
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="employee.profileId"
@@ -95,11 +94,7 @@
               />
             </oxd-grid-item>
           </oxd-grid>
-          <oxd-grid
-            v-if="isCandidate"
-            :cols="2"
-            class="orangehrm-full-width-grid"
-          >
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <file-upload-input
                 v-model:newFile="attachment.newAttachment"
@@ -107,17 +102,19 @@
                 :label="$t('recruitment.resume')"
                 :button-label="$t('general.browse')"
                 :file="attachment.oldAttachment"
-                :rules="rules.resume"
+                :rules="rules.attachment"
                 :hint="
                   $t('general.accept_custom_format_file_up_to_n_mb', {
                     count: formattedFileSize,
                   })
                 "
-                :url="getResumeUrl"
+                :url="getAttachmentUrl"
               />
             </oxd-grid-item>
           </oxd-grid>
-          <oxd-grid v-else :cols="3" class="orangehrm-full-width-grid">
+        </oxd-form-row>
+        <oxd-form-row v-else>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="employee.companySiret"
@@ -132,6 +129,24 @@
                 :label="$t('company.naf_code')"
                 type="select"
                 :options="nafCodes"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <file-upload-input
+                v-model:newFile="attachment.newAttachment"
+                v-model:method="attachment.method"
+                :label="$t('company.company_presentation_file')"
+                :button-label="$t('general.browse')"
+                :file="attachment.oldAttachment"
+                :rules="rules.attachment"
+                :hint="
+                  $t('general.accept_custom_format_file_up_to_n_mb', {
+                    count: formattedFileSize,
+                  })
+                "
+                :url="getAttachmentUrl"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -434,13 +449,14 @@ const employeeModel = {
   nickname: '',
   smoker: '',
   militaryService: '',
-  companyName: '',
+  companyName: null,
   companySiret: '',
   companyWebsite: '',
   companyPresentation: '',
   companyWorkforce: [],
   companyNafCode: [],
   resume: null,
+  attachment: null,
 };
 
 const EmployeeAttachmentModel = {
@@ -545,7 +561,7 @@ export default {
         birthday: [validDateFormat(this.userDateFormat)],
         website: [validWebsiteFormat()],
         drivingLicenseExpiredDate: [validDateFormat(this.userDateFormat)],
-        resume: [
+        attachment: [
           maxFileSize(this.maxFileSize),
           validFileTypes(this.allowedFileTypes),
         ],
@@ -568,7 +584,6 @@ export default {
     this.http
       .getAll()
       .then((response) => {
-        // console.log('response:', response);
         this.updateModel(response);
         return this.http.request({
           method: 'GET',
@@ -600,8 +615,6 @@ export default {
 
   methods: {
     onSave() {
-      // console.log('motivation on save', this.employee.motivation);
-      // console.log('type of motivation', typeof this.employee.motivation);
       this.isLoading = true;
       this.http
         .request({
@@ -621,7 +634,9 @@ export default {
             ssnNumber: this.showSsnField ? this.employee.ssnNumber : undefined,
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
             need: this.employee.need?.label,
-            drivingLicense: JSON.stringify(this.employee.checkedPermits),
+            drivingLicense: this.employee.checkedPermits
+              ? JSON.stringify(this.employee.checkedPermits)
+              : undefined,
             motivation: this.employee.motivation,
             salary: this.employee.salary,
             studyLevel: this.employee.studyLevel?.label,
@@ -657,13 +672,11 @@ export default {
 
     updateModel(response) {
       const {data} = response.data;
-      console.log('Data : ', data);
       this.employee = {...employeeModel, ...data};
       if (data.drivingLicense && data.drivingLicense != '') {
         try {
           this.employee.checkedPermits = JSON.parse(data.drivingLicense);
         } catch (e) {
-          console.error('Invalid JSON in drivingLicense:', data.drivingLicense);
           this.employee.checkedPermits = [];
         }
       } else {
@@ -715,11 +728,33 @@ export default {
         this.employee.companyNafCode = this.nafCodes.find(
           (item) => item.label === data.companyNafCode,
         );
+        if (this.employee.attachment && this.employee.attachment != -1) {
+          this.http
+            .request({
+              method: 'GET',
+              url: `/api/v2/pim/attachments/` + this.employee.attachment,
+            })
+            .then(({data: {data}}) => {
+              this.attachment.id = data.id;
+              this.attachment.newAttachment = null;
+              this.attachment.oldAttachment = {
+                id: data.id,
+                filename: data.attachment.fileName,
+                fileType: data.attachment.fileType,
+                fileSize: data.attachment.fileSize,
+              };
+              this.attachment.method = 'keepCurrent';
+            });
+        } else {
+          this.attachment = {...EmployeeAttachmentModel};
+        }
       }
     },
-    getResumeUrl() {
+    getAttachmentUrl() {
       return urlFor('/pim/viewAttachment/attachId/{attachId}', {
-        attachId: this.employee.resume,
+        attachId: this.isCandidate
+          ? this.employee.resume
+          : this.employee.attachment,
       });
     },
   },

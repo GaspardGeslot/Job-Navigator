@@ -18,6 +18,9 @@
 
 namespace OrangeHRM\Authentication\Controller;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use OrangeHRM\Authentication\Auth\AuthProviderChain;
 use OrangeHRM\Authentication\Auth\User as AuthUser;
 use OrangeHRM\Authentication\Controller\Traits\SessionHandlingTrait;
@@ -45,8 +48,8 @@ class ValidateCompanyController extends AbstractController implements PublicCont
     use CsrfTokenManagerTrait;
     use SessionHandlingTrait;
 
-    public const PARAMETER_USERNAME = 'username';
-    public const PARAMETER_PASSWORD = 'password';
+    public const PARAMETER_SIRET = 'siret';
+    public const PARAMETER_ADHERENT_CODE = 'adherentCode';
 
     /**
      * @var null|LoginService
@@ -82,15 +85,29 @@ class ValidateCompanyController extends AbstractController implements PublicCont
 
     public function handle(Request $request): RedirectResponse
     {
-        $username = $request->request->get(self::PARAMETER_USERNAME, '');
-        $password = $request->request->get(self::PARAMETER_PASSWORD, '');
-        $credentials = new UserCredential($username, $password, 'Interviewer');
+        $siret = $request->request->get(self::PARAMETER_SIRET, '');
+        $adherentCode = $request->request->get(self::PARAMETER_ADHERENT_CODE, '');
 
-        /** @var UrlGenerator $urlGenerator */
-        $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $loginUrl = $urlGenerator->generate('auth_login_company', [], UrlGenerator::ABSOLUTE_URL);
+        try{
+            /** @var UrlGenerator $urlGenerator */
+            $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
+            $loginUrl = $urlGenerator->generate('auth_login_company', [], UrlGenerator::ABSOLUTE_URL);
+            
+            $clientToken = $this->retrieveClientToken();    
+            $isAuthorizedByClient = $this->checkIsAuthorizedByClient($siret, $adherentCode, $clientToken);
+            if (!$isAuthorizedByClient) {
+                $this->getAuthUser()->addFlash(
+                    AuthUser::FLASH_LOGIN_ERROR, 
+                    [
+                        'error' => AuthenticationException::UNEXPECT_ERROR,
+                        'message' => "Votre entreprise n'est pas identifiée comme adhérente à Constructys. Veuillez contacter votre conseiller Constructys.",
+                    ]
+                );
+                return new RedirectResponse($loginUrl);
+            }
 
-        try {
+            $credentials = new UserCredential($siret, $adherentCode, 'Interviewer');
+
             $token = $request->request->get('_token');
             if (!$this->getCsrfTokenManager()->isValid('login', $token)) {
                 throw AuthenticationException::invalidCsrfToken();
@@ -98,7 +115,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticate(new AuthParams($credentials));
+            $token = $authProviderChain->authenticateCompany(new AuthParams($credentials));
             $success = !is_null($token);
 
             if (!$success) {
@@ -108,18 +125,25 @@ class ValidateCompanyController extends AbstractController implements PublicCont
             $this->getAuthUser()->setIsCandidate(false);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
+        } catch (ClientException $e) {
+            $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, 
+            [
+                'error' => AuthenticationException::UNEXPECT_ERROR,
+                'message' => $e->getResponse()->getBody()->getContents(),
+            ]);
+            return new RedirectResponse($loginUrl);
         } catch (AuthenticationException $e) {
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());
             if ($e instanceof RedirectableException) {
                 return new RedirectResponse($e->getRedirectUrl());
             }
             return new RedirectResponse($loginUrl);
-        } catch (Throwable $e) {
+        } catch (Throwable | ServerException $e) {
             $this->getAuthUser()->addFlash(
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred',
+                    'message' => "Une erreur inattendue s'est produite. Veuillez contacter votre conseiller Constructys.",
                 ]
             );
             return new RedirectResponse($loginUrl);
@@ -132,5 +156,43 @@ class ValidateCompanyController extends AbstractController implements PublicCont
 
         $homePagePath = $this->getHomePageService()->getHomePagePath();
         return $this->redirect($homePagePath);
+    }
+
+    private function retrieveClientToken(): string
+    {
+        $client = new Client();
+        $clientToken = getenv('CONSTUCTYS_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('CONSTUCTYS_URL');
+
+        try {
+            $response = $client->request('POST', "{$clientBaseUrl}/api/token", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true)['token'];
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
+    }
+
+    private function checkIsAuthorizedByClient(string $siret, string $adherentCode, string $token): bool
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('CONSTUCTYS_URL');
+
+        $response = $client->request('POST', "{$clientBaseUrl}/api/checkAdhStatus", [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'siret' => $siret,
+                'sentrep' => (int) $adherentCode,
+            ]
+        ]);
+
+        return filter_var($response->getBody()->getContents(), FILTER_VALIDATE_BOOLEAN);
     }
 }

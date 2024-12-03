@@ -29,14 +29,6 @@
           :message="error?.message || ''"
           type="error"
         ></oxd-alert>
-        <oxd-sheet
-          v-if="isDemoMode"
-          type="gray-lighten-2"
-          class="orangehrm-demo-credentials"
-        >
-          <oxd-text tag="p">Username : Admin</oxd-text>
-          <oxd-text tag="p">Password : admin123</oxd-text>
-        </oxd-sheet>
       </div>
       <oxd-form
         ref="loginForm"
@@ -48,27 +40,35 @@
 
         <oxd-form-row>
           <oxd-input-field
-            v-model="username"
-            name="username"
+            v-model="siret"
+            name="siret"
             :label="$t('auth.siret')"
             label-icon="person"
             :placeholder="$t('auth.siret')"
-            :rules="rules.username"
+            :rules="rules.siret"
             autofocus
           />
         </oxd-form-row>
 
         <oxd-form-row>
           <oxd-input-field
-            v-model="password"
-            name="password"
+            v-model="adherentCode"
+            name="adherentCode"
             :label="$t('auth.adherent_code_constructys')"
             label-icon="key"
             :placeholder="$t('auth.adherent_code_constructys')"
             type="password"
-            :rules="rules.password"
+            :rules="rules.adherentCode"
           />
         </oxd-form-row>
+
+        <div class="orangehrm-login-error">
+          <oxd-alert
+            :show="error_adherent_code"
+            :message="$t('Le code adhérent doit être un nombre')"
+            type="error"
+          ></oxd-alert>
+        </div>
 
         <oxd-form-actions class="orangehrm-login-action">
           <oxd-button
@@ -78,14 +78,6 @@
             type="submit"
           />
         </oxd-form-actions>
-        <!--<div class="orangehrm-login-forgot">
-            <oxd-text
-              class="orangehrm-login-forgot-header"
-              @click="navigateUrlForgotPassword"
-            >
-              {{ $t('auth.forgot_password') }} ?
-            </oxd-text>
-          </div>-->
         <div class="orangehrm-login-forgot">
           <oxd-text
             class="orangehrm-login-forgot-header"
@@ -105,7 +97,7 @@
 
 <script>
 import {urlFor} from '@ohrm/core/util/helper/url';
-import {OxdAlert, OxdSheet} from '@ohrm/oxd';
+import {OxdAlert} from '@ohrm/oxd';
 import {required} from '@ohrm/core/util/validation/rules';
 import {navigate, reloadPage} from '@ohrm/core/util/helper/navigation';
 import LoginLayout from '@/orangehrmAuthenticationPlugin/components/LoginLayout.vue';
@@ -114,7 +106,7 @@ import SocialMediaAuth from '@/orangehrmAuthenticationPlugin/components/SocialMe
 export default {
   components: {
     'oxd-alert': OxdAlert,
-    'oxd-sheet': OxdSheet,
+    //'oxd-sheet': OxdSheet,
     'login-layout': LoginLayout,
     'social-media-auth': SocialMediaAuth,
   },
@@ -144,12 +136,13 @@ export default {
 
   data() {
     return {
-      username: '',
-      password: '',
+      siret: '',
+      adherentCode: '',
       rules: {
-        username: [required],
-        password: [required],
+        siret: [required],
+        adherentCode: [required],
       },
+      error_adherent_code: false,
       submitted: false,
     };
   },
@@ -168,13 +161,16 @@ export default {
 
   methods: {
     onSubmit() {
-      if (!this.submitted) {
+      if (isNaN(this.adherentCode)) {
+        this.error_adherent_code = true;
+      } else if (!this.submitted) {
+        this.error_adherent_code = false;
         this.submitted = true;
         this.$refs.loginForm.$el.submit();
       }
     },
-    navigateUrlForgotPassword() {
-      navigate('/auth/requestPasswordResetCode');
+    navigateUrlForgotadherentCode() {
+      navigate('/auth/requestadherentCodeResetCode');
     },
     navigateUrlConnexion() {
       navigate('/auth/login');
