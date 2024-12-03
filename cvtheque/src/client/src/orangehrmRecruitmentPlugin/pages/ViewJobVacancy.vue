@@ -121,9 +121,6 @@
           @click="onClickAdd"
         />
         <div class="boutonTriBloc">
-          <!-- <button class="boutonTri" @click="sortByName">
-            Trier par nom métier ⇅
-          </button> -->
           <button class="boutonTri" @click="sortByDate">
             Trier par date ⇅
           </button>
@@ -163,32 +160,35 @@
     </div>
     <br />
     <div class="orangehrm-paper-container" v-if="isSearchingNoStatut">
-      <oxd-table-filter :filter-title="$t('Découvrez les autres candidats sur ce métier')"></oxd-table-filter>
-      <div class="boutonTriBloc2">
+      <oxd-table-filter
+        :filter-title="$t('Découvrez les autres candidats sur ce métier')"
+      >
+        <div class="boutonTriBloc2">
           <button class="boutonTri" @click="sortByDate2">
             Trier par date ⇅
           </button>
         </div>
-      <div class="orangehrm-container" v-if="isSearching">
-        <oxd-card-table
-          v-model:selected="checkedItems"
-          :headers="headers2"
-          :items="otherLeads"
-          :selectable="false"
-          :clickable="false"
-          :loading="isLoading"
-          row-decorator="oxd-table-decorator-card"
-        />
+        <div class="orangehrm-container" v-if="isSearching">
+          <oxd-card-table
+            v-model:selected="checkedItems"
+            :headers="headers2"
+            :items="otherLeads"
+            :selectable="false"
+            :clickable="false"
+            :loading="isLoading"
+            row-decorator="oxd-table-decorator-card"
+          />
 
-        <!--class="orangehrm-vacancy-list"-->
-      </div>
-      <div class="orangehrm-bottom-container">
-        <oxd-pagination
-          v-if="showPaginator"
-          v-model:current="currentPage"
-          :length="pages"
-        />
-      </div>
+          <!--class="orangehrm-vacancy-list"-->
+        </div>
+        <div class="orangehrm-bottom-container">
+          <oxd-pagination
+            v-if="showPaginator"
+            v-model:current="currentPage"
+            :length="pages"
+          />
+        </div>
+      </oxd-table-filter>
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
   </div>
@@ -629,47 +629,43 @@ export default {
       });
     },
 
-    async getOtherLeads(){
-      new APIService(
-          window.appGlobal.baseUrl,
-          '/api/v2/recruitment/candidates',
-        )
-          .getAll({
-            matchingId: this.filters.matchingSelected?.id,
-            vacancyId: this.filters.vacancyId?.id,
-            jobTitleId: this.filters.jobTitleId?.id,
-            hiringManagerId: this.filters.hiringManagerId?.id,
-            status: this.filters.status?.id,
-            sortField: this.sortField,
-            sortOrder: this.sortOrder,
-            model: 'detailed',
-            statusJob: this.filters.statusJobSelected?.label,
-            otherLeads: 'entreprise',
-          })
-          .then(({data: {data}}) => {
-            this.otherLeads = data.map((item) => {
-              return {
-                id: item.leadId,
-                jobTitle: item.jobTitle,
-                candidate: `${item.firstName} ${item.middleName || ''} ${
-                  item.lastName
-                }`,
-                dateOfApplication: item.dateOfApplication,
-                email: item.email,
-                /*status:
-                  statuses.find((status) => status.id === item.status?.id)?.label ||
-                  '',*/
-                status: item.candidatureStatus,
-                resume: item.hasAttachment,
-                isSelectable: item.deletable,
-                matchingId: item.matchingId,
-              };
-            });
-          })
-          .catch((error) => {
-              console.error('Erreur lors de la récupération des leads :', error);
+    async getOtherLeads() {
+      new APIService(window.appGlobal.baseUrl, '/api/v2/recruitment/candidates')
+        .getAll({
+          matchingId: this.filters.matchingSelected?.id,
+          vacancyId: this.filters.vacancyId?.id,
+          jobTitleId: this.filters.jobTitleId?.id,
+          hiringManagerId: this.filters.hiringManagerId?.id,
+          status: this.filters.status?.id,
+          sortField: this.sortField,
+          sortOrder: this.sortOrder,
+          model: 'detailed',
+          statusJob: this.filters.statusJobSelected?.label,
+          otherLeads: 'entreprise',
+        })
+        .then(({data: {data}}) => {
+          this.otherLeads = data.map((item) => {
+            return {
+              id: item.leadId,
+              jobTitle: item.jobTitle,
+              candidate: `${item.firstName} ${item.middleName || ''} ${
+                item.lastName
+              }`,
+              dateOfApplication: item.dateOfApplication,
+              email: item.email,
+              /*status:
+                statuses.find((status) => status.id === item.status?.id)?.label ||
+                '',*/
+              status: item.candidatureStatus,
+              resume: item.hasAttachment,
+              isSelectable: item.deletable,
+              matchingId: item.matchingId,
+            };
           });
-
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des leads :', error);
+        });
     },
 
     async deleteData(items) {
@@ -698,7 +694,7 @@ export default {
     async filterItems() {
       this.isSearching = this.filters.matchingSelected;
       this.isSearchingNoStatut = this.filters.matchingSelected;
-      if(this.filters.statusJobSelected != null){
+      if (this.filters.statusJobSelected != null) {
         this.isSearchingNoStatut = false;
       }
       this.getOtherLeads();

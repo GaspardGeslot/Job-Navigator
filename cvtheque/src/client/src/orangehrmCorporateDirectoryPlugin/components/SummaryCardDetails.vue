@@ -27,6 +27,7 @@
     :company-email-contact="companyEmailContact"
     :show-back-button="true"
     :candidature-status="candidatureStatus"
+    @see-details="$emit('see-details', false)"
   >
     <company-details
       :company-id="companyId"
