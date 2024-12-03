@@ -203,7 +203,7 @@ class UserService
      */
     public function createCredentials(UserCredential $credentials): ?User
     {
-        return $this->getUserDao()->saveNewUser($credentials->getUsername(), $this->hashPassword($credentials->getPassword()));
+        return $this->getUserDao()->saveNewUser($credentials->getUsername(), $this->hashPassword($credentials->getPassword()), $credentials->getRole());
     }
 
     /**

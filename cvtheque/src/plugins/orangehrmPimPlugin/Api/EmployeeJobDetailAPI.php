@@ -180,7 +180,6 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
     $employee->setJobs(json_encode($jobs, JSON_UNESCAPED_UNICODE));
 
     $sendJobs = $employee->getJobs();
-    error_log('$sendJobs' . $sendJobs);
     $client = new Client();
     $clientBaseUrl = getenv('HEDWIGE_URL');
 

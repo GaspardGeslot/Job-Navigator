@@ -119,7 +119,7 @@ class ValidateController extends AbstractController implements PublicControllerI
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred',
+                    'message' => "Une erreur inattendue s'est produite.",
                 ]
             );
             return new RedirectResponse($loginUrl);

@@ -19,12 +19,19 @@
 
 <template>
   <oxd-sheet :gutters="false" class="orangehrm-directory-card">
-    <div
-      v-show="showBackButton"
-      class="orangehrm-directory-card-top"
-      @click="$emit('hide-details', false)"
-    >
-      <oxd-icon name="arrow-right"></oxd-icon>
+    <div v-show="showBackButton" class="orangehrm-directory-card-top">
+      <oxd-icon
+        name="arrow-left"
+        class="icon-left"
+        @click="$emit('hide-details', false)"
+      >
+      </oxd-icon>
+      <oxd-icon
+        name="eye-fill"
+        class="icon-right"
+        @click="$emit('see-details', false)"
+      >
+      </oxd-icon>
     </div>
     <oxd-text tag="p" :class="cardTitleClasses">
       {{ companyName }}
@@ -111,7 +118,7 @@ export default {
       default: null,
     },
   },
-  emits: ['hide-details'],
+  emits: ['hide-details', 'see-details'],
   computed: {
     hasDefaultSlot() {
       return !!this.$slots.default;
@@ -139,6 +146,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.icon-left {
+  display: inline-block;
+}
+.icon-right {
+  float: right;
+}
 .orangehrm-directory-card {
   height: auto;
   cursor: pointer;

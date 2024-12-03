@@ -52,6 +52,16 @@ apiv2_recruitment_candidate:
   requirements:
     id: '\d+'
 
+apiv2_recruitment_company:
+  path: /api/v2/recruitment/companies/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\Recruitment\Api\CompanyAPI
+    _key: id
+  requirements:
+    id: '\d+'
+
 apiv2_recruitment_candidate_attachment:
   path: /api/v2/recruitment/candidate/{candidateId}/attachment
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
@@ -271,6 +281,16 @@ recruitment_view_candidate_profile:
 recruitment_view_candidate_profile_by_matching:
   path: /recruitment/viewCandidate/{leadId}/matching/{matchingId}
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
+  methods: [ GET ]
+
+recruitment_view_company_profile:
+  path: /recruitment/viewCompany/{id}
+  controller: OrangeHRM\Recruitment\Controller\ViewCompanyController::handle
+  methods: [ GET ]
+
+recruitment_view_company_profile_by_matching:
+  path: /recruitment/viewCompany/{companyId}/matching/{matchingId}
+  controller: OrangeHRM\Recruitment\Controller\ViewCompanyController::handle
   methods: [ GET ]
 
 recruitment_candidate_action:

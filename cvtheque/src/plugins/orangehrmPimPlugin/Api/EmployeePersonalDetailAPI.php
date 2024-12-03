@@ -157,7 +157,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         if ($this->getAuthUser()->getIsCandidate())
             $employee->setProfileInfo($profile);
         else $employee->setCompany($profile);
-        // error_log('$employee find motivation' . $employee->getMotivation());
+        
         $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
         $userRoleNames = array_map(fn (UserRole $userRole) => $userRole->getName(), $userRoles);
         $employee->setOtherId(json_encode($userRoleNames));
@@ -376,37 +376,45 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         if ($this->getAuthUser()->getIsCandidate()) {
             $profileId = $this->updateHedwigeProfile($this->getAuthUser()->getUserHedwigeToken(), $employee);
             $employee->setProfileId($profileId);
+        } else {
+            $this->updateHedwigeCompany($this->getAuthUser()->getUserHedwigeToken(), $employee);    
+        }
             
-            $attachmentMethod = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_METHOD);
-            $attachmentId = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_ID);
-            if ($attachmentMethod && $attachmentMethod !== 'keepCurrent') {
-                if ($attachmentMethod === 'deleteCurrent') {
-                    $this->getEmployeeAttachmentService()->deleteEmployeeAttachments(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal', [$attachmentId]);
-                    $this->removeHedwigeResume($this->getAuthUser()->getUserHedwigeToken());
+        $attachmentMethod = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_METHOD);
+        $attachmentId = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_ID);
+        if ($attachmentMethod && $attachmentMethod !== 'keepCurrent') {
+            if ($attachmentMethod === 'deleteCurrent') {
+                $this->getEmployeeAttachmentService()->deleteEmployeeAttachments(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal', [$attachmentId]);
+                $this->removeHedwigeAttachment($this->getAuthUser()->getUserHedwigeToken());
+                if($this->getAuthUser()->getIsCandidate())
                     $employee->setResume(-1);
-                } else {
-                    $base64Attachment = $this->getRequestParams()->getAttachmentOrNull(
-                        RequestParams::PARAM_TYPE_BODY,
-                        self::PARAMETER_ATTACHMENT
-                    );
-                    if (!is_null($base64Attachment))
-                    {
-                        if ($attachmentId && $attachmentId != -1)
-                            $this->getEmployeeAttachmentService()->deleteEmployeeAttachments(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal', [$attachmentId]);
-                        $employeeAttachment = new EmployeeAttachment();
-                        $employeeAttachment->getDecorator()->setEmployeeByEmpNumber(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'));
-                        $employeeAttachment->setScreen("personal");
-                        $this->setAttachmentAttributesForCreateAndGetId($employeeAttachment, $base64Attachment, getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal');
-                        $newEmployeeAttachment = $this->getEmployeeAttachmentService()->saveEmployeeAttachment($employeeAttachment);
-                        $attachmentId = $newEmployeeAttachment->getAttachId();
-                        $this->updateHedwigeResume($this->getAuthUser()->getUserHedwigeToken(), $attachmentId);
-                    }
-                    $employee->setResume($attachmentId);
+                else $employee->setAttachment(-1);
+            } else {
+                $base64Attachment = $this->getRequestParams()->getAttachmentOrNull(
+                    RequestParams::PARAM_TYPE_BODY,
+                    self::PARAMETER_ATTACHMENT
+                );
+                if (!is_null($base64Attachment))
+                {
+                    if ($attachmentId && $attachmentId != -1)
+                        $this->getEmployeeAttachmentService()->deleteEmployeeAttachments(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal', [$attachmentId]);
+                    $employeeAttachment = new EmployeeAttachment();
+                    $employeeAttachment->getDecorator()->setEmployeeByEmpNumber(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'));
+                    $employeeAttachment->setScreen("personal");
+                    $this->setAttachmentAttributesForCreateAndGetId($employeeAttachment, $base64Attachment, getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), 'personal');
+                    $newEmployeeAttachment = $this->getEmployeeAttachmentService()->saveEmployeeAttachment($employeeAttachment);
+                    $attachmentId = $newEmployeeAttachment->getAttachId();
+                    $this->updateHedwigeAttachment($this->getAuthUser()->getUserHedwigeToken(), $attachmentId);
                 }
-            } else $employee->setResume($attachmentId);
-        } else
-            $this->updateHedwigeCompany($this->getAuthUser()->getUserHedwigeToken(), $employee);
-
+                if($this->getAuthUser()->getIsCandidate())
+                    $employee->setResume($attachmentId);
+                else $employee->setAttachment($attachmentId);
+            }
+        } else {
+            if($this->getAuthUser()->getIsCandidate())
+                $employee->setResume($attachmentId);
+            else $employee->setAttachment($attachmentId);
+        }
         return new EndpointResourceResult(EmployeePersonalDetailModel::class, $employee);
     }
 
@@ -422,7 +430,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $data = [
             'firstName' => $employee->getFirstName(),
             'need' => $employee->getNeed(),
-            'drivingLicenses' => $employee->getDrivingLicense() && $employee->getDrivingLicense() != '' ? json_decode($employee->getDrivingLicense(), true) : [],
+            'drivingLicenses' => $employee->getDrivingLicense() !== null && $employee->getDrivingLicense() !== '' ? json_decode($employee->getDrivingLicense(), true) : [],
             'motivation' => $employee->getMotivation(),
             'salaryExpectation' => $employee->getSalary(),
             'studyLevel' => $employee->getStudyLevel(),
@@ -480,13 +488,14 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
      * @param string $token
      * @param int $attachmentId
      */
-    protected function updateHedwigeResume(string $token, int $attachmentId) : void
+    protected function updateHedwigeAttachment(string $token, int $attachmentId) : void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $client->request('POST', "{$clientBaseUrl}/user/resume?resumeId={$attachmentId}", [
+            $url = $this->getAuthUser()->getIsCandidate() ? "{$clientBaseUrl}/user/resume?resumeId={$attachmentId}" : "{$clientBaseUrl}/company/attachment?attachmentId={$attachmentId}";
+            $client->request('POST', $url, [
                 'headers' => [
                     'Authorization' => $token,
                 ]
@@ -498,13 +507,14 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     /**
      * @param string $token
      */
-    protected function removeHedwigeResume(string $token) : void
+    protected function removeHedwigeAttachment(string $token) : void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $client->request('DELETE', "{$clientBaseUrl}/user/resume", [
+            $url = $this->getAuthUser()->getIsCandidate() ? "{$clientBaseUrl}/user/resume" : "{$clientBaseUrl}/company/attachment";
+            $client->request('DELETE', $url, [
                 'headers' => [
                     'Authorization' => $token,
                 ]

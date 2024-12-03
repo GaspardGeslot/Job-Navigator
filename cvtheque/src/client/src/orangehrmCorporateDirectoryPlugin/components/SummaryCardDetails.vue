@@ -36,6 +36,7 @@
       :company-phone-number-contact="companyPhoneNumberContact"
       :company-email-contact="companyEmailContact"
       :candidature-status="candidatureStatus"
+      @see-details="$emit('see-details', false)"
     >
     </company-details>
   </summary-card>
@@ -51,6 +52,7 @@ export default {
     'company-details': CompanyDetails,
     'summary-card': SummaryCard,
   },
+  emits: ['see-details'],
   props: {
     companyId: {
       type: Number,

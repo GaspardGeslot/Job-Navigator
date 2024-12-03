@@ -113,7 +113,7 @@
     </oxd-table-filter>
     <br />
     <div class="orangehrm-paper-container">
-      <div class="orangehrm-header-container">
+      <div class="orangehrm-header-container" v-if="hasName">
         <oxd-button
           :label="$t('recruitment.add_matching')"
           icon-name="plus"
@@ -128,6 +128,11 @@
             Trier par date ⇅
           </button>
         </div>
+      </div>
+      <div class="orangehrm-header-container" v-else>
+        <oxd-text class="orangehrm-sub-title" style="color: red" tag="h6">
+          {{ $t('recruitment.company_has_no_name') }}
+        </oxd-text>
       </div>
       <!--<table-header
         :selected="checkedItems.length"
@@ -207,17 +212,11 @@ export default {
       type: Array,
       default: () => [],
     },
+    hasName: {
+      type: Boolean,
+      default: true,
+    },
   },
-  /*mounted() {
-    if (this.filters?.value) {
-      this.$watch(
-        () => this.filters.value.matchingSelected,
-        (newVal) => {
-          this.canUpdate = !!newVal;
-        },
-      );
-    }
-  },*/
   watch: {
     'filters.matchingSelected': {
       handler(newVal) {
@@ -334,6 +333,7 @@ export default {
     } = usePaginate(http, {
       query: serializedFilters,
       normalizer: candidateDataNormalizer,
+      prefetch: false,
     });
     onSort(execQuery);
 

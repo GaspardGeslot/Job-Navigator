@@ -42,6 +42,7 @@ class ViewJobVacancyController extends AbstractVueController
             ];
         }, $options)));
 
+        $component->addProp(new Prop('has-name', Prop::TYPE_BOOLEAN, $this->checkHasName($this->getAuthUser()->getUserHedwigeToken())));
         
         $options = $this->getHedwigeStatusOptions($this->getAuthUser()->getUserHedwigeToken());
         $component->addProp(new Prop('candidature-statuses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
@@ -83,6 +84,24 @@ class ViewJobVacancyController extends AbstractVueController
             ]);
 
             return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
+    }
+
+    public function checkHasName(string $token): bool
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/company/hasName", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+
+            return filter_var($response->getBody()->getContents(), FILTER_VALIDATE_BOOLEAN);
         } catch (\Exceptionon $e) {
             return new \stdClass();
         }

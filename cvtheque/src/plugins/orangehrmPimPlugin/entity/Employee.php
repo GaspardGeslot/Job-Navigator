@@ -125,6 +125,13 @@ class Employee
     private ?int $resume;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="emp_attachment", type="integer", length=100, nullable=true)
+     */
+    private ?int $attachment;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="emp_jobs", type="string", length=300, nullable=true, options={"default" : ""})
@@ -228,6 +235,12 @@ class Employee
      * @ORM\Column(name="company_matching_job_title", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $companyMatchingJobTitle = '';
+
+    /**
+     * @var int
+     * @ORM\Column(name="matching_id", type="integer", nullable=true)
+     */
+    private ?int $matchingId = null;
 
     /**
      * @var bool
@@ -807,6 +820,7 @@ class Employee
     public function setCompany(mixed $company): void 
     {
         $this->setCompanyId($company['id'] ?? -1);
+        $this->setAttachment(array_key_exists('attachment', $company) && $company['attachment'] != null ? (int) $company['attachment'] : -1);
         $this->setCompanyName($company['name'] ?? '');
         $this->setCompanySiret($company['siret'] ?? '');
         $this->setCompanyWebsite($company['website'] ?? '');
@@ -818,9 +832,41 @@ class Employee
         $this->setCompanyPhoneNumberContact($company['phoneNumberContact'] ?? '');
         $this->setCompanyEmailContact($company['emailContact'] ?? '');
         $this->setCompanyMatchingJobTitle($company['matchingJobTitle'] ?? '');
+        $this->setMatchingId($company['matchingId'] ?? null);
         $this->setCandidatureStatus($company['candidatureStatus'] ?? '');
         $this->setProfileContact([]);
         $this->setProfileInfo([]);
+    }
+
+    /**
+     * @param mixed $company
+     */
+    public function setCompanyDetails(mixed $company): void 
+    {
+        $this->setProfileContact([]);
+        $this->setProfileInfo([]);
+        if (array_key_exists('info', $company)) {
+            $this->setAttachment(array_key_exists('attachment', $company['info']) && $company['info']['attachment'] != null ? (int) $company['info']['attachment'] : -1);
+            $this->setCompanyName($company['info']['name'] ?? '');
+            $this->setCompanySiret($company['info']['siret'] ?? '');
+            $this->setCompanyWebsite($company['info']['website'] ?? '');
+            $this->setCompanyPresentation($company['info']['presentation'] ?? '');
+            $this->setCompanyNafCode($company['info']['nafCode'] ?? '');
+            $this->setCompanyWorkforce($company['info']['workforce'] ?? '');
+            $this->setCompanyLogo($company['info']['logo'] ?? '');
+        }
+        if (array_key_exists('contact', $company)) {
+            $this->setCompanyPhoneNumberContact($company['contact']['phoneNumber'] ?? '');
+            $this->setCompanyEmailContact($company['contact']['contactEmail'] ?? '');
+            if (array_key_exists('address', $company['contact'])) {
+                $this->setStreet1($company['contact']['address']['street'] ?? '');
+                $this->setCity($company['contact']['address']['city'] ?? '');
+                $this->setProvince($company['contact']['address']['state'] ?? '');
+                $this->setZipcode($company['contact']['address']['postalCode'] ?? '');
+            }
+        }
+        $this->setJobs(json_encode($company['jobs'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setCandidatureStatus($company['candidatureStatus'] ?? '');
     }
 
     /**
@@ -922,9 +968,9 @@ class Employee
     }
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDrivingLicense(): string
+    public function getDrivingLicense(): ?string
     {
         return $this->drivingLicense;
     }
@@ -946,9 +992,9 @@ class Employee
     }
 
     /**
-     * @param string $drivingLicense
+     * @param ?string $drivingLicense
      */
-    public function setDrivingLicense(string $drivingLicense): void
+    public function setDrivingLicense(?string $drivingLicense): void
     {
         $this->drivingLicense = $drivingLicense;
     }
@@ -1002,9 +1048,25 @@ class Employee
     }
 
     /**
-     * @return string
+     * @return ?int
      */
-    public function getJobs(): string
+    public function getAttachment(): ?int
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * @param ?int $attachment
+     */
+    public function setAttachment(?int $attachment): void
+    {
+        $this->attachment = $attachment;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJobs(): ?string
     {
         return $this->jobs;
     }
@@ -1012,7 +1074,7 @@ class Employee
     /**
      * @param string $jobs
      */
-    public function setJobs(string $jobs): void
+    public function setJobs(?string $jobs): void
     {
         $this->jobs = $jobs;
     }
@@ -1223,6 +1285,22 @@ class Employee
     public function setCompanyMatchingJobTitle(string $companyMatchingJobTitle): void
     {
         $this->companyMatchingJobTitle = $companyMatchingJobTitle;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMatchingId(): ?int
+    {
+        return $this->matchingId;
+    }
+
+    /**
+     * @param int|null $matchingId
+     */
+    public function setMatchingId(?int $matchingId): void
+    {
+        $this->matchingId = $matchingId;
     }
 
     /**
