@@ -78,6 +78,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     public const FILTER_CANDIDATE_NAME = 'candidateName';
     public const FILTER_MODEL = 'model';
     public const FILTER_ALL_LEADS = 'allLeads';
+    public const FILTER_OTHER_LEADS = 'otherLeads';
     public const FILTER_STATUS_JOB = "statusJob";
 
     public const FILTER_JOB_SECTOR = 'jobSector';
@@ -130,8 +131,14 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
      *         required=false,
      *         @OA\Schema(type="integer")
      *     ),
-    *       @OA\Parameter(
+    *      @OA\Parameter(
     *         name="allLeads",
+    *         in="query",
+    *         required=false,
+    *         @OA\Schema(type="string")
+    *     ),
+    *     @OA\Parameter(
+    *         name="otherLeads",
     *         in="query",
     *         required=false,
     *         @OA\Schema(type="string")
@@ -321,6 +328,11 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_ALL_LEADS
         );
 
+        $otherLeads = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_OTHER_LEADS
+        );
+
         $jobSector = $this->getRequestParams()->getString(
             RequestParams::PARAM_TYPE_QUERY,
             self::FILTER_JOB_SECTOR
@@ -353,10 +365,13 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             self::FILTER_STATUS_JOB
         );
 
-        // error_log($statusJob);
+        if($otherLeads == 'entreprise'){
+            $leads = $this->getOtherLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $otherLeads);
+        }else{
+            $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $statusJob);
+        }
 
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $statusJob);
-        $candidates = array();
+        $candidates = [];
         foreach ($leads as $lead) {
             $candidate = new Candidate();
             $candidate->setLeadInfo($lead);
@@ -410,6 +425,28 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             return null;
         }
     }
+
+    protected function getOtherLeads(string $token, ?int $matchingId = null, ?string $otherLeads = null) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $url = "{$clientBaseUrl}/company/leads/other?";
+            if ($matchingId && $matchingId != ''){
+                $url .= 'matchingId=' . urlencode($matchingId);
+            }
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
+    }
+
 
     /**
      * @return string|null
@@ -507,6 +544,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::FILTER_ALL_LEADS,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_OTHER_LEADS,
                     new Rule(Rules::STRING_TYPE)
                 )
             ),

@@ -121,9 +121,9 @@
           @click="onClickAdd"
         />
         <div class="boutonTriBloc">
-          <button class="boutonTri" @click="sortByName">
+          <!-- <button class="boutonTri" @click="sortByName">
             Trier par nom métier ⇅
-          </button>
+          </button> -->
           <button class="boutonTri" @click="sortByDate">
             Trier par date ⇅
           </button>
@@ -140,6 +140,35 @@
           v-model:selected="checkedItems"
           :headers="headers"
           :items="items?.data"
+          :selectable="false"
+          :clickable="false"
+          :loading="isLoading"
+          row-decorator="oxd-table-decorator-card"
+        />
+
+        <!--class="orangehrm-vacancy-list"-->
+      </div>
+      <div class="orangehrm-bottom-container">
+        <oxd-pagination
+          v-if="showPaginator"
+          v-model:current="currentPage"
+          :length="pages"
+        />
+      </div>
+    </div>
+    <br />
+    <div class="orangehrm-paper-container" v-if="isSearchingNoStatut">
+      <oxd-table-filter :filter-title="$t('Découvrez les autres candidats sur ce métier')"></oxd-table-filter>
+      <div class="boutonTriBloc2">
+          <button class="boutonTri" @click="sortByDate2">
+            Trier par date ⇅
+          </button>
+        </div>
+      <div class="orangehrm-container" v-if="isSearching">
+        <oxd-card-table
+          v-model:selected="checkedItems"
+          :headers="headers2"
+          :items="otherLeads"
           :selectable="false"
           :clickable="false"
           :loading="isLoading"
@@ -236,7 +265,6 @@ export default {
     // Surveille items.data pour exécuter le tri une fois les données chargées
     'items.data': function (newData) {
       if (newData && newData.length > 0) {
-        // Vérifie que les données sont chargées
         this.sortByDate();
       }
     },
@@ -355,11 +383,15 @@ export default {
   data() {
     return {
       isSearching: false,
+      isSearchingNoStatut: false,
       canUpdate: false,
       matchingSelected: null,
       statusJobSelected: null,
       isDateAscending: true,
+      isDateAscending2: true,
       isNomAscending: false,
+      leads: [],
+      otherLeads: [],
       /*headers: [
         {
           name: 'vacancy',
@@ -445,6 +477,37 @@ export default {
           cellRenderer: this.cellRenderer,
         },
       ],
+      headers2: [
+        {
+          name: 'jobTitle',
+          title: this.$t('general.job_title'),
+          style: {flex: 1},
+        },
+        {
+          name: 'candidate',
+          slot: 'title',
+          title: this.$t('recruitment.candidate'),
+          style: {flex: 1},
+        },
+        {
+          name: 'dateOfApplication',
+          title: this.$t('recruitment.date_of_application'),
+          style: {flex: 1},
+        },
+        {
+          name: 'email',
+          title: this.$t('general.other_email'),
+          style: {flex: 1},
+        },
+        {
+          name: 'actions',
+          slot: 'action',
+          title: this.$t('general.actions'),
+          style: {flex: 0.5},
+          cellType: 'oxd-table-cell-actions',
+          cellRenderer: this.cellRenderer,
+        },
+      ],
       statusOptions: [
         {id: true, param: 'active', label: this.$t('general.active')},
         {id: false, param: 'closed', label: this.$t('general.closed')},
@@ -459,11 +522,23 @@ export default {
       // Change l'ordre de tri
       this.isDateAscending = !this.isDateAscending;
       // Trie les éléments en fonction de l'ordre défini
-      this.items.data.sort((a, b) => {
+      this.items?.data.sort((a, b) => {
         const dateA = new Date(a.dateOfApplication);
         const dateB = new Date(b.dateOfApplication);
 
         return this.isDateAscending ? dateA - dateB : dateB - dateA;
+      });
+    },
+
+    sortByDate2() {
+      // Change l'ordre de tri
+      this.isDateAscending2 = !this.isDateAscending2;
+      // Trie les éléments en fonction de l'ordre défini
+      this.otherLeads.sort((a, b) => {
+        const dateA = new Date(a.dateOfApplication);
+        const dateB = new Date(b.dateOfApplication);
+
+        return this.isDateAscending2 ? dateA - dateB : dateB - dateA;
       });
     },
     sortByName() {
@@ -554,6 +629,49 @@ export default {
       });
     },
 
+    async getOtherLeads(){
+      new APIService(
+          window.appGlobal.baseUrl,
+          '/api/v2/recruitment/candidates',
+        )
+          .getAll({
+            matchingId: this.filters.matchingSelected?.id,
+            vacancyId: this.filters.vacancyId?.id,
+            jobTitleId: this.filters.jobTitleId?.id,
+            hiringManagerId: this.filters.hiringManagerId?.id,
+            status: this.filters.status?.id,
+            sortField: this.sortField,
+            sortOrder: this.sortOrder,
+            model: 'detailed',
+            statusJob: this.filters.statusJobSelected?.label,
+            otherLeads: 'entreprise',
+          })
+          .then(({data: {data}}) => {
+            this.otherLeads = data.map((item) => {
+              return {
+                id: item.leadId,
+                jobTitle: item.jobTitle,
+                candidate: `${item.firstName} ${item.middleName || ''} ${
+                  item.lastName
+                }`,
+                dateOfApplication: item.dateOfApplication,
+                email: item.email,
+                /*status:
+                  statuses.find((status) => status.id === item.status?.id)?.label ||
+                  '',*/
+                status: item.candidatureStatus,
+                resume: item.hasAttachment,
+                isSelectable: item.deletable,
+                matchingId: item.matchingId,
+              };
+            });
+          })
+          .catch((error) => {
+              console.error('Erreur lors de la récupération des leads :', error);
+          });
+
+    },
+
     async deleteData(items) {
       if (items instanceof Array) {
         this.isLoading = true;
@@ -579,6 +697,12 @@ export default {
     },
     async filterItems() {
       this.isSearching = this.filters.matchingSelected;
+      this.isSearchingNoStatut = this.filters.matchingSelected;
+      if(this.filters.statusJobSelected != null){
+        this.isSearchingNoStatut = false;
+      }
+      this.getOtherLeads();
+      this.sortByDate2();
       await this.execQuery();
     },
     onClickReset() {
