@@ -682,10 +682,10 @@ export default {
       } else {
         this.employee.checkedPermits = [];
       }
-      this.isCandidate = this.contact.otherId
-        ? JSON.parse(this.contact.otherId).includes(
+      this.isCandidate = this.employee.otherId
+        ? JSON.parse(this.employee.otherId).includes(
             process.env.VUE_APP_CANDIDATE_ROLE_NAME,
-          ) || JSON.parse(this.contact.otherId).includes('ESS')
+          ) || JSON.parse(this.employee.otherId).includes('ESS')
         : false;
       this.employee.maritalStatus = this.maritalStatuses.find(
         (item) => item.id === data.maritalStatus,
