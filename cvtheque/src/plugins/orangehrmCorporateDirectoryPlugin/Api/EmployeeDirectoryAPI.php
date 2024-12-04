@@ -48,6 +48,7 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
     public const FILTER_NAME_OR_ID = 'nameOrId';
     public const FILTER_JOB_TITLE_ID = 'jobTitleId';
     public const FILTER_LOCATION_ID = 'locationId';
+    public const PARAMETER_ALL_COMPANIES = 'allCompanies';
     public const FILTER_MODEL = 'model';
     public const PARAM_RULE_FILTER_NAME_OR_ID_MAX_LENGTH = 100;
     public const MODEL_DEFAULT = 'default';
@@ -260,7 +261,11 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
         $count = $this->getEmployeeDirectoryService()->getEmployeeDirectoryDao()->getEmployeeCount(
             $employeeDirectoryParamHolder
         );*/
-        $companiesAPI = $this->getMatchedCompanies($this->getAuthUser()->getUserHedwigeToken());
+        $allCompanies = $this->getRequestParams()->getBooleanOrNull(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::PARAMETER_ALL_COMPANIES
+        );
+        $companiesAPI = $this->getCompanies($this->getAuthUser()->getUserHedwigeToken(), $allCompanies);
         $companies = array();
         foreach ($companiesAPI as $company) {
             $emp = new Employee();
@@ -274,13 +279,14 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
         );
     }
 
-    public function getMatchedCompanies(string $token): array
+    public function getCompanies(string $token, ?bool $allCompanies): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $response = $client->request('GET', "{$clientBaseUrl}/user/matching/companies", [
+            $url = $allCompanies ? "{$clientBaseUrl}/client/companies" : "{$clientBaseUrl}/user/matching/companies";
+            $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token
                 ]
@@ -322,6 +328,12 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
                     self::FILTER_LOCATION_ID,
                     new Rule(Rules::POSITIVE),
                 )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ALL_COMPANIES,
+                    new Rule(Rules::BOOL_VAL)
+                ),
             ),
             $this->getModelParamRule(),
             ...$this->getSortingAndPaginationParamsRules(EmployeeDirectorySearchFilterParams::ALLOWED_SORT_FIELDS)

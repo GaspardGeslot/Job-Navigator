@@ -75,6 +75,14 @@ class HomePageService
     /**
      * @return string|null
      */
+    public function getDirectoryModuleDefaultPath(): ?string
+    {
+        return $this->getModuleDefaultPage('directory');
+    }
+
+    /**
+     * @return string|null
+     */
     public function getPerformanceModuleDefaultPath(): ?string
     {
         return $this->getModuleDefaultPage('performance');

@@ -5876,6 +5876,61 @@
 .orangehrm-paper-container[data-v-90f2162a] {
   width: 100%;
 }
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmCorporateDirectoryPlugin/pages/corporate-directory.scss?vue&type=style&index=0&id=01658d22&lang=scss&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-corporate-directory[data-v-01658d22] {
+  display: block;
+}
+@media (min-width: 800px) {
+.orangehrm-corporate-directory[data-v-01658d22] {
+    display: flex;
+    justify-content: space-between;
+}
+}
+.orangehrm-corporate-directory-sidebar[data-v-01658d22] {
+  min-width: 250px;
+  max-width: 250px;
+  margin-left: 1rem;
+  border-radius: 1.2rem;
+  background-color: #ffffff;
+}
+.orangehrm-container[data-v-01658d22] {
+  height: 512px;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-color: #cfd3de #f6f5fb;
+  scrollbar-width: thin;
+}
+.orangehrm-container[data-v-01658d22]::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+.orangehrm-container[data-v-01658d22]::-webkit-scrollbar-thumb {
+  background: #cfd3de;
+  border-radius: 20px;
+}
+.orangehrm-container[data-v-01658d22]::-webkit-scrollbar-track {
+  background: #f6f5fb;
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+.orangehrm-container[data-v-01658d22] {
+    scrollbar-face-color: #cfd3de;
+    scrollbar-track-color: #f6f5fb;
+    scrollbar-arrow-color: #929baa;
+}
+}
+.orangehrm-container-loader[data-v-01658d22] {
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+.oxd-grid-item[data-v-01658d22] {
+  padding: 0.5rem 0.75rem;
+}
+.orangehrm-paper-container[data-v-01658d22] {
+  width: 100%;
+}
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmAuthenticationPlugin/components/login-layout.scss?vue&type=style&index=0&id=4972d5fc&lang=scss&scoped=true ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

@@ -241,6 +241,7 @@ export default {
           /*locationId: state.filters.locationId?.id,
           companyNumber: state.filters.companyNumber?.id,*/
           jobTitle: state.filters.jobTitle,
+          allCompanies: false,
         })
         .then((response) => {
           const {data, meta} = response.data;

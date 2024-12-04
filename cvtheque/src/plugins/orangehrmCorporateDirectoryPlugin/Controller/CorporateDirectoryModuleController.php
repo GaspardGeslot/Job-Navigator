@@ -18,80 +18,19 @@
 
 namespace OrangeHRM\CorporateDirectory\Controller;
 
-use GuzzleHttp\Client;
-use OrangeHRM\Admin\Service\LocationService;
-use OrangeHRM\Admin\Service\JobTitleService;
-use OrangeHRM\Core\Controller\AbstractVueController;
-use OrangeHRM\Core\Vue\Component;
-use OrangeHRM\Core\Vue\Prop;
-use OrangeHRM\Framework\Http\Request;
-use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
+use Exception;
+use OrangeHRM\Core\Controller\AbstractModuleController;
+use OrangeHRM\Framework\Http\RedirectResponse;
 
-class CorporateDirectoryModuleController extends AbstractVueController
+class CorporateDirectoryModuleController extends AbstractModuleController
 {
-    use AuthUserTrait;
-    protected ?JobTitleService $jobTitleService = null;
-    protected ?LocationService $locationService = null;
-
     /**
-     * @return JobTitleService
+     * @return RedirectResponse
+     * @throws Exception
      */
-    protected function getJobTitleService(): JobTitleService
+    public function handle(): RedirectResponse
     {
-        if (!$this->jobTitleService instanceof JobTitleService) {
-            $this->jobTitleService = new JobTitleService();
-        }
-        return $this->jobTitleService;
-    }
-
-    /**
-     * @return LocationService
-     */
-    protected function getLocationService(): LocationService
-    {
-        if (!$this->locationService instanceof LocationService) {
-            $this->locationService = new LocationService();
-        }
-        return $this->locationService;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function preRender(Request $request): void
-    {
-        $component = new Component('corporate-directory-employee-list');
-
-        $jobTitles = $this->getMatchedJobs($this->getAuthUser()->getUserHedwigeToken());
-        //$jobTitles = $this->getJobTitleService()->getJobTitleArray();
-        $component->addProp(new Prop('job-titles', Prop::TYPE_ARRAY, array_map(function($label, $index) {
-            return [
-                'id' => $index,
-                'label' => $label
-            ];
-        }, $jobTitles, array_keys($jobTitles))));
-
-        $locations = $this->getLocationService()->getLocationsArray();
-        $component->addProp(new Prop('locations', Prop::TYPE_ARRAY, $locations));
-
-        $this->setComponent($component);
-    }
-
-    public function getMatchedJobs(string $token): array
-    {
-        $client = new Client();
-        $clientBaseUrl = getenv('HEDWIGE_URL');
-
-        try {
-            $response = $client->request('GET', "{$clientBaseUrl}/user/matching/jobs", [
-                'headers' => [
-                    'Authorization' => $token
-                ]
-            ]);
-
-            return json_decode($response->getBody(), true);
-        } catch (\Exceptionon $e) {
-            return new \stdClass();
-        }
+        $defaultPath = $this->getHomePageService()->getDirectoryModuleDefaultPath();
+        return $this->redirect($defaultPath);
     }
 }

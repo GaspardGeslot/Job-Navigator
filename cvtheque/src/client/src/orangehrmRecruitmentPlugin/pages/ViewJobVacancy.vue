@@ -531,9 +531,7 @@ export default {
     },
 
     sortByDate2() {
-      // Change l'ordre de tri
       this.isDateAscending2 = !this.isDateAscending2;
-      // Trie les éléments en fonction de l'ordre défini
       this.otherLeads.sort((a, b) => {
         const dateA = new Date(a.dateOfApplication);
         const dateB = new Date(b.dateOfApplication);

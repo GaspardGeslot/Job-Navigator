@@ -16,7 +16,9 @@
  */
 
 import CorporateDirectory from './pages/CorporateDirectory.vue';
+import ViewAllCompanies from './pages/ViewAllCompanies.vue';
 
 export default {
-  'corporate-directory-employee-list': CorporateDirectory,
+  'view-matched-companies': CorporateDirectory,
+  'view-all-companies': ViewAllCompanies,
 };
