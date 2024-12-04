@@ -372,12 +372,11 @@ export default {
 
     updateModel(response) {
       const {data} = response.data;
-      console.log('Data : ', data);
       this.contact = {...contactDetailsModel, ...data};
       this.isCandidate = this.contact.otherId
         ? JSON.parse(this.contact.otherId).includes(
             process.env.VUE_APP_CANDIDATE_ROLE_NAME,
-          )
+          ) || JSON.parse(this.contact.otherId).includes('ESS')
         : false;
       this.contact.country = this.countries.find(
         (item) => item.label === data.country,
