@@ -18,15 +18,92 @@
 
 namespace OrangeHRM\Recruitment\Controller;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Vue\Component;
+use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class ViewJobVacancyController extends AbstractVueController
 {
+    use AuthUserTrait;
+
     public function preRender(Request $request): void
     {
         $component = new Component('view-job-vacancy');
+
+        $options = $this->getMatchings($this->getAuthUser()->getUserHedwigeToken());
+
+        $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, array_map(function($item) {
+            return [
+                'id' => $item['id'],
+                'label' => $item['title'] ?? ''
+            ];
+        }, $options)));
+
+        $component->addProp(new Prop('has-name', Prop::TYPE_BOOLEAN, $this->checkHasName($this->getAuthUser()->getUserHedwigeToken())));
+        
+        $options = $this->getHedwigeStatusOptions($this->getAuthUser()->getUserHedwigeToken());
+        $component->addProp(new Prop('candidature-statuses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($options), $options)));
+
         $this->setComponent($component);
+    }
+
+    protected function getMatchings(string $token) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/matching/company", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+        }
+    }
+
+    public function getHedwigeStatusOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/candidature-status", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
+    }
+
+    public function checkHasName(string $token): bool
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/company/hasName", [
+                'headers' => [
+                    'Authorization' => $token
+                ]
+            ]);
+
+            return filter_var($response->getBody()->getContents(), FILTER_VALIDATE_BOOLEAN);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
     }
 }

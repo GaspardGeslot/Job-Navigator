@@ -77,8 +77,7 @@ class EmployeeDecorator
      */
     public function getBirthday(): ?string
     {
-        $date = $this->getEmployee()->getBirthday();
-        return $this->getDateTimeHelper()->formatDate($date);
+        return $this->getEmployee()->getBirthday() ? $this->getDateTimeHelper()->formatDate($this->getEmployee()->getBirthday()) : '';
     }
 
     /**

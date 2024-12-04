@@ -20,6 +20,7 @@ namespace OrangeHRM\Recruitment\Api;
 
 use DateTime;
 use Exception;
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Api\CommonParams;
 use OrangeHRM\Core\Api\V2\CrudEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -64,6 +65,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     use AuthUserTrait;
     use UserRoleManagerTrait;
 
+    public const FILTER_MATCHING_ID = 'matchingId';
     public const FILTER_JOB_TITLE_ID = 'jobTitleId';
     public const FILTER_CANDIDATE_ID = 'candidateId';
     public const FILTER_VACANCY_ID = 'vacancyId';
@@ -75,6 +77,16 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     public const FILTER_METHOD_OF_APPLICATION = 'methodOfApplication';
     public const FILTER_CANDIDATE_NAME = 'candidateName';
     public const FILTER_MODEL = 'model';
+    public const FILTER_ALL_LEADS = 'allLeads';
+    public const FILTER_OTHER_LEADS = 'otherLeads';
+    public const FILTER_STATUS_JOB = "statusJob";
+
+    public const FILTER_JOB_SECTOR = 'jobSector';
+    public const FILTER_PROFESSIONAL_EXPERIENCE = 'professionalExperienceFilter';
+    public const FILTER_JOB_TITLE = 'jobTitleFilter';
+    public const FILTER_NEED = 'needFilter';
+    public const FILTER_STUDY_LEVEL = 'studyLevelFilter';
+    public const FILTER_COURSE_START = 'courseStartFilter';
 
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
@@ -119,6 +131,18 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
      *         required=false,
      *         @OA\Schema(type="integer")
      *     ),
+    *      @OA\Parameter(
+    *         name="allLeads",
+    *         in="query",
+    *         required=false,
+    *         @OA\Schema(type="string")
+    *     ),
+    *     @OA\Parameter(
+    *         name="otherLeads",
+    *         in="query",
+    *         required=false,
+    *         @OA\Schema(type="string")
+    *     ),
      *     @OA\Parameter(
      *         name="jobTitleId",
      *         in="query",
@@ -290,18 +314,139 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                 self::FILTER_CANDIDATE_NAME
             )
         );
-        $candidates = $this->getCandidateService()->getCandidateDao()->getCandidatesList(
+        /*$candidates = $this->getCandidateService()->getCandidateDao()->getCandidatesList(
             $candidateSearchFilterParamHolder
+        );*/
+
+        $matchingId = $this->getRequestParams()->getIntOrNull(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_MATCHING_ID
         );
 
-        $count = $this->getCandidateService()->getCandidateDao()->getCandidatesCount($candidateSearchFilterParamHolder);
+        $allLeads = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_ALL_LEADS
+        );
+
+        $otherLeads = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_OTHER_LEADS
+        );
+
+        $jobSector = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_JOB_SECTOR
+        );
+        
+        $professionalExperienceFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_PROFESSIONAL_EXPERIENCE
+        );
+        
+        $jobTitleFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_JOB_TITLE
+        );
+        $needFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_NEED
+        );
+        $studyLevelFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_STUDY_LEVEL
+        );
+        $courseStartFilter = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_COURSE_START
+        );
+
+        $statusJob = $this->getRequestParams()->getString(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_STATUS_JOB
+        );
+
+        if($otherLeads == 'entreprise'){
+            $leads = $this->getOtherLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $otherLeads);
+        }else{
+            $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $matchingId, $allLeads, $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $statusJob);
+        }
+
+        $candidates = [];
+        foreach ($leads as $lead) {
+            $candidate = new Candidate();
+            $candidate->setLeadInfo($lead);
+            array_push($candidates, $candidate);
+        }
+
+        $count = count($leads); //$this->getCandidateService()->getCandidateDao()->getCandidatesCount($candidateSearchFilterParamHolder);
 
         return new EndpointCollectionResult(
-            $this->getModelClass(),
+            CandidateDetailedModel::class,
             $candidates,
             new ParameterBag([CommonParams::PARAMETER_TOTAL => $count])
         );
     }
+
+    protected function getLeads(string $token, ?int $matchingId = null, ?string $allLeads = null, ?string $jobTitleFilter = '', ?string $needFilter = '', ?string $studyLevelFilter = '', ?string $courseStartFilter = '', ?string $professionalExperienceFilter = '', ?string $statusJob = '') : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $url = $allLeads ? "{$clientBaseUrl}/client/leads?" : "{$clientBaseUrl}/company/leads?";
+            if ($jobTitleFilter !== '') {
+                $url .= 'job=' . urlencode($jobTitleFilter) . '&';
+            }
+            if ($needFilter !== '') {
+                $url .= 'need=' . urlencode($needFilter) . '&';
+            }
+            if ($studyLevelFilter !== '') {
+                $url .= 'studyLevel=' . urlencode($studyLevelFilter) . '&';
+            }
+            if ($courseStartFilter !== '') {
+                $url .= 'courseStart=' . urlencode($courseStartFilter) . '&';
+            }
+            if ($professionalExperienceFilter !== '') {
+                $url .= 'professionalExperience=' . urlencode($professionalExperienceFilter) . '&';
+            }
+            if ($matchingId && $matchingId != ''){
+                $url .= 'matchingId=' . urlencode($matchingId) . '&';
+            }
+            if ($statusJob != ''){
+                $url .= 'status=' . urlencode($statusJob) . '&';
+            }
+                
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
+    }
+
+    protected function getOtherLeads(string $token, ?int $matchingId = null, ?string $otherLeads = null) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $url = "{$clientBaseUrl}/company/leads/other?";
+            if ($matchingId && $matchingId != ''){
+                $url .= 'matchingId=' . urlencode($matchingId);
+            }
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
+    }
+
 
     /**
      * @return string|null
@@ -388,6 +533,66 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                     self::FILTER_CANDIDATE_ID,
                     new Rule(Rules::POSITIVE),
                     new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_MATCHING_ID,
+                    new Rule(Rules::POSITIVE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_ALL_LEADS,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_OTHER_LEADS,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_JOB_SECTOR,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_PROFESSIONAL_EXPERIENCE,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_JOB_TITLE,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_NEED,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_STUDY_LEVEL,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_COURSE_START,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_STATUS_JOB,
+                    new Rule(Rules::STRING_TYPE)
                 )
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
@@ -772,9 +977,35 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_ID
         );
-        $candidate = $this->getCandidateService()->getCandidateDao()->getCandidateById($id);
-        $this->throwRecordNotFoundExceptionIfNotExist($candidate, Candidate::class);
+
+        $matchingId = $this->getRequestParams()->getIntOrNull(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::FILTER_MATCHING_ID
+        );
+        /*$candidate = $this->getCandidateService()->getCandidateDao()->getCandidateById($id);
+        $this->throwRe<cordNotFoundExceptionIfNotExist($candidate, Candidate::class)*/
+        $lead = $this->getLead($this->getAuthUser()->getUserHedwigeToken(), $id, $matchingId);
+        $lead['skills'] = json_encode($lead['skills'], JSON_THROW_ON_ERROR);
+        $candidate = new Candidate();
+        $candidate->setLeadInfo($lead);
         return new EndpointResourceResult(CandidateDetailedModel::class, $candidate);
+    }
+
+    protected function getLead(string $token, int $leadId, ?int $matchingId) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $url = $matchingId ? "{$clientBaseUrl}/lead/{$leadId}/matching/{$matchingId}" : "{$clientBaseUrl}/lead/{$leadId}";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
     }
 
     /**
@@ -785,7 +1016,14 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
         return new ParamRuleCollection(
             new ParamRule(
                 CommonParams::PARAMETER_ID,
-                new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
+                new Rule(Rules::POSITIVE)
+                //new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_MATCHING_ID,
+                    new Rule(Rules::POSITIVE)
+                )
             )
         );
     }

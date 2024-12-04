@@ -72,7 +72,7 @@
     @mouseover="showEmailClip = true"
   >
     <div class="orangehrm-directory-card-hover-body">
-      <oxd-text type="toast-message">{{ $t('general.work_email') }}</oxd-text>
+      <oxd-text type="toast-message">{{ $t('general.other_email') }}</oxd-text>
       <oxd-text ref="cloneEmail" type="toast-title">
         {{ companyEmailContact }}
       </oxd-text>
@@ -92,6 +92,14 @@
     v-if="qrPayload && (companyPhoneNumberContact || companyEmailContact)"
     :value="qrPayload"
   ></qr-code>
+  <oxd-divider v-show="companyEmailContact"></oxd-divider>
+  <div style="text-align: center">
+    <oxd-button
+      display-type="secondary"
+      :label="$t('general.show_more')"
+      @click="$emit('see-details', false)"
+    />
+  </div>
 </template>
 
 <script>
@@ -126,6 +134,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    candidatureStatus: {
+      type: String,
+      default: null,
+    },
   },
   setup() {
     const http = new APIService(
@@ -155,6 +167,7 @@ export default {
   beforeMount() {
     this.generateQrPayload();
   },
+  emits: ['see-details'],
   methods: {
     openClientTelephone() {
       window.location.href = 'tel:' + this.companyPhoneNumberContact;

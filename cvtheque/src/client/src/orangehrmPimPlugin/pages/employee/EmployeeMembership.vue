@@ -19,14 +19,53 @@
 
 <template>
   <edit-employee-layout :employee-id="empNumber" screen="membership">
+    <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
+      <oxd-text tag="h6" class="orangehrm-main-title">{{
+        $t('Expérience professionnelle')
+      }}</oxd-text>
+      <oxd-divider />
+      <oxd-form :loading="isLoading" @submit-valid="onSave">
+        <oxd-form-row>
+          <div class="orangehrm-vertical-padding">
+            <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="defaultSelectedExperience"
+                  type="select"
+                  :options="formattedOptions"
+                  label="Expérience professionnelle globale"
+                  required
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="BTPSelectedExperience"
+                  type="select"
+                  :options="formattedOptions"
+                  label="Expérience professionnelle dans le BTP"
+                  required
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </div>
+        </oxd-form-row>
+        <oxd-form-actions>
+          <submit-button />
+        </oxd-form-actions>
+      </oxd-form>
+    </div>
+
+    <oxd-divider />
     <save-membership
       v-if="showSaveModal"
       :http="http"
       :currencies="currencies"
       :paid-by="paidBy"
       :memberships="memberships"
+      :skills="items.skills"
       @close="onSaveModalClose"
     ></save-membership>
+    <!--
     <edit-membership
       v-if="showEditModal"
       :http="http"
@@ -36,9 +75,13 @@
       :data="editModalState"
       @close="onEditModalClose"
     ></edit-membership>
+    -->
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
       <profile-action-header @click="onClickAdd">
+        {{ $t('Mes expériences professionnelles') }}
+        <!--
         {{ $t('pim.assigned_memberships') }}
+        -->
       </profile-action-header>
     </div>
     <table-header
@@ -51,8 +94,8 @@
       <oxd-card-table
         v-model:selected="checkedItems"
         :headers="headers"
-        :items="items?.data"
-        :selectable="true"
+        :items="items?.skills"
+        :selectable="false"
         :disabled="isDisabled"
         :clickable="false"
         :loading="isLoading"
@@ -71,24 +114,27 @@
 </template>
 
 <script>
+import {ref, computed, watch} from 'vue';
 import usePaginate from '@ohrm/core/util/composable/usePaginate';
 import {APIService} from '@ohrm/core/util/services/api.service';
 import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
 import EditEmployeeLayout from '@/orangehrmPimPlugin/components/EditEmployeeLayout';
 import SaveMembership from '@/orangehrmPimPlugin/components/SaveMembership';
-import EditMembership from '@/orangehrmPimPlugin/components/EditMembership';
+// import EditMembership from '@/orangehrmPimPlugin/components/EditMembership';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
-import useDateFormat from '@/core/util/composable/useDateFormat';
-import {formatDate, parseDate} from '@/core/util/helper/datefns';
-import useLocale from '@/core/util/composable/useLocale';
+// import QualificationDropdown from '@/orangehrmPimPlugin/components/QualificationDropdown';
+// import useDateFormat from '@/core/util/composable/useDateFormat';
+// import {formatDate, parseDate} from '@/core/util/helper/datefns';
+// import useLocale from '@/core/util/composable/useLocale';
 
 export default {
   components: {
     'profile-action-header': ProfileActionHeader,
     'edit-employee-layout': EditEmployeeLayout,
     'save-membership': SaveMembership,
-    'edit-membership': EditMembership,
+    // 'edit-membership': EditMembership,
     'delete-confirmation': DeleteConfirmationDialog,
+    // 'qualification-dropdown': QualificationDropdown,
   },
 
   props: {
@@ -108,38 +154,40 @@ export default {
       type: Array,
       default: () => [],
     },
+    infoOptions: {
+      type: Array,
+      required: true,
+    },
   },
 
   setup(props) {
+    const formattedOptions = computed(() =>
+      props.infoOptions.professionalExperiences.map((option, index) => ({
+        id: index, // Identifiant unique pour chaque option
+        label: option, // Label affiché dans la liste déroulante
+      })),
+    );
+
+    const defaultSelectedExperience = ref(null);
+    const BTPSelectedExperience = ref(null);
     const http = new APIService(
       window.appGlobal.baseUrl,
       `/api/v2/pim/employees/${props.empNumber}/memberships`,
     );
-    const {jsDateFormat} = useDateFormat();
-    const {locale} = useLocale();
+    // const {jsDateFormat} = useDateFormat();
+    // const {locale} = useLocale();
 
     const membershipNormalizer = (data) => {
-      return data.map((item) => {
-        return {
-          id: item.id,
-          membershipId: item.membership.id,
-          membershipName: item.membership.name,
-          subscriptionPaidBy: item.subscriptionPaidBy,
-          subscriptionFee: item.subscriptionFee,
-          subscriptionTypeId: item.currencyType.id,
-          subscriptionCurrencyName: item.currencyType.name,
-          subscriptionCommenceDate: formatDate(
-            parseDate(item.subscriptionCommenceDate),
-            jsDateFormat,
-            {locale},
-          ),
-          subscriptionRenewalDate: formatDate(
-            parseDate(item.subscriptionRenewalDate),
-            jsDateFormat,
-            {locale},
-          ),
-        };
-      });
+      return {
+        professionalExperience: data[0]?.professionalExperience ?? null,
+        specificProfessionalExperience:
+          data[0]?.specificProfessionalExperience ?? null,
+        skills: data.map((item) => ({
+          title: item.title,
+          year: item.year,
+          description: item.description,
+        })),
+      };
     };
 
     const {
@@ -155,6 +203,31 @@ export default {
       normalizer: membershipNormalizer,
       toastNoRecords: false,
     });
+    const items = ref({
+      professionalExperience: null,
+      specificProfessionalExperience: null,
+      skills: [],
+    });
+
+    watch(response, (newResponse) => {
+      if (newResponse?.data) {
+        items.value = newResponse.data;
+        const findOption = (value) => {
+          const foundOption =
+            formattedOptions.value.find((option) => option.label === value) ||
+            null;
+          return foundOption || null;
+        };
+
+        defaultSelectedExperience.value = findOption(
+          items.value.professionalExperience,
+        );
+        BTPSelectedExperience.value = findOption(
+          items.value.specificProfessionalExperience,
+        );
+      }
+    });
+
     return {
       http,
       showPaginator,
@@ -164,7 +237,11 @@ export default {
       pages,
       pageSize,
       execQuery,
-      items: response,
+      items,
+      formattedOptions,
+      defaultSelectedExperience,
+      BTPSelectedExperience,
+      //submit,
     };
   },
 
@@ -172,41 +249,25 @@ export default {
     return {
       headers: [
         {
-          name: 'membershipName',
-          slot: 'title',
-          title: this.$t('pim.membership'),
+          name: 'title',
+          title: this.$t('Poste occupé'),
           style: {flex: 1},
         },
         {
-          name: 'subscriptionPaidBy',
-          title: this.$t('pim.subscription_paid_by'),
+          name: 'year',
+          title: this.$t('Période'),
           style: {flex: 1},
         },
         {
-          name: 'subscriptionFee',
-          title: this.$t('pim.subscription_amount'),
-          style: {flex: 1},
-        },
-        {
-          name: 'subscriptionCurrencyName',
-          title: this.$t('general.currency'),
-          style: {flex: 1},
-        },
-        {
-          name: 'subscriptionCommenceDate',
-          title: this.$t('pim.subscription_commence_date'),
-          style: {flex: 1},
-        },
-        {
-          name: 'subscriptionRenewalDate',
-          title: this.$t('pim.subscription_renewal_date'),
-          style: {flex: 1},
+          name: 'description',
+          title: this.$t('Description'),
+          style: {flex: 2},
         },
         {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 1},
+          style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellConfig: {
             delete: {
@@ -216,12 +277,12 @@ export default {
                 name: 'trash',
               },
             },
-            edit: {
-              onClick: this.onClickEdit,
-              props: {
-                name: 'pencil-fill',
-              },
-            },
+            // edit: {
+            //   onClick: this.onClickEdit,
+            //   props: {
+            //     name: 'pencil-fill',
+            //   },
+            // },
           },
         },
       ],
@@ -239,6 +300,20 @@ export default {
   },
 
   methods: {
+    onSave() {
+      this.isLoading = true;
+      this.http
+        .update('', {
+          professionalExperience: this.defaultSelectedExperience?.label,
+          specificProfessionalExperience: this.BTPSelectedExperience?.label,
+        })
+        .then(() => {
+          return this.$toast.saveSuccess();
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
+    },
     onClickDeleteSelected() {
       const ids = this.checkedItems.map((index) => {
         return this.items?.data[index].id;
@@ -252,7 +327,7 @@ export default {
     onClickDelete(item) {
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems([item.id]);
+          this.deleteItems([item]);
         }
       });
     },

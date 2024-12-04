@@ -18,7 +18,12 @@
  -->
 
 <template>
-  <recruitment-status v-if="candidate" :candidate="candidate">
+  <recruitment-status
+    v-if="candidate && candidate.candidatureStatus"
+    :candidate="candidate"
+    :candidature-statuses="candidatureStatuses"
+    :matching-id="matchingId"
+  >
   </recruitment-status>
   <candidate-profile
     v-if="candidate"
@@ -26,25 +31,29 @@
     :allowed-file-types="allowedFileTypes"
     :max-file-size="maxFileSize"
     :updatable="updatable"
-    @update="onCandidateUpdate"
+    @update="onCandidsateUpdate"
   ></candidate-profile>
-  <history-table v-if="candidate" :candidate="candidate"></history-table>
+  <!--<history-table v-if="candidate" :candidate="candidate"></history-table>-->
 </template>
 
 <script>
 import {APIService} from '@/core/util/services/api.service';
 import RecruitmentStatus from '@/orangehrmRecruitmentPlugin/components/RecruitmentStatus';
 import CandidateProfile from '@/orangehrmRecruitmentPlugin/components/CandidateProfile';
-import HistoryTable from '@/orangehrmRecruitmentPlugin/components/HistoryTable';
+//import HistoryTable from '@/orangehrmRecruitmentPlugin/components/HistoryTable';
 
 export default {
   components: {
-    'history-table': HistoryTable,
+    //'history-table': HistoryTable,
     'candidate-profile': CandidateProfile,
     'recruitment-status': RecruitmentStatus,
   },
   props: {
     candidateId: {
+      type: Number,
+      required: true,
+    },
+    matchingId: {
       type: Number,
       required: true,
     },
@@ -60,6 +69,10 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    candidatureStatuses: {
+      type: Array,
+      default: () => [],
     },
   },
   setup() {
@@ -81,9 +94,17 @@ export default {
   },
   methods: {
     onCandidateUpdate() {
-      this.http.get(this.candidateId).then(({data: {data}}) => {
-        this.candidate = data;
-      });
+      this.matchingId
+        ? this.http
+            .get(this.candidateId, {
+              matchingId: this.matchingId,
+            })
+            .then(({data: {data}}) => {
+              this.candidate = data;
+            })
+        : this.http.get(this.candidateId).then(({data: {data}}) => {
+            this.candidate = data;
+          });
     },
   },
 };

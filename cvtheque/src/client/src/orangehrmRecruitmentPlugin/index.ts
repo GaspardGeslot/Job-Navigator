@@ -29,6 +29,7 @@ import ShortlistAction from './pages/ShortlistAction.vue';
 import SaveCandidate from './pages/SaveCandidate.vue';
 import ViewCandidatesList from './pages/ViewCandidatesList.vue';
 import ViewCandidateProfile from './pages/ViewCandidateProfile.vue';
+import ViewCompanyProfile from './pages/ViewCompanyProfile.vue';
 import ViewActionHistory from './pages/ViewActionHistory.vue';
 import VacancyList from './pages/VacancyList.vue';
 import ApplyJobVacancy from './pages/ApplyJobVacancy.vue';
@@ -41,6 +42,7 @@ export default {
   'save-candidate': SaveCandidate,
   'view-candidates-list': ViewCandidatesList,
   'view-candidate-profile': ViewCandidateProfile,
+  'view-company-profile': ViewCompanyProfile,
   'shortlist-action': ShortlistAction,
   'reject-action': RejectAction,
   'interview-schedule-action': InterviewScheduleAction,

@@ -26,13 +26,14 @@ use OrangeHRM\Core\Traits\ModuleScreenHelperTrait;
 use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\Core\Traits\UserRoleManagerTrait;
 use OrangeHRM\Entity\Employee;
+use OrangeHRM\Entity\UserRole;
 use OrangeHRM\Entity\WorkflowStateMachine;
 use OrangeHRM\I18N\Traits\Service\I18NHelperTrait;
 
 class PIMLeftMenuService
 {
-    use UserRoleManagerTrait;
     use AuthUserTrait;
+    use UserRoleManagerTrait;
     use ConfigServiceTrait;
     use ModuleScreenHelperTrait;
     use ControllerTrait;
@@ -43,7 +44,7 @@ class PIMLeftMenuService
 
     private ?EmployeeService $employeeService = null;
 
-    private array $availableActions = [
+    private array $availableActionsCandidate = [
         'viewPersonalDetails' => [
             'module' => 'pim',
             'data_groups' => ['personal_information', 'personal_attachment', 'personal_custom_fields'],
@@ -103,11 +104,24 @@ class PIMLeftMenuService
             ],
             'label' => 'Qualifications'
         ],
-        /*'viewMemberships' => [
+        'viewMemberships' => [
             'module' => 'pim',
             'data_groups' => ['membership', 'membership_attachment', 'membership_custom_fields'],
             'label' => 'Memberships'
-        ]*/
+        ]
+    ];
+
+    private array $availableActionsCompany = [
+        'viewPersonalDetails' => [
+            'module' => 'pim',
+            'data_groups' => ['personal_information', 'personal_attachment', 'personal_custom_fields'],
+            'label' => "Personal Details"
+        ],
+        'contactDetails' => [
+            'module' => 'pim',
+            'data_groups' => ['contact_details', 'contact_attachment', 'contact_custom_fields'],
+            'label' => 'Contact Details'
+        ]
     ];
 
     /**
@@ -288,8 +302,8 @@ class PIMLeftMenuService
      * @throws CoreServiceException
      */
     protected function getAvailableActions(): array
-    {
-        $availableActions = $this->availableActions;
+    {   
+        $availableActions = $this->getAuthUser()->getIsCandidate() ? $this->availableActionsCandidate : $this->availableActionsCompany;
         if (!$this->isTaxMenuEnabled()) {
             unset($availableActions['viewUsTaxExemptions']);
         }

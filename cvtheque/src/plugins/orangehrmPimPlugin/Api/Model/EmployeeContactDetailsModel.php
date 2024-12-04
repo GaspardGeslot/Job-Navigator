@@ -58,7 +58,10 @@ class EmployeeContactDetailsModel implements Normalizable
                 'workTelephone',
                 'mobile',
                 'workEmail',
-                'otherEmail'
+                'otherEmail',
+                'otherId',
+                'companyAllowContactViaEmail',
+                'companyAllowContactViaPhone',
             ]
         );
         $this->setAttributeNames(
@@ -73,7 +76,10 @@ class EmployeeContactDetailsModel implements Normalizable
                 'workTelephone',
                 'mobile',
                 'workEmail',
-                'otherEmail'
+                'otherEmail',
+                'otherId',
+                'companyAllowContactViaEmail',
+                'companyAllowContactViaPhone',
             ]
         );
     }

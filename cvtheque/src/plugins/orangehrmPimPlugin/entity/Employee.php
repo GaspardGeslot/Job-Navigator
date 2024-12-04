@@ -92,6 +92,13 @@ class Employee
     /**
      * @var string
      *
+     * @ORM\Column(name="emp_salary", type="string", length=100, nullable=true, options={"default" : ""})
+     */
+    private ?string $salary = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="emp_driving_license", type="string", length=100, nullable=true, options={"default" : ""})
      */
     private ?string $drivingLicense = '';
@@ -99,9 +106,30 @@ class Employee
     /**
      * @var string
      *
+     * @ORM\Column(name="emp_motivation ", type="string", length=2000, nullable=true, options={"default" : ""})
+     */
+    private ?string $motivation = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="emp_need", type="string", length=100, nullable=true, options={"default" : ""})
      */
     private ?string $need = '';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="emp_resume", type="integer", length=100, nullable=true)
+     */
+    private ?int $resume;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="emp_attachment", type="integer", length=100, nullable=true)
+     */
+    private ?int $attachment;
 
     /**
      * @var string
@@ -113,9 +141,58 @@ class Employee
     /**
      * @var string
      *
+     * @ORM\Column(name="emp_roles", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $roles = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="emp_skills", type="string", length=400, nullable=true, options={"default" : ""})
+     */
+    private ?string $emp_skills = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="company_name", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $companyName = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_siret", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companySiret = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_workforce", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyWorkforce = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_naf_code", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyNafCode = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_website", type="string", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyWebsite = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company_presentation", type="string", length=1000, nullable=true, options={"default" : ""})
+     */
+    private ?string $companyPresentation = '';
 
     /**
      * @var string
@@ -158,6 +235,30 @@ class Employee
      * @ORM\Column(name="company_matching_job_title", type="string", length=300, nullable=true, options={"default" : ""})
      */
     private ?string $companyMatchingJobTitle = '';
+
+    /**
+     * @var int
+     * @ORM\Column(name="matching_id", type="integer", nullable=true)
+     */
+    private ?int $matchingId = null;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="company_allow_contact_via_email", type="boolean", options={"default" : 1})
+     */
+    private bool $companyAllowContactViaEmail = true;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="company_allow_contact_via_phone", type="boolean", options={"default" : 1})
+     */
+    private bool $companyAllowContactViaPhone = true;
+
+    /**
+     * @var string
+     * @ORM\Column(name="candidature_status", length=300, nullable=true, options={"default" : ""})
+     */
+    private ?string $candidatureStatus = '';
     
     /**
      * @var string
@@ -670,14 +771,17 @@ class Employee
      */
     public function setProfileInfo(mixed $profileInfo): void 
     {
-        $this->setProfileId($profileInfo['id'] ?? $this->empNumber);
+        $this->setProfileId($profileInfo['id'] ?? $this->empNumber ?? null);
         $this->setNeed($profileInfo['need'] ?? '');
+        $this->setResume(array_key_exists('resume', $profileInfo) && $profileInfo['resume'] != null ? (int) $profileInfo['resume'] : -1);
         $this->setStudyLevel($profileInfo['studyLevel'] ?? '');
-        $this->setDrivingLicense($profileInfo['drivingLicense'] ?? '');
+        $this->setDrivingLicense(json_encode($profileInfo['drivingLicenses'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setMotivation($profileInfo['motivation'] ?? '');
+        $this->setSalary($profileInfo['salaryExpectation'] ?? '');
         $this->setCourseStart($profileInfo['courseStart'] ?? '');
         $this->setFirstName($profileInfo['firstName'] ?? '');
         $this->setLastName($profileInfo['lastName'] ?? '');
-        $this->setBirthday($profileInfo['birthDate'] != null ? new \DateTime($profileInfo['birthDate']) : null);
+        $this->setBirthday(array_key_exists('birthDate', $profileInfo) && $profileInfo['birthDate'] != null ? new \DateTime($profileInfo['birthDate']) : null);
     }
 
     /**
@@ -696,17 +800,73 @@ class Employee
     }
 
     /**
+     * @param mixed $profileContact
+     */
+    public function setCompanyContact(mixed $companyContact): void 
+    {
+        $this->setOtherEmail($companyContact['contactEmail'] ?? '');
+        $this->setMobile($companyContact['phoneNumber'] ?? '');
+        $this->setStreet1($companyContact['address']['street'] ?? '');
+        $this->setCity($companyContact['address']['city'] ?? '');
+        $this->setProvince($companyContact['address']['state'] ?? '');
+        $this->setZipcode($companyContact['address']['postalCode'] ?? '');
+        $this->setCompanyAllowContactViaEmail($companyContact['allowContactViaEmail'] ?? true);
+        $this->setCompanyAllowContactViaPhone($companyContact['allowContactViaPhone'] ?? true);
+    }
+
+    /**
      * @param mixed $company
      */
     public function setCompany(mixed $company): void 
     {
-        $this->setCompanyId($company['id'] ?? '');
+        $this->setCompanyId($company['id'] ?? -1);
+        $this->setAttachment(array_key_exists('attachment', $company) && $company['attachment'] != null ? (int) $company['attachment'] : -1);
         $this->setCompanyName($company['name'] ?? '');
+        $this->setCompanySiret($company['siret'] ?? '');
+        $this->setCompanyWebsite($company['website'] ?? '');
+        $this->setCompanyPresentation($company['presentation'] ?? '');
+        $this->setCompanyNafCode($company['nafCode'] ?? '');
+        $this->setCompanyWorkforce($company['workforce'] ?? '');
         $this->setCompanyLogo($company['logo'] ?? '');
         $this->setCompanyLocation($company['location'] ?? '');
         $this->setCompanyPhoneNumberContact($company['phoneNumberContact'] ?? '');
         $this->setCompanyEmailContact($company['emailContact'] ?? '');
-        $this->setCompanyMatchingJobTitle($company['matchingJobTitle'] ?? '');;
+        $this->setCompanyMatchingJobTitle($company['matchingJobTitle'] ?? '');
+        $this->setMatchingId($company['matchingId'] ?? null);
+        $this->setCandidatureStatus($company['candidatureStatus'] ?? '');
+        $this->setProfileContact([]);
+        $this->setProfileInfo([]);
+    }
+
+    /**
+     * @param mixed $company
+     */
+    public function setCompanyDetails(mixed $company): void 
+    {
+        $this->setProfileContact([]);
+        $this->setProfileInfo([]);
+        if (array_key_exists('info', $company)) {
+            $this->setAttachment(array_key_exists('attachment', $company['info']) && $company['info']['attachment'] != null ? (int) $company['info']['attachment'] : -1);
+            $this->setCompanyName($company['info']['name'] ?? '');
+            $this->setCompanySiret($company['info']['siret'] ?? '');
+            $this->setCompanyWebsite($company['info']['website'] ?? '');
+            $this->setCompanyPresentation($company['info']['presentation'] ?? '');
+            $this->setCompanyNafCode($company['info']['nafCode'] ?? '');
+            $this->setCompanyWorkforce($company['info']['workforce'] ?? '');
+            $this->setCompanyLogo($company['info']['logo'] ?? '');
+        }
+        if (array_key_exists('contact', $company)) {
+            $this->setCompanyPhoneNumberContact($company['contact']['phoneNumber'] ?? '');
+            $this->setCompanyEmailContact($company['contact']['contactEmail'] ?? '');
+            if (array_key_exists('address', $company['contact'])) {
+                $this->setStreet1($company['contact']['address']['street'] ?? '');
+                $this->setCity($company['contact']['address']['city'] ?? '');
+                $this->setProvince($company['contact']['address']['state'] ?? '');
+                $this->setZipcode($company['contact']['address']['postalCode'] ?? '');
+            }
+        }
+        $this->setJobs(json_encode($company['jobs'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->setCandidatureStatus($company['candidatureStatus'] ?? '');
     }
 
     /**
@@ -789,19 +949,52 @@ class Employee
     {
         $this->studyLevel = $studyLevel;
     }
-    
+
     /**
      * @return string
      */
-    public function getDrivingLicense(): string
+    public function getSalary(): string
+    {
+        return $this->salary;
+    }
+
+
+    /**
+     * @param string $salary
+     */
+    public function setSalary(string $salary): void
+    {
+        $this->salary = $salary;
+    }
+    
+    /**
+     * @return string|null
+     */
+    public function getDrivingLicense(): ?string
     {
         return $this->drivingLicense;
     }
 
     /**
-     * @param string $drivingLicense
+     * @param string $motivation
      */
-    public function setDrivingLicense(string $drivingLicense): void
+    public function setMotivation(string $motivation): void
+    {
+        $this->motivation = $motivation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMotivation(): string
+    {
+        return $this->motivation;
+    }
+
+    /**
+     * @param ?string $drivingLicense
+     */
+    public function setDrivingLicense(?string $drivingLicense): void
     {
         $this->drivingLicense = $drivingLicense;
     }
@@ -839,9 +1032,41 @@ class Employee
     }
 
     /**
-     * @return string
+     * @return ?int
      */
-    public function getJobs(): string
+    public function getResume(): ?int
+    {
+        return $this->resume;
+    }
+
+    /**
+     * @param ?int $resume
+     */
+    public function setResume(?int $resume): void
+    {
+        $this->resume = $resume;
+    }
+
+    /**
+     * @return ?int
+     */
+    public function getAttachment(): ?int
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * @param ?int $attachment
+     */
+    public function setAttachment(?int $attachment): void
+    {
+        $this->attachment = $attachment;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJobs(): ?string
     {
         return $this->jobs;
     }
@@ -849,9 +1074,41 @@ class Employee
     /**
      * @param string $jobs
      */
-    public function setJobs(string $jobs): void
+    public function setJobs(?string $jobs): void
     {
         $this->jobs = $jobs;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoles(): string
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param string $roles
+     */
+    public function setRoles(string $roles): void
+    {
+        $this->roles = $roles ?? '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmpSkills(): string
+    {
+        return $this->emp_skills;
+    }
+
+    /**
+     * @param string $emp_skills
+     */
+    public function setEmpSkills(string $emp_skills): void
+    {
+        $this->emp_skills = $emp_skills;
     }
 
     /**
@@ -868,6 +1125,86 @@ class Employee
     public function setCompanyName(string $companyName): void
     {
         $this->companyName = $companyName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanySiret(): string
+    {
+        return $this->companySiret;
+    }
+
+    /**
+     * @param string $companySiret
+     */
+    public function setCompanySiret(string $companySiret): void
+    {
+        $this->companySiret = $companySiret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyPresentation(): string
+    {
+        return $this->companyPresentation;
+    }
+
+    /**
+     * @param string $companyPresentation
+     */
+    public function setCompanyPresentation(string $companyPresentation): void
+    {
+        $this->companyPresentation = $companyPresentation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyWebsite(): string
+    {
+        return $this->companyWebsite;
+    }
+
+    /**
+     * @param string $companyWebsite
+     */
+    public function setCompanyWebsite(string $companyWebsite): void
+    {
+        $this->companyWebsite = $companyWebsite;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyWorkforce(): string
+    {
+        return $this->companyWorkforce;
+    }
+
+    /**
+     * @param string $companyWorkforce
+     */
+    public function setCompanyWorkforce(string $companyWorkforce): void
+    {
+        $this->companyWorkforce = $companyWorkforce;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyNafCode(): string
+    {
+        return $this->companyNafCode;
+    }
+
+    /**
+     * @param string $companyNafCode
+     */
+    public function setCompanyNafCode(string $companyNafCode): void
+    {
+        $this->companyNafCode = $companyNafCode;
     }
 
     /**
@@ -948,6 +1285,70 @@ class Employee
     public function setCompanyMatchingJobTitle(string $companyMatchingJobTitle): void
     {
         $this->companyMatchingJobTitle = $companyMatchingJobTitle;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMatchingId(): ?int
+    {
+        return $this->matchingId;
+    }
+
+    /**
+     * @param int|null $matchingId
+     */
+    public function setMatchingId(?int $matchingId): void
+    {
+        $this->matchingId = $matchingId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCompanyAllowContactViaEmail(): bool
+    {
+        return $this->companyAllowContactViaEmail;
+    }
+
+    /**
+     * @param bool $companyAllowContactViaEmail
+     */
+    public function setCompanyAllowContactViaEmail(bool $companyAllowContactViaEmail): void
+    {
+        $this->companyAllowContactViaEmail = $companyAllowContactViaEmail;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCompanyAllowContactViaPhone(): bool
+    {
+        return $this->companyAllowContactViaPhone;
+    }
+
+    /**
+     * @param bool $companyAllowContactViaPhone
+     */
+    public function setCompanyAllowContactViaPhone(bool $companyAllowContactViaPhone): void
+    {
+        $this->companyAllowContactViaPhone = $companyAllowContactViaPhone;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getCandidatureStatus(): string
+    {
+        return $this->candidatureStatus;
+    }
+
+    /**
+     * @param string $candidatureStatus
+     */
+    public function setCandidatureStatus(string $candidatureStatus): void
+    {
+        $this->candidatureStatus = $candidatureStatus;
     }
     
     /**

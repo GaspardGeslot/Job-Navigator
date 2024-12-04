@@ -97,7 +97,7 @@ class DataGroupService
     public function getApiPermissions(string $apiClassName, array $roles): ResourcePermission
     {
         $apiPermissions = $this->getDao()->getApiPermissions($apiClassName, $roles);
-
+        
         $read = false;
         $create = false;
         $update = false;

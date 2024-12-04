@@ -46,9 +46,9 @@ class AuthenticationService
                 throw AuthenticationException::userDisabled();
             } elseif ($user->getEmpNumber() === null) {
                 throw AuthenticationException::employeeNotAssigned();
-            } elseif ($user->getEmployee()->getEmployeeTerminationRecord() instanceof EmployeeTerminationRecord) {
+            }/* elseif ($user->getEmployee()->getEmployeeTerminationRecord() instanceof EmployeeTerminationRecord) {
                 throw AuthenticationException::employeeTerminated();
-            }
+            }*/
 
             $this->setUserAttributes($user);
             return true;
@@ -67,34 +67,35 @@ class AuthenticationService
     
     /**
      * @param UserCredential $credentials
-     * @return string
+     * @return ?string
      * @throws AuthenticationException
      */
-    public function setCredentials(UserCredential $credentials): string
+    public function setCredentials(UserCredential $credentials, bool $isCompany): ?string
     {
         $user = $this->getUserService()->getCredentials($credentials);
         $success = $this->setCredentialsForUser($user);
         $token = null;
         if ($success)
-            $token = $this->setHedwigeCredentials($credentials);
+            $token = $this->setHedwigeCredentials($credentials, $isCompany);
         return $token;
     }
 
     /**
      * @param UserCredential $credentials
+     * @param bool $company
      * @return string
      * @throws AuthenticationException
      */
-    public function createCredentials(UserCredential $credentials): string
+    public function createCredentials(UserCredential $credentials, bool $isCompany): ?string
     {
         $user = $this->getUserService()->createCredentials($credentials);
         $success = $this->setCredentialsForUser($user);
         $token = null;
         if ($success)
         {
-            $success = $this->createHedwigeCredentials($credentials);
+            $success = $this->createHedwigeCredentials($credentials, $isCompany);
             if ($success)
-                $token = $this->setHedwigeCredentials($credentials);
+                $token = $this->setHedwigeCredentials($credentials, $isCompany);
         }
         return $token;
     }
@@ -103,7 +104,7 @@ class AuthenticationService
      * @param UserCredential $credentials
      * @return string
      */
-    protected function setHedwigeCredentials(UserCredential $credentials) : string
+    protected function setHedwigeCredentials(UserCredential $credentials, bool $isCompany) : ?string
     {
         $client = new Client();
         $clientId = getenv('HEDWIGE_CLIENT_ID');
@@ -111,7 +112,8 @@ class AuthenticationService
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $response = $client->request('POST', "{$clientBaseUrl}/user/{$clientId}/login", [
+            $url = $isCompany ? "{$clientBaseUrl}/company/{$clientId}/login" : "{$clientBaseUrl}/user/{$clientId}/login";
+            $response = $client->request('POST', $url, [
                 'json' => [
                     'email' => $credentials->getUsername(),
                     'password' => $credentials->getPassword()
@@ -127,7 +129,7 @@ class AuthenticationService
      * @param UserCredential $credentials
      * @return bool
      */
-    protected function createHedwigeCredentials(UserCredential $credentials) : bool
+    protected function createHedwigeCredentials(UserCredential $credentials, bool $isCompany) : bool
     {
         $client = new Client();
         $clientId = getenv('HEDWIGE_CLIENT_ID');
@@ -135,7 +137,8 @@ class AuthenticationService
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $client->request('POST', "{$clientBaseUrl}/user/{$clientId}", [
+            $url = $isCompany ? "{$clientBaseUrl}/company/{$clientId}" : "{$clientBaseUrl}/user/{$clientId}";
+            $client->request('POST', $url, [
                 'json' => [
                     'email' => $credentials->getUsername(),
                     'password' => $credentials->getPassword()

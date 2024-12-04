@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Recruitment\Controller;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
@@ -31,10 +32,80 @@ class EditJobVacancyController extends AbstractVueController
     public function preRender(Request $request): void
     {
         $id = $request->attributes->get('id');
+
+        $options = $this->getCandidatureOptions();
+
         $component = new Component('edit-job-vacancy');
-        $component->addProp(new Prop('vacancy-id', Prop::TYPE_STRING, $id));
+
+        $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($options['studyLevels']), $options['studyLevels'])));
+        $component->addProp(new Prop('course-starts', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($options['courseStarts']), $options['courseStarts'])));
+        $component->addProp(new Prop('driving-licenses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($options['drivingLicenses']), $options['drivingLicenses'])));
+        $component->addProp(new Prop('professional-experiences', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($options['professionalExperiences']), $options['professionalExperiences'])));
+        $component->addProp(new Prop('countries', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($options['countries']), $options['countries'])));
+        $component->addProp(new Prop('needs', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+            return [
+                'id' => $index,
+                'label' => $label
+            ];
+        }, $options['needs'], array_keys($options['needs']))));
+        $component->addProp(new Prop('sectors', Prop::TYPE_ARRAY, array_map(function($sector, $index) {
+            return [
+                'id' => $index,
+                'label' => $sector['title'],
+                'jobs' => $sector['jobs']
+            ];
+        }, $options['sectors'], array_keys($options['sectors']))));
+
+        $component->addProp(new Prop('matching-id', Prop::TYPE_NUMBER, $id));
+
+        /*$component->addProp(new Prop('vacancy-id', Prop::TYPE_STRING, $id));
         $component->addProp(new Prop('allowed-file-types', Prop::TYPE_ARRAY, $this->getConfigService()->getAllowedFileTypes()));
-        $component->addProp(new Prop('max-file-size', Prop::TYPE_NUMBER, $this->getConfigService()->getMaxAttachmentSize()));
+        $component->addProp(new Prop('max-file-size', Prop::TYPE_NUMBER, $this->getConfigService()->getMaxAttachmentSize()));*/
+
         $this->setComponent($component);
+    }
+
+    public function getCandidatureOptions(): array
+    {
+        $client = new Client();
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/options", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
     }
 }

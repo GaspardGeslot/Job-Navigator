@@ -49,7 +49,11 @@
             </div>
           </div>
       -->
-      <h3 class="formTitle" style="margin-top: 2.5rem">Permis et véhicule</h3>
+      <h3 class="formTitle" style="margin-top: 1rem">Permis et véhicule</h3>
+      <SubmitComponent :is-disabled="validationSuivant" @go-back="goBack" />
+      <p v-if="errorMessage" id="alert-msg04" class="alert-msg">
+        {{ errorMessage }}
+      </p>
       <p class="formSubTitle">Plusieurs choix possibles.</p>
       <p class="CVText">Permis obtenus</p>
       <!--
@@ -100,36 +104,35 @@
         <div class="checkbox-item2">
           <div
             v-for="(elem, elemIndex) in drivingLicenses"
-            :key="`${elemIndex}-${elem}`"
+            :key="elemIndex"
             class="checkbox-item"
           >
             <input
-              :key="elemIndex"
+              :id="'permit' + elemIndex"
               v-model="checkedPermits"
               class="custom-checkbox custom-input"
               type="checkbox"
               :value="elem"
             />
-            <label class="permitLabel">{{ elem }}</label>
+            <label :for="'permit' + elemIndex" class="permitLabel">{{
+              elem
+            }}</label>
           </div>
         </div>
       </div>
-
-      <p class="adjust-margin CVText">Possédez-vous un véhicule personnel ?</p>
+      <p class="adjust-margin CVText">
+        Possédez-vous un véhicule personnel ? *
+      </p>
       <div class="radio-group">
         <div id="radio-item-left" class="radio-item">
-          <input id="vehicleYes" v-model="picked" type="radio" value="Oui" />
+          <input id="vehicleYes" v-model="picked" type="radio" value="true" />
           <label for="vehicleYes">Oui</label>
         </div>
         <div class="radio-item">
-          <input id="vehicleNo" v-model="picked" type="radio" value="Non" />
+          <input id="vehicleNo" v-model="picked" type="radio" value="false" />
           <label for="vehicleNo">Non</label>
         </div>
       </div>
-      <p v-if="errorMessage" id="alert-msg04" class="alert-msg">
-        {{ errorMessage }}
-      </p>
-      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -154,7 +157,13 @@ export default {
       checkedPermits: [],
       picked: null,
       errorMessage: '',
+      validationSuivant: true,
     };
+  },
+  watch: {
+    picked(newVal) {
+      this.validationSuivant = !newVal;
+    },
   },
   methods: {
     onSubmit() {

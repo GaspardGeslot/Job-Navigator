@@ -20,6 +20,7 @@ namespace OrangeHRM\Authentication\Auth;
 
 use OrangeHRM\Authentication\Dto\AuthParamsInterface;
 use OrangeHRM\Authentication\Dto\UserCredentialInterface;
+use OrangeHRM\Authentication\Exception\UserAlreadyEnrolledException;
 use OrangeHRM\Authentication\Exception\AuthenticationException;
 use OrangeHRM\Authentication\Exception\PasswordEnforceException;
 use OrangeHRM\Authentication\Service\AuthenticationService;
@@ -48,16 +49,16 @@ class LocalAuthProvider extends AbstractAuthProvider
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return string
+     * @return ?string
      * @throws AuthenticationException
      * @throws PasswordEnforceException
      */
-    public function authenticate(AuthParamsInterface $authParams): string
+    public function authenticate(AuthParamsInterface $authParams, bool $isCompany = false): ?string
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface) {
             return false;
         }
-        $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential());
+        $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential(), $isCompany);
         if (!is_null($token)) {
             if ($this->getConfigService()->getConfigDao()
                     ->getValue(ConfigService::KEY_ENFORCE_PASSWORD_STRENGTH) === 'on') {
@@ -86,18 +87,51 @@ class LocalAuthProvider extends AbstractAuthProvider
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return string
+     * @return ?string
      * @throws AuthenticationException
      * @throws PasswordEnforceException
      */
-    public function signIn(AuthParamsInterface $authParams): string
+    public function authenticateCompany(AuthParamsInterface $authParams): ?string
+    {
+        if (!$authParams->getCredential() instanceof UserCredentialInterface)
+            return false;
+        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
+        if ($exists)
+            return $this->authenticate($authParams, true);
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), true);
+    }
+
+    /**
+     * @param AuthParamsInterface $authParams
+     * @return ?string
+     * @throws AuthenticationException
+     * @throws PasswordEnforceException
+     */
+    public function signIn(AuthParamsInterface $authParams): ?string
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
             return false;
         $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
         if ($exists)
             return false;
-        return $this->getAuthenticationService()->createCredentials($authParams->getCredential());
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false);
+    }
+
+    /**
+     * @param AuthParamsInterface $authParams
+     * @return ?string
+     * @throws AuthenticationException
+     * @throws PasswordEnforceException
+     * @throws UserAlreadyEnrolledException
+     */
+    public function signInFromCandidature(AuthParamsInterface $authParams): ?string
+    {
+        if (!$authParams->getCredential() instanceof UserCredentialInterface)
+            return false;
+        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
+        if ($exists)
+            throw new UserAlreadyEnrolledException();
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false);
     }
 
     /**

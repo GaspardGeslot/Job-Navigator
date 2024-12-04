@@ -26,6 +26,7 @@ use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Entity\EmployeeMembership;
 use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Framework\Services;
+use GuzzleHttp\Client;
 
 class EmployeeMembershipController extends BaseViewEmployeeController
 {
@@ -47,13 +48,13 @@ class EmployeeMembershipController extends BaseViewEmployeeController
         return $this->membershipService;
     }
 
-    /**
-     * @return PayGradeService
-     */
-    public function getPayGradeService(): PayGradeService
-    {
-        return $this->getContainer()->get(Services::PAY_GRADE_SERVICE);
-    }
+    // /**
+    //  * @return PayGradeService
+    //  */
+    // public function getPayGradeService(): PayGradeService
+    // {
+    //     return $this->getContainer()->get(Services::PAY_GRADE_SERVICE);
+    // }
 
     /**
      * @inheritDoc
@@ -64,15 +65,17 @@ class EmployeeMembershipController extends BaseViewEmployeeController
         if ($empNumber) {
             $component = new Component('employee-membership');
             $component->addProp(new Prop('emp-number', Prop::TYPE_NUMBER, $empNumber));
-            $currencies = $this->getPayGradeService()->getCurrencyArray();
+            // $currencies = $this->getPayGradeService()->getCurrencyArray();
             $memberships = $this->getMembershipService()->getMembershipArray();
-            $paidBy = [
-                ["id" => EmployeeMembership::COMPANY, "label" => EmployeeMembership::COMPANY],
-                ["id" => EmployeeMembership::INDIVIDUAL, "label" => EmployeeMembership::INDIVIDUAL]
-            ];
-            $component->addProp(new Prop('currencies', Prop::TYPE_ARRAY, $currencies));
-            $component->addProp(new Prop('paid-by', Prop::TYPE_ARRAY, $paidBy));
+            // $paidBy = [
+            //     ["id" => EmployeeMembership::COMPANY, "label" => EmployeeMembership::COMPANY],
+            //     ["id" => EmployeeMembership::INDIVIDUAL, "label" => EmployeeMembership::INDIVIDUAL]
+            // ];
+            // $component->addProp(new Prop('currencies', Prop::TYPE_ARRAY, $currencies));
+            // $component->addProp(new Prop('paid-by', Prop::TYPE_ARRAY, $paidBy));
             $component->addProp(new Prop('memberships', Prop::TYPE_ARRAY, $memberships));
+            $infoOptions = $this->getInfoOptions();
+            $component->addProp(new Prop('info-options', Prop::TYPE_ARRAY, $infoOptions));
             $this->setComponent($component);
 
             $this->setPermissionsForEmployee(
@@ -85,6 +88,25 @@ class EmployeeMembershipController extends BaseViewEmployeeController
             );
         } else {
             $this->handleBadRequest();
+        }
+    }
+
+    public function getInfoOptions(): array
+    {
+        $client = new Client();
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/options", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return [];
         }
     }
 

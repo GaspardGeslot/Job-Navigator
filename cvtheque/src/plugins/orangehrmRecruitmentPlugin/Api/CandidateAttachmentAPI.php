@@ -30,9 +30,11 @@ use OrangeHRM\Core\Api\V2\Validator\Rule;
 use OrangeHRM\Core\Api\V2\Validator\Rules;
 use OrangeHRM\Entity\Candidate;
 use OrangeHRM\Entity\CandidateAttachment;
+use OrangeHRM\Entity\EmployeeAttachment;
 use OrangeHRM\Recruitment\Api\Model\CandidateAttachmentModel;
 use OrangeHRM\Recruitment\Dto\RecruitmentAttachment;
 use OrangeHRM\Recruitment\Service\RecruitmentAttachmentService;
+use OrangeHRM\Pim\Service\EmployeeAttachmentService;
 use OrangeHRM\Recruitment\Traits\Service\RecruitmentAttachmentServiceTrait;
 
 class CandidateAttachmentAPI extends Endpoint implements CrudEndpoint
@@ -49,6 +51,22 @@ class CandidateAttachmentAPI extends Endpoint implements CrudEndpoint
 
     public const CANDIDATE_ATTACHMENT_REPLACE_CURRENT = 'replaceCurrent';
     public const CANDIDATE_ATTACHMENT_DELETE_CURRENT = 'deleteCurrent';
+
+    /**
+     * @var EmployeeAttachmentService|null
+     */
+    protected ?EmployeeAttachmentService $employeeAttachmentService = null;
+
+    /**
+     * @return EmployeeAttachmentService
+     */
+    public function getEmployeeAttachmentService(): EmployeeAttachmentService
+    {
+        if (!$this->employeeAttachmentService instanceof EmployeeAttachmentService) {
+            $this->employeeAttachmentService = new EmployeeAttachmentService();
+        }
+        return $this->employeeAttachmentService;
+    }
 
     /**
      * @inheritDoc
@@ -206,14 +224,19 @@ class CandidateAttachmentAPI extends Endpoint implements CrudEndpoint
      */
     public function getOne(): EndpointResult
     {
-        $candidateId = $this->getRequestParams()->getInt(
+        $candidateAttachmentId = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             self::PARAMETER_CANDIDATE_ID
         );
-        $candidateAttachment = $this->getRecruitmentAttachmentService()
+        
+        $employeeAttachment = $this->getEmployeeAttachmentService()->getEmployeeAttachment(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), $candidateAttachmentId);
+        
+        $candidateAttachment = !$employeeAttachment ? new RecruitmentAttachment() : new RecruitmentAttachment($employeeAttachment->getAttachId(), $employeeAttachment->getFilename(), $employeeAttachment->getFileType(), (string) $employeeAttachment->getSize(), null, null);
+
+        /*$candidateAttachment = $this->getRecruitmentAttachmentService()
             ->getRecruitmentAttachmentDao()
             ->getPartialCandidateAttachmentByCandidateId($candidateId);
-        $this->throwRecordNotFoundExceptionIfNotExist($candidateAttachment, RecruitmentAttachment::class);
+        $this->throwRecordNotFoundExceptionIfNotExist($candidateAttachment, RecruitmentAttachment::class);*/
 
         return new EndpointResourceResult(CandidateAttachmentModel::class, $candidateAttachment);
     }

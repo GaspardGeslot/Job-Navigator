@@ -54,7 +54,7 @@ export class APIService {
     this._ignorePathRegex = new RegExp(ignorePath);
   }
 
-  getAll(params?: object): Promise<AxiosResponse> {
+  getAll(params?: any): Promise<AxiosResponse> {
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -76,16 +76,25 @@ export class APIService {
     const headers = {
       Accept: 'application/json',
     };
-    console.log('Données prêtes pour POST :', data);
     return this._http.post(this._apiSection, data, {headers});
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update(id: number, data: any): Promise<AxiosResponse> {
+  update(id: number | string | null, data: any): Promise<AxiosResponse> {
     const headers = {
       'Content-Type': 'application/json',
     };
+    if (!id) {
+      return this._http.put(`${this._apiSection}`, data, {headers});
+    }
     return this._http.put(`${this._apiSection}/${id}`, data, {headers});
+  }
+
+  updateJobs(id: number, data: any): Promise<AxiosResponse> {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    return this._http.put(`${this._apiSection}`, data, {headers});
   }
 
   delete(id: number): Promise<AxiosResponse> {

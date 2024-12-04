@@ -24,11 +24,7 @@
         {{ $t('pim.job_details') }}
       </oxd-text>
       <oxd-divider />
-      <oxd-form
-        v-if="jobsFetched.length"
-        :loading="isLoading"
-        @submit-valid="onSave"
-      >
+      <oxd-form :loading="isLoading" @submit-valid="onSave">
         <oxd-form-row
           v-for="(item, itemIndex) in sectors"
           :key="itemIndex"
@@ -178,9 +174,10 @@
       </oxd-form>
     </div>
 
+    <!--
     <oxd-divider v-if="hasUpdatePermissions && !isLoading" />
 
-    <div
+<div
       v-if="hasUpdatePermissions && !isLoading"
       class="orangehrm-horizontal-padding orangehrm-vertical-padding"
     >
@@ -210,6 +207,7 @@
       :termination-id="termination.id"
       @close="closeTerminateModal"
     ></terminate-modal>
+    -->
   </edit-employee-layout>
 </template>
 
@@ -218,8 +216,8 @@ import {APIService} from '@ohrm/core/util/services/api.service';
 //import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import EditEmployeeLayout from '@/orangehrmPimPlugin/components/EditEmployeeLayout';
 //import JobSpecDownload from '@/orangehrmPimPlugin/components/JobSpecDownload';
-import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
-import TerminateModal from '@/orangehrmPimPlugin/components/TerminateModal';
+// import ProfileActionHeader from '@/orangehrmPimPlugin/components/ProfileActionHeader';
+// import TerminateModal from '@/orangehrmPimPlugin/components/TerminateModal';
 import {
   required,
   maxFileSize,
@@ -256,8 +254,8 @@ export default {
     //'oxd-switch-input': OxdSwitchInput,
     //'job-spec-download': JobSpecDownload,
     //'file-upload-input': FileUploadInput,
-    'profile-action-header': ProfileActionHeader,
-    'terminate-modal': TerminateModal,
+    // 'profile-action-header': ProfileActionHeader,
+    // 'terminate-modal': TerminateModal,
   },
 
   props: {
@@ -277,26 +275,26 @@ export default {
       type: Array,
       default: () => [],
     },
-    subunits: {
-      type: Array,
-      default: () => [],
-    },
-    employmentStatuses: {
-      type: Array,
-      default: () => [],
-    },
-    terminationReasons: {
-      type: Array,
-      default: () => [],
-    },
-    allowedFileTypes: {
-      type: Array,
-      required: true,
-    },
-    maxFileSize: {
-      type: Number,
-      required: true,
-    },
+    // subunits: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // employmentStatuses: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // terminationReasons: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // allowedFileTypes: {
+    //   type: Array,
+    //   required: true,
+    // },
+    // maxFileSize: {
+    //   type: Number,
+    //   required: true,
+    // },
     sectors: {
       type: Array,
       default: () => [],
@@ -323,6 +321,7 @@ export default {
 
   data() {
     return {
+      empNumberInternal: this.empNumber,
       errors: {
         tooMuchOptions: false,
       },
@@ -440,24 +439,41 @@ export default {
           this.errors.tooMuchOptions = true;
         }
       }
-      console.log('checkedJobs', this.checkedJobs);
     },
     onSave() {
       this.isLoading = true;
+      // const encodedJobs = this.checkedJobs.map((job) =>
+      //   encodeURIComponent(job),
+      // );
+
+      // const newData = JSON.parse(JSON.stringify(this.checkedJobs));
+      // const newData = {
+      // ...this.job,
+      // jobs: this.checkedJobs,
+      // jobTitleId: this.job.jobTitleId?.id ?? null,
+      // jobCategoryId: this.job.jobCategoryId?.id ?? null,
+      // subunitId: this.job.subunitId?.id ?? null,
+      // empStatusId: this.job.empStatusId?.id ?? null,
+      // locationId: this.job.locationId?.id ?? null,
+      // };
+
+      // jobTitleId: this.job.jobTitleId?.id ?? null,
+      // jobCategoryId: this.job.jobCategoryId?.id ?? null,
+      // subunitId: this.job.subunitId?.id ?? null,
+      // empStatusId: this.job.empStatusId?.id ?? null,
+      // locationId: this.job.locationId?.id ?? null,
       this.http
-        .request({
-          method: 'PUT',
-          data: {
-            ...this.job,
-            jobTitleId: this.job.jobTitleId?.id,
-            jobCategoryId: this.job.jobCategoryId?.id,
-            subunitId: this.job.subunitId?.id,
-            empStatusId: this.job.empStatusId?.id,
-            locationId: this.job.locationId?.id,
-          },
+        // .request({
+        //   method: 'PUT',
+        //   data: newData,
+        // })
+        .updateJobs(this.empNumberInternal, {
+          jobs: this.checkedJobs,
         })
-        .then((response) => {
-          this.updateJobModel(response);
+        /*.then((response) => {
+           this.updateJobModel(response);
+          
+        
           return this.http.request({
             method: 'PUT',
             url: `/api/v2/pim/employees/${this.empNumber}/employment-contract`,
@@ -473,11 +489,16 @@ export default {
             },
           });
         })
-        .then((response) => {
-          if (response) {
-            this.updateContractModel(response);
-          }
-          return this.$toast.updateSuccess();
+        .catch((error) => {
+        })
+        // .then((response) => {
+        //   if (response) {
+        //     this.updateContractModel(response);
+        //   }
+        //   return this.$toast.updateSuccess();
+        // })*/
+        .then(() => {
+          return this.$toast.saveSuccess();
         })
         .then(() => {
           this.isLoading = false;
@@ -534,16 +555,14 @@ export default {
       let tempJobsFetched = [];
       try {
         tempJobsFetched = JSON.parse(data.jobs);
-      } catch (error) {
-        console.error('Erreur lors du parsing de jobs:', error);
+      } catch {
+        tempJobsFetched = [];
       }
       this.jobsFetched = tempJobsFetched || [];
       let tempCheckedJobs = this.jobsFetched.flatMap(
         (sector) => sector.jobs || [],
       );
       this.checkedJobs.splice(0, this.checkedJobs.length, ...tempCheckedJobs);
-      console.log('jobsFetched', this.jobsFetched);
-      console.log('checkedJobs après splice', this.checkedJobs);
       this.job.joinedDate = data.joinedDate;
       this.job.jobTitleId = this.normalizedJobTitles.find(
         (item) => item.id === data.jobTitle?.id,
@@ -551,7 +570,7 @@ export default {
       this.job.jobCategoryId = this.jobCategories.find(
         (item) => item.id === data.jobCategory?.id,
       );
-      this.job.subunitId = this.subunits.find(
+      /*this.job.subunitId = this.subunits.find(
         (item) => item.id === data.subunit?.id,
       );
       this.job.empStatusId = this.employmentStatuses.find(
@@ -559,7 +578,7 @@ export default {
       );
       this.job.locationId = this.locations.find(
         (item) => item.id === data.location?.id,
-      );
+      );*/
       this.termination = data.employeeTerminationRecord;
     },
   },

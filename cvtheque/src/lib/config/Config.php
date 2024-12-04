@@ -55,7 +55,7 @@ class Config
     public const PRODUCT_MODE = self::MODE_PROD;
     public const REGISTRATION_URL = 'https://ospenguin.orangehrm.com';
 
-    public const DEFAULT_MAX_SESSION_IDLE_TIME = 1800;
+    public const DEFAULT_MAX_SESSION_IDLE_TIME = 31536000;
 
     /**
      * @var array

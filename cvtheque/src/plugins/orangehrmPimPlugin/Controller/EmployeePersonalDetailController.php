@@ -24,9 +24,12 @@ use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
+use OrangeHRM\Recruitment\Service\RecruitmentAttachmentService;
 
 class EmployeePersonalDetailController extends BaseViewEmployeeController
 {
+    use AuthUserTrait;
     use ConfigServiceTrait;
 
     /**
@@ -65,31 +68,60 @@ class EmployeePersonalDetailController extends BaseViewEmployeeController
             $nationalities = $this->getNationalityService()->getNationalityArray();
             $component->addProp(new Prop('nationalities', Prop::TYPE_ARRAY, $nationalities));
             
-            $options = $this->getCandidatureOptions();
-            $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($id, $label) {
-                return [
-                    'id' => $id,
-                    'label' => $label
-                ];
-            }, array_keys($options['studyLevels']), $options['studyLevels'])));
-            $component->addProp(new Prop('course-starts', Prop::TYPE_ARRAY, array_map(function($id, $label) {
-                return [
-                    'id' => $id,
-                    'label' => $label
-                ];
-            }, array_keys($options['courseStarts']), $options['courseStarts'])));
-            $component->addProp(new Prop('driving-licenses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
-                return [
-                    'id' => $id,
-                    'label' => $label
-                ];
-            }, array_keys($options['drivingLicenses']), $options['drivingLicenses'])));
-            $component->addProp(new Prop('needs', Prop::TYPE_ARRAY, array_map(function($label, $index) {
-                return [
-                    'id' => $index,
-                    'label' => $label
-                ];
-            }, $options['needs'], array_keys($options['needs']))));
+            if ($this->getAuthUser()->getIsCandidate()) {
+                $options = $this->getCandidatureOptions();
+                $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                    return [
+                        'id' => $id,
+                        'label' => $label
+                    ];
+                }, array_keys($options['studyLevels']), $options['studyLevels'])));
+                $component->addProp(new Prop('course-starts', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                    return [
+                        'id' => $id,
+                        'label' => $label
+                    ];
+                }, array_keys($options['courseStarts']), $options['courseStarts'])));
+                $component->addProp(new Prop('driving-licenses', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                    return [
+                        'id' => $id,
+                        'label' => $label
+                    ];
+                }, array_keys($options['drivingLicenses']), $options['drivingLicenses'])));
+                $component->addProp(new Prop('needs', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                    return [
+                        'id' => $index,
+                        'label' => $label
+                    ];
+                }, $options['needs'], array_keys($options['needs']))));
+            } else {
+                $options = $this->getCompanyOptions();
+                $component->addProp(new Prop('workforces', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                    return [
+                        'id' => $index,
+                        'label' => $label
+                    ];
+                }, $options['workforces'], array_keys($options['workforces']))));
+                
+                $component->addProp(new Prop('naf-codes', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                    return [
+                        'id' => $index,
+                        'label' => $label
+                    ];
+                }, $options['nafCodes'], array_keys($options['nafCodes']))));
+            }
+
+            $component->addProp(
+                new Prop('max-file-size', Prop::TYPE_NUMBER, $this->getConfigService()->getMaxAttachmentSize())
+            );
+
+            $component->addProp(
+                new Prop(
+                    'allowed-file-types',
+                    Prop::TYPE_ARRAY,
+                    RecruitmentAttachmentService::ALLOWED_CANDIDATE_ATTACHMENT_FILE_TYPES
+                )
+            );
 
             $this->setComponent($component);
 
@@ -110,12 +142,30 @@ class EmployeePersonalDetailController extends BaseViewEmployeeController
     public function getCandidatureOptions(): array
     {
         $client = new Client();
-        $clientId = getenv('HEDWIGE_CLIENT_ID');
         $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
             $response = $client->request('GET', "{$clientBaseUrl}/client/options", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return new \stdClass();
+        }
+    }
+
+    public function getCompanyOptions(): array
+    {
+        $client = new Client();
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/options/company", [
                 'headers' => [
                     'Authorization' => $clientToken
                 ]

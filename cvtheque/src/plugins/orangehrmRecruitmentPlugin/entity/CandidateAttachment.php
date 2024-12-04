@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Entity;
 
+use OrangeHRM\Entity\EmployeeAttachment;
 use OrangeHRM\Entity\Decorator\DecoratorTrait;
 use OrangeHRM\Entity\Decorator\CandidateAttachmentDecorator;
 use Doctrine\ORM\Mapping as ORM;
@@ -81,6 +82,15 @@ class CandidateAttachment
      * @ORM\Column(name="attachment_type", type="integer", length=4)
      */
     private ?int $attachmentType;
+
+    public function setAttachmentByEmployee(?EmployeeAttachment $attachment) : void
+    {
+        $this->setId($attachment->getAttachId());
+        $this->setFileName($attachment->getFilename());
+        $this->setFileType($attachment->getFileType());
+        $this->setFileSize($attachment->getSize());
+        //$this->setFileContent($attachment->getAttachment());
+    }
 
     /**
      * @return int

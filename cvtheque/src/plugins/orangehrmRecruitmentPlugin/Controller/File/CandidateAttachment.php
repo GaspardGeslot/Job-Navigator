@@ -21,30 +21,62 @@ namespace OrangeHRM\Recruitment\Controller\File;
 use OrangeHRM\Core\Controller\AbstractFileController;
 use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Framework\Http\Response;
+use OrangeHRM\Entity\EmployeeAttachment;
+use OrangeHRM\Pim\Service\EmployeeAttachmentService;
 use OrangeHRM\Recruitment\Traits\Service\RecruitmentAttachmentServiceTrait;
 
 class CandidateAttachment extends AbstractFileController
 {
     use RecruitmentAttachmentServiceTrait;
 
+    /**
+     * @var EmployeeAttachmentService|null
+     */
+    protected ?EmployeeAttachmentService $employeeAttachmentService = null;
+
+    /**
+     * @return EmployeeAttachmentService
+     */
+    public function getEmployeeAttachmentService(): EmployeeAttachmentService
+    {
+        if (!$this->employeeAttachmentService instanceof EmployeeAttachmentService) {
+            $this->employeeAttachmentService = new EmployeeAttachmentService();
+        }
+        return $this->employeeAttachmentService;
+    }
+
     public function handle(Request $request): Response
     {
-        $candidateId = $request->attributes->get('candidateId');
+        $attachmentId = $request->attributes->get('attachmentId');
         $response = $this->getResponse();
 
-        if ($candidateId) {
-            $attachment = $this->getRecruitmentAttachmentService()
-                ->getRecruitmentAttachmentDao()
-                ->getCandidateAttachmentByCandidateId($candidateId);
-            if ($attachment instanceof \OrangeHRM\Entity\CandidateAttachment) {
+        if ($attachmentId) {
+            $employeeAttachment = $this->getEmployeeAttachmentService()->getEmployeeAttachment(getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID'), $attachmentId);
+        
+            if($employeeAttachment) {
                 $this->setCommonHeadersToResponse(
-                    $attachment->getFileName(),
-                    $attachment->getFileType(),
-                    $attachment->getFileSize(),
+                    $employeeAttachment->getFileName(),
+                    $employeeAttachment->getFileType(),
+                    $employeeAttachment->getSize(),
                     $response
                 );
-                $response->setContent($attachment->getDecorator()->getFileContent());
+                $response->setContent($employeeAttachment->getDecorator()->getAttachment());
                 return $response;
+                
+                /*$attachmentCandidate = $this->getRecruitmentAttachmentService()
+                    ->getRecruitmentAttachmentDao()
+                    ->getCandidateAttachmentByCandidateId($candidateId);
+                
+                if ($candidateAttachment instanceof \OrangeHRM\Entity\CandidateAttachment) {
+                    $this->setCommonHeadersToResponse(
+                        $candidateAttachment->getFileName(),
+                        $candidateAttachment->getFileType(),
+                        $candidateAttachment->getFileSize(),
+                        $response
+                    );
+                    $response->setContent($employeeAttachment->getDecorator()->getAttachment());
+                    return $response;
+                }*/
             }
         }
         return $this->handleBadRequest();

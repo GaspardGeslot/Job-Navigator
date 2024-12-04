@@ -22,11 +22,60 @@
     <oxd-table-filter :filter-title="$t('general.candidates')">
       <oxd-form @submit-valid="filterItems" @reset="onReset">
         <oxd-form-row>
-          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
-              <jobtitle-dropdown v-model="filters.jobTitle"></jobtitle-dropdown>
+              <oxd-input-field
+                v-model="jobSector"
+                type="select"
+                :label="$t('recruitment.job_sector')"
+                :options="sectors"
+              />
             </oxd-grid-item>
             <oxd-grid-item>
+              <oxd-input-field
+                v-model="jobTitleFilter"
+                type="select"
+                :label="$t('general.job_title')"
+                :options="jobTitlesPerSector"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="needFilter"
+                type="select"
+                :label="$t('general.need')"
+                :options="needs"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="studyLevelFilter"
+                type="select"
+                :label="$t('general.study_level')"
+                :options="studyLevels"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseStartFilter"
+                type="select"
+                :label="$t('general.course_start_option')"
+                :options="courseStarts"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="professionalExperienceFilter"
+                type="select"
+                :label="$t('pim.work_experience_global')"
+                :options="professionalExperiences"
+              />
+            </oxd-grid-item>
+            <!-- <oxd-grid-item>
               <vacancy-dropdown v-model="filters.vacancy"></vacancy-dropdown>
             </oxd-grid-item>
             <oxd-grid-item>
@@ -36,10 +85,10 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <candidate-status-dropdown v-model="filters.status" />
-            </oxd-grid-item>
+            </oxd-grid-item> -->
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row>
+        <!-- <oxd-form-row>
           <oxd-grid :cols="4" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <candidate-autocomplete
@@ -85,7 +134,7 @@
               />
             </oxd-grid-item>
           </oxd-grid>
-        </oxd-form-row>
+        </oxd-form-row> -->
         <oxd-divider />
 
         <oxd-form-actions>
@@ -93,14 +142,16 @@
             type="reset"
             display-type="ghost"
             :label="$t('general.reset')"
+            :disabled="!canUpdate"
+            @click="resetFiltre"
           />
-          <submit-button :label="$t('general.search')" />
+          <submit-button :label="$t('general.search')" :disabled="!canUpdate" />
         </oxd-form-actions>
       </oxd-form>
     </oxd-table-filter>
     <br />
     <div class="orangehrm-paper-container">
-      <div
+      <!--<div
         v-if="$can.create('recruitment_candidates')"
         class="orangehrm-header-container"
       >
@@ -117,14 +168,16 @@
         :loading="isLoading"
         :show-divider="$can.create('recruitment_candidates')"
         @delete="onClickDeleteSelected"
-      ></table-header>
+      ></table-header>-->
+      <div class="boutonTriBloc">
+        <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
+      </div>
       <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
           v-model:order="sortDefinition"
           :headers="headers"
           :items="items?.data"
-          :selectable="true"
           :clickable="false"
           :loading="isLoading"
           row-decorator="oxd-table-decorator-card"
@@ -158,13 +211,13 @@ import {APIService} from '@/core/util/services/api.service';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import usePaginate from '@ohrm/core/util/composable/usePaginate';
 import {formatDate, parseDate} from '@ohrm/core/util/helper/datefns';
-import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
-import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown';
+//import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
+//import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown';
 import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
-import CandidateAutocomplete from '@/orangehrmRecruitmentPlugin/components/CandidateAutocomplete';
-import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';
-import CandidateStatusDropdown from '@/orangehrmRecruitmentPlugin/components/CandidateStatusDropdown';
+//import CandidateAutocomplete from '@/orangehrmRecruitmentPlugin/components/CandidateAutocomplete';
+//import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';
+//import CandidateStatusDropdown from '@/orangehrmRecruitmentPlugin/components/CandidateStatusDropdown';
 
 const defaultFilters = {
   jobTitle: null,
@@ -188,12 +241,12 @@ const defaultSortOrder = {
 
 export default {
   components: {
-    'vacancy-dropdown': VacancyDropdown,
-    'jobtitle-dropdown': JobtitleDropdown,
+    //'vacancy-dropdown': VacancyDropdown,
+    //'jobtitle-dropdown': JobtitleDropdown,
     'delete-confirmation': DeleteConfirmationDialog,
-    'candidate-autocomplete': CandidateAutocomplete,
-    'hiring-manager-dropdown': HiringManagerDropdown,
-    'candidate-status-dropdown': CandidateStatusDropdown,
+    //'candidate-autocomplete': CandidateAutocomplete,
+    //'hiring-manager-dropdown': HiringManagerDropdown,
+    //'candidate-status-dropdown': CandidateStatusDropdown,
   },
 
   props: {
@@ -202,9 +255,34 @@ export default {
       required: false,
       default: null,
     },
+    studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+    needs: {
+      type: Array,
+      default: () => [],
+    },
+    courseStarts: {
+      type: Array,
+      default: () => [],
+    },
+    professionalExperiences: {
+      type: Array,
+      default: () => [],
+    },
+    sectors: {
+      type: Array,
+      default: () => [],
+    },
   },
-
   setup(props) {
+    const jobSector = ref('');
+    const professionalExperienceFilter = ref(null);
+    const jobTitleFilter = ref(null);
+    const needFilter = ref(null);
+    const studyLevelFilter = ref(null);
+    const courseStartFilter = ref(null);
     const {$t} = usei18n();
     const {locale} = useLocale();
     const {jsDateFormat, userDateFormat} = useDateFormat();
@@ -224,24 +302,16 @@ export default {
       return data.map((item) => {
         return {
           id: item.id,
-          vacancy:
-            item.vacancy?.status === false
-              ? `${item.vacancy?.name} (${$t('general.closed')})`
-              : item.vacancy?.name,
+          jobTitle: JSON.parse(item.jobs).join(', '),
           candidate: `${item.firstName} ${item.middleName || ''} ${
             item.lastName
           }`,
-          manager: item?.vacancy?.hiringManager?.id
-            ? $tEmpName(item.vacancy.hiringManager, {
-                includeMiddle: true,
-                excludePastEmpTag: false,
-              })
-            : $t('general.deleted'),
           dateOfApplication: formatDate(
             parseDate(item.dateOfApplication),
             jsDateFormat,
             {locale},
           ),
+          email: item.email,
           status:
             statuses.find((status) => status.id === item.status?.id)?.label ||
             '',
@@ -287,9 +357,27 @@ export default {
         toDate: filters.value.toDate,
         status: filters.value.status?.id,
         methodOfApplication: filters.value.methodOfApplication?.id,
-        model: 'list',
+        model: 'detailed',
         sortField: sortField.value,
         sortOrder: sortOrder.value,
+        allLeads: 'candidat',
+        ...(jobSector.value ? {jobSector: jobSector.value.label} : {}),
+        ...(professionalExperienceFilter.value
+          ? {
+              professionalExperienceFilter:
+                professionalExperienceFilter.value.label,
+            }
+          : {}),
+        ...(jobTitleFilter.value
+          ? {jobTitleFilter: jobTitleFilter.value.label}
+          : {}),
+        ...(needFilter.value ? {needFilter: needFilter.value.label} : {}),
+        ...(studyLevelFilter.value
+          ? {studyLevelFilter: studyLevelFilter.value.label}
+          : {}),
+        ...(courseStartFilter.value
+          ? {courseStartFilter: courseStartFilter.value.label}
+          : {}),
       };
     });
 
@@ -327,48 +415,51 @@ export default {
       filters,
       sortDefinition,
       rules,
+      needFilter,
+      jobSector,
+      professionalExperienceFilter,
+      jobTitleFilter,
+      studyLevelFilter,
+      courseStartFilter,
     };
   },
   data() {
     return {
+      jobTitlesPerSector: [],
       checkedItems: [],
+      canUpdate: false,
       headers: [
         {
-          name: 'vacancy',
-          title: this.$t('recruitment.vacancy'),
-          sortField: 'vacancy.name',
+          name: 'jobTitle',
+          title: this.$t('general.job_title'),
           style: {flex: 1},
         },
         {
           name: 'candidate',
           slot: 'title',
           title: this.$t('recruitment.candidate'),
-          sortField: 'candidate.lastName',
-          style: {flex: 1},
-        },
-        {
-          name: 'manager',
-          title: this.$t('recruitment.hiring_manager'),
-          sortField: 'hiringManager.lastName',
           style: {flex: 1},
         },
         {
           name: 'dateOfApplication',
           title: this.$t('recruitment.date_of_application'),
-          sortField: 'candidate.dateOfApplication',
           style: {flex: 1},
         },
         {
-          name: 'status',
-          title: this.$t('general.status'),
-          sortField: 'candidateVacancy.status',
+          name: 'email',
+          title: this.$t('general.other_email'),
           style: {flex: 1},
         },
+        /*{
+          name: 'status',
+          title: this.$t('general.status'),
+          style: {flex: 1},
+        },*/
         {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 1},
+          style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellRenderer: this.cellRenderer,
         },
@@ -385,7 +476,119 @@ export default {
       ],
     };
   },
+  watch: {
+    jobSector(newVal) {
+      if (newVal) {
+        const selectedSector = this.sectors.find(
+          (sector) => sector.label === newVal.label,
+        );
+        this.jobTitlesPerSector = selectedSector
+          ? selectedSector.jobs.map((job, index) => {
+              return {id: index, label: job};
+            })
+          : [];
+      } else {
+        this.jobTitlesPerSector = [];
+        this.jobTitleFilter = null;
+      }
+    },
+    'items.data': function (newData) {
+      if (newData && newData.length > 0) {
+        // Vérifie que les données sont chargées
+        this.sortByDate();
+      }
+    },
+    jobTitleFilter(newVal) {
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.courseStartFilter == null &&
+        this.professionalExperienceFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
+    },
+    needFilter(newVal) {
+      if (
+        newVal === null &&
+        this.studyLevelFilter == null &&
+        this.courseStartFilter == null &&
+        this.professionalExperienceFilter == null &&
+        this.jobTitleFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
+    },
+    studyLevelFilter(newVal) {
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.courseStartFilter == null &&
+        this.professionalExperienceFilter == null &&
+        this.jobTitleFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
+    },
+    courseStartFilter(newVal) {
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.studyLevelFilter == null &&
+        this.professionalExperienceFilter == null &&
+        this.jobTitleFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
+    },
+    professionalExperienceFilter(newVal) {
+      if (
+        newVal === null &&
+        this.needFilter == null &&
+        this.studyLevelFilter == null &&
+        this.courseStartFilter == null &&
+        this.jobTitleFilter == null
+      ) {
+        this.canUpdate = false;
+      } else {
+        this.canUpdate = true;
+      }
+    },
+  },
   methods: {
+    async resetFiltre() {
+      await this.resetFiltreValeur();
+      await this.execQuery();
+      this.canUpdate = false;
+    },
+    resetFiltreValeur() {
+      this.jobSector = '';
+      this.professionalExperienceFilter = null;
+      this.jobTitleFilter = null;
+      this.needFilter = null;
+      this.studyLevelFilter = null;
+      this.courseStartFilter = null;
+    },
+    sortByDate() {
+      // Change l'ordre de tri
+      this.isDateAscending = !this.isDateAscending;
+
+      // Trie les éléments en fonction de l'ordre défini
+      this.items.data.sort((a, b) => {
+        const dateA = new Date(a.dateOfApplication);
+        const dateB = new Date(b.dateOfApplication);
+
+        return this.isDateAscending ? dateA - dateB : dateB - dateA;
+      });
+    },
     cellRenderer(...[, , , row]) {
       const cellConfig = {
         view: {
@@ -395,7 +598,7 @@ export default {
           },
         },
       };
-      if (row.isSelectable) {
+      /*if (row.isSelectable) {
         cellConfig.delete = {
           onClick: this.onClickDelete,
           component: 'oxd-icon-button',
@@ -411,7 +614,7 @@ export default {
             name: 'download',
           },
         };
-      }
+      }*/
       return {
         props: {
           header: {
@@ -424,7 +627,7 @@ export default {
       navigate('/recruitment/addCandidate');
     },
     onClickEdit(item) {
-      navigate('/recruitment/addCandidate/{id}', {id: item.id});
+      navigate('/recruitment/viewCandidate/{id}', {id: item.id});
     },
     onClickDeleteSelected() {
       const ids = this.checkedItems.map((index) => {
@@ -483,3 +686,14 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.boutonTri {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+  margin: 1rem 1rem;
+}
+</style>

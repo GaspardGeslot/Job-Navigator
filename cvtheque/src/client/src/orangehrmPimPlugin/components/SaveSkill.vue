@@ -20,7 +20,7 @@
 <template>
   <div class="orangehrm-horizontal-padding orangehrm-top-padding">
     <oxd-text tag="h6" class="orangehrm-main-title">{{
-      $t('general.add_skill')
+      $t('general.add_certificate')
     }}</oxd-text>
     <oxd-divider />
     <oxd-form :loading="isLoading" @submit-valid="onSave">
@@ -28,18 +28,19 @@
         <oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item>
             <qualification-dropdown
-              v-model="skill.skillId"
-              :label="$t('pim.skill')"
-              :rules="rules.skillId"
+              v-model="skill.type"
+              :label="$t('general.type')"
+              :rules="rules.type"
               :api="api"
+              :certificate-options="certificateOptions"
               required
             ></qualification-dropdown>
           </oxd-grid-item>
           <oxd-grid-item>
             <oxd-input-field
-              v-model="skill.yearsOfExperience"
-              :label="$t('pim.years_of_experience')"
-              :rules="rules.yearsOfExperience"
+              v-model="skill.title"
+              :label="$t('pim.certificate_title')"
+              :rules="rules.title"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -49,10 +50,10 @@
         <oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item class="--span-column-2">
             <oxd-input-field
-              v-model="skill.comments"
+              v-model="skill.description"
               type="textarea"
-              :label="$t('general.comments')"
-              :rules="rules.comments"
+              :label="$t('general.description')"
+              :rules="rules.description"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -78,14 +79,12 @@ import QualificationDropdown from '@/orangehrmPimPlugin/components/Qualification
 import {
   required,
   shouldNotExceedCharLength,
-  max,
-  digitsOnly,
 } from '@ohrm/core/util/validation/rules';
 
 const skillModel = {
-  yearsOfExperience: '',
-  comments: '',
-  skillId: null,
+  title: '',
+  description: '',
+  type: '',
 };
 
 export default {
@@ -104,6 +103,10 @@ export default {
       type: String,
       required: true,
     },
+    certificateOptions: {
+      type: Array,
+      required: true,
+    },
   },
 
   emits: ['close'],
@@ -113,9 +116,9 @@ export default {
       isLoading: false,
       skill: {...skillModel},
       rules: {
-        skillId: [required],
-        yearsOfExperience: [digitsOnly, max(100)],
-        comments: [shouldNotExceedCharLength(100)],
+        type: [required],
+        title: [shouldNotExceedCharLength(100)],
+        description: [shouldNotExceedCharLength(300)],
       },
     };
   },
@@ -125,15 +128,29 @@ export default {
       this.isLoading = true;
       this.http
         .create({
-          skillId: this.skill.skillId?.id,
-          yearsOfExperience: parseInt(this.skill.yearsOfExperience),
-          comments: this.skill.comments !== '' ? this.skill.comments : '',
+          type: this.skill.type?.label,
+          title: this.skill.title ? String(this.skill.title) : '',
+          description:
+            this.skill.description !== '' ? this.skill.description : '',
         })
-        .then(() => {
+        .then((response) => {
+          console.log('Response du serveur : ', response);
           return this.$toast.saveSuccess();
         })
         .then(() => {
           this.onCancel();
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error('Erreur lors de la requête:', error.response.data);
+          } else if (error.request) {
+            console.error('Aucune réponse du serveur:', error.request);
+          } else {
+            console.error(
+              'Erreur lors de la configuration de la requête:',
+              error.message || 'Erreur inconnue',
+            );
+          }
         });
     },
     onCancel() {

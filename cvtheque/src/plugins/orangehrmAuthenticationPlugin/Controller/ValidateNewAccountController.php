@@ -67,7 +67,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
     {
         $email = $request->request->get(self::PARAMETER_EMAIL, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
-        $credentials = new UserCredential($email, $password);
+        $credentials = new UserCredential($email, $password, 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
@@ -88,6 +88,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             if (!$success)
                 throw AuthenticationException::invalidCredentials();
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setIsCandidate(true);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
@@ -101,7 +102,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred',
+                    'message' => "Une erreur inattendue s''est produite.",
                 ]
             );
             return new RedirectResponse($createAccountUrl);

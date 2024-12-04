@@ -3,6 +3,30 @@ import { inject } from 'vue';
   <div class="formBlockLayout">
     <form class="formBlock6" @submit.prevent="onSubmit">
       <h3 class="formTitle">Pour finir</h3>
+      <SubmitComponent :is-disabled="validationSuivant" @go-back="goBack" />
+      <p v-if="errors.incompleteForm" id="alert-msg05" class="alert-msg">
+        L'évaluation est incomplète. Veuillez remplir tous les champs.
+      </p>
+      <p v-if="errors.email" id="alert-msg06" class="alert-msg">
+        Veuillez entrer une adresse e-mail valide.
+      </p>
+      <p v-if="errors.password" id="alert-msg07" class="alert-msg">
+        Les mots de passe ne correspondent pas. Veuillez réessayer.
+      </p>
+      <p v-if="errors.phoneNumber" id="alert-msg08" class="alert-msg">
+        Veuillez indiquer un numéro de téléphone valide.
+      </p>
+      <p v-if="errors.checked" id="alert-msg09" class="alert-msg">
+        Vous devez accepter les conditions générales et la politique de
+        confidentialité des données.
+      </p>
+      <p v-if="cannotCreateAccount" class="alert-msg">
+        Cette adresse mail est déjà liée à un compte, veuillez renseigner une
+        autre adresse ou vous
+        <a style="text-decoration: underline" @click="sendLeadAndRedirect">
+          connecter à votre compte
+        </a>
+      </p>
       <input
         id="lastName"
         v-model="lastName"
@@ -36,7 +60,22 @@ import { inject } from 'vue';
       <div class="AcceptanceofTerms-container">
         <!--
 
-          <div class="checkbox-container">
+          
+        
+
+
+        <div class="checkbox-container">
+          <label class="switch short-switch">
+            <input type="checkbox" @change="toggle" />
+            <span class="slider round"></span>
+          </label>
+          <label class="AcceptanceofTermsText">
+            J’accepte d’être contacté par des entreprises qui recrutent et qui
+            sont intéressées par mon profil.
+          </label>
+        </div>
+        -->
+        <div class="checkbox-container">
           <label class="switch">
             <input v-model="createAccount" type="checkbox" @change="toggle" />
             <span class="slider round"></span>
@@ -64,19 +103,6 @@ import { inject } from 'vue';
             required
           />
         </div>
-
-
-        <div class="checkbox-container">
-          <label class="switch short-switch">
-            <input type="checkbox" @change="toggle" />
-            <span class="slider round"></span>
-          </label>
-          <label class="AcceptanceofTermsText">
-            J’accepte d’être contacté par des entreprises qui recrutent et qui
-            sont intéressées par mon profil.
-          </label>
-        </div>
-        -->
         <div class="checkbox-container">
           <label class="switch big-switch">
             <input v-model="checked" type="checkbox" @change="toggle" />
@@ -89,23 +115,6 @@ import { inject } from 'vue';
           </label>
         </div>
       </div>
-      <p v-if="errors.incompleteForm" id="alert-msg05" class="alert-msg">
-        L'évaluation est incomplète. Veuillez remplir tous les champs.
-      </p>
-      <p v-if="errors.email" id="alert-msg06" class="alert-msg">
-        Veuillez entrer une adresse e-mail valide.
-      </p>
-      <p v-if="errors.password" id="alert-msg07" class="alert-msg">
-        Les mots de passe ne correspondent pas. Veuillez réessayer.
-      </p>
-      <p v-if="errors.phoneNumber" id="alert-msg08" class="alert-msg">
-        Veuillez indiquer un numéro de téléphone valide.
-      </p>
-      <p v-if="errors.checked" id="alert-msg09" class="alert-msg">
-        Vous devez accepter les conditions générales et la politique de
-        confidentialité des données.
-      </p>
-      <SubmitComponent @go-back="goBack" />
     </form>
   </div>
 </template>
@@ -116,7 +125,13 @@ export default {
   components: {
     SubmitComponent,
   },
-  emits: ['situation-submitted', 'go-back'],
+  props: {
+    cannotCreateAccount: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ['situation-submitted', 'go-back', 'send-lead'],
   data() {
     return {
       firstName: '',
@@ -134,7 +149,24 @@ export default {
         phoneNumber: false,
         checked: false,
       },
+      validationSuivant: true,
     };
+  },
+  computed: {
+    isFormValid() {
+      return (
+        this.lastName !== '' &&
+        this.firstName !== '' &&
+        this.email !== '' &&
+        this.phone !== '' &&
+        this.checked === true
+      );
+    },
+  },
+  watch: {
+    isFormValid(newVal) {
+      this.validationSuivant = !newVal;
+    },
   },
   methods: {
     validateEmail() {
@@ -146,6 +178,7 @@ export default {
       return true;
     },
     onSubmit() {
+      this.isLoading = true;
       this.errors.incompleteForm = false;
       this.errors.email = false;
       this.errors.password = false;
@@ -158,37 +191,26 @@ export default {
         this.email === ''
       ) {
         this.errors.incompleteForm = true;
-        //alert("L'évaluation est incomplète. Veuillez remplir tous les champs.");
         return;
       }
       if (!this.validateEmail()) {
         this.errors.email = true;
-        //alert('Veuillez entrer une adresse e-mail valide.');
         return;
       }
       if (this.createAccount && this.password !== this.confirmPassword) {
         this.errors.password = true;
-        //alert('Les mots de passe ne correspondent pas. Veuillez réessayer.');
         return;
       }
       if (!this.checked) {
         this.errors.checked = true;
-        // alert(
-        //   'Vous devez accepter les conditions générales et la politique de confidentialité des données.',
-        // );
         return;
       }
       this.phone = this.phone.toString();
-      //console.log(this.phone, typeof this.phone, this.phone.length);
       if (this.phone.length == 9) {
-        console.log(this.phone, typeof this.phone);
         this.phone = '0' + this.phone;
-        // console.log('ici');
-        // console.log(this.phone, typeof this.phone);
       }
       if (this.phone.length != 10) {
         this.errors.phoneNumber = true;
-        //alert('Veuillez indiquer un numéro de téléphone valide.');
         return;
       }
       let productReview = {
@@ -199,13 +221,19 @@ export default {
       };
       if (this.createAccount) {
         productReview.password = this.password;
-        productReview.confirmPassword = this.confirmPassword;
       }
       this.$emit('situation-submitted', productReview);
       // this.firstName = '';
       // this.lastName = '';
       // this.email = '';
       // this.phone = '';
+      this.isLoading = false;
+    },
+    sendLeadAndRedirect() {
+      this.password = '';
+      this.confirmPassword = '';
+      this.onSubmit();
+      window.location.href = `${window.location.origin}/web/index.php/auth/login`;
     },
     goBack() {
       this.$emit('go-back');

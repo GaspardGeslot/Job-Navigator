@@ -27,13 +27,15 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option
           v-for="item in sortedCourseStarts"
           :key="item.id"
-          :value="item.id"
+          :value="item.label"
         >
           {{ item.label }}
         </option>
       </select>
       <select v-model="mobility">
-        <option disabled value="">Ma mobilité géographique</option>
+        <option class="placeholder-option" disabled value="">
+          Ma mobilité géographique
+        </option>
         <option>10 kms</option>
         <option>30 kms</option>
         <option>50 kms</option>
@@ -50,7 +52,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         <option
           v-for="item in sortedStudyLevels"
           :key="item.id"
-          :value="item.id"
+          :value="item.label"
         >
           {{ item.label }}
         </option>
@@ -88,6 +90,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         class="submitButton"
         type="submit"
         value="SUIVANT"
+        :disabled="validationSuivant"
       />
     </form>
   </div>
@@ -125,16 +128,33 @@ export default {
       sortedStudyLevels: [],
       checkedEXP: '',
       BTPcheckedEXP: '',
+      validationSuivant: true,
       errors: {
         postalCode: false,
         incompleteForm: false,
       },
     };
   },
+  computed: {
+    // Propriété calculée pour vérifier si le formulaire est valide
+    isFormValid() {
+      return (
+        this.need !== '' &&
+        this.postalCode !== '' &&
+        this.courseStart !== '' &&
+        this.studyLevel !== ''
+      );
+    },
+  },
+  watch: {
+    isFormValid(newVal) {
+      this.validationSuivant = !newVal;
+    },
+  },
   created() {
-    console.log('this.courseStarts', this.courseStarts);
-    console.log('this.studyLevel', this.studyLevels);
-    console.log('professionalXp', this.professionalXp);
+    // console.log('this.courseStarts', this.courseStarts);
+    // console.log('this.studyLevel', this.studyLevels);
+    // console.log('professionalXp', this.professionalXp);
     if (
       typeof this.courseStarts === 'object' &&
       !Array.isArray(this.courseStarts)
@@ -194,12 +214,12 @@ export default {
       //   String(Number(this.postalCode)),
       //   Number,
       // );
-      console.log(this.postalCode);
+      // console.log(this.postalCode);
       if (this.postalCode.length != 5) {
         if (this.postalCode.length == 4) {
           //this.postalCode.unshift(0);
           this.postalCode = '0' + this.postalCode;
-          console.log('postalCode', this.postalCode);
+          // console.log('postalCode', this.postalCode);
         } else {
           this.errors.postalCode = true;
           hasError = true;

@@ -51,13 +51,13 @@
             :employee-id="employeeId"
             :screen="screen"
           ></profile-custom-fields>
-          <profile-attachments
+          <!--<profile-attachments
             v-if="screen == 'personal'"
             :employee-id="employeeId"
             :allowed-file-types="allowedFileTypes"
             :max-file-size="maxFileSize"
             :screen="screen"
-          ></profile-attachments>
+          ></profile-attachments>-->
         </div>
       </div>
     </div>
@@ -69,7 +69,7 @@ import {computed, ref} from 'vue';
 import {APIService} from '@/core/util/services/api.service';
 import {navigate} from '@ohrm/core/util/helper/navigation';
 import TabsNavigation from '@/orangehrmPimPlugin/components/TabsNavigation';
-import ProfileAttachments from '@/orangehrmPimPlugin/components/ProfileAttachments';
+//import ProfileAttachments from '@/orangehrmPimPlugin/components/ProfileAttachments';
 import ProfileCustomFields from '@/orangehrmPimPlugin/components/ProfileCustomFields';
 
 const defaultPic = `${window.appGlobal.publicPath}/images/default-photo.png`;
@@ -78,7 +78,7 @@ export default {
   name: 'EditEmployeeLayout',
   components: {
     'tabs-navigation': TabsNavigation,
-    'profile-attachments': ProfileAttachments,
+    //'profile-attachments': ProfileAttachments,
     'profile-custom-fields': ProfileCustomFields,
   },
   props: {

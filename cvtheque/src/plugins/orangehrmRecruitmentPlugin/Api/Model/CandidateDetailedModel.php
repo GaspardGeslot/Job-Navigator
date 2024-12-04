@@ -100,16 +100,42 @@ class CandidateDetailedModel implements Normalizable
         $vacancy = !is_null($candidateVacancy) ? $candidateVacancy->getVacancy() : null;
 
         return [
-            'id' => $this->candidate->getId(),
-            'firstName' => $this->candidate->getFirstName(),
-            'middleName' => $this->candidate->getMiddleName(),
-            'lastName' => $this->candidate->getLastName(),
-            'email' => $this->candidate->getEmail(),
-            'contactNumber' => $this->candidate->getContactNumber(),
+            'birthday' => $this->candidate->getDecorator()->getBirthday(),
+            'candidatureStatus' => $this->candidate->getCandidatureStatus(),
+            'certificates' => $this->candidate->getCertificates(),
+            'city' => $this->candidate->getCity(),
             'comment' => $this->candidate->getComment(),
-            'keywords' => $this->candidate->getKeywords(),
-            'modeOfApplication' => $this->candidate->getModeOfApplication(),
+            'consentToKeepData' => $this->candidate->isConsentToKeepData(),
+            'contactNumber' => $this->candidate->getContactNumber(),
+            'country' => $this->candidate->getCountry(),
+            'courseStart' => $this->candidate->getCourseStart(),
             'dateOfApplication' => $this->candidate->getDecorator()->getDateOfApplication(),
+            'drivingLicense' => $this->candidate->getDrivingLicense(),
+            'email' => $this->candidate->getEmail(),
+            'firstName' => $this->candidate->getFirstName(),
+            'gender' => $this->candidate->getGender(),
+            'hasAttachment' => $hasCandidateAttachment,
+            'hasPersonalVehicule' => $this->candidate->getHasPersonalVehicule(),
+            'id' => $this->candidate->getId(),
+            'jobTitle' => $this->candidate->getJobTitle(),
+            'jobs' => $this->candidate->getJobs(),
+            'keywords' => $this->candidate->getKeywords(),
+            'lastName' => $this->candidate->getLastName(),
+            'leadId' => $this->candidate->getLeadId(),
+            'matchingId' => $this->candidate->getMatchingId(),
+            'middleName' => $this->candidate->getMiddleName(),
+            'motivation' => $this->candidate->getMotivation(),
+            'need' => $this->candidate->getNeed(),
+            'professionalExperience' => $this->candidate->getProfessionalExperience(),
+            'province' => $this->candidate->getProvince(),
+            'resume' => $this->candidate->getResume(),
+            'salary' => $this->candidate->getSalary(),
+            'specificProfessionalExperience' => $this->candidate->getSpecificProfessionalExperience(),
+            'skills' => $this->candidate->getCandidateSkills(),
+            'status' => is_null($candidateVacancy) ? null :
+                $candidateVacancy->getDecorator()->getCandidateVacancyStatus(),
+            'street1' => $this->candidate->getStreet1(),
+            'studyLevel' => $this->candidate->getStudyLevel(),
             'vacancy' => is_null($vacancy) ? null :
                 [
                     'id' => $vacancy->getId(),
@@ -130,11 +156,9 @@ class CandidateDetailedModel implements Normalizable
                             $vacancy->getHiringManager()->getEmployeeTerminationRecord()->getId()
                         ,
                     ]
-                ],
-            'status' => is_null($candidateVacancy) ? null :
-                $candidateVacancy->getDecorator()->getCandidateVacancyStatus(),
-            'hasAttachment' => $hasCandidateAttachment,
-            'consentToKeepData' => $this->candidate->isConsentToKeepData()
+                    ],
+            'zipcode' => $this->candidate->getZipcode(),
+            //'modeOfApplication' => $this->candidate->getModeOfApplication(),
         ];
     }
 }

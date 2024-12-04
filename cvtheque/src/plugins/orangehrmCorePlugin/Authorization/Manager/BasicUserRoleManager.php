@@ -565,9 +565,9 @@ class BasicUserRoleManager extends AbstractUserRoleManager
         // Check for supervisor:
         $empNumber = $user->getEmpNumber();
         if (!empty($empNumber)) {
-            if ($user->getUserRole()->getName() != 'ESS') {
+            /*if ($user->getUserRole()->getName() != 'ESS') {
                 $roles[] = $this->getUserService()->getUserRole('ESS');
-            }
+            }*/
 
             if ($this->isProjectAdmin($empNumber)) {
                 $roles[] = $this->getUserService()->getUserRole('ProjectAdmin');

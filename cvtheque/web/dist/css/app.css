@@ -14,22 +14,6 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d99f0b7a&lang=scss&scoped=true (1) ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 @import url(https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap);
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8f5f16e&lang=scss&scoped=true ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap);
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8f5f16e&lang=scss&scoped=true (1) ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap);
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8d9c26c&lang=scss&scoped=true ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap);
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8d9c26c&lang=scss&scoped=true (1) ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap);
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/table/TableHeader.vue?vue&type=style&index=0&id=47bf13c8&scoped=true&lang=css ***!
   \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1077,6 +1061,26 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
+.orangerhrm-switch-wrapper[data-v-2fd04746] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-2fd04746] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-2fd04746] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-2fd04746] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=c545b180&lang=scss&scoped=true ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1161,6 +1165,26 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
+.orangerhrm-switch-wrapper[data-v-c545b180] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-c545b180] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-c545b180] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-c545b180] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmPimPlugin/components/TabsNavigation.vue?vue&type=style&index=0&id=6013ffa7&lang=scss&scoped=true ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1241,32 +1265,6 @@
     scrollbar-arrow-color: #929baa;
 }
 }
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmPimPlugin/components/ProfileActionHeader.vue?vue&type=style&index=0&id=6f72b187&lang=scss&scoped=true ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.orangehrm-action-header[data-v-6f72b187] {
-  display: flex;
-  overflow-wrap: break-word;
-  align-items: center;
-}
-.orangehrm-action-header button[data-v-6f72b187] {
-  margin-left: 1rem;
-  white-space: nowrap;
-}
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmPimPlugin/components/ProfileAttachments.vue?vue&type=style&index=0&id=1ff04e88&scoped=true&lang=css ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.oxd-divider[data-v-1ff04e88] {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.orangehrm-attachment[data-v-1ff04e88] {
-  border-bottom-right-radius: 1.2rem;
-  overflow: hidden;
-}
-
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmPimPlugin/components/EditEmployeeLayout.vue?vue&type=style&index=0&id=20f71dd2&lang=scss&scoped=true ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1435,6 +1433,143 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
+.orangerhrm-switch-wrapper[data-v-2d6e3bb2] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-2d6e3bb2] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-2d6e3bb2] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-2d6e3bb2] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=d183633c&lang=scss&scoped=true ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-employee-container[data-v-d183633c] {
+  display: flex;
+}
+@media (min-width: 0px) {
+.orangehrm-employee-container[data-v-d183633c] {
+    flex-direction: column;
+}
+}
+@media (min-width: 800px) {
+.orangehrm-employee-container[data-v-d183633c] {
+    flex-direction: row;
+}
+}
+.orangehrm-employee-container .orangehrm-employee-image[data-v-d183633c] {
+  flex: 1 1 25%;
+  padding: 1rem;
+  text-align: center;
+}
+.orangehrm-employee-container .orangehrm-employee-form[data-v-d183633c] {
+  flex: 1 1 75%;
+}
+.user-form-header[data-v-d183633c] {
+  display: flex;
+  padding: 1rem 0;
+}
+.user-form-header-text[data-v-d183633c] {
+  font-size: 0.8rem;
+  margin-right: 1rem;
+}
+[data-v-d183633c] .--status-grouped-field {
+  display: flex;
+}
+[data-v-d183633c] .--gender-grouped-field {
+  display: flex;
+}
+.orangehrm-employee-list[data-v-d183633c] .card-header-slot {
+  border-bottom: 1px solid #e8eaef;
+  margin-bottom: 5px;
+}
+.orangehrm-employee-list[data-v-d183633c] .card-header-slot .oxd-table-card-cell {
+  display: flex;
+}
+.orangehrm-employee-list[data-v-d183633c] .card-header-slot .header {
+  margin-right: 5px;
+  font-size: 1rem;
+}
+.orangehrm-employee-list[data-v-d183633c] .card-header-slot-content.--left {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-employee-list[data-v-d183633c] .card-body-slot {
+  display: unset;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.2rem;
+}
+.orangehrm-employee-picture[data-v-d183633c] {
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 8rem;
+}
+.orangehrm-employee-picture[data-v-d183633c] .oxd-file-div {
+  width: 12rem !important;
+  height: 12rem !important;
+}
+.orangehrm-employee-picture[data-v-d183633c] .employee-image {
+  height: 12rem;
+}
+[data-v-d183633c] .--termination-button {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.orangehrm-terminate-date[data-v-d183633c] {
+  cursor: pointer;
+  color: var(--oxd-primary-one-color);
+  text-decoration: underline;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+.orangerhrm-switch-wrapper[data-v-d183633c] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-d183633c] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-d183633c] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-d183633c] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmPimPlugin/components/ProfileActionHeader.vue?vue&type=style&index=0&id=6f72b187&lang=scss&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-action-header[data-v-6f72b187] {
+  display: flex;
+  overflow-wrap: break-word;
+  align-items: center;
+}
+.orangehrm-action-header button[data-v-6f72b187] {
+  margin-left: 1rem;
+  white-space: nowrap;
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=1eceb9d4&lang=scss&scoped=true ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1519,6 +1654,26 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
+.orangerhrm-switch-wrapper[data-v-1eceb9d4] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-1eceb9d4] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-1eceb9d4] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-1eceb9d4] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=b0ba1416&lang=scss&scoped=true ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1602,6 +1757,26 @@
   text-decoration: underline;
   font-size: 0.75rem;
   font-weight: 800;
+}
+.orangerhrm-switch-wrapper[data-v-b0ba1416] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-b0ba1416] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-b0ba1416] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-b0ba1416] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
 }
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmPimPlugin/components/SaveSalaryComponent.vue?vue&type=style&index=0&id=49767af1&lang=scss&scoped=true ***!
@@ -1711,6 +1886,26 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
+.orangerhrm-switch-wrapper[data-v-57742a0d] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-57742a0d] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-57742a0d] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-57742a0d] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=245ff20c&lang=scss&scoped=true ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1795,6 +1990,26 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
+.orangerhrm-switch-wrapper[data-v-245ff20c] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-245ff20c] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-245ff20c] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-245ff20c] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=2d01ee36&lang=scss&scoped=true ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1878,6 +2093,26 @@
   text-decoration: underline;
   font-size: 0.75rem;
   font-weight: 800;
+}
+.orangerhrm-switch-wrapper[data-v-2d01ee36] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-2d01ee36] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-2d01ee36] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-2d01ee36] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
 }
 /*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmPimPlugin/pages/customField/customField.scss?vue&type=style&index=0&id=7fc4c454&lang=scss&scoped=true ***!
@@ -3481,6 +3716,14 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=5dfa7e3a&lang=scss&scoped=true ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.boutonTri[data-v-5dfa7e3a] {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+}
 .user-form-header[data-v-5dfa7e3a] {
   display: flex;
   padding: 1rem;
@@ -3551,36 +3794,41 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/VacancyLinkCard.vue?vue&type=style&index=0&id=daba02d0&lang=scss&scoped=true ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.orangehrm-label-link-wrapper[data-v-daba02d0] {
+.boutonTriBloc2[data-v-5dfa7e3a] {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: end;
+  padding: 0 2rem 1.5rem 0;
 }
-.orangehrm-label-link-wrapper[data-v-daba02d0]:first-of-type {
-  margin-bottom: 0.25rem;
+@media (max-width: 1000px) {
+.orangehrm-header-container[data-v-5dfa7e3a] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
 }
-.orangehrm-text-label[data-v-daba02d0] {
-  font-size: 12px;
-  font-weight: 600;
-  padding-right: 0.2rem;
-  color: #64728c;
+.boutonTriBloc[data-v-5dfa7e3a], .boutonTriBloc2[data-v-5dfa7e3a] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
-.orangehrm-vacancy-link[data-v-daba02d0] {
-  font-size: 12px;
-  font-weight: 600;
-  margin-left: 1rem;
-  text-decoration: none;
-  word-break: break-all;
-  font-family: "Nunito Sans", sans-serif;
-  color: var(--oxd-primary-one-color);
+.boutonTri[data-v-5dfa7e3a] {
+    margin: 0;
+}
 }
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=6f04c618&lang=scss&scoped=true ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.boutonTri[data-v-6f04c618] {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+}
 .user-form-header[data-v-6f04c618] {
   display: flex;
   padding: 1rem;
@@ -3651,10 +3899,41 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
+.boutonTriBloc2[data-v-6f04c618] {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  padding: 0 2rem 1.5rem 0;
+}
+@media (max-width: 1000px) {
+.orangehrm-header-container[data-v-6f04c618] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+}
+.boutonTriBloc[data-v-6f04c618], .boutonTriBloc2[data-v-6f04c618] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.boutonTri[data-v-6f04c618] {
+    margin: 0;
+}
+}
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=35ae5cdf&lang=scss&scoped=true ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.boutonTri[data-v-35ae5cdf] {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+}
 .user-form-header[data-v-35ae5cdf] {
   display: flex;
   padding: 1rem;
@@ -3725,6 +4004,29 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
+.boutonTriBloc2[data-v-35ae5cdf] {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  padding: 0 2rem 1.5rem 0;
+}
+@media (max-width: 1000px) {
+.orangehrm-header-container[data-v-35ae5cdf] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+}
+.boutonTriBloc[data-v-35ae5cdf], .boutonTriBloc2[data-v-35ae5cdf] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.boutonTri[data-v-35ae5cdf] {
+    margin: 0;
+}
+}
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/InterviewerAutocomplete.vue?vue&type=style&index=0&id=2f4a5c49&lang=scss&scoped=true ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -3751,14 +4053,19 @@
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/CandidateAutocomplete.vue?vue&type=style&index=0&id=0fa9589e&scoped=true&lang=css ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.past-employee-tag[data-v-0fa9589e] {
-  margin-left: auto;
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/pages/ViewCandidatesList.vue?vue&type=style&index=0&id=4977bb6c&lang=scss&scoped=true ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.boutonTri[data-v-4977bb6c] {
+  border-radius: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(190, 190, 190);
+  cursor: pointer;
+  background-color: white;
+  width: 10rem;
+  margin: 1rem 1rem;
 }
-
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/RecruitmentStatus.vue?vue&type=style&index=0&id=73067c41&lang=scss&scoped=true ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -3806,12 +4113,52 @@
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/HistoryTable.vue?vue&type=style&index=0&id=e5da8752&lang=scss&scoped=true ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/CompanyRecruitmentStatus.vue?vue&type=style&index=0&id=42061124&lang=scss&scoped=true ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
-.orangehrm-card-container[data-v-e5da8752] {
-  padding: 1.2rem 0;
+.orangehrm-recruitment[data-v-42061124] {
+  display: flex;
+  justify-content: space-between;
+}
+.orangehrm-recruitment-actions[data-v-42061124] {
+  gap: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 120px;
+  margin-left: 60px;
+  justify-content: flex-end;
+}
+.orangehrm-recruitment-actions[data-v-42061124] .oxd-button--medium {
+  width: 100%;
+}
+@media (min-width: 800px) {
+.orangehrm-recruitment-actions[data-v-42061124] {
+    margin-left: unset;
+    max-width: unset;
+}
+.orangehrm-recruitment-actions[data-v-42061124] .oxd-button--medium {
+    width: unset;
+}
+}
+[data-v-42061124] .oxd-input-group {
+  margin-bottom: 1rem;
+}
+@media (min-width: 800px) {
+[data-v-42061124] .oxd-input-group {
+    margin-bottom: 0;
+}
+}
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmRecruitmentPlugin/components/CompanyProfile.vue?vue&type=style&index=0&id=1546f8e9&scoped=true&lang=scss ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-header-container[data-v-1546f8e9] {
+  padding: 0;
+}
+.orangehrm-candidate-grid-checkbox .oxd-input-group[data-v-1546f8e9] {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
 }
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/public-job-vacancy.scss?vue&type=style&index=0&id=96454104&lang=scss&scoped=true ***!
@@ -5260,6 +5607,12 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/orangehrmCorporateDirectoryPlugin/components/SummaryCard.vue?vue&type=style&index=0&id=44424255&lang=scss&scoped=true ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.icon-left[data-v-44424255] {
+  display: inline-block;
+}
+.icon-right[data-v-44424255] {
+  float: right;
+}
 .orangehrm-directory-card[data-v-44424255] {
   height: auto;
   cursor: pointer;
@@ -5521,6 +5874,61 @@
   padding: 0.5rem 0.75rem;
 }
 .orangehrm-paper-container[data-v-90f2162a] {
+  width: 100%;
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmCorporateDirectoryPlugin/pages/corporate-directory.scss?vue&type=style&index=0&id=01658d22&lang=scss&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-corporate-directory[data-v-01658d22] {
+  display: block;
+}
+@media (min-width: 800px) {
+.orangehrm-corporate-directory[data-v-01658d22] {
+    display: flex;
+    justify-content: space-between;
+}
+}
+.orangehrm-corporate-directory-sidebar[data-v-01658d22] {
+  min-width: 250px;
+  max-width: 250px;
+  margin-left: 1rem;
+  border-radius: 1.2rem;
+  background-color: #ffffff;
+}
+.orangehrm-container[data-v-01658d22] {
+  height: 512px;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-color: #cfd3de #f6f5fb;
+  scrollbar-width: thin;
+}
+.orangehrm-container[data-v-01658d22]::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+.orangehrm-container[data-v-01658d22]::-webkit-scrollbar-thumb {
+  background: #cfd3de;
+  border-radius: 20px;
+}
+.orangehrm-container[data-v-01658d22]::-webkit-scrollbar-track {
+  background: #f6f5fb;
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+.orangehrm-container[data-v-01658d22] {
+    scrollbar-face-color: #cfd3de;
+    scrollbar-track-color: #f6f5fb;
+    scrollbar-arrow-color: #929baa;
+}
+}
+.orangehrm-container-loader[data-v-01658d22] {
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+.oxd-grid-item[data-v-01658d22] {
+  padding: 0.5rem 0.75rem;
+}
+.orangehrm-paper-container[data-v-01658d22] {
   width: 100%;
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
@@ -6440,6 +6848,84 @@
 .orangehrm-forgot-password-button--cancel[data-v-2d46acdf] {
     margin-right: 0.5rem;
 }
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmAuthenticationPlugin/pages/login.scss?vue&type=style&index=0&id=d5024cf2&lang=scss&scoped=true ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-login-form[data-v-d5024cf2] {
+  margin: 0 auto;
+}
+@media (min-width: 0px) {
+.orangehrm-login-form[data-v-d5024cf2] {
+    width: 80%;
+}
+}
+@media (min-width: 800px) {
+.orangehrm-login-form[data-v-d5024cf2] {
+    width: 60%;
+    max-width: 485px;
+}
+}
+.orangehrm-login-action[data-v-d5024cf2] {
+  margin-top: 2rem;
+  justify-content: center;
+}
+.orangehrm-login-button[data-v-d5024cf2] {
+  flex: 1;
+  padding: 1rem 0;
+}
+.orangehrm-login-title[data-v-d5024cf2] {
+  text-align: center;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+.orangehrm-login-pwreset[data-v-d5024cf2] {
+  margin: 1rem 0;
+  text-align: center;
+  font-weight: 600;
+}
+.orangehrm-login-pwreset a[data-v-d5024cf2] {
+  color: var(--oxd-primary-one-color);
+  text-decoration: none;
+}
+.orangehrm-login-forgot[data-v-d5024cf2] {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  font-size: 14px;
+}
+.orangehrm-login-forgot-header[data-v-d5024cf2] {
+  cursor: pointer;
+  color: var(--oxd-primary-one-color);
+}
+.orangehrm-demo-credentials[data-v-d5024cf2] {
+  margin: 1rem 0;
+}
+.orangehrm-login-footer-sm[data-v-d5024cf2] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.orangehrm-login-footer-sm a[data-v-d5024cf2] {
+  width: 22px;
+  height: 22px;
+  margin: 0 0.25rem;
+}
+.orangehrm-login-footer-sm .orangehrm-sm-icon[data-v-d5024cf2] {
+  width: inherit;
+  height: inherit;
+  color: rgba(146, 155, 170, 0.8);
+}
+@media (min-width: 800px) {
+.orangehrm-login-footer-sm[data-v-d5024cf2] {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+}
+}
+.orangehrm-login-seperator[data-v-d5024cf2] {
+  margin: 0.5rem 0;
 }
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmDashboardPlugin/components/base-widget.scss?vue&type=style&index=0&id=e838762c&lang=scss&scoped=true ***!
@@ -8722,7 +9208,7 @@ p {
   margin-right: 5rem;
 }
 #review {
-  height: 6rem;
+  height: 12rem;
   margin-bottom: 0.5rem;
 }
 #review::-moz-placeholder {
@@ -8751,7 +9237,8 @@ p {
   line-height: 0.8rem;
 }
 .submit-block {
-  margin-top: 2rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
   height: 3rem;
 }
 .previousButton {
@@ -8778,6 +9265,11 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
+}
+.mainSubmitButton:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .mainSubmitButtonTxt {
   margin-left: 6.5rem;
@@ -8801,6 +9293,11 @@ p {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+  cursor: pointer;
+}
+.submitButton:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .submit-block {
   display: flex;
@@ -8810,7 +9307,7 @@ p {
   font-size: 0.75rem;
   line-height: 1rem;
   /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
+    padding-bottom: 0.15rem; */
   color: red;
 }
 .formBlockLayout {
@@ -9100,7 +9597,7 @@ p[data-v-d99f0b7a] {
   margin-right: 5rem;
 }
 #review[data-v-d99f0b7a] {
-  height: 6rem;
+  height: 12rem;
   margin-bottom: 0.5rem;
 }
 #review[data-v-d99f0b7a]::-moz-placeholder {
@@ -9129,7 +9626,8 @@ p[data-v-d99f0b7a] {
   line-height: 0.8rem;
 }
 .submit-block[data-v-d99f0b7a] {
-  margin-top: 2rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
   height: 3rem;
 }
 .previousButton[data-v-d99f0b7a] {
@@ -9156,6 +9654,11 @@ p[data-v-d99f0b7a] {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
+}
+.mainSubmitButton[data-v-d99f0b7a]:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .mainSubmitButtonTxt[data-v-d99f0b7a] {
   margin-left: 6.5rem;
@@ -9179,6 +9682,11 @@ p[data-v-d99f0b7a] {
   align-items: center;
   border-radius: 1.5rem;
   font-family: "Telegraf", sans-serif;
+  cursor: pointer;
+}
+.submitButton[data-v-d99f0b7a]:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 .submit-block[data-v-d99f0b7a] {
   display: flex;
@@ -9188,7 +9696,7 @@ p[data-v-d99f0b7a] {
   font-size: 0.75rem;
   line-height: 1rem;
   /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
+    padding-bottom: 0.15rem; */
   color: red;
 }
 .formBlockLayout[data-v-d99f0b7a] {
@@ -9658,643 +10166,65 @@ input:checked + .slider[data-v-d92e4f72]:before {
 }
 }
 
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8f5f16e&lang=scss&scoped=true (2) ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.bg-white[data-v-d8f5f16e] {
-  background-color: white;
-}
-.row[data-v-d8f5f16e] {
-  display: flex;
-  flex-direction: row;
-}
-.formBlock[data-v-d8f5f16e] {
-  padding-top: 3.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  overflow: visible;
-}
-.formBlock > *[data-v-d8f5f16e] {
-  flex: 1;
-}
-.formTitle[data-v-d8f5f16e] {
-  color: black;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 900 !important;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-}
-.formSubTitle[data-v-d8f5f16e] {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.CVText[data-v-d8f5f16e] {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700 !important;
-  color: black;
-}
-p[data-v-d8f5f16e] {
-  font-family: "Telegraf", sans-serif;
-}
-.checkbox-item[data-v-d8f5f16e] {
-  display: flex;
-  align-items: center;
-}
-
-/*
-.custom-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid #767676;
-    outline: none;
-    transition: background-color 0.3s;
-    position: relative;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    flex-shrink: 0;
-  }
-  .custom-input[type='checkbox']:checked {
-    background-color: #1069b3;
-    border-color: #1069b3;
-    border-width: 2px;
-  }
-
-  .custom-input[type='checkbox']:checked::before {
-    content: '';
-    display: block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #1069b3;
-    border: 1.5px solid white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-*/
-.radio-group[data-v-d8f5f16e] {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-#radio-item-left[data-v-d8f5f16e] {
-  margin-right: 5rem;
-}
-#review[data-v-d8f5f16e] {
-  height: 6rem;
-  margin-bottom: 0.5rem;
-}
-#review[data-v-d8f5f16e]::-moz-placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-#review[data-v-d8f5f16e]::placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-.AcceptanceofTerms-container > *[data-v-d8f5f16e] {
-  flex: 1;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-.checkbox-container[data-v-d8f5f16e] {
-  display: flex;
-}
-.checkbox-container input[type=checkbox][data-v-d8f5f16e] {
-  margin-right: 0.5rem;
-}
-.AcceptanceofTermsText[data-v-d8f5f16e] {
-  font-size: 0.5rem;
-  line-height: 0.8rem;
-}
-.submit-block[data-v-d8f5f16e] {
-  margin-top: 2rem;
-  height: 3rem;
-}
-.previousButton[data-v-d8f5f16e] {
-  border-radius: 0.5rem;
-  width: 4rem;
-  background-color: #6d685f;
-  border: none;
-  width: 3.25rem;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.mainSubmitButton[data-v-d8f5f16e] {
-  background-color: black;
-  color: white;
-  width: 85%;
-  margin-left: 1rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.mainSubmitButtonTxt[data-v-d8f5f16e] {
-  margin-left: 6.5rem;
-}
-.mainSubmitButtonSvg[data-v-d8f5f16e] {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: auto;
-  width: 3rem;
-  margin-right: 0.25rem;
-}
-.submitButton[data-v-d8f5f16e] {
-  background-color: black;
-  color: white;
-  width: 45%;
-  margin: 0.5rem auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1.5rem;
-  font-family: "Telegraf", sans-serif;
-}
-.submit-block[data-v-d8f5f16e] {
-  display: flex;
-  flex-direction: row;
-}
-.alert-msg[data-v-d8f5f16e] {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
-  color: red;
-}
-.formBlockLayout[data-v-d8f5f16e] {
-  background-color: white;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1.75rem;
-  padding-right: 1.75rem;
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1[data-v-d8f5f16e] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1 > *[data-v-d8f5f16e] {
-  flex: 1;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.formBlock1 input[data-v-d8f5f16e]::-moz-placeholder {
-  padding-left: 0.75rem;
-}
-.formBlock1 input[data-v-d8f5f16e]::placeholder,
-.formBlock1 select[data-v-d8f5f16e] {
-  padding-left: 0.75rem;
-}
-.formBlock5[data-v-d8f5f16e] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock5 > .submitButton[data-v-d8f5f16e] {
-  margin-top: 1rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.formBlock6[data-v-d8f5f16e] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock6 > .submitButton[data-v-d8f5f16e] {
-  margin-top: 1.75rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.blackPlaceholder[data-v-d8f5f16e]::-moz-placeholder {
-  color: black;
-}
-.blackPlaceholder[data-v-d8f5f16e]::placeholder {
-  color: black;
-}
-.formImg[data-v-d8f5f16e] {
-  max-width: 50%;
-  max-height: 100%;
-  height: auto;
-  box-sizing: border-box;
-}
-.formBlock.row[data-v-d8f5f16e] {
-  display: flex;
-  align-items: flex-start;
-  box-sizing: border-box;
-}
-.formBlock.row > div[data-v-d8f5f16e] {
-  flex: 1;
-  box-sizing: border-box;
-}
-.scroll-container[data-v-d8f5f16e] {
-  height: 100%;
-  overflow-y: auto;
-  background-color: white;
-  position: relative;
-  box-sizing: border-box;
-}
-.scroll-container.scroll-active[data-v-d8f5f16e] {
-  overflow-y: auto;
-}
-.scroll-content[data-v-d8f5f16e] {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-@media screen and (max-width: 450px) {
-.mainSubmitButtonTxt[data-v-d8f5f16e] {
-    margin-left: 2.15rem;
-}
-.formTitle[data-v-d8f5f16e] {
-    color: black;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 900 !important;
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-}
-}
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock8.vue?vue&type=style&index=1&id=d8f5f16e&scoped=true&lang=css ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.checkbox-group.two-columns[data-v-d8f5f16e] {
-  margin-top: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-}
-.checkbox-item[data-v-d8f5f16e] {
-  flex: 1 1 50%;
-  box-sizing: border-box;
-  padding: 2px;
-}
-.checkbox-item input[data-v-d8f5f16e] {
-  margin-right: 5px;
-}
-.checkbox-item label[data-v-d8f5f16e] {
-  font-family: 'Telegraf', sans-serif;
-}
-.checkbox-item label[data-v-d8f5f16e] {
-  font-family: 'Telegraf', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  display: inline-block;
-  padding-left: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=d8d9c26c&lang=scss&scoped=true (2) ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.bg-white[data-v-d8d9c26c] {
-  background-color: white;
-}
-.row[data-v-d8d9c26c] {
-  display: flex;
-  flex-direction: row;
-}
-.formBlock[data-v-d8d9c26c] {
-  padding-top: 3.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  overflow: visible;
-}
-.formBlock > *[data-v-d8d9c26c] {
-  flex: 1;
-}
-.formTitle[data-v-d8d9c26c] {
-  color: black;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 900 !important;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-}
-.formSubTitle[data-v-d8d9c26c] {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.CVText[data-v-d8d9c26c] {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700 !important;
-  color: black;
-}
-p[data-v-d8d9c26c] {
-  font-family: "Telegraf", sans-serif;
-}
-.checkbox-item[data-v-d8d9c26c] {
-  display: flex;
-  align-items: center;
-}
-
-/*
-.custom-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid #767676;
-    outline: none;
-    transition: background-color 0.3s;
-    position: relative;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    flex-shrink: 0;
-  }
-  .custom-input[type='checkbox']:checked {
-    background-color: #1069b3;
-    border-color: #1069b3;
-    border-width: 2px;
-  }
-
-  .custom-input[type='checkbox']:checked::before {
-    content: '';
-    display: block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #1069b3;
-    border: 1.5px solid white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-*/
-.radio-group[data-v-d8d9c26c] {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-#radio-item-left[data-v-d8d9c26c] {
-  margin-right: 5rem;
-}
-#review[data-v-d8d9c26c] {
-  height: 6rem;
-  margin-bottom: 0.5rem;
-}
-#review[data-v-d8d9c26c]::-moz-placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-#review[data-v-d8d9c26c]::placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-.AcceptanceofTerms-container > *[data-v-d8d9c26c] {
-  flex: 1;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-.checkbox-container[data-v-d8d9c26c] {
-  display: flex;
-}
-.checkbox-container input[type=checkbox][data-v-d8d9c26c] {
-  margin-right: 0.5rem;
-}
-.AcceptanceofTermsText[data-v-d8d9c26c] {
-  font-size: 0.5rem;
-  line-height: 0.8rem;
-}
-.submit-block[data-v-d8d9c26c] {
-  margin-top: 2rem;
-  height: 3rem;
-}
-.previousButton[data-v-d8d9c26c] {
-  border-radius: 0.5rem;
-  width: 4rem;
-  background-color: #6d685f;
-  border: none;
-  width: 3.25rem;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.mainSubmitButton[data-v-d8d9c26c] {
-  background-color: black;
-  color: white;
-  width: 85%;
-  margin-left: 1rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.mainSubmitButtonTxt[data-v-d8d9c26c] {
-  margin-left: 6.5rem;
-}
-.mainSubmitButtonSvg[data-v-d8d9c26c] {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: auto;
-  width: 3rem;
-  margin-right: 0.25rem;
-}
-.submitButton[data-v-d8d9c26c] {
-  background-color: black;
-  color: white;
-  width: 45%;
-  margin: 0.5rem auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1.5rem;
-  font-family: "Telegraf", sans-serif;
-}
-.submit-block[data-v-d8d9c26c] {
-  display: flex;
-  flex-direction: row;
-}
-.alert-msg[data-v-d8d9c26c] {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
-  color: red;
-}
-.formBlockLayout[data-v-d8d9c26c] {
-  background-color: white;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1.75rem;
-  padding-right: 1.75rem;
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1[data-v-d8d9c26c] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1 > *[data-v-d8d9c26c] {
-  flex: 1;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.formBlock1 input[data-v-d8d9c26c]::-moz-placeholder {
-  padding-left: 0.75rem;
-}
-.formBlock1 input[data-v-d8d9c26c]::placeholder,
-.formBlock1 select[data-v-d8d9c26c] {
-  padding-left: 0.75rem;
-}
-.formBlock5[data-v-d8d9c26c] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock5 > .submitButton[data-v-d8d9c26c] {
-  margin-top: 1rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.formBlock6[data-v-d8d9c26c] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock6 > .submitButton[data-v-d8d9c26c] {
-  margin-top: 1.75rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.blackPlaceholder[data-v-d8d9c26c]::-moz-placeholder {
-  color: black;
-}
-.blackPlaceholder[data-v-d8d9c26c]::placeholder {
-  color: black;
-}
-.formImg[data-v-d8d9c26c] {
-  max-width: 50%;
-  max-height: 100%;
-  height: auto;
-  box-sizing: border-box;
-}
-.formBlock.row[data-v-d8d9c26c] {
-  display: flex;
-  align-items: flex-start;
-  box-sizing: border-box;
-}
-.formBlock.row > div[data-v-d8d9c26c] {
-  flex: 1;
-  box-sizing: border-box;
-}
-.scroll-container[data-v-d8d9c26c] {
-  height: 100%;
-  overflow-y: auto;
-  background-color: white;
-  position: relative;
-  box-sizing: border-box;
-}
-.scroll-container.scroll-active[data-v-d8d9c26c] {
-  overflow-y: auto;
-}
-.scroll-content[data-v-d8d9c26c] {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-@media screen and (max-width: 450px) {
-.mainSubmitButtonTxt[data-v-d8d9c26c] {
-    margin-left: 2.15rem;
-}
-.formTitle[data-v-d8d9c26c] {
-    color: black;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 900 !important;
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-}
-}
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formBlock9.vue?vue&type=style&index=1&id=d8d9c26c&scoped=true&lang=css ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.checkbox-group.two-columns[data-v-d8d9c26c] {
-  display: flex;
-  flex-wrap: wrap;
-}
-.checkbox-item[data-v-d8d9c26c] {
-  flex: 1 1 50%;
-  box-sizing: border-box;
-  padding: 2px;
-}
-.checkbox-item input[data-v-d8d9c26c] {
-  margin-right: 5px;
-}
-.checkbox-item label[data-v-d8d9c26c] {
-  font-family: 'Telegraf', sans-serif;
-}
-.checkbox-item label[data-v-d8d9c26c] {
-  font-size: 0.75rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/components/formComponent.vue?vue&type=style&index=1&id=59201b22&scoped=true&lang=css ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+.loading-circle-container[data-v-59201b22] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+.loading-circle[data-v-59201b22] {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.2);
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin-59201b22 1s linear infinite;
+}
+@keyframes spin-59201b22 {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
 .formImg[data-v-59201b22],
 .scroll-container[data-v-59201b22] {
   border-radius: 1rem;
 }
 .formBlock[data-v-59201b22] {
-  margin-top: 13rem;
-  margin-bottom: 6rem;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
+.closeButton[data-v-59201b22] {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-top-right-radius: 1rem;
+}
+.closeButton[data-v-59201b22]:hover {
+  background-color: red;
+}
+
 /* @media screen and (max-width: 460px) {
   .formBlock {
     margin-top: 13rem;
@@ -10587,13 +10517,264 @@ p[data-v-d8d9c26c] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/candidaturePlugin/pages/Candidature.vue?vue&type=style&index=1&id=0c52339c&scoped=true&lang=css ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+*[data-v-0c52339c] {
+  font-family: 'DM Sans', sans-serif;
+}
+h1[data-v-0c52339c] {
+  font-size: 4rem;
+}
+#aPropos p[data-v-0c52339c] {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  line-height: 150%;
+}
+#comment p[data-v-0c52339c] {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
 .title-container[data-v-0c52339c],
 #olecio-logo[data-v-0c52339c] {
   display: none;
 }
+.formContainer[data-v-0c52339c] {
+  z-index: 10;
+}
+.exit-button[data-v-0c52339c] {
+  position: relative;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+#accueil[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #1b1f23;
+}
+#accueil h1[data-v-0c52339c],
+#accueil a[data-v-0c52339c] {
+  color: white;
+}
+.accueilLogo[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  height: 20%;
+  gap: 4rem;
+}
+.jobNavigatorLogo[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem;
+  gap: 1rem;
+  align-items: center;
+  color: #f7e28f;
+}
+#logoConstructys[data-v-0c52339c] {
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+}
+.accueilGauche[data-v-0c52339c] {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+}
+.accueilBouton[data-v-0c52339c] {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 0rem 4rem;
+  gap: 1rem;
+  height: 100%;
+}
+.accueilBouton button[data-v-0c52339c] {
+  height: 3rem;
+  width: 60%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.accueilBouton button[data-v-0c52339c]:hover {
+  background-color: #e54021;
+  color: white;
+}
+.accueilDroite[data-v-0c52339c] {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.accueilDroiteVideo[data-v-0c52339c] {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+.accueilNav[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  align-self: end;
+  padding-right: 5rem;
+  height: 4rem;
+  align-items: center;
+  font-weight: bold;
+}
+.accueilNav a[data-v-0c52339c] {
+  margin: 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+.accueilDroite video[data-v-0c52339c] {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 3rem;
+  margin-right: 4rem;
+  height: auto;
+}
+#comment[data-v-0c52339c] {
+  height: 100vh;
+  background-color: #f4f1ed;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.commentGauche[data-v-0c52339c],
+.aProposDroite[data-v-0c52339c] {
+  box-sizing: border-box;
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  justify-content: center;
+}
+.commentBouton[data-v-0c52339c],
+.aProposBouton[data-v-0c52339c] {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.commentBouton button[data-v-0c52339c],
+.aProposBouton button[data-v-0c52339c] {
+  height: 3rem;
+  width: 45%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: #e54021;
+  color: white;
+}
+.commentBouton button[data-v-0c52339c]:hover,
+.aProposBouton button[data-v-0c52339c]:hover {
+  background-color: white;
+  color: black;
+}
+#comment img[data-v-0c52339c],
+#aPropos img[data-v-0c52339c] {
+  margin: auto;
+  width: auto;
+  height: 80%;
+}
+#aPropos[data-v-0c52339c] {
+  height: 100vh;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+#logoJobNavigatorHomepage[data-v-0c52339c] {
+  margin-top: 0.5rem;
+  height: auto;
+  width: 20rem;
+}
+
+/* Responsivité pour les écrans de taille moyenne (tablettes) */
+@media (max-width: 900px) {
+#accueil[data-v-0c52339c],
+  #comment[data-v-0c52339c] {
+    flex-direction: column;
+    height: auto;
+}
+h1[data-v-0c52339c] {
+    font-size: 2.5rem;
+}
+.accueilGauche[data-v-0c52339c] {
+    width: 100%;
+}
+.accueilLogo[data-v-0c52339c] {
+    gap: 0;
+    height: 5rem;
+    justify-content: space-evenly;
+}
+.accueilBouton[data-v-0c52339c] {
+    width: 100%;
+    margin: 0rem;
+    padding: 2rem;
+    align-items: center;
+    text-align: center;
+    height: auto;
+}
+.jobNavigatorLogo[data-v-0c52339c] {
+    margin: 2rem 0;
+}
+#logoConstructys[data-v-0c52339c] {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    -o-object-fit: contain;
+       object-fit: contain;
+}
+.accueilNav[data-v-0c52339c] {
+    display: none;
+}
+.accueilDroite[data-v-0c52339c] {
+    width: 100%;
+}
+.accueilDroite video[data-v-0c52339c] {
+    border-radius: 3rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+#aPropos[data-v-0c52339c] {
+    height: auto;
+    flex-direction: column-reverse;
+}
+.commentGauche[data-v-0c52339c],
+  .aProposDroite[data-v-0c52339c] {
+    box-sizing: border-box;
+    width: 100%;
+    gap: 2rem;
+    padding: 2rem;
+    text-align: center;
+}
+.commentBouton[data-v-0c52339c],
+  .aProposBouton[data-v-0c52339c] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+#comment img[data-v-0c52339c],
+  #aPropos img[data-v-0c52339c] {
+    margin: 1rem;
+    width: 40%;
+    align-self: center;
+}
+}
 @media screen and (max-width: 461px) {
 .exit-button[data-v-0c52339c] {
     display: none;
+}
+#logoJobNavigatorHomepage[data-v-0c52339c] {
+    margin-top: 0.75rem;
+    height: auto;
+    width: 10rem;
 }
 }
 
@@ -10633,8 +10814,18 @@ p[data-v-d8d9c26c] {
   font-weight: 700 !important;
 }
 
+.orangehrm-input-title {
+  padding: 0.25rem 0 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
 .orangehrm-left-space {
   margin-left: 10px;
+}
+
+.orangehrm-right-space {
+  margin-right: 10px;
 }
 
 .orangehrm-card-container {

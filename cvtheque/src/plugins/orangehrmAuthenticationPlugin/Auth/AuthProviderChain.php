@@ -59,9 +59,9 @@ class AuthProviderChain
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return string
+     * @return ?string
      */
-    public function authenticate(AuthParamsInterface $authParams): string
+    public function authenticate(AuthParamsInterface $authParams): ?string
     {
         array_multisort($this->priorities, SORT_DESC, $this->providers);
         foreach ($this->providers as $authProvider) {
@@ -75,6 +75,23 @@ class AuthProviderChain
 
     /**
      * @param AuthParamsInterface $authParams
+     * @return ?string
+     */
+    public function authenticateCompany(AuthParamsInterface $authParams): ?string
+    {
+        array_multisort($this->priorities, SORT_DESC, $this->providers);
+        foreach ($this->providers as $authProvider) {
+            $token = $authProvider->authenticateCompany($authParams);
+            if (!is_null($token)) {
+                return $token;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * @param AuthParamsInterface $authParams
      * @return string
      */
     public function signIn(AuthParamsInterface $authParams): string
@@ -82,6 +99,21 @@ class AuthProviderChain
         array_multisort($this->priorities, SORT_DESC, $this->providers);
         foreach ($this->providers as $authProvider) {
             $token = $authProvider->signIn($authParams);
+            if (!is_null($token))
+                return $token;
+        }
+        return null;
+    }
+
+    /**
+     * @param AuthParamsInterface $authParams
+     * @return string
+     */
+    public function signInFromCandidature(AuthParamsInterface $authParams): string
+    {
+        array_multisort($this->priorities, SORT_DESC, $this->providers);
+        foreach ($this->providers as $authProvider) {
+            $token = $authProvider->signInFromCandidature($authParams);
             if (!is_null($token))
                 return $token;
         }

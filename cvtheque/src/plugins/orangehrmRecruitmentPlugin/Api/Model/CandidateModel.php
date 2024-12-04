@@ -46,6 +46,10 @@ class CandidateModel implements Normalizable
             'middleName',
             'lastName',
             'email',
+            'dateOfApplication',
+            'jobs',
+            'jobTitle',
+            'contactNumber',
         ]);
 
         $this->setAttributeNames([
@@ -54,6 +58,10 @@ class CandidateModel implements Normalizable
             'middleName',
             'lastName',
             'email',
+            'dateOfApplication',
+            'jobs',
+            'jobTitle',
+            'contactNumber',
         ]);
     }
 }

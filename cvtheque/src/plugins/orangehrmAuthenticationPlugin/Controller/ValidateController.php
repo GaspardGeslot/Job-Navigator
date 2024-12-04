@@ -84,7 +84,7 @@ class ValidateController extends AbstractController implements PublicControllerI
     {
         $username = $request->request->get(self::PARAMETER_USERNAME, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
-        $credentials = new UserCredential($username, $password);
+        $credentials = new UserCredential($username, $password, 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
@@ -105,6 +105,7 @@ class ValidateController extends AbstractController implements PublicControllerI
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setIsCandidate(true);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
@@ -118,7 +119,7 @@ class ValidateController extends AbstractController implements PublicControllerI
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => 'Unexpected error occurred',
+                    'message' => "Une erreur inattendue s'est produite.",
                 ]
             );
             return new RedirectResponse($loginUrl);

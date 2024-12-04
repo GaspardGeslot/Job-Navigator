@@ -26,6 +26,8 @@
     :company-phone-number-contact="companyPhoneNumberContact"
     :company-email-contact="companyEmailContact"
     :show-back-button="true"
+    :candidature-status="candidatureStatus"
+    @see-details="$emit('see-details', false)"
   >
     <company-details
       :company-id="companyId"
@@ -34,6 +36,8 @@
       :company-matching-job-title="companyMatchingJobTitle"
       :company-phone-number-contact="companyPhoneNumberContact"
       :company-email-contact="companyEmailContact"
+      :candidature-status="candidatureStatus"
+      @see-details="$emit('see-details', false)"
     >
     </company-details>
   </summary-card>
@@ -49,6 +53,7 @@ export default {
     'company-details': CompanyDetails,
     'summary-card': SummaryCard,
   },
+  emits: ['see-details'],
   props: {
     companyId: {
       type: Number,
@@ -75,22 +80,10 @@ export default {
       type: String,
       default: '',
     },
-  },
-  beforeMount() {
-    console.log(
-      'Company data : ',
-      this.companyId,
-      ' ; ',
-      this.companyName,
-      ' ; ',
-      this.companyLocation,
-      ' ; ',
-      this.companyMatchingJobTitle,
-      ' ; ',
-      this.companyPhoneNumberContact,
-      ' ; ',
-      this.companyEmailContact,
-    );
+    candidatureStatus: {
+      type: String,
+      default: null,
+    },
   },
 };
 </script>

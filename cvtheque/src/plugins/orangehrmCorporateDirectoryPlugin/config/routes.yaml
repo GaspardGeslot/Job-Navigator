@@ -40,3 +40,13 @@ corporate_directory_module:
   path: /directory/viewDirectory
   controller: OrangeHRM\CorporateDirectory\Controller\CorporateDirectoryModuleController::handle
   methods: [ GET ]
+
+corporate_view_matched_companies:
+  path: /directory/viewMatchedCompanies
+  controller: OrangeHRM\CorporateDirectory\Controller\ViewMatchedCompaniesController::handle
+  methods: [ GET ]
+
+corporate_view_all_companies:
+  path: /directory/viewAllCompanies
+  controller: OrangeHRM\CorporateDirectory\Controller\ViewAllCompaniesController::handle
+  methods: [ GET ]

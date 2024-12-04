@@ -33,6 +33,8 @@ class RegistrationEventProcessorFactory
             return new RegistrationEmployeeActivationEventProcessor();
         } elseif ($eventType == RegistrationEventQueue::INACTIVE_EMPLOYEE_COUNT) {
             return new RegistrationEmployeeTerminationEventProcessor();
+        } elseif ($eventType == RegistrationEventQueue::FORM_SESSION_START) {
+            return new FormSessionEventProcessor();
         }
         throw new InvalidArgumentException("Invalid event type $eventType");
     }

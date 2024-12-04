@@ -81,6 +81,7 @@
                 :company-name="company.companyName"
                 :company-location="company.companyLocation"
                 :company-matching-job-title="company.companyMatchingJobTitle"
+                :candidature-status="company.candidatureStatus"
                 @click="showCompanyDetails(index)"
               >
                 <company-details
@@ -90,7 +91,9 @@
                     company.companyPhoneNumberContact
                   "
                   :company-email-contact="company.companyEmailContact"
+                  :candidature-status="company.candidatureStatus"
                   :is-mobile="isMobile"
+                  @see-details="seeCompanyDetails()"
                 >
                 </company-details>
               </summary-card>
@@ -100,6 +103,7 @@
                 :company-name="company.companyName"
                 :company-location="company.companyLocation"
                 :company-matching-job-title="company.companyMatchingJobTitle"
+                :candidature-status="company.candidatureStatus"
                 @click="showCompanyDetails(index)"
               >
               </summary-card>
@@ -129,7 +133,9 @@
               companies[currentIndex].companyPhoneNumberContact
             "
             :company-email-contact="companies[currentIndex].companyEmailContact"
+            :candidature-status="companies[currentIndex].candidatureStatus"
             @hide-details="hideCompanyDetails()"
+            @see-details="seeCompanyDetails()"
           ></summary-card-details>
         </oxd-grid-item>
       </div>
@@ -139,6 +145,7 @@
 
 <script>
 import {reactive, toRefs} from 'vue';
+import {navigate} from '@ohrm/core/util/helper/navigation';
 import usei18n from '@/core/util/composable/usei18n';
 import useToast from '@/core/util/composable/useToast';
 import {APIService} from '@/core/util/services/api.service';
@@ -200,6 +207,8 @@ export default {
           companyLogo: item.companyLogo,
           companyPhoneNumberContact: item.companyPhoneNumberContact,
           companyEmailContact: item.companyEmailContact,
+          candidatureStatus: item.candidatureStatus,
+          matchingId: item.matchingId,
         };
       });
     };
@@ -232,6 +241,7 @@ export default {
           /*locationId: state.filters.locationId?.id,
           companyNumber: state.filters.companyNumber?.id,*/
           jobTitle: state.filters.jobTitle,
+          allCompanies: false,
         })
         .then((response) => {
           const {data, meta} = response.data;
@@ -293,6 +303,19 @@ export default {
   methods: {
     hideCompanyDetails() {
       this.currentIndex = -1;
+    },
+    seeCompanyDetails() {
+      !this.companies[this.currentIndex].matchingId
+        ? navigate('/recruitment/viewCompany/{id}', {
+            id: this.companies[this.currentIndex].companyId,
+          })
+        : navigate(
+            '/recruitment/viewCompany/{companyId}/matching/{matchingId}',
+            {
+              companyId: this.companies[this.currentIndex].companyId,
+              matchingId: this.companies[this.currentIndex].matchingId,
+            },
+          );
     },
     showCompanyDetails(index) {
       if (this.currentIndex != index) {

@@ -26,7 +26,11 @@
       <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
         <oxd-form-row>
-          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+          <oxd-grid
+            v-if="isCandidate"
+            :cols="1"
+            class="orangehrm-full-width-grid"
+          >
             <oxd-grid-item>
               <full-name-input
                 v-model:firstName="employee.firstName"
@@ -35,7 +39,35 @@
               />
             </oxd-grid-item>
           </oxd-grid>
-          <oxd-grid
+          <oxd-grid v-else :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.companyName"
+                :label="$t('company.name')"
+                :rules="rules.companyName"
+                required
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.companyWebsite"
+                :label="$t('pim.web_site')"
+                :rule="rules.website"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+            <oxd-grid-item
+              class="orangehrm-save-candidate-page --span-column-2"
+            >
+              <oxd-input-field
+                v-model="employee.companyPresentation"
+                :label="$t('pim.presentation')"
+                type="textarea"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <!--<oxd-grid
             v-if="showDeprecatedFields"
             :cols="3"
             class="orangehrm-full-width-grid"
@@ -47,11 +79,11 @@
                 :rules="rules.nickname"
               />
             </oxd-grid-item>
-          </oxd-grid>
+          </oxd-grid>-->
         </oxd-form-row>
 
         <oxd-divider />
-        <oxd-form-row>
+        <oxd-form-row v-if="isCandidate">
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
@@ -61,13 +93,62 @@
                 :disabled="!$can.update(`personal_sensitive_information`)"
               />
             </oxd-grid-item>
-            <!--<oxd-grid-item>
-              <oxd-input-field
-                v-model="employee.otherId"
-                :label="$t('pim.other_id')"
-                :rules="rules.otherId"
+          </oxd-grid>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <file-upload-input
+                v-model:newFile="attachment.newAttachment"
+                v-model:method="attachment.method"
+                :label="$t('recruitment.resume')"
+                :button-label="$t('general.browse')"
+                :file="attachment.oldAttachment"
+                :rules="rules.attachment"
+                :hint="
+                  $t('general.accept_custom_format_file_up_to_n_mb', {
+                    count: formattedFileSize,
+                  })
+                "
+                :url="getAttachmentUrl"
               />
-            </oxd-grid-item>-->
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row v-else>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.companySiret"
+                :label="$t('company.siret')"
+                :rules="rules.employeeId"
+                :disabled="!$can.update(`personal_sensitive_information`)"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.companyNafCode"
+                :label="$t('company.naf_code')"
+                type="select"
+                :options="nafCodes"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <file-upload-input
+                v-model:newFile="attachment.newAttachment"
+                v-model:method="attachment.method"
+                :label="$t('company.company_presentation_file')"
+                :button-label="$t('general.browse')"
+                :file="attachment.oldAttachment"
+                :rules="rules.attachment"
+                :hint="
+                  $t('general.accept_custom_format_file_up_to_n_mb', {
+                    count: formattedFileSize,
+                  })
+                "
+                :url="getAttachmentUrl"
+              />
+            </oxd-grid-item>
           </oxd-grid>
           <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
@@ -85,7 +166,7 @@
                 :label="$t('pim.license_expiry_date')"
               />
             </oxd-grid-item>
-          </oxd-grid>-->
+          </oxd-grid>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item v-if="showSsnField">
               <oxd-input-field
@@ -103,7 +184,7 @@
                 :disabled="!$can.update(`personal_sensitive_information`)"
               />
             </oxd-grid-item>
-          </oxd-grid>
+          </oxd-grid>-->
         </oxd-form-row>
 
         <oxd-divider />
@@ -128,7 +209,11 @@
               />
             </oxd-grid-item>
           </oxd-grid>-->
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid
+            v-if="isCandidate"
+            :cols="3"
+            class="orangehrm-full-width-grid"
+          >
             <oxd-grid-item>
               <date-input
                 v-model="employee.birthday"
@@ -136,6 +221,7 @@
                 :rules="rules.birthday"
               />
             </oxd-grid-item>
+            <!--
             <oxd-grid-item>
               <oxd-input-group
                 :label="$t('pim.gender')"
@@ -155,136 +241,166 @@
                 />
               </oxd-input-group>
             </oxd-grid-item>
+            -->
+          </oxd-grid>
+          <oxd-grid v-else :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.companyWorkforce"
+                type="select"
+                :label="$t('company.workforce')"
+                :options="workforces"
+              />
+            </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
 
         <oxd-divider />
-        <oxd-form-row>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+        <div v-if="isCandidate">
+          <oxd-form-row>
+            <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="employee.studyLevel"
+                  type="select"
+                  :label="$t('general.study_level')"
+                  :options="studyLevels"
+                />
+                <!--
+                <oxd-input-field :label="$t('pim.degree_and_certification')" />
+                -->
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+          <oxd-divider />
+          <oxd-form-row>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="employee.need"
+                  type="select"
+                  :label="$t('general.need')"
+                  :options="needs"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="employee.courseStart"
+                  type="select"
+                  :label="$t('general.course_start')"
+                  :options="courseStarts"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="employee.salary"
+                  :label="$t('pim.salary_expectation')"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+          <!--
+          <oxd-divider />
+          <oxd-form-row>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="employee.studyLevel"
-                type="select"
-                :label="$t('general.study_level')"
-                :options="studyLevels"
-              />
-              <oxd-input-field :label="$t('Diplômes et certifications')" />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-divider />
-        <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="employee.need"
-                type="select"
-                :label="$t('general.need')"
-                :options="needs"
+                :label="$t('pim.professional_experience_description')"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="employee.courseStart"
-                type="select"
-                :label="$t('general.course_start')"
-                :options="courseStarts"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                :label="$t('Tranche de rémunération souhaitée')"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-divider />
-        <oxd-form-row>
-          <oxd-grid-item>
-            <oxd-input-field
-              :label="$t('Description des expériences professionnelles')"
-            />
-          </oxd-grid-item>
-        </oxd-form-row>
-        <oxd-divider />
-        <oxd-form-row>
-          <oxd-text>Permis obtenus</oxd-text>
-          <oxd-grid
-            :cols="drivingLicenses.length"
-            class="orangehrm-full-width-grid"
-          >
+          </oxd-form-row>
+          -->
+          <oxd-divider />
+          <oxd-form-row>
             <oxd-grid-item
-              v-for="(elem, elemIndex) in drivingLicenses"
-              :key="`${elemIndex}-${elem}`"
+              class="orangehrm-save-candidate-page --span-column-2"
             >
               <oxd-input-field
-                v-model="employee.checkedPermits"
-                type="checkbox"
-                :label="elem.label"
-                :value="elem.label"
+                v-model="employee.motivation"
+                :label="$t('Motivation')"
+                type="textarea"
               />
             </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <!--
-        <oxd-divider />
-        <oxd-form-row>
-          <oxd-text>Permis obtenus</oxd-text>
-          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                type="checkbox"
-                :label="'Permis A'"
-                :value="'Permis A'"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                type="checkbox"
-                :label="'Permis B'"
-                :value="'Permis B'"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                type="checkbox"
-                :label="'Permis BE'"
-                :value="'Permis BE'"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                type="checkbox"
-                :label="'Permis C'"
-                :value="'Permis C'"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        -->
+          </oxd-form-row>
+          <oxd-divider />
+          <oxd-form-row>
+            <oxd-text>{{ $t('pim.driving_licences') }}</oxd-text>
+            <oxd-grid
+              :cols="drivingLicenses.length"
+              class="orangehrm-full-width-grid"
+            >
+              <oxd-grid-item
+                v-for="(elem, elemIndex) in drivingLicenses"
+                :key="`${elemIndex}-${elem}`"
+              >
+                <oxd-input-field
+                  v-model="employee.checkedPermits"
+                  type="checkbox"
+                  :label="elem.label"
+                  :value="elem.label"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+          <!--
+          <oxd-divider />
+          <oxd-form-row>
+            <oxd-text>Permis obtenus</oxd-text>
+            <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-input-field
+                  type="checkbox"
+                  :label="'Permis A'"
+                  :value="'Permis A'"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  type="checkbox"
+                  :label="'Permis B'"
+                  :value="'Permis B'"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  type="checkbox"
+                  :label="'Permis BE'"
+                  :value="'Permis BE'"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  type="checkbox"
+                  :label="'Permis C'"
+                  :value="'Permis C'"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+          -->
 
-        <oxd-divider v-if="showDeprecatedFields" />
-        <oxd-form-row v-if="showDeprecatedFields">
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="employee.militaryService"
-                :label="$t('pim.military_service')"
-                :rules="rules.militaryService"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="employee.smoker"
-                type="checkbox"
-                :label="$t('pim.smoker')"
-                :option-label="$t('general.yes')"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+          <oxd-divider v-if="showDeprecatedFields" />
+          <oxd-form-row v-if="showDeprecatedFields">
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="employee.militaryService"
+                  :label="$t('pim.military_service')"
+                  :rules="rules.militaryService"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="employee.smoker"
+                  type="checkbox"
+                  :label="$t('pim.smoker')"
+                  :option-label="$t('general.yes')"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
 
-        <oxd-divider />
+          <oxd-divider />
+        </div>
         <oxd-form-actions>
           <required-text />
           <submit-button />
@@ -295,6 +411,7 @@
 </template>
 
 <script>
+import {urlFor} from '@ohrm/core/util/helper/url';
 import {APIService} from '@ohrm/core/util/services/api.service';
 import EditEmployeeLayout from '@/orangehrmPimPlugin/components/EditEmployeeLayout';
 import FullNameInput from '@/orangehrmPimPlugin/components/FullNameInput';
@@ -302,8 +419,12 @@ import {
   required,
   shouldNotExceedCharLength,
   validDateFormat,
+  maxFileSize,
+  validFileTypes,
+  validWebsiteFormat,
 } from '@ohrm/core/util/validation/rules';
 import useDateFormat from '@/core/util/composable/useDateFormat';
+import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 
 const employeeModel = {
   firstName: '',
@@ -319,6 +440,8 @@ const employeeModel = {
   maritalStatus: [],
   need: [],
   checkedPermits: [],
+  motivation: '',
+  salary: '',
   studyLevel: [],
   courseStart: [],
   birthday: '',
@@ -326,12 +449,28 @@ const employeeModel = {
   nickname: '',
   smoker: '',
   militaryService: '',
+  companyName: null,
+  companySiret: '',
+  companyWebsite: '',
+  companyPresentation: '',
+  companyWorkforce: [],
+  companyNafCode: [],
+  resume: null,
+  attachment: null,
+};
+
+const EmployeeAttachmentModel = {
+  id: null,
+  oldAttachment: {},
+  newAttachment: null,
+  method: 'replaceCurrent',
 };
 
 export default {
   components: {
     'edit-employee-layout': EditEmployeeLayout,
     'full-name-input': FullNameInput,
+    'file-upload-input': FileUploadInput,
   },
 
   props: {
@@ -344,6 +483,14 @@ export default {
       default: () => [],
     },
     studyLevels: {
+      type: Array,
+      default: () => [],
+    },
+    workforces: {
+      type: Array,
+      default: () => [],
+    },
+    nafCodes: {
       type: Array,
       default: () => [],
     },
@@ -371,6 +518,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    allowedFileTypes: {
+      type: Array,
+      required: true,
+    },
+    maxFileSize: {
+      type: Number,
+      required: true,
+    },
   },
 
   setup(props) {
@@ -390,8 +545,10 @@ export default {
     return {
       isLoading: false,
       employee: {...employeeModel},
+      attachment: {...EmployeeAttachmentModel},
       rules: {
         firstName: [required, shouldNotExceedCharLength(30)],
+        companyName: [required, shouldNotExceedCharLength(50)],
         middleName: [shouldNotExceedCharLength(30)],
         lastName: [required, shouldNotExceedCharLength(30)],
         employeeId: [shouldNotExceedCharLength(10)],
@@ -402,16 +559,26 @@ export default {
         nickname: [shouldNotExceedCharLength(30)],
         militaryService: [shouldNotExceedCharLength(30)],
         birthday: [validDateFormat(this.userDateFormat)],
+        website: [validWebsiteFormat()],
         drivingLicenseExpiredDate: [validDateFormat(this.userDateFormat)],
+        attachment: [
+          maxFileSize(this.maxFileSize),
+          validFileTypes(this.allowedFileTypes),
+        ],
       },
       maritalStatuses: [
         {id: 'Single', label: this.$t('pim.single')},
         {id: 'Married', label: this.$t('pim.married')},
         {id: 'Other', label: this.$t('pim.other')},
       ],
+      isCandidate: true,
     };
   },
-
+  computed: {
+    formattedFileSize() {
+      return Math.round((this.maxFileSize / (1024 * 1024)) * 100) / 100;
+    },
+  },
   beforeMount() {
     this.isLoading = true;
     this.http
@@ -423,7 +590,7 @@ export default {
           url: '/api/v2/pim/employees',
         });
       })
-      .then((response) => {
+      /*.then((response) => {
         const {data} = response.data;
         this.rules.employeeId.push((v) => {
           const index = data.findIndex(
@@ -440,7 +607,7 @@ export default {
             return true;
           }
         });
-      })
+      })*/
       .finally(() => {
         this.isLoading = false;
       });
@@ -467,9 +634,22 @@ export default {
             ssnNumber: this.showSsnField ? this.employee.ssnNumber : undefined,
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
             need: this.employee.need?.label,
-            drivingLicense: JSON.stringify(this.employee.checkedPermits),
+            drivingLicense: this.employee.checkedPermits
+              ? JSON.stringify(this.employee.checkedPermits)
+              : undefined,
+            motivation: this.employee.motivation,
+            salary: this.employee.salary,
             studyLevel: this.employee.studyLevel?.label,
             courseStart: this.employee.courseStart?.label,
+            attachment: this.attachment.newAttachment,
+            attachmentMethod: this.attachment.method,
+            attachmentId: this.attachment.id,
+            companyName: this.employee.companyName,
+            companyNafCode: this.employee.companyNafCode?.label,
+            companyWorkforce: this.employee.companyWorkforce?.label,
+            companySiret: this.employee.companySiret,
+            companyWebsite: this.employee.companyWebsite,
+            companyPresentation: this.employee.companyPresentation,
             nickname: this.showDeprecatedFields
               ? this.employee.nickname
               : undefined,
@@ -482,7 +662,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log('response HERE ', response.data);
           this.updateModel(response);
           return this.$toast.updateSuccess();
         })
@@ -493,21 +672,90 @@ export default {
 
     updateModel(response) {
       const {data} = response.data;
-      console.log(response.data);
       this.employee = {...employeeModel, ...data};
+      if (data.drivingLicense && data.drivingLicense != '') {
+        try {
+          this.employee.checkedPermits = JSON.parse(data.drivingLicense);
+        } catch (e) {
+          this.employee.checkedPermits = [];
+        }
+      } else {
+        this.employee.checkedPermits = [];
+      }
+      this.isCandidate = JSON.parse(this.employee.otherId).includes(
+        process.env.VUE_APP_CANDIDATE_ROLE_NAME,
+      );
       this.employee.maritalStatus = this.maritalStatuses.find(
         (item) => item.id === data.maritalStatus,
       );
       this.employee.nationality = this.nationalities.find(
         (item) => item.id === data.nationality?.id,
       );
-      this.employee.need = this.needs.find((item) => item.label === data.need);
-      this.employee.studyLevel = this.studyLevels.find(
-        (item) => item.label === data.studyLevel,
-      );
-      this.employee.courseStart = this.courseStarts.find(
-        (item) => item.label === data.courseStart,
-      );
+      if (this.isCandidate) {
+        this.employee.need = this.needs.find(
+          (item) => item.label === data.need,
+        );
+        this.employee.studyLevel = this.studyLevels.find(
+          (item) => item.label === data.studyLevel,
+        );
+        this.employee.courseStart = this.courseStarts.find(
+          (item) => item.label === data.courseStart,
+        );
+        if (this.employee.resume && this.employee.resume != -1) {
+          this.http
+            .request({
+              method: 'GET',
+              url: `/api/v2/pim/attachments/` + this.employee.resume,
+            })
+            .then(({data: {data}}) => {
+              this.attachment.id = data.id;
+              this.attachment.newAttachment = null;
+              this.attachment.oldAttachment = {
+                id: data.id,
+                filename: data.attachment.fileName,
+                fileType: data.attachment.fileType,
+                fileSize: data.attachment.fileSize,
+              };
+              this.attachment.method = 'keepCurrent';
+            });
+        } else {
+          this.attachment = {...EmployeeAttachmentModel};
+        }
+      } else {
+        this.employee.companyWorkforce = this.workforces.find(
+          (item) => item.label === data.companyWorkforce,
+        );
+        this.employee.companyNafCode = this.nafCodes.find(
+          (item) => item.label === data.companyNafCode,
+        );
+        if (this.employee.attachment && this.employee.attachment != -1) {
+          this.http
+            .request({
+              method: 'GET',
+              url: `/api/v2/pim/attachments/` + this.employee.attachment,
+            })
+            .then(({data: {data}}) => {
+              this.attachment.id = data.id;
+              this.attachment.newAttachment = null;
+              this.attachment.oldAttachment = {
+                id: data.id,
+                filename: data.attachment.fileName,
+                fileType: data.attachment.fileType,
+                fileSize: data.attachment.fileSize,
+              };
+              this.attachment.method = 'keepCurrent';
+            });
+        } else {
+          this.attachment = {...EmployeeAttachmentModel};
+        }
+      }
+    },
+    getAttachmentUrl() {
+      return urlFor('/pim/viewAttachment/attachId/{attachId}', {
+        attachId: this.isCandidate
+          ? this.employee.resume
+          : this.employee.attachment,
+      });
     },
   },
 };

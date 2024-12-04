@@ -94,6 +94,14 @@
             {{ $t('auth.no_account') }} ?
           </oxd-text>
         </div>
+        <div class="orangehrm-login-forgot">
+          <oxd-text
+            class="orangehrm-login-forgot-header"
+            @click="navigateUrlLoginCompany"
+          >
+            {{ $t('auth.connection_company') }}
+          </oxd-text>
+        </div>
       </oxd-form>
       <template v-if="authenticators.length > 0">
         <oxd-divider class="orangehrm-login-seperator"></oxd-divider>
@@ -178,6 +186,9 @@ export default {
     },
     navigateUrlCreateAccount() {
       navigate('/auth/createAccount');
+    },
+    navigateUrlLoginCompany() {
+      navigate('/auth/company/login');
     },
   },
 };

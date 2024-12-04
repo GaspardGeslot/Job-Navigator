@@ -47,6 +47,7 @@ class CompanyDirectoryAPI extends Endpoint implements CrudEndpoint
     public const FILTER_LOCATION_ID = 'locationId';
     public const FILTER_MODEL = 'model';
     public const PARAM_RULE_FILTER_NAME_OR_ID_MAX_LENGTH = 100;
+    public const PARAMETER_ALL_COMPANIES = 'allCompanies';
     public const MODEL_DEFAULT = 'default';
     public const MODEL_DETAILED = 'detailed';
     public const MODEL_MAP = [
@@ -220,7 +221,7 @@ class CompanyDirectoryAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
-        $employeeDirectoryParamHolder = new EmployeeDirectorySearchFilterParams();
+        /*$employeeDirectoryParamHolder = new EmployeeDirectorySearchFilterParams();
         $this->setSortingAndPaginationParams($employeeDirectoryParamHolder);
 
         $empNumber = $this->getRequestParams()->getIntOrNull(
@@ -254,22 +255,27 @@ class CompanyDirectoryAPI extends Endpoint implements CrudEndpoint
         );
         $count = $this->getEmployeeDirectoryService()->getEmployeeDirectoryDao()->getEmployeeCount(
             $employeeDirectoryParamHolder
+        );*/
+        $allCompanies = $this->getRequestParams()->getBooleanOrNull(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::PARAMETER_ALL_COMPANIES
         );
-        $companies = $this->getMatchedCompanies($this->getAuthUser()->getUserHedwigeToken());
+        $companies = $this->getCompanies($this->getAuthUser()->getUserHedwigeToken(), $allCompanies);
         return new EndpointCollectionResult(
             $this->getModelClass(),
             $companies,
-            new ParameterBag([CommonParams::PARAMETER_TOTAL => $count])
+            new ParameterBag([CommonParams::PARAMETER_TOTAL => count($companies)])
         );
     }
 
-    public function getMatchedCompanies(string $token): array
+    public function getCompanies(string $token, ?bool $allCompanies): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $response = $client->request('GET', "{$clientBaseUrl}/user/matching/companies", [
+            $url = $allCompanies ? "{$clientBaseUrl}/client/companies" : "{$clientBaseUrl}/user/matching/companies";
+            $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token
                 ]
@@ -310,6 +316,12 @@ class CompanyDirectoryAPI extends Endpoint implements CrudEndpoint
                 new ParamRule(
                     self::FILTER_LOCATION_ID,
                     new Rule(Rules::POSITIVE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ALL_COMPANIES,
+                    new Rule(Rules::BOOL_TYPE)
                 )
             ),
             $this->getModelParamRule(),
