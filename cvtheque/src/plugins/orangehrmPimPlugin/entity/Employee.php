@@ -450,6 +450,13 @@ class Employee
     /**
      * @var string|null
      *
+     * @ORM\Column(name="emp_mobility", type="string", length=300, nullable=true)
+     */
+    private ?string $mobility = null;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(name="emp_hm_telephone", type="string", length=50, nullable=true)
      */
     private ?string $homeTelephone = null;
@@ -792,6 +799,7 @@ class Employee
         $this->setWorkEmail($profileContact['email'] ?? '');
         $this->setOtherEmail($profileContact['contactEmail'] ?? '');
         $this->setMobile($profileContact['phoneNumber'] ?? '');
+        $this->setMobility($profileContact['mobility'] ?? '');
         $this->setStreet1($profileContact['address']['street'] ?? '');
         $this->setCity($profileContact['address']['city'] ?? '');
         $this->setProvince($profileContact['address']['state'] ?? '');
@@ -1765,6 +1773,22 @@ class Employee
     public function setZipcode(?string $zipcode): void
     {
         $this->zipcode = $zipcode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMobility(): ?string
+    {
+        return $this->mobility;
+    }
+
+    /**
+     * @param string|null $mobility
+     */
+    public function setMobility(?string $mobility): void
+    {
+        $this->mobility = $mobility;
     }
 
     /**

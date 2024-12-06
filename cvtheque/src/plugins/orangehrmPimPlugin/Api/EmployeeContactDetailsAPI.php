@@ -51,6 +51,7 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_CITY = 'city';
     public const PARAMETER_PROVINCE = 'province';
     public const PARAMETER_ZIP_CODE = 'zipCode';
+    public const PARAMETER_MOBILITY = 'mobility';
     public const PARAMETER_COUNTRY = 'country';
     public const PARAMETER_COUNTRY_CODE = 'countryCode';
     public const PARAMETER_HOME_TELEPHONE = 'homeTelephone';
@@ -65,6 +66,7 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     public const PARAM_RULE_STREET_2_MAX_LENGTH = 100;
     public const PARAM_RULE_CITY_MAX_LENGTH = 100;
     public const PARAM_RULE_PROVINCE_MAX_LENGTH = 100;
+    public const PARAM_RULE_MOBILITY_MAX_LENGTH = 300;
     public const PARAM_RULE_ZIP_CODE_MAX_LENGTH = 20;
     public const PARAM_RULE_COUNTRY_MAX_LENGTH = 100;
     public const PARAM_RULE_COUNTRY_CODE_MAX_LENGTH = 100;
@@ -316,6 +318,7 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
         $data = [
             'contactEmail' => $employee->getOtherEmail(),
             'phoneNumber' => $employee->getMobile(),
+            'mobility' => $employee->getMobility(),
             'address' => [
                 'street' => $employee->getStreet1(),
                 'city' => $employee->getCity(),
@@ -431,6 +434,14 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
+                    self::PARAMETER_MOBILITY,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_MOBILITY_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
                     self::PARAMETER_COUNTRY,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_COUNTRY_MAX_LENGTH]),
@@ -477,8 +488,6 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
                     self::PARAMETER_WORK_EMAIL,
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, self::PARAM_RULE_WORK_EMAIL_MAX_LENGTH]),
-                    new Rule(Rules::EMAIL),
-                    new Rule(Rules::CALLBACK, [[$this, 'isUniqueEmail'], 'getWorkEmail']),
                 ),
                 true
             ),
@@ -575,6 +584,10 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_BODY,
             self::PARAMETER_ALLOW_CONTACT_VIA_PHONE
         );
+        $mobility = $this->getRequestParams()->getStringOrNull(
+            RequestParams::PARAM_TYPE_BODY,
+            self::PARAMETER_MOBILITY
+        );
 
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
@@ -592,6 +605,7 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
         $employee->setOtherEmail($otherEmail);
         $employee->setCompanyAllowContactViaEmail($allowContactViaEmail);
         $employee->setCompanyAllowContactViaPhone($allowContactViaPhone);
+        $employee->setMobility($mobility);
         return $this->getEmployeeService()->saveEmployee($employee);
     }
 

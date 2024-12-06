@@ -90,6 +90,7 @@
           <oxd-text
             class="orangehrm-login-forgot-header"
             @click="navigateUrlCreateAccount"
+            style="text-align: center"
           >
             {{ $t('auth.no_account') }} ?
           </oxd-text>
@@ -98,6 +99,7 @@
           <oxd-text
             class="orangehrm-login-forgot-header"
             @click="navigateUrlLoginCompany"
+            style="text-align: center"
           >
             {{ $t('auth.connection_company') }}
           </oxd-text>

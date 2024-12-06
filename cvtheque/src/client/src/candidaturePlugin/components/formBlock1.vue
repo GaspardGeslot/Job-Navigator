@@ -32,16 +32,13 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
           {{ item.label }}
         </option>
       </select>
-      <select v-model="mobility">
+      <select v-if="mobilities.length" v-model="mobility">
         <option class="placeholder-option" disabled value="">
           Ma mobilité géographique
         </option>
-        <option>10 kms</option>
-        <option>30 kms</option>
-        <option>50 kms</option>
-        <option>100 kms</option>
-        <option>Ile-de-France</option>
-        <option>France entière</option>
+        <option v-for="(item, index) in mobilities" :key="index" :value="item">
+          {{ item }}
+        </option>
       </select>
       <select
         v-if="sortedStudyLevels.length"
@@ -108,6 +105,10 @@ export default {
       default: () => [],
     },
     studyLevels: {
+      type: [Array, Object],
+      default: () => ({}),
+    },
+    mobilities: {
       type: [Array, Object],
       default: () => ({}),
     },

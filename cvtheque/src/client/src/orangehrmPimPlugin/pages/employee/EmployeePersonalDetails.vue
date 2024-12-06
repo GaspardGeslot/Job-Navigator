@@ -56,7 +56,11 @@
               />
             </oxd-grid-item>
           </oxd-grid>
-          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+          <oxd-grid
+            v-if="!isCandidate"
+            :cols="1"
+            class="orangehrm-full-width-grid"
+          >
             <oxd-grid-item
               class="orangehrm-save-candidate-page --span-column-2"
             >

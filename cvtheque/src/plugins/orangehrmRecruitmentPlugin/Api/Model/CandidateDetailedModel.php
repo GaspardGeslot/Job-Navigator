@@ -125,6 +125,7 @@ class CandidateDetailedModel implements Normalizable
             'matchingId' => $this->candidate->getMatchingId(),
             'middleName' => $this->candidate->getMiddleName(),
             'motivation' => $this->candidate->getMotivation(),
+            'mobility' => $this->candidate->getMobility(),
             'need' => $this->candidate->getNeed(),
             'professionalExperience' => $this->candidate->getProfessionalExperience(),
             'province' => $this->candidate->getProvince(),

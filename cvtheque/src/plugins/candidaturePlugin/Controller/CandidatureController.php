@@ -99,22 +99,18 @@ class CandidatureController extends AbstractVueController implements PublicContr
     {
         $leadData = $request->request->all();
 
-        // error_log('$leadData ' . json_encode($leadData));
-
         $keyMapping = [
             'BTPcheckedEXP' => 'specificProfessionalExperience',
             'checkedEXP' => 'professionalExperience',
             'permits' => 'drivingLicenses',
             'vehicle' => 'hasPersonalVehicle',
+            ''
         ];
 
         // Désérialiser les champs qui sont des tableaux JSON
         if (isset($leadData['jobs'])) {
             $leadData['jobs'] = json_decode($leadData['jobs'], true);
         }
-        // if (isset($leadData['drivingLicenses'])) {
-        //     $leadData['drivingLicenses'] = json_decode($leadData['permits'], true);
-        // }
         if (isset($leadData['skills'])) {
             $leadData['skills'] = json_decode($leadData['skills'], true);
         }
@@ -132,9 +128,6 @@ class CandidatureController extends AbstractVueController implements PublicContr
                 unset($leadData[$oldKey]); // Supprime l'ancienne clé
             }
         }
-        // echo '<pre>';
-        // var_dump($leadData);
-        // echo '</pre>';
         
         $empNumber = getenv('HEDWIGE_CANDIDATURE_EMPLOYEE_ID');
         $screen = 'personal';
@@ -162,13 +155,7 @@ class CandidatureController extends AbstractVueController implements PublicContr
                 $result = $employeeAttachmentApi->createAndGetId($empNumber, $screen, $base64Attachment);
                 $normalizedResult = $result->normalize();
                 $attachment_Id = $normalizedResult["id"] ?? 'No ID';
-                // echo '<pre>attachment_Id';
-                // var_dump($attachment_Id);
-                // echo 'attachment_Id</pre>';
                 $attachment_Id = strval($attachment_Id);
-                // echo '<pre>strval_attachment_Id';
-                // var_dump($attachment_Id);
-                // echo 'strval_attachment_Id</pre>';
             } catch (Exception $e) {
                 $error_message = 'Error in createAndGetId: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
                 error_log($error_message); // Log the error
@@ -182,20 +169,8 @@ class CandidatureController extends AbstractVueController implements PublicContr
             $leadData['resume'] = $attachment_Id;
         }
 
-        // Debug : Affichage des données du lead avant et après l'encodage en JSON
-        // echo '<pre>';
-
-        // print_r('Lead Data before submission:');
-        // print_r($leadData);
-        // echo '</pre>';
-
         // Encode les données du lead en JSON
         $leadDataJson = json_encode($leadData);
-        // error_log('$leadDataJson ' . $leadDataJson);
-        // echo '<pre>';
-        // print_r('Lead Data post json_encode:');
-        // print_r($leadDataJson);
-        // echo '</pre>';
 
         // Envoi du lead avec les données encodées en JSON
         $client = new \GuzzleHttp\Client();

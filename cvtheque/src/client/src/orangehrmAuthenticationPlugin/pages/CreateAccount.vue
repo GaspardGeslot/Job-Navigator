@@ -25,7 +25,7 @@
             name="email"
             :label="$t('general.email')"
             label-icon="person"
-            :placeholder="$t('auth.email')"
+            :placeholder="$t('general.email')"
             :rules="rules.email"
             autofocus
           />
@@ -80,7 +80,11 @@
           />
         </oxd-form-actions>
         <div class="orangehrm-login-forgot">
-          <oxd-text class="orangehrm-login-forgot-header" @click="navigateUrl">
+          <oxd-text
+            class="orangehrm-login-forgot-header"
+            @click="navigateUrl"
+            style="text-align: center"
+          >
             {{ $t('auth.already_signed_id') }} ? {{ $t('auth.login') }}
           </oxd-text>
         </div>

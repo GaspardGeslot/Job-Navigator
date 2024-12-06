@@ -42,6 +42,7 @@
           :needs="options.needs"
           :study-levels="options.studyLevels"
           :professional-xp="options.professionalExperiences"
+          :mobilities="options.mobilities"
           @situation-submitted="addReview"
         />
         <FormTwo

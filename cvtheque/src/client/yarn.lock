@@ -2659,6 +2659,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/path-browserify@npm:^1":
+  version: 1.0.3
+  resolution: "@types/path-browserify@npm:1.0.3"
+  checksum: 10/f6e77f2e0b86dd0279562da23df16bd089d95fc51bc2aace413fbfb18c2e8dcbf7c5763f951436328c865d0220829c5382fdf7c87d6252c1aa6372588260f6aa
+  languageName: node
+  linkType: hard
+
 "@types/prettier@npm:^2.1.5":
   version: 2.7.2
   resolution: "@types/prettier@npm:2.7.2"
@@ -8109,6 +8116,7 @@ __metadata:
     "@ohrm/oxd": "npm:2.0.3"
     "@types/hammerjs": "npm:^2.0.45"
     "@types/jest": "npm:^27.5.2"
+    "@types/path-browserify": "npm:^1"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
     "@vue/cli-plugin-babel": "npm:~5.0.8"
@@ -8130,6 +8138,7 @@ __metadata:
     hammerjs: "npm:^2.0.8"
     intl-messageformat: "npm:^9.13.0"
     jest: "npm:^27.5.1"
+    path-browserify: "npm:^1.0.1"
     prettier: "npm:^2.8.8"
     qrcode: "npm:^1.5.3"
     sass: "npm:^1.70.0"
@@ -9504,6 +9513,13 @@ __metadata:
     no-case: "npm:^3.0.4"
     tslib: "npm:^2.0.3"
   checksum: 10/ba98bfd595fc91ef3d30f4243b1aee2f6ec41c53b4546bfa3039487c367abaa182471dcfc830a1f9e1a0df00c14a370514fa2b3a1aacc68b15a460c31116873e
+  languageName: node
+  linkType: hard
+
+"path-browserify@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "path-browserify@npm:1.0.1"
+  checksum: 10/7e7368a5207e7c6b9051ef045711d0dc3c2b6203e96057e408e6e74d09f383061010d2be95cb8593fe6258a767c3e9fc6b2bfc7ce8d48ae8c3d9f6994cca9ad8
   languageName: node
   linkType: hard
 

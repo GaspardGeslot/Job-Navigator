@@ -147,6 +147,15 @@
               />
             </oxd-grid-item>
           </oxd-grid>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.mobility"
+                :label="$t('general.mobility')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
         </oxd-form-row>
 
         <oxd-divider></oxd-divider>
@@ -414,6 +423,7 @@ const CandidateProfileModel = {
   city: '',
   zipCode: '',
   motivation: '',
+  mobility: '',
   need: '',
   studyLevel: '',
   courseStart: '',
@@ -660,6 +670,7 @@ export default {
         this.candidate.professionalExperience;
       this.profile.specificProfessionalExperience =
         this.candidate.specificProfessionalExperience;
+      this.profile.mobility = this.candidate.mobility;
       this.profile.hasPersonalVehicle = this.candidate.hasPersonalVehicule;
       this.profile.resume = this.candidate.resume;
       if (this.candidate.resume) {

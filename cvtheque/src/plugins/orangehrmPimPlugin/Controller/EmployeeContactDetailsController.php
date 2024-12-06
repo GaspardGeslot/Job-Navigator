@@ -41,12 +41,12 @@ class EmployeeContactDetailsController extends BaseViewEmployeeController
             $countryService = $this->getContainer()->get(Services::COUNTRY_SERVICE);
             
             $options = $this->getCandidatureOptions();
-            $component->addProp(new Prop('countries', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+            $component->addProp(new Prop('mobilities', Prop::TYPE_ARRAY, array_map(function($label, $index) {
                 return [
                     'id' => $index,
                     'label' => $label
                 ];
-            }, $options['countries'], array_keys($options['countries']))));
+            }, $options['mobilities'], array_keys($options['mobilities']))));
             
             $this->setComponent($component);
 

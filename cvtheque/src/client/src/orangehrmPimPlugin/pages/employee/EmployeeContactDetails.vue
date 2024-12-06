@@ -66,17 +66,25 @@
                 :rules="rules.zipCode"
               />
             </oxd-grid-item>
-            <!--<oxd-grid-item>
-              <oxd-input-field
-                v-model="contact.country"
-                type="select"
-                :label="$t('general.country')"
-                :options="countries"
-              />
-            </oxd-grid-item>-->
           </oxd-grid>
         </oxd-form-row>
 
+        <oxd-form-row v-if="isCandidate">
+          <oxd-text class="orangehrm-sub-title" tag="h6">{{
+            $t('pim.mobility')
+          }}</oxd-text>
+          <oxd-divider />
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="contact.mobility"
+                type="select"
+                :options="mobilities"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <br />
+        </oxd-form-row>
         <oxd-text class="orangehrm-sub-title" tag="h6">{{
           $t('pim.telephone')
         }}</oxd-text>
@@ -190,6 +198,7 @@ const contactDetailsModel = {
   mobile: '',
   workEmail: '',
   otherEmail: '',
+  mobility: [],
   companyAllowContactViaEmail: true,
   companyAllowContactViaPhone: true,
   otherId: null,
@@ -206,7 +215,7 @@ export default {
       type: String,
       required: true,
     },
-    countries: {
+    mobilities: {
       type: Array,
       default: () => [],
     },
@@ -273,13 +282,13 @@ export default {
           method: 'PUT',
           data: {
             city: this.contact.city,
-            country: this.contact.country?.label,
             mobile: this.contact.mobile,
             otherEmail: this.contact.otherEmail,
             province: this.contact.province,
             street1: this.contact.street1,
             workEmail: this.contact.workEmail,
             zipCode: this.contact.zipCode,
+            mobility: this.contact.mobility?.label,
             allowContactViaPhone: this.contact.companyAllowContactViaPhone,
             allowContactViaEmail: this.contact.companyAllowContactViaEmail,
           },
@@ -378,8 +387,8 @@ export default {
             process.env.VUE_APP_CANDIDATE_ROLE_NAME,
           ) || JSON.parse(this.contact.otherId).includes('ESS')
         : false;
-      this.contact.country = this.countries.find(
-        (item) => item.label === data.country,
+      this.contact.mobility = this.mobilities.find(
+        (item) => item.label === data.mobility,
       );
     },
   },
