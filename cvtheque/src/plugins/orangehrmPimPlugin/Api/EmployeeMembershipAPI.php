@@ -185,13 +185,11 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
         );
 
         $experiences = $this->getHedwigeExperiences($this->getAuthUser()->getUserHedwigeToken());
-        // error_log('Raw experiences: ' . json_encode($experiences));
 
         if (!is_array($experiences)) {
             throw new \RuntimeException('Invalid data format received for experiences.');
         }
 
-        // error_log('Response structure: ' . json_encode($experiences, JSON_PRETTY_PRINT));
 
         $employeeMemberships = array_map(function ($experience) use ($experiences) {
             $employeeMembership = new EmployeeMembership();
@@ -207,16 +205,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
         
             return $employeeMembership;
         }, $experiences['skills'] ?? []); // Itère sur "skills"
-        
-        // if (!empty($employeeMemberships)) {
-        //     foreach ($employeeMemberships as $membership) {
-        //         error_log('ProfessionalExperience: ' . $membership->getProfessionalExperience());
-        //         error_log('SpecificProfessionalExperience: ' . $membership->getSpecificProfessionalExperience());
-        //         error_log('Title: ' . $membership->getTitle());
-        //         error_log('Description: ' . $membership->getDescription());
-        //     }
-        // }
-        // error_log('Transformed EmployeeMembership objects: ' . json_encode($employeeMemberships, JSON_PRETTY_PRINT));
 
         $employeeMembershipModels = array_map(
             fn($membership) => $membership instanceof EmployeeMembershipModel 
@@ -225,8 +213,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             $employeeMemberships
         );
         $normalizedResults = array_map(fn($model) => $model->normalize(), $employeeMembershipModels);
-
-        // error_log('Normalized memberships: ' . json_encode($normalizedResults, JSON_PRETTY_PRINT));
 
         $result = new EndpointCollectionResult(
             EmployeeMembershipModel::class,
@@ -237,10 +223,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 'total' => count($normalizedResults),
             ])
         );
-
-        // error_log('Returning result: ' . json_encode([
-        //     'data' => $result
-        // ], JSON_PRETTY_PRINT));
 
         return $result;
     }
@@ -257,7 +239,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                     'Authorization' => $token,
                 ]
             ]);
-            // error_log('response' . $response->getBody());
             $data = json_decode($response->getBody(), true);
 
             return $data;
@@ -334,9 +315,7 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 'description' => $description,
             ];
             $skillDataJson = json_encode($skillData);
-            // error_log('$skillDataJson' . $skillDataJson);
             $postExperience = $this->postHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
-            // error_log('Création réussie.');
             $employeeMembership = new EmployeeMembership();
             $employeeMembership->setTitle($skillData->title ?? null);
             $employeeMembership->setYear($skillData->year ?? null);
@@ -350,7 +329,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 new ParameterBag(['status' => 'success'])
             );
         } catch (\Exception $e) {
-            error_log('Erreur lors de la création : ' . $e->getMessage());
             return new EndpointResourceResult(
                 EmployeeMembershipModel::class,
                 ['message' => 'Erreur : ' . $e->getMessage()],
@@ -385,11 +363,9 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
             }
-            // error_log('Réponse reçue : ' . print_r($responseData, true));
     
             return $responseData['certificates'] ?? [];
         } catch (\Exception $e) {
-            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
             return [];
         }
     }
@@ -413,7 +389,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      */
     private function getCommonBodyValidationRules(string $httpMethod): array
     {
-        error_log('on est ici');
         if ($httpMethod === 'POST') {
             return [
                 new ParamRule(
@@ -441,7 +416,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             ];
         }
         if ($httpMethod === 'PUT') {
-            error_log('dans la validation du update');
             return [
                 $this->getValidationDecorator()->notRequiredParamRule(
                     new ParamRule(
@@ -526,7 +500,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      */
     public function update(): EndpointResourceResult
     {
-        error_log('dans le update');
         try {
             $empNumber = $this->getRequestParams()->getInt(
                 RequestParams::PARAM_TYPE_ATTRIBUTE,
@@ -542,9 +515,7 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 'specificProfessionalExperience' => $specificProfessionalExperience,
             ];
             $skillDataJson = json_encode($skillData);
-            error_log('$skillDataJson' . $skillDataJson);
             $putExperience = $this->putHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
-            error_log('Modification réussie.');
             $employeeMembership = new EmployeeMembership();
             $employeeMembership->setTitle($skillData->title ?? null);
             $employeeMembership->setYear($skillData->year ?? null);
@@ -564,7 +535,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 new ParameterBag(['status' => 'success'])
             );
         } catch (\Exception $e) {
-            error_log('Erreur lors de la création : ' . $e->getMessage());
             return new EndpointResourceResult(
                 EmployeeMembershipModel::class,
                 ['message' => 'Erreur : ' . $e->getMessage()],
@@ -605,11 +575,9 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
             }
-            error_log('Réponse reçue : ' . print_r($responseData, true));
     
             return $responseData['certificates'] ?? [];
         } catch (\Exception $e) {
-            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
             return [];
         }
     }
@@ -673,12 +641,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 'title' => $title,
             ];
             $skillDataJson = json_encode($skillData);
-            // error_log('$skillDataJson (pour suppression) : ' . $skillDataJson);
 
             $deleteResponse = $this->deleteHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
 
             if (isset($deleteResponse['response'])) {
-                // error_log('Suppression réussie.');
                 return new EndpointResourceResult(
                     EmployeeMembershipModel::class,
                     ['message' => 'Compétence supprimée avec succès.'],
@@ -690,7 +656,6 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 throw new \Exception('Réponse inattendue lors de la suppression.');
             }
         } catch (\Exception $e) {
-            error_log('Erreur lors de la suppression : ' . $e->getMessage());
             return new EndpointResourceResult(
                 EmployeeMembershipModel::class,
                 ['message' => 'Erreur : ' . $e->getMessage()],
@@ -730,11 +695,9 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
             }
-            // error_log('Réponse reçue : ' . print_r($responseData, true));
     
             return ['response' => ['message' => 'Suppression effectuée.']];
         } catch (\Exception $e) {
-            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
             return [
                 'status' => 'error',
                 'message' => $e->getMessage(),

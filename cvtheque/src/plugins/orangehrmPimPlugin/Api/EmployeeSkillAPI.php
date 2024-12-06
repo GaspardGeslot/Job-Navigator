@@ -122,10 +122,6 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
      */
     public function getOne(): EndpointResourceResult
     {
-        error_log('Entrée dans getOne');
-        echo '<pre>';
-        echo 'ICI';
-        echo '</pre>';
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_EMP_NUMBER
@@ -217,12 +213,9 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
 
         $certificates = $this->getHedwigeCertificates($this->getAuthUser()->getUserHedwigeToken());
 
-        // error_log('Certificates: ' . json_encode($certificates, JSON_PRETTY_PRINT));
 
         // Map certificates to EmployeeSkillModel and normalize them
         $normalizedSkills = array_map(fn($cert) => (new EmployeeSkillModel($cert))->normalize(), $certificates);
-
-        error_log('Normalized Skills: ' . json_encode($normalizedSkills, JSON_PRETTY_PRINT));
 
         return new EndpointCollectionResult(
             EmployeeSkillModel::class,
@@ -262,9 +255,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
                 ]
             ]);
             $data = json_decode($response->getBody(), true);
-            // error_log('certificates : ' . print_r($data['certificates'], true));
             return $data['certificates'] ?? [];
-            // return json_encode(json_decode($response->getBody(), true)['certificates'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } catch (\Exceptionon $e) {
             return null;
         }
@@ -332,7 +323,6 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     public function create(): EndpointResourceResult
     {
         // $employeeSkill = $this->saveEmployeeSkill();
-        error_log('Entrée dans la méthode create');
 
         try {
             $empNumber = $this->getRequestParams()->getInt(
@@ -357,9 +347,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
                 'description' => $description,
             ];
             $skillDataJson = json_encode($skillData);
-            error_log('$skillDataJson' . $skillDataJson);
             $postCertificate = $this->postHedwigeCertificate($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
-            error_log('Création réussie.');
             return new EndpointResourceResult(
                 EmployeeSkillModel::class,
                 ['message' => 'Compétence ajoutée avec succès.'],
@@ -368,7 +356,6 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
                 ])
             );
         } catch (\Exception $e) {
-            error_log('Erreur lors de la création : ' . $e->getMessage());
             return new EndpointResourceResult(
                 EmployeeSkillModel::class,
                 ['message' => 'Erreur : ' . $e->getMessage()],
@@ -403,11 +390,9 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
             }
-            error_log('Réponse reçue : ' . print_r($responseData, true));
     
             return $responseData['certificates'] ?? [];
         } catch (\Exception $e) {
-            error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
             return [];
         }
     }
@@ -579,12 +564,10 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
                 'title' => $title,
             ];
             $skillDataJson = json_encode($skillData);
-            // error_log('$skillDataJson (pour suppression) : ' . $skillDataJson);
 
             $deleteResponse = $this->deleteHedwigeCertificate($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
 
             if (isset($deleteResponse['response'])) {
-                // error_log('Suppression réussie.');
                 return new EndpointResourceResult(
                     EmployeeSkillModel::class,
                     ['message' => 'Compétence supprimée avec succès.'],
@@ -596,7 +579,6 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
                 throw new \Exception('Réponse inattendue lors de la suppression.');
             }
         } catch (\Exception $e) {
-            // error_log('Erreur lors de la suppression : ' . $e->getMessage());
             return new EndpointResourceResult(
                 EmployeeSkillModel::class,
                 ['message' => 'Erreur : ' . $e->getMessage()],
@@ -628,11 +610,9 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
             }
-            // error_log('Réponse reçue : ' . print_r($responseData, true));
     
             return ['response' => ['message' => 'Suppression effectuée.']];
         } catch (\Exception $e) {
-            // error_log('Erreur lors de l\'envoi des données : ' . $e->getMessage());
             return [
                 'status' => 'error',
                 'message' => $e->getMessage(),

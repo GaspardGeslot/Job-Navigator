@@ -36,7 +36,7 @@
     <oxd-text tag="p" :class="cardTitleClasses">
       {{ companyName }}
     </oxd-text>
-    <profile-picture :id="companyId"></profile-picture>
+    <profile-picture></profile-picture>
     <oxd-text
       v-show="companyMatchingJobTitle"
       tag="p"
