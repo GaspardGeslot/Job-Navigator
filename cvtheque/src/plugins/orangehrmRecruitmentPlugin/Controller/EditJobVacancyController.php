@@ -61,12 +61,6 @@ class EditJobVacancyController extends AbstractVueController
                 'label' => $label
             ];
         }, array_keys($options['professionalExperiences']), $options['professionalExperiences'])));
-        $component->addProp(new Prop('countries', Prop::TYPE_ARRAY, array_map(function($id, $label) {
-            return [
-                'id' => $id,
-                'label' => $label
-            ];
-        }, array_keys($options['countries']), $options['countries'])));
         $component->addProp(new Prop('needs', Prop::TYPE_ARRAY, array_map(function($label, $index) {
             return [
                 'id' => $index,

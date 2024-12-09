@@ -82,7 +82,7 @@
           <oxd-text
             class="orangehrm-login-forgot-header"
             @click="navigateUrlConnexion"
-            style="text-align: center;"
+            style="text-align: center"
           >
             {{ $t('auth.connection_candidate') }}
           </oxd-text>
