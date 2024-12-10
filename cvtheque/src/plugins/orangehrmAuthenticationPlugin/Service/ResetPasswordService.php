@@ -19,6 +19,7 @@
 namespace OrangeHRM\Authentication\Service;
 
 use Exception;
+use GuzzleHttp\Client;
 use OrangeHRM\Admin\Dto\UserSearchFilterParams;
 use OrangeHRM\Admin\Traits\Service\UserServiceTrait;
 use OrangeHRM\Authentication\Dao\ResetPasswordDao;
@@ -150,14 +151,14 @@ class ResetPasswordService
             $this->getLogger()->error("Reset Password: Employee: `$empNumber` terminated");
             return null;
         }
-
+        /*
         if (empty($associatedEmployee->getWorkEmail())) {
             $empNumber = $associatedEmployee->getEmpNumber();
             $this->getLogger()->error(
                 "Reset Password: Work email is not set for employee: `$empNumber`"
             );
             return null;
-        }
+        }*/
         return $user;
     }
 
@@ -197,15 +198,15 @@ class ResetPasswordService
     public function sendPasswordResetCodeEmail(Employee $receiver, string $resetCode, string $userName): bool
     {
         try {
-            $this->getEmailService()->setMessageTo([$receiver->getWorkEmail()]);
+            /*$this->getEmailService()->setMessageTo([$userName]);
             $this->getEmailService()->setMessageFrom(
                 [$this->getEmailService()->getEmailConfig()->getSentAs() => 'OrangeHRM']
             );
             $this->getEmailService()->setMessageSubject('OrangeHRM Password Reset');
             $this->getEmailService()->setMessageBody(
                 $this->generatePasswordResetEmailBody($receiver, $resetCode, $userName)
-            );
-            return $this->getEmailService()->sendEmail();
+            );*/
+            return $this->getEmailService()->sendBrevoEmail($userName, $resetCode);
         } catch (TransportExceptionInterface $e) {
             $this->getLogger()->error('Invalid Email configuration');
             return false;
@@ -221,6 +222,20 @@ class ResetPasswordService
         return Base64Url::encode(
             "{$identifier}#SEPARATOR#" .
             random_bytes(static::RESET_PASSWORD_TOKEN_RANDOM_BYTES_LENGTH)
+        );
+    }
+
+    /**
+     * @param string $identifier
+     * @return array|false|string|string[]
+     */
+    public function generateResetLink(string $resetCode)
+    {
+        $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
+        return $urlGenerator->generate(
+            'auth_reset_code',
+            ['resetCode' => $resetCode],
+            UrlGenerator::ABSOLUTE_URL
         );
     }
 
@@ -250,7 +265,9 @@ class ResetPasswordService
         $userNameMetaData = $this->extractPasswordResetMetaData($resetCode);
         if (count($userNameMetaData) > 0) {
             $username = $userNameMetaData[0];
-            $resetPassword = $this->getResetPasswordDao()->getResetPasswordLogByResetCode($resetCode);
+            $user = $this->getUserService()->getUserDao()->getUserByUserName($username);
+            return $this->validateUser($user);
+            /*$resetPassword = $this->getResetPasswordDao()->getResetPasswordLogByResetCode($resetCode);
             if ($resetPassword instanceof ResetPasswordRequest) {
                 $currentResetCode = $this->getResetPasswordDao()->getResetPasswordLogByEmail(
                     $resetPassword->getResetEmail()
@@ -271,7 +288,7 @@ class ResetPasswordService
                 $user = $this->getUserService()->geUserDao()->getUserByUserName($username);
                 return $this->validateUser($user);
             }
-            return null;
+            return null;*/
         }
         $this->getLogger()->error('Invalid reset code');
         return null;
@@ -285,13 +302,14 @@ class ResetPasswordService
     {
         $identifier = $user->getUserName();
         $resetCode = $this->generatePasswordResetCode($identifier);
+        $resetLink = $this->generateResetLink($resetCode);
         $resetPassword = new ResetPasswordRequest();
         $resetPassword->setResetEmail($user->getEmployee()->getWorkEmail());
         $date = $this->getDateTimeHelper()->getNow();
         $resetPassword->setResetRequestDate($date);
         $resetPassword->setResetCode($resetCode);
         $resetPassword->setExpired(1);
-        $emailSent = $this->sendPasswordResetCodeEmail($user->getEmployee(), $resetCode, $user->getUserName());
+        $emailSent = $this->sendPasswordResetCodeEmail($user->getEmployee(), $resetLink, $user->getUserName());
         if (!$emailSent) {
             $this->getLogger()->error('Password reset email could not be sent.');
             return false;
@@ -309,18 +327,43 @@ class ResetPasswordService
         $this->beginTransaction();
         try {
             $success = false;
-            $user = $this->getUserService()->geUserDao()->getUserByUserName($credential->getUsername());
+            $user = $this->getUserService()->getUserDao()->getUserByUserName($credential->getUsername());
             if ($this->validateUser($user) instanceof User) {
                 $user->getDecorator()->setNonHashedPassword($credential->getPassword());
-                $this->getUserService()->saveSystemUser($user);
-                $success = $this->getResetPasswordDao()
-                    ->updateResetPasswordValid($user->getEmployee()->getWorkEmail(), 0);
+                $success = $this->resetHedwigePassword($credential);
+                if ($success)
+                    $this->getUserService()->saveSystemUser($user);
+                /*$success = $this->getResetPasswordDao()
+                    ->updateResetPasswordValid($user->getEmployee()->getWorkEmail(), 0);*/
+                $this->commitTransaction();
+                return $success;
             }
-            $this->commitTransaction();
-            return $success;
+            return false;
         } catch (Exception $e) {
             $this->rollBackTransaction();
             throw new TransactionException($e);
+        }
+    }
+
+    protected function resetHedwigePassword(UserCredential $credential): bool
+    {
+        $client = new Client();
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $client->request('PUT', "{$clientBaseUrl}/user/password", [
+                'headers' => [
+                    'Authorization' => $clientToken,
+                ],
+                'json' => [
+                    'email' => $credential->getUsername(),
+                    'password' => $credential->getPassword()
+                ]
+            ]);
+            return true;
+        } catch (\Exceptionon $e) {
+            return false;
         }
     }
 }

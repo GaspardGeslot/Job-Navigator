@@ -256,9 +256,9 @@ class PasswordStrengthService
         return (($defaultPasswordStrength === 'veryWeak' && $passwordStrength < 0)
             || ($defaultPasswordStrength === 'weak'
                 && $passwordStrength < 1)
-            || ($defaultPasswordStrength === 'better' && $passwordStrength < 2)
+            /*|| ($defaultPasswordStrength === 'better' && $passwordStrength < 2)
             || ($defaultPasswordStrength === 'strong' && $passwordStrength < 3)
-            || ($defaultPasswordStrength === 'strongest' && $passwordStrength < 4)
+            || ($defaultPasswordStrength === 'strongest' && $passwordStrength < 4)*/
         );
     }
 

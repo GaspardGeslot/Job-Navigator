@@ -30,20 +30,22 @@
 <script>
 import {computed} from 'vue';
 
-const defaultPic = `${window.appGlobal.publicPath}/images/default-photo.png`;
+const defaultPic = `${window.appGlobal.publicPath}/images/default-company.png`;
 
 export default {
   name: 'ProfilePicture',
   props: {
-    id: {
+    companySiret: {
       type: Number,
-      required: true,
+      required: false,
+      default: null,
     },
   },
   setup(props) {
     const imgSrc = computed(() => {
-      return props.id
-        ? `${window.appGlobal.baseUrl}/pim/viewPhoto/empNumber/${props.id}`
+      console.log('Image for siret : ', props.companySiret);
+      return props.companySiret && props.companySiret !== ''
+        ? `${window.appGlobal.baseUrl}/directory/viewPhoto/company/${props.companySiret}`
         : defaultPic;
     });
     return {

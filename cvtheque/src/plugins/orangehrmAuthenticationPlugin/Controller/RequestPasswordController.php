@@ -48,7 +48,7 @@ class RequestPasswordController extends AbstractVueController implements PublicC
      */
     public function preRender(Request $request): void
     {
-        if ($this->getEmailService()->isConfigSet()) {
+        /*if ($this->getEmailService()->isConfigSet()) {
             $component = new Component('request-reset-password');
             $component->addProp(
                 new Prop(
@@ -59,7 +59,16 @@ class RequestPasswordController extends AbstractVueController implements PublicC
             );
         } else {
             $component = new Component('email-configuration-warning');
-        }
+        }*/
+
+        $component = new Component('request-reset-password');
+        $component->addProp(
+            new Prop(
+                'token',
+                Prop::TYPE_STRING,
+                $this->getCsrfTokenManager()->getToken('request-reset-password')->getValue()
+            )
+        );
 
         $this->setTemplate('no_header.html.twig');
         $this->setComponent($component);

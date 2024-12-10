@@ -50,3 +50,8 @@ corporate_view_all_companies:
   path: /directory/viewAllCompanies
   controller: OrangeHRM\CorporateDirectory\Controller\ViewAllCompaniesController::handle
   methods: [ GET ]
+
+corporate_picture:
+  path: /directory/viewPhoto/company/{companySiret}
+  controller: OrangeHRM\CorporateDirectory\Controller\File\CompanyPictureController::handle
+  methods: [ GET ]

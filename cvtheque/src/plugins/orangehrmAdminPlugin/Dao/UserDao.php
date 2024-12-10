@@ -130,6 +130,22 @@ class UserDao extends BaseDao
     }
 
     /**
+     * @param string $userName
+     * @return User|null
+     */
+    public function isExistingSystemUserByUsername(string $userName): ?User
+    {
+        $query = $this->createQueryBuilder(User::class, 'u');
+        $query->andWhere('u.userName = :username')
+            ->setParameter('username', $userName);
+        $query->andWhere($query->expr()->isNotNull('u.userPassword'));
+        $query->andWhere('u.deleted = :deleted')
+            ->setParameter('deleted', false);
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * Get System User for given User Id
      * @param int $userId
      * @return User|null

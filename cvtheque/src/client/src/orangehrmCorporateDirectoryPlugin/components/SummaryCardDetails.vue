@@ -20,6 +20,7 @@
 <template>
   <summary-card
     :company-id="companyId"
+    :company-siret="companySiret"
     :company-name="companyName"
     :company-location="companyLocation"
     :company-matching-job-title="companyMatchingJobTitle"
@@ -58,6 +59,11 @@ export default {
     companyId: {
       type: Number,
       required: true,
+    },
+    companySiret: {
+      type: String,
+      required: false,
+      default: null,
     },
     companyName: {
       type: String,

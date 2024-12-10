@@ -78,6 +78,7 @@
               <summary-card
                 v-if="isMobile && currentIndex === index"
                 :company-id="company.companyId"
+                :company-siret="company.companySiret"
                 :company-name="company.companyName"
                 :company-location="company.companyLocation"
                 :company-matching-job-title="company.companyMatchingJobTitle"
@@ -100,6 +101,7 @@
               <summary-card
                 v-else
                 :company-id="company.companyId"
+                :company-siret="company.companySiret"
                 :company-name="company.companyName"
                 :company-location="company.companyLocation"
                 :company-matching-job-title="company.companyMatchingJobTitle"
@@ -124,6 +126,7 @@
         <oxd-grid-item>
           <summary-card-details
             :company-id="companies[currentIndex].companyId"
+            :company-siret="companies[currentIndex].companySiret"
             :company-location="companies[currentIndex].companyLocation"
             :company-name="companies[currentIndex].companyName"
             :company-matching-job-title="
@@ -201,6 +204,7 @@ export default {
       return data.map((item) => {
         return {
           companyId: item.companyId,
+          companySiret: item.companySiret,
           companyName: item.companyName,
           companyMatchingJobTitle: item.companyMatchingJobTitle,
           companyLocation: item.companyLocation,

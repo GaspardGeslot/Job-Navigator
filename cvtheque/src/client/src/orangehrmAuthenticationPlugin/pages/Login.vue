@@ -50,9 +50,9 @@
           <oxd-input-field
             v-model="username"
             name="username"
-            :label="$t('general.username')"
+            :label="$t('general.email')"
             label-icon="person"
-            :placeholder="$t('auth.username')"
+            :placeholder="$t('general.email')"
             :rules="rules.username"
             autofocus
           />
@@ -78,14 +78,14 @@
             type="submit"
           />
         </oxd-form-actions>
-        <!--<div class="orangehrm-login-forgot">
+        <div class="orangehrm-login-forgot">
           <oxd-text
             class="orangehrm-login-forgot-header"
             @click="navigateUrlForgotPassword"
           >
             {{ $t('auth.forgot_password') }} ?
           </oxd-text>
-        </div>-->
+        </div>
         <div class="orangehrm-login-forgot">
           <oxd-text
             class="orangehrm-login-forgot-header"

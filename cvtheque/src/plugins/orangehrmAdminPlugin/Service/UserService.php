@@ -226,6 +226,15 @@ class UserService
     }
 
     /**
+     * @param string $userName
+     * @return User
+     */
+    public function getUserByUsername(string $userName): ?User
+    {
+        return $this->getUserDao()->isExistingSystemUserByUsername($userName);
+    }
+
+    /**
      * Checks if the password hash matches the password.
      * @param string $password
      * @param string $hash

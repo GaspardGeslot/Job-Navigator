@@ -36,7 +36,7 @@
     <oxd-text tag="p" :class="cardTitleClasses">
       {{ companyName }}
     </oxd-text>
-    <profile-picture></profile-picture>
+    <profile-picture :company-siret="companySiret"></profile-picture>
     <oxd-text
       v-show="companyMatchingJobTitle"
       tag="p"
@@ -91,6 +91,11 @@ export default {
     companyId: {
       type: Number,
       required: true,
+    },
+    companySiret: {
+      type: String,
+      required: false,
+      default: null,
     },
     companyName: {
       type: String,

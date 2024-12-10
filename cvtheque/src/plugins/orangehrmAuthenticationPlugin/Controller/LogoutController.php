@@ -20,19 +20,25 @@ namespace OrangeHRM\Authentication\Controller;
 
 use OrangeHRM\Core\Controller\AbstractController;
 use OrangeHRM\Core\Traits\ServiceContainerTrait;
+use OrangeHRM\Core\Utility\Base64Url;
 use OrangeHRM\Framework\Http\RedirectResponse;
 use OrangeHRM\Framework\Http\Session\Session;
+use OrangeHRM\Framework\Routing\UrlGenerator;
 use OrangeHRM\Framework\Services;
+use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 
 class LogoutController extends AbstractController
 {
+    public const RESET_PASSWORD_TOKEN_RANDOM_BYTES_LENGTH = 16;
     use ServiceContainerTrait;
+    use AuthUserTrait;
 
     public function handle(): RedirectResponse
     {
+        $isCandidate = $this->getAuthUser()->getIsCandidate();
         /** @var Session $session */
         $session = $this->getContainer()->get(Services::SESSION);
         $session->invalidate();
-        return $this->redirect("auth/login");
+        return $this->redirect($isCandidate ? "auth/login" : "auth/company/login");
     }
 }

@@ -18,6 +18,7 @@
 
 namespace OrangeHRM\Core\Service;
 
+use GuzzleHttp\Client;
 use OrangeHRM\Admin\Service\EmailConfigurationService;
 use OrangeHRM\Config\Config;
 use OrangeHRM\Core\Dao\EmailDao;
@@ -428,6 +429,32 @@ class EmailService
             }
         } else {
             $this->logResult('Failure', 'Email configuration is not set.');
+            return false;
+        }
+    }
+
+    public function sendBrevoEmail(string $email, string $confirmationUrl) : bool
+    {
+        $client = new Client();
+        $template = getenv('BREVO_RESET_PASSWORD_TEMPLATE_ID');
+        $clientToken = getenv('BREVO_API_KEY');
+        $clientBaseUrl = getenv('BREVO_URL');
+
+        $destination = [['email' => $email]];
+        try {
+            $client->request('POST', $clientBaseUrl, [
+                'headers' => [
+                    'api-key' => $clientToken,
+                ],
+                'json' => [
+                    'to' => $destination,
+                    'templateId' => (int) $template,
+                    'params' => [ 'confirmation_url' => $confirmationUrl ],
+                ]
+            ]);
+            return true;
+        } catch (\Exceptionon $e) {
+            $this->logResult('Failure', $e->getTraceAsString());
             return false;
         }
     }

@@ -39,10 +39,10 @@
             <oxd-input-field
               v-model="username"
               name="username"
-              :label="$t('auth.username')"
+              :label="$t('general.email')"
               label-icon="person"
               :rules="rules.username"
-              :placeholder="$t('auth.username')"
+              :placeholder="$t('general.email')"
             />
           </oxd-form-row>
           <oxd-divider />

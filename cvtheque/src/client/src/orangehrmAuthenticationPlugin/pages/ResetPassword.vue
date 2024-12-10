@@ -39,7 +39,7 @@
           <oxd-form-row>
             <oxd-input-field
               :value="username"
-              :label="$t('auth.username')"
+              :label="$t('general.email')"
               readonly
               name="username"
               label-icon="person"
@@ -86,7 +86,7 @@
         </oxd-form>
       </div>
     </div>
-    <slot name="footer"></slot>
+    <!--<slot name="footer"></slot>-->
   </div>
 </template>
 
