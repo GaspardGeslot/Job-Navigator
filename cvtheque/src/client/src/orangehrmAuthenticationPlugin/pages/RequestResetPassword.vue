@@ -65,7 +65,7 @@
         </oxd-form>
       </div>
     </div>
-    <slot name="footer"></slot>
+    <!--<slot name="footer"></slot>-->
   </div>
 </template>
 
