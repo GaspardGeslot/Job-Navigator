@@ -580,11 +580,10 @@ export default {
     sortByDate() {
       // Change l'ordre de tri
       this.isDateAscending = !this.isDateAscending;
-
       // Trie les éléments en fonction de l'ordre défini
       this.items.data.sort((a, b) => {
-        const dateA = new Date(a.dateOfApplication);
-        const dateB = new Date(b.dateOfApplication);
+        const dateA = parseDate(a.dateOfApplication, 'dd-MM-yyyy');
+        const dateB = parseDate(b.dateOfApplication, 'dd-MM-yyyy');
 
         return this.isDateAscending ? dateA - dateB : dateB - dateA;
       });

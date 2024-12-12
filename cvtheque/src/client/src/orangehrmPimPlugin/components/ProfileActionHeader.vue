@@ -5,7 +5,7 @@
     </oxd-text>
     <oxd-button
       v-if="actionButtonShown"
-      :label="$t('general.add')"
+      :label="computedAddLabel"
       icon-name="plus"
       display-type="text"
       v-bind="$attrs"
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import usei18n from '@/core/util/composable/usei18n';
+
 export default {
   name: 'ProfileActionHeader',
   inheritAttrs: false,
@@ -23,6 +25,18 @@ export default {
       required: false,
       default: true,
     },
+    addLabel: {
+      type: String,
+      required: false,
+    },
+  },
+  setup(props) {
+    const {$t} = usei18n();
+    const computedAddLabel = props.addLabel || $t('general.add');
+
+    return {
+      computedAddLabel,
+    };
   },
 };
 </script>

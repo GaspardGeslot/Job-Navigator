@@ -1,5 +1,7 @@
 <template>
+  <back-button></back-button>
   <company-recruitment-status
+    style="margin-top: 1.5rem"
     v-if="company && company.candidatureStatus"
     :company="company"
     :matching-id="matchingId"
@@ -17,6 +19,7 @@
 
 <script>
 import {APIService} from '@/core/util/services/api.service';
+import BackButton from '@/core/components/buttons/BackButton';
 import CompanyRecruitmentStatus from '@/orangehrmRecruitmentPlugin/components/CompanyRecruitmentStatus';
 import CompanyProfile from '@/orangehrmRecruitmentPlugin/components/CompanyProfile';
 
@@ -24,6 +27,7 @@ export default {
   components: {
     'company-profile': CompanyProfile,
     'company-recruitment-status': CompanyRecruitmentStatus,
+    'back-button': BackButton,
   },
   props: {
     companyId: {

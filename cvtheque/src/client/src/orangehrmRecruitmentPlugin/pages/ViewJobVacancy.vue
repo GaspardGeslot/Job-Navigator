@@ -367,6 +367,8 @@ export default {
 
     return {
       http,
+      jsDateFormat,
+      locale,
       showPaginator,
       currentPage,
       isLoading,
@@ -523,8 +525,8 @@ export default {
       this.isDateAscending = !this.isDateAscending;
       // Trie les éléments en fonction de l'ordre défini
       this.items?.data.sort((a, b) => {
-        const dateA = new Date(a.dateOfApplication);
-        const dateB = new Date(b.dateOfApplication);
+        const dateA = parseDate(a.dateOfApplication, 'dd-MM-yyyy');
+        const dateB = parseDate(b.dateOfApplication, 'dd-MM-yyyy');
 
         return this.isDateAscending ? dateA - dateB : dateB - dateA;
       });
@@ -533,8 +535,8 @@ export default {
     sortByDate2() {
       this.isDateAscending2 = !this.isDateAscending2;
       this.otherLeads.sort((a, b) => {
-        const dateA = new Date(a.dateOfApplication);
-        const dateB = new Date(b.dateOfApplication);
+        const dateA = parseDate(a.dateOfApplication, 'dd-MM-yyyy');
+        const dateB = parseDate(b.dateOfApplication, 'dd-MM-yyyy');
 
         return this.isDateAscending2 ? dateA - dateB : dateB - dateA;
       });
@@ -649,7 +651,11 @@ export default {
               candidate: `${item.firstName} ${item.middleName || ''} ${
                 item.lastName
               }`,
-              dateOfApplication: item.dateOfApplication,
+              dateOfApplication: formatDate(
+                parseDate(item.dateOfApplication),
+                this.jsDateFormat,
+                {locale: this.locale},
+              ),
               email: item.email,
               /*status:
                 statuses.find((status) => status.id === item.status?.id)?.label ||

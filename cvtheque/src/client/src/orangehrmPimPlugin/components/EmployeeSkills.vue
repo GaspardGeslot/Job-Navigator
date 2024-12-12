@@ -35,9 +35,10 @@
     ></edit-skill>
     -->
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
-      <profile-action-header @click="onClickAdd">
-        {{ $t('general.certificates') }}
-      </profile-action-header>
+      <profile-action-header
+        :add-label="$t('general.add_certificate')"
+        @click="onClickAdd"
+      ></profile-action-header>
     </div>
     <table-header
       :selected="checkedItems.length"

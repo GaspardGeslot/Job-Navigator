@@ -20,7 +20,7 @@
 <template>
   <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
     <oxd-text tag="h6" class="orangehrm-main-title">
-      {{ $t('Ajouter une expérience professionnelle') }}
+      {{ $t('general.add_experience') }}
     </oxd-text>
     <oxd-divider />
     <oxd-form :loading="isLoading" @submit-valid="onSave">

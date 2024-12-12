@@ -18,7 +18,9 @@
  -->
 
 <template>
+  <back-button></back-button>
   <recruitment-status
+    style="margin-top: 1.5rem"
     v-if="candidate && candidate.candidatureStatus"
     :candidate="candidate"
     :candidature-statuses="candidatureStatuses"
@@ -38,6 +40,7 @@
 
 <script>
 import {APIService} from '@/core/util/services/api.service';
+import BackButton from '@/core/components/buttons/BackButton';
 import RecruitmentStatus from '@/orangehrmRecruitmentPlugin/components/RecruitmentStatus';
 import CandidateProfile from '@/orangehrmRecruitmentPlugin/components/CandidateProfile';
 //import HistoryTable from '@/orangehrmRecruitmentPlugin/components/HistoryTable';
@@ -47,6 +50,7 @@ export default {
     //'history-table': HistoryTable,
     'candidate-profile': CandidateProfile,
     'recruitment-status': RecruitmentStatus,
+    'back-button': BackButton,
   },
   props: {
     candidateId: {

@@ -187,7 +187,6 @@
 }
 .orangehrm-file-download[data-v-d653c6ae] {
   font-size: 12px;
-  margin-left: 10px;
   vertical-align: middle;
 }
 .orangehrm-file-name[data-v-d653c6ae] {
@@ -196,6 +195,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
+  margin-bottom: 0.5rem;
 }
 .orangehrm-file-options[data-v-d653c6ae] {
   display: flex;

@@ -33,7 +33,7 @@
                   v-model="defaultSelectedExperience"
                   type="select"
                   :options="formattedOptions"
-                  label="Expérience professionnelle globale"
+                  :label="$t('pim.work_experience_global')"
                   required
                 />
               </oxd-grid-item>
@@ -42,7 +42,7 @@
                   v-model="BTPSelectedExperience"
                   type="select"
                   :options="formattedOptions"
-                  label="Expérience professionnelle dans le BTP"
+                  :label="$t('pim.work_experience_btp')"
                   required
                 />
               </oxd-grid-item>
@@ -77,11 +77,10 @@
     ></edit-membership>
     -->
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
-      <profile-action-header @click="onClickAdd">
-        {{ $t('Mes expériences professionnelles') }}
-        <!--
-        {{ $t('pim.assigned_memberships') }}
-        -->
+      <profile-action-header
+        :add-label="$t('general.add_experience')"
+        @click="onClickAdd"
+      >
       </profile-action-header>
     </div>
     <table-header

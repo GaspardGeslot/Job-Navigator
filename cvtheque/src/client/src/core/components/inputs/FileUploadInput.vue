@@ -25,8 +25,8 @@
         <oxd-icon class="orangehrm-file-icon" name="file-earmark-text" />
         <oxd-text class="orangehrm-file-name" tag="p" :title="file.filename">
           {{ file.filename }}
-          <oxd-icon class="orangehrm-file-download" name="download" />
         </oxd-text>
+        <oxd-icon class="orangehrm-file-download" name="eye-fill" />
       </div>
       <div v-if="!disabled" class="orangehrm-file-options">
         <oxd-input-field
@@ -157,7 +157,6 @@ export default {
   }
   &-download {
     font-size: 12px;
-    margin-left: 10px;
     vertical-align: middle;
   }
   &-name {
@@ -166,6 +165,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-word;
+    margin-bottom: 0.5rem;
   }
   &-options {
     display: flex;

@@ -17,6 +17,7 @@
  */
  -->
 <template>
+  <back-button></back-button>
   <div class="orangehrm-background-container">
     <div class="orangehrm-card-container">
       <oxd-text tag="h6" class="orangehrm-main-title">
@@ -417,6 +418,7 @@
 <script>
 import {APIService} from '@/core/util/services/api.service';
 import {navigate} from '@ohrm/core/util/helper/navigation';
+import BackButton from '@/core/components/buttons/BackButton';
 //import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 //import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import {
@@ -477,6 +479,7 @@ const attachmentNormalizer = (data) => {
 export default {
   components: {
     'oxd-switch-input': OxdSwitchInput,
+    'back-button': BackButton,
     /*'employee-autocomplete': EmployeeAutocomplete,
     'jobtitle-dropdown': JobtitleDropdown,
     'vacancy-link-card': VacancyLinkCard,
