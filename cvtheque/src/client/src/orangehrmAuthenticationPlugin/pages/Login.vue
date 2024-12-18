@@ -19,6 +19,26 @@
 
 <template>
   <login-layout>
+    <oxd-form class="orangehrm-login-form">
+      <oxd-form-row>
+        <oxd-text class="orangehrm-profile-title" tag="h6">Je suis</oxd-text>
+      </oxd-form-row>
+      <oxd-form-row>
+        <oxd-form-actions>
+          <oxd-button
+            class="orangehrm-profile-button"
+            display-type="secondary"
+            :label="$t('Un candidat')"
+          />
+          <oxd-button
+            class="orangehrm-profile-button"
+            display-type="ghost"
+            :label="$t('Une entreprise')"
+            @click="navigateUrlLoginCompany"
+          />
+        </oxd-form-actions>
+      </oxd-form-row>
+    </oxd-form>
     <oxd-text class="orangehrm-login-title" tag="h5">
       {{ $t('auth.login') }}
     </oxd-text>
@@ -78,30 +98,20 @@
             type="submit"
           />
         </oxd-form-actions>
+        <oxd-form-actions class="orangehrm-create-account-action">
+          <oxd-button
+            class="orangehrm-create-account-button"
+            display-type="main"
+            :label="$t('auth.create_accont')"
+            @click="navigateUrlCreateAccount"
+          />
+        </oxd-form-actions>
         <div class="orangehrm-login-forgot">
           <oxd-text
             class="orangehrm-login-forgot-header"
             @click="navigateUrlForgotPassword"
           >
             {{ $t('auth.forgot_password') }} ?
-          </oxd-text>
-        </div>
-        <div class="orangehrm-login-forgot">
-          <oxd-text
-            class="orangehrm-login-forgot-header"
-            @click="navigateUrlCreateAccount"
-            style="text-align: center"
-          >
-            {{ $t('auth.no_account') }} ?
-          </oxd-text>
-        </div>
-        <div class="orangehrm-login-forgot">
-          <oxd-text
-            class="orangehrm-login-forgot-header"
-            @click="navigateUrlLoginCompany"
-            style="text-align: center"
-          >
-            {{ $t('auth.connection_company') }}
           </oxd-text>
         </div>
       </oxd-form>

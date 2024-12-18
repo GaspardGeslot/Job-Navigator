@@ -36,26 +36,28 @@ class ViewAllCompaniesController extends AbstractVueController
     {
         $component = new Component('view-all-companies');
 
-        $jobTitles = $this->getMatchedJobs($this->getAuthUser()->getUserHedwigeToken());
-        $component->addProp(new Prop('job-titles', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+        $options = $this->getHedwigeOptions();
+        $component->addProp(new Prop('sectors', Prop::TYPE_ARRAY, array_map(function($sector, $index) {
             return [
                 'id' => $index,
-                'label' => $label
+                'label' => $sector['title'],
+                'jobs' => $sector['jobs']
             ];
-        }, $jobTitles, array_keys($jobTitles))));
+        }, $options['sectors'], array_keys($options['sectors']))));
 
         $this->setComponent($component);
     }
 
-    public function getMatchedJobs(string $token): array
+    public function getHedwigeOptions(): array
     {
         $client = new Client();
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $response = $client->request('GET', "{$clientBaseUrl}/user/matching/jobs", [
+            $response = $client->request('GET', "{$clientBaseUrl}/client/options", [
                 'headers' => [
-                    'Authorization' => $token
+                    'Authorization' => $clientToken
                 ]
             ]);
 

@@ -185,6 +185,7 @@ export default {
           title: item.title,
           year: item.year,
           description: item.description,
+          employer: item.employer,
         })),
       };
     };
@@ -255,6 +256,11 @@ export default {
         {
           name: 'year',
           title: this.$t('Période'),
+          style: {flex: 1},
+        },
+        {
+          name: 'employer',
+          title: this.$t('Employeur'),
           style: {flex: 1},
         },
         {

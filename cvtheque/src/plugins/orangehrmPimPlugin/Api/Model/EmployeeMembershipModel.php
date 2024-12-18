@@ -39,6 +39,7 @@
   
       private ?string $title;
       private ?string $description;
+      private ?string $employer;
       private ?string $year;
       private ?string $professionalExperience;
       private ?string $specificProfessionalExperience;
@@ -52,12 +53,14 @@
             $this->setEntity($data);
             $this->title = $data->getTitle() ?? null;
             $this->description = $data->getDescription() ?? null;
+            $this->employer = $data->getEmployer() ?? null;
             $this->year = $data->getYear() ?? null;
             $this->professionalExperience = $data->getProfessionalExperience() ?? null;
             $this->specificProfessionalExperience = $data->getSpecificProfessionalExperience() ?? null;
         } elseif (is_array($data)) {
             $this->title = $data['title'] ?? null;
             $this->description = $data['description'] ?? null;
+            $this->employer = $data['employer'] ?? null;
             $this->year = $data['year'] ?? null;
             $this->professionalExperience = $data['professionalExperience'] ?? null;
             $this->specificProfessionalExperience = $data['specificProfessionalExperience'] ?? null;
@@ -65,8 +68,8 @@
             throw new \InvalidArgumentException('Invalid data type for EmployeeMembershipModel constructor');
         }
 
-        $this->setFilters(['title', 'description', 'year', 'professionalExperience', 'specificProfessionalExperience']);
-        $this->setAttributeNames(['title', 'description', 'year', 'professionalExperience', 'specificProfessionalExperience']);
+        $this->setFilters(['title', 'description', 'employer', 'year', 'professionalExperience', 'specificProfessionalExperience']);
+        $this->setAttributeNames(['title', 'description', 'employer', 'year', 'professionalExperience', 'specificProfessionalExperience']);
     }
 
   
@@ -75,6 +78,7 @@
           return [
               'title' => $this->title,
               'description' => $this->description,
+              'employer' => $this->employer,
               'year' => $this->year,
               'professionalExperience' => $this->professionalExperience,
               'specificProfessionalExperience' => $this->specificProfessionalExperience,

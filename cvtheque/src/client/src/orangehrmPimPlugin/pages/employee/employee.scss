@@ -117,3 +117,10 @@
   font-weight: 600;
   color: $oxd-interface-gray-darken-1-color;
 }
+
+.top-form-actions {
+  margin-top: .5rem;
+  justify-content: flex-start;
+  display: flex;
+  flex-wrap: nowrap;
+}

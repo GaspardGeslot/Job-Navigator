@@ -79,15 +79,14 @@
             type="submit"
           />
         </oxd-form-actions>
-        <div class="orangehrm-login-forgot">
-          <oxd-text
-            class="orangehrm-login-forgot-header"
+        <oxd-form-actions class="orangehrm-create-account-action">
+          <oxd-button
+            class="orangehrm-create-account-button"
+            display-type="main"
+            :label="$t('candidature.login')"
             @click="navigateUrl"
-            style="text-align: center"
-          >
-            {{ $t('auth.already_signed_id') }} ? {{ $t('auth.login') }}
-          </oxd-text>
-        </div>
+          />
+        </oxd-form-actions>
       </oxd-form>
     </div>
   </login-layout>

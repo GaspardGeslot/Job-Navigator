@@ -19,7 +19,15 @@
 
 <template>
   <div class="orangehrm-background-container">
-    <oxd-table-filter :filter-title="$t('general.directory')">
+    <table-filter-title
+      v-if="isLoading || isEmpty"
+      :title="$t('general.directory_matching_title')"
+    >
+    </table-filter-title>
+    <oxd-table-filter
+      v-else
+      :filter-title="$t('general.directory_matching_title')"
+    >
       <oxd-form @submit-valid="onSearch" @reset="onReset">
         <oxd-form-row>
           <oxd-grid :cols="1">
@@ -34,7 +42,7 @@
               <oxd-input-field
                 v-model="filters.jobTitle"
                 type="select"
-                :label="$t('general.job_title')"
+                :label="$t('general.job')"
                 :options="jobTitles"
               />
             </oxd-grid-item>
@@ -66,59 +74,69 @@
 
     <div class="orangehrm-corporate-directory">
       <div class="orangehrm-paper-container">
-        <table-header
-          :selected="0"
-          :total="total"
-          :loading="false"
-          :show-divider="false"
-        ></table-header>
-        <div ref="scrollerRef" class="orangehrm-container">
-          <oxd-grid :cols="colSize">
-            <oxd-grid-item v-for="(company, index) in companies" :key="company">
-              <summary-card
-                v-if="isMobile && currentIndex === index"
-                :company-id="company.companyId"
-                :company-siret="company.companySiret"
-                :company-name="company.companyName"
-                :company-location="company.companyLocation"
-                :company-matching-job-title="company.companyMatchingJobTitle"
-                :candidature-status="company.candidatureStatus"
-                @click="showCompanyDetails(index)"
-              >
-                <company-details
-                  :company-id="company.companyId"
-                  :company-name="company.companyName"
-                  :company-phone-number-contact="
-                    company.companyPhoneNumberContact
-                  "
-                  :company-email-contact="company.companyEmailContact"
-                  :candidature-status="company.candidatureStatus"
-                  :is-mobile="isMobile"
-                  @see-details="seeCompanyDetails()"
-                >
-                </company-details>
-              </summary-card>
-              <summary-card
-                v-else
-                :company-id="company.companyId"
-                :company-siret="company.companySiret"
-                :company-name="company.companyName"
-                :company-location="company.companyLocation"
-                :company-matching-job-title="company.companyMatchingJobTitle"
-                :candidature-status="company.candidatureStatus"
-                @click="showCompanyDetails(index)"
-              >
-              </summary-card>
-            </oxd-grid-item>
-          </oxd-grid>
-          <oxd-loading-spinner
-            v-if="isLoading"
-            class="orangehrm-container-loader"
-          />
+        <div v-if="isEmpty" class="orangehrm-corporate-directory-nocontent">
+          <img :src="noContentPic" alt="No Content" />
+          <oxd-text tag="p">
+            {{ $t('general.directory_matching_no_record') }}
+          </oxd-text>
         </div>
-        <div class="orangehrm-bottom-container"></div>
+        <div v-else>
+          <table-header
+            :selected="0"
+            :total="total"
+            :loading="false"
+            :show-divider="false"
+          ></table-header>
+          <div ref="scrollerRef" class="orangehrm-container">
+            <oxd-grid :cols="colSize">
+              <oxd-grid-item
+                v-for="(company, index) in companies"
+                :key="company"
+              >
+                <summary-card
+                  v-if="isMobile && currentIndex === index"
+                  :company-id="company.companyId"
+                  :company-siret="company.companySiret"
+                  :company-name="company.companyName"
+                  :company-location="company.companyLocation"
+                  :company-matching-job-title="company.companyMatchingJobTitle"
+                  :candidature-status="company.candidatureStatus"
+                  @click="showCompanyDetails(index)"
+                >
+                  <company-details
+                    :company-id="company.companyId"
+                    :company-name="company.companyName"
+                    :company-phone-number-contact="
+                      company.companyPhoneNumberContact
+                    "
+                    :company-email-contact="company.companyEmailContact"
+                    :candidature-status="company.candidatureStatus"
+                    :is-mobile="isMobile"
+                    @see-details="seeCompanyDetails()"
+                  >
+                  </company-details>
+                </summary-card>
+                <summary-card
+                  v-else
+                  :company-id="company.companyId"
+                  :company-siret="company.companySiret"
+                  :company-name="company.companyName"
+                  :company-location="company.companyLocation"
+                  :company-matching-job-title="company.companyMatchingJobTitle"
+                  :candidature-status="company.candidatureStatus"
+                  @click="showCompanyDetails(index)"
+                >
+                </summary-card>
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-loading-spinner
+              v-if="isLoading"
+              class="orangehrm-container-loader"
+            />
+          </div>
+          <div class="orangehrm-bottom-container"></div>
+        </div>
       </div>
-
       <div
         v-if="isCompanySelected && isMobile === false"
         class="orangehrm-corporate-directory-sidebar"
@@ -161,6 +179,7 @@ import useInfiniteScroll from '@ohrm/core/util/composable/useInfiniteScroll';
 import SummaryCard from '@/orangehrmCorporateDirectoryPlugin/components/SummaryCard';
 import CompanyDetails from '@/orangehrmCorporateDirectoryPlugin/components/CompanyDetails';
 import SummaryCardDetails from '@/orangehrmCorporateDirectoryPlugin/components/SummaryCardDetails';
+import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
 import {OxdSpinner, useResponsive} from '@ohrm/oxd';
 
 const defaultFilters = {
@@ -177,6 +196,7 @@ export default {
     'oxd-loading-spinner': OxdSpinner,
     'company-details': CompanyDetails,
     'summary-card-details': SummaryCardDetails,
+    'table-filter-title': TableFilterTitle,
     //'employee-autocomplete': EmployeeAutocomplete,
   },
 
@@ -195,6 +215,7 @@ export default {
     const {$t} = usei18n();
     const {noRecordsFound} = useToast();
     const responsiveState = useResponsive();
+    const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
 
     const rules = {
       employee: [shouldNotExceedCharLength(100), validSelection],
@@ -270,6 +291,7 @@ export default {
     });
 
     return {
+      noContentPic,
       rules,
       fetchData,
       scrollerRef,
@@ -279,6 +301,9 @@ export default {
   },
 
   computed: {
+    isEmpty() {
+      return !this.isLoading && this.companies.length === 0;
+    },
     isMobile() {
       return this.windowWidth < 800;
     },

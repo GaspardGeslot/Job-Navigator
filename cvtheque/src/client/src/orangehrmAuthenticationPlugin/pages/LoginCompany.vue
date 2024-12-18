@@ -19,6 +19,26 @@
 
 <template>
   <login-layout>
+    <oxd-form class="orangehrm-login-form">
+      <oxd-form-row>
+        <oxd-text class="orangehrm-profile-title" tag="h6">Je suis</oxd-text>
+      </oxd-form-row>
+      <oxd-form-row>
+        <oxd-form-actions>
+          <oxd-button
+            class="orangehrm-profile-button"
+            display-type="ghost"
+            :label="$t('Un candidat')"
+            @click="navigateUrlConnexion"
+          />
+          <oxd-button
+            class="orangehrm-profile-button"
+            display-type="secondary"
+            :label="$t('Une entreprise')"
+          />
+        </oxd-form-actions>
+      </oxd-form-row>
+    </oxd-form>
     <oxd-text class="orangehrm-login-title" tag="h5">
       {{ $t('auth.login') }}
     </oxd-text>
@@ -78,7 +98,7 @@
             type="submit"
           />
         </oxd-form-actions>
-        <div class="orangehrm-login-forgot">
+        <!--<div class="orangehrm-login-forgot">
           <oxd-text
             class="orangehrm-login-forgot-header"
             @click="navigateUrlConnexion"
@@ -86,7 +106,7 @@
           >
             {{ $t('auth.connection_candidate') }}
           </oxd-text>
-        </div>
+        </div>-->
       </oxd-form>
       <template v-if="authenticators.length > 0">
         <oxd-divider class="orangehrm-login-seperator"></oxd-divider>

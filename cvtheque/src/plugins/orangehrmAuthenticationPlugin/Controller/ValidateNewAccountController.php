@@ -112,7 +112,6 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             return new RedirectResponse($redirectUrl);
         }
 
-        $homePagePath = $this->getHomePageService()->getHomePagePath();
-        return $this->redirect($homePagePath);
+        return $this->redirect("/pim/viewMyDetails");
     }
 }

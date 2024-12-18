@@ -176,50 +176,54 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointCollectionResult
     {
-        $limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 50);
+        /*$limit = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'limit', 50);
         $offset = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_QUERY, 'offset', 0);
 
         $empNumber = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_ATTRIBUTE,
             CommonParams::PARAMETER_EMP_NUMBER
-        );
+        );*/
 
         $experiences = $this->getHedwigeExperiences($this->getAuthUser()->getUserHedwigeToken());
+        $employeeMemberships;
+        if (array_key_exists('skills', $experiences) && is_array($experiences['skills']) && count($experiences['skills']) > 0)
+        {
+            $employeeMemberships = array_map(function ($experience) use ($experiences) {
+                $employeeMembership = new EmployeeMembership();
+            
+                // Données spécifiques à chaque expérience
+                $employeeMembership->setTitle($experience['title'] ?? null);
+                $employeeMembership->setDescription($experience['description'] ?? null);
+                $employeeMembership->setYear($experience['period'] ?? null); // "period" utilisé comme "year"
+                $employeeMembership->setEmployer($experience['employer'] ?? null);
+            
+                // Données globales
+                $employeeMembership->setProfessionalExperience($experiences['professionalExperience'] ?? null);
+                $employeeMembership->setSpecificProfessionalExperience($experiences['specificProfessionalExperience'] ?? null);
+            
+                return $employeeMembership;
+            }, $experiences['skills'] ?? []); // Itère sur "skills"
 
-        if (!is_array($experiences)) {
-            throw new \RuntimeException('Invalid data format received for experiences.');
-        }
-
-
-        $employeeMemberships = array_map(function ($experience) use ($experiences) {
+            $employeeMembershipModels = array_map(
+                fn($membership) => $membership instanceof EmployeeMembershipModel 
+                    ? $membership 
+                    : new EmployeeMembershipModel($membership),
+                $employeeMemberships
+            );
+        } else {
             $employeeMembership = new EmployeeMembership();
-        
-            // Données spécifiques à chaque expérience
-            $employeeMembership->setTitle($experience['title'] ?? null);
-            $employeeMembership->setDescription($experience['description'] ?? null);
-            $employeeMembership->setYear($experience['period'] ?? null); // "period" utilisé comme "year"
-        
-            // Données globales
             $employeeMembership->setProfessionalExperience($experiences['professionalExperience'] ?? null);
             $employeeMembership->setSpecificProfessionalExperience($experiences['specificProfessionalExperience'] ?? null);
-        
-            return $employeeMembership;
-        }, $experiences['skills'] ?? []); // Itère sur "skills"
-
-        $employeeMembershipModels = array_map(
-            fn($membership) => $membership instanceof EmployeeMembershipModel 
-                ? $membership 
-                : new EmployeeMembershipModel($membership),
-            $employeeMemberships
-        );
+            $employeeMembershipModels = [new EmployeeMembershipModel($employeeMembership)];
+        }
         $normalizedResults = array_map(fn($model) => $model->normalize(), $employeeMembershipModels);
 
         $result = new EndpointCollectionResult(
             EmployeeMembershipModel::class,
             $employeeMembershipModels, // Normalized data
             new ParameterBag([
-                'limit' => $limit,
-                'offset' => $offset,
+                //'limit' => $limit,
+                //'offset' => $offset,
                 'total' => count($normalizedResults),
             ])
         );
@@ -308,18 +312,22 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             $year = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'year');
 
             $description = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'description');
+            
+            $employer = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, 'employer');
 
             $skillData = (object) [
                 'title' => $title,
                 'period' => $year,
                 'description' => $description,
+                'employer' => $employer,
             ];
             $skillDataJson = json_encode($skillData);
-            $postExperience = $this->postHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
+            $this->postHedwigeExperience($this->getAuthUser()->getUserHedwigeToken(), $skillDataJson);
             $employeeMembership = new EmployeeMembership();
             $employeeMembership->setTitle($skillData->title ?? null);
             $employeeMembership->setYear($skillData->year ?? null);
             $employeeMembership->setDescription($skillData->description ?? null);
+            $employeeMembership->setEmployer($skillData->employer ?? null);
             $employeeMembership->setProfessionalExperience($professionalExperience ?? null);
             $employeeMembership->setSpecificProfessionalExperience($specificProfessionalExperience ?? null);
 
@@ -339,7 +347,7 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
         }
     }
 
-    protected function postHedwigeExperience(string $token, string $data): array
+    protected function postHedwigeExperience(string $token, string $data): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -351,22 +359,14 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 throw new \InvalidArgumentException('Invalid JSON data provided: ' . json_last_error_msg());
             }
 
-            $response = $client->request('POST', "{$clientBaseUrl}/user/skill", [
+            $client->request('POST', "{$clientBaseUrl}/user/skill", [
                 'headers' => [
                     'Authorization' => $token,
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $decodedData,
             ]);
-    
-            $responseData = json_decode($response->getBody(), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException('Failed to decode response JSON: ' . json_last_error_msg());
-            }
-    
-            return $responseData['certificates'] ?? [];
         } catch (\Exception $e) {
-            return [];
         }
     }
 
@@ -395,6 +395,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                     'title',
                     new Rule(Rules::STRING_TYPE),
                     new Rule(Rules::LENGTH, [null, 100])
+                ),
+                new ParamRule(
+                    'employer',
+                    new Rule(Rules::STRING_TYPE),
                 ),
                 new ParamRule(
                     'description',

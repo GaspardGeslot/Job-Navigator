@@ -76,6 +76,13 @@
       */
      private ?string $description = null;
 
+     /**
+      * @var string|null
+      *
+      * @ORM\Column(name="employer", type="string", length=300, nullable=true)
+      */
+      private ?string $employer = null;
+
     /**
     * @var string|null
     *
@@ -117,6 +124,16 @@
      public function setDescription(?string $description): void
      {
          $this->description = $description;
+     }
+
+     public function getEmployer(): ?string
+     {
+         return $this->employer;
+     }
+ 
+     public function setEmployer(?string $employer): void
+     {
+         $this->employer = $employer;
      }
  
      public function getYear(): ?string

@@ -20,11 +20,20 @@
 <template>
   <edit-employee-layout screen="job" :employee-id="empNumber">
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
-      <oxd-text tag="h6" class="orangehrm-main-title">
-        {{ $t('pim.job_details') }}
-      </oxd-text>
-      <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
+        <oxd-form-row>
+          <oxd-text tag="h6" class="orangehrm-main-title">
+            {{ $t('pim.job_details') }}
+          </oxd-text>
+          <oxd-form-actions class="top-form-actions">
+            <oxd-button
+              display-type="secondary"
+              :label="$t('general.save')"
+              type="submit"
+            />
+          </oxd-form-actions>
+        </oxd-form-row>
+        <oxd-divider />
         <oxd-form-row
           v-for="(item, itemIndex) in sectors"
           :key="itemIndex"

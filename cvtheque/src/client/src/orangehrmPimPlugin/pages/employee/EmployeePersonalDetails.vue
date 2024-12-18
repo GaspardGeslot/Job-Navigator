@@ -20,11 +20,25 @@
 <template>
   <edit-employee-layout :employee-id="empNumber" screen="personal">
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
-      <oxd-text tag="h6" class="orangehrm-main-title">
-        {{ $t('general.personal_details') }}
-      </oxd-text>
-      <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
+        <oxd-form-row>
+          <oxd-text tag="h6" class="orangehrm-main-title">
+            {{ $t('general.personal_details') }}
+          </oxd-text>
+          <oxd-text class="orangehrm-text" tag="p">
+            <i>
+              {{ $t('general.think_about_saving') }}
+            </i>
+          </oxd-text>
+          <oxd-form-actions class="top-form-actions">
+            <oxd-button
+              display-type="secondary"
+              :label="$t('general.save')"
+              type="submit"
+            />
+          </oxd-form-actions>
+          <oxd-divider />
+        </oxd-form-row>
         <oxd-form-row>
           <oxd-grid
             v-if="isCandidate"
@@ -88,7 +102,7 @@
 
         <oxd-divider />
         <oxd-form-row v-if="isCandidate">
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="employee.profileId"
@@ -97,7 +111,7 @@
                 :disabled="!$can.update(`personal_sensitive_information`)"
               />
             </oxd-grid-item>
-          </oxd-grid>
+          </oxd-grid>-->
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <file-upload-input
@@ -299,6 +313,7 @@
                 <oxd-input-field
                   v-model="employee.salary"
                   :label="$t('pim.salary_expectation')"
+                  :placeholder="$t('pim.salary_expectation_holder')"
                 />
               </oxd-grid-item>
             </oxd-grid>

@@ -20,7 +20,7 @@
 <template>
   <oxd-input-field
     type="date"
-    :placeholder="userDateFormat"
+    placeholder="23-10-2000"
     :day-attributes="attributes"
     :events="events"
     :display-format="jsDateFormat"

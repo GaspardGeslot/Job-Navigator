@@ -20,11 +20,20 @@
 <template>
   <edit-employee-layout :employee-id="empNumber" screen="contact">
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
-      <oxd-text tag="h6" class="orangehrm-main-title">{{
-        $t('pim.contact_details')
-      }}</oxd-text>
-      <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
+        <oxd-form-row>
+          <oxd-text tag="h6" class="orangehrm-main-title">{{
+            $t('pim.contact_details')
+          }}</oxd-text>
+          <oxd-form-actions class="top-form-actions">
+            <oxd-button
+              display-type="secondary"
+              :label="$t('general.save')"
+              type="submit"
+            />
+          </oxd-form-actions>
+          <oxd-divider />
+        </oxd-form-row>
         <oxd-text class="orangehrm-sub-title" tag="h6">{{
           $t('admin.address')
         }}</oxd-text>

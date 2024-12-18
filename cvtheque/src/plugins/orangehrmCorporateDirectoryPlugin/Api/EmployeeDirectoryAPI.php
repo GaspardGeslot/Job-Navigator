@@ -47,6 +47,7 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
     public const FILTER_EMP_NUMBER = 'empNumber';
     public const FILTER_NAME_OR_ID = 'nameOrId';
     public const FILTER_JOB_TITLE_ID = 'jobTitleId';
+    public const PARAMETER_JOB_TITLE = 'jobTitle';
     public const FILTER_LOCATION_ID = 'locationId';
     public const PARAMETER_ALL_COMPANIES = 'allCompanies';
     public const FILTER_MODEL = 'model';
@@ -265,7 +266,11 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
             RequestParams::PARAM_TYPE_QUERY,
             self::PARAMETER_ALL_COMPANIES
         );
-        $companiesAPI = $this->getCompanies($this->getAuthUser()->getUserHedwigeToken(), $allCompanies);
+        $jobTitle = $this->getRequestParams()->getStringOrNull(
+            RequestParams::PARAM_TYPE_QUERY,
+            self::PARAMETER_JOB_TITLE
+        );
+        $companiesAPI = $this->getCompanies($this->getAuthUser()->getUserHedwigeToken(), $allCompanies, $jobTitle);
         $companies = array();
         foreach ($companiesAPI as $company) {
             $emp = new Employee();
@@ -279,13 +284,14 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
         );
     }
 
-    public function getCompanies(string $token, ?bool $allCompanies): array
+    public function getCompanies(string $token, ?bool $allCompanies, ?string $jobTitle): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $url = $allCompanies ? "{$clientBaseUrl}/client/companies" : "{$clientBaseUrl}/user/matching/companies";
+            $url = $allCompanies ? ($jobTitle ? "{$clientBaseUrl}/client/companies?job={$jobTitle}" : "{$clientBaseUrl}/client/companies")
+                                : "{$clientBaseUrl}/user/matching/companies";
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token
@@ -321,6 +327,12 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
                 new ParamRule(
                     self::FILTER_JOB_TITLE_ID,
                     new Rule(Rules::POSITIVE),
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_JOB_TITLE,
+                    new Rule(Rules::STRING_TYPE),
                 )
             ),
             $this->getValidationDecorator()->notRequiredParamRule(

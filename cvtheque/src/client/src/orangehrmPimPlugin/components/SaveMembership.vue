@@ -39,19 +39,30 @@
               >{{ titleErrorMessage }}</oxd-text
             >
           </oxd-grid-item>
-
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="membership.employer"
+              :label="$t('Employeur')"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+        <oxd-grid :cols="2" class="orangehrm-full-width-grid">
           <oxd-grid-item>
             <oxd-input-field
               v-model="membership.year"
-              :label="$t('Année')"
-              placeholder="yyyy - yyyy"
+              :label="$t('Période')"
+              placeholder="01/22 - 05/22"
               required
             />
           </oxd-grid-item>
-          <oxd-grid-item>
+        </oxd-grid>
+        <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+          <oxd-grid-item class="orangehrm-save-candidate-page --span-column-2">
             <oxd-input-field
               v-model="membership.description"
               :label="$t('Description')"
+              type="textarea"
+              :rules="rules.description"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -82,6 +93,7 @@
 // maxCurrency,
 // '@ohrm/core/util/validation/rules';
 // import {yearRange} from '@ohrm/core/util/helper/year-range';
+import {shouldNotExceedCharLength} from '@ohrm/core/util/validation/rules';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 
 // const membershipModel = {
@@ -96,6 +108,7 @@ const proXPModel = {
   title: '',
   year: '',
   description: '',
+  employer: '',
 };
 
 export default {
@@ -153,6 +166,7 @@ export default {
       titleErrorMessage: '',
       // yearArray: [...yearRange()],
       rules: {
+        description: [shouldNotExceedCharLength(300)],
         // membership: [required],
         // subscriptionCommenceDate: [validDateFormat(this.userDateFormat)],
         // subscriptionRenewalDate: [
@@ -193,6 +207,7 @@ export default {
           title: String(this.membership.title),
           year: String(this.membership.year),
           description: String(this.membership.description),
+          employer: String(this.membership.employer),
         })
         // subscriptionFee: this.membership.subscriptionFee,
         // subscriptionCommenceDate: this.membership.subscriptionCommenceDate,

@@ -43,7 +43,6 @@ export default {
   },
   setup(props) {
     const imgSrc = computed(() => {
-      console.log('Image for siret : ', props.companySiret);
       return props.companySiret && props.companySiret !== ''
         ? `${window.appGlobal.baseUrl}/directory/viewPhoto/company/${props.companySiret}`
         : defaultPic;

@@ -41,6 +41,7 @@
               v-model="skill.title"
               :label="$t('pim.certificate_title')"
               :rules="rules.title"
+              :placeholder="$t('pim.certificate_title_holder')"
             />
           </oxd-grid-item>
         </oxd-grid>

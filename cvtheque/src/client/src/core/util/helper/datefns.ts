@@ -382,4 +382,5 @@ export {
   getStandardTimezone,
   isToday,
   formatTime,
+  getDaysInMonth,
 };

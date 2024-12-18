@@ -67,10 +67,10 @@ class EmployeeMembership extends \OrangeHRM\Entity\EmployeeMembership implements
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employer', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'membership', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'title', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'description', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'employer', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'professionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'specificProfessionalExperience', '' . "\0" . 'OrangeHRM\\Entity\\EmployeeMembership' . "\0" . 'year', 'entityDecorator'];
     }
 
     /**
@@ -219,6 +219,28 @@ class EmployeeMembership extends \OrangeHRM\Entity\EmployeeMembership implements
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDescription', [$description]);
 
         parent::setDescription($description);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEmployer(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmployer', []);
+
+        return parent::getEmployer();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setEmployer(?string $employer): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmployer', [$employer]);
+
+        parent::setEmployer($employer);
     }
 
     /**
