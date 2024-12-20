@@ -1,11 +1,11 @@
 <template>
   <div class="orangehrm-background-container">
     <table-filter-title
-      v-if="isLoading || isEmpty"
+      v-if="isLoading || hasNoCompany"
       :title="$t('general.directory_all_companies_title')"
     >
     </table-filter-title>
-    <oxd-table-filter
+    <table-filter
       v-else
       :filter-title="$t('general.directory_all_companies_title')"
     >
@@ -43,7 +43,7 @@
           <submit-button :label="$t('general.search')" :disabled="!canUpdate" />
         </oxd-form-actions>
       </oxd-form>
-    </oxd-table-filter>
+    </table-filter>
 
     <br />
 
@@ -156,6 +156,7 @@ import SummaryCard from '@/orangehrmCorporateDirectoryPlugin/components/SummaryC
 import CompanyDetails from '@/orangehrmCorporateDirectoryPlugin/components/CompanyDetails';
 import SummaryCardDetails from '@/orangehrmCorporateDirectoryPlugin/components/SummaryCardDetails';
 import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
+import TableFilter from '@/core/components/dropdown/TableFilter.vue';
 import {OxdSpinner, useResponsive} from '@ohrm/oxd';
 
 const defaultFilters = {
@@ -173,6 +174,7 @@ export default {
     'company-details': CompanyDetails,
     'summary-card-details': SummaryCardDetails,
     'table-filter-title': TableFilterTitle,
+    'table-filter': TableFilter,
   },
 
   props: {
@@ -273,6 +275,7 @@ export default {
     });
 
     return {
+      noContentPic,
       jobSector,
       jobTitleFilter,
       rules,
@@ -284,6 +287,9 @@ export default {
   },
 
   computed: {
+    hasNoCompany() {
+      return !this.isLoading && this.allCompanies.length === 0;
+    },
     isEmpty() {
       return !this.isLoading && this.companies.length === 0;
     },

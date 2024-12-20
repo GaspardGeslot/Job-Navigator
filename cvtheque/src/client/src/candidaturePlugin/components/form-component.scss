@@ -219,7 +219,7 @@ p {
 .formBlockLayout {
   background-color: white;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1.5rem;
   padding-left: 1.75rem;
   padding-right: 1.75rem;
   display: flex;
@@ -257,6 +257,12 @@ p {
   margin-top: 1.75rem;
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
+}
+.formBlock7 > .submitButton {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 .blackPlaceholder::placeholder {
   color: black;

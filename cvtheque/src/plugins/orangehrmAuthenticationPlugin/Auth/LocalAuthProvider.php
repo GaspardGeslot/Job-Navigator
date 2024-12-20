@@ -110,10 +110,10 @@ class LocalAuthProvider extends AbstractAuthProvider
     public function signIn(AuthParamsInterface $authParams): ?string
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
-            return false;
+            return null;
         $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
         if ($exists)
-            return false;
+            throw new UserAlreadyEnrolledException();
         return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false);
     }
 

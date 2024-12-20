@@ -73,6 +73,7 @@
         :options="options"
         class="formComponent"
         @close-form="hideForm"
+        @login="navigateToLogin"
       />
     </div>
     <div class="accueilGauche">

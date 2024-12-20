@@ -27,10 +27,7 @@ export default {
 .oxd-table-filter {
   background-color: $oxd-white-color;
   border-radius: 1.2rem;
-  padding-top: 25px;
-  padding-bottom: 25px;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding: 25px;
   &-title {
     font-size: 14px;
     font-weight: 800;

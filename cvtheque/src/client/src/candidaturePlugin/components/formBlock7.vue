@@ -22,6 +22,21 @@
       un emploi, n’hésitez pas à leur partager ce bon plan. Ils vous
       remercieront !
     </p>
+    <br />
+    <div class="loginContainer">
+      <p class="formSubTitle">
+        Vous souhaitez compléter encore plus votre profil et voir les
+        entreprises qui recrutent ?
+      </p>
+      <button
+        class="loginButton"
+        type="submit"
+        v-on:click="$emit('login')"
+        style="margin-top: 1rem"
+      >
+        Se connecter
+      </button>
+    </div>
     <div class="col">
       <p id="share-msg">SHARE THIS:</p>
       <div class="row" style="align-items: flex-start">
@@ -262,6 +277,32 @@ export default {
   z-index: 1;
   width: 80%;
   margin-top: 0.5rem;
+}
+.loginButton {
+  height: 3rem;
+  width: 45%;
+  font-size: large;
+  font-family: 'Telegraf', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.5rem;
+}
+.loginButton:hover {
+  background-color: #e54021;
+  color: white;
+}
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
 }
 @media screen and (max-width: 350px) {
   .social-media-window {

@@ -73,12 +73,11 @@ import SaveSkill from '@/orangehrmPimPlugin/components/SaveSkill';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 
 const skillNormalizer = (data) => {
-  // console.log('Data from backend:', data);
   return data.map((item) => {
     return {
-      type: item.type || 'Unknown Type',
-      title: item.title || 'No Title',
-      description: item.description || 'No Description',
+      type: item.type,
+      title: item.title,
+      description: item.description,
     };
   });
 };

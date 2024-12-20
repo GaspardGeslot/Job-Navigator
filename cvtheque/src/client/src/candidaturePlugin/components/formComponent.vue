@@ -1,5 +1,5 @@
 <template>
-  <div class="formBlock row" style="width: 900px; height: auto">
+  <div class="formBlock row" style="height: auto">
     <div v-if="isLoading" class="loading-circle-container">
       <div class="loading-circle"></div>
     </div>
@@ -83,6 +83,7 @@
           v-show="currentStep === 6"
           ref="formSix"
           :match-response="matchResponse"
+          @login="$emit('login')"
         />
         <!--
           <FormEight
@@ -110,6 +111,7 @@
     />
     <button class="closeButton" @click="$emit('close-form')">
       <svg
+        class="closeIcon"
         width="24"
         height="24"
         viewBox="0 0 24 24"
@@ -489,6 +491,7 @@ export default {
   position: relative;
   margin: 0;
   padding: 0;
+  width: 75%;
 }
 .closeButton {
   position: absolute;
@@ -514,14 +517,21 @@ export default {
 } */
 @media screen and (max-width: 450px) {
   .formBlock {
-    max-width: 410px;
-    margin-bottom: 0rem;
+    width: calc(100% - 2rem);
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
   .scroll-container {
     width: 100%;
   }
   .formImg {
     background-image: none;
+  }
+  .closeButton {
+    background-color: black;
+    border-top-right-radius: 0rem;
+    border-bottom-left-radius: 1rem;
+    padding: 5px;
   }
 }
 @media screen and (min-width: 461px) {

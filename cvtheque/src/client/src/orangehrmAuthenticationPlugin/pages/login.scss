@@ -43,8 +43,11 @@
   color: $oxd-primary-one-color;
 }
 .orangehrm-profile-button {
+  display: flex;
+  justify-content: center;
   flex: 1;
   margin: 1rem;
+  text-align: center;
 }
 .orangehrm-login-title {
   text-align: center;
@@ -71,6 +74,7 @@
   margin-top: 1rem;
   font-size: 16px;
   &-header {
+    text-align: center;
     cursor: pointer;
     color: $oxd-primary-one-color;
   }

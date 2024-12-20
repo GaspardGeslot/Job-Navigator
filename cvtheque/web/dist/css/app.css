@@ -5882,10 +5882,7 @@
 .oxd-table-filter[data-v-1d175970] {
   background-color: #ffffff;
   border-radius: 1.2rem;
-  padding-top: 25px;
-  padding-bottom: 25px;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding: 25px;
 }
 .oxd-table-filter-title[data-v-1d175970] {
   font-size: 14px;
@@ -5903,6 +5900,46 @@
 .oxd-table-filter-header-options .--toggle[data-v-1d175970],
 .oxd-table-filter-header-options .--export[data-v-1d175970] {
   display: flex;
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/dropdown/TableFilter.vue?vue&type=style&index=0&id=5e4cbb8a&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.oxd-table-filter[data-v-5e4cbb8a] {
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  padding: 25px;
+}
+.oxd-table-filter-title[data-v-5e4cbb8a] {
+  font-size: 14px;
+  font-weight: 800;
+}
+.oxd-table-filter-header[data-v-5e4cbb8a] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.oxd-table-filter-header-options[data-v-5e4cbb8a] {
+  display: flex;
+}
+.oxd-table-filter-header-options .--toggle[data-v-5e4cbb8a],
+.oxd-table-filter-header-options .--export[data-v-5e4cbb8a] {
+  display: flex;
+}
+.oxd-table-filter-header-options .oxd-icon-button[data-v-5e4cbb8a] {
+  font-size: 12px;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: unset;
+  min-height: unset;
+  margin-right: 5px;
+}
+.oxd-table-filter-header-options .oxd-button[data-v-5e4cbb8a] {
+  padding-right: 5px;
+  padding-left: 5px;
+  min-width: unset;
+  margin-right: 5px;
 }
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmCorporateDirectoryPlugin/pages/corporate-directory.scss?vue&type=style&index=0&id=90f2162a&lang=scss&scoped=true ***!
@@ -6308,8 +6345,11 @@
   color: var(--oxd-primary-one-color);
 }
 .orangehrm-profile-button[data-v-bdb1cc74] {
+  display: flex;
+  justify-content: center;
   flex: 1;
   margin: 1rem;
+  text-align: center;
 }
 .orangehrm-login-title[data-v-bdb1cc74] {
   text-align: center;
@@ -6336,6 +6376,7 @@
   font-size: 16px;
 }
 .orangehrm-login-forgot-header[data-v-bdb1cc74] {
+  text-align: center;
   cursor: pointer;
   color: var(--oxd-primary-one-color);
 }
@@ -6405,8 +6446,11 @@
   color: var(--oxd-primary-one-color);
 }
 .orangehrm-profile-button[data-v-013e6eee] {
+  display: flex;
+  justify-content: center;
   flex: 1;
   margin: 1rem;
+  text-align: center;
 }
 .orangehrm-login-title[data-v-013e6eee] {
   text-align: center;
@@ -6433,6 +6477,7 @@
   font-size: 16px;
 }
 .orangehrm-login-forgot-header[data-v-013e6eee] {
+  text-align: center;
   cursor: pointer;
   color: var(--oxd-primary-one-color);
 }
@@ -7038,8 +7083,11 @@
   color: var(--oxd-primary-one-color);
 }
 .orangehrm-profile-button[data-v-d5024cf2] {
+  display: flex;
+  justify-content: center;
   flex: 1;
   margin: 1rem;
+  text-align: center;
 }
 .orangehrm-login-title[data-v-d5024cf2] {
   text-align: center;
@@ -7066,6 +7114,7 @@
   font-size: 16px;
 }
 .orangehrm-login-forgot-header[data-v-d5024cf2] {
+  text-align: center;
   cursor: pointer;
   color: var(--oxd-primary-one-color);
 }
@@ -9483,7 +9532,7 @@ p {
 .formBlockLayout {
   background-color: white;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1.5rem;
   padding-left: 1.75rem;
   padding-right: 1.75rem;
   display: flex;
@@ -9524,6 +9573,12 @@ p {
   margin-top: 1.75rem;
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
+}
+.formBlock7 > .submitButton {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 .blackPlaceholder::-moz-placeholder {
   color: black;
@@ -9872,7 +9927,7 @@ p[data-v-d99f0b7a] {
 .formBlockLayout[data-v-d99f0b7a] {
   background-color: white;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1.5rem;
   padding-left: 1.75rem;
   padding-right: 1.75rem;
   display: flex;
@@ -9913,6 +9968,12 @@ p[data-v-d99f0b7a] {
   margin-top: 1.75rem;
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
+}
+.formBlock7 > .submitButton[data-v-d99f0b7a] {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 .blackPlaceholder[data-v-d99f0b7a]::-moz-placeholder {
   color: black;
@@ -10305,6 +10366,32 @@ input:checked + .slider[data-v-d92e4f72]:before {
   width: 80%;
   margin-top: 0.5rem;
 }
+.loginButton[data-v-d9122070] {
+  height: 3rem;
+  width: 45%;
+  font-size: large;
+  font-family: 'Telegraf', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.5rem;
+}
+.loginButton[data-v-d9122070]:hover {
+  background-color: #e54021;
+  color: white;
+}
+.loginContainer[data-v-d9122070] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
 @media screen and (max-width: 350px) {
 .social-media-window[data-v-d9122070] {
     /* padding-left: 0.75rem;
@@ -10378,6 +10465,7 @@ input:checked + .slider[data-v-d92e4f72]:before {
   position: relative;
   margin: 0;
   padding: 0;
+  width: 75%;
 }
 .closeButton[data-v-59201b22] {
   position: absolute;
@@ -10402,14 +10490,21 @@ input:checked + .slider[data-v-d92e4f72]:before {
 } */
 @media screen and (max-width: 450px) {
 .formBlock[data-v-59201b22] {
-    max-width: 410px;
-    margin-bottom: 0rem;
+    width: calc(100% - 2rem);
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 .scroll-container[data-v-59201b22] {
     width: 100%;
 }
 .formImg[data-v-59201b22] {
     background-image: none;
+}
+.closeButton[data-v-59201b22] {
+    background-color: black;
+    border-top-right-radius: 0rem;
+    border-bottom-left-radius: 1rem;
+    padding: 5px;
 }
 }
 @media screen and (min-width: 461px) {

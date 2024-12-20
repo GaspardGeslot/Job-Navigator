@@ -7,6 +7,7 @@ use OrangeHRM\Authentication\Controller\Traits\SessionHandlingTrait;
 use OrangeHRM\Authentication\Dto\AuthParams;
 use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Authentication\Exception\AuthenticationException;
+use OrangeHRM\Authentication\Exception\UserAlreadyEnrolledException;
 use OrangeHRM\Authentication\Service\LoginService;
 use OrangeHRM\Authentication\Traits\CsrfTokenManagerTrait;
 use OrangeHRM\Core\Authorization\Service\HomePageService;
@@ -91,6 +92,15 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             $this->getAuthUser()->setIsCandidate(true);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
+        } catch (UserAlreadyEnrolledException $e){
+            $this->getAuthUser()->addFlash(
+                AuthUser::FLASH_LOGIN_ERROR, 
+                [
+                    'error' => AuthenticationException::USER_ALREADY_SIGNED_IN,
+                    'message' => 'Compte déjà créé, veuillez vous connecter.',
+                ]
+            );
+            return new RedirectResponse($createAccountUrl);
         } catch (AuthenticationException $e) {
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());
             if ($e instanceof RedirectableException) {
@@ -102,7 +112,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => "Une erreur inattendue s''est produite.",
+                    'message' => "Une erreur inattendue s'est produite. Veuillez contacter votre conseiller Constructys.",
                 ]
             );
             return new RedirectResponse($createAccountUrl);
