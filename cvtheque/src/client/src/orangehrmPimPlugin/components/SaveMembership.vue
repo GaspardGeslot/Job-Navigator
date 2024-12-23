@@ -30,6 +30,7 @@
             <oxd-input-field
               v-model="membership.title"
               :label="$t('Poste occupé')"
+              :rules="rules.title"
               required
             />
             <oxd-text
@@ -52,6 +53,7 @@
               v-model="membership.year"
               :label="$t('Période')"
               placeholder="01/22 - 05/22"
+              :rules="rules.year"
               required
             />
           </oxd-grid-item>
@@ -93,7 +95,10 @@
 // maxCurrency,
 // '@ohrm/core/util/validation/rules';
 // import {yearRange} from '@ohrm/core/util/helper/year-range';
-import {shouldNotExceedCharLength} from '@ohrm/core/util/validation/rules';
+import {
+  required,
+  shouldNotExceedCharLength,
+} from '@ohrm/core/util/validation/rules';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 
 // const membershipModel = {
@@ -167,6 +172,8 @@ export default {
       // yearArray: [...yearRange()],
       rules: {
         description: [shouldNotExceedCharLength(300)],
+        title: [required],
+        year: [required],
         // membership: [required],
         // subscriptionCommenceDate: [validDateFormat(this.userDateFormat)],
         // subscriptionRenewalDate: [

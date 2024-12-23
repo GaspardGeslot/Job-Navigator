@@ -36,7 +36,7 @@
     -->
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
       <profile-action-header
-        :add-label="$t('general.add_certificate')"
+        :add-label="$t('general.add')"
         @click="onClickAdd"
       ></profile-action-header>
     </div>

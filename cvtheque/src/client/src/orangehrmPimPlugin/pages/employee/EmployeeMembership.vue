@@ -77,10 +77,7 @@
     ></edit-membership>
     -->
     <div class="orangehrm-horizontal-padding orangehrm-vertical-padding">
-      <profile-action-header
-        :add-label="$t('general.add_experience')"
-        @click="onClickAdd"
-      >
+      <profile-action-header :add-label="$t('general.add')" @click="onClickAdd">
       </profile-action-header>
     </div>
     <table-header
@@ -181,12 +178,19 @@ export default {
         professionalExperience: data[0]?.professionalExperience ?? null,
         specificProfessionalExperience:
           data[0]?.specificProfessionalExperience ?? null,
-        skills: data.map((item) => ({
-          title: item.title,
-          year: item.year,
-          description: item.description,
-          employer: item.employer,
-        })),
+        skills:
+          data.length > 1 ||
+          data[0].title !== undefined ||
+          data[0].year !== undefined ||
+          data[0].description !== undefined ||
+          data[0].employer !== undefined
+            ? data.map((item) => ({
+                title: item.title,
+                year: item.year,
+                description: item.description,
+                employer: item.employer,
+              }))
+            : [],
       };
     };
 
@@ -225,6 +229,16 @@ export default {
         BTPSelectedExperience.value = findOption(
           items.value.specificProfessionalExperience,
         );
+        if (
+          !items.value.skills ||
+          items.value.skills.length === 0 ||
+          (items.value.skills.length === 1 &&
+            items.value.skills[0].title === null &&
+            items.value.skills[0].year === null &&
+            items.value.skills[0].description === null &&
+            items.value.skills[0].employer === null)
+        )
+          items.value.skills = [];
       }
     });
 
