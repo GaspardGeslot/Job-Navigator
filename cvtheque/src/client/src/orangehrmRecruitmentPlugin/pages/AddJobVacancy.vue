@@ -74,6 +74,13 @@
               required
               :rules="rules.jobTitle"
             />
+            <oxd-text class="orangehrm-input-hint" tag="p">
+              {{
+                $t(
+                  'Veuillez sélectionner la famille avant de pouvoir choisir le métier.',
+                )
+              }}
+            </oxd-text>
           </oxd-grid-item>
         </oxd-grid>
         <!--<oxd-grid :cols="3" class="orangehrm-full-width-grid">
@@ -133,7 +140,7 @@
 
         <oxd-divider />
         <oxd-text class="orangehrm-sub-title" tag="h6">
-          {{ $t('pim.work_experience') }}
+          {{ $t('pim.work_experience_global') }}
         </oxd-text>
         <oxd-grid :cols="4" class="orangehrm-full-width-grid">
           <oxd-grid-item

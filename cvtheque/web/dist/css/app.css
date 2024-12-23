@@ -3766,6 +3766,72 @@
 .orangehrm-paper-container[data-v-b82a2182] {
   margin-top: 1rem;
 }
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/labels/TableFilterTitle.vue?vue&type=style&index=0&id=1d175970&lang=scss&scoped=true ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.oxd-table-filter[data-v-1d175970] {
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  padding: 25px;
+}
+.oxd-table-filter-title[data-v-1d175970] {
+  font-size: 14px;
+  font-weight: 800;
+}
+.oxd-table-filter-header[data-v-1d175970] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.oxd-table-filter-header-options[data-v-1d175970] {
+  display: flex;
+}
+.oxd-table-filter-header-options .--toggle[data-v-1d175970],
+.oxd-table-filter-header-options .--export[data-v-1d175970] {
+  display: flex;
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/dropdown/TableFilter.vue?vue&type=style&index=0&id=5e4cbb8a&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.oxd-table-filter[data-v-5e4cbb8a] {
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  padding: 25px;
+}
+.oxd-table-filter-title[data-v-5e4cbb8a] {
+  font-size: 14px;
+  font-weight: 800;
+}
+.oxd-table-filter-header[data-v-5e4cbb8a] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.oxd-table-filter-header-options[data-v-5e4cbb8a] {
+  display: flex;
+}
+.oxd-table-filter-header-options .--toggle[data-v-5e4cbb8a],
+.oxd-table-filter-header-options .--export[data-v-5e4cbb8a] {
+  display: flex;
+}
+.oxd-table-filter-header-options .oxd-icon-button[data-v-5e4cbb8a] {
+  font-size: 12px;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: unset;
+  min-height: unset;
+  margin-right: 5px;
+}
+.oxd-table-filter-header-options .oxd-button[data-v-5e4cbb8a] {
+  padding-right: 5px;
+  padding-left: 5px;
+  min-width: unset;
+  margin-right: 5px;
+}
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=5dfa7e3a&lang=scss&scoped=true ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -3848,7 +3914,7 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
-.boutonTriBloc2[data-v-5dfa7e3a] {
+.boutonTriBloc[data-v-5dfa7e3a] {
   display: flex;
   flex-direction: row;
   justify-content: end;
@@ -3953,7 +4019,7 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
-.boutonTriBloc2[data-v-6f04c618] {
+.boutonTriBloc[data-v-6f04c618] {
   display: flex;
   flex-direction: row;
   justify-content: end;
@@ -4058,7 +4124,7 @@
   border-radius: 0.5rem;
   background-color: #e8eaef;
 }
-.boutonTriBloc2[data-v-35ae5cdf] {
+.boutonTriBloc[data-v-35ae5cdf] {
   display: flex;
   flex-direction: row;
   justify-content: end;
@@ -5874,72 +5940,6 @@
   font-size: 24px;
   display: flex;
   justify-content: center;
-}
-/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/labels/TableFilterTitle.vue?vue&type=style&index=0&id=1d175970&lang=scss&scoped=true ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.oxd-table-filter[data-v-1d175970] {
-  background-color: #ffffff;
-  border-radius: 1.2rem;
-  padding: 25px;
-}
-.oxd-table-filter-title[data-v-1d175970] {
-  font-size: 14px;
-  font-weight: 800;
-}
-.oxd-table-filter-header[data-v-1d175970] {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.oxd-table-filter-header-options[data-v-1d175970] {
-  display: flex;
-}
-.oxd-table-filter-header-options .--toggle[data-v-1d175970],
-.oxd-table-filter-header-options .--export[data-v-1d175970] {
-  display: flex;
-}
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/dropdown/TableFilter.vue?vue&type=style&index=0&id=5e4cbb8a&lang=scss&scoped=true ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.oxd-table-filter[data-v-5e4cbb8a] {
-  background-color: #ffffff;
-  border-radius: 1.2rem;
-  padding: 25px;
-}
-.oxd-table-filter-title[data-v-5e4cbb8a] {
-  font-size: 14px;
-  font-weight: 800;
-}
-.oxd-table-filter-header[data-v-5e4cbb8a] {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.oxd-table-filter-header-options[data-v-5e4cbb8a] {
-  display: flex;
-}
-.oxd-table-filter-header-options .--toggle[data-v-5e4cbb8a],
-.oxd-table-filter-header-options .--export[data-v-5e4cbb8a] {
-  display: flex;
-}
-.oxd-table-filter-header-options .oxd-icon-button[data-v-5e4cbb8a] {
-  font-size: 12px;
-  width: 24px !important;
-  height: 24px !important;
-  min-width: unset;
-  min-height: unset;
-  margin-right: 5px;
-}
-.oxd-table-filter-header-options .oxd-button[data-v-5e4cbb8a] {
-  padding-right: 5px;
-  padding-left: 5px;
-  min-width: unset;
-  margin-right: 5px;
 }
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/orangehrmCorporateDirectoryPlugin/pages/corporate-directory.scss?vue&type=style&index=0&id=90f2162a&lang=scss&scoped=true ***!
@@ -11171,7 +11171,7 @@ h1[data-v-0c52339c] {
 
 .orangehrm-input-hint {
   font-size: 0.75rem;
-  margin-top: -15px;
+  margin-top: -10px;
   padding-bottom: 1rem;
 }
 

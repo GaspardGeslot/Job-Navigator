@@ -18,7 +18,9 @@
  -->
 <template>
   <div class="orangehrm-background-container">
-    <oxd-table-filter :filter-title="$t('general.vacancies')">
+    <table-filter-title v-if="hasNoMatchings" :title="$t('general.vacancies')">
+    </table-filter-title>
+    <table-filter v-else :filter-title="$t('general.vacancies')">
       <oxd-form @submit-valid="filterItems">
         <oxd-form-row>
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
@@ -110,7 +112,7 @@
           />
         </oxd-form-actions>
       </oxd-form>
-    </oxd-table-filter>
+    </table-filter>
     <br />
     <div class="orangehrm-paper-container">
       <div class="orangehrm-header-container" v-if="hasName">
@@ -120,24 +122,28 @@
           display-type="secondary"
           @click="onClickAdd"
         />
-        <div class="boutonTriBloc">
-          <button class="boutonTri" @click="sortByDate">
-            Trier par date ⇅
-          </button>
-        </div>
       </div>
       <div class="orangehrm-header-container" v-else>
         <oxd-text class="orangehrm-sub-title" style="color: red" tag="h6">
           {{ $t('recruitment.company_has_no_name') }}
         </oxd-text>
       </div>
-      <!--<table-header
-        :selected="checkedItems.length"
-        :loading="isLoading"
-        :total="total"
-        @delete="onClickDeleteSelected"
-      ></table-header>-->
-      <div class="orangehrm-container" v-if="isSearching">
+    </div>
+    <br />
+    <!--<table-header
+      :selected="checkedItems.length"
+      :loading="isLoading"
+      :total="total"
+      @delete="onClickDeleteSelected"
+    ></table-header>-->
+    <oxd-table-filter
+      :filter-title="$t('Découvrez les candidats qui correspondent')"
+      v-if="isSearching"
+    >
+      <div class="boutonTriBloc">
+        <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
+      </div>
+      <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
           :headers="headers"
@@ -150,46 +156,35 @@
 
         <!--class="orangehrm-vacancy-list"-->
       </div>
-      <div class="orangehrm-bottom-container">
-        <oxd-pagination
-          v-if="showPaginator"
-          v-model:current="currentPage"
-          :length="pages"
-        />
+    </oxd-table-filter>
+    <div class="orangehrm-bottom-container" v-if="showPaginator">
+      <oxd-pagination v-model:current="currentPage" :length="pages" />
+    </div>
+    <br v-if="!showPaginator" />
+    <oxd-table-filter
+      :filter-title="$t('Découvrez les autres candidats sur ce métier')"
+      v-if="isSearchingNoStatut"
+    >
+      <div class="boutonTriBloc">
+        <button class="boutonTri" @click="sortByDate2">Trier par date ⇅</button>
       </div>
-    </div>
-    <br />
-    <div class="orangehrm-paper-container" v-if="isSearchingNoStatut">
-      <oxd-table-filter
-        :filter-title="$t('Découvrez les autres candidats sur ce métier')"
-      >
-        <div class="boutonTriBloc2">
-          <button class="boutonTri" @click="sortByDate2">
-            Trier par date ⇅
-          </button>
-        </div>
-        <div class="orangehrm-container" v-if="isSearching">
-          <oxd-card-table
-            v-model:selected="checkedItems"
-            :headers="headers2"
-            :items="otherLeads"
-            :selectable="false"
-            :clickable="false"
-            :loading="isLoading"
-            row-decorator="oxd-table-decorator-card"
-          />
+      <div class="orangehrm-container" v-if="isSearching">
+        <oxd-card-table
+          v-model:selected="checkedItems"
+          :headers="headers2"
+          :items="otherLeads"
+          :selectable="false"
+          :clickable="false"
+          :loading="isLoading"
+          row-decorator="oxd-table-decorator-card"
+        />
 
-          <!--class="orangehrm-vacancy-list"-->
-        </div>
-        <div class="orangehrm-bottom-container">
-          <oxd-pagination
-            v-if="showPaginator"
-            v-model:current="currentPage"
-            :length="pages"
-          />
-        </div>
-      </oxd-table-filter>
-    </div>
+        <!--class="orangehrm-vacancy-list"-->
+      </div>
+      <div class="orangehrm-bottom-container" v-if="showPaginator">
+        <oxd-pagination v-model:current="currentPage" :length="pages" />
+      </div>
+    </oxd-table-filter>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
   </div>
 </template>
@@ -206,6 +201,8 @@ import useLocale from '@/core/util/composable/useLocale';
 import {formatDate, parseDate} from '@ohrm/core/util/helper/datefns';
 import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
 import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
+import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
+import TableFilter from '@/core/components/dropdown/TableFilter.vue';
 /*import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
 import VacancyDropdown from '@/orangehrmRecruitmentPlugin/components/VacancyDropdown.vue';
 import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';*/
@@ -227,6 +224,8 @@ export default {
   name: 'ViewJobVacancy',
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
+    'table-filter-title': TableFilterTitle,
+    'table-filter': TableFilter,
     /*'jobtitle-dropdown': JobtitleDropdown,
     'vacancy-dropdown': VacancyDropdown,
     'hiring-manager-dropdown': HiringManagerDropdown,*/
@@ -381,7 +380,11 @@ export default {
       sortDefinition,
     };
   },
-
+  computed: {
+    hasNoMatchings() {
+      return this.matchings.length === 0;
+    },
+  },
   data() {
     return {
       isSearching: false,

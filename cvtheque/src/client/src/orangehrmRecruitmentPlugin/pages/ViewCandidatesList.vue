@@ -38,6 +38,13 @@
                 :label="$t('general.job_title')"
                 :options="jobTitlesPerSector"
               />
+              <oxd-text class="orangehrm-input-hint" tag="p">
+                {{
+                  $t(
+                    'Veuillez sélectionner la famille avant de pouvoir choisir le métier.',
+                  )
+                }}
+              </oxd-text>
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
