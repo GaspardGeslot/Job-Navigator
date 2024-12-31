@@ -1,4 +1,6 @@
 core_i18n_messages:
-  path: /core/i18n/messages
+  path: /{theme}/core/i18n/messages
   controller: OrangeHRM\I18N\Controller\I18NMessagesController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio

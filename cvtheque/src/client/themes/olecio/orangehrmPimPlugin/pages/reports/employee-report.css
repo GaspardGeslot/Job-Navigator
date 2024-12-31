@@ -1,0 +1,11 @@
+.orangehrm-report-criteria {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-report-icon {
+  margin-left: 1rem;
+}
+
+::v-deep(.oxd-chip .oxd-icon) {
+  align-self: center;
+} /*# sourceMappingURL=employee-report.css.map */

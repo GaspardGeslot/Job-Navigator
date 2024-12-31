@@ -34,8 +34,24 @@ if ($debug) {
     Debug::enable();
 }
 
-$kernel = new Framework($env, $debug);
+$validThemes = ['constructys', 'olecio'];
+
 $request = Request::createFromGlobals();
+
+$baseUrl = $request->getBaseUrl();
+$pathInfo = $request->getPathInfo();
+$parts = explode('/', trim($pathInfo, '/'));
+$theme = $parts[0] ?? '';
+
+if (!in_array($theme, $validThemes)) {
+    $newPath = "/constructys" . $pathInfo;
+    $redirectUrl = $baseUrl . $newPath;
+    $response = new RedirectResponse($redirectUrl);
+    $response->send();
+    exit();
+}
+
+$kernel = new Framework($env, $debug);
 
 if (Config::isInstalled()) {
     $response = $kernel->handleRequest($request);
