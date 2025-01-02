@@ -9618,6 +9618,10 @@ p {
   box-sizing: border-box;
 }
 @media screen and (max-width: 450px) {
+input, select, option {
+    font-size: 16px;
+    line-height: 1.5;
+}
 .mainSubmitButtonTxt {
     margin-left: 2.15rem;
 }
@@ -10013,6 +10017,10 @@ p[data-v-d99f0b7a] {
   box-sizing: border-box;
 }
 @media screen and (max-width: 450px) {
+input[data-v-d99f0b7a], select[data-v-d99f0b7a], option[data-v-d99f0b7a] {
+    font-size: 16px;
+    line-height: 1.5;
+}
 .mainSubmitButtonTxt[data-v-d99f0b7a] {
     margin-left: 2.15rem;
 }
