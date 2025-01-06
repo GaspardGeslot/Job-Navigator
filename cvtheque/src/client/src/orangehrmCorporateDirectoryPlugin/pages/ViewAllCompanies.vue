@@ -104,7 +104,6 @@
                   :company-siret="company.companySiret"
                   :company-name="company.companyName"
                   :company-location="company.companyLocation"
-                  :company-matching-job-title="company.companyMatchingJobTitle"
                   :candidature-status="company.candidatureStatus"
                   @click="showCompanyDetails(index)"
                 >
