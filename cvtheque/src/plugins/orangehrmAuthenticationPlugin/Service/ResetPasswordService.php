@@ -168,13 +168,13 @@ class ResetPasswordService
      * @param string $userName
      * @return array|string|string[]|null
      */
-    protected function generatePasswordResetEmailBody(Employee $receiver, string $resetCode, string $userName)
+    protected function generatePasswordResetEmailBody(Employee $receiver, string $resetCode, string $userName, string $theme)
     {
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
         $resetLink = $urlGenerator->generate(
             'auth_reset_code',
-            ['resetCode' => $resetCode],
+            ['resetCode' => $resetCode, '$theme' => $theme],
             UrlGenerator::ABSOLUTE_URL
         );
         $placeholders = [
@@ -229,12 +229,13 @@ class ResetPasswordService
      * @param string $identifier
      * @return array|false|string|string[]
      */
-    public function generateResetLink(string $resetCode)
+    public function generateResetLink(string $resetCode, string $theme)
     {
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
         return $urlGenerator->generate(
             'auth_reset_code',
-            ['resetCode' => $resetCode],
+            ['resetCode' => $resetCode,
+                'theme' => $theme],
             UrlGenerator::ABSOLUTE_URL
         );
     }
@@ -298,11 +299,11 @@ class ResetPasswordService
      * @param User $user
      * @return bool
      */
-    public function logPasswordResetRequest(User $user): bool
+    public function logPasswordResetRequest(User $user, string $theme): bool
     {
         $identifier = $user->getUserName();
         $resetCode = $this->generatePasswordResetCode($identifier);
-        $resetLink = $this->generateResetLink($resetCode);
+        $resetLink = $this->generateResetLink($resetCode, $theme);
         $resetPassword = new ResetPasswordRequest();
         $resetPassword->setResetEmail($user->getEmployee()->getWorkEmail());
         $date = $this->getDateTimeHelper()->getNow();

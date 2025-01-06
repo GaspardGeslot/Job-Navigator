@@ -176,7 +176,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/auth/validate');
+      return urlFor('/' + window.appGlobal.theme + '/auth/validate');
     },
   },
 

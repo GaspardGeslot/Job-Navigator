@@ -40,9 +40,10 @@ class AuthenticationPluginConfiguration implements PluginConfigurationInterface
      */
     public function initialize(Request $request): void
     {
+        $theme = $request->attributes->get('theme');
         /** @var EventDispatcher $dispatcher */
         $dispatcher = $this->getContainer()->get(Services::EVENT_DISPATCHER);
-        $dispatcher->addSubscriber(new AuthenticationSubscriber());
+        $dispatcher->addSubscriber(new AuthenticationSubscriber(is_null($theme) ? 'constructys' : $theme));
         $dispatcher->addSubscriber(new AdministratorAccessSubscriber());
         $this->getContainer()->register(Services::AUTH_USER)
             ->setFactory([AuthUser::class, 'getInstance']);

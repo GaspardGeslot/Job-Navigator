@@ -244,69 +244,95 @@ recruitment_interview_attachment:
 ##########################
 
 recruitment_module:
-  path: /recruitment/viewRecruitmentModule
+  path: /{theme}/recruitment/viewRecruitmentModule
   controller: OrangeHRM\Recruitment\Controller\RecruitmentModuleController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_job_vacancy:
-  path: /recruitment/viewJobVacancy
+  path: /{theme}/recruitment/viewJobVacancy
   controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_add_job_vacancy:
-  path: /recruitment/addJobVacancy
+  path: /{theme}/recruitment/addJobVacancy
   controller: OrangeHRM\Recruitment\Controller\AddJobVacancyController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_edit_job_vacancy:
-  path: /recruitment/addJobVacancy/{id}
+  path: /{theme}/recruitment/addJobVacancy/{id}
   controller: OrangeHRM\Recruitment\Controller\EditJobVacancyController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_candidates:
-  path: /recruitment/viewCandidates
+  path: /{theme}/recruitment/viewCandidates
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_save_candidates:
-  path: /recruitment/addCandidate
+  path: /{theme}/recruitment/addCandidate
   controller: OrangeHRM\Recruitment\Controller\SaveCandidateController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_candidate_profile:
-  path: /recruitment/viewCandidate/{id}
+  path: /{theme}/recruitment/viewCandidate/{id}
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_candidate_profile_by_matching:
-  path: /recruitment/viewCandidate/{leadId}/matching/{matchingId}
+  path: /{theme}/recruitment/viewCandidate/{leadId}/matching/{matchingId}
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_company_profile:
-  path: /recruitment/viewCompany/{id}
+  path: /{theme}/recruitment/viewCompany/{id}
   controller: OrangeHRM\Recruitment\Controller\ViewCompanyController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_company_profile_by_matching:
-  path: /recruitment/viewCompany/{companyId}/matching/{matchingId}
+  path: /{theme}/recruitment/viewCompany/{companyId}/matching/{matchingId}
   controller: OrangeHRM\Recruitment\Controller\ViewCompanyController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_candidate_action:
-  path: /recruitment/changeCandidateVacancyStatus
+  path: /{theme}/recruitment/changeCandidateVacancyStatus
   controller: OrangeHRM\Recruitment\Controller\CandidateActionController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_action_history:
-  path: /recruitment/candidateHistory/{candidateId}/{historyId}
+  path: /{theme}/recruitment/candidateHistory/{candidateId}/{historyId}
   controller: OrangeHRM\Recruitment\Controller\WorkflowActionHistoryController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_interview_attachments:
-  path: /recruitment/interviewAttachments/{interviewId}
+  path: /{theme}/recruitment/interviewAttachments/{interviewId}
   controller: OrangeHRM\Recruitment\Controller\InterviewAttachmentsController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 ##########################
 #  External Vacancy List

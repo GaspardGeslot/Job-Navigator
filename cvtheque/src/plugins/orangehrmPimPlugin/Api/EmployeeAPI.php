@@ -59,6 +59,7 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
     public const FILTER_SUPERVISOR_EMP_NUMBERS = 'supervisorEmpNumbers';
     public const FILTER_MODEL = 'model';
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
     public const PARAMETER_LAST_NAME = 'lastName';
@@ -161,6 +162,10 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
                 CommonParams::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
             ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             $this->getModelParamRule(),
         );
     }
@@ -171,7 +176,7 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::FILTER_MODEL,
                 new Rule(Rules::IN, [array_keys(self::MODEL_MAP)])
-            )
+            ),
         );
     }
 
@@ -369,6 +374,12 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForGetAll(): ParamRuleCollection
     {
         return new ParamRuleCollection(
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                ),
+            ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::FILTER_INCLUDE_EMPLOYEES,
@@ -590,6 +601,10 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
                         [EmpPicture::ALLOWED_IMAGE_TYPES, EmpPicture::ALLOWED_IMAGE_EXTENSIONS, self::PARAM_RULE_EMP_PICTURE_FILE_NAME_MAX_LENGTH]
                     )
                 ),
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
             ...$this->getCommonBodyValidationRules($uniqueOption),
         );

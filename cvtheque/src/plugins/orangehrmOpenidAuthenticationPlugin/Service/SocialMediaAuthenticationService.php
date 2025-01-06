@@ -93,11 +93,11 @@ class SocialMediaAuthenticationService
     /**
      * @return string
      */
-    public function getRedirectURL(): string
+    public function getRedirectURL(string $theme): string
     {
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        return $urlGenerator->generate('auth_oidc_login_redirect', [], UrlGenerator::ABSOLUTE_URL);
+        return $urlGenerator->generate('auth_oidc_login_redirect', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
     }
 
     /**

@@ -45,6 +45,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     use EmployeeServiceTrait;
     use ConfigServiceTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_EMP_NUMBER = 'empNumber';
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
@@ -195,6 +196,10 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
         );
     }
@@ -536,6 +541,10 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(

@@ -96,7 +96,9 @@ export default {
   },
   computed: {
     submitUrl() {
-      return urlFor('/auth/requestResetPassword');
+      return urlFor(
+        '/' + window.appGlobal.theme + '/auth/requestResetPassword',
+      );
     },
   },
   methods: {

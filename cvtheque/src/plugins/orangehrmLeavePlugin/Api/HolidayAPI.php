@@ -41,6 +41,7 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
 {
     use HolidayServiceTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_NAME = 'name';
     public const PARAMETER_DATE = 'date';
     public const PARAMETER_RECURRING = 'recurring';
@@ -106,7 +107,13 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
      */
     public function getValidationRuleForGetOne(): ParamRuleCollection
     {
-        return new ParamRuleCollection($this->getIdParamRule());
+        return new ParamRuleCollection(
+            $this->getIdParamRule(),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
+        );
     }
 
     /**
@@ -157,6 +164,7 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
      */
     public function getAll(): EndpointResult
     {
+        /*
         $fromDate = $this->getRequestParams()->getDateTime(RequestParams::PARAM_TYPE_QUERY, self::FILTER_FROM_DATE);
         $toDate = $this->getRequestParams()->getDateTime(RequestParams::PARAM_TYPE_QUERY, self::FILTER_TO_DATE);
 
@@ -166,11 +174,11 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
         $holidaySearchFilterParams->setToDate($toDate);
         $holidays = $this->getHolidayService()->searchHolidays($holidaySearchFilterParams);
         $total = $this->getHolidayService()->searchHolidaysCount($holidaySearchFilterParams);
-
+        */
         return new EndpointCollectionResult(
             HolidayModel::class,
-            $holidays,
-            new ParameterBag([CommonParams::PARAMETER_TOTAL => $total])
+            []//$holidays,
+            new ParameterBag([CommonParams::PARAMETER_TOTAL => 0]) //$total])
         );
     }
 
@@ -180,8 +188,22 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForGetAll(): ParamRuleCollection
     {
         return new ParamRuleCollection(
-            new ParamRule(self::FILTER_FROM_DATE, new Rule(Rules::API_DATE)),
-            new ParamRule(self::FILTER_TO_DATE, new Rule(Rules::API_DATE)),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_FROM_DATE, 
+                    new Rule(Rules::API_DATE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::FILTER_TO_DATE, 
+                    new Rule(Rules::API_DATE)
+                )
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             ...$this->getSortingAndPaginationParamsRules()
         );
     }
@@ -262,6 +284,10 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
     private function getCommonBodyParamRuleCollection(): ParamRuleCollection
     {
         return new ParamRuleCollection(
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             $this->getValidationDecorator()->requiredParamRule(
                 new ParamRule(
                     self::PARAMETER_NAME,
@@ -373,6 +399,10 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForDelete(): ParamRuleCollection
     {
         return new ParamRuleCollection(
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             new ParamRule(
                 CommonParams::PARAMETER_IDS,
                 new Rule(Rules::INT_ARRAY)

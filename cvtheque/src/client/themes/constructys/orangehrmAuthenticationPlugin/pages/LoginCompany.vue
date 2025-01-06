@@ -170,7 +170,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/auth/company/validate');
+      return urlFor('/' + window.appGlobal.theme + '/auth/company/validate');
     },
   },
 

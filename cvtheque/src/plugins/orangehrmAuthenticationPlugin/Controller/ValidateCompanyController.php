@@ -87,11 +87,12 @@ class ValidateCompanyController extends AbstractController implements PublicCont
     {
         $siret = $request->request->get(self::PARAMETER_SIRET, '');
         $adherentCode = $request->request->get(self::PARAMETER_ADHERENT_CODE, '');
+        $theme = $request->attributes->get('theme');
 
         try{
             /** @var UrlGenerator $urlGenerator */
             $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-            $loginUrl = $urlGenerator->generate('auth_login_company', [], UrlGenerator::ABSOLUTE_URL);
+            $loginUrl = $urlGenerator->generate('auth_login_company', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
             
             $clientToken = $this->retrieveClientToken();    
             $isAuthorizedByClient = $this->checkIsAuthorizedByClient($siret, $adherentCode, $clientToken);
@@ -149,7 +150,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
             return new RedirectResponse($loginUrl);
         }
 
-        $redirectUrl = $this->handleSessionTimeoutRedirect();
+        $redirectUrl = $this->handleSessionTimeoutRedirect($theme);
         if ($redirectUrl) {
             return new RedirectResponse($redirectUrl);
         }

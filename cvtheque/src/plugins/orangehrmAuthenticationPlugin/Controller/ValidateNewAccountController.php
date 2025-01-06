@@ -68,11 +68,12 @@ class ValidateNewAccountController extends AbstractController implements PublicC
     {
         $email = $request->request->get(self::PARAMETER_EMAIL, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
+        $theme = $request->attributes->get('theme');
         $credentials = new UserCredential($email, $password, 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $createAccountUrl = $urlGenerator->generate('auth_create_account', [], UrlGenerator::ABSOLUTE_URL);
+        $createAccountUrl = $urlGenerator->generate('auth_create_account', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
 
         try {
             $token = $request->request->get('_token');
@@ -117,7 +118,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             );
             return new RedirectResponse($createAccountUrl);
         }
-        $redirectUrl = $this->handleSessionTimeoutRedirect();
+        $redirectUrl = $this->handleSessionTimeoutRedirect($theme);
         if ($redirectUrl) {
             return new RedirectResponse($redirectUrl);
         }

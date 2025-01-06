@@ -33,11 +33,11 @@ trait SessionHandlingTrait
     /**
      * @return string
      */
-    public function handleSessionTimeoutRedirect(): ?string
+    public function handleSessionTimeoutRedirect(string $theme): ?string
     {
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $loginUrl = $urlGenerator->generate('auth_login', [], UrlGenerator::ABSOLUTE_URL);
+        $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
 
         /** @var Session $session */
         $session = $this->getContainer()->get(Services::SESSION);
@@ -47,7 +47,7 @@ trait SessionHandlingTrait
         if ($this->getAuthUser()->hasAttribute(AuthUser::SESSION_TIMEOUT_REDIRECT_URL)) {
             $redirectUrl = $this->getAuthUser()->getAttribute(AuthUser::SESSION_TIMEOUT_REDIRECT_URL);
             $this->getAuthUser()->removeAttribute(AuthUser::SESSION_TIMEOUT_REDIRECT_URL);
-            $logoutUrl = $urlGenerator->generate('auth_logout', [], UrlGenerator::ABSOLUTE_URL);
+            $logoutUrl = $urlGenerator->generate('auth_logout', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
 
             if ($redirectUrl !== $loginUrl || $redirectUrl !== $logoutUrl) {
                 return $redirectUrl;

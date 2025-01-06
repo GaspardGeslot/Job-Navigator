@@ -79,6 +79,7 @@ class RequestResetWeakPasswordController extends AbstractController implements P
         $password = $request->request->get('password');
         $resetCode = $request->request->get('resetCode');
         $token = $request->request->get('_token');
+        $theme = $request->attributes->get('theme');
 
         $user = $this->getUserService()->geUserDao()->getUserByUserName($username);
 
@@ -90,7 +91,8 @@ class RequestResetWeakPasswordController extends AbstractController implements P
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
         $redirectUrl = $urlGenerator->generate(
             'auth_weak_password_reset',
-            ['resetCode' => $resetCode],
+            ['resetCode' => $resetCode,
+                'theme' => $theme],
             UrlGenerator::ABSOLUTE_URL
         );
 

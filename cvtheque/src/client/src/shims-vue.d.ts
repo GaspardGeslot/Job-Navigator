@@ -26,6 +26,7 @@ declare global {
   interface Window {
     appGlobal: {
       baseUrl: string;
+      theme: string;
     };
   }
 }

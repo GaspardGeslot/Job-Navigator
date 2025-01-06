@@ -40,6 +40,7 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
     use EmployeeServiceTrait;
     use DateTimeHelperTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_JOINED_DATE = 'joinedDate';
     public const PARAMETER_JOB_TITLE_ID = 'jobTitleId';
     public const PARAMETER_EMP_STATUS_ID = 'empStatusId';
@@ -114,6 +115,10 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 CommonParams::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
         );
     }
@@ -294,6 +299,10 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 CommonParams::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
             new ParamRule(
                 'jobs',

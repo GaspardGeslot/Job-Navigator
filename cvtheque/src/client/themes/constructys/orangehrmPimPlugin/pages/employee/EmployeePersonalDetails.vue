@@ -772,11 +772,16 @@ export default {
       }
     },
     getAttachmentUrl() {
-      return urlFor('/pim/viewAttachment/attachId/{attachId}', {
-        attachId: this.isCandidate
-          ? this.employee.resume
-          : this.employee.attachment,
-      });
+      return urlFor(
+        '/' +
+          window.appGlobal.theme +
+          '/pim/viewAttachment/attachId/{attachId}',
+        {
+          attachId: this.isCandidate
+            ? this.employee.resume
+            : this.employee.attachment,
+        },
+      );
     },
   },
 };

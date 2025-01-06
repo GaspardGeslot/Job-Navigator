@@ -77,8 +77,17 @@ declare module '@vue/runtime-core' {
   }
 }
 
+const theme = subspace ?? 'constructys';
+
 app.config.globalProperties.global = {
   baseUrl,
+};
+
+// @ts-expect-error: appGlobal is not in window object by default
+window.appGlobal = {
+  // @ts-expect-error: appGlobal is not in window object by default
+  ...window.appGlobal,
+  theme,
 };
 
 init().then(() => app.mount('#app'));

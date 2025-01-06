@@ -77,10 +77,11 @@ class OpenIdConnectRedirectController extends AbstractVueController implements P
      */
     public function handle(Request $request): RedirectResponse
     {
+        $theme = $request->attributes->get('theme');
         $this->beginTransaction();
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $loginUrl = $urlGenerator->generate('auth_login', [], UrlGenerator::ABSOLUTE_URL);
+        $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
 
         try {
             $providerId = $this->getAuthUser()->getAttribute(AuthUser::OPENID_PROVIDER_ID);
@@ -92,7 +93,7 @@ class OpenIdConnectRedirectController extends AbstractVueController implements P
             $oidcClient = $this->getSocialMediaAuthenticationService()->initiateAuthentication(
                 $authProviderExtraDetails,
                 $this->getSocialMediaAuthenticationService()->getScope(),
-                $this->getSocialMediaAuthenticationService()->getRedirectURL()
+                $this->getSocialMediaAuthenticationService()->getRedirectURL($theme)
             );
 
             $oidcClient->authenticate();
@@ -109,7 +110,7 @@ class OpenIdConnectRedirectController extends AbstractVueController implements P
                 $this->getLoginService()->addOIDCLogin($user);
             }
 
-            $redirectUrl = $this->handleSessionTimeoutRedirect();
+            $redirectUrl = $this->handleSessionTimeoutRedirect($theme);
             if ($redirectUrl) {
                 return new RedirectResponse($redirectUrl);
             }
@@ -120,7 +121,7 @@ class OpenIdConnectRedirectController extends AbstractVueController implements P
             $this->rollBackTransaction();
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());
             if ($e instanceof RedirectableException) {
-                return new RedirectResponse($e->getRedirectUrl());
+                return new RedirectResponse($e->getRedirectUrl($theme));
             }
             return new RedirectResponse($loginUrl);
         } catch (Throwable $e) {

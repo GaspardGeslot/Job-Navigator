@@ -82,7 +82,7 @@ export default {
   setup(props) {
     const http = new APIService(
       window.appGlobal.baseUrl,
-      `/api/v2/pim/employees/${props.employeeId}/custom-fields?screen=${props.screen}`,
+      `/${window.appGlobal.theme}/api/v2/pim/employees/${props.employeeId}/custom-fields?screen=${props.screen}`,
     );
 
     return {
@@ -137,7 +137,7 @@ export default {
       this.http
         .request({
           method: 'PUT',
-          url: `/api/v2/pim/employees/${this.employeeId}/custom-fields`,
+          url: `/${window.appGlobal.theme}/api/v2/pim/employees/${this.employeeId}/custom-fields`,
           data: {...this.customFieldsModel},
           transformRequest: [
             (data) => {

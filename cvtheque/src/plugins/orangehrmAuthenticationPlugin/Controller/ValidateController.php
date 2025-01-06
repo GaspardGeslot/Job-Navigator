@@ -84,11 +84,12 @@ class ValidateController extends AbstractController implements PublicControllerI
     {
         $username = $request->request->get(self::PARAMETER_USERNAME, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
+        $theme = $request->attributes->get('theme');
         $credentials = new UserCredential($username, $password, 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $loginUrl = $urlGenerator->generate('auth_login', [], UrlGenerator::ABSOLUTE_URL);
+        $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
 
         try {
             $token = $request->request->get('_token');
@@ -125,7 +126,7 @@ class ValidateController extends AbstractController implements PublicControllerI
             return new RedirectResponse($loginUrl);
         }
 
-        $redirectUrl = $this->handleSessionTimeoutRedirect();
+        $redirectUrl = $this->handleSessionTimeoutRedirect($theme);
         if ($redirectUrl) {
             return new RedirectResponse($redirectUrl);
         }
