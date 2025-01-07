@@ -67,8 +67,8 @@ export default {
 
       // Si un fichier a été déposé, procéder à la requête
       // console.log('this.file', this.file);
-      const formData = new FormData();
-      formData.append('file', this.file);
+      // const formData = new FormData();
+      // formData.append('file', this.file);
       // console.log('formData', formData);
 
       this.isLoading = true;

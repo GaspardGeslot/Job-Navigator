@@ -381,6 +381,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         }
             
         $attachmentMethod = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_METHOD);
+        error_log('attachmentMethod' . $attachmentMethod);
         $attachmentId = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_ID);
         if ($attachmentMethod && $attachmentMethod !== 'keepCurrent') {
             if ($attachmentMethod === 'deleteCurrent') {

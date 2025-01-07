@@ -41,12 +41,6 @@
 
 <script>
 export default {
-  // props: {
-  //   allowedFileTypes: {
-  //     type: Array,
-  //     required: true,
-  //   },
-  // },
   emits: ['emit-input'], // Emission de l'input pour envoyer le fichier au parent
   data() {
     return {
@@ -54,11 +48,7 @@ export default {
       errorMessage: '',
     };
   },
-  // computed: {
-  //   acceptedFileTypes() {
-  //     return this.allowedFileTypes.map((type) => `.${type}`).join(',');
-  //   },
-  // },
+
   methods: {
     handleFileChange(e) {
       const file = e.target.files[0];
@@ -77,19 +67,27 @@ export default {
         return;
       }
 
-      // Vérification du type de fichier
-      //const fileType = file.name.split('.').pop().toLowerCase();
-      // if (!this.allowedFileTypes.includes(fileType)) {
-      //   this.errorMessage = `Type de fichier non autorisé. Types acceptés : ${this.allowedFileTypes.join(
-      //     ', ',
-      //   )}.`;
-      //   this.attachment = null;
-      //   return;
-      // }
-
       // Si tout est valide, émettre le fichier au parent
-      this.attachment = file;
-      this.$emit('emit-input', this.attachment); // Emission du fichier
+      this.convertFileToBase64(file);
+      // this.attachment = file;
+      // this.$emit('emit-input', this.attachment);
+    },
+    convertFileToBase64(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result.split(',').pop();
+        const output = {
+          name: file.name,
+          type: file.type,
+          base64: base64,
+          size: file.size,
+        };
+        this.$emit('emit-input', output); // Émettre le fichier en Base64
+      };
+      reader.onerror = () => {
+        this.errorMessage = 'Erreur lors de la lecture du fichier.';
+      };
+      reader.readAsDataURL(file);
     },
   },
 };

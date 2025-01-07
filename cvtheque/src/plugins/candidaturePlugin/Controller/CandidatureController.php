@@ -134,36 +134,46 @@ class CandidatureController extends AbstractVueController implements PublicContr
         $attachment_Id = 'No ID'; // Valeur par défaut si aucune pièce jointe n'est téléchargée
 
         // Gestion de la pièce jointe
-        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-            $fileTmpPath = $_FILES['file']['tmp_name'];
-            $fileName = $_FILES['file']['name'];
-            $fileSize = (int)$_FILES['file']['size'];
-            $fileType = $_FILES['file']['type'];
-            $fileContent = file_get_contents($fileTmpPath);
+        // if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK)
+        if (isset($leadData['file'])) {
+            // $fileTmpPath = $_FILES['file']['tmp_name'];
+            // $fileName = $_FILES['file']['name'];
+            // $fileSize = (int)$_FILES['file']['size'];
+            // $fileType = $_FILES['file']['type'];
+            // $fileContent = file_get_contents($fileTmpPath);
 
-            $base64Attachment = new \OrangeHRM\Core\Dto\Base64Attachment(
-                $fileName,
-                $fileType,
-                $fileContent,
-                $fileSize
-            );
+            // $base64Attachment = new \OrangeHRM\Core\Dto\Base64Attachment(
+            //     $fileName,
+            //     $fileType,
+            //     $fileContent,
+            //     $fileSize
+            // );
+            $decodedFileData = json_decode($leadData['file'], true);
+            if (isset($decodedFileData['base64'], $decodedFileData['name'], $decodedFileData['type'], $decodedFileData['size'])) {
 
-            $apiRequest = new \OrangeHRM\Core\Api\V2\Request($request);
-            $employeeAttachmentApi = new \OrangeHRM\Pim\Api\EmployeeAttachmentAPI($apiRequest);
+                $base64Attachment = new \OrangeHRM\Core\Dto\Base64Attachment(
+                    $decodedFileData['name'],    // Nom du fichier
+                    $decodedFileData['type'],    // Type MIME
+                    $decodedFileData['base64'],  // Contenu du fichier en base64
+                    $decodedFileData['size']     // Taille du fichier
+                );
 
-            try {
-                $result = $employeeAttachmentApi->createAndGetId($empNumber, $screen, $base64Attachment);
-                $normalizedResult = $result->normalize();
-                $attachment_Id = $normalizedResult["id"] ?? 'No ID';
-                $attachment_Id = strval($attachment_Id);
-            } catch (Exception $e) {
-                $error_message = 'Error in createAndGetId: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
-                error_log($error_message); // Log the error
-                
-                return new Response('Internal Server Error during attachment creation: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $apiRequest = new \OrangeHRM\Core\Api\V2\Request($request);
+                $employeeAttachmentApi = new \OrangeHRM\Pim\Api\EmployeeAttachmentAPI($apiRequest);
+
+                try {
+                    $result = $employeeAttachmentApi->createAndGetId($empNumber, $screen, $base64Attachment);
+                    $normalizedResult = $result->normalize();
+                    $attachment_Id = $normalizedResult["id"] ?? 'No ID';
+                    $attachment_Id = strval($attachment_Id);
+                } catch (Exception $e) {
+                    $error_message = 'Error in createAndGetId: ' . $e->getMessage() . "\n" . $e->getTraceAsString();
+                    error_log($error_message); // Log the error
+                    
+                    return new Response('Internal Server Error during attachment creation: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
             }
         }
-
         // Ajout de l'ID de la pièce jointe aux données du lead
         if ($attachment_Id !== 'No ID') {
             $leadData['resume'] = $attachment_Id;
@@ -217,7 +227,6 @@ class CandidatureController extends AbstractVueController implements PublicContr
         $email = $request->request->get('email');
         $password = $request->request->get('password');
         $credentials = new UserCredential($email, $password, 'ESS');
-
         try {
 
             /** @var AuthProviderChain $authProviderChain */

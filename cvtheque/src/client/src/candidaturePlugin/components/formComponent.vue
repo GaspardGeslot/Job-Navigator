@@ -318,6 +318,11 @@ export default {
       if (currentStep.value == 5) {
         const dataToProcess = reviews.value.slice(0, 5);
         const combinedData = combineData(dataToProcess);
+        // console.log(
+        //   'Array.isArray(combinedData[key])',
+        //   Array.isArray(combinedData['file']),
+        // );
+        // console.log('combinedData', combinedData);
         // delete combinedData.checkedEXP;
         if (combinedData.file == null) {
           delete combinedData.file;
@@ -331,9 +336,14 @@ export default {
             if (Array.isArray(combinedData[key])) {
               // Sérialiser les tableaux en JSON
               formData.append(key, JSON.stringify(combinedData[key]));
-            } else if (key === 'file' && combinedData[key] instanceof File) {
-              formData.append(key, combinedData[key]);
-            } else {
+            } else if (key === 'file' && combinedData[key].base64) {
+              formData.append(key, JSON.stringify(combinedData[key]));
+            }
+            // else if (key === 'file' && combinedData[key] instanceof File) {
+            //   console.log('on entre dans la condition de file');
+            //   formData.append(key, combinedData[key]);
+            // }
+            else {
               formData.append(key, combinedData[key]);
             }
           }
@@ -351,8 +361,8 @@ export default {
             // ]);
 
             await http.create(formData);
-            //const response = await http.create(formData);
-            //console.log('RESPONSE HERE !!!! ', response);
+            // const response = await http.create(formData);
+            // console.log('RESPONSE HERE !!!! ', response);
 
             // Si la création de compte réussit, passez à la création de lead
             await createLead(formData);
@@ -394,9 +404,9 @@ export default {
       try {
         isLoading.value = true;
         const leadResponse = await leadHttp.create(formData);
-        //console.log('Lead RESPONSE HERE !!!! ', leadResponse);
+        // console.log('Lead RESPONSE HERE !!!! ', leadResponse);
         matchResponse.value = leadResponse.data.MatchResponse;
-        //console.log('matchResponse.value in formComp', matchResponse.value);
+        // console.log('matchResponse.value in formComp', matchResponse.value);
         isLoading.value = false;
       } catch (error) {
         console.error(
