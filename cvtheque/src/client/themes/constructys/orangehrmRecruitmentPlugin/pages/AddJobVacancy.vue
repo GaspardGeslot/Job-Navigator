@@ -340,7 +340,7 @@ export default {
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/recruitment/vacancies',
+      `${window.appGlobal.theme}/api/v2/recruitment/vacancies`,
     );
     const {createUniqueValidator} = useServerValidation(http);
     const vacancyNameUniqueValidation = createUniqueValidator(

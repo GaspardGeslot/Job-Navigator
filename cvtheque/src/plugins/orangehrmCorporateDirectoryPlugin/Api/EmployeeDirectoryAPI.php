@@ -44,6 +44,7 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
     use AuthUserTrait;
     use UserRoleManagerTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const FILTER_EMP_NUMBER = 'empNumber';
     public const FILTER_NAME_OR_ID = 'nameOrId';
     public const FILTER_JOB_TITLE_ID = 'jobTitleId';
@@ -144,6 +145,10 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 CommonParams::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::ENTITY_ID_EXISTS, [Employee::class])
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
             $this->getModelParamRule(),
         );
@@ -334,6 +339,12 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
                     self::PARAMETER_JOB_TITLE,
                     new Rule(Rules::STRING_TYPE),
                 )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                ),
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(

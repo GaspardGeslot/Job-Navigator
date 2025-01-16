@@ -177,7 +177,7 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
         */
         return new EndpointCollectionResult(
             HolidayModel::class,
-            []//$holidays,
+            [],//$holidays,
             new ParameterBag([CommonParams::PARAMETER_TOTAL => 0]) //$total])
         );
     }

@@ -346,7 +346,7 @@ export default {
 
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/recruitment/candidates',
+      `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
     );
     const {
       showPaginator,
@@ -633,7 +633,10 @@ export default {
     },
 
     async getOtherLeads() {
-      new APIService(window.appGlobal.baseUrl, '/api/v2/recruitment/candidates')
+      new APIService(
+        window.appGlobal.baseUrl,
+        `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
+      )
         .getAll({
           matchingId: this.filters.matchingSelected?.id,
           vacancyId: this.filters.vacancyId?.id,
@@ -680,7 +683,7 @@ export default {
         this.isLoading = true;
         new APIService(
           window.appGlobal.baseUrl,
-          '/api/v2/recruitment/vacancies',
+          `${window.appGlobal.theme}/api/v2/recruitment/vacancies`,
         )
           .deleteAll({
             ids: items,

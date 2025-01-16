@@ -217,7 +217,7 @@ class VueControllerHelper
     protected function getMenuItems(): array
     {
         try {
-            return $this->getMenuService()->getMenuItems($this->getRequest()->getBaseUrl());
+            return $this->getMenuService()->getMenuItems($this->getRequest()->getBaseUrl() . '/constructys');
         } catch (ServiceException $e) {
         }
         return [[], []];

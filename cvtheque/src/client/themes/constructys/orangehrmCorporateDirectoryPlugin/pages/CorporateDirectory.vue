@@ -238,7 +238,7 @@ export default {
 
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/directory/employees',
+      `${window.appGlobal.theme}/api/v2/directory/employees`,
     );
 
     const limit = 14;
