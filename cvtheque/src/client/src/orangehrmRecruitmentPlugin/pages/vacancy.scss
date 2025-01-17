@@ -35,6 +35,14 @@
     border-bottom: $oxd-input-control-border--active;
     margin-bottom: 5px;
   }
+  ::v-deep(.--status-grouped-field) {
+    display: flex;
+    max-width: 15rem;
+  }
+  .label-is-entitlement-situational {
+    display: flex;
+    align-items: center;
+  }
   ::v-deep(.card-header-slot .oxd-table-card-cell) {
     display: flex;
     flex-direction: column;
@@ -98,6 +106,13 @@
   justify-content: end;
   padding: 0 2rem 1.5rem 0;
 }
+
+.warning-icon {
+  font-size: 1.5rem;
+  color: $oxd-primary-one-color;
+  padding: 1rem;
+}
+
 
 
 @media (max-width: 1000px) {

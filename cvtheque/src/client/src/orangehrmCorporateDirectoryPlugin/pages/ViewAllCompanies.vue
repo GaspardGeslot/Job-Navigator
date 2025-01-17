@@ -21,12 +21,26 @@
               />
             </oxd-grid-item>
             <oxd-grid-item>
-              <oxd-input-field
-                v-model="jobTitleFilter"
-                type="select"
-                :label="$t('general.job_title')"
-                :options="jobTitlesPerSector"
-              />
+              <oxd-input-group :classes="{wrapper: '--status-grouped-field'}">
+                <template #label>
+                  <div class="label-is-entitlement-situational">
+                    <oxd-label :label="$t('general.job_title')" />
+                    <oxd-icon-button
+                      style="margin-left: 5px; font-size: 12px"
+                      name="exclamation-circle"
+                      :with-container="false"
+                      @click="onModalOpen"
+                    />
+                  </div>
+                </template>
+                <oxd-input-field
+                  v-model="jobTitleFilter"
+                  type="select"
+                  :options="jobTitlesPerSector"
+                  required
+                  :rules="rules.jobTitle"
+                />
+              </oxd-input-group>
               <oxd-text class="orangehrm-input-hint" tag="p">
                 {{
                   $t(
@@ -142,6 +156,10 @@
           ></summary-card-details>
         </oxd-grid-item>
       </div>
+      <job-category-selection-modal
+        v-if="showModal"
+        @close="onModalClose"
+      ></job-category-selection-modal>
     </div>
   </div>
 </template>
@@ -163,7 +181,8 @@ import CompanyDetails from '@/orangehrmCorporateDirectoryPlugin/components/Compa
 import SummaryCardDetails from '@/orangehrmCorporateDirectoryPlugin/components/SummaryCardDetails';
 import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
-import {OxdSpinner, useResponsive} from '@ohrm/oxd';
+import {OxdSpinner, useResponsive, OxdLabel} from '@ohrm/oxd';
+import JobCategorySelectionModal from '../../orangehrmRecruitmentPlugin/components/JobCategorySelectionModal.vue';
 
 const defaultFilters = {
   companyNumber: null,
@@ -181,6 +200,8 @@ export default {
     'summary-card-details': SummaryCardDetails,
     'table-filter-title': TableFilterTitle,
     'table-filter': TableFilter,
+    'oxd-label': OxdLabel,
+    'job-category-selection-modal': JobCategorySelectionModal,
   },
 
   props: {
@@ -320,6 +341,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       jobTitlesPerSector: [],
       canUpdate: false,
     };
@@ -350,6 +372,12 @@ export default {
   },
 
   methods: {
+    onModalOpen() {
+      this.showModal = true;
+    },
+    onModalClose() {
+      this.showModal = false;
+    },
     hideCompanyDetails() {
       this.currentIndex = -1;
     },

@@ -23,12 +23,6 @@
       <oxd-text tag="h6" class="orangehrm-main-title">
         {{ $t('recruitment.add_vacancy') }}
       </oxd-text>
-      <br />
-      <oxd-text class="orangehrm-text" tag="p">
-        <i>
-          {{ $t('recruitment.select_only_conditions_for_matching') }}
-        </i>
-      </oxd-text>
       <oxd-divider />
 
       <oxd-form :loading="isLoading" @submit-valid="onSave">
@@ -66,14 +60,26 @@
             />
           </oxd-grid-item>
           <oxd-grid-item>
-            <oxd-input-field
-              v-model="vacancy.jobTitle"
-              type="select"
-              :label="$t('general.job_title')"
-              :options="jobTitlesPerSector"
-              required
-              :rules="rules.jobTitle"
-            />
+            <oxd-input-group :classes="{wrapper: '--status-grouped-field'}">
+              <template #label>
+                <div class="label-is-entitlement-situational">
+                  <oxd-label :label="$t('Métier*')" />
+                  <oxd-icon-button
+                    style="margin-left: 5px; font-size: 12px"
+                    name="exclamation-circle"
+                    :with-container="false"
+                    @click="onModalOpen"
+                  />
+                </div>
+              </template>
+              <oxd-input-field
+                v-model="vacancy.jobTitle"
+                type="select"
+                :options="jobTitlesPerSector"
+                required
+                :rules="rules.jobTitle"
+              />
+            </oxd-input-group>
             <oxd-text class="orangehrm-input-hint" tag="p">
               {{
                 $t(
@@ -138,6 +144,24 @@
         </oxd-grid>
         <br />
 
+        <oxd-divider />
+        <br />
+        <oxd-form-row>
+          <oxd-icon class="warning-icon" name="exclamation-triangle-fill" />
+          <oxd-label
+            :label="$t('recruitment.select_only_conditions_for_matching')"
+          />
+          <oxd-text class="orangehrm-input-hint">
+            <i>
+              {{
+                $t(
+                  '(Si vous voulez maximiser les opportunités de candidatures, ne cochez aucun critère, la mise en relation se fera uniquement sur le métier recherché)',
+                )
+              }}
+            </i>
+          </oxd-text>
+        </oxd-form-row>
+        <br />
         <oxd-divider />
         <oxd-text class="orangehrm-sub-title" tag="h6">
           {{ $t('pim.work_experience_global') }}
@@ -264,6 +288,10 @@
           <submit-button />
         </oxd-form-actions>
       </oxd-form>
+      <job-category-selection-modal
+        v-if="showModal"
+        @close="onModalClose"
+      ></job-category-selection-modal>
     </div>
   </div>
 </template>
@@ -283,7 +311,10 @@ import {
 import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
 import VacancyLinkCard from '../components/VacancyLinkCard.vue';*/
 import {OxdSwitchInput} from '@ohrm/oxd';
+import {OxdLabel} from '@ohrm/oxd';
+import {OxdIcon} from '@ohrm/oxd';
 import useServerValidation from '@/core/util/composable/useServerValidation';
+import JobCategorySelectionModal from '../components/JobCategorySelectionModal.vue';
 
 const vacancyModel = {
   jobTitle: null,
@@ -306,6 +337,9 @@ export default {
   components: {
     'oxd-switch-input': OxdSwitchInput,
     'back-button': BackButton,
+    'oxd-label': OxdLabel,
+    'oxd-icon': OxdIcon,
+    'job-category-selection-modal': JobCategorySelectionModal,
     /*'employee-autocomplete': EmployeeAutocomplete,
     'jobtitle-dropdown': JobtitleDropdown,
     'vacancy-link-card': VacancyLinkCard,*/
@@ -354,6 +388,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       jobSector: '',
       jobTitlesPerSector: [],
       isLoading: false,
@@ -397,6 +432,12 @@ export default {
     },
   },
   methods: {
+    onModalOpen() {
+      this.showModal = true;
+    },
+    onModalClose() {
+      this.showModal = false;
+    },
     onCancel() {
       navigate('/recruitment/viewJobVacancy');
     },

@@ -84,10 +84,37 @@ export const validDateFormat = function (
   };
 };
 
+export const validDateFormatFrench = function (
+  displayFormat = 'dd-mm-yyyy',
+  dateFormat = 'dd-MM-yyyy',
+) {
+  return function (value: string): boolean | string {
+    if (!value) return true;
+    const parsed = parseDate(value, dateFormat);
+    return parsed
+      ? true
+      : translate('general.should_be_a_valid_date_in_x_format', {
+          format: displayFormat,
+        });
+  };
+};
+
 export const shouldBeCurrentOrPreviousDate = function () {
   return function (value: string): boolean | string {
     if (!value) return true;
     const dateFormat = 'yyyy-MM-dd';
+    const currentDate = formatDate(new Date(), dateFormat) || '';
+    const isValid = diffInDays(value, currentDate, dateFormat);
+    return isValid > 0
+      ? true
+      : translate('recruitment.should_be_current_date_previous_date');
+  };
+};
+
+export const shouldBeCurrentOrPreviousDateFrench = function () {
+  return function (value: string): boolean | string {
+    if (!value) return true;
+    const dateFormat = 'dd-MM-yyyy';
     const currentDate = formatDate(new Date(), dateFormat) || '';
     const isValid = diffInDays(value, currentDate, dateFormat);
     return isValid > 0

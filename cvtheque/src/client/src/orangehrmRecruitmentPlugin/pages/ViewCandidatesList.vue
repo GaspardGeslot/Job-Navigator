@@ -32,12 +32,25 @@
               />
             </oxd-grid-item>
             <oxd-grid-item>
-              <oxd-input-field
-                v-model="jobTitleFilter"
-                type="select"
-                :label="$t('general.job_title')"
-                :options="jobTitlesPerSector"
-              />
+              <oxd-input-group :classes="{wrapper: '--status-grouped-field'}">
+                <template #label>
+                  <div class="label-is-entitlement-situational">
+                    <oxd-label :label="$t('general.job_title')" />
+                    <oxd-icon-button
+                      style="margin-left: 5px; font-size: 12px"
+                      name="exclamation-circle"
+                      :with-container="false"
+                      @click="onModalOpen"
+                    />
+                  </div>
+                </template>
+                <oxd-input-field
+                  v-model="jobTitleFilter"
+                  type="select"
+                  :options="jobTitlesPerSector"
+                  required
+                />
+              </oxd-input-group>
               <oxd-text class="orangehrm-input-hint" tag="p">
                 {{
                   $t(
@@ -199,6 +212,10 @@
       </div>
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
+    <job-category-selection-modal
+      v-if="showModal"
+      @close="onModalClose"
+    ></job-category-selection-modal>
   </div>
 </template>
 
@@ -225,6 +242,8 @@ import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmatio
 //import CandidateAutocomplete from '@/orangehrmRecruitmentPlugin/components/CandidateAutocomplete';
 //import HiringManagerDropdown from '@/orangehrmRecruitmentPlugin/components/HiringManagerDropdown';
 //import CandidateStatusDropdown from '@/orangehrmRecruitmentPlugin/components/CandidateStatusDropdown';
+import {OxdLabel} from '@ohrm/oxd';
+import JobCategorySelectionModal from '../components/JobCategorySelectionModal.vue';
 
 const defaultFilters = {
   jobTitle: null,
@@ -250,6 +269,8 @@ export default {
   components: {
     //'vacancy-dropdown': VacancyDropdown,
     //'jobtitle-dropdown': JobtitleDropdown,
+    'oxd-label': OxdLabel,
+    'job-category-selection-modal': JobCategorySelectionModal,
     'delete-confirmation': DeleteConfirmationDialog,
     //'candidate-autocomplete': CandidateAutocomplete,
     //'hiring-manager-dropdown': HiringManagerDropdown,
@@ -432,6 +453,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       jobTitlesPerSector: [],
       checkedItems: [],
       canUpdate: false,
@@ -571,6 +593,12 @@ export default {
     },
   },
   methods: {
+    onModalOpen() {
+      this.showModal = true;
+    },
+    onModalClose() {
+      this.showModal = false;
+    },
     async resetFiltre() {
       await this.resetFiltreValeur();
       await this.execQuery();

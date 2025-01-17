@@ -233,10 +233,11 @@
             class="orangehrm-full-width-grid"
           >
             <oxd-grid-item>
-              <date-input
+              <oxd-input-field
                 v-model="employee.birthday"
                 :label="$t('pim.date_of_birth')"
                 :rules="rules.birthday"
+                placeholder="23-10-2000"
               />
             </oxd-grid-item>
             <!--
@@ -438,12 +439,15 @@ import {
   required,
   shouldNotExceedCharLength,
   validDateFormat,
+  validDateFormatFrench,
   maxFileSize,
   validFileTypes,
   validWebsiteFormat,
+  shouldBeCurrentOrPreviousDateFrench,
 } from '@ohrm/core/util/validation/rules';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import FileUploadInput from '@/core/components/inputs/FileUploadInput';
+import {formatDate, parseDate} from '@ohrm/core/util/helper/datefns';
 
 const employeeModel = {
   firstName: '',
@@ -577,7 +581,10 @@ export default {
         sinNumber: [shouldNotExceedCharLength(30)],
         nickname: [shouldNotExceedCharLength(30)],
         militaryService: [shouldNotExceedCharLength(30)],
-        birthday: [validDateFormat(this.userDateFormat)],
+        birthday: [
+          validDateFormatFrench('dd-MM-yyyy'),
+          shouldBeCurrentOrPreviousDateFrench(),
+        ],
         website: [validWebsiteFormat()],
         drivingLicenseExpiredDate: [validDateFormat(this.userDateFormat)],
         attachment: [
@@ -648,7 +655,12 @@ export default {
             drivingLicenseExpiredDate: this.employee.drivingLicenseExpiredDate,
             gender: this.employee.gender,
             maritalStatus: this.employee.maritalStatus?.id,
-            birthday: this.employee.birthday,
+            birthday: this.employee.birthday
+              ? formatDate(
+                  parseDate(this.employee.birthday, 'dd-MM-yyyy'),
+                  'yyyy-MM-dd',
+                )
+              : undefined,
             nationalityId: this.employee.nationality?.id,
             ssnNumber: this.showSsnField ? this.employee.ssnNumber : undefined,
             sinNumber: this.showSinField ? this.employee.sinNumber : undefined,
@@ -692,6 +704,12 @@ export default {
     updateModel(response) {
       const {data} = response.data;
       this.employee = {...employeeModel, ...data};
+      if (this.employee.birthday) {
+        this.employee.birthday = formatDate(
+          new Date(this.employee.birthday),
+          'dd-MM-yyyy',
+        );
+      }
       if (data.drivingLicense && data.drivingLicense != '') {
         try {
           this.employee.checkedPermits = JSON.parse(data.drivingLicense);
