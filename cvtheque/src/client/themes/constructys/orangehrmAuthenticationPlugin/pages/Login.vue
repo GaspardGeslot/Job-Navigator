@@ -176,7 +176,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/' + window.appGlobal.theme + '/auth/validate');
+      return urlFor(`/${window.appGlobal.theme}/auth/validate`);
     },
   },
 
@@ -194,13 +194,13 @@ export default {
       }
     },
     navigateUrlForgotPassword() {
-      navigate('/auth/requestPasswordResetCode');
+      navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);
     },
     navigateUrlCreateAccount() {
-      navigate('/auth/createAccount');
+      navigate(`/${window.appGlobal.theme}/auth/createAccount`);
     },
     navigateUrlLoginCompany() {
-      navigate('/auth/company/login');
+      navigate(`/${window.appGlobal.theme}/auth/company/login`);
     },
   },
 };

@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     navigateUrl() {
-      navigate('/auth/requestPasswordResetCode');
+      navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);
     },
   },
 };

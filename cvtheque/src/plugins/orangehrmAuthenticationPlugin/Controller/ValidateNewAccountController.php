@@ -84,7 +84,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
             
-            $token = $authProviderChain->signIn(new AuthParams($credentials));
+            $token = $authProviderChain->signIn(new AuthParams($credentials, null, $theme));
             $success = !is_null($token);
 
             if (!$success)
@@ -123,6 +123,6 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             return new RedirectResponse($redirectUrl);
         }
 
-        return $this->redirect("/pim/viewMyDetails");
+        return $this->redirect("/" . $theme . "/pim/viewMyDetails");
     }
 }

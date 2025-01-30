@@ -65,9 +65,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         </option>
       </select>
       <select v-if="professionalXp.length" v-model="BTPcheckedEXP">
-        <option disabled value="">
-          Expérience professionnelle dans le BTP
-        </option>
+        <option disabled value="">Expérience dans le BTP</option>
         <option
           v-for="(item, index) in professionalXp"
           :key="index"

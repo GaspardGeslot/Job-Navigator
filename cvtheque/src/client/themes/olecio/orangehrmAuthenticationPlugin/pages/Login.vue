@@ -19,26 +19,6 @@
 
 <template>
   <login-layout>
-    <oxd-form class="orangehrm-login-form">
-      <oxd-form-row>
-        <oxd-text class="orangehrm-profile-title" tag="h6">Je suis</oxd-text>
-      </oxd-form-row>
-      <oxd-form-row>
-        <oxd-form-actions>
-          <oxd-button
-            class="orangehrm-profile-button"
-            display-type="secondary"
-            :label="$t('Un candidat')"
-          />
-          <oxd-button
-            class="orangehrm-profile-button"
-            display-type="ghost"
-            :label="$t('Une entreprise')"
-            @click="navigateUrlLoginCompany"
-          />
-        </oxd-form-actions>
-      </oxd-form-row>
-    </oxd-form>
     <oxd-text class="orangehrm-login-title" tag="h5">
       {{ $t('auth.login') }}
     </oxd-text>
@@ -176,7 +156,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/auth/validate');
+      return urlFor(`/${window.appGlobal.theme}/auth/validate`);
     },
   },
 
@@ -194,13 +174,13 @@ export default {
       }
     },
     navigateUrlForgotPassword() {
-      navigate('/auth/requestPasswordResetCode');
+      navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);
     },
     navigateUrlCreateAccount() {
-      navigate('/auth/createAccount');
+      navigate(`/${window.appGlobal.theme}/auth/createAccount`);
     },
     navigateUrlLoginCompany() {
-      navigate('/auth/company/login');
+      navigate(`/${window.appGlobal.theme}/auth/company/login`);
     },
   },
 };

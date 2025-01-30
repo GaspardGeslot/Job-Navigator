@@ -69,7 +69,7 @@
               class="orangehrm-save-candidate-page --span-column-2"
             >
               <oxd-input-field
-                v-model="profile.motivation"
+                v-model="profile.companyPresentation"
                 :label="$t('pim.presentation')"
                 type="textarea"
                 :disabled="!editable"
@@ -245,7 +245,7 @@ export default {
   methods: {
     getAttachmentUrl() {
       return urlFor(
-        '/recruitment/viewCandidateAttachment/candidateId/{attachmentId}',
+        `/${window.appGlobal.theme}/recruitment/viewCandidateAttachment/candidateId/{attachmentId}`,
         {attachmentId: this.company.attachment},
       );
     },

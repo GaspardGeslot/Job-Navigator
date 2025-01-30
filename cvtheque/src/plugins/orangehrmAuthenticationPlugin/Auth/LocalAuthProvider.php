@@ -58,7 +58,7 @@ class LocalAuthProvider extends AbstractAuthProvider
         if (!$authParams->getCredential() instanceof UserCredentialInterface) {
             return false;
         }
-        $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential(), $isCompany);
+        $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential(), $isCompany, $authParams->getTheme());
         if (!is_null($token)) {
             if ($this->getConfigService()->getConfigDao()
                     ->getValue(ConfigService::KEY_ENFORCE_PASSWORD_STRENGTH) === 'on') {
@@ -95,10 +95,10 @@ class LocalAuthProvider extends AbstractAuthProvider
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
             return false;
-        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
+        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential(), $authParams->getTheme());
         if ($exists)
             return $this->authenticate($authParams, true);
-        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), true);
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), true, $authParams->getTheme());
     }
 
     /**
@@ -111,10 +111,10 @@ class LocalAuthProvider extends AbstractAuthProvider
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
             return null;
-        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
+        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential(), $authParams->getTheme());
         if ($exists)
             throw new UserAlreadyEnrolledException();
-        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false);
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false, $authParams->getTheme());
     }
 
     /**
@@ -131,7 +131,7 @@ class LocalAuthProvider extends AbstractAuthProvider
         $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
         if ($exists)
             throw new UserAlreadyEnrolledException();
-        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false);
+        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false, $authParams->getTheme());
     }
 
     /**

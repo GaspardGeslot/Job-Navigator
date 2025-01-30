@@ -28,7 +28,7 @@
         :user="{{ user | json_encode() }}"
         brand-logo-src="{{ clientLogoUrl }}"
         brand-banner-src="{{ clientBannerUrl }}"
-        logout-url="{{ baseUrl }}/auth/logout"
+        logout-url="{{ baseUrl }}/{{ theme }}/auth/logout"
         support-url="{{ baseUrl }}/help/support"
         :update-password-url="{{ user.hasPassword ? "\"#{baseUrl}/pim/updatePassword\"" : "null" }}"
         :permissions="{{ (permissions ? permissions : []) | json_encode() }}"
@@ -52,6 +52,7 @@
   <script type="text/javascript">
       window.appGlobal = {
         baseUrl: "{{ baseUrl }}",
+        theme: "{{ theme }}",
         publicPath: "{{ publicPath }}",
       };
   </script>

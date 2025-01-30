@@ -100,6 +100,13 @@ class User
     private ?int $createdBy = null;
 
     /**
+     * @var Theme|null
+     * @ORM\ManyToOne(targetEntity="OrangeHRM\Entity\Theme", inversedBy="users")
+     * @ORM\JoinColumn(name="theme_id", referencedColumnName="theme_id")
+     */
+    private ?Theme $theme = null;
+    
+    /**
      * @var Employee|null
      * @ORM\ManyToOne(targetEntity="OrangeHRM\Entity\Employee", inversedBy="users")
      * @ORM\JoinColumn(name="emp_number", referencedColumnName="emp_number")
@@ -296,6 +303,22 @@ class User
         $this->employee = $employee;
     }
 
+    /**
+     * @return Theme
+     */
+    public function getTheme(): Theme
+    {
+        return $this->theme;
+    }
+
+    /**
+     * @param Theme $theme
+     */
+    public function setTheme(Theme $theme): void
+    {
+        $this->theme = $theme;
+    }
+    
     /**
      * @return UserRole
      */

@@ -139,9 +139,12 @@ export default {
     });
 
     const onClickProfilePic = () => {
-      navigate('/pim/viewPhotograph/empNumber/{empNumber}', {
-        empNumber: props.employeeId,
-      });
+      navigate(
+        `/${window.appGlobal.theme}/pim/viewPhotograph/empNumber/{empNumber}`,
+        {
+          empNumber: props.employeeId,
+        },
+      );
     };
 
     return {

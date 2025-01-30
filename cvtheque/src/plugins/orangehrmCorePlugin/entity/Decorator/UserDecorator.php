@@ -22,6 +22,7 @@ use OrangeHRM\Core\Traits\ORM\EntityManagerHelperTrait;
 use OrangeHRM\Entity\Employee;
 use OrangeHRM\Entity\User;
 use OrangeHRM\Entity\UserRole;
+use OrangeHRM\Entity\Theme;
 
 class UserDecorator
 {
@@ -71,6 +72,16 @@ class UserDecorator
         /** @var UserRole|null $userRole */
         $userRole = $this->getReference(UserRole::class, $id);
         $this->getUser()->setUserRole($userRole);
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setThemeById(int $id): void
+    {
+        /** @var Theme|null $theme */
+        $theme = $this->getReference(Theme::class, $id);
+        $this->getUser()->setTheme($theme);
     }
 
     /**

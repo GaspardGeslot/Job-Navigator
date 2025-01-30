@@ -346,7 +346,7 @@ export default {
 
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/recruitment/candidates',
+      `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
     );
     const {
       showPaginator,
@@ -588,9 +588,12 @@ export default {
     },
     onClickCandidate(item) {
       !item.matchingId
-        ? navigate('/recruitment/viewCandidate/{id}', {id: item.id})
+        ? navigate(
+            `/${window.appGlobal.theme}/recruitment/viewCandidate/{id}`,
+            {id: item.id},
+          )
         : navigate(
-            '/recruitment/viewCandidate/{leadId}/matching/{matchingId}',
+            `/${window.appGlobal.theme}/recruitment/viewCandidate/{leadId}/matching/{matchingId}`,
             {
               leadId: item.id,
               matchingId: item.matchingId,
@@ -598,10 +601,10 @@ export default {
           );
     },
     onClickAdd() {
-      navigate('/recruitment/addJobVacancy');
+      navigate(`/${window.appGlobal.theme}/recruitment/addJobVacancy`);
     },
     onClickEdit(item) {
-      navigate('/recruitment/addJobVacancy/{id}', {
+      navigate(`/${window.appGlobal.theme}/recruitment/addJobVacancy/{id}`, {
         id: this.filters.matchingSelected?.id,
       });
     },
@@ -633,7 +636,10 @@ export default {
     },
 
     async getOtherLeads() {
-      new APIService(window.appGlobal.baseUrl, '/api/v2/recruitment/candidates')
+      new APIService(
+        window.appGlobal.baseUrl,
+        `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
+      )
         .getAll({
           matchingId: this.filters.matchingSelected?.id,
           vacancyId: this.filters.vacancyId?.id,
@@ -680,7 +686,7 @@ export default {
         this.isLoading = true;
         new APIService(
           window.appGlobal.baseUrl,
-          '/api/v2/recruitment/vacancies',
+          `${window.appGlobal.theme}/api/v2/recruitment/vacancies`,
         )
           .deleteAll({
             ids: items,
@@ -689,7 +695,7 @@ export default {
             return this.$toast.deleteSuccess();
           })
           .then(() => {
-            navigate('/recruitment/viewJobVacancy');
+            navigate(`/${window.appGlobal.theme}/recruitment/viewJobVacancy`);
             this.isLoading = false;
           });
       }

@@ -3,18 +3,18 @@ view_candidature:
   controller: Candidature\Controller\CandidatureController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys
 
 postNewLead:
   path: /{theme}/candidature/lead
   controller: Candidature\Controller\CandidatureController::postNewLead
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys
 
 createNewAccount:
   path: /{theme}/candidature/account
   controller: Candidature\Controller\CandidatureController::createNewAccount
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys

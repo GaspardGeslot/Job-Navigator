@@ -170,7 +170,6 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
     $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
     $jobs = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, 'jobs');
-    // error_log('Jobs reçus brut : ' . print_r($jobs, true));
 
     if (!is_array($jobs)) {
         throw new \InvalidArgumentException("Le paramètre `jobs` doit être un tableau.");
@@ -179,8 +178,6 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
     $jobs = array_map(function ($job) {
         return html_entity_decode($job, ENT_QUOTES, 'UTF-8');
     }, $jobs);
-
-    // error_log('Jobs après traitement : ' . print_r($jobs, true));
 
     $employee->setJobs(json_encode($jobs, JSON_UNESCAPED_UNICODE));
 
@@ -199,7 +196,6 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
             'body' => $sendJobs
         ]);
         $responseContent = $response->getBody()->getContents();
-        error_log("Réponse Hedwige : " . $responseContent);
 
         $employee->setJobs($sendJobs);
 
@@ -345,8 +341,6 @@ class EmployeeJobDetailAPI extends Endpoint implements ResourceEndpoint
                 )
             ),
         );
-
-        error_log("Règles de validation pour update : " . json_encode($rules));
 
         return $rules;
     }

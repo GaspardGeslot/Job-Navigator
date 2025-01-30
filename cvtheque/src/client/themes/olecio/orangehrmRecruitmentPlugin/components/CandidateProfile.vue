@@ -633,7 +633,7 @@ export default {
     },
     getResumeUrl() {
       return urlFor(
-        '/recruitment/viewCandidateAttachment/candidateId/{attachmentId}',
+        `/${window.appGlobal.theme}/recruitment/viewCandidateAttachment/candidateId/{attachmentId}`,
         {attachmentId: this.profile.resume},
       );
     },

@@ -238,7 +238,7 @@ export default {
 
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/directory/employees',
+      `${window.appGlobal.theme}/api/v2/directory/employees`,
     );
 
     const limit = 14;
@@ -336,11 +336,11 @@ export default {
     },
     seeCompanyDetails() {
       !this.companies[this.currentIndex].matchingId
-        ? navigate('/recruitment/viewCompany/{id}', {
+        ? navigate(`/${window.appGlobal.theme}/recruitment/viewCompany/{id}`, {
             id: this.companies[this.currentIndex].companyId,
           })
         : navigate(
-            '/recruitment/viewCompany/{companyId}/matching/{matchingId}',
+            `/${window.appGlobal.theme}/recruitment/viewCompany/{companyId}/matching/{matchingId}`,
             {
               companyId: this.companies[this.currentIndex].companyId,
               matchingId: this.companies[this.currentIndex].matchingId,

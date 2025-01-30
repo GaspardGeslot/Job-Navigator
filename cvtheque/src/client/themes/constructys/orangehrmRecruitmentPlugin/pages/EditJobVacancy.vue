@@ -23,12 +23,6 @@
       <oxd-text tag="h6" class="orangehrm-main-title">
         {{ $t('recruitment.edit_vacancy') }}
       </oxd-text>
-      <br />
-      <oxd-text class="orangehrm-text" tag="p">
-        <i>
-          {{ $t('recruitment.select_only_conditions_for_matching') }}
-        </i>
-      </oxd-text>
       <oxd-divider />
       <oxd-form :loading="isLoading" @submit-valid="onSave">
         <oxd-grid :cols="3" class="orangehrm-full-width-grid">
@@ -50,13 +44,25 @@
             />
           </oxd-grid-item>
           <oxd-grid-item>
-            <oxd-input-field
-              v-model="vacancy.jobSelected"
-              type="select"
-              :label="$t('general.job_title')"
-              :options="jobTitlesPerSector"
-              required
-            />
+            <oxd-input-group :classes="{wrapper: '--status-grouped-field'}">
+              <template #label>
+                <div class="label-is-entitlement-situational">
+                  <oxd-label :label="$t('Métier*')" />
+                  <oxd-icon-button
+                    style="margin-left: 5px; font-size: 12px"
+                    name="exclamation-circle"
+                    :with-container="false"
+                    @click="onModalOpen"
+                  />
+                </div>
+              </template>
+              <oxd-input-field
+                v-model="vacancy.jobSelected"
+                type="select"
+                :options="jobTitlesPerSector"
+                required
+              />
+            </oxd-input-group>
             <oxd-text class="orangehrm-input-hint" tag="p">
               {{
                 $t(
@@ -76,6 +82,24 @@
         </oxd-grid>
         <br />
 
+        <oxd-divider />
+        <br />
+        <oxd-form-row>
+          <oxd-icon class="warning-icon" name="exclamation-triangle-fill" />
+          <oxd-label
+            :label="$t('recruitment.select_only_conditions_for_matching')"
+          />
+          <oxd-text class="orangehrm-input-hint">
+            <i>
+              {{
+                $t(
+                  '(Si vous voulez maximiser les opportunités de candidatures, ne cochez aucun critère, la mise en relation se fera uniquement sur le métier recherché)',
+                )
+              }}
+            </i>
+          </oxd-text>
+        </oxd-form-row>
+        <br />
         <oxd-divider />
         <oxd-text class="orangehrm-sub-title" tag="h6">
           {{ $t('pim.work_experience_global') }}
@@ -178,248 +202,11 @@
           <submit-button />
         </oxd-form-actions>
       </oxd-form>
+      <job-category-selection-modal
+        v-if="showModal"
+        @close="onModalClose"
+      ></job-category-selection-modal>
     </div>
-    <!--<oxd-form :loading="isLoading" @submit-valid="onSave">
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="vacancy.name"
-              :label="$t('recruitment.vacancy_name')"
-              required
-              :rules="rules.name"
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <jobtitle-dropdown
-              v-model="vacancy.jobTitle"
-              :rules="rules.jobTitle"
-              required
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item class="orangehrm-grid-item-span-2">
-            <oxd-input-field
-              v-model="vacancy.description"
-              type="textarea"
-              :label="$t('general.description')"
-              :placeholder="$t('general.type_description_here')"
-              :rules="rules.description"
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <employee-autocomplete
-              v-model="vacancy.hiringManager"
-              :params="{
-                includeEmployees: 'onlyCurrent',
-              }"
-              required
-              :rules="rules.hiringManager"
-              :label="$t('recruitment.hiring_manager')"
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="vacancy.numOfPositions"
-                  :label="$t('recruitment.num_of_positions')"
-                  :rules="rules.numOfPositions"
-                />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-grid-item>
-        </oxd-grid>
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item class="orangerhrm-switch-wrapper">
-            <oxd-text class="orangehrm-text" tag="p">
-              {{ $t('general.active') }}
-            </oxd-text>
-            <oxd-switch-input v-model="vacancy.status" />
-          </oxd-grid-item>
-        </oxd-grid>
-        <br />
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item class="orangerhrm-switch-wrapper">
-            <oxd-text class="orangehrm-text" tag="p">
-              {{ $t('recruitment.publish_in_rss_feed_and_web_page') }}
-            </oxd-text>
-            <oxd-switch-input v-model="vacancy.isPublished" />
-          </oxd-grid-item>
-        </oxd-grid>
-        <br />
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item class="orangehrm-grid-item-span-2">
-            <div class="orangehrm-vacancy-links">
-              <vacancy-link-card
-                :label="$t('recruitment.rss_feed_url')"
-                :url="rssFeedUrl"
-              />
-              <vacancy-link-card
-                :label="$t('recruitment.web_page_url')"
-                :url="webUrl"
-              />
-            </div>
-          </oxd-grid-item>
-        </oxd-grid>
-        <br />
-        <oxd-divider />
-        <oxd-form-actions>
-          <required-text />
-          <oxd-button
-            display-type="ghost"
-            :label="$t('general.cancel')"
-            @click="onCancel"
-          />
-          <submit-button />
-        </oxd-form-actions>
-      </oxd-form>
-    </div>
-    <br />
-    <div v-if="isAddClicked && !isEditClicked" class="orangehrm-card-container">
-      <oxd-text
-        tag="h6"
-        class="orangehrm-main-title orangehrm-attachment-header__title"
-      >
-        {{ $t('general.add_attachment') }}
-      </oxd-text>
-      <oxd-divider />
-      <oxd-form :loading="isLoadingAttachment" @submit-valid="onSaveAttachment">
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <file-upload-input
-              v-model:newFile="vacancyAttachment.newAttachment"
-              v-model:method="vacancyAttachment.method"
-              :label="$t('general.select_file')"
-              :button-label="$t('general.browse')"
-              :file="vacancyAttachment.oldAttachment"
-              :rules="rules.addAttachment"
-              :url="`recruitment/vacancyAttachment/attachId`"
-              :hint="
-                $t('general.accepts_up_to_n_mb', {count: formattedFileSize})
-              "
-              required
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="vacancyAttachment.comment"
-              type="textarea"
-              :label="$t('general.comment')"
-              :placeholder="$t('general.type_comment_here')"
-              :rules="rules.comment"
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-        <br />
-        <oxd-divider />
-        <oxd-form-actions>
-          <required-text />
-          <oxd-button
-            display-type="ghost"
-            :label="$t('general.cancel')"
-            @click="updateVisibility"
-          />
-          <submit-button :label="$t('general.save')" />
-        </oxd-form-actions>
-      </oxd-form>
-    </div>
-    <div v-if="isEditClicked && !isAddClicked" class="orangehrm-card-container">
-      <oxd-text
-        tag="h6"
-        class="orangehrm-main-title orangehrm-attachment-header__title"
-      >
-        {{ $t('general.edit_attachment') }}
-      </oxd-text>
-      <oxd-divider />
-      <oxd-form
-        :loading="isLoadingAttachment"
-        @submit-valid="onUpdateAttachment"
-      >
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <file-upload-input
-              v-model:newFile="vacancyAttachment.newAttachment"
-              v-model:method="vacancyAttachment.method"
-              :label="$t('general.select_file')"
-              :button-label="$t('general.browse')"
-              :file="vacancyAttachment.oldAttachment"
-              :rules="rules.updateAttachment"
-              :url="`recruitment/viewVacancyAttachment/attachId`"
-              :hint="
-                $t('general.accepts_up_to_n_mb', {count: formattedFileSize})
-              "
-              :deletable="false"
-              required
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="vacancyAttachment.comment"
-              type="textarea"
-              :label="$t('general.comment')"
-              :placeholder="$t('general.type_comment_here')"
-              :rules="rules.comment"
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-        <br />
-        <oxd-divider />
-        <oxd-form-actions>
-          <required-text />
-          <oxd-button
-            display-type="ghost"
-            :label="$t('general.cancel')"
-            @click="updateVisibility"
-          />
-          <submit-button :label="$t('general.save')" />
-        </oxd-form-actions>
-      </oxd-form>
-    </div>
-    <br />
-    <div class="orangehrm-paper-container">
-      <div class="orangehrm-header-container orangehrm-attachment-header">
-        <oxd-text
-          tag="h6"
-          class="orangehrm-main-title orangehrm-attachment-header__title"
-        >
-          {{ $t('general.attachments') }}
-        </oxd-text>
-        <oxd-button
-          v-if="!isAddClicked && !isEditClicked"
-          :label="$t('general.add')"
-          icon-name="plus"
-          display-type="text"
-          @click="onClickAdd"
-        />
-      </div>
-      <table-header
-        :selected="checkedItems.length"
-        :loading="isLoadingTable"
-        :total="attachments.length"
-        @delete="onClickDeleteSelected"
-      ></table-header>
-      <div class="orangehrm-container">
-        <oxd-card-table
-          v-model:selected="checkedItems"
-          :headers="headers"
-          :items="attachments"
-          :selectable="true"
-          :clickable="false"
-          :loading="isLoadingTable"
-          row-decorator="oxd-table-decorator-card"
-        />
-      </div>
-      <delete-confirmation ref="deleteDialog"></delete-confirmation>
-      <br />
-      <br />
-    </div>-->
   </div>
 </template>
 <script>
@@ -441,7 +228,10 @@ import {
 import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
 import VacancyLinkCard from '../components/VacancyLinkCard.vue';*/
 import {OxdSwitchInput} from '@ohrm/oxd';
+import {OxdLabel} from '@ohrm/oxd';
+import {OxdIcon} from '@ohrm/oxd';
 import useServerValidation from '@/core/util/composable/useServerValidation';
+import JobCategorySelectionModal from '../components/JobCategorySelectionModal.vue';
 
 const vacancyModel = {
   jobTitle: null,
@@ -487,6 +277,9 @@ export default {
   components: {
     'oxd-switch-input': OxdSwitchInput,
     'back-button': BackButton,
+    'oxd-label': OxdLabel,
+    'oxd-icon': OxdIcon,
+    'job-category-selection-modal': JobCategorySelectionModal,
     /*'employee-autocomplete': EmployeeAutocomplete,
     'jobtitle-dropdown': JobtitleDropdown,
     'vacancy-link-card': VacancyLinkCard,
@@ -555,6 +348,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       jobSector: null,
       jobTitlesPerSector: [],
       isLoading: false,
@@ -659,8 +453,8 @@ export default {
       ],
       attachments: [],
       checkedItems: [],
-      rssFeedUrl: `${basePath}/recruitmentApply/jobs.rss`,
-      webUrl: `${basePath}/recruitmentApply/jobs.html`,
+      rssFeedUrl: `${basePath}/${window.appGlobal.theme}/recruitmentApply/jobs.rss`,
+      webUrl: `${basePath}/${window.appGlobal.theme}/recruitmentApply/jobs.html`,
     };
   },
   computed: {
@@ -747,8 +541,14 @@ export default {
     },
   },
   methods: {
+    onModalOpen() {
+      this.showModal = true;
+    },
+    onModalClose() {
+      this.showModal = false;
+    },
     onCancel() {
-      navigate('/recruitment/viewJobVacancy');
+      navigate(`/${window.appGlobal.theme}/recruitment/viewJobVacancy`);
     },
     onSave() {
       this.isLoading = true;
@@ -782,7 +582,7 @@ export default {
           return this.$toast.saveSuccess();
         })
         .then(() => {
-          navigate('/recruitment/viewJobVacancy');
+          navigate(`/${window.appGlobal.theme}/recruitment/viewJobVacancy`);
         });
     },
     /*onSaveAttachment() {

@@ -133,7 +133,7 @@ export default {
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/leave/holidays',
+      `/${window.appGlobal.theme}/api/v2/leave/holidays`,
     );
     const {userDateFormat} = useDateFormat();
 

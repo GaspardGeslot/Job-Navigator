@@ -34,7 +34,6 @@
                   type="select"
                   :options="formattedOptions"
                   :label="$t('pim.work_experience_global')"
-                  required
                 />
               </oxd-grid-item>
               <oxd-grid-item>
@@ -43,7 +42,6 @@
                   type="select"
                   :options="formattedOptions"
                   :label="$t('pim.work_experience_btp')"
-                  required
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -168,7 +166,7 @@ export default {
     const BTPSelectedExperience = ref(null);
     const http = new APIService(
       window.appGlobal.baseUrl,
-      `/api/v2/pim/employees/${props.empNumber}/memberships`,
+      `/${window.appGlobal.theme}/api/v2/pim/employees/${props.empNumber}/memberships`,
     );
     // const {jsDateFormat} = useDateFormat();
     // const {locale} = useLocale();

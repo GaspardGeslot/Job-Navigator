@@ -85,7 +85,7 @@ class ValidateController extends AbstractController implements PublicControllerI
         $username = $request->request->get(self::PARAMETER_USERNAME, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
         $theme = $request->attributes->get('theme');
-        $credentials = new UserCredential($username, $password, 'ESS');
+        $credentials = new UserCredential($username, $password, $theme === 'olecio' ? 'Admin' : 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
@@ -99,7 +99,7 @@ class ValidateController extends AbstractController implements PublicControllerI
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticate(new AuthParams($credentials));
+            $token = $authProviderChain->authenticate(new AuthParams($credentials, null, $theme));
             $success = !is_null($token);
 
             if (!$success) {
@@ -132,6 +132,6 @@ class ValidateController extends AbstractController implements PublicControllerI
         }
 
         $homePagePath = $this->getHomePageService()->getHomePagePath();
-        return $this->redirect($homePagePath);
+        return $this->redirect($theme . "/" . $homePagePath);
     }
 }

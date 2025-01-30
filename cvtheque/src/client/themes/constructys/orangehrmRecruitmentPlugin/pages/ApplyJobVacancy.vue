@@ -306,7 +306,7 @@ export default {
   },
   computed: {
     submitUrl() {
-      return urlFor('/recruitment/public/applicants');
+      return urlFor(`/${window.appGlobal.theme}/recruitment/public/applicants`);
     },
     descriptionClasses() {
       return {
@@ -342,12 +342,12 @@ export default {
       this.$refs.applicantForm.$el.submit();
     },
     onCancel() {
-      navigate('/recruitmentApply/jobs.html');
+      navigate(`/${window.appGlobal.theme}/recruitmentApply/jobs.html`);
     },
     showDialogue() {
       this.$refs.showDialogueModal.showSuccessDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          navigate('/recruitmentApply/jobs.html');
+          navigate(`/${window.appGlobal.theme}/recruitmentApply/jobs.html`);
         }
       });
     },

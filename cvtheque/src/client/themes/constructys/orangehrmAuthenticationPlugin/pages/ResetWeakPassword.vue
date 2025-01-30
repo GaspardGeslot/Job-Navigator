@@ -192,7 +192,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/auth/resetWeakPassword');
+      return urlFor(`/${window.appGlobal.theme}/auth/resetWeakPassword`);
     },
   },
 

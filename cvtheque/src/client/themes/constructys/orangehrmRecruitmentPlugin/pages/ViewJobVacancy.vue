@@ -588,9 +588,12 @@ export default {
     },
     onClickCandidate(item) {
       !item.matchingId
-        ? navigate('/recruitment/viewCandidate/{id}', {id: item.id})
+        ? navigate(
+            `/${window.appGlobal.theme}/recruitment/viewCandidate/{id}`,
+            {id: item.id},
+          )
         : navigate(
-            '/recruitment/viewCandidate/{leadId}/matching/{matchingId}',
+            `/${window.appGlobal.theme}/recruitment/viewCandidate/{leadId}/matching/{matchingId}`,
             {
               leadId: item.id,
               matchingId: item.matchingId,
@@ -598,10 +601,10 @@ export default {
           );
     },
     onClickAdd() {
-      navigate('/recruitment/addJobVacancy');
+      navigate(`/${window.appGlobal.theme}/recruitment/addJobVacancy`);
     },
     onClickEdit(item) {
-      navigate('/recruitment/addJobVacancy/{id}', {
+      navigate(`/${window.appGlobal.theme}/recruitment/addJobVacancy/{id}`, {
         id: this.filters.matchingSelected?.id,
       });
     },
@@ -692,7 +695,7 @@ export default {
             return this.$toast.deleteSuccess();
           })
           .then(() => {
-            navigate('/recruitment/viewJobVacancy');
+            navigate(`/${window.appGlobal.theme}/recruitment/viewJobVacancy`);
             this.isLoading = false;
           });
       }

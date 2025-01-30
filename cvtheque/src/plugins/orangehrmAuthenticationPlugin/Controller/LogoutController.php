@@ -23,6 +23,7 @@ use OrangeHRM\Core\Traits\ServiceContainerTrait;
 use OrangeHRM\Core\Utility\Base64Url;
 use OrangeHRM\Framework\Http\RedirectResponse;
 use OrangeHRM\Framework\Http\Session\Session;
+use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Framework\Routing\UrlGenerator;
 use OrangeHRM\Framework\Services;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
@@ -33,12 +34,14 @@ class LogoutController extends AbstractController
     use ServiceContainerTrait;
     use AuthUserTrait;
 
-    public function handle(): RedirectResponse
+    public function handle(Request $request): RedirectResponse
     {
         $isCandidate = $this->getAuthUser()->getIsCandidate();
         /** @var Session $session */
         $session = $this->getContainer()->get(Services::SESSION);
         $session->invalidate();
-        return $this->redirect($isCandidate ? "auth/login" : "auth/company/login");
+        $theme = $request->attributes->get('theme');
+        $redirectUrl = $theme . "/" . ($isCandidate ? "auth/login" : "auth/company/login");
+        return $this->redirect($redirectUrl);
     }
 }

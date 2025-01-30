@@ -157,7 +157,7 @@ export default {
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/recruitment/candidates',
+      `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
     );
     const {$tEmpName} = useEmployeeNameTranslate();
 
@@ -247,7 +247,7 @@ export default {
       this.http
         .request({
           method: 'GET',
-          url: `/api/v2/recruitment/candidates/${this.candidate?.id}/actions/allowed`,
+          url: `${window.appGlobal.theme}/api/v2/recruitment/candidates/${this.candidate?.id}/actions/allowed`,
         })
         .then((response) => {
           const {data} = response.data;
@@ -272,7 +272,7 @@ export default {
       this.http
         .request({
           method: 'PUT',
-          url: `/api/v2/recruitment/candidates/${this.candidate?.id}/matching/${this.matchingId}/status/${this.candidatureStatus?.id}`,
+          url: `${window.appGlobal.theme}/api/v2/recruitment/candidates/${this.candidate?.id}/matching/${this.matchingId}/status/${this.candidatureStatus?.id}`,
         })
         .finally(() => {
           this.profile.candidatureStatus = this.candidatureStatus?.label;

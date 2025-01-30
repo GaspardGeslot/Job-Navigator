@@ -21,6 +21,7 @@ namespace OrangeHRM\CorporateDirectory\Controller;
 use Exception;
 use OrangeHRM\Core\Controller\AbstractModuleController;
 use OrangeHRM\Framework\Http\RedirectResponse;
+use OrangeHRM\Framework\Http\Request;
 
 class CorporateDirectoryModuleController extends AbstractModuleController
 {
@@ -28,9 +29,9 @@ class CorporateDirectoryModuleController extends AbstractModuleController
      * @return RedirectResponse
      * @throws Exception
      */
-    public function handle(): RedirectResponse
+    public function handle(Request $request): RedirectResponse
     {
         $defaultPath = $this->getHomePageService()->getDirectoryModuleDefaultPath();
-        return $this->redirect($defaultPath);
+        return $this->redirect($request->attributes->get('theme') . "/" . $defaultPath);
     }
 }

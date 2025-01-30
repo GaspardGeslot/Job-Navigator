@@ -198,7 +198,7 @@ export default {
       try {
         const http = new APIService(
           window.appGlobal.baseUrl,
-          '/events/push/form-session',
+          `${window.appGlobal.theme}/events/push/form-session`,
         );
         await http.create(data);
         // const response = await http.create(data);
@@ -222,7 +222,7 @@ export default {
         try {
           const http = new APIService(
             window.appGlobal.baseUrl,
-            '/events/push/form-session',
+            `${window.appGlobal.theme}/events/push/form-session`,
           );
           // console.log('Données envoyées pour la mise à jour:', {
           //   sessionId: sessionId.value,
@@ -331,9 +331,14 @@ export default {
             if (Array.isArray(combinedData[key])) {
               // Sérialiser les tableaux en JSON
               formData.append(key, JSON.stringify(combinedData[key]));
-            } else if (key === 'file' && combinedData[key] instanceof File) {
-              formData.append(key, combinedData[key]);
-            } else {
+            } else if (key === 'file' && combinedData[key].base64) {
+              formData.append(key, JSON.stringify(combinedData[key]));
+            }
+            // else if (key === 'file' && combinedData[key] instanceof File) {
+            //   console.log('on entre dans la condition de file');
+            //   formData.append(key, combinedData[key]);
+            // }
+            else {
               formData.append(key, combinedData[key]);
             }
           }
@@ -344,7 +349,7 @@ export default {
             //console.log('password here', formData.get('password'));
             const http = new APIService(
               window.appGlobal.baseUrl,
-              '/candidature/account',
+              `${window.appGlobal.theme}/candidature/account`,
             );
             // console.log('FormData content before submission:', [
             //   ...formData.entries(),
@@ -385,7 +390,7 @@ export default {
     async function createLead(formData) {
       const leadHttp = new APIService(
         window.appGlobal.baseUrl,
-        '/candidature/lead',
+        `${window.appGlobal.theme}/candidature/lead`,
       );
       // console.log('FormData content before submission:', [
       //   ...formData.entries(),

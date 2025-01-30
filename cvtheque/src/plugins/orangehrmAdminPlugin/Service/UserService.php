@@ -24,6 +24,7 @@ use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Config\Config;
 use OrangeHRM\Core\Traits\UserRoleManagerTrait;
 use OrangeHRM\Core\Utility\PasswordHash;
+use OrangeHRM\CorporateBranding\Dao\ThemeDao;
 use OrangeHRM\Entity\Employee;
 use OrangeHRM\Entity\User;
 use OrangeHRM\Entity\UserRole;
@@ -37,6 +38,7 @@ class UserService
 
     private UserDao $userDao;
     private PasswordHash $passwordHasher;
+    private ?ThemeDao $themeDao = null;
 
     /**
      * @return UserDao
@@ -44,6 +46,17 @@ class UserService
     public function getUserDao(): UserDao
     {
         return $this->userDao ??= new UserDao();
+    }
+
+    /**
+     * @return ThemeDao
+     */
+    public function getThemeDao(): ThemeDao
+    {
+        if (!$this->themeDao instanceof ThemeDao) {
+            $this->themeDao = new ThemeDao();
+        }
+        return $this->themeDao;
     }
 
     /**
@@ -180,9 +193,12 @@ class UserService
      * @param UserCredential $credentials
      * @return User|null
      */
-    public function getCredentials(UserCredential $credentials): ?User
+    public function getCredentials(UserCredential $credentials, string $theme): ?User
     {
-        $user = $this->getUserDao()->isExistingSystemUser($credentials);
+        $themeId = $this->getThemeDao()->getId($theme);
+        if ($themeId === null)
+            return null;
+        $user = $this->getUserDao()->isExistingSystemUser($credentials, $themeId);
         if ($user instanceof User) {
             $hash = $user->getUserPassword();
             if ($this->checkPasswordHash($credentials->getPassword(), $hash)) {
@@ -201,9 +217,12 @@ class UserService
      * @param UserCredential $credentials
      * @return User|null
      */
-    public function createCredentials(UserCredential $credentials): ?User
+    public function createCredentials(UserCredential $credentials, string $theme): ?User
     {
-        return $this->getUserDao()->saveNewUser($credentials->getUsername(), $this->hashPassword($credentials->getPassword()), $credentials->getRole());
+        $themeId = $this->getThemeDao()->getId($theme);
+        if ($themeId === null)
+            return null;
+        return $this->getUserDao()->saveNewUser($credentials->getUsername(), $this->hashPassword($credentials->getPassword()), $credentials->getRole(), $themeId);
     }
 
     /**
@@ -220,9 +239,12 @@ class UserService
      * @param UserCredential $credentials
      * @return bool
      */
-    public function checkExistsUser(UserCredential $credentials): bool
+    public function checkExistsUser(UserCredential $credentials, string $theme): bool
     {
-        return !is_null($this->getUserDao()->isExistingSystemUser($credentials));
+        $themeId = $this->getThemeDao()->getId($theme);
+        if ($themeId === null)
+            return false;
+        return !is_null($this->getUserDao()->isExistingSystemUser($credentials, $themeId));
     }
 
     /**

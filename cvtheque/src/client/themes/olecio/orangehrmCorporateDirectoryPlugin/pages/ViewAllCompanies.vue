@@ -21,12 +21,26 @@
               />
             </oxd-grid-item>
             <oxd-grid-item>
-              <oxd-input-field
-                v-model="jobTitleFilter"
-                type="select"
-                :label="$t('general.job_title')"
-                :options="jobTitlesPerSector"
-              />
+              <oxd-input-group :classes="{wrapper: '--status-grouped-field'}">
+                <template #label>
+                  <div class="label-is-entitlement-situational">
+                    <oxd-label :label="$t('general.job_title')" />
+                    <oxd-icon-button
+                      style="margin-left: 5px; font-size: 12px"
+                      name="exclamation-circle"
+                      :with-container="false"
+                      @click="onModalOpen"
+                    />
+                  </div>
+                </template>
+                <oxd-input-field
+                  v-model="jobTitleFilter"
+                  type="select"
+                  :options="jobTitlesPerSector"
+                  required
+                  :rules="rules.jobTitle"
+                />
+              </oxd-input-group>
               <oxd-text class="orangehrm-input-hint" tag="p">
                 {{
                   $t(
@@ -104,7 +118,6 @@
                   :company-siret="company.companySiret"
                   :company-name="company.companyName"
                   :company-location="company.companyLocation"
-                  :company-matching-job-title="company.companyMatchingJobTitle"
                   :candidature-status="company.candidatureStatus"
                   @click="showCompanyDetails(index)"
                 >
@@ -143,6 +156,10 @@
           ></summary-card-details>
         </oxd-grid-item>
       </div>
+      <job-category-selection-modal
+        v-if="showModal"
+        @close="onModalClose"
+      ></job-category-selection-modal>
     </div>
   </div>
 </template>
@@ -164,7 +181,8 @@ import CompanyDetails from '../components/CompanyDetails';
 import SummaryCardDetails from '../components/SummaryCardDetails';
 import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
-import {OxdSpinner, useResponsive} from '@ohrm/oxd';
+import {OxdSpinner, useResponsive, OxdLabel} from '@ohrm/oxd';
+import JobCategorySelectionModal from '../../orangehrmRecruitmentPlugin/components/JobCategorySelectionModal.vue';
 
 const defaultFilters = {
   companyNumber: null,
@@ -182,6 +200,8 @@ export default {
     'summary-card-details': SummaryCardDetails,
     'table-filter-title': TableFilterTitle,
     'table-filter': TableFilter,
+    'oxd-label': OxdLabel,
+    'job-category-selection-modal': JobCategorySelectionModal,
   },
 
   props: {
@@ -226,7 +246,7 @@ export default {
 
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/directory/employees',
+      `${window.appGlobal.theme}/api/v2/directory/employees`,
     );
 
     const limit = 14;
@@ -321,6 +341,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       jobTitlesPerSector: [],
       canUpdate: false,
     };
@@ -351,16 +372,22 @@ export default {
   },
 
   methods: {
+    onModalOpen() {
+      this.showModal = true;
+    },
+    onModalClose() {
+      this.showModal = false;
+    },
     hideCompanyDetails() {
       this.currentIndex = -1;
     },
     seeCompanyDetails() {
       !this.companies[this.currentIndex].matchingId
-        ? navigate('/recruitment/viewCompany/{id}', {
+        ? navigate(`/${window.appGlobal.theme}/recruitment/viewCompany/{id}`, {
             id: this.companies[this.currentIndex].companyId,
           })
         : navigate(
-            '/recruitment/viewCompany/{companyId}/matching/{matchingId}',
+            `/${window.appGlobal.theme}/recruitment/viewCompany/{companyId}/matching/{matchingId}`,
             {
               companyId: this.companies[this.currentIndex].companyId,
               matchingId: this.companies[this.currentIndex].matchingId,

@@ -158,7 +158,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/auth/resetPassword');
+      return urlFor(`/${window.appGlobal.theme}/auth/resetPassword`);
     },
   },
 

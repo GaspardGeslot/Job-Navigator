@@ -34,7 +34,6 @@
                   type="select"
                   :options="formattedOptions"
                   :label="$t('pim.work_experience_global')"
-                  required
                 />
               </oxd-grid-item>
               <oxd-grid-item>
@@ -43,7 +42,6 @@
                   type="select"
                   :options="formattedOptions"
                   :label="$t('pim.work_experience_btp')"
-                  required
                 />
               </oxd-grid-item>
             </oxd-grid>

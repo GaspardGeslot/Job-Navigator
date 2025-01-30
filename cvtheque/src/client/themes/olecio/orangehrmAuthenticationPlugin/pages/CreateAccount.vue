@@ -134,7 +134,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/auth/validateNewAccount');
+      return urlFor(`/${window.appGlobal.theme}/auth/validateNewAccount`);
     },
   },
 
@@ -161,7 +161,7 @@ export default {
       }
     },
     navigateUrl() {
-      navigate('/auth/login');
+      navigate(`/${window.appGlobal.theme}/auth/login`);
     },
   },
 };

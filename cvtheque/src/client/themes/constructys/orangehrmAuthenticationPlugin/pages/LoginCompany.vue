@@ -170,7 +170,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor('/' + window.appGlobal.theme + '/auth/company/validate');
+      return urlFor(`/${window.appGlobal.theme}/auth/company/validate`);
     },
   },
 
@@ -191,10 +191,10 @@ export default {
       }
     },
     navigateUrlForgotadherentCode() {
-      navigate('/auth/requestadherentCodeResetCode');
+      navigate(`/${window.appGlobal.theme}/auth/requestadherentCodeResetCode`);
     },
     navigateUrlConnexion() {
-      navigate('/auth/login');
+      navigate(`/${window.appGlobal.theme}/auth/login`);
     },
   },
 };

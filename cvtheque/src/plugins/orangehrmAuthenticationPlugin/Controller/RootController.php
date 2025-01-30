@@ -29,6 +29,18 @@ class RootController extends AbstractController implements PublicControllerInter
      */
     public function handle(Request $request)
     {
-        return $this->redirect('candidature/index');
+        $redirectUrl;
+        switch ($request->attributes->get('theme')) {
+            case 'constructys':
+                $redirectUrl = '/constructys/candidature/index';
+                break;
+            case 'olecio':
+                $redirectUrl = '/olecio/auth/login';
+                break;
+            default:
+                $redirectUrl = '/constructys/candidature/index';
+                break;
+        }
+        return $this->redirect($redirectUrl);
     }
 }

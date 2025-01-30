@@ -192,10 +192,10 @@ export default {
       this.formVisible = false;
     },
     navigateToLogin() {
-      navigate('/auth/login');
+      navigate(`/${window.appGlobal.theme}/auth/login`);
     },
     navigateToLoginCompany() {
-      navigate('/auth/company/login');
+      navigate(`/${window.appGlobal.theme}/auth/company/login`);
     },
   },
 };

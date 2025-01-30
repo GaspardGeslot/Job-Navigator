@@ -37,6 +37,9 @@
       {{ companyName }}
     </oxd-text>
     <profile-picture :company-siret="companySiret"></profile-picture>
+    <br
+      v-if="!companyMatchingJobTitle || companyMatchingJobTitle.length <= 0"
+    />
     <oxd-text
       v-show="companyMatchingJobTitle"
       tag="p"

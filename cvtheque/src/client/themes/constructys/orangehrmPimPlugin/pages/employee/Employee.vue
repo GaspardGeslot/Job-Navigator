@@ -340,11 +340,14 @@ export default {
 
   methods: {
     onClickAdd() {
-      navigate('/pim/addEmployee');
+      navigate(`/${window.appGlobal.theme}/pim/addEmployee`);
     },
     onClickEdit($event) {
       const id = $event.id ? $event.id : $event.item?.id;
-      navigate('/pim/viewPersonalDetails/empNumber/{id}', {id});
+      navigate(
+        `/${window.appGlobal.theme}/pim/viewPersonalDetails/empNumber/{id}`,
+        {id},
+      );
     },
     onClickDeleteSelected() {
       const ids = this.checkedItems.map((index) => {

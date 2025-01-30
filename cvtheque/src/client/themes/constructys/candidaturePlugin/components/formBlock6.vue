@@ -233,7 +233,7 @@ export default {
       this.password = '';
       this.confirmPassword = '';
       this.onSubmit();
-      window.location.href = `${window.location.origin}/web/index.php/auth/login`;
+      window.location.href = `${window.location.origin}/${window.appGlobal.theme}/web/index.php/auth/login`;
     },
     goBack() {
       this.$emit('go-back');

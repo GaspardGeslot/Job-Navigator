@@ -14,22 +14,6 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=c2f22a12&lang=scss&scoped=true (1) ***!
   \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 @import url(https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap);
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&lang=scss ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap);
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&lang=scss (1) ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap);
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=61d7a465&lang=scss&scoped=true ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap);
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=61d7a465&lang=scss&scoped=true (1) ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap);
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/table/TableHeader.vue?vue&type=style&index=0&id=47bf13c8&scoped=true&lang=css ***!
   \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -4115,6 +4099,14 @@
   border-bottom: 1px solid #e8eaef;
   margin-bottom: 5px;
 }
+.orangehrm-vacancy-list[data-v-38020a24] .--status-grouped-field {
+  display: flex;
+  max-width: 15rem;
+}
+.orangehrm-vacancy-list .label-is-entitlement-situational[data-v-38020a24] {
+  display: flex;
+  align-items: center;
+}
 .orangehrm-vacancy-list[data-v-38020a24] .card-header-slot .oxd-table-card-cell {
   display: flex;
   flex-direction: column;
@@ -4179,6 +4171,11 @@
   justify-content: end;
   padding: 0 2rem 1.5rem 0;
 }
+.warning-icon[data-v-38020a24] {
+  font-size: 1.5rem;
+  color: var(--oxd-primary-one-color);
+  padding: 1rem;
+}
 @media (max-width: 1000px) {
 .orangehrm-header-container[data-v-38020a24] {
     display: flex;
@@ -4195,6 +4192,23 @@
 .boutonTri[data-v-38020a24] {
     margin: 0;
 }
+}
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmRecruitmentPlugin/components/JobCategorySelectionModal.vue?vue&type=style&index=0&id=791648fa&lang=scss&scoped=true ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-modal-header[data-v-791648fa] {
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-modal-footer[data-v-791648fa] {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-text-center-align[data-v-791648fa] {
+  text-align: center;
 }
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=b6383a38&lang=scss&scoped=true ***!
@@ -4219,6 +4233,14 @@
 .orangehrm-vacancy-list[data-v-b6383a38] .card-header-slot {
   border-bottom: 1px solid #e8eaef;
   margin-bottom: 5px;
+}
+.orangehrm-vacancy-list[data-v-b6383a38] .--status-grouped-field {
+  display: flex;
+  max-width: 15rem;
+}
+.orangehrm-vacancy-list .label-is-entitlement-situational[data-v-b6383a38] {
+  display: flex;
+  align-items: center;
 }
 .orangehrm-vacancy-list[data-v-b6383a38] .card-header-slot .oxd-table-card-cell {
   display: flex;
@@ -4284,6 +4306,11 @@
   justify-content: end;
   padding: 0 2rem 1.5rem 0;
 }
+.warning-icon[data-v-b6383a38] {
+  font-size: 1.5rem;
+  color: var(--oxd-primary-one-color);
+  padding: 1rem;
+}
 @media (max-width: 1000px) {
 .orangehrm-header-container[data-v-b6383a38] {
     display: flex;
@@ -4324,6 +4351,14 @@
 .orangehrm-vacancy-list[data-v-889a4cda] .card-header-slot {
   border-bottom: 1px solid #e8eaef;
   margin-bottom: 5px;
+}
+.orangehrm-vacancy-list[data-v-889a4cda] .--status-grouped-field {
+  display: flex;
+  max-width: 15rem;
+}
+.orangehrm-vacancy-list .label-is-entitlement-situational[data-v-889a4cda] {
+  display: flex;
+  align-items: center;
 }
 .orangehrm-vacancy-list[data-v-889a4cda] .card-header-slot .oxd-table-card-cell {
   display: flex;
@@ -4388,6 +4423,11 @@
   flex-direction: row;
   justify-content: end;
   padding: 0 2rem 1.5rem 0;
+}
+.warning-icon[data-v-889a4cda] {
+  font-size: 1.5rem;
+  color: var(--oxd-primary-one-color);
+  padding: 1rem;
 }
 @media (max-width: 1000px) {
 .orangehrm-header-container[data-v-889a4cda] {
@@ -11948,6 +11988,30 @@ h1[data-v-1575c360] {
 .pagination[data-v-08221b1d] {
   margin-left: auto;
 }
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/components/MatchingCard.vue?vue&type=style&index=0&id=7c1f0e0a&scoped=true&lang=scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangerhrm-switch-wrapper[data-v-7c1f0e0a] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-7c1f0e0a] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-7c1f0e0a] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-7c1f0e0a] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmPimPlugin/components/ProfileImageInput.vue?vue&type=style&index=0&id=555cf975&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -14766,6 +14830,14 @@ h1[data-v-1575c360] {
   border-bottom: 1px solid #e8eaef;
   margin-bottom: 5px;
 }
+.orangehrm-vacancy-list[data-v-fe233348] .--status-grouped-field {
+  display: flex;
+  max-width: 15rem;
+}
+.orangehrm-vacancy-list .label-is-entitlement-situational[data-v-fe233348] {
+  display: flex;
+  align-items: center;
+}
 .orangehrm-vacancy-list[data-v-fe233348] .card-header-slot .oxd-table-card-cell {
   display: flex;
   flex-direction: column;
@@ -14830,6 +14902,11 @@ h1[data-v-1575c360] {
   justify-content: end;
   padding: 0 2rem 1.5rem 0;
 }
+.warning-icon[data-v-fe233348] {
+  font-size: 1.5rem;
+  color: var(--oxd-primary-one-color);
+  padding: 1rem;
+}
 @media (max-width: 1000px) {
 .orangehrm-header-container[data-v-fe233348] {
     display: flex;
@@ -14846,6 +14923,23 @@ h1[data-v-1575c360] {
 .boutonTri[data-v-fe233348] {
     margin: 0;
 }
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmRecruitmentPlugin/components/JobCategorySelectionModal.vue?vue&type=style&index=0&id=4b2baaf1&lang=scss&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-modal-header[data-v-4b2baaf1] {
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-modal-footer[data-v-4b2baaf1] {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-text-center-align[data-v-4b2baaf1] {
+  text-align: center;
 }
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=387b5c94&lang=scss&scoped=true ***!
@@ -14870,6 +14964,14 @@ h1[data-v-1575c360] {
 .orangehrm-vacancy-list[data-v-387b5c94] .card-header-slot {
   border-bottom: 1px solid #e8eaef;
   margin-bottom: 5px;
+}
+.orangehrm-vacancy-list[data-v-387b5c94] .--status-grouped-field {
+  display: flex;
+  max-width: 15rem;
+}
+.orangehrm-vacancy-list .label-is-entitlement-situational[data-v-387b5c94] {
+  display: flex;
+  align-items: center;
 }
 .orangehrm-vacancy-list[data-v-387b5c94] .card-header-slot .oxd-table-card-cell {
   display: flex;
@@ -14935,6 +15037,11 @@ h1[data-v-1575c360] {
   justify-content: end;
   padding: 0 2rem 1.5rem 0;
 }
+.warning-icon[data-v-387b5c94] {
+  font-size: 1.5rem;
+  color: var(--oxd-primary-one-color);
+  padding: 1rem;
+}
 @media (max-width: 1000px) {
 .orangehrm-header-container[data-v-387b5c94] {
     display: flex;
@@ -14975,6 +15082,14 @@ h1[data-v-1575c360] {
 .orangehrm-vacancy-list[data-v-58a24501] .card-header-slot {
   border-bottom: 1px solid #e8eaef;
   margin-bottom: 5px;
+}
+.orangehrm-vacancy-list[data-v-58a24501] .--status-grouped-field {
+  display: flex;
+  max-width: 15rem;
+}
+.orangehrm-vacancy-list .label-is-entitlement-situational[data-v-58a24501] {
+  display: flex;
+  align-items: center;
 }
 .orangehrm-vacancy-list[data-v-58a24501] .card-header-slot .oxd-table-card-cell {
   display: flex;
@@ -15039,6 +15154,11 @@ h1[data-v-1575c360] {
   flex-direction: row;
   justify-content: end;
   padding: 0 2rem 1.5rem 0;
+}
+.warning-icon[data-v-58a24501] {
+  font-size: 1.5rem;
+  color: var(--oxd-primary-one-color);
+  padding: 1rem;
 }
 @media (max-width: 1000px) {
 .orangehrm-header-container[data-v-58a24501] {
@@ -17955,107 +18075,6 @@ h1[data-v-1575c360] {
     margin-right: 0.5rem;
 }
 }
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/orangehrmAuthenticationPlugin/pages/login.scss?vue&type=style&index=0&id=5df014b6&lang=scss&scoped=true ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.orangehrm-login-form[data-v-5df014b6] {
-  margin: 0 auto;
-}
-@media (min-width: 0px) {
-.orangehrm-login-form[data-v-5df014b6] {
-    width: 80%;
-}
-}
-@media (min-width: 800px) {
-.orangehrm-login-form[data-v-5df014b6] {
-    width: 60%;
-    max-width: 485px;
-}
-}
-.orangehrm-login-action[data-v-5df014b6] {
-  margin-top: 2rem;
-  justify-content: center;
-}
-.orangehrm-create-account-action[data-v-5df014b6] {
-  margin-top: 1rem;
-  justify-content: center;
-}
-.orangehrm-login-button[data-v-5df014b6] {
-  flex: 1;
-  padding: 1rem 0;
-}
-.orangehrm-create-account-button[data-v-5df014b6] {
-  flex: 1;
-  padding: 1rem 0;
-  background-color: transparent;
-  border: 1px solid;
-  color: var(--oxd-primary-one-color);
-}
-.orangehrm-profile-button[data-v-5df014b6] {
-  display: flex;
-  justify-content: center;
-  flex: 1;
-  margin: 1rem;
-  text-align: center;
-}
-.orangehrm-login-title[data-v-5df014b6] {
-  text-align: center;
-  font-weight: 800;
-  margin-bottom: 1rem;
-}
-.orangehrm-profile-title[data-v-5df014b6] {
-  text-align: center;
-  font-weight: 800;
-}
-.orangehrm-login-pwreset[data-v-5df014b6] {
-  margin: 1rem 0;
-  text-align: center;
-  font-weight: 600;
-}
-.orangehrm-login-pwreset a[data-v-5df014b6] {
-  color: var(--oxd-primary-one-color);
-  text-decoration: none;
-}
-.orangehrm-login-forgot[data-v-5df014b6] {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  font-size: 16px;
-}
-.orangehrm-login-forgot-header[data-v-5df014b6] {
-  text-align: center;
-  cursor: pointer;
-  color: var(--oxd-primary-one-color);
-}
-.orangehrm-demo-credentials[data-v-5df014b6] {
-  margin: 1rem 0;
-}
-.orangehrm-login-footer-sm[data-v-5df014b6] {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.orangehrm-login-footer-sm a[data-v-5df014b6] {
-  width: 22px;
-  height: 22px;
-  margin: 0 0.25rem;
-}
-.orangehrm-login-footer-sm .orangehrm-sm-icon[data-v-5df014b6] {
-  width: inherit;
-  height: inherit;
-  color: rgba(146, 155, 170, 0.8);
-}
-@media (min-width: 800px) {
-.orangehrm-login-footer-sm[data-v-5df014b6] {
-    position: absolute;
-    left: 1rem;
-    bottom: 1rem;
-}
-}
-.orangehrm-login-seperator[data-v-5df014b6] {
-  margin: 0.5rem 0;
-}
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/orangehrmDashboardPlugin/components/base-widget.scss?vue&type=style&index=0&id=00a15088&lang=scss&scoped=true ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -20238,1718 +20257,5 @@ span[data-v-0c4352a3] {
 
 .past-employee-tag[data-v-d0a9f6b2] {
   margin-left: auto;
-}
-
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&lang=scss (2) ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.bg-white {
-  background-color: white;
-}
-.row {
-  display: flex;
-  flex-direction: row;
-}
-.formBlock {
-  padding-top: 3.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  overflow: visible;
-}
-.formBlock > * {
-  flex: 1;
-}
-.formTitle {
-  color: black;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 900 !important;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-}
-.formSubTitle {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.CVText {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700 !important;
-  color: black;
-}
-p {
-  font-family: "Telegraf", sans-serif;
-}
-.checkbox-item {
-  display: flex;
-  align-items: center;
-}
-
-/*
-.custom-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid #767676;
-    outline: none;
-    transition: background-color 0.3s;
-    position: relative;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    flex-shrink: 0;
-  }
-  .custom-input[type='checkbox']:checked {
-    background-color: #1069b3;
-    border-color: #1069b3;
-    border-width: 2px;
-  }
-
-  .custom-input[type='checkbox']:checked::before {
-    content: '';
-    display: block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #1069b3;
-    border: 1.5px solid white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-*/
-.radio-group {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-#radio-item-left {
-  margin-right: 5rem;
-}
-#review {
-  height: 12rem;
-  margin-bottom: 0.5rem;
-}
-#review::-moz-placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-#review::placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-.AcceptanceofTerms-container > * {
-  flex: 1;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-.checkbox-container {
-  display: flex;
-}
-.checkbox-container input[type=checkbox] {
-  margin-right: 0.5rem;
-}
-.AcceptanceofTermsText {
-  font-size: 0.5rem;
-  line-height: 0.8rem;
-}
-.submit-block {
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-  height: 3rem;
-}
-.previousButton {
-  border-radius: 0.5rem;
-  width: 4rem;
-  background-color: #6d685f;
-  border: none;
-  width: 3.25rem;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.mainSubmitButton {
-  background-color: black;
-  color: white;
-  width: 85%;
-  margin-left: 1rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  cursor: pointer;
-}
-.mainSubmitButton:disabled {
-  opacity: 10%;
-  cursor: not-allowed;
-}
-.mainSubmitButtonTxt {
-  margin-left: 6.5rem;
-}
-.mainSubmitButtonSvg {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: auto;
-  width: 3rem;
-  margin-right: 0.25rem;
-}
-.submitButton {
-  background-color: black;
-  color: white;
-  width: 45%;
-  margin: 0.5rem auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1.5rem;
-  font-family: "Telegraf", sans-serif;
-  cursor: pointer;
-}
-.submitButton:disabled {
-  opacity: 10%;
-  cursor: not-allowed;
-}
-.submit-block {
-  display: flex;
-  flex-direction: row;
-}
-.alert-msg {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  /* padding-top: 0.15rem;
-    padding-bottom: 0.15rem; */
-  color: red;
-}
-.formBlockLayout {
-  background-color: white;
-  padding-top: 0.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 1.75rem;
-  padding-right: 1.75rem;
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1 {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1 > * {
-  flex: 1;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.formBlock1 input::-moz-placeholder {
-  padding-left: 0.75rem;
-}
-.formBlock1 input::placeholder,
-.formBlock1 select {
-  padding-left: 0.75rem;
-}
-.formBlock5 {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock5 > .submitButton {
-  margin-top: 1rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.formBlock6 {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock6 > .submitButton {
-  margin-top: 1.75rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.formBlock7 > .submitButton {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.blackPlaceholder::-moz-placeholder {
-  color: black;
-}
-.blackPlaceholder::placeholder {
-  color: black;
-}
-.formImg {
-  max-width: 50%;
-  max-height: 100%;
-  height: auto;
-  box-sizing: border-box;
-}
-.formBlock.row {
-  display: flex;
-  align-items: flex-start;
-  box-sizing: border-box;
-}
-.formBlock.row > div {
-  flex: 1;
-  box-sizing: border-box;
-}
-.scroll-container {
-  height: 100%;
-  overflow-y: auto;
-  background-color: white;
-  position: relative;
-  box-sizing: border-box;
-}
-.scroll-container.scroll-active {
-  overflow-y: auto;
-}
-.scroll-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-@media screen and (max-width: 450px) {
-.mainSubmitButtonTxt {
-    margin-left: 2.15rem;
-}
-.formTitle {
-    color: black;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 900 !important;
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-}
-}
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/formBlock1.vue?vue&type=style&index=1&id=61c98ce4&scoped=true&lang=css ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.formBlock1 select[data-v-61c98ce4] {
-  /* border: unset;
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.1); */
-  padding-left: 1rem;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem top 50%;
-  background-size: 0.65rem auto;
-}
-/* #educationForm {
-  background-image: none;
-} */
-#formBlock1SubmitButton[data-v-61c98ce4] {
-  margin-top: 0.5rem;
-}
-.formBlock1 input[data-v-61c98ce4]::-moz-placeholder {
-  text-indent: -0.75rem;
-}
-.formBlock1 input[data-v-61c98ce4]::placeholder {
-  text-indent: -0.75rem;
-}
-.formBlock1 input[data-v-61c98ce4]:not(.submitButton) {
-  width: 100%;
-  box-sizing: border-box;
-  padding-left: 1rem;
-}
-/* .formBlock1 > input {
-  width: 100%;
-  box-sizing: border-box;
-  padding-left: 1rem;
-} */
-#postalCode[data-v-61c98ce4]::-webkit-outer-spin-button,
-#postalCode[data-v-61c98ce4]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-/* #postalCode {
-  appearance: none;
-  -moz-appearance: textfield;
-} */
-@media screen and (max-width: 400px) {
-.formBlock1 select[data-v-61c98ce4] {
-    background-image: none;
-    padding-left: 0.5rem;
-}
-.formBlock1 input[data-v-61c98ce4]:not(.submitButton) {
-    width: 100%;
-    box-sizing: border-box;
-    padding-left: 0.5rem;
-}
-  /* .formBlock1 > input {
-    width: 100%;
-    box-sizing: border-box;
-    padding-left: 0.5rem;
-  } */
-}
-@media screen and (max-width: 450px) {
-#formBlock1SubmitButton[data-v-61c98ce4] {
-    margin-top: 1rem;
-}
-}
-
-/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/submit.vue?vue&type=style&index=1&id=2096e3d4&scoped=true&lang=css ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-@media screen and (min-width: 400px) and (max-width: 450px) {
-.mainSubmitButtonTxt[data-v-2096e3d4] {
-    margin-left: 2.15rem;
-}
-}
-@media screen and (max-width: 350px) {
-.mainSubmitButton[data-v-2096e3d4] {
-    margin-left: 0.5rem;
-}
-.mainSubmitButtonTxt[data-v-2096e3d4] {
-    margin-left: 1rem;
-}
-.mainSubmitButtonSvg[data-v-2096e3d4] {
-    width: auto;
-    max-width: 3rem;
-}
-}
-
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/candidaturePlugin/components/form-component.scss?vue&type=style&index=0&id=61d7a465&lang=scss&scoped=true (2) ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.bg-white[data-v-61d7a465] {
-  background-color: white;
-}
-.row[data-v-61d7a465] {
-  display: flex;
-  flex-direction: row;
-}
-.formBlock[data-v-61d7a465] {
-  padding-top: 3.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  overflow: visible;
-}
-.formBlock > *[data-v-61d7a465] {
-  flex: 1;
-}
-.formTitle[data-v-61d7a465] {
-  color: black;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 900 !important;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-}
-.formSubTitle[data-v-61d7a465] {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.CVText[data-v-61d7a465] {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700 !important;
-  color: black;
-}
-p[data-v-61d7a465] {
-  font-family: "Telegraf", sans-serif;
-}
-.checkbox-item[data-v-61d7a465] {
-  display: flex;
-  align-items: center;
-}
-
-/*
-.custom-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid #767676;
-    outline: none;
-    transition: background-color 0.3s;
-    position: relative;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    flex-shrink: 0;
-  }
-  .custom-input[type='checkbox']:checked {
-    background-color: #1069b3;
-    border-color: #1069b3;
-    border-width: 2px;
-  }
-
-  .custom-input[type='checkbox']:checked::before {
-    content: '';
-    display: block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #1069b3;
-    border: 1.5px solid white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-*/
-.radio-group[data-v-61d7a465] {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-#radio-item-left[data-v-61d7a465] {
-  margin-right: 5rem;
-}
-#review[data-v-61d7a465] {
-  height: 12rem;
-  margin-bottom: 0.5rem;
-}
-#review[data-v-61d7a465]::-moz-placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-#review[data-v-61d7a465]::placeholder {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding-left: 0.5rem;
-}
-.AcceptanceofTerms-container > *[data-v-61d7a465] {
-  flex: 1;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-.checkbox-container[data-v-61d7a465] {
-  display: flex;
-}
-.checkbox-container input[type=checkbox][data-v-61d7a465] {
-  margin-right: 0.5rem;
-}
-.AcceptanceofTermsText[data-v-61d7a465] {
-  font-size: 0.5rem;
-  line-height: 0.8rem;
-}
-.submit-block[data-v-61d7a465] {
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-  height: 3rem;
-}
-.previousButton[data-v-61d7a465] {
-  border-radius: 0.5rem;
-  width: 4rem;
-  background-color: #6d685f;
-  border: none;
-  width: 3.25rem;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.mainSubmitButton[data-v-61d7a465] {
-  background-color: black;
-  color: white;
-  width: 85%;
-  margin-left: 1rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  cursor: pointer;
-}
-.mainSubmitButton[data-v-61d7a465]:disabled {
-  opacity: 10%;
-  cursor: not-allowed;
-}
-.mainSubmitButtonTxt[data-v-61d7a465] {
-  margin-left: 6.5rem;
-}
-.mainSubmitButtonSvg[data-v-61d7a465] {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: auto;
-  width: 3rem;
-  margin-right: 0.25rem;
-}
-.submitButton[data-v-61d7a465] {
-  background-color: black;
-  color: white;
-  width: 45%;
-  margin: 0.5rem auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1.5rem;
-  font-family: "Telegraf", sans-serif;
-  cursor: pointer;
-}
-.submitButton[data-v-61d7a465]:disabled {
-  opacity: 10%;
-  cursor: not-allowed;
-}
-.submit-block[data-v-61d7a465] {
-  display: flex;
-  flex-direction: row;
-}
-.alert-msg[data-v-61d7a465] {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  /* padding-top: 0.15rem;
-    padding-bottom: 0.15rem; */
-  color: red;
-}
-.formBlockLayout[data-v-61d7a465] {
-  background-color: white;
-  padding-top: 0.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 1.75rem;
-  padding-right: 1.75rem;
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1[data-v-61d7a465] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock1 > *[data-v-61d7a465] {
-  flex: 1;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.formBlock1 input[data-v-61d7a465]::-moz-placeholder {
-  padding-left: 0.75rem;
-}
-.formBlock1 input[data-v-61d7a465]::placeholder,
-.formBlock1 select[data-v-61d7a465] {
-  padding-left: 0.75rem;
-}
-.formBlock5[data-v-61d7a465] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock5 > .submitButton[data-v-61d7a465] {
-  margin-top: 1rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.formBlock6[data-v-61d7a465] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock6 > .submitButton[data-v-61d7a465] {
-  margin-top: 1.75rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-}
-.formBlock7 > .submitButton[data-v-61d7a465] {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.blackPlaceholder[data-v-61d7a465]::-moz-placeholder {
-  color: black;
-}
-.blackPlaceholder[data-v-61d7a465]::placeholder {
-  color: black;
-}
-.formImg[data-v-61d7a465] {
-  max-width: 50%;
-  max-height: 100%;
-  height: auto;
-  box-sizing: border-box;
-}
-.formBlock.row[data-v-61d7a465] {
-  display: flex;
-  align-items: flex-start;
-  box-sizing: border-box;
-}
-.formBlock.row > div[data-v-61d7a465] {
-  flex: 1;
-  box-sizing: border-box;
-}
-.scroll-container[data-v-61d7a465] {
-  height: 100%;
-  overflow-y: auto;
-  background-color: white;
-  position: relative;
-  box-sizing: border-box;
-}
-.scroll-container.scroll-active[data-v-61d7a465] {
-  overflow-y: auto;
-}
-.scroll-content[data-v-61d7a465] {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-@media screen and (max-width: 450px) {
-.mainSubmitButtonTxt[data-v-61d7a465] {
-    margin-left: 2.15rem;
-}
-.formTitle[data-v-61d7a465] {
-    color: black;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 900 !important;
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-}
-}
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/formBlock2.vue?vue&type=style&index=1&id=61d7a465&scoped=true&lang=css ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.toggleShowMoreButton[data-v-61d7a465] {
-  background-color: white;
-  border: none;
-  font-family: 'Telegraf', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  padding-right: 0rem;
-  cursor: pointer;
-}
-/* .toggleShowMoreButton:hover {
-  color: grey;
-} */
-.arrow-icon[data-v-61d7a465] {
-  fill: black;
-  transition: fill 0.3s;
-}
-.toggleShowMoreContainer:hover .toggleShowMoreButton[data-v-61d7a465],
-.toggleShowMoreContainer:hover .arrow-icon[data-v-61d7a465] {
-  color: grey;
-  fill: grey;
-  transition: color 0.3s, fill 0.3s;
-}
-.checkbox-group.two-columns[data-v-61d7a465] {
-  display: flex;
-  flex-wrap: wrap;
-}
-.checkbox-item[data-v-61d7a465] {
-  flex: 1 1 50%;
-  box-sizing: border-box;
-  padding: 2px;
-}
-.checkbox-item input[data-v-61d7a465] {
-  margin-right: 5px;
-}
-.checkbox-item label[data-v-61d7a465] {
-  font-family: 'Telegraf', sans-serif;
-}
-.checkbox-item label[data-v-61d7a465] {
-  font-family: 'Telegraf', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/formBlock3.vue?vue&type=style&index=1&id=61e5bbe6&scoped=true&lang=css ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.radio-group[data-v-61e5bbe6] {
-  font-family: 'Telegraf', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-.checkbox-item[data-v-61e5bbe6] {
-  /*display: flex;
-  align-items: center;*/
-  margin-bottom: 0.5rem;
-}
-.checkbox-item input[data-v-61e5bbe6] {
-  margin-right: 5px;
-}
-.checkbox-item label[data-v-61e5bbe6] {
-  font-family: 'Telegraf', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  display: inline-block;
-  vertical-align: middle;
-  padding-left: 6px;
-  text-indent: -1.3rem;
-}
-.checkbox-item2 label[data-v-61e5bbe6] {
-  font-family: 'Telegraf', sans-serif;
-}
-.checkbox-item label[data-v-61e5bbe6]::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-}
-
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/formBlock4.vue?vue&type=style&index=1&id=61f3d367&scoped=true&lang=css ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.adjust-margin[data-v-61f3d367] {
-  margin-top: 1.5rem;
-}
-.submitButton[data-v-61f3d367] {
-  margin-top: 2rem;
-}
-
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/inputFile.vue?vue&type=style&index=0&id=eae1474c&scoped=true&lang=css ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.download-icon[data-v-eae1474c] {
-  max-width: 1.15rem;
-  height: auto;
-  background-color: rgba(255, 255, 255, 1);
-}
-.select-button[data-v-eae1474c] {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  color: black;
-  text-align: center;
-  font-weight: 400;
-  background-color: rgba(255, 255, 255, 1);
-  transition: background-color 0.3s;
-}
-.file-select[data-v-eae1474c] {
-  background-color: rgba(255, 255, 255, 1);
-  margin-top: 0.25rem;
-  border-color: black;
-  border-width: 1px;
-  border-style: solid;
-}
-.download-icon-wrapper[data-v-eae1474c] {
-  display: inline-block;
-  padding: 0.2rem;
-}
-.file-select > .select-button[data-v-eae1474c]:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-.file-select input[type='file'][data-v-eae1474c] {
-  display: none;
-}
-.error-message[data-v-eae1474c] {
-  color: red;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
-
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/formBlock6.vue?vue&type=style&index=1&id=62100269&scoped=true&lang=css ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.submit-block[data-v-62100269] {
-  margin-top: 1rem;
-}
-.formBlock6[data-v-62100269] {
-  display: flex;
-  flex-direction: column;
-}
-.formBlock6 > *[data-v-62100269]:not(.submit-block) {
-  flex: 1;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.formBlock6 input[data-v-62100269]::-moz-placeholder {
-  padding-left: 0.75rem;
-}
-.formBlock6 input[data-v-62100269]::placeholder,
-.formBlock6 select[data-v-62100269] {
-  padding-left: 0.75rem;
-}
-.AcceptanceofTermsText[data-v-62100269] {
-  padding-left: 1.5rem;
-  font-family: 'Telegraf', sans-serif;
-}
-.switch[data-v-62100269] {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 14px;
-}
-/* .short-switch {
-  width: 34.22px;
-} */
-.big-switch[data-v-62100269] {
-  width: 70px;
-}
-.switch input[data-v-62100269] {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.slider[data-v-62100269] {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 18px;
-}
-.slider[data-v-62100269]:before {
-  position: absolute;
-  content: '';
-  height: 12.5px;
-  width: 12.5px;
-  left: 1px;
-  bottom: 0.7px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-input:checked + .slider[data-v-62100269] {
-  background-color: #31ea3d;
-}
-input:focus + .slider[data-v-62100269] {
-  box-shadow: 0 0 1px #31ea3d;
-}
-input:checked + .slider[data-v-62100269]:before {
-  /* -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px); */
-  transform: translateX(16px);
-}
-.slider.round[data-v-62100269] {
-  border-radius: 17px;
-}
-.slider.round[data-v-62100269]:before {
-  border-radius: 50%;
-}
-.passwordFields > *[data-v-62100269] {
-  flex: 1;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-}
-.passwordFields input[data-v-62100269]::-moz-placeholder {
-  text-indent: -0.75rem;
-}
-.passwordFields input[data-v-62100269]::placeholder {
-  text-indent: -0.75rem;
-}
-.passwordFields input[data-v-62100269] {
-  width: 100%;
-  box-sizing: border-box;
-  padding-left: 1rem;
-}
-@media screen and (max-width: 450px) {
-input:checked + .slider[data-v-62100269]:before {
-    transform: translateX(15px);
-}
-}
-@media screen and (max-width: 600px) {
-.slider[data-v-62100269] {
-    width: 29px;
-}
-}
-
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/formBlock7.vue?vue&type=style&index=1&id=621e19ea&scoped=true&lang=css ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.col[data-v-621e19ea] {
-  display: none;
-  /* display: flex;
-  flex-direction: column; */
-}
-.row[data-v-621e19ea] {
-  display: flex;
-  flex-direction: row;
-}
-.formSubTitle[data-v-621e19ea],
-.matchResponse-txt[data-v-621e19ea] {
-  font-family: 'Telegraf', sans-serif;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-#share-msg[data-v-621e19ea] {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  color: grey;
-  font-family: 'Telegraf', sans-serif;
-  font-weight: 500;
-}
-.icon-row[data-v-621e19ea] {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  /*justify-content: center;*/
-}
-.buttons[data-v-621e19ea] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 0.5px solid #000;
-  border-radius: 0.25rem;
-  background-color: white;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  gap: 4px;
-  font-weight: 500;
-}
-.svg-button[data-v-621e19ea] {
-  margin-top: 0.25rem;
-  width: 4.5rem;
-}
-.svg-button[data-v-621e19ea]:hover {
-  background-color: rgb(244, 244, 244);
-  cursor: pointer;
-}
-.svg-container[data-v-621e19ea] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.vertical-svg[data-v-621e19ea] {
-  transform: rotate(90deg);
-}
-.social-media-window[data-v-621e19ea] {
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  position: absolute;
-  bottom: 0;
-  top: 100%;
-  left: 48%;
-  transform: translateX(-50%);
-  background-color: white;
-  border: 1px solid grey;
-  padding: 1rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  border-radius: 0.25rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  width: 80%;
-  margin-top: 0.5rem;
-}
-.loginButton[data-v-621e19ea] {
-  height: 3rem;
-  width: 45%;
-  font-size: large;
-  font-family: 'Telegraf', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  background-color: black;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1.5rem;
-}
-.loginButton[data-v-621e19ea]:hover {
-  background-color: #e54021;
-  color: white;
-}
-.loginContainer[data-v-621e19ea] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-}
-@media screen and (max-width: 350px) {
-.social-media-window[data-v-621e19ea] {
-    /* padding-left: 0.75rem;
-    padding-right: 0.75rem; */
-    gap: 0px;
-}
-.social-media-window-elements[data-v-621e19ea] {
-    transform: scale(0.8);
-}
-}
-@media screen and (max-width: 450px) {
-.social-media-window[data-v-621e19ea] {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-}
-#social-media-last-element[data-v-621e19ea] {
-    display: none;
-}
-}
-@media screen and (max-width: 800px) {
-#more-social-block[data-v-621e19ea] {
-    padding-left: 0.5rem;
-}
-}
-@media screen and (min-width: 551px) and (max-width: 800px) {
-.social-media-window[data-v-621e19ea] {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-}
-}
-
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/components/formComponent.vue?vue&type=style&index=1&id=428ffd0d&scoped=true&lang=css ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-.loading-circle-container[data-v-428ffd0d] {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 9999;
-}
-.loading-circle[data-v-428ffd0d] {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(0, 0, 0, 0.2);
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin-428ffd0d 1s linear infinite;
-}
-@keyframes spin-428ffd0d {
-0% {
-    transform: rotate(0deg);
-}
-100% {
-    transform: rotate(360deg);
-}
-}
-.formImg[data-v-428ffd0d],
-.scroll-container[data-v-428ffd0d] {
-  border-radius: 1rem;
-}
-.formBlock[data-v-428ffd0d] {
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  width: 75%;
-}
-.closeButton[data-v-428ffd0d] {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  padding: 10px;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-  font-weight: bold;
-  font-size: 1.5rem;
-  border-top-right-radius: 1rem;
-}
-.closeButton[data-v-428ffd0d]:hover {
-  background-color: red;
-}
-
-/* @media screen and (max-width: 460px) {
-  .formBlock {
-    margin-top: 13rem;
-  }
-} */
-@media screen and (max-width: 450px) {
-.formBlock[data-v-428ffd0d] {
-    width: calc(100% - 2rem);
-    margin-left: 1rem;
-    margin-right: 1rem;
-}
-.scroll-container[data-v-428ffd0d] {
-    width: 100%;
-}
-.formImg[data-v-428ffd0d] {
-    background-image: none;
-}
-.closeButton[data-v-428ffd0d] {
-    background-color: black;
-    border-top-right-radius: 0rem;
-    border-bottom-left-radius: 1rem;
-    padding: 5px;
-}
-}
-@media screen and (min-width: 461px) {
-.exit-button[data-v-428ffd0d] {
-    display: none;
-}
-}
-@media screen and (max-width: 550px) {
-.formImg[data-v-428ffd0d] {
-    display: none;
-}
-}
-
-/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/candidaturePlugin/pages/view-application.scss?vue&type=style&index=0&lang=scss ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.VA_bg_img {
-  background-color: black;
-  width: 100%;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  overflow: hidden;
-}
-.mt {
-  margin-top: 2.5rem;
-}
-.col {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 1;
-}
-.row {
-  display: flex;
-  flex-direction: row;
-}
-.top-row {
-  padding-left: 3rem;
-  padding-right: 3rem;
-}
-.top-row-logo {
-  transform: scale(1.4);
-}
-.space-b-to-center,
-.space-b {
-  justify-content: space-between;
-}
-.mr-2 {
-  margin-right: 2rem;
-}
-.ml-6 {
-  margin-left: 6rem;
-}
-.mt-05 {
-  margin-top: 0.5rem;
-}
-.mt-075 {
-  margin-top: 1rem;
-}
-.mb-05 {
-  margin-bottom: 0.55rem;
-}
-.title-container {
-  max-width: 60rem;
-}
-.main-title {
-  padding-top: 5rem;
-  padding-left: 2.5rem;
-  padding-right: 20rem;
-  margin-right: 10rem;
-  font-size: 3.5rem;
-  line-height: 3.75rem;
-}
-.text-white {
-  color: white;
-}
-.connexion_button {
-  color: white;
-  background-color: #1b1f23;
-  border: none;
-  font-weight: 500;
-  padding-right: 1.35rem;
-  padding-left: 1.35rem;
-  padding-top: 0.95rem;
-  padding-bottom: 0.95rem;
-  margin-top: 1.5rem;
-  margin-right: 8rem;
-  border-radius: 1.5rem;
-}
-.connexion_button:hover {
-  background-color: white;
-  color: black;
-  border: solid 2px black;
-  font-weight: 600;
-  padding-right: 1.225rem;
-  padding-left: 1.225rem;
-  padding-top: 0.825rem;
-  padding-bottom: 0.825rem;
-}
-.bot_button {
-  background-color: white;
-  color: black;
-  font-weight: 700;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  padding-right: 1.35rem;
-  padding-left: 1.35rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-  border: none;
-  margin-top: 2rem;
-  margin-left: 2.5rem;
-  border-radius: 1.5rem;
-}
-.bot_button:hover {
-  background-color: black;
-  color: white;
-}
-.bg-white {
-  background-color: white;
-}
-.orangehrm-buzz-layout {
-  justify-content: center;
-  grid-template-columns: minmax(240px, 640px) minmax(0, 375px);
-}
-@media screen and (min-width: 1920px) {
-.orangehrm-buzz-layout {
-    gap: 2rem;
-    grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(0, 375px);
-}
-}
-.formComponent {
-  /*position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  opacity: 1;*/
-  width: 90%;
-  max-width: 2000px;
-  height: 90%;
-  padding: 2rem;
-}
-.formContainer {
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-@media screen and (min-width: 1020px) and (max-height: 700px) {
-.formContainer {
-    z-index: 2;
-}
-}
-@media screen and (max-width: 370px) {
-#page-content {
-    max-width: 360px;
-}
-}
-@media screen and (max-width: 380px) {
-#page-content {
-    max-width: 370px;
-}
-}
-@media screen and (max-width: 450px) {
-.formComponent {
-    height: 100%;
-}
-#page-content {
-    max-width: 430px;
-}
-.top-row {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-}
-.main-title {
-    padding-top: 3rem;
-    font-size: 1.85rem;
-    line-height: 2.25rem;
-    padding-right: 2.5rem;
-    margin-right: 0rem;
-}
-.bot_button {
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 700;
-    padding-right: 0.75rem;
-    padding-left: 0.75rem;
-    padding-top: 0.415rem;
-    padding-bottom: 0.415rem;
-    margin-top: 1.5rem;
-}
-.space-b {
-    margin-left: 3rem;
-}
-.connexion_button {
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 500;
-    padding-right: 1.15rem;
-    padding-left: 1.15rem;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    margin-top: 1.5rem;
-    margin-right: 3rem;
-    border-radius: 1.5rem;
-}
-}
-@media screen and (max-width: 800px) {
-#olecio-logo {
-    display: none;
-}
-.top-row-logo {
-    margin-left: 0 !important;
-    transform: scale(0.9);
-}
-}
-@media screen and (min-width: 1020px) {
-.space-b-to-center {
-    justify-content: center;
-}
-.mr {
-    margin-right: 10rem;
-}
-}
-@media screen and (min-width: 1200px) and (max-height: 600px) {
-.main-title {
-    padding-top: 2rem;
-    font-size: 3rem;
-    line-height: 3.25rem;
-}
-}
-@media screen and (min-width: 1200px) and (max-height: 520px) {
-.main-title {
-    font-size: 2.5rem;
-    line-height: 2.75rem;
-}
-}
-@media (min-width: 1500px) {
-.main-title {
-    font-size: 4rem;
-    line-height: 4.25rem;
-}
-.connexion_button {
-    margin-right: 10rem;
-}
-.bot_button {
-    margin-left: 3rem;
-}
-}
-@media (min-width: 1920px) {
-.main-title {
-    font-size: 4.5rem;
-    line-height: 4.75rem;
-}
-.connexion_button {
-    margin-right: 12rem;
-}
-.bot_button {
-    margin-left: 4rem;
-}
-}
-/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/candidaturePlugin/pages/Candidature.vue?vue&type=style&index=1&id=06508284&scoped=true&lang=css ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-*[data-v-06508284] {
-  font-family: 'DM Sans', sans-serif;
-}
-h1[data-v-06508284] {
-  font-size: 4rem;
-}
-#aPropos p[data-v-06508284] {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  line-height: 150%;
-}
-#comment p[data-v-06508284] {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-}
-.title-container[data-v-06508284],
-#olecio-logo[data-v-06508284] {
-  display: none;
-}
-.formContainer[data-v-06508284] {
-  z-index: 10;
-}
-.exit-button[data-v-06508284] {
-  position: relative;
-  top: 10px;
-  right: 10px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-#accueil[data-v-06508284] {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  background-color: #1b1f23;
-}
-#accueil h1[data-v-06508284],
-#accueil a[data-v-06508284] {
-  color: white;
-}
-.accueilLogo[data-v-06508284] {
-  display: flex;
-  flex-direction: row;
-  height: 20%;
-  gap: 4rem;
-}
-.jobNavigatorLogo[data-v-06508284] {
-  display: flex;
-  flex-direction: row;
-  margin: 2rem;
-  gap: 1rem;
-  align-items: center;
-  color: #f7e28f;
-}
-#logoConstructys[data-v-06508284] {
-  border-bottom-left-radius: 20%;
-  border-bottom-right-radius: 20%;
-}
-.accueilGauche[data-v-06508284] {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  height: 100%;
-}
-.accueilBouton[data-v-06508284] {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  margin: 0rem 4rem;
-  gap: 1rem;
-  height: 100%;
-}
-.accueilBouton button[data-v-06508284] {
-  height: 3rem;
-  width: 60%;
-  font-size: large;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-}
-.accueilBouton button[data-v-06508284]:hover {
-  background-color: #e54021;
-  color: white;
-}
-.accueilDroite[data-v-06508284] {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-}
-.accueilDroiteVideo[data-v-06508284] {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-}
-.accueilNav[data-v-06508284] {
-  display: flex;
-  flex-direction: row;
-  align-self: end;
-  padding-right: 5rem;
-  height: 4rem;
-  align-items: center;
-  font-weight: bold;
-}
-.accueilNav a[data-v-06508284] {
-  margin: 1rem;
-  color: inherit;
-  text-decoration: none;
-}
-.accueilDroite video[data-v-06508284] {
-  padding: 2rem;
-  background-color: white;
-  border-radius: 3rem;
-  margin-right: 4rem;
-  height: auto;
-}
-#comment[data-v-06508284] {
-  height: 100vh;
-  background-color: #f4f1ed;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-.commentGauche[data-v-06508284],
-.aProposDroite[data-v-06508284] {
-  box-sizing: border-box;
-  width: 55%;
-  display: flex;
-  flex-direction: column;
-  padding: 4rem;
-  justify-content: center;
-}
-.commentBouton[data-v-06508284],
-.aProposBouton[data-v-06508284] {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.commentBouton button[data-v-06508284],
-.aProposBouton button[data-v-06508284] {
-  height: 3rem;
-  width: 45%;
-  font-size: large;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  background-color: #e54021;
-  color: white;
-}
-.commentBouton button[data-v-06508284]:hover,
-.aProposBouton button[data-v-06508284]:hover {
-  background-color: white;
-  color: black;
-}
-#comment img[data-v-06508284],
-#aPropos img[data-v-06508284] {
-  margin: auto;
-  width: auto;
-  height: 80%;
-}
-#aPropos[data-v-06508284] {
-  height: 100vh;
-  background-color: black;
-  color: white;
-  display: flex;
-  flex-direction: row;
-}
-#logoJobNavigatorHomepage[data-v-06508284] {
-  margin-top: 0.5rem;
-  height: auto;
-  width: 20rem;
-}
-
-/* Responsivité pour les écrans de taille moyenne (tablettes) */
-@media (max-width: 900px) {
-#accueil[data-v-06508284],
-  #comment[data-v-06508284] {
-    flex-direction: column;
-    height: auto;
-}
-h1[data-v-06508284] {
-    font-size: 2.5rem;
-}
-.accueilGauche[data-v-06508284] {
-    width: 100%;
-}
-.accueilLogo[data-v-06508284] {
-    gap: 0;
-    height: 5rem;
-    justify-content: space-evenly;
-}
-.accueilBouton[data-v-06508284] {
-    width: 100%;
-    margin: 0rem;
-    padding: 2rem;
-    align-items: center;
-    text-align: center;
-    height: auto;
-}
-.jobNavigatorLogo[data-v-06508284] {
-    margin: 2rem 0;
-}
-#logoConstructys[data-v-06508284] {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 100%;
-    -o-object-fit: contain;
-       object-fit: contain;
-}
-.accueilNav[data-v-06508284] {
-    display: none;
-}
-.accueilDroite[data-v-06508284] {
-    width: 100%;
-}
-.accueilDroite video[data-v-06508284] {
-    border-radius: 3rem;
-    margin: 2rem;
-    padding: 1rem;
-}
-#aPropos[data-v-06508284] {
-    height: auto;
-    flex-direction: column-reverse;
-}
-.commentGauche[data-v-06508284],
-  .aProposDroite[data-v-06508284] {
-    box-sizing: border-box;
-    width: 100%;
-    gap: 2rem;
-    padding: 2rem;
-    text-align: center;
-}
-.commentBouton[data-v-06508284],
-  .aProposBouton[data-v-06508284] {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    width: 100%;
-    justify-content: center;
-}
-#comment img[data-v-06508284],
-  #aPropos img[data-v-06508284] {
-    margin: 1rem;
-    width: 40%;
-    align-self: center;
-}
-}
-@media screen and (max-width: 461px) {
-.exit-button[data-v-06508284] {
-    display: none;
-}
-#logoJobNavigatorHomepage[data-v-06508284] {
-    margin-top: 0.75rem;
-    height: auto;
-    width: 10rem;
-}
 }
 

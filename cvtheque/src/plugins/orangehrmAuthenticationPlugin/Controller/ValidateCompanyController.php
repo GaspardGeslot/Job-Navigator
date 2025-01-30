@@ -116,7 +116,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticateCompany(new AuthParams($credentials));
+            $token = $authProviderChain->authenticateCompany(new AuthParams($credentials, null, $theme));
             $success = !is_null($token);
 
             if (!$success) {
@@ -156,7 +156,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
         }
 
         $homePagePath = $this->getHomePageService()->getHomePagePath();
-        return $this->redirect($homePagePath);
+        return $this->redirect($theme . "/" . $homePagePath);
     }
 
     private function retrieveClientToken(): string

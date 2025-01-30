@@ -14,6 +14,13 @@ apiv2_auth_public_validation_password:
 ##########################
 
 root:
+  path: /{theme}
+  controller: OrangeHRM\Authentication\Controller\RootController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+root_secondary:
   path: /{theme}/
   controller: OrangeHRM\Authentication\Controller\RootController::handle
   methods: [ GET ]
@@ -32,8 +39,7 @@ auth_login_company:
   controller: OrangeHRM\Authentication\Controller\LoginCompanyController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
-
+    theme: constructys
 
 auth_create_account:
   path: /{theme}/auth/createAccount
@@ -54,7 +60,7 @@ auth_company_validate:
   controller: OrangeHRM\Authentication\Controller\ValidateCompanyController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys
 
 auth_validate_new_account:
   path: /{theme}/auth/validateNewAccount

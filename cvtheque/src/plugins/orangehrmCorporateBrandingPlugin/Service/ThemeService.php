@@ -225,7 +225,8 @@ class ThemeService
     public function getClientLogoURL(Request $request): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        return "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_logo_small.png";
+        $theme = $this->getThemeDao()->getThemeByThemeName($request->attributes->get('theme'));
+        return $theme !== null ? $theme->getClientLogoFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_logo_small.png";
         /*if ($this->getImageETag('client_logo') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientLogo?v=$assetsVersion";
         }
@@ -239,7 +240,8 @@ class ThemeService
     public function getClientBannerURL(Request $request): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        return "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Constructys_banner_streched.png";
+        $theme = $this->getThemeDao()->getThemeByThemeName($request->attributes->get('theme'));
+        return $theme !== null ? $theme->getClientBannerFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Constructys_banner_streched.png";
         /*if ($this->getImageETag('client_banner') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientBanner?v=$assetsVersion";
         }
@@ -253,9 +255,21 @@ class ThemeService
     public function getLoginBannerURL(Request $request): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        if ($this->getImageETag('login_banner') !== null) {
+        $theme = $this->getThemeDao()->getThemeByThemeName($request->attributes->get('theme'));
+        return $theme !== null ? $theme->getLoginBannerFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/constructys_branding.png";
+        /*if ($this->getImageETag('login_banner') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/loginBanner?v=$assetsVersion";
         }
-        return $request->getBasePath() . "/images/constructys_branding.png?v=$assetsVersion";
+        return $request->getBasePath() . "/images/constructys_branding.png?v=$assetsVersion";*/
+    }
+
+    /**
+     * @param string $theme
+     * @return int
+     */
+    public function getClientId(string $theme): int
+    {
+        $clientId = $theme !== null ? $this->getThemeDao()->getClientIdByThemeName($theme) : getenv('HEDWIGE_CLIENT_ID');
+        return $clientId !== null ? $clientId : getenv('HEDWIGE_CLIENT_ID');
     }
 }

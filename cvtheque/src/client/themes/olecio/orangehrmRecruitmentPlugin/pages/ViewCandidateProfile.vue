@@ -82,7 +82,7 @@ export default {
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
-      '/api/v2/recruitment/candidates',
+      `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
     );
     return {
       http,

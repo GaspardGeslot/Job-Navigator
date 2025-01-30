@@ -338,8 +338,9 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         /*$employee->setMaritalStatus(
             $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_MARTIAL_STATUS)
         );*/
+        $birthday = $this->getRequestParams()->getStringOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_BIRTHDAY);
         $employee->setBirthday(
-            $this->getRequestParams()->getDateTimeOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_BIRTHDAY)
+            $birthday != null ? new \DateTime($birthday) : null
         );
         /*$employee->getDecorator()->setNationality(
             $this->getRequestParams()->getIntOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NATIONALITY_ID)
@@ -737,7 +738,7 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
                     self::PARAMETER_BIRTHDAY,
-                    new Rule(Rules::API_DATE),
+                    new Rule(Rules::STRING_TYPE),
                 )
             ),
             $this->getValidationDecorator()->notRequiredParamRule(

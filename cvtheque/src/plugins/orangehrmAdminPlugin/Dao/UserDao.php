@@ -25,8 +25,10 @@ use OrangeHRM\Entity\Employee;
 use OrangeHRM\Entity\User;
 use OrangeHRM\Entity\UserRole;
 use OrangeHRM\Entity\UniqueId;
+use OrangeHRM\Entity\Theme;
 use OrangeHRM\ORM\ListSorter;
 use OrangeHRM\ORM\Paginator;
+use OrangeHRM\CorporateBranding\Service\ThemeService;
 use OrangeHRM\Core\Traits\Service\DateTimeHelperTrait;
 
 class UserDao extends BaseDao
@@ -47,7 +49,7 @@ class UserDao extends BaseDao
      * @param string $password
      * @param string $role
      */
-    public function saveNewUser(string $userName, string $password, string $role = 'ESS'): User
+    public function saveNewUser(string $userName, string $password, string $role = 'ESS', int $themeId): User
     {
         $userRole = $this->getUserRole($role);
         $newUserEmployeeId = $this->saveNewEmployee($userName);
@@ -60,6 +62,7 @@ class UserDao extends BaseDao
             $user->getDecorator()->setUserRoleById($userRole->getId());
         if ($newUserEmployeeId != null)
             $user->getDecorator()->setEmployeeByEmpNumber($newUserEmployeeId);
+        $user->getDecorator()->setThemeById($themeId);
         $user->setDateEntered($this->getDateTimeHelper()->getNow());
 
         $this->persist($user);
@@ -107,11 +110,13 @@ class UserDao extends BaseDao
 
     /**
      * @param UserCredential $credentials
+     * @param int $themeId
      * @return User|null
      */
-    public function isExistingSystemUser(UserCredential $credentials): ?User
+    public function isExistingSystemUser(UserCredential $credentials, int $themeId): ?User
     {
         $userRole = $this->getUserRole($credentials->getRole());
+        $theme = $this->getThemeById($themeId);
         $query = $this->createQueryBuilder(User::class, 'u');
         if ($userRole != null) {
             $query->andWhere('u.userName = :username')
@@ -125,6 +130,10 @@ class UserDao extends BaseDao
         $query->andWhere($query->expr()->isNotNull('u.userPassword'));
         $query->andWhere('u.deleted = :deleted')
             ->setParameter('deleted', false);
+        if ($theme != null) {
+            $query->andWhere('u.theme = :theme')
+                ->setParameter('theme', $theme);
+        }
 
         return $query->getQuery()->getOneOrNullResult();
     }
@@ -225,6 +234,18 @@ class UserDao extends BaseDao
         $query = $this->createQueryBuilder(UserRole::class, 'ur');
         $query->andWhere('ur.name = :name');
         $query->setParameter('name', $roleName);
+        return $query->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $themeId
+     * @return Theme|null
+     */
+    public function getThemeById(int $themeId): ?Theme
+    {
+        $query = $this->createQueryBuilder(Theme::class, 't');
+        $query->andWhere('t.id = :themeId');
+        $query->setParameter('themeId', $themeId);
         return $query->getQuery()->getOneOrNullResult();
     }
 

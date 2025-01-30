@@ -96,14 +96,12 @@ export default {
   },
   computed: {
     submitUrl() {
-      return urlFor(
-        '/' + window.appGlobal.theme + '/auth/requestResetPassword',
-      );
+      return urlFor(`/${window.appGlobal.theme}/auth/requestResetPassword`);
     },
   },
   methods: {
     onCancel() {
-      navigate('/auth/login');
+      navigate(`/${window.appGlobal.theme}/auth/login`);
     },
     onSubmit() {
       this.$refs.resetForm.$el.submit();
