@@ -109,9 +109,16 @@ import { inject } from 'vue';
             <span class="slider round"></span>
           </label>
           <label class="AcceptanceofTermsText">
-            J'accepte les conditions générales du service ainsi que la politique
-            de confidentialité des données. J'accepte d'être contacté par les
-            entreprises qui recrutent et qui sont interessées par mon profil
+            J'accepte les
+            <a @click="navigateToCGU" style="color: blue; cursor: pointer">
+              conditions générales du service
+            </a>
+            ainsi que la
+            <a @click="navigateToCGU" style="color: blue; cursor: pointer">
+              politique de confidentialité des données
+            </a>
+            .J'accepte d'être contacté par les entreprises qui recrutent et qui
+            sont interessées par mon profil
           </label>
         </div>
       </div>
@@ -119,6 +126,7 @@ import { inject } from 'vue';
   </div>
 </template>
 <script>
+import {navigate} from '@ohrm/core/util/helper/navigation';
 import SubmitComponent from './submit';
 export default {
   name: 'FormSix',
@@ -169,6 +177,9 @@ export default {
     },
   },
   methods: {
+    navigateToCGU() {
+      navigate('/cgu/index');
+    },
     validateEmail() {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailPattern.test(this.email)) {

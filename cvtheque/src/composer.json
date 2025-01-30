@@ -83,6 +83,7 @@
             "OrangeHRM\\Mobile\\": "./plugins/orangehrmMobilePlugin",
             "OrangeHRM\\Claim\\": "./plugins/orangehrmClaimPlugin",
             "Candidature\\": "./plugins/candidaturePlugin",
+            "CGU\\": "./plugins/cguPlugin",
             "OrangeHRM\\Installer\\": "../installer",
             "OrangeHRM\\Entity\\": [
                 "./plugins/orangehrmAdminPlugin/entity",

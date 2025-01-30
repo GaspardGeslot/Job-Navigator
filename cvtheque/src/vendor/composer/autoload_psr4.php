@@ -142,4 +142,5 @@ return array(
     'Crunz\\' => array($vendorDir . '/crunzphp/crunz/src'),
     'Cron\\' => array($vendorDir . '/dragonmantank/cron-expression/src/Cron'),
     'Candidature\\' => array($baseDir . '/plugins/candidaturePlugin'),
+    'CGU\\' => array($baseDir . '/plugins/cguPlugin'),
 );

@@ -1,0 +1,4 @@
+view_cgu:
+  path: /cgu/index
+  controller: CGU\Controller\CGUController::handle
+  methods: [ GET ]

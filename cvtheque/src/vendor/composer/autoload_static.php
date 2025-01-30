@@ -213,6 +213,7 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             'Crunz\\' => 6,
             'Cron\\' => 5,
             'Candidature\\' => 12,
+            'CGU\\' => 4,
         ),
     );
 
@@ -778,6 +779,10 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
         'Candidature\\' => 
         array (
             0 => __DIR__ . '/../..' . '/plugins/candidaturePlugin',
+        ),
+        'CGU\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/plugins/cguPlugin',
         ),
     );
 
