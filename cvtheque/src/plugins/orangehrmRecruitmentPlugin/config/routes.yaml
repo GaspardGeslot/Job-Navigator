@@ -253,6 +253,11 @@ recruitment_view_job_vacancy:
   controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
   methods: [ GET ]
 
+recruitment_view_job_vacancy_by_id:
+  path: /recruitment/viewJobVacancy/{id}
+  controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
+  methods: [ GET ]
+
 recruitment_add_job_vacancy:
   path: /recruitment/addJobVacancy
   controller: OrangeHRM\Recruitment\Controller\AddJobVacancyController::handle

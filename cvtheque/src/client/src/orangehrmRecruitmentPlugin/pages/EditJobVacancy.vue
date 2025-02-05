@@ -17,7 +17,8 @@
  */
  -->
 <template>
-  <back-button></back-button>
+  <back-button :to="`/recruitment/viewJobVacancy/${this.matchingId}`">
+  </back-button>
   <div class="orangehrm-background-container">
     <div class="orangehrm-card-container">
       <oxd-text tag="h6" class="orangehrm-main-title">
@@ -548,7 +549,7 @@ export default {
       this.showModal = false;
     },
     onCancel() {
-      navigate('/recruitment/viewJobVacancy');
+      navigate(`/recruitment/viewJobVacancy/${this.matchingId}`);
     },
     onSave() {
       this.isLoading = true;
@@ -582,7 +583,7 @@ export default {
           return this.$toast.saveSuccess();
         })
         .then(() => {
-          navigate('/recruitment/viewJobVacancy');
+          navigate(`/recruitment/viewJobVacancy/${this.matchingId}`);
         });
     },
     /*onSaveAttachment() {

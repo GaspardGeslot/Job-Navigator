@@ -35,12 +35,23 @@ class ViewJobVacancyController extends AbstractVueController
 
         $options = $this->getMatchings($this->getAuthUser()->getUserHedwigeToken());
 
-        $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, array_map(function($item) {
+        $matchings = array_map(function($item) {
             return [
                 'id' => $item['id'],
                 'label' => $item['title'] ?? ''
             ];
-        }, $options)));
+        }, $options);
+        $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, $matchings));
+        
+        if ($request->attributes->has('id')) {
+            $idToFind = $request->attributes->getInt('id');
+            $matchingItem = array_filter($matchings, function ($item) use ($idToFind) {
+                return isset($item['id']) && $item['id'] === $idToFind;
+            });
+            $matchingItem = reset($matchingItem) ?: null;
+            if ($matchingItem !== null)
+                $component->addProp(new Prop('matching-selected', Prop::TYPE_OBJECT, $matchingItem));
+        }
 
         $component->addProp(new Prop('has-name', Prop::TYPE_BOOLEAN, $this->checkHasName($this->getAuthUser()->getUserHedwigeToken())));
         

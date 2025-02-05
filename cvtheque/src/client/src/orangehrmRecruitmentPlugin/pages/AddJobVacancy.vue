@@ -468,9 +468,11 @@ export default {
         //isPublished: this.vacancy.isPublished,
       };
       this.http.create({...vacancy}).then((response) => {
-        //const {data} = response.data;
+        const {data} = response.data;
         this.$toast.saveSuccess();
-        navigate('/recruitment/viewJobVacancy');
+        if (data.id !== null)
+          navigate(`/recruitment/viewJobVacancy/${data.id}`);
+        else navigate('/recruitment/viewJobVacancy');
       });
     },
   },
