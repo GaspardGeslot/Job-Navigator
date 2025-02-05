@@ -93,15 +93,18 @@
       </div>
       <div class="accueilBouton">
         <h1>Simplifions le recrutement !</h1>
-        <button @click="navigateToLoginCompany">Espace entreprise</button>
-        <button @click="navigateToLogin">Espace candidat</button>
-        <button @click="showForm">Candidater</button>
+        <div class="accueilBoutonLogins">
+          <button @click="navigateToLogin">Espace candidat</button>
+          <button @click="navigateToLoginCompany">Espace entreprise</button>
+        </div>
+        <button @click="showForm">Je postule</button>
       </div>
     </div>
     <div class="accueilDroite">
       <div class="accueilNav">
         <a href="#comment">Comment ça marche ?</a>
         <a href="#aPropos">A propos</a>
+        <a @click="navigateToCGU" style="cursor: pointer">Mentions légales</a>
       </div>
       <div class="accueilDroiteVideo">
         <video
@@ -114,17 +117,18 @@
 
   <div id="comment">
     <div class="commentGauche">
-      <h1>Comment ça marche ?</h1>
+      <h1>Découvrez Job Navigator : votre passerelle vers l’emploi !</h1>
       <p>
-        D’un côté, des centaines d’entreprises partenaires déposent leurs offres
-        d’emploi sur Job Navigator.
+        <b>Entreprises partenaires :</b> Publiez vos besoins en recrutement et
+        attirez les meilleurs profils au sein de votre structure.
       </p>
-
-      <p>De l’autre, les internautes postulent en ligne, avec ou sans CV.</p>
-
       <p>
-        Puis, la magie opère en faisant “matcher” candidats & employeurs qui
-        n’ont plus qu’à faire connaissance.
+        <b>Candidats :</b> Postulez en ligne, avec ou sans CV, et laissez notre
+        plateforme faire le reste.
+      </p>
+      <p>
+        <b>Job Navigator</b> se charge de connecter les candidats et les
+        employeurs pour des rencontres professionnelles réussies.
       </p>
       <div class="commentBouton">
         <button @click="navigateToLoginCompany">Espace Entreprises</button>
@@ -140,14 +144,50 @@
     <img
       src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/image_women.png"
       alt="Image random"
+      style="width: 20%"
     />
     <div class="aProposDroite">
       <h1>A propos</h1>
       <p>
-        Face aux besoins immenses de facilitation de la rencontre entre l’offre
-        et la demande, Olecio développe une approche complète pour faciliter la
-        concrétisation des projets professionnels et les besoins en ressources
-        humaines des organisations.
+        Afin de soutenir l’emploi régional et de dynamiser la filière BTP en
+        Île-de-France, l’État, les Fédérations et Confédérations
+        professionnelles du Bâtiment et des Travaux Publics, ainsi que
+        l’Opérateur de Compétences de la Construction, Constructys, ont
+        collaboré avec le prestataire Olécio pour développer une CVthèque
+        opérationnelle.
+      </p>
+      <p>
+        Cette initiative répond à un enjeu majeur : accompagner les entreprises
+        du BTP dans leur recrutement et faciliter la mobilité professionnelle
+        dans un secteur marqué par des tensions en matière de main-d’œuvre.
+      </p>
+      <p>
+        <b>Une solution simple, rapide et efficace</b><br /><br />
+        La CVthèque offre :<br /><br />
+        &emsp; &#8226;&emsp;Une gestion intuitive des besoins en recrutement des
+        entreprises <br /><br />
+        &emsp; &#8226;&emsp;Un espace dédié au dépôt et à la gestion des
+        candidatures
+      </p>
+      <p><b>Les atouts de la CVthèque</b></p>
+      <p>
+        &emsp; &#8226;&emsp;<b>Un sourcing garanti :</b> un flux de 1 200
+        candidatures qualifiées chaque année, pendant 3 ans <br /><br />
+        &emsp; &#8226;&emsp;<b>Un matching intelligent :</b> un algorithme
+        performant basé sur 6 critères clés* pour rapprocher efficacement les
+        profils des besoins des entreprises<br /><br />
+        &emsp; &#8226;&emsp;<b>Un gain de temps :</b> les candidatures
+        correspondant aux attentes des entreprises sont envoyées automatiquement
+        et immédiatement<br />
+      </p>
+      <p>
+        *Critères pris en compte : type de contrat recherché, disponibilité,
+        niveau d’études, expérience professionnelle, métiers visés et permis.
+      </p>
+      <p>
+        Ensemble, contribuons à renforcer l’emploi dans le secteur du BTP en
+        Île-de-France grâce à cette solution numérique dédiée à la mise en
+        relation des candidats et des employeurs.
       </p>
       <div class="aProposBouton">
         <button @click="navigateToLoginCompany">Je suis une entreprise</button>
@@ -196,6 +236,9 @@ export default {
     },
     navigateToLoginCompany() {
       navigate('/auth/company/login');
+    },
+    navigateToCGU() {
+      navigate('/cgu/index');
     },
   },
 };
@@ -284,8 +327,17 @@ h1 {
   display: flex;
   flex-direction: column;
   margin: 0rem 4rem;
-  gap: 1rem;
+  gap: 2rem;
   height: 100%;
+  align-items: center;
+}
+
+.accueilBoutonLogins {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
 }
 
 .accueilBouton button {
@@ -295,6 +347,7 @@ h1 {
   font-weight: 600;
   cursor: pointer;
   border: none;
+  border-radius: 1rem;
 }
 
 .accueilBouton button:hover {
@@ -348,14 +401,27 @@ h1 {
   width: 100%;
 }
 
-.commentGauche,
-.aProposDroite {
+.commentGauche {
   box-sizing: border-box;
-  width: 55%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   padding: 4rem;
   justify-content: center;
+}
+
+.aProposDroite {
+  box-sizing: border-box;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  justify-content: center;
+}
+
+.commentGauche h1,
+.aProposDroite h1 {
+  font-size: 2.5rem;
 }
 
 .commentBouton,
@@ -374,6 +440,7 @@ h1 {
   font-weight: 600;
   cursor: pointer;
   border: none;
+  border-radius: 1rem;
   background-color: #e54021;
   color: white;
 }
@@ -392,7 +459,6 @@ h1 {
 }
 
 #aPropos {
-  height: 100vh;
   background-color: black;
   color: white;
   display: flex;
@@ -414,6 +480,7 @@ h1 {
 
   h1 {
     font-size: 2.5rem;
+    text-align: center;
   }
 
   .accueilGauche {
@@ -433,6 +500,22 @@ h1 {
     align-items: center;
     text-align: center;
     height: auto;
+  }
+  .accueilBoutonLogin {
+    width: 100%;
+    margin: 0rem;
+    padding: 2rem;
+    align-items: center;
+    text-align: center;
+    height: auto;
+  }
+
+  .accueilBoutonLogins {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
   }
 
   .jobNavigatorLogo {
@@ -489,6 +572,7 @@ h1 {
     margin: 1rem;
     width: 40%;
     align-self: center;
+    visibility: collapse;
   }
 }
 

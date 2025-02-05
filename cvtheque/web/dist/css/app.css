@@ -10915,8 +10915,16 @@ h1[data-v-0c52339c] {
   display: flex;
   flex-direction: column;
   margin: 0rem 4rem;
-  gap: 1rem;
+  gap: 2rem;
   height: 100%;
+  align-items: center;
+}
+.accueilBoutonLogins[data-v-0c52339c] {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
 }
 .accueilBouton button[data-v-0c52339c] {
   height: 3rem;
@@ -10925,6 +10933,7 @@ h1[data-v-0c52339c] {
   font-weight: 600;
   cursor: pointer;
   border: none;
+  border-radius: 1rem;
 }
 .accueilBouton button[data-v-0c52339c]:hover {
   background-color: #e54021;
@@ -10970,14 +10979,25 @@ h1[data-v-0c52339c] {
   flex-direction: row;
   width: 100%;
 }
-.commentGauche[data-v-0c52339c],
-.aProposDroite[data-v-0c52339c] {
+.commentGauche[data-v-0c52339c] {
   box-sizing: border-box;
-  width: 55%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   padding: 4rem;
   justify-content: center;
+}
+.aProposDroite[data-v-0c52339c] {
+  box-sizing: border-box;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  justify-content: center;
+}
+.commentGauche h1[data-v-0c52339c],
+.aProposDroite h1[data-v-0c52339c] {
+  font-size: 2.5rem;
 }
 .commentBouton[data-v-0c52339c],
 .aProposBouton[data-v-0c52339c] {
@@ -10994,6 +11014,7 @@ h1[data-v-0c52339c] {
   font-weight: 600;
   cursor: pointer;
   border: none;
+  border-radius: 1rem;
   background-color: #e54021;
   color: white;
 }
@@ -11009,7 +11030,6 @@ h1[data-v-0c52339c] {
   height: 80%;
 }
 #aPropos[data-v-0c52339c] {
-  height: 100vh;
   background-color: black;
   color: white;
   display: flex;
@@ -11030,6 +11050,7 @@ h1[data-v-0c52339c] {
 }
 h1[data-v-0c52339c] {
     font-size: 2.5rem;
+    text-align: center;
 }
 .accueilGauche[data-v-0c52339c] {
     width: 100%;
@@ -11046,6 +11067,21 @@ h1[data-v-0c52339c] {
     align-items: center;
     text-align: center;
     height: auto;
+}
+.accueilBoutonLogin[data-v-0c52339c] {
+    width: 100%;
+    margin: 0rem;
+    padding: 2rem;
+    align-items: center;
+    text-align: center;
+    height: auto;
+}
+.accueilBoutonLogins[data-v-0c52339c] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
 }
 .jobNavigatorLogo[data-v-0c52339c] {
     margin: 2rem 0;
@@ -11094,6 +11130,7 @@ h1[data-v-0c52339c] {
     margin: 1rem;
     width: 40%;
     align-self: center;
+    visibility: collapse;
 }
 }
 @media screen and (max-width: 461px) {
