@@ -199,6 +199,9 @@
       </p>
     </div>
   </div>
+  <div id="footer">
+    <a @click="navigateToCGU" style="cursor: pointer">Mentions légales</a>
+  </div>
 </template>
 
 <script>
@@ -261,6 +264,9 @@ h1 {
   font-size: 1.3rem;
   margin-bottom: 1rem;
   line-height: 150%;
+}
+#footer a {
+  color: black;
 }
 
 #comment p {
@@ -399,7 +405,7 @@ h1 {
 
 #comment {
   height: 100vh;
-  background-color: #f4f1ed;
+  background-color: white;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -463,17 +469,28 @@ h1 {
 }
 
 #aPropos {
-  background-color: black;
+  background-color: #1b1f23;
   color: white;
   display: flex;
   flex-direction: row;
 }
+#footer {
+  background-color: #1b1f23;
+  visibility: collapse;
+  padding: 0rem;
+}
+
 #logoJobNavigatorHomepage {
   margin-top: 0.5rem;
   height: auto;
   width: 20rem;
 }
 
+@media (min-width: 901px) {
+  #footer a {
+    font-size: 0px;
+  }
+}
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
   #accueil,
@@ -576,6 +593,17 @@ h1 {
     width: 40%;
     align-self: center;
     visibility: collapse;
+  }
+  #footer {
+    visibility: visible;
+    background-color: white;
+    color: black;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: 2rem;
+    justify-content: center;
+    text-align: center;
   }
 }
 

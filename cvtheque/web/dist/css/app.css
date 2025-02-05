@@ -10857,6 +10857,9 @@ h1[data-v-0c52339c] {
   margin-bottom: 1rem;
   line-height: 150%;
 }
+#footer a[data-v-0c52339c] {
+  color: black;
+}
 #comment p[data-v-0c52339c] {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
@@ -10974,7 +10977,7 @@ h1[data-v-0c52339c] {
 }
 #comment[data-v-0c52339c] {
   height: 100vh;
-  background-color: #f4f1ed;
+  background-color: white;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -11030,17 +11033,26 @@ h1[data-v-0c52339c] {
   height: 80%;
 }
 #aPropos[data-v-0c52339c] {
-  background-color: black;
+  background-color: #1b1f23;
   color: white;
   display: flex;
   flex-direction: row;
+}
+#footer[data-v-0c52339c] {
+  background-color: #1b1f23;
+  visibility: collapse;
+  padding: 0rem;
 }
 #logoJobNavigatorHomepage[data-v-0c52339c] {
   margin-top: 0.5rem;
   height: auto;
   width: 20rem;
 }
-
+@media (min-width: 901px) {
+#footer a[data-v-0c52339c] {
+    font-size: 0px;
+}
+}
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
 #accueil[data-v-0c52339c],
@@ -11130,6 +11142,17 @@ h1[data-v-0c52339c] {
     width: 40%;
     align-self: center;
     visibility: collapse;
+}
+#footer[data-v-0c52339c] {
+    visibility: visible;
+    background-color: white;
+    color: black;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: 2rem;
+    justify-content: center;
+    text-align: center;
 }
 }
 @media screen and (max-width: 461px) {
