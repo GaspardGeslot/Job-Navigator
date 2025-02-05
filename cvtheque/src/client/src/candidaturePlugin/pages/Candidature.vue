@@ -92,7 +92,7 @@
         />
       </div>
       <div class="accueilBouton">
-        <h1>Simplifions le recrutement !</h1>
+        <h1>Simplifions le recrutement</h1>
         <div class="accueilBoutonLogins">
           <button @click="navigateToLogin">Espace candidat</button>
           <button @click="navigateToLoginCompany">Espace entreprise</button>
@@ -117,7 +117,7 @@
 
   <div id="comment">
     <div class="commentGauche">
-      <h1>Découvrez Job Navigator : votre passerelle vers l’emploi !</h1>
+      <h1>Découvrez Job Navigator : votre passerelle vers l’emploi</h1>
       <p>
         <b>Entreprises partenaires :</b> Publiez vos besoins en recrutement et
         attirez les meilleurs profils au sein de votre structure.
@@ -181,18 +181,22 @@
         et immédiatement<br />
       </p>
       <p>
-        *Critères pris en compte : type de contrat recherché, disponibilité,
-        niveau d’études, expérience professionnelle, métiers visés et permis.
-      </p>
-      <p>
-        Ensemble, contribuons à renforcer l’emploi dans le secteur du BTP en
-        Île-de-France grâce à cette solution numérique dédiée à la mise en
-        relation des candidats et des employeurs.
+        <b>
+          Ensemble, contribuons à renforcer l’emploi dans le secteur du BTP en
+          Île-de-France grâce à cette solution numérique dédiée à la mise en
+          relation des candidats et des employeurs.
+        </b>
       </p>
       <div class="aProposBouton">
-        <button @click="navigateToLoginCompany">Je suis une entreprise</button>
-        <button @click="navigateToLogin">Je suis un candidat</button>
+        <button @click="navigateToLoginCompany">Espace Entreprises</button>
+        <button @click="navigateToLogin">Espace Candidats</button>
       </div>
+      <p style="font-size: 1rem">
+        <i>
+          *Critères pris en compte : type de contrat recherché, disponibilité,
+          niveau d’études, expérience professionnelle, métiers visés et permis.
+        </i>
+      </p>
     </div>
   </div>
 </template>
@@ -555,7 +559,6 @@ h1 {
     width: 100%;
     gap: 2rem;
     padding: 2rem;
-    text-align: center;
   }
 
   .commentBouton,
