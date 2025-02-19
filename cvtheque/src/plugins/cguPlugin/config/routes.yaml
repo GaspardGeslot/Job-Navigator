@@ -1,0 +1,6 @@
+view_cgu:
+  path: /{theme}/cgu/index
+  controller: CGU\Controller\CGUController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys

@@ -264,10 +264,11 @@ class VueControllerHelper
         if ($module instanceof Module) {
             $breadcrumb['moduleName'] = $this->getI18NHelper()->transBySource($module->getDisplayName());
         }
-
+        $themeId = $this->getMenuService()->getThemeDao()->getId($this->getCurrentModuleAndScreen()->getTheme());
         $menuItem = $this->getMenuService()->getMenuDao()->getMenuItemByModuleAndScreen(
             $this->getCurrentModuleAndScreen()->getModule(),
-            $this->getCurrentModuleAndScreen()->getScreen()
+            $this->getCurrentModuleAndScreen()->getScreen(),
+            $themeId
         );
         if ($menuItem instanceof MenuItem) {
             $breadcrumb['level'] = $menuItem->getLevel() == 3 ? $menuItem->getParent()->getMenuTitle() : null;
@@ -283,8 +284,8 @@ class VueControllerHelper
      */
     private function getThemeData(): array
     {
-        $clientLogoUrl = $this->getThemeService()->getClientLogoURL($this->getRequest());
-        $clientBannerUrl = $this->getThemeService()->getClientBannerURL($this->getRequest());
+        $clientLogoUrl = $this->getThemeService()->getClientLogoURL($this->getCurrentModuleAndScreen()->getTheme());
+        $clientBannerUrl = $this->getThemeService()->getClientBannerURL($this->getCurrentModuleAndScreen()->getTheme());
         $themeVariables = $this->getThemeService()->getCurrentThemeVariables();
 
         return [$clientLogoUrl, $clientBannerUrl, $themeVariables];

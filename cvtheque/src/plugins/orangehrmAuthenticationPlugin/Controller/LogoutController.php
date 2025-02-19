@@ -37,11 +37,12 @@ class LogoutController extends AbstractController
     public function handle(Request $request): RedirectResponse
     {
         $isCandidate = $this->getAuthUser()->getIsCandidate();
+        $isAdmin = $this->getAuthUser()->getIsAdmin();
         /** @var Session $session */
         $session = $this->getContainer()->get(Services::SESSION);
         $session->invalidate();
         $theme = $request->attributes->get('theme');
-        $redirectUrl = $theme . "/" . ($isCandidate ? "auth/login" : "auth/company/login");
+        $redirectUrl = $theme . "/" . ($isAdmin ? "auth/admin/login" : ($isCandidate ? "auth/login" : "auth/company/login"));
         return $this->redirect($redirectUrl);
     }
 }

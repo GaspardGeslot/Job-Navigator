@@ -469,9 +469,13 @@ export default {
         //isPublished: this.vacancy.isPublished,
       };
       this.http.create({...vacancy}).then((response) => {
-        //const {data} = response.data;
+        const {data} = response.data;
         this.$toast.saveSuccess();
-        navigate(`/${window.appGlobal.theme}/recruitment/viewJobVacancy`);
+        if (data.id !== null)
+          navigate(
+            `/${window.appGlobal.theme}/recruitment/viewJobVacancy/${data.id}`,
+          );
+        else navigate(`/${window.appGlobal.theme}/recruitment/viewJobVacancy`);
       });
     },
   },

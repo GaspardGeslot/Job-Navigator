@@ -483,6 +483,27 @@ apiv2_admin_i18n_language_translation_errors:
     languageId: '\d+'
     theme: constructys|olecio
 
+apiv2_admin_candidates:
+  path: /{theme}/api/v2/admin/candidates
+  controller: OrangeHRM\Admin\Controller\CandidatesController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_companies:
+  path: /{theme}/api/v2/admin/companies
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_companies_matchings:
+  path: /{theme}/api/v2/admin/companies/matchings
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getMatchings
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 ##########################
 #        Files
 ##########################
@@ -895,6 +916,20 @@ admin_ldap_configuration:
 admin_matching_configuration:
   path: /{theme}/admin/matching
   controller: OrangeHRM\Admin\Controller\MatchingController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_candidates:
+  path: /{theme}/admin/viewCandidates
+  controller: OrangeHRM\Admin\Controller\CandidatesController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_companies:
+  path: /{theme}/admin/viewCompanies
+  controller: OrangeHRM\Admin\Controller\CompaniesController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio

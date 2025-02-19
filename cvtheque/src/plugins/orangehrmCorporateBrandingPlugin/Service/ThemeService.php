@@ -219,13 +219,13 @@ class ThemeService
     }
 
     /**
-     * @param Request $request
+     * @param string $theme
      * @return string
      */
-    public function getClientLogoURL(Request $request): string
+    public function getClientLogoURL(string $theme): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        $theme = $this->getThemeDao()->getThemeByThemeName($request->attributes->get('theme'));
+        $theme = $this->getThemeDao()->getThemeByThemeName($theme);
         return $theme !== null ? $theme->getClientLogoFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_logo_small.png";
         /*if ($this->getImageETag('client_logo') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientLogo?v=$assetsVersion";
@@ -234,13 +234,13 @@ class ThemeService
     }
 
     /**
-     * @param Request $request
+     * @param string $theme 
      * @return string
      */
-    public function getClientBannerURL(Request $request): string
+    public function getClientBannerURL(string $theme): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        $theme = $this->getThemeDao()->getThemeByThemeName($request->attributes->get('theme'));
+        $theme = $this->getThemeDao()->getThemeByThemeName($theme);
         return $theme !== null ? $theme->getClientBannerFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Constructys_banner_streched.png";
         /*if ($this->getImageETag('client_banner') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientBanner?v=$assetsVersion";
@@ -249,13 +249,13 @@ class ThemeService
     }
 
     /**
-     * @param Request $request
+     * @param string $theme
      * @return string
      */
-    public function getLoginBannerURL(Request $request): string
+    public function getLoginBannerURL(string $theme): string
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        $theme = $this->getThemeDao()->getThemeByThemeName($request->attributes->get('theme'));
+        $theme = $this->getThemeDao()->getThemeByThemeName($theme);
         return $theme !== null ? $theme->getLoginBannerFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/constructys_branding.png";
         /*if ($this->getImageETag('login_banner') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/loginBanner?v=$assetsVersion";

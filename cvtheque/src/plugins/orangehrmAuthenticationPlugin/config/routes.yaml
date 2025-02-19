@@ -34,6 +34,13 @@ auth_login:
   requirements:
     theme: constructys|olecio
 
+auth_login_admin:
+  path: /{theme}/auth/admin/login
+  controller: OrangeHRM\Authentication\Controller\LoginAdminController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 auth_login_company:
   path: /{theme}/auth/company/login
   controller: OrangeHRM\Authentication\Controller\LoginCompanyController::handle
@@ -54,6 +61,14 @@ auth_validate:
   methods: [ POST ]
   requirements:
     theme: constructys|olecio
+
+auth_validate_with_role:
+  path: /{theme}/auth/validate/{role}
+  controller: OrangeHRM\Authentication\Controller\ValidateController::handle
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+    role: admin|candidate
 
 auth_company_validate:
   path: /{theme}/auth/company/validate

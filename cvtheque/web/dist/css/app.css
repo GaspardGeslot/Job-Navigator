@@ -1160,6 +1160,63 @@
 .pagination[data-v-da3d21a2] {
   margin-left: auto;
 }
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmRecruitmentPlugin/components/JobCategorySelectionModal.vue?vue&type=style&index=0&id=791648fa&lang=scss&scoped=true ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-modal-header[data-v-791648fa] {
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-modal-footer[data-v-791648fa] {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-text-center-align[data-v-791648fa] {
+  text-align: center;
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/dropdown/TableFilter.vue?vue&type=style&index=0&id=5e4cbb8a&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.oxd-table-filter[data-v-5e4cbb8a] {
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  padding: 25px;
+}
+.oxd-table-filter-title[data-v-5e4cbb8a] {
+  font-size: 14px;
+  font-weight: 800;
+}
+.oxd-table-filter-header[data-v-5e4cbb8a] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.oxd-table-filter-header-options[data-v-5e4cbb8a] {
+  display: flex;
+}
+.oxd-table-filter-header-options .--toggle[data-v-5e4cbb8a],
+.oxd-table-filter-header-options .--export[data-v-5e4cbb8a] {
+  display: flex;
+}
+.oxd-table-filter-header-options .oxd-icon-button[data-v-5e4cbb8a] {
+  font-size: 12px;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: unset;
+  min-height: unset;
+  margin-right: 5px;
+}
+.oxd-table-filter-header-options .oxd-button[data-v-5e4cbb8a] {
+  padding-right: 5px;
+  padding-left: 5px;
+  min-width: unset;
+  margin-right: 5px;
+}
 /*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmPimPlugin/components/ProfileImageInput.vue?vue&type=style&index=0&id=8f24e3f2&lang=scss&scoped=true ***!
   \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -4035,46 +4092,6 @@
 .oxd-table-filter-header-options .--export[data-v-1d175970] {
   display: flex;
 }
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/dropdown/TableFilter.vue?vue&type=style&index=0&id=5e4cbb8a&lang=scss&scoped=true ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.oxd-table-filter[data-v-5e4cbb8a] {
-  background-color: #ffffff;
-  border-radius: 1.2rem;
-  padding: 25px;
-}
-.oxd-table-filter-title[data-v-5e4cbb8a] {
-  font-size: 14px;
-  font-weight: 800;
-}
-.oxd-table-filter-header[data-v-5e4cbb8a] {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.oxd-table-filter-header-options[data-v-5e4cbb8a] {
-  display: flex;
-}
-.oxd-table-filter-header-options .--toggle[data-v-5e4cbb8a],
-.oxd-table-filter-header-options .--export[data-v-5e4cbb8a] {
-  display: flex;
-}
-.oxd-table-filter-header-options .oxd-icon-button[data-v-5e4cbb8a] {
-  font-size: 12px;
-  width: 24px !important;
-  height: 24px !important;
-  min-width: unset;
-  min-height: unset;
-  margin-right: 5px;
-}
-.oxd-table-filter-header-options .oxd-button[data-v-5e4cbb8a] {
-  padding-right: 5px;
-  padding-left: 5px;
-  min-width: unset;
-  margin-right: 5px;
-}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=38020a24&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -4192,23 +4209,6 @@
 .boutonTri[data-v-38020a24] {
     margin: 0;
 }
-}
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmRecruitmentPlugin/components/JobCategorySelectionModal.vue?vue&type=style&index=0&id=791648fa&lang=scss&scoped=true ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.orangehrm-modal-header[data-v-791648fa] {
-  margin-bottom: 1.2rem;
-  display: flex;
-  justify-content: center;
-}
-.orangehrm-modal-footer[data-v-791648fa] {
-  margin-top: 1.2rem;
-  display: flex;
-  justify-content: center;
-}
-.orangehrm-text-center-align[data-v-791648fa] {
-  text-align: center;
 }
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=b6383a38&lang=scss&scoped=true ***!
@@ -7443,6 +7443,107 @@
 }
 }
 .orangehrm-login-seperator[data-v-5fec195a] {
+  margin: 0.5rem 0;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmAuthenticationPlugin/pages/login.scss?vue&type=style&index=0&id=492498a5&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-login-form[data-v-492498a5] {
+  margin: 0 auto;
+}
+@media (min-width: 0px) {
+.orangehrm-login-form[data-v-492498a5] {
+    width: 80%;
+}
+}
+@media (min-width: 800px) {
+.orangehrm-login-form[data-v-492498a5] {
+    width: 60%;
+    max-width: 485px;
+}
+}
+.orangehrm-login-action[data-v-492498a5] {
+  margin-top: 2rem;
+  justify-content: center;
+}
+.orangehrm-create-account-action[data-v-492498a5] {
+  margin-top: 1rem;
+  justify-content: center;
+}
+.orangehrm-login-button[data-v-492498a5] {
+  flex: 1;
+  padding: 1rem 0;
+}
+.orangehrm-create-account-button[data-v-492498a5] {
+  flex: 1;
+  padding: 1rem 0;
+  background-color: transparent;
+  border: 1px solid;
+  color: var(--oxd-primary-one-color);
+}
+.orangehrm-profile-button[data-v-492498a5] {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  margin: 1rem;
+  text-align: center;
+}
+.orangehrm-login-title[data-v-492498a5] {
+  text-align: center;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+.orangehrm-profile-title[data-v-492498a5] {
+  text-align: center;
+  font-weight: 800;
+}
+.orangehrm-login-pwreset[data-v-492498a5] {
+  margin: 1rem 0;
+  text-align: center;
+  font-weight: 600;
+}
+.orangehrm-login-pwreset a[data-v-492498a5] {
+  color: var(--oxd-primary-one-color);
+  text-decoration: none;
+}
+.orangehrm-login-forgot[data-v-492498a5] {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  font-size: 16px;
+}
+.orangehrm-login-forgot-header[data-v-492498a5] {
+  text-align: center;
+  cursor: pointer;
+  color: var(--oxd-primary-one-color);
+}
+.orangehrm-demo-credentials[data-v-492498a5] {
+  margin: 1rem 0;
+}
+.orangehrm-login-footer-sm[data-v-492498a5] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.orangehrm-login-footer-sm a[data-v-492498a5] {
+  width: 22px;
+  height: 22px;
+  margin: 0 0.25rem;
+}
+.orangehrm-login-footer-sm .orangehrm-sm-icon[data-v-492498a5] {
+  width: inherit;
+  height: inherit;
+  color: rgba(146, 155, 170, 0.8);
+}
+@media (min-width: 800px) {
+.orangehrm-login-footer-sm[data-v-492498a5] {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+}
+}
+.orangehrm-login-seperator[data-v-492498a5] {
   margin: 0.5rem 0;
 }
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
@@ -11092,6 +11193,9 @@ h1[data-v-1575c360] {
   margin-bottom: 1rem;
   line-height: 150%;
 }
+#footer a[data-v-1575c360] {
+  color: black;
+}
 #comment p[data-v-1575c360] {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
@@ -11150,8 +11254,16 @@ h1[data-v-1575c360] {
   display: flex;
   flex-direction: column;
   margin: 0rem 4rem;
-  gap: 1rem;
+  gap: 2rem;
   height: 100%;
+  align-items: center;
+}
+.accueilBoutonLogins[data-v-1575c360] {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
 }
 .accueilBouton button[data-v-1575c360] {
   height: 3rem;
@@ -11160,6 +11272,7 @@ h1[data-v-1575c360] {
   font-weight: 600;
   cursor: pointer;
   border: none;
+  border-radius: 1rem;
 }
 .accueilBouton button[data-v-1575c360]:hover {
   background-color: #e54021;
@@ -11200,19 +11313,30 @@ h1[data-v-1575c360] {
 }
 #comment[data-v-1575c360] {
   height: 100vh;
-  background-color: #f4f1ed;
+  background-color: white;
   display: flex;
   flex-direction: row;
   width: 100%;
 }
-.commentGauche[data-v-1575c360],
-.aProposDroite[data-v-1575c360] {
+.commentGauche[data-v-1575c360] {
   box-sizing: border-box;
-  width: 55%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   padding: 4rem;
   justify-content: center;
+}
+.aProposDroite[data-v-1575c360] {
+  box-sizing: border-box;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  justify-content: center;
+}
+.commentGauche h1[data-v-1575c360],
+.aProposDroite h1[data-v-1575c360] {
+  font-size: 2.5rem;
 }
 .commentBouton[data-v-1575c360],
 .aProposBouton[data-v-1575c360] {
@@ -11229,6 +11353,7 @@ h1[data-v-1575c360] {
   font-weight: 600;
   cursor: pointer;
   border: none;
+  border-radius: 1rem;
   background-color: #e54021;
   color: white;
 }
@@ -11244,18 +11369,26 @@ h1[data-v-1575c360] {
   height: 80%;
 }
 #aPropos[data-v-1575c360] {
-  height: 100vh;
-  background-color: black;
+  background-color: #1b1f23;
   color: white;
   display: flex;
   flex-direction: row;
+}
+#footer[data-v-1575c360] {
+  background-color: #1b1f23;
+  visibility: collapse;
+  padding: 0rem;
 }
 #logoJobNavigatorHomepage[data-v-1575c360] {
   margin-top: 0.5rem;
   height: auto;
   width: 20rem;
 }
-
+@media (min-width: 901px) {
+#footer a[data-v-1575c360] {
+    font-size: 0px;
+}
+}
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
 #accueil[data-v-1575c360],
@@ -11265,6 +11398,7 @@ h1[data-v-1575c360] {
 }
 h1[data-v-1575c360] {
     font-size: 2.5rem;
+    text-align: center;
 }
 .accueilGauche[data-v-1575c360] {
     width: 100%;
@@ -11281,6 +11415,21 @@ h1[data-v-1575c360] {
     align-items: center;
     text-align: center;
     height: auto;
+}
+.accueilBoutonLogin[data-v-1575c360] {
+    width: 100%;
+    margin: 0rem;
+    padding: 2rem;
+    align-items: center;
+    text-align: center;
+    height: auto;
+}
+.accueilBoutonLogins[data-v-1575c360] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
 }
 .jobNavigatorLogo[data-v-1575c360] {
     margin: 2rem 0;
@@ -11314,7 +11463,6 @@ h1[data-v-1575c360] {
     width: 100%;
     gap: 2rem;
     padding: 2rem;
-    text-align: center;
 }
 .commentBouton[data-v-1575c360],
   .aProposBouton[data-v-1575c360] {
@@ -11329,6 +11477,18 @@ h1[data-v-1575c360] {
     margin: 1rem;
     width: 40%;
     align-self: center;
+    visibility: collapse;
+}
+#footer[data-v-1575c360] {
+    visibility: visible;
+    background-color: white;
+    color: black;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: 2rem;
+    justify-content: center;
+    text-align: center;
 }
 }
 @media screen and (max-width: 461px) {
@@ -11340,6 +11500,466 @@ h1[data-v-1575c360] {
     height: auto;
     width: 10rem;
 }
+}
+
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/cguPlugin/pages/view-application.scss?vue&type=style&index=0&lang=scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.VA_bg_img {
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+.mt {
+  margin-top: 2.5rem;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.top-row {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+.top-row-logo {
+  transform: scale(1.4);
+}
+.space-b-to-center,
+.space-b {
+  justify-content: space-between;
+}
+.mr-2 {
+  margin-right: 2rem;
+}
+.ml-6 {
+  margin-left: 6rem;
+}
+.mt-05 {
+  margin-top: 0.5rem;
+}
+.mt-075 {
+  margin-top: 1rem;
+}
+.mb-05 {
+  margin-bottom: 0.55rem;
+}
+.title-container {
+  max-width: 60rem;
+}
+.main-title {
+  padding-top: 5rem;
+  padding-left: 2.5rem;
+  padding-right: 20rem;
+  margin-right: 10rem;
+  font-size: 3.5rem;
+  line-height: 3.75rem;
+}
+.text-white {
+  color: white;
+}
+.connexion_button {
+  color: white;
+  background-color: #1b1f23;
+  border: none;
+  font-weight: 500;
+  padding-right: 1.35rem;
+  padding-left: 1.35rem;
+  padding-top: 0.95rem;
+  padding-bottom: 0.95rem;
+  margin-top: 1.5rem;
+  margin-right: 8rem;
+  border-radius: 1.5rem;
+}
+.connexion_button:hover {
+  background-color: white;
+  color: black;
+  border: solid 2px black;
+  font-weight: 600;
+  padding-right: 1.225rem;
+  padding-left: 1.225rem;
+  padding-top: 0.825rem;
+  padding-bottom: 0.825rem;
+}
+.bot_button {
+  background-color: white;
+  color: black;
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-right: 1.35rem;
+  padding-left: 1.35rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+  border: none;
+  margin-top: 2rem;
+  margin-left: 2.5rem;
+  border-radius: 1.5rem;
+}
+.bot_button:hover {
+  background-color: black;
+  color: white;
+}
+.bg-white {
+  background-color: white;
+}
+.orangehrm-buzz-layout {
+  justify-content: center;
+  grid-template-columns: minmax(240px, 640px) minmax(0, 375px);
+}
+@media screen and (min-width: 1920px) {
+.orangehrm-buzz-layout {
+    gap: 2rem;
+    grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(0, 375px);
+}
+}
+.formComponent {
+  /*position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  opacity: 1;*/
+  width: 90%;
+  max-width: 2000px;
+  height: 90%;
+  padding: 2rem;
+}
+.formContainer {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+@media screen and (min-width: 1020px) and (max-height: 700px) {
+.formContainer {
+    z-index: 2;
+}
+}
+@media screen and (max-width: 370px) {
+#page-content {
+    max-width: 360px;
+}
+}
+@media screen and (max-width: 380px) {
+#page-content {
+    max-width: 370px;
+}
+}
+@media screen and (max-width: 450px) {
+.formComponent {
+    height: 100%;
+}
+#page-content {
+    max-width: 430px;
+}
+.top-row {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+.main-title {
+    padding-top: 3rem;
+    font-size: 1.85rem;
+    line-height: 2.25rem;
+    padding-right: 2.5rem;
+    margin-right: 0rem;
+}
+.bot_button {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    padding-top: 0.415rem;
+    padding-bottom: 0.415rem;
+    margin-top: 1.5rem;
+}
+.space-b {
+    margin-left: 3rem;
+}
+.connexion_button {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    padding-right: 1.15rem;
+    padding-left: 1.15rem;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    margin-top: 1.5rem;
+    margin-right: 3rem;
+    border-radius: 1.5rem;
+}
+}
+@media screen and (max-width: 800px) {
+#olecio-logo {
+    display: none;
+}
+.top-row-logo {
+    margin-left: 0 !important;
+    transform: scale(0.9);
+}
+}
+@media screen and (min-width: 1020px) {
+.space-b-to-center {
+    justify-content: center;
+}
+.mr {
+    margin-right: 10rem;
+}
+}
+@media screen and (min-width: 1200px) and (max-height: 600px) {
+.main-title {
+    padding-top: 2rem;
+    font-size: 3rem;
+    line-height: 3.25rem;
+}
+}
+@media screen and (min-width: 1200px) and (max-height: 520px) {
+.main-title {
+    font-size: 2.5rem;
+    line-height: 2.75rem;
+}
+}
+@media (min-width: 1500px) {
+.main-title {
+    font-size: 4rem;
+    line-height: 4.25rem;
+}
+.connexion_button {
+    margin-right: 10rem;
+}
+.bot_button {
+    margin-left: 3rem;
+}
+}
+@media (min-width: 1920px) {
+.main-title {
+    font-size: 4.5rem;
+    line-height: 4.75rem;
+}
+.connexion_button {
+    margin-right: 12rem;
+}
+.bot_button {
+    margin-left: 4rem;
+}
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/cguPlugin/pages/CGU.vue?vue&type=style&index=1&id=c7c92d34&scoped=true&lang=css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+*[data-v-c7c92d34] {
+  font-family: 'DM Sans', sans-serif;
+}
+h1[data-v-c7c92d34],
+h5[data-v-c7c92d34] {
+  text-align: center;
+}
+.title-container[data-v-c7c92d34],
+#olecio-logo[data-v-c7c92d34] {
+  display: none;
+}
+.formContainer[data-v-c7c92d34] {
+  z-index: 10;
+}
+.exit-button[data-v-c7c92d34] {
+  position: relative;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+#accueil[data-v-c7c92d34] {
+  display: flex;
+  flex-direction: row;
+  height: 22vh;
+  background-color: #1b1f23;
+}
+#accueil h1[data-v-c7c92d34],
+#accueil a[data-v-c7c92d34] {
+  color: white;
+}
+.accueilLogo[data-v-c7c92d34] {
+  display: flex;
+  flex-direction: row;
+  height: 20%;
+  gap: 4rem;
+}
+.jobNavigatorLogo[data-v-c7c92d34] {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem;
+  gap: 1rem;
+  align-items: center;
+  color: #f7e28f;
+}
+#logoConstructys[data-v-c7c92d34] {
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+}
+.accueilGauche[data-v-c7c92d34] {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 500px;
+}
+.accueilBouton[data-v-c7c92d34] {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 0rem 4rem;
+  gap: 1rem;
+  height: 100%;
+}
+.accueilBouton button[data-v-c7c92d34] {
+  height: 3rem;
+  width: 60%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.accueilBouton button[data-v-c7c92d34]:hover {
+  background-color: #e54021;
+  color: white;
+}
+.accueilDroite[data-v-c7c92d34] {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.accueilNav[data-v-c7c92d34] {
+  display: flex;
+  flex-direction: row;
+  align-self: end;
+  padding-right: 5rem;
+  height: 10rem;
+  align-items: center;
+  font-weight: bold;
+}
+.accueilNav a[data-v-c7c92d34] {
+  margin: 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+.accueilDroite video[data-v-c7c92d34] {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 3rem;
+  margin-right: 4rem;
+  height: auto;
+}
+#content[data-v-c7c92d34] {
+  padding: 25px 5px;
+  /*height: 25vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;*/
+}
+.commentGauche[data-v-c7c92d34],
+.subtitle[data-v-c7c92d34] {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#logoJobNavigatorHomepage[data-v-c7c92d34] {
+  margin-top: 0.5rem;
+  height: auto;
+  width: 20rem;
+}
+
+/* Responsivité pour les écrans de taille moyenne (tablettes) */
+@media (max-width: 900px) {
+#accueil[data-v-c7c92d34] {
+    flex-direction: column;
+    height: 15vh;
+}
+.accueilGauche[data-v-c7c92d34] {
+    width: 100%;
+}
+.accueilLogo[data-v-c7c92d34] {
+    gap: 0;
+    height: 5rem;
+    justify-content: space-evenly;
+}
+.accueilBouton[data-v-c7c92d34] {
+    width: 100%;
+    margin: 0rem;
+    padding: 2rem;
+    align-items: center;
+    text-align: center;
+    height: auto;
+}
+.jobNavigatorLogo[data-v-c7c92d34] {
+    margin: 2rem 0;
+}
+#logoConstructys[data-v-c7c92d34] {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    -o-object-fit: contain;
+       object-fit: contain;
+}
+.accueilNav[data-v-c7c92d34] {
+    display: none;
+}
+.accueilDroite[data-v-c7c92d34] {
+    width: 100%;
+}
+.accueilDroite video[data-v-c7c92d34] {
+    border-radius: 3rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+#aPropos[data-v-c7c92d34] {
+    height: auto;
+    flex-direction: column-reverse;
+}
+}
+@media screen and (max-width: 461px) {
+.exit-button[data-v-c7c92d34] {
+    display: none;
+}
+#logoJobNavigatorHomepage[data-v-c7c92d34] {
+    margin-top: 0.75rem;
+    height: auto;
+    width: 10rem;
+}
+}
+.cgu-main-header[data-v-c7c92d34] {
+  font-size: 25px !important;
+  font-weight: 1000 !important;
+}
+.cgu-main-title[data-v-c7c92d34] {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+.cgu-sub-title[data-v-c7c92d34] {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  padding: 0.25rem 0 !important;
 }
 
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
@@ -17338,104 +17958,104 @@ h1[data-v-1575c360] {
   margin-top: 1rem;
 }
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/orangehrmAuthenticationPlugin/pages/login.scss?vue&type=style&index=0&id=62ac4368&lang=scss&scoped=true ***!
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/orangehrmAuthenticationPlugin/pages/login.scss?vue&type=style&index=0&id=eff9f112&lang=scss&scoped=true ***!
   \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
-.orangehrm-login-form[data-v-62ac4368] {
+.orangehrm-login-form[data-v-eff9f112] {
   margin: 0 auto;
 }
 @media (min-width: 0px) {
-.orangehrm-login-form[data-v-62ac4368] {
+.orangehrm-login-form[data-v-eff9f112] {
     width: 80%;
 }
 }
 @media (min-width: 800px) {
-.orangehrm-login-form[data-v-62ac4368] {
+.orangehrm-login-form[data-v-eff9f112] {
     width: 60%;
     max-width: 485px;
 }
 }
-.orangehrm-login-action[data-v-62ac4368] {
+.orangehrm-login-action[data-v-eff9f112] {
   margin-top: 2rem;
   justify-content: center;
 }
-.orangehrm-create-account-action[data-v-62ac4368] {
+.orangehrm-create-account-action[data-v-eff9f112] {
   margin-top: 1rem;
   justify-content: center;
 }
-.orangehrm-login-button[data-v-62ac4368] {
+.orangehrm-login-button[data-v-eff9f112] {
   flex: 1;
   padding: 1rem 0;
 }
-.orangehrm-create-account-button[data-v-62ac4368] {
+.orangehrm-create-account-button[data-v-eff9f112] {
   flex: 1;
   padding: 1rem 0;
   background-color: transparent;
   border: 1px solid;
   color: var(--oxd-primary-one-color);
 }
-.orangehrm-profile-button[data-v-62ac4368] {
+.orangehrm-profile-button[data-v-eff9f112] {
   display: flex;
   justify-content: center;
   flex: 1;
   margin: 1rem;
   text-align: center;
 }
-.orangehrm-login-title[data-v-62ac4368] {
+.orangehrm-login-title[data-v-eff9f112] {
   text-align: center;
   font-weight: 800;
   margin-bottom: 1rem;
 }
-.orangehrm-profile-title[data-v-62ac4368] {
+.orangehrm-profile-title[data-v-eff9f112] {
   text-align: center;
   font-weight: 800;
 }
-.orangehrm-login-pwreset[data-v-62ac4368] {
+.orangehrm-login-pwreset[data-v-eff9f112] {
   margin: 1rem 0;
   text-align: center;
   font-weight: 600;
 }
-.orangehrm-login-pwreset a[data-v-62ac4368] {
+.orangehrm-login-pwreset a[data-v-eff9f112] {
   color: var(--oxd-primary-one-color);
   text-decoration: none;
 }
-.orangehrm-login-forgot[data-v-62ac4368] {
+.orangehrm-login-forgot[data-v-eff9f112] {
   display: flex;
   justify-content: center;
   margin-top: 1rem;
   font-size: 16px;
 }
-.orangehrm-login-forgot-header[data-v-62ac4368] {
+.orangehrm-login-forgot-header[data-v-eff9f112] {
   text-align: center;
   cursor: pointer;
   color: var(--oxd-primary-one-color);
 }
-.orangehrm-demo-credentials[data-v-62ac4368] {
+.orangehrm-demo-credentials[data-v-eff9f112] {
   margin: 1rem 0;
 }
-.orangehrm-login-footer-sm[data-v-62ac4368] {
+.orangehrm-login-footer-sm[data-v-eff9f112] {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.orangehrm-login-footer-sm a[data-v-62ac4368] {
+.orangehrm-login-footer-sm a[data-v-eff9f112] {
   width: 22px;
   height: 22px;
   margin: 0 0.25rem;
 }
-.orangehrm-login-footer-sm .orangehrm-sm-icon[data-v-62ac4368] {
+.orangehrm-login-footer-sm .orangehrm-sm-icon[data-v-eff9f112] {
   width: inherit;
   height: inherit;
   color: rgba(146, 155, 170, 0.8);
 }
 @media (min-width: 800px) {
-.orangehrm-login-footer-sm[data-v-62ac4368] {
+.orangehrm-login-footer-sm[data-v-eff9f112] {
     position: absolute;
     left: 1rem;
     bottom: 1rem;
 }
 }
-.orangehrm-login-seperator[data-v-62ac4368] {
+.orangehrm-login-seperator[data-v-eff9f112] {
   margin: 0.5rem 0;
 }
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\

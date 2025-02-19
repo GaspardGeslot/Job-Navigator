@@ -87,6 +87,13 @@ class MenuItem
     private ?array $additionalParams = [];
 
     /**
+     * @var Theme|null
+     * @ORM\ManyToOne(targetEntity="OrangeHRM\Entity\Theme", inversedBy="users")
+     * @ORM\JoinColumn(name="theme_id", referencedColumnName="theme_id")
+     */
+    private ?Theme $theme = null;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -148,6 +155,22 @@ class MenuItem
     public function setLevel(int $level): void
     {
         $this->level = $level;
+    }
+
+    /**
+     * @return Theme
+     */
+    public function getTheme(): Theme
+    {
+        return $this->theme;
+    }
+
+    /**
+     * @param Theme $theme
+     */
+    public function setTheme(Theme $theme): void
+    {
+        $this->theme = $theme;
     }
 
     /**

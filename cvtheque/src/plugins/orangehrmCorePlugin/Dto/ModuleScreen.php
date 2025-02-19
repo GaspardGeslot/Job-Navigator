@@ -33,6 +33,11 @@ class ModuleScreen
     /**
      * @var string|null
      */
+    private ?string $theme = null;
+
+    /**
+     * @var string|null
+     */
     private ?string $overriddenModule = null;
 
     /**
@@ -44,10 +49,11 @@ class ModuleScreen
      * @param string|null $module
      * @param string|null $screen
      */
-    public function __construct(?string $module = null, ?string $screen = null)
+    public function __construct(?string $module = null, ?string $screen = null, ?string $theme = null)
     {
         $this->module = $module;
         $this->screen = $screen;
+        $this->theme = $theme;
         $this->overrideModule($module);
         $this->overrideScreen($screen);
     }
@@ -84,6 +90,22 @@ class ModuleScreen
     {
         $this->screen = $screen;
         !is_null($this->overriddenScreen) ?: $this->overrideScreen($screen);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    /**
+     * @param string|null $theme
+     */
+    public function setTheme(?string $theme): void
+    {
+        $this->theme = $theme;
     }
 
     /**

@@ -19,6 +19,34 @@
 
 <template>
   <login-layout>
+    <oxd-form class="orangehrm-login-form">
+      <oxd-form-row>
+        <oxd-text class="orangehrm-profile-title" tag="h6">Je suis</oxd-text>
+      </oxd-form-row>
+      <oxd-form-row>
+        <oxd-form-actions>
+          <oxd-button
+            class="orangehrm-profile-button"
+            display-type="secondary"
+            :label="$t('Un administrateur')"
+          />
+        </oxd-form-actions>
+        <oxd-form-actions>
+          <oxd-button
+            class="orangehrm-profile-button"
+            display-type="ghost"
+            :label="$t('Un candidat')"
+            @click="navigateUrlConnexion"
+          />
+          <oxd-button
+            class="orangehrm-profile-button"
+            display-type="ghost"
+            :label="$t('Une entreprise')"
+            @click="navigateUrlLoginCompany"
+          />
+        </oxd-form-actions>
+      </oxd-form-row>
+    </oxd-form>
     <oxd-text class="orangehrm-login-title" tag="h5">
       {{ $t('auth.login') }}
     </oxd-text>
@@ -29,14 +57,6 @@
           :message="error?.message || ''"
           type="error"
         ></oxd-alert>
-        <oxd-sheet
-          v-if="isDemoMode"
-          type="gray-lighten-2"
-          class="orangehrm-demo-credentials"
-        >
-          <oxd-text tag="p">Username : Admin</oxd-text>
-          <oxd-text tag="p">Password : admin123</oxd-text>
-        </oxd-sheet>
       </div>
       <oxd-form
         ref="loginForm"
@@ -78,14 +98,6 @@
             type="submit"
           />
         </oxd-form-actions>
-        <oxd-form-actions class="orangehrm-create-account-action">
-          <oxd-button
-            class="orangehrm-create-account-button"
-            display-type="main"
-            :label="$t('auth.create_accont')"
-            @click="navigateUrlCreateAccount"
-          />
-        </oxd-form-actions>
         <div class="orangehrm-login-forgot">
           <oxd-text
             class="orangehrm-login-forgot-header"
@@ -95,28 +107,21 @@
           </oxd-text>
         </div>
       </oxd-form>
-      <template v-if="authenticators.length > 0">
-        <oxd-divider class="orangehrm-login-seperator"></oxd-divider>
-        <social-media-auth :authenticators="authenticators"></social-media-auth>
-      </template>
     </div>
   </login-layout>
 </template>
 
 <script>
 import {urlFor} from '@/core/util/helper/url';
-import {OxdAlert, OxdSheet} from '@ohrm/oxd';
+import {OxdAlert} from '@ohrm/oxd';
 import {required} from '@/core/util/validation/rules';
 import {navigate, reloadPage} from '@/core/util/helper/navigation';
 import LoginLayout from '../components/LoginLayout.vue';
-import SocialMediaAuth from '../components/SocialMediaAuth.vue';
 
 export default {
   components: {
     'oxd-alert': OxdAlert,
-    'oxd-sheet': OxdSheet,
     'login-layout': LoginLayout,
-    'social-media-auth': SocialMediaAuth,
   },
 
   props: {
@@ -127,18 +132,6 @@ export default {
     token: {
       type: String,
       required: true,
-    },
-    showSocialMedia: {
-      type: Boolean,
-      default: true,
-    },
-    isDemoMode: {
-      type: Boolean,
-      default: false,
-    },
-    authenticators: {
-      type: Array,
-      default: () => [],
     },
   },
 
@@ -156,7 +149,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor(`/${window.appGlobal.theme}/auth/validate`);
+      return urlFor(`/${window.appGlobal.theme}/auth/validate/admin`);
     },
   },
 
@@ -176,11 +169,11 @@ export default {
     navigateUrlForgotPassword() {
       navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);
     },
-    navigateUrlCreateAccount() {
-      navigate(`/${window.appGlobal.theme}/auth/createAccount`);
-    },
     navigateUrlLoginCompany() {
       navigate(`/${window.appGlobal.theme}/auth/company/login`);
+    },
+    navigateUrlConnexion() {
+      navigate(`/${window.appGlobal.theme}/auth/login`);
     },
   },
 };

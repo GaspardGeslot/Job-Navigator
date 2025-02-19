@@ -26,10 +26,12 @@ import RequestResetPassword from './pages/RequestResetPassword.vue';
 import ResetPasswordSuccess from './pages/ResetPasswordSuccess.vue';
 import EmailConfigurationWarning from './pages/EmailConfigurationWarning.vue';
 import LoginCompany from './pages/LoginCompany.vue';
+import LoginAdmin from './pages/LoginAdmin.vue';
 
 export default {
   'auth-login': Login,
   'auth-login-company': LoginCompany,
+  'auth-login-admin': LoginAdmin,
   'auth-create-account': CreateAccount,
   'auth-forbidden': Forbidden,
   'reset-password': ResetPassword,

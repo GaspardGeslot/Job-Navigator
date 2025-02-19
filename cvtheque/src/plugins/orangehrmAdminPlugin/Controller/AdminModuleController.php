@@ -31,7 +31,17 @@ class AdminModuleController extends AbstractModuleController
      */
     public function handle(Request $request): RedirectResponse
     {
-        $defaultPath = $this->getHomePageService()->getAdminModuleDefaultPath();
+        $defaultPath = '';
+        switch ($request->attributes->get('theme')) {
+            case 'olecio':
+                $defaultPath = 'admin/matching';
+                break;
+            case 'constructys':
+                $defaultPath = 'admin/viewCandidates';
+                break;
+            default:
+                $defaultPath = $this->getHomePageService()->getAdminModuleDefaultPath();
+        }
         return $this->redirect($request->attributes->get('theme') . "/" . $defaultPath);
     }
 }

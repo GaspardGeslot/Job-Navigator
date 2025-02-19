@@ -15,7 +15,7 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Login from './pages/Login.vue';
+import LoginAdmin from './pages/LoginAdmin.vue';
 import CreateAccount from './pages/CreateAccount.vue';
 import Forbidden from './pages/Forbidden.vue';
 import ResetPassword from './pages/ResetPassword.vue';
@@ -27,7 +27,7 @@ import ResetPasswordSuccess from './pages/ResetPasswordSuccess.vue';
 import EmailConfigurationWarning from './pages/EmailConfigurationWarning.vue';
 
 export default {
-  'auth-login': Login,
+  'auth-login-admin': LoginAdmin,
   'auth-create-account': CreateAccount,
   'auth-forbidden': Forbidden,
   'reset-password': ResetPassword,

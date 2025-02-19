@@ -190,9 +190,6 @@ export default {
         this.$refs.loginForm.$el.submit();
       }
     },
-    navigateUrlForgotadherentCode() {
-      navigate(`/${window.appGlobal.theme}/auth/requestadherentCodeResetCode`);
-    },
     navigateUrlConnexion() {
       navigate(`/${window.appGlobal.theme}/auth/login`);
     },

@@ -123,6 +123,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setIsAdmin(false);
             $this->getAuthUser()->setIsCandidate(false);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);

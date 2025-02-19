@@ -236,6 +236,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    matchingSelected: {
+      type: Object,
+      default: null,
+    },
     candidatureStatuses: {
       type: Array,
       default: () => [],
@@ -385,12 +389,18 @@ export default {
       return this.matchings.length === 0;
     },
   },
+  beforeMount() {
+    if (this.matchingSelected) {
+      if (this.filters === undefined) this.filters = {...defaultFilters};
+      this.filters.matchingSelected = this.matchingSelected;
+      this.filterItems();
+    }
+  },
   data() {
     return {
       isSearching: false,
       isSearchingNoStatut: false,
       canUpdate: false,
-      matchingSelected: null,
       statusJobSelected: null,
       isDateAscending: true,
       isDateAscending2: true,

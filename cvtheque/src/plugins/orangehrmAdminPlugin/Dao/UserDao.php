@@ -49,7 +49,7 @@ class UserDao extends BaseDao
      * @param string $password
      * @param string $role
      */
-    public function saveNewUser(string $userName, string $password, string $role = 'ESS', int $themeId): User
+    public function saveNewUser(string $userName, string $password, string $role = 'ESS', int $themeId = 1): User
     {
         $userRole = $this->getUserRole($role);
         $newUserEmployeeId = $this->saveNewEmployee($userName);

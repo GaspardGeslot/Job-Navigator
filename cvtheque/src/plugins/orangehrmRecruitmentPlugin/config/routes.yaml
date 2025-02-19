@@ -354,6 +354,13 @@ recruitment_view_job_vacancy:
   requirements:
     theme: constructys|olecio
 
+recruitment_view_job_vacancy_by_id:
+  path: /{theme}/recruitment/viewJobVacancy/{id}
+  controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 recruitment_add_job_vacancy:
   path: /{theme}/recruitment/addJobVacancy
   controller: OrangeHRM\Recruitment\Controller\AddJobVacancyController::handle

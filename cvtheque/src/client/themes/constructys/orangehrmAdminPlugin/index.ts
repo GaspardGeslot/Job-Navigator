@@ -70,6 +70,8 @@ import ProviderList from './pages/socialMediaAuth/ProviderList.vue';
 import AddProvider from './pages/socialMediaAuth/AddProvider.vue';
 import EditProvider from './pages/socialMediaAuth/EditProvider.vue';
 import FixLanguageErrors from './pages/languageImport/FixLanguageStringErrors.vue';
+import Candidates from './pages/candidates/Candidates.vue';
+import Companies from './pages/companies/Companies.vue';
 
 export default {
   'job-title-list': JobTitle,
@@ -127,4 +129,6 @@ export default {
   'add-auth-provider': AddProvider,
   'edit-auth-provider': EditProvider,
   'fix-language-errors': FixLanguageErrors,
+  'candidates-list': Candidates,
+  'companies-list': Companies,
 };

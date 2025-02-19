@@ -423,7 +423,9 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
         $vacancy->setUpdatedTime($this->getDateTimeHelper()->getNow());
         $vacancy = $this->getVacancyService()->getVacancyDao()->saveJobVacancy($vacancy);
 
-        $this->createHedwigeMatching($this->getAuthUser()->getUserHedwigeToken());
+        $matchingId = $this->createHedwigeMatching($this->getAuthUser()->getUserHedwigeToken());
+        if ($matchingId != null)
+            $vacancy->setId(intval($matchingId));
 
         $vacancy->setJobs($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_JOB_TITLE));
         $vacancy->setNeeds($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEEDS));
@@ -440,7 +442,7 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     /**
      * @param string $token
      */
-    protected function createHedwigeMatching(string $token) : void
+    protected function createHedwigeMatching(string $token) : ?string
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -458,14 +460,16 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
         ];
 
         try {
-            $client->request('POST', "{$clientBaseUrl}/matching/company", [
+            $response = $client->request('POST', "{$clientBaseUrl}/matching/company", [
                 'headers' => [
                     'Authorization' => $token,
                     'Content-Type' => 'application/json',
                 ],
                 'body' => json_encode($data)
             ]);
+            return (string) $response->getBody();
         } catch (\Exceptionon $e) {
+            return null;
         }
     }
 

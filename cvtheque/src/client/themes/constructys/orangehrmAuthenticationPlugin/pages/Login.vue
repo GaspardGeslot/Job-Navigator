@@ -176,7 +176,7 @@ export default {
 
   computed: {
     submitUrl() {
-      return urlFor(`/${window.appGlobal.theme}/auth/validate`);
+      return urlFor(`/${window.appGlobal.theme}/auth/validate/candidate`);
     },
   },
 

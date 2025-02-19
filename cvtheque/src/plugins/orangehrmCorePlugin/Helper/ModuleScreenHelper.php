@@ -41,6 +41,9 @@ class ModuleScreenHelper
             $request = self::getCurrentRequest();
             if ($request) {
                 $pathChunks = explode('/', $request->getPathInfo());
+                if (isset($pathChunks[1])) {
+                    $moduleScreen->setTheme($pathChunks[1]);
+                }
                 if (isset($pathChunks[2])) {
                     $moduleScreen->setModule($pathChunks[2]);
                 }

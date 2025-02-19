@@ -85,11 +85,17 @@ class ValidateController extends AbstractController implements PublicControllerI
         $username = $request->request->get(self::PARAMETER_USERNAME, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
         $theme = $request->attributes->get('theme');
-        $credentials = new UserCredential($username, $password, $theme === 'olecio' ? 'Admin' : 'ESS');
+        $role = $request->attributes->get('role');
+        $role = $role !== null && $role === 'admin' ? 'Admin' : 'ESS';
+        $credentials = new UserCredential($username, $password, $role);
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+        if ($role === 'Admin') {
+            $loginUrl = $urlGenerator->generate('auth_login_admin', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+        } else {
+            $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+        }
 
         try {
             $token = $request->request->get('_token');
@@ -106,7 +112,8 @@ class ValidateController extends AbstractController implements PublicControllerI
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
-            $this->getAuthUser()->setIsCandidate(true);
+            $this->getAuthUser()->setIsAdmin($role === 'Admin');
+            $this->getAuthUser()->setIsCandidate($role !== 'Admin');
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {

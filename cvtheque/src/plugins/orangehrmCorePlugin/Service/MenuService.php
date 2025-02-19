@@ -21,6 +21,7 @@ namespace OrangeHRM\Core\Service;
 use LogicException;
 use OrangeHRM\Core\Authorization\Service\ScreenPermissionService;
 use OrangeHRM\Core\Dao\MenuDao;
+use OrangeHRM\CorporateBranding\Dao\ThemeDao;
 use OrangeHRM\Core\Dto\ModuleScreen;
 use OrangeHRM\Core\Menu\DetailedMenuItem;
 use OrangeHRM\Core\Menu\MenuConfigurator;
@@ -47,9 +48,25 @@ class MenuService
      */
     protected ?MenuDao $menuDao = null;
     /**
+     * @var MenuDao|null
+     */
+    protected ?ThemeDao $themeDao = null;
+    /**
      * @var ScreenPermissionService|null
      */
     protected ?ScreenPermissionService $screenPermissionService = null;
+
+    /**
+     * @return ThemeDao
+     */
+    public function getThemeDao(): ThemeDao
+    {
+        if (is_null($this->themeDao)) {
+            $this->themeDao = new ThemeDao();
+        }
+
+        return $this->themeDao;
+    }
 
     /**
      * @return MenuDao
@@ -104,11 +121,11 @@ class MenuService
     /**
      * @return DetailedMenuItem[]
      */
-    private function getDetailedSidePanelMenuItemsAlongWithCache(): array
+    private function getDetailedSidePanelMenuItemsAlongWithCache(?int $themeId): array
     {
         if (!$this->getAuthUser()->hasAttribute(self::CORE_MENU_SIDE_PANEL_CACHE_KEY)) {
             $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
-            $sidePanelMenuItems = $this->getMenuDao()->getSidePanelMenuItems($userRoles);
+            $sidePanelMenuItems = $this->getMenuDao()->getSidePanelMenuItems($userRoles, $themeId);
 
             $detailedSidePanelMenuItems = [];
             foreach ($sidePanelMenuItems as $sidePanelMenuItem) {
@@ -128,12 +145,12 @@ class MenuService
      * @param int $sidePanelMenuItemId
      * @return DetailedMenuItem[]
      */
-    private function getTopMenuItemsAlongWithCache(int $sidePanelMenuItemId): array
+    private function getTopMenuItemsAlongWithCache(int $sidePanelMenuItemId, ?int $themeId): array
     {
         $cacheKey = $this->generateCacheKeyForTopMenuItem($sidePanelMenuItemId);
         $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
         if (!$this->getAuthUser()->hasAttribute($cacheKey)) {
-            $topMenuItems = $this->getMenuDao()->getTopMenuItems($userRoles, $sidePanelMenuItemId);
+            $topMenuItems = $this->getMenuDao()->getTopMenuItems($userRoles, $sidePanelMenuItemId, $themeId);
             $this->getAuthUser()->setAttribute($cacheKey, $topMenuItems);
 
             $topRibbonKeys = $this->getAuthUser()->getAttribute(self::CORE_MENU_TOP_RIBBON_KEYS_CACHE_KEY, []);
@@ -160,7 +177,7 @@ class MenuService
     public function getMenuItems(string $baseUrl): array
     {
         $currentModuleAndScreen = $this->getCurrentModuleAndScreen();
-
+        
         $configuratorMenuItems = [];
         $screen = $this->getScreenPermissionService()
             ->getScreenDao()
@@ -174,7 +191,8 @@ class MenuService
             $configuratorMenuItems = $this->getMenuItemChainForMenuItem($configurator->configure($screen));
         }
 
-        $detailedSidePanelMenuItems = $this->getDetailedSidePanelMenuItemsAlongWithCache();
+        $themeId = $this->getThemeDao()->getId($currentModuleAndScreen->getTheme());
+        $detailedSidePanelMenuItems = $this->getDetailedSidePanelMenuItemsAlongWithCache($themeId);
         $normalizedSidePanelMenuItems = [];
         $selectedSidePanelMenuId = null;
 
@@ -192,7 +210,7 @@ class MenuService
 
         $normalizedTopMenuItems = [];
         if (!is_null($selectedSidePanelMenuId)) {
-            $topMenuItems = $this->getTopMenuItemsAlongWithCache($selectedSidePanelMenuId);
+            $topMenuItems = $this->getTopMenuItemsAlongWithCache($selectedSidePanelMenuId, $themeId);
             foreach ($topMenuItems as $topMenuItem) {
                 $normalizedTopMenuItem = $this->normalizeTopMenuItem(
                     $topMenuItem,
