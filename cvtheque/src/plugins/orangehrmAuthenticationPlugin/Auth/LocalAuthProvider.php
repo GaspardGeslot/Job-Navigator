@@ -128,7 +128,7 @@ class LocalAuthProvider extends AbstractAuthProvider
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
             return false;
-        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential());
+        $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential(), $authParams->getTheme());
         if ($exists)
             throw new UserAlreadyEnrolledException();
         return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), false, $authParams->getTheme());
