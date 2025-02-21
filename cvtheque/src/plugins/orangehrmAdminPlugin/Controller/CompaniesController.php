@@ -89,6 +89,25 @@ class CompaniesController extends AbstractVueController
      */
     public function getMatchings(Request $request)
     {
+        $fromDateFilter = $request->query->get(self::FILTER_START_DATE);
+        $toDateFilter = $request->query->get(self::FILTER_TO_DATE);
+        $fromDate = $fromDateFilter ? new \DateTime($fromDateFilter) : null;
+        $toDate = $toDateFilter ? new \DateTime($toDateFilter) : null;
+
+        $companies = $this->getHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken(), $fromDate, $toDate);
+        return new Response(
+            json_encode($companies),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+        
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCompaniesMatchings(Request $request)
+    {
         $professionalExperienceFilter = $request->query->get(
             self::FILTER_PROFESSIONAL_EXPERIENCE
         );
@@ -105,7 +124,7 @@ class CompaniesController extends AbstractVueController
             self::FILTER_COURSE_START
         );
 
-        $matchings = $this->getHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken(), $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter);
+        $matchings = $this->getHedwigeCompaniesMatchings($this->getAuthUser()->getUserHedwigeToken(), $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter);
         return new Response(
             json_encode($matchings),
             Response::HTTP_OK,
@@ -138,13 +157,37 @@ class CompaniesController extends AbstractVueController
         }
     }
 
-    protected function getHedwigeMatchings(string $token, ?string $jobTitleFilter, ?string $needFilter, ?string $studyLevelFilter, ?string $courseStartFilter, ?string $professionalExperienceFilter) : array
+    protected function getHedwigeMatchings(string $token, ?\DateTime $fromDate, ?\DateTime $toDate) : array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
             $url = "{$clientBaseUrl}/client/matching/stats?";
+            if ($fromDate !== null) {
+                $url .= 'from=' . urlencode($fromDate->format('Y-m-d')) . '&';
+            }
+            if ($toDate !== null) {
+                $url .= 'to=' . urlencode($toDate->format('Y-m-d')) . '&';
+            }
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return null;
+        }
+    }
+
+    protected function getHedwigeCompaniesMatchings(string $token, ?string $jobTitleFilter, ?string $needFilter, ?string $studyLevelFilter, ?string $courseStartFilter, ?string $professionalExperienceFilter) : array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/client/companies/matching/stats?";
             if ($jobTitleFilter != null &&$jobTitleFilter !== '') {
                 $url .= 'job=' . urlencode($jobTitleFilter) . '&';
             }

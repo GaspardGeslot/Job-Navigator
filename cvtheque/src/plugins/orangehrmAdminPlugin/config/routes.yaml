@@ -498,6 +498,13 @@ apiv2_admin_companies:
     theme: constructys|olecio
 
 apiv2_admin_companies_matchings:
+  path: /{theme}/api/v2/admin/companies/matchings/count
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getCompaniesMatchings
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_companies_matchings_count:
   path: /{theme}/api/v2/admin/companies/matchings
   controller: OrangeHRM\Admin\Controller\CompaniesController::getMatchings
   methods: [ GET ]

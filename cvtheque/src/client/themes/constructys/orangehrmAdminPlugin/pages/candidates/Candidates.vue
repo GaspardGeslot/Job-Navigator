@@ -119,6 +119,7 @@
         </div>
       </oxd-form>
     </div>
+    <br />
     <job-category-selection-modal
       v-if="showModal"
       @close="onModalClose"

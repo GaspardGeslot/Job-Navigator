@@ -1,13 +1,13 @@
 <template>
   <div class="orangehrm-candidate-page">
     <oxd-table-filter :filter-title="$t('Evolution des entreprises')">
-      <oxd-form @submit-valid="onSearchCompanies" @reset="onResetCompanies">
+      <oxd-form @submit-valid="onSearchDates" @reset="onResetDates">
         <oxd-form-row>
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="startDateFilter"
-                :label="$t('general.start_date')"
+                :label="$t('Date de début')"
                 :rules="rules.fromDate"
                 required
               />
@@ -15,7 +15,7 @@
             <oxd-grid-item>
               <oxd-input-field
                 v-model="endDateFilter"
-                :label="$t('general.end_date')"
+                :label="$t('Date de fin')"
                 :rules="rules.toDate"
                 required
               />
@@ -40,6 +40,14 @@
       <oxd-form :loading="isLoadingCompanies" style="padding: 25px">
         <div style="width: 100%; height: 400px">
           <canvas ref="companiesChartRef"></canvas>
+        </div>
+      </oxd-form>
+    </div>
+    <br />
+    <div class="orangehrm-paper-container">
+      <oxd-form :loading="isLoadingMatchings" style="padding: 25px">
+        <div style="width: 100%; height: 400px">
+          <canvas ref="matchingsChartRef"></canvas>
         </div>
       </oxd-form>
     </div>
@@ -142,10 +150,10 @@
       <div class="orangehrm-container">
         <oxd-card-table
           :headers="headers"
-          :items="matchings"
+          :items="companiesMatchings"
           :selectable="false"
           :clickable="false"
-          :loading="isLoadingMatching"
+          :loading="isLoadingCompaniesMatching"
           row-decorator="oxd-table-decorator-card"
         />
       </div>
@@ -258,13 +266,18 @@ export default {
       `${window.appGlobal.theme}/api/v2/admin/companies/matchings`,
     );
 
+    const httpCompaniesMatching = new APIService(
+      window.appGlobal.baseUrl,
+      `${window.appGlobal.theme}/api/v2/admin/companies/matchings/count`,
+    );
+
     const state = reactive({
       total: 0,
       offset: 0,
       candidates: [],
-      matchings: [],
+      companiesMatchings: [],
       isLoadingCompanies: false,
-      isLoadingMatching: false,
+      isLoadingCompaniesMatching: false,
     });
 
     const fetchCompaniesData = () => {
@@ -294,9 +307,35 @@ export default {
     };
 
     const fetchMatchingData = () => {
-      state.isLoadingMatching = true;
+      state.isLoadingMatchings = true;
       state.matchings = [];
       httpMatching
+        .getAll({
+          startDate: formatDate(
+            parseDate(startDateFilter.value, 'dd-MM-yyyy'),
+            'yyyy-MM-dd',
+          ),
+          toDate: endDateFilter.value
+            ? formatDate(
+                parseDate(endDateFilter.value, 'dd-MM-yyyy'),
+                'yyyy-MM-dd',
+              )
+            : undefined,
+        })
+        .then((response) => {
+          state.matchings = response.data;
+          state.total = response.data.length;
+          if (state.total === 0) {
+            noRecordsFound();
+          }
+        })
+        .finally(() => (state.isLoadingMatchings = false));
+    };
+
+    const fetchCompaniesMatchingData = () => {
+      state.isLoadingCompaniesMatching = true;
+      state.companiesMatchings = [];
+      httpCompaniesMatching
         .getAll({
           ...(professionalExperienceFilter.value
             ? {
@@ -316,12 +355,12 @@ export default {
             : {}),
         })
         .then((response) => {
-          console.log('response data : ', response.data);
-          state.matchings = response.data.map((item) => {
+          state.companiesMatchings = response.data.map((item) => {
             return {
               siret: item.siret,
               name: item.companyName,
               amount: item.matchingAmount,
+              lastUpdated: item.lastUpdated,
             };
           });
           state.total = response.data.length;
@@ -329,7 +368,7 @@ export default {
             noRecordsFound();
           }
         })
-        .finally(() => (state.isLoadingMatching = false));
+        .finally(() => (state.isLoadingCompaniesMatching = false));
     };
 
     const companiesChartRef = ref(null);
@@ -436,7 +475,7 @@ export default {
               },
               title: {
                 display: true,
-                text: "Quantité d'entreprises actives",
+                text: 'Volume de comptes entreprises actifs',
                 font: {
                   size: 16,
                 },
@@ -479,11 +518,133 @@ export default {
       }
     });
 
+    const matchingsChartRef = ref(null);
+    let matchingsChart = null;
+
+    const normalizeMatchingsDataForChart = (matchingsData) => {
+      if (!matchingsData || Object.keys(matchingsData).length === 0)
+        return null;
+
+      // Get all unique dates
+      const dates = Object.keys(matchingsData).sort();
+      // Format dates
+      const formattedDates = dates.map((date) => {
+        // Handle both ISO date format and simple date format
+        const dateObj = date.includes('T')
+          ? new Date(date)
+          : parseDate(date, 'yyyy-MM-dd');
+        return formatDate(dateObj, 'dd-MM-yyyy');
+      });
+
+      // Create single dataset with matching counts
+      const dataset = {
+        label: 'Nombre de besoins',
+        data: dates.map((date) => matchingsData[date] || 0),
+        borderColor: 'rgb(255, 99, 132)', // Different color (pink/red)
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        tension: 0.3,
+        fill: true,
+      };
+
+      return {
+        labels: formattedDates,
+        datasets: [dataset],
+      };
+    };
+
+    // Calculate the maximum y-axis value that's a multiple of 5
+    const calculateMatchingsYAxisMax = (datasets) => {
+      const maxValue = Math.max(...datasets[0].data);
+      return Math.ceil(maxValue / 5) * 5;
+    };
+
+    // Store the maximum y-axis value for matchings
+    const matchingsYAxisMax = ref(0);
+
+    const createMatchingsChart = () => {
+      const ctx = matchingsChartRef.value.getContext('2d');
+      const chartData = normalizeMatchingsDataForChart(state.matchings);
+
+      if (matchingsChart) {
+        matchingsChart.destroy();
+      }
+
+      if (chartData) {
+        // Only update yAxisMax if it hasn't been set yet or if it's 0
+        if (matchingsYAxisMax.value === 0) {
+          matchingsYAxisMax.value = calculateMatchingsYAxisMax(
+            chartData.datasets,
+          );
+        }
+
+        matchingsChart = new Chart(ctx, {
+          type: 'line',
+          data: chartData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: matchingsYAxisMax.value,
+                ticks: {
+                  stepSize: 1,
+                  callback: function (value) {
+                    if (Math.floor(value) === value) {
+                      return value;
+                    }
+                  },
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+              title: {
+                display: true,
+                text: 'Volume de besoins en recrutements actifs',
+                font: {
+                  size: 16,
+                },
+                padding: {
+                  bottom: 20,
+                },
+              },
+            },
+          },
+        });
+      }
+    };
+
+    // Reset matchingsYAxisMax when date filters change
+    watch([startDateFilter, endDateFilter], () => {
+      matchingsYAxisMax.value = 0;
+    });
+
+    watch(
+      () => state.matchings,
+      () => {
+        if (matchingsChartRef.value) {
+          createMatchingsChart();
+        }
+      },
+      {deep: true},
+    );
+
+    onMounted(() => {
+      if (state.matchings && Object.keys(state.matchings).length > 0) {
+        createMatchingsChart();
+      }
+    });
+
     return {
       httpCompanies,
+      httpCompaniesMatching,
       httpMatching,
       fetchCompaniesData,
       fetchMatchingData,
+      fetchCompaniesMatchingData,
       ...toRefs(state),
       rules,
       startDateFilter,
@@ -496,6 +657,8 @@ export default {
       courseStartFilter,
       companiesChartRef,
       yAxisMax,
+      matchingsChartRef,
+      matchingsYAxisMax,
     };
   },
   data() {
@@ -516,6 +679,11 @@ export default {
         {
           name: 'amount',
           title: this.$t('Quantité de besoin en recrutement'),
+          style: {flex: 1},
+        },
+        {
+          name: 'lastUpdated',
+          title: this.$t('Date de dernière mise à jour'),
           style: {flex: 1},
         },
       ],
@@ -540,6 +708,7 @@ export default {
   },
   beforeMount() {
     this.fetchCompaniesData();
+    this.fetchCompaniesMatchingData();
     this.fetchMatchingData();
   },
   methods: {
@@ -549,19 +718,21 @@ export default {
     onModalClose() {
       this.showModal = false;
     },
-    onSearchCompanies() {
+    onSearchDates() {
       this.fetchCompaniesData();
+      this.fetchMatchingData();
     },
-    onResetCompanies() {
+    onResetDates() {
       this.startDateFilter = formatDate(
         new Date(new Date().setMonth(new Date().getMonth() - 1)),
         'dd-MM-yyyy',
       );
       this.endDateFilter = formatDate(new Date(), 'dd-MM-yyyy');
       this.fetchCompaniesData();
+      this.fetchMatchingData();
     },
     onSearchMatching() {
-      this.fetchMatchingData();
+      this.fetchCompaniesMatchingData();
     },
     onResetMatching() {
       this.jobTitleFilter = null;
@@ -570,7 +741,7 @@ export default {
       this.needFilter = null;
       this.studyLevelFilter = null;
       this.courseStartFilter = null;
-      this.fetchMatchingData();
+      this.fetchCompaniesMatchingData();
     },
   },
 };

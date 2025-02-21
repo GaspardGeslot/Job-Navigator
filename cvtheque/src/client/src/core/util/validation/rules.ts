@@ -186,7 +186,7 @@ export const digitsOnlyWithDecimalPointAndMinusSign = function (
 export const beforeDate = function (
   date1: string,
   date2: string,
-  dateFormat = 'dd-MM-yyyy',
+  dateFormat = 'yyyy-MM-dd',
 ) {
   // Skip assertion on unset values
   if (!date1 || !date2) {
