@@ -1,637 +1,942 @@
 apiv2_admin_job_title:
-  path: /api/v2/admin/job-titles/{id}
+  path: /{theme}/api/v2/admin/job-titles/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\JobTitleAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_job_titles:
-  path: /api/v2/admin/job-titles
+  path: /{theme}/api/v2/admin/job-titles
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\JobTitleAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_job_specification:
-  path: /api/v2/admin/job-titles/{jobTitleId}/specification
+  path: /{theme}/api/v2/admin/job-titles/{jobTitleId}/specification
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\JobSpecificationAPI
     _key: jobTitleId
+  requirements:
+    jobTitleId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_job_category:
-  path: /api/v2/admin/job-categories/{id}
+  path: /{theme}/api/v2/admin/job-categories/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\JobCategoryAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_job_categories:
-  path: /api/v2/admin/job-categories
+  path: /{theme}/api/v2/admin/job-categories
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\JobCategoryAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_user:
-  path: /api/v2/admin/users/{id}
+  path: /{theme}/api/v2/admin/users/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\UserAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_users:
-  path: /api/v2/admin/users
+  path: /{theme}/api/v2/admin/users
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\UserAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_subunit:
-  path: /api/v2/admin/subunits/{id}
+  path: /{theme}/api/v2/admin/subunits/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\SubunitAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_subunits:
-  path: /api/v2/admin/subunits
+  path: /{theme}/api/v2/admin/subunits
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST ]
   defaults:
     _api: OrangeHRM\Admin\Api\SubunitAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_employment_status:
-  path: /api/v2/admin/employment-statuses/{id}
+  path: /{theme}/api/v2/admin/employment-statuses/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\EmploymentStatusAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_employment_statuses:
-  path: /api/v2/admin/employment-statuses
+  path: /{theme}/api/v2/admin/employment-statuses
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\EmploymentStatusAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_education:
-  path: /api/v2/admin/educations/{id}
+  path: /{theme}/api/v2/admin/educations/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\EducationAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_educations:
-  path: /api/v2/admin/educations
+  path: /{theme}/api/v2/admin/educations
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\EducationAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_skill:
-  path: /api/v2/admin/skills/{id}
+  path: /{theme}/api/v2/admin/skills/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\SkillAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_skills:
-  path: /api/v2/admin/skills
+  path: /{theme}/api/v2/admin/skills
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\SkillAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_license:
-  path: /api/v2/admin/licenses/{id}
+  path: /{theme}/api/v2/admin/licenses/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\LicenseAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_licenses:
-  path: /api/v2/admin/licenses
+  path: /{theme}/api/v2/admin/licenses
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\LicenseAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_language:
-  path: /api/v2/admin/languages/{id}
+  path: /{theme}/api/v2/admin/languages/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\LanguageAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_languages:
-  path: /api/v2/admin/languages
+  path: /{theme}/api/v2/admin/languages
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\LanguageAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_membership:
-  path: /api/v2/admin/memberships/{id}
+  path: /{theme}/api/v2/admin/memberships/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\MembershipAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_memberships:
-  path: /api/v2/admin/memberships
+  path: /{theme}/api/v2/admin/memberships
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\MembershipAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_organization:
-  path: /api/v2/admin/organization
+  path: /{theme}/api/v2/admin/organization
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     id: 0
     _api: OrangeHRM\Admin\Api\OrganizationAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_pay_grade_allowed_currencies:
-  path: /api/v2/admin/pay-grades/{payGradeId}/currencies/allowed
+  path: /{theme}/api/v2/admin/pay-grades/{payGradeId}/currencies/allowed
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Admin\Api\PayGradeAllowedCurrencyAPI
+  requirements:
+    payGradeId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_paygrades_currency:
-  path: /api/v2/admin/pay-grades/{payGradeId}/currencies/{id}
+  path: /{theme}/api/v2/admin/pay-grades/{payGradeId}/currencies/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\PayGradeCurrencyAPI
+  requirements:
+    payGradeId: '\d+'
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_paygrades_currencies:
-  path: /api/v2/admin/pay-grades/{payGradeId}/currencies
+  path: /{theme}/api/v2/admin/pay-grades/{payGradeId}/currencies
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\PayGradeCurrencyAPI
+  requirements:
+    payGradeId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_nationality:
-  path: /api/v2/admin/nationalities/{id}
+  path: /{theme}/api/v2/admin/nationalities/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\NationalityAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_nationalities:
-  path: /api/v2/admin/nationalities
+  path: /{theme}/api/v2/admin/nationalities
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\NationalityAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_email_configuration:
-  path: /api/v2/admin/email-configuration
+  path: /{theme}/api/v2/admin/email-configuration
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     id: 0
     _api: OrangeHRM\Admin\Api\EmailConfigurationAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_work_shift:
-  path: /api/v2/admin/work-shifts/{id}
+  path: /{theme}/api/v2/admin/work-shifts/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\WorkShiftAPI
   requirements:
     id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_work_shifts:
-  path: /api/v2/admin/work-shifts
+  path: /{theme}/api/v2/admin/work-shifts
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\WorkShiftAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_work_shifts_employee:
-  path: /api/v2/admin/work-shifts/employees
+  path: /{theme}/api/v2/admin/work-shifts/employees
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Admin\Api\WorkShiftEmployeeAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_location:
-  path: /api/v2/admin/locations/{id}
+  path: /{theme}/api/v2/admin/locations/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\LocationAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_locations:
-  path: /api/v2/admin/locations
+  path: /{theme}/api/v2/admin/locations
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\LocationAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_modules:
-  path: /api/v2/admin/modules
+  path: /{theme}/api/v2/admin/modules
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\ModulesAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_pay_grades:
-  path: /api/v2/admin/pay-grades
+  path: /{theme}/api/v2/admin/pay-grades
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\PayGradeAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_pay_grade:
-  path: /api/v2/admin/pay-grades/{id}
+  path: /{theme}/api/v2/admin/pay-grades/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\PayGradeAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_email_subscription:
-  path: /api/v2/admin/email-subscriptions/{id}
+  path: /{theme}/api/v2/admin/email-subscriptions/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\EmailSubscriptionAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_email_subscriptions:
-  path: /api/v2/admin/email-subscriptions
+  path: /{theme}/api/v2/admin/email-subscriptions
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Admin\Api\EmailSubscriptionAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_email_subscribers:
-  path: /api/v2/admin/email-subscriptions/{emailSubscriptionId}/subscribers
+  path: /{theme}/api/v2/admin/email-subscriptions/{emailSubscriptionId}/subscribers
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\EmailSubscriberAPI
+  requirements:
+    emailSubscriptionId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_email_subscriber:
-  path: /api/v2/admin/email-subscriptions/{emailSubscriptionId}/subscribers/{id}
+  path: /{theme}/api/v2/admin/email-subscriptions/{emailSubscriptionId}/subscribers/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\EmailSubscriberAPI
+  requirements:
+    emailSubscriptionId: '\d+'
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_validate_user_name:
-  path: /api/v2/admin/validation/user-name
+  path: /{theme}/api/v2/admin/validation/user-name
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _key: userName
     _api: OrangeHRM\Admin\Api\ValidationUserNameAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_localization:
-  path: /api/v2/admin/localization
+  path: /{theme}/api/v2/admin/localization
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     id: 0
     _api: OrangeHRM\Admin\Api\LocalizationAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_i18n_languages:
-  path: /api/v2/admin/i18n/languages
+  path: /{theme}/api/v2/admin/i18n/languages
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, DELETE ]
   defaults:
     _api: OrangeHRM\Admin\Api\I18NLanguageAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_i18n_translation_import:
-  path: /api/v2/admin/i18n/languages/{languageId}/import
+  path: /{theme}/api/v2/admin/i18n/languages/{languageId}/import
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ POST ]
   defaults:
     _api: OrangeHRM\Admin\Api\I18NTranslationImportAPI
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_i18n_language:
-  path: /api/v2/admin/i18n/languages/{id}
+  path: /{theme}/api/v2/admin/i18n/languages/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\I18NLanguageAPI
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_i18n_language_translations:
-  path: /api/v2/admin/i18n/languages/{languageId}/translations
+  path: /{theme}/api/v2/admin/i18n/languages/{languageId}/translations
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Admin\Api\I18NTranslationAPI
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_i18n_language_bulk_translations:
-  path: /api/v2/admin/i18n/languages/{languageId}/translations/bulk
+  path: /{theme}/api/v2/admin/i18n/languages/{languageId}/translations/bulk
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Admin\Api\I18NTranslationBulkAPI
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_i18n_groups:
-  path: /api/v2/admin/i18n/groups
+  path: /{theme}/api/v2/admin/i18n/groups
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Admin\Api\I18NGroupAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_admin_i18n_translation_validation:
-  path: /api/v2/admin/i18n/translation/{langStringId}/validate
+  path: /{theme}/api/v2/admin/i18n/translation/{langStringId}/validate
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _key: langStringId
     _api: OrangeHRM\Admin\Api\I18NTranslationValidationAPI
+  requirements:
+    langStringId: '\d+'
+    theme: constructys|olecio
 
 apiv2_admin_i18n_language_translation_errors:
-  path: /api/v2/admin/i18n/languages/{languageId}/translations/errors
+  path: /{theme}/api/v2/admin/i18n/languages/{languageId}/translations/errors
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Admin\Api\I18NImportErrorAPI
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_candidates:
+  path: /{theme}/api/v2/admin/candidates
+  controller: OrangeHRM\Admin\Controller\CandidatesController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_companies:
+  path: /{theme}/api/v2/admin/companies
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_companies_matchings:
+  path: /{theme}/api/v2/admin/companies/matchings/count
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getCompaniesMatchings
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_companies_matchings_count:
+  path: /{theme}/api/v2/admin/companies/matchings
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getMatchings
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 ##########################
 #        Files
 ##########################
 
 admin_job_specification_attachment:
-  path: /admin/viewJobSpecification/attachId/{attachId}
+  path: /{theme}/admin/viewJobSpecification/attachId/{attachId}
   controller: OrangeHRM\Admin\Controller\File\JobSpecification::handle
   methods: [ GET ]
+  requirements:
+    attachId: '\d+'
+    theme: constructys|olecio
 
 admin_language_package_attachment:
-  path: /admin/viewLanguagePackage/languageId/{languageId}
+  path: /{theme}/admin/viewLanguagePackage/languageId/{languageId}
   controller: OrangeHRM\Admin\Controller\File\LanguagePackage::handle
   methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
 
 ##########################
 #        Screens
 ##########################
 
 admin_module:
-  path: /admin/viewAdminModule
+  path: /{theme}/admin/viewAdminModule
   controller: OrangeHRM\Admin\Controller\AdminModuleController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 view_job_title:
-  path: /admin/viewJobTitleList
+  path: /{theme}/admin/viewJobTitleList
   controller: OrangeHRM\Admin\Controller\JobTitleController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_job_title:
-  path: /admin/saveJobTitle
+  path: /{theme}/admin/saveJobTitle
   controller: OrangeHRM\Admin\Controller\SaveJobTitleController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_job_title:
-  path: /admin/saveJobTitle/{id}
+  path: /{theme}/admin/saveJobTitle/{id}
   controller: OrangeHRM\Admin\Controller\SaveJobTitleController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_job_category:
-  path: /admin/jobCategory
+  path: /{theme}/admin/jobCategory
   controller: OrangeHRM\Admin\Controller\JobCategoryController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_job_category:
-  path: /admin/saveJobCategory
+  path: /{theme}/admin/saveJobCategory
   controller: OrangeHRM\Admin\Controller\SaveJobCategoryController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_job_category:
-  path: /admin/saveJobCategory/{id}
+  path: /{theme}/admin/saveJobCategory/{id}
   controller: OrangeHRM\Admin\Controller\SaveJobCategoryController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_employment_status:
-  path: /admin/employmentStatus
+  path: /{theme}/admin/employmentStatus
   controller: OrangeHRM\Admin\Controller\EmploymentStatusController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_employment_status:
-  path: /admin/saveEmploymentStatus
+  path: /{theme}/admin/saveEmploymentStatus
   controller: OrangeHRM\Admin\Controller\SaveEmploymentStatusController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_employment_status:
-  path: /admin/saveEmploymentStatus/{id}
+  path: /{theme}/admin/saveEmploymentStatus/{id}
   controller: OrangeHRM\Admin\Controller\SaveEmploymentStatusController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_system_users:
-  path: /admin/viewSystemUsers
+  path: /{theme}/admin/viewSystemUsers
   controller: OrangeHRM\Admin\Controller\SystemUserController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_system_users:
-  path: /admin/saveSystemUser
+  path: /{theme}/admin/saveSystemUser
   controller: OrangeHRM\Admin\Controller\SaveSystemUserController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_system_users:
-  path: /admin/saveSystemUser/{id}
+  path: /{theme}/admin/saveSystemUser/{id}
   controller: OrangeHRM\Admin\Controller\SaveSystemUserController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_organization_structure:
-  path: /admin/viewCompanyStructure
+  path: /{theme}/admin/viewCompanyStructure
   controller: OrangeHRM\Admin\Controller\OrganizationStructureController::handle
+  requirements:
+    theme: constructys|olecio
 
 view_education:
-  path: /admin/viewEducation
+  path: /{theme}/admin/viewEducation
   controller: OrangeHRM\Admin\Controller\QualificationEducationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_education:
-  path: /admin/saveEducation
+  path: /{theme}/admin/saveEducation
   controller: OrangeHRM\Admin\Controller\SaveQualificationEducationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_education:
-  path: /admin/saveEducation/{id}
+  path: /{theme}/admin/saveEducation/{id}
   controller: OrangeHRM\Admin\Controller\SaveQualificationEducationController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_qualification_skills:
-  path: /admin/viewSkills
+  path: /{theme}/admin/viewSkills
   controller: OrangeHRM\Admin\Controller\QualificationSkillController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_qualification_skills:
-  path: /admin/saveSkills
+  path: /{theme}/admin/saveSkills
   controller: OrangeHRM\Admin\Controller\SaveQualificationSkillController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_qualification_skills:
-  path: /admin/saveSkills/{id}
+  path: /{theme}/admin/saveSkills/{id}
   controller: OrangeHRM\Admin\Controller\SaveQualificationSkillController::handle
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_license:
-  path: /admin/viewLicenses
+  path: /{theme}/admin/viewLicenses
   controller: OrangeHRM\Admin\Controller\QualificationLicenseController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_license:
-  path: /admin/saveLicenses
+  path: /{theme}/admin/saveLicenses
   controller: OrangeHRM\Admin\Controller\SaveQualificationLicenseController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_license:
-  path: /admin/saveLicenses/{id}
+  path: /{theme}/admin/saveLicenses/{id}
   controller: OrangeHRM\Admin\Controller\SaveQualificationLicenseController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_qualification_languages:
-  path: /admin/viewLanguages
+  path: /{theme}/admin/viewLanguages
   controller: OrangeHRM\Admin\Controller\QualificationLanguageController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_qualification_languages:
-  path: /admin/saveLanguages
+  path: /{theme}/admin/saveLanguages
   controller: OrangeHRM\Admin\Controller\SaveQualificationLanguageController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_qualification_languages:
-  path: /admin/saveLanguages/{id}
+  path: /{theme}/admin/saveLanguages/{id}
   controller: OrangeHRM\Admin\Controller\SaveQualificationLanguageController::handle
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_qualification_memberships:
-  path: /admin/membership
+  path: /{theme}/admin/membership
   controller: OrangeHRM\Admin\Controller\QualificationMembershipController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_qualification_memberships:
-  path: /admin/saveMemberships
+  path: /{theme}/admin/saveMemberships
   controller: OrangeHRM\Admin\Controller\SaveQualificationMembershipController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_qualification_memberships:
-  path: /admin/saveMemberships/{id}
+  path: /{theme}/admin/saveMemberships/{id}
   controller: OrangeHRM\Admin\Controller\SaveQualificationMembershipController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_organization_general_info:
-  path: /admin/viewOrganizationGeneralInformation
+  path: /{theme}/admin/viewOrganizationGeneralInformation
   controller: OrangeHRM\Admin\Controller\ViewOrganizationGeneralInformationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 view_nationality:
-  path: /admin/nationality
+  path: /{theme}/admin/nationality
   controller: OrangeHRM\Admin\Controller\NationalityController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_nationality:
-  path: /admin/saveNationality
+  path: /{theme}/admin/saveNationality
   controller: OrangeHRM\Admin\Controller\SaveNationalityController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_nationality:
-  path: /admin/saveNationality/{id}
+  path: /{theme}/admin/saveNationality/{id}
   controller: OrangeHRM\Admin\Controller\SaveNationalityController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_location:
-  path: /admin/viewLocations
+  path: /{theme}/admin/viewLocations
   controller: OrangeHRM\Admin\Controller\ViewLocationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_location:
-  path: /admin/saveLocation
+  path: /{theme}/admin/saveLocation
   controller: OrangeHRM\Admin\Controller\SaveLocationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_location:
-  path: /admin/saveLocation/{id}
+  path: /{theme}/admin/saveLocation/{id}
   controller: OrangeHRM\Admin\Controller\SaveLocationController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_email_configuration:
-  path: /admin/listMailConfiguration
+  path: /{theme}/admin/listMailConfiguration
   controller: OrangeHRM\Admin\Controller\ViewEmailConfigurationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 view_pay_grades:
-  path: /admin/viewPayGrades
+  path: /{theme}/admin/viewPayGrades
   controller: OrangeHRM\Admin\Controller\PayGradeController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 add_pay_grade:
-  path: /admin/payGrade
+  path: /{theme}/admin/payGrade
   controller: OrangeHRM\Admin\Controller\SavePayGradeController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_pay_grade:
-  path: /admin/payGrade/{id}
+  path: /{theme}/admin/payGrade/{id}
   controller: OrangeHRM\Admin\Controller\SavePayGradeController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 edit_module_configuration:
-  path: /admin/viewModules
+  path: /{theme}/admin/viewModules
   controller: OrangeHRM\Admin\Controller\SaveModuleConfigurationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 view_work_shift:
-  path: /admin/workShift
+  path: /{theme}/admin/workShift
   controller: OrangeHRM\Admin\Controller\WorkShiftController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_work_shift:
-  path: /admin/saveWorkShifts
+  path: /{theme}/admin/saveWorkShifts
   controller: OrangeHRM\Admin\Controller\SaveWorkShiftController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_work_shift:
-  path: /admin/saveWorkShifts/{id}
+  path: /{theme}/admin/saveWorkShifts/{id}
   controller: OrangeHRM\Admin\Controller\SaveWorkShiftController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 view_email_subscription:
-  path: /admin/viewEmailNotification
+  path: /{theme}/admin/viewEmailNotification
   controller: OrangeHRM\Admin\Controller\EmailSubscriptionController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_email_subscription:
-  path: /admin/saveSubscriber/{id}
+  path: /{theme}/admin/saveSubscriber/{id}
   controller: OrangeHRM\Admin\Controller\SaveEmailSubscriptionController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 admin_localization:
-  path: /admin/localization
+  path: /{theme}/admin/localization
   controller: OrangeHRM\Admin\Controller\LocalizationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 admin_open_id_provider:
-  path: /admin/openIdProvider
+  path: /{theme}/admin/openIdProvider
   controller: OrangeHRM\OpenidAuthentication\Controller\SocialMediaAuthenticationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 admin_language_package:
-  path: /admin/languagePackage
+  path: /{theme}/admin/languagePackage
   controller: OrangeHRM\Admin\Controller\LanguagePackageController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 admin_language_package_import:
-  path: /admin/languageImport/{languageId}
+  path: /{theme}/admin/languageImport/{languageId}
   controller: OrangeHRM\Admin\Controller\LanguageImportController::handle
   methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
 
 admin_language_package_fix_errors:
-  path: /admin/fixLanguageStringErrors/{languageId}
+  path: /{theme}/admin/fixLanguageStringErrors/{languageId}
   controller: OrangeHRM\Admin\Controller\FixLanguageStringErrorsController::handle
   methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
 
 admin_language_translation:
-  path: /admin/languageCustomization/{languageId}
+  path: /{theme}/admin/languageCustomization/{languageId}
   controller: OrangeHRM\Admin\Controller\LanguageTranslationController::handle
   methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+    theme: constructys|olecio
 
 admin_ldap_configuration:
-  path: /admin/ldapConfiguration
+  path: /{theme}/admin/ldapConfiguration
   controller: OrangeHRM\Admin\Controller\LdapConfigurationController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_matching_configuration:
+  path: /{theme}/admin/matching
+  controller: OrangeHRM\Admin\Controller\MatchingController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_candidates:
+  path: /{theme}/admin/viewCandidates
+  controller: OrangeHRM\Admin\Controller\CandidatesController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_companies:
+  path: /{theme}/admin/viewCompanies
+  controller: OrangeHRM\Admin\Controller\CompaniesController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio

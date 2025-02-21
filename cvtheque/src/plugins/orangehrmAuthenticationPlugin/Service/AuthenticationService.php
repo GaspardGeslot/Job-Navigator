@@ -20,6 +20,7 @@ namespace OrangeHRM\Authentication\Service;
 
 use GuzzleHttp\Client;
 use OrangeHRM\Admin\Traits\Service\UserServiceTrait;
+use OrangeHRM\CorporateBranding\Traits\ThemeServiceTrait;
 use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Authentication\Exception\AuthenticationException;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
@@ -31,6 +32,7 @@ class AuthenticationService
 {
     use AuthUserTrait;
     use UserServiceTrait;
+    use ThemeServiceTrait;
 
     /**
      * @param User|null $user
@@ -60,9 +62,9 @@ class AuthenticationService
      * @return bool
      * @throws AuthenticationException
      */
-    public function hasCredentials(UserCredential $credentials): bool
+    public function hasCredentials(UserCredential $credentials, string $theme): bool
     {
-        return $this->getUserService()->checkExistsUser($credentials);
+        return $this->getUserService()->checkExistsUser($credentials, $theme);
     }
     
     /**
@@ -70,13 +72,13 @@ class AuthenticationService
      * @return ?string
      * @throws AuthenticationException
      */
-    public function setCredentials(UserCredential $credentials, bool $isCompany): ?string
+    public function setCredentials(UserCredential $credentials, bool $isCompany, string $theme): ?string
     {
-        $user = $this->getUserService()->getCredentials($credentials);
+        $user = $this->getUserService()->getCredentials($credentials, $theme);
         $success = $this->setCredentialsForUser($user);
         $token = null;
         if ($success)
-            $token = $this->setHedwigeCredentials($credentials, $isCompany);
+            $token = $this->setHedwigeCredentials($credentials, $isCompany, $theme);
         return $token;
     }
 
@@ -86,16 +88,16 @@ class AuthenticationService
      * @return string
      * @throws AuthenticationException
      */
-    public function createCredentials(UserCredential $credentials, bool $isCompany): ?string
+    public function createCredentials(UserCredential $credentials, bool $isCompany, string $theme): ?string
     {
-        $user = $this->getUserService()->createCredentials($credentials);
+        $user = $this->getUserService()->createCredentials($credentials, $theme);
         $success = $this->setCredentialsForUser($user);
         $token = null;
         if ($success)
         {
-            $success = $this->createHedwigeCredentials($credentials, $isCompany);
+            $success = $this->createHedwigeCredentials($credentials, $isCompany, $theme);
             if ($success)
-                $token = $this->setHedwigeCredentials($credentials, $isCompany);
+                $token = $this->setHedwigeCredentials($credentials, $isCompany, $theme);
         }
         return $token;
     }
@@ -104,10 +106,11 @@ class AuthenticationService
      * @param UserCredential $credentials
      * @return string
      */
-    protected function setHedwigeCredentials(UserCredential $credentials, bool $isCompany) : ?string
+    protected function setHedwigeCredentials(UserCredential $credentials, bool $isCompany, string $theme) : ?string
     {
+        $clientId = $this->getThemeService()->getClientId($theme);
+
         $client = new Client();
-        $clientId = getenv('HEDWIGE_CLIENT_ID');
         $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
@@ -129,10 +132,11 @@ class AuthenticationService
      * @param UserCredential $credentials
      * @return bool
      */
-    protected function createHedwigeCredentials(UserCredential $credentials, bool $isCompany) : bool
+    protected function createHedwigeCredentials(UserCredential $credentials, bool $isCompany, string $theme) : bool
     {
+        $clientId = $this->getThemeService()->getClientId($theme);
+
         $client = new Client();
-        $clientId = getenv('HEDWIGE_CLIENT_ID');
         $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 

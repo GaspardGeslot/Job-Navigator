@@ -37,7 +37,11 @@ export default function usePasswordPolicy(http: APIService) {
         http
           .request({
             method: 'POST',
-            url: `/api/v2/auth/public/validation/password`,
+            url:
+              '/' +
+              // @ts-expect-error: appGlobal is not in window object by default
+              window.appGlobal.theme +
+              `/api/v2/auth/public/validation/password`,
             data: {
               password,
             },

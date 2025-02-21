@@ -1,72 +1,89 @@
 apiv2_leave_holiday:
-  path: /api/v2/leave/holidays/{id}
+  path: /{theme}/api/v2/leave/holidays/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Leave\Api\HolidayAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_holidays:
-  path: /api/v2/leave/holidays
+  path: /{theme}/api/v2/leave/holidays
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Leave\Api\HolidayAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_workweek:
-  path: /api/v2/leave/workweek
+  path: /{theme}/api/v2/leave/workweek
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Leave\Api\WorkWeekAPI
     id: 1
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leave_period:
-  path: /api/v2/leave/leave-period
+  path: /{theme}/api/v2/leave/leave-period
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeavePeriodAPI
     id: 0
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leave_periods:
-  path: /api/v2/leave/leave-periods
+  path: /{theme}/api/v2/leave/leave-periods
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeavePeriodAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leave_type:
-  path: /api/v2/leave/leave-types/{id}
+  path: /{theme}/api/v2/leave/leave-types/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveTypeAPI
   requirements:
     id: '\d+'
+    theme: constructys|olecio
 
 apiv2_leave_leave_types:
-  path: /api/v2/leave/leave-types
+  path: /{theme}/api/v2/leave/leave-types
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveTypeAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_eligible_leave_types:
-  path: /api/v2/leave/leave-types/eligible
+  path: /{theme}/api/v2/leave/leave-types/eligible
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Leave\Api\EligibleLeaveTypeAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_my_leave_requests:
-  path: /api/v2/leave/leave-requests
+  path: /{theme}/api/v2/leave/leave-requests
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Leave\Api\MyLeaveRequestAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_my_leave_request:
-  path: /api/v2/leave/leave-requests/{leaveRequestId}
+  path: /{theme}/api/v2/leave/leave-requests/{leaveRequestId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
@@ -74,16 +91,19 @@ apiv2_leave_my_leave_request:
     _key: leaveRequestId
   requirements:
     leaveRequestId: '\d+'
+    theme: constructys|olecio
 
 apiv2_leave_employee_leave_requests:
-  path: /api/v2/leave/employees/leave-requests
+  path: /{theme}/api/v2/leave/employees/leave-requests
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Leave\Api\EmployeeLeaveRequestAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_employee_leave_request:
-  path: /api/v2/leave/employees/leave-requests/{leaveRequestId}
+  path: /{theme}/api/v2/leave/employees/leave-requests/{leaveRequestId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
@@ -91,32 +111,38 @@ apiv2_leave_employee_leave_request:
     _key: leaveRequestId
   requirements:
     leaveRequestId: '\d+'
+    theme: constructys|olecio
 
 apiv2_leave_employees_bulk_leave_request:
-  path: /api/v2/leave/employees/leave-requests/bulk
+  path: /{theme}/api/v2/leave/employees/leave-requests/bulk
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Leave\Api\EmployeeBulkLeaveRequestAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leave_entitlement:
-  path: /api/v2/leave/leave-entitlements/{id}
+  path: /{theme}/api/v2/leave/leave-entitlements/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveEntitlementAPI
   requirements:
     id: '\d+'
+    theme: constructys|olecio
 
 apiv2_leave_leave_entitlements:
-  path: /api/v2/leave/leave-entitlements
+  path: /{theme}/api/v2/leave/leave-entitlements
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveEntitlementAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_employee_leave_entitlements:
-  path: /api/v2/leave/employees/{empNumber}/leave-entitlements
+  path: /{theme}/api/v2/leave/employees/{empNumber}/leave-entitlements
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
@@ -124,66 +150,83 @@ apiv2_leave_employee_leave_entitlements:
     _key: empNumber
   requirements:
     empNumber: '\d+'
+    theme: constructys|olecio
 
 apiv2_leave_employees_leave_entitlements:
-  path: /api/v2/leave/employees/leave-entitlements
+  path: /{theme}/api/v2/leave/employees/leave-entitlements
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\EmployeeLeaveEntitlementAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leave_balance:
-  path: /api/v2/leave/leave-balance/leave-type/{leaveTypeId}
+  path: /{theme}/api/v2/leave/leave-balance/leave-type/{leaveTypeId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveBalanceAPI
     _key: leaveTypeId
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_employee_leave_balances:
-  path: /api/v2/leave/employees/leave-balances
+  path: /{theme}/api/v2/leave/employees/leave-balances
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\EmployeeLeaveBalanceAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leave_entitlements_validation_value:
-  path: /api/v2/leave/leave-entitlements/{id}/validation/entitlements
+  path: /{theme}/api/v2/leave/leave-entitlements/{id}/validation/entitlements
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\ValidationLeaveEntitlementValueAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_overlap_leaves:
-  path: /api/v2/leave/overlap-leaves
+  path: /{theme}/api/v2/leave/overlap-leaves
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveOverlapAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_request_comments:
-  path: /api/v2/leave/leave-requests/{leaveRequestId}/leave-comments
+  path: /{theme}/api/v2/leave/leave-requests/{leaveRequestId}/leave-comments
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET , POST ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveRequestCommentAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_comments:
-  path: /api/v2/leave/leaves/{leaveId}/leave-comments
+  path: /{theme}/api/v2/leave/leaves/{leaveId}/leave-comments
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET , POST ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveCommentAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leaves:
-  path: /api/v2/leave/leave-requests/{leaveRequestId}/leaves
+  path: /{theme}/api/v2/leave/leave-requests/{leaveRequestId}/leaves
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_leave:
-  path: /api/v2/leave/leaves/{leaveId}
+  path: /{theme}/api/v2/leave/leaves/{leaveId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
@@ -191,136 +234,185 @@ apiv2_leave_leave:
     _key: leaveId
   requirements:
     leaveId: '\d+'
+    theme: constructys|olecio
 
 apiv2_leave_bulk_leaves:
-  path: /api/v2/leave/leaves/bulk
+  path: /{theme}/api/v2/leave/leaves/bulk
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Leave\Api\BulkLeaveAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_reports:
-  path: /api/v2/leave/reports
+  path: /{theme}/api/v2/leave/reports
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveReportAPI
     _key: name
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_reports_data:
-  path: /api/v2/leave/reports/data
+  path: /{theme}/api/v2/leave/reports/data
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\LeaveReportDataAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_leave_employee_leave:
-  path: /api/v2/leave/employees/leaves
+  path: /{theme}/api/v2/leave/employees/leaves
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Leave\Api\EmployeeLeaveAPI
+  requirements:
+    theme: constructys|olecio
 
 ##########################
 #        Screens
 ##########################
 
 leave_module:
-  path: /leave/viewLeaveModule
+  path: /{theme}/leave/viewLeaveModule
   controller: OrangeHRM\Leave\Controller\LeaveModuleController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_define_leave_period:
-  path: /leave/defineLeavePeriod
+  path: /{theme}/leave/defineLeavePeriod
   controller: OrangeHRM\Leave\Controller\LeavePeriodController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_apply_leave:
-  path: /leave/applyLeave
+  path: /{theme}/leave/applyLeave
   controller: OrangeHRM\Leave\Controller\ApplyLeaveController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_assign_leave:
-  path: /leave/assignLeave
+  path: /{theme}/leave/assignLeave
   controller: OrangeHRM\Leave\Controller\AssignLeaveController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_leave_list:
-  path: /leave/viewLeaveList
+  path: /{theme}/leave/viewLeaveList
   controller: OrangeHRM\Leave\Controller\LeaveListController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_my_leave_list:
-  path: /leave/viewMyLeaveList
+  path: /{theme}/leave/viewMyLeaveList
   controller: OrangeHRM\Leave\Controller\MyLeaveListController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_view_leave_request:
-  path: /leave/viewLeaveRequest/{id}
+  path: /{theme}/leave/viewLeaveRequest/{id}
   controller: OrangeHRM\Leave\Controller\LeaveRequestController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 view_leave_type:
-  path: /leave/leaveTypeList
+  path: /{theme}/leave/leaveTypeList
   controller: OrangeHRM\Leave\Controller\LeaveTypeController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_leave_type:
-  path: /leave/defineLeaveType
+  path: /{theme}/leave/defineLeaveType
   controller: OrangeHRM\Leave\Controller\SaveLeaveTypeController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_leave_type:
-  path: /leave/defineLeaveType/{id}
+  path: /{theme}/leave/defineLeaveType/{id}
   controller: OrangeHRM\Leave\Controller\SaveLeaveTypeController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_add_leave_entitlement:
-  path: /leave/addLeaveEntitlement
+  path: /{theme}/leave/addLeaveEntitlement
   controller: OrangeHRM\Leave\Controller\SaveLeaveEntitlementController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_edit_leave_entitlement:
-  path: /leave/editLeaveEntitlement/{id}
+  path: /{theme}/leave/editLeaveEntitlement/{id}
   controller: OrangeHRM\Leave\Controller\SaveLeaveEntitlementController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_view_leave_entitlement:
-  path: /leave/viewLeaveEntitlements
+  path: /{theme}/leave/viewLeaveEntitlements
   controller: OrangeHRM\Leave\Controller\ViewLeaveEntitlementController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_view_my_leave_entitlement:
-  path: /leave/viewMyLeaveEntitlements
+  path: /{theme}/leave/viewMyLeaveEntitlements
   controller: OrangeHRM\Leave\Controller\ViewMyLeaveEntitlementController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_work_week:
-  path: /leave/defineWorkWeek
+  path: /{theme}/leave/defineWorkWeek
   controller: OrangeHRM\Leave\Controller\WorkWeekController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 list_holidays:
-  path: /leave/viewHolidayList
+  path: /{theme}/leave/viewHolidayList
   controller: OrangeHRM\Leave\Controller\HolidayController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 add_holiday:
-  path: /leave/saveHolidays
+  path: /{theme}/leave/saveHolidays
   controller: OrangeHRM\Leave\Controller\SaveHolidayController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_holiday:
-  path: /leave/saveHolidays/{id}
+  path: /{theme}/leave/saveHolidays/{id}
   controller: OrangeHRM\Leave\Controller\SaveHolidayController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_view_leave_entitlement_report:
-  path: /leave/viewLeaveBalanceReport
+  path: /{theme}/leave/viewLeaveBalanceReport
   controller: OrangeHRM\Leave\Controller\LeaveEntitlementReport::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 leave_view_my_leave_entitlement_report:
-  path: /leave/viewMyLeaveBalanceReport
+  path: /{theme}/leave/viewMyLeaveBalanceReport
   controller: OrangeHRM\Leave\Controller\MyLeaveEntitlementReport::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio

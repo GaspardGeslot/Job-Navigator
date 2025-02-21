@@ -1,49 +1,65 @@
 apiv2_recruitment_vacancy:
-  path: /api/v2/recruitment/vacancies/{id}
+  path: /{theme}/api/v2/recruitment/vacancies/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\VacancyAPI
     _key: id
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_vacancies:
-  path: /api/v2/recruitment/vacancies
+  path: /{theme}/api/v2/recruitment/vacancies
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\VacancyAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_recruitment_vacancies_attachments:
-  path: /api/v2/recruitment/vacancies/{vacancyId}/attachments
+  path: /{theme}/api/v2/recruitment/vacancies/{vacancyId}/attachments
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\VacancyAttachmentAPI
     _key: vacancyId
+  requirements:
+    vacancyId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_vacancies_attachment:
-  path: /api/v2/recruitment/vacancies/{vacancyId}/attachments/{attachmentId}
+  path: /{theme}/api/v2/recruitment/vacancies/{vacancyId}/attachments/{attachmentId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\VacancyAttachmentAPI
+  requirements:
+    vacancyId: '\d+'
+    attachmentId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_vacancy_attachments:
-  path: /api/v2/recruitment/vacancy/attachments
+  path: /{theme}/api/v2/recruitment/vacancy/attachments
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ POST, DELETE ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\VacancyAttachmentAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates:
-  path: /api/v2/recruitment/candidates
+  path: /{theme}/api/v2/recruitment/candidates
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_recruitment_candidate:
-  path: /api/v2/recruitment/candidates/{id}
+  path: /{theme}/api/v2/recruitment/candidates/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
@@ -51,9 +67,10 @@ apiv2_recruitment_candidate:
     _key: id
   requirements:
     id: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_company:
-  path: /api/v2/recruitment/companies/{id}
+  path: /{theme}/api/v2/recruitment/companies/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
@@ -61,197 +78,288 @@ apiv2_recruitment_company:
     _key: id
   requirements:
     id: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidate_attachment:
-  path: /api/v2/recruitment/candidate/{candidateId}/attachment
+  path: /{theme}/api/v2/recruitment/candidate/{candidateId}/attachment
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateAttachmentAPI
     _key: candidateId
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidate_attachments:
-  path: /api/v2/recruitment/candidate/attachments
+  path: /{theme}/api/v2/recruitment/candidate/attachments
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ POST ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateAttachmentAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_recruitment_candidate_status:
-  path: /api/v2/recruitment/candidates/statuses
+  path: /{theme}/api/v2/recruitment/candidates/statuses
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateStatusAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_recruitment_candidature_status:
-  path: /api/v2/recruitment/candidates/{candidateId}/matching/{matchingId}/status/{candidatureStatusId}
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/matching/{matchingId}/status/{candidatureStatusId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateStatusAPI
+  requirements:
+    candidateId: '\d+'
+    matchingId: '\d+'
+    candidatureStatusId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_hiring_managers:
-  path: /api/v2/recruitment/hiring-managers
+  path: /{theme}/api/v2/recruitment/hiring-managers
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\HiringManagerAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_allowed_actions:
-  path: /api/v2/recruitment/candidates/{candidateId}/actions/allowed
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/actions/allowed
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateAllowedActionAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_reject:
-  path: /api/v2/recruitment/candidates/{candidateId}/reject
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/reject
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateRejectionAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_shortlist:
-  path: /api/v2/recruitment/candidates/{candidateId}/shortlist
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/shortlist
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateShortlistingAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_schedule_interview:
-  path: /api/v2/recruitment/candidates/{candidateId}/shedule-interview
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/shedule-interview
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ POST ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateInterviewSchedulingAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_interviews:
-  path: /api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateInterviewSchedulingAPI
     _key: candidateId
+  requirements:
+    candidateId: '\d+'
+    interviewId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_interviews_attachment:
-  path: /api/v2/recruitment/interviews/{interviewId}/attachments/{attachmentId}
+  path: /{theme}/api/v2/recruitment/interviews/{interviewId}/attachments/{attachmentId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\InterviewAttachmentAPI
     _key: attachmentId
+  requirements:
+    interviewId: '\d+'
+    attachmentId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_interview_attachments:
-  path: /api/v2/recruitment/interviews/{interviewId}/attachments
+  path: /{theme}/api/v2/recruitment/interviews/{interviewId}/attachments
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, POST, DELETE ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\InterviewAttachmentAPI
+  requirements:
+    interviewId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_mark_interview_passed:
-  path: /api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}/pass
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}/pass
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateMarkingInterviewPassAPI
+  requirements:
+    candidateId: '\d+'
+    interviewId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_mark_interview_failed:
-  path: /api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}/fail
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}/fail
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateMarkingInterviewFailAPI
+  requirements:
+    candidateId: '\d+'
+    interviewId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_offer_job:
-  path: /api/v2/recruitment/candidates/{candidateId}/job/offer
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/job/offer
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateJobOfferingAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_offer_decline:
-  path: /api/v2/recruitment/candidates/{candidateId}/job/decline
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/job/decline
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateOfferDecliningAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_hire:
-  path: /api/v2/recruitment/candidates/{candidateId}/hire
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/hire
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateHiringAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidates_history:
-  path: /api/v2/recruitment/candidates/{candidateId}/history
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/history
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateHistoryAPI
+  requirements:
+    candidateId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_candidate_history:
-  path: /api/v2/recruitment/candidates/{candidateId}/history/{historyId}
+  path: /{theme}/api/v2/recruitment/candidates/{candidateId}/history/{historyId}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateHistoryAPI
     _key: historyId
+  requirements:
+    candidateId: '\d+'
+    historyId: '\d+'
+    theme: constructys|olecio
 
 apiv2_recruitment_interviewers:
-  path: /api/v2/recruitment/interviewers
+  path: /{theme}/api/v2/recruitment/interviewers
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET ]
   defaults:
     _api: OrangeHRM\Recruitment\Api\EmployeeListAPI
+  requirements:
+    theme: constructys|olecio
 
 ##########################
 #     Public APIs
 ##########################
 
 apiv2_recruitment_public_vacancies:
-  path: /api/v2/recruitment/public/vacancies
+  path: /{theme}/api/v2/recruitment/public/vacancies
   controller: OrangeHRM\Recruitment\Controller\PublicController\VacancyListRestController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 apiv2_recruitment_public_vacancy:
-  path: /api/v2/recruitment/public/vacancies/{id}
+  path: /{theme}/api/v2/recruitment/public/vacancies/{id}
   controller: OrangeHRM\Recruitment\Controller\PublicController\VacancyRestController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 ##########################
 #        Files
 ##########################
 
 recruitment_vacancy_attachment:
-  path: /recruitment/viewVacancyAttachment/attachId/{attachId}
+  path: /{theme}/recruitment/viewVacancyAttachment/attachId/{attachId}
   controller: OrangeHRM\Recruitment\Controller\File\VacancyAttachment::handle
   methods: [ GET ]
+  requirements:
+    attachId: '\d+'
+    theme: constructys|olecio
 
 recruitment_candidate_attachment:
-  path: /recruitment/viewCandidateAttachment/candidateId/{attachmentId}
+  path: /{theme}/recruitment/viewCandidateAttachment/candidateId/{attachmentId}
   controller: OrangeHRM\Recruitment\Controller\File\CandidateAttachment::handle
   methods: [ GET ]
+  requirements:
+    candidateId: '\d+'
+    attachmentId: '\d+'
+    theme: constructys|olecio
 
 recruitment_interview_attachment:
-  path: /recruitment/viewInterviewAttachment/interview/{interviewId}/attachment/{attachmentId}
+  path: /{theme}/recruitment/viewInterviewAttachment/interview/{interviewId}/attachment/{attachmentId}
   controller: OrangeHRM\Recruitment\Controller\File\InterviewAttachment::handle
   methods: [ GET ]
+  requirements:
+    interviewId: '\d+'
+    attachmentId: '\d+'
+    theme: constructys|olecio
 
 ##########################
 #        Screens
 ##########################
 
 recruitment_module:
-  path: /recruitment/viewRecruitmentModule
+  path: /{theme}/recruitment/viewRecruitmentModule
   controller: OrangeHRM\Recruitment\Controller\RecruitmentModuleController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_job_vacancy:
-  path: /recruitment/viewJobVacancy
+  path: /{theme}/recruitment/viewJobVacancy
   controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+recruitment_view_job_vacancy_by_id:
+  path: /{theme}/recruitment/viewJobVacancy/{id}
+  controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_job_vacancy_by_id:
   path: /recruitment/viewJobVacancy/{id}
@@ -259,84 +367,125 @@ recruitment_view_job_vacancy_by_id:
   methods: [ GET ]
 
 recruitment_add_job_vacancy:
-  path: /recruitment/addJobVacancy
+  path: /{theme}/recruitment/addJobVacancy
   controller: OrangeHRM\Recruitment\Controller\AddJobVacancyController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_edit_job_vacancy:
-  path: /recruitment/addJobVacancy/{id}
+  path: /{theme}/recruitment/addJobVacancy/{id}
   controller: OrangeHRM\Recruitment\Controller\EditJobVacancyController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 recruitment_view_candidates:
-  path: /recruitment/viewCandidates
+  path: /{theme}/recruitment/viewCandidates
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_save_candidates:
-  path: /recruitment/addCandidate
+  path: /{theme}/recruitment/addCandidate
   controller: OrangeHRM\Recruitment\Controller\SaveCandidateController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_candidate_profile:
-  path: /recruitment/viewCandidate/{id}
+  path: /{theme}/recruitment/viewCandidate/{id}
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 recruitment_view_candidate_profile_by_matching:
-  path: /recruitment/viewCandidate/{leadId}/matching/{matchingId}
+  path: /{theme}/recruitment/viewCandidate/{leadId}/matching/{matchingId}
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
+  requirements:
+    leadId: '\d+'
+    matchingId: '\d+'
+    theme: constructys|olecio
 
 recruitment_view_company_profile:
-  path: /recruitment/viewCompany/{id}
+  path: /{theme}/recruitment/viewCompany/{id}
   controller: OrangeHRM\Recruitment\Controller\ViewCompanyController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 recruitment_view_company_profile_by_matching:
-  path: /recruitment/viewCompany/{companyId}/matching/{matchingId}
+  path: /{theme}/recruitment/viewCompany/{companyId}/matching/{matchingId}
   controller: OrangeHRM\Recruitment\Controller\ViewCompanyController::handle
   methods: [ GET ]
+  requirements:
+    companyId: '\d+'
+    matchingId: '\d+'
+    theme: constructys|olecio
 
 recruitment_candidate_action:
-  path: /recruitment/changeCandidateVacancyStatus
+  path: /{theme}/recruitment/changeCandidateVacancyStatus
   controller: OrangeHRM\Recruitment\Controller\CandidateActionController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_view_action_history:
-  path: /recruitment/candidateHistory/{candidateId}/{historyId}
+  path: /{theme}/recruitment/candidateHistory/{candidateId}/{historyId}
   controller: OrangeHRM\Recruitment\Controller\WorkflowActionHistoryController::handle
   methods: [ GET ]
+  requirements:
+    candidateId: '\d+'
+    historyId: '\d+'
+    theme: constructys|olecio
 
 recruitment_view_interview_attachments:
-  path: /recruitment/interviewAttachments/{interviewId}
+  path: /{theme}/recruitment/interviewAttachments/{interviewId}
   controller: OrangeHRM\Recruitment\Controller\InterviewAttachmentsController::handle
   methods: [ GET ]
+  requirements:
+    interviewId: '\d+'
+    theme: constructys|olecio
 
 ##########################
 #  External Vacancy List
 ##########################
 
 recruitment_view_vacancy_list:
-  path: /recruitmentApply/jobs.html
+  path: /{theme}/recruitmentApply/jobs.html
   controller: OrangeHRM\Recruitment\Controller\PublicController\VacancyListViewController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 recruitment_apply_job_vacancy:
-  path: /recruitmentApply/applyVacancy/id/{id}
+  path: /{theme}/recruitmentApply/applyVacancy/id/{id}
   controller: OrangeHRM\Recruitment\Controller\PublicController\ApplyJobVacancyViewController::handle
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
 
 recruitment_public_applicants:
-  path: /recruitment/public/applicants
+  path: /{theme}/recruitment/public/applicants
   controller: OrangeHRM\Recruitment\Controller\PublicController\ApplicantController::handle
   methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
 
 ##########################
 #        RSS Feed
 ##########################
 
 recruitment_rss_feed:
-  path: /recruitmentApply/jobs.rss
+  path: /{theme}/recruitmentApply/jobs.rss
   controller: OrangeHRM\Recruitment\Controller\PublicController\VacancyListRSSController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio

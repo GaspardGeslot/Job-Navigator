@@ -49,6 +49,7 @@ class VueControllerHelper
     public const COMPONENT_PROPS = 'componentProps';
     public const PUBLIC_PATH = 'publicPath';
     public const BASE_URL = 'baseUrl';
+    public const THEME = 'theme';
     public const ASSETS_VERSION = 'assetsVersion';
     public const USER = 'user';
     public const SIDE_PANEL_MENU_ITEMS = 'sidePanelMenuItems';
@@ -137,6 +138,7 @@ class VueControllerHelper
                 self::COMPONENT_PROPS => $this->getComponent()->getProps(),
                 self::PUBLIC_PATH => $this->getRequest()->getBasePath(),
                 self::BASE_URL => $this->getRequest()->getBaseUrl(),
+                self::THEME => $this->getRequest()->attributes->get('theme'),
                 self::ASSETS_VERSION => $this->getAssetsVersion(),
                 self::USER => $this->getUserObject(),
                 self::SIDE_PANEL_MENU_ITEMS => $sidePanelMenuItems,
@@ -152,7 +154,7 @@ class VueControllerHelper
                 self::CLIENT_BANNER_URL => $clientBannerUrl,
                 self::THEME_VARIABLES => $themeVariables,
                 self::HELP_URL => $this->getHelpUrl(),
-                self::SHOW_UPGRADE => $this->getAuthUser()->getUserRoleId() === 1
+                self::SHOW_UPGRADE => false//$this->getAuthUser()->getUserRoleId() === 1
             ]
         );
         return $this->context->all();
@@ -217,7 +219,10 @@ class VueControllerHelper
     protected function getMenuItems(): array
     {
         try {
-            return $this->getMenuService()->getMenuItems($this->getRequest()->getBaseUrl());
+            $theme = $this->getRequest()->attributes && $this->getRequest()->attributes->get('theme') 
+                ? $this->getRequest()->attributes->get('theme') 
+                : 'constructys';
+            return $this->getMenuService()->getMenuItems($this->getRequest()->getBaseUrl() . '/' . $theme);
         } catch (ServiceException $e) {
         }
         return [[], []];
@@ -259,10 +264,11 @@ class VueControllerHelper
         if ($module instanceof Module) {
             $breadcrumb['moduleName'] = $this->getI18NHelper()->transBySource($module->getDisplayName());
         }
-
+        $themeId = $this->getMenuService()->getThemeDao()->getId($this->getCurrentModuleAndScreen()->getTheme());
         $menuItem = $this->getMenuService()->getMenuDao()->getMenuItemByModuleAndScreen(
             $this->getCurrentModuleAndScreen()->getModule(),
-            $this->getCurrentModuleAndScreen()->getScreen()
+            $this->getCurrentModuleAndScreen()->getScreen(),
+            $themeId
         );
         if ($menuItem instanceof MenuItem) {
             $breadcrumb['level'] = $menuItem->getLevel() == 3 ? $menuItem->getParent()->getMenuTitle() : null;
@@ -278,8 +284,8 @@ class VueControllerHelper
      */
     private function getThemeData(): array
     {
-        $clientLogoUrl = $this->getThemeService()->getClientLogoURL($this->getRequest());
-        $clientBannerUrl = $this->getThemeService()->getClientBannerURL($this->getRequest());
+        $clientLogoUrl = $this->getThemeService()->getClientLogoURL($this->getCurrentModuleAndScreen()->getTheme());
+        $clientBannerUrl = $this->getThemeService()->getClientBannerURL($this->getCurrentModuleAndScreen()->getTheme());
         $themeVariables = $this->getThemeService()->getCurrentThemeVariables();
 
         return [$clientLogoUrl, $clientBannerUrl, $themeVariables];

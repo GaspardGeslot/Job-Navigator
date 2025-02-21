@@ -45,6 +45,7 @@ class CandidateAttachmentAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_CANDIDATE_ID = 'candidateId';
     public const PARAMETER_ATTACHMENT = 'attachment';
     public const PARAMETER_CURRENT_ATTACHMENT = 'currentAttachment';
+    public const PARAMETER_THEME = 'theme';
 
     public const PARAM_RULE_FILE_NAME_MAX_LENGTH = 200;
     public const PARAM_RULE_CURRENT_ATTACHMENT_MAX_LENGTH = 16;
@@ -176,6 +177,10 @@ class CandidateAttachmentAPI extends Endpoint implements CrudEndpoint
                         self::PARAM_RULE_FILE_NAME_MAX_LENGTH
                     ]
                 )
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             )
         );
     }
@@ -248,6 +253,10 @@ class CandidateAttachmentAPI extends Endpoint implements CrudEndpoint
     {
         return new ParamRuleCollection(
             new ParamRule(self::PARAMETER_CANDIDATE_ID),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
         );
     }
 
@@ -346,6 +355,10 @@ class CandidateAttachmentAPI extends Endpoint implements CrudEndpoint
                     )
                 )
             ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
         );
     }
 

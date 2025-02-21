@@ -102,4 +102,34 @@ class ThemeDao extends BaseDao
         }
         return null;
     }
+
+    public function getClientIdByThemeName(string $theme): ?int
+    {
+        $q = $this->createQueryBuilder(Theme::class, 't')
+            ->select('t.clientId')
+            ->where('t.name = :themeName')
+            ->setParameter('themeName', $theme);
+
+        $result = $q->getQuery()->getOneOrNullResult();
+        return $result ? $result['clientId'] : null;
+    }
+
+    public function getId(string $theme): ?int
+    {
+        $q = $this->createQueryBuilder(Theme::class, 't')
+            ->select('t.id')
+            ->where('t.name = :themeName')
+            ->setParameter('themeName', $theme);
+
+        $result = $q->getQuery()->getOneOrNullResult();
+        if ($result === null) {
+            $q = $this->createQueryBuilder(Theme::class, 't')
+                ->select('t.id')
+                ->where('t.name = :themeName')
+                ->setParameter('themeName', ThemeService::DEFAULT_THEME);
+
+            $result = $q->getQuery()->getOneOrNullResult();
+        }
+        return $result ? $result['id'] : null;
+    }
 }

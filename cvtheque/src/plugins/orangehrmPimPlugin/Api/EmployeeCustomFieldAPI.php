@@ -44,6 +44,7 @@ class EmployeeCustomFieldAPI extends Endpoint implements ResourceEndpoint
     use EmployeeServiceTrait;
     use NormalizerServiceTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_SCREEN = 'screen';
     public const META_PARAMETER_FIELDS = 'fields';
 
@@ -196,8 +197,12 @@ class EmployeeCustomFieldAPI extends Endpoint implements ResourceEndpoint
                 new ParamRule(
                     self::PARAMETER_SCREEN,
                     new Rule(Rules::IN, [CustomField::SCREENS])
-                )
-            )
+                ),
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
         );
     }
 
@@ -319,6 +324,10 @@ class EmployeeCustomFieldAPI extends Endpoint implements ResourceEndpoint
     public function getValidationRuleForUpdate(): ParamRuleCollection
     {
         return new ParamRuleCollection(
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             $this->getEmpNumberRule(),
             ...$this->getCustomFieldsParamsRules()
         );

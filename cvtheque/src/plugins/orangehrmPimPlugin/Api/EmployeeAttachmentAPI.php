@@ -48,6 +48,7 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
     use AuthUserTrait;
     use UserRoleManagerTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_SCREEN = 'screen';
     public const PARAMETER_ATTACHMENT = 'attachment';
     public const PARAMETER_ATTACHMENT_ID = 'attachmentId';
@@ -160,6 +161,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
         );*/
         return new ParamRuleCollection(
             new ParamRule(self::PARAMETER_ATTACHMENT_ID),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
         );
     }
 
@@ -227,6 +232,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForGetAll(): ParamRuleCollection
     {
         return new ParamRuleCollection(
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),
             ...$this->getSortingAndPaginationParamsRules()
@@ -420,6 +429,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
     public function getValidationRuleForCreate(): ParamRuleCollection
     {
         return new ParamRuleCollection(
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),
             $this->getAttachmentRule(),
@@ -576,6 +589,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
     {
         return new ParamRuleCollection(
             new ParamRule(CommonParams::PARAMETER_ID, new Rule(Rules::POSITIVE)),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),
             $this->getValidationDecorator()->notRequiredParamRule($this->getAttachmentRule()),
@@ -623,6 +640,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 CommonParams::PARAMETER_IDS,
                 new Rule(Rules::ARRAY_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),

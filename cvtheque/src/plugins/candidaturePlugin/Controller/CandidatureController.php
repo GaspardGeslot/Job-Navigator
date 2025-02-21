@@ -148,9 +148,9 @@ class CandidatureController extends AbstractVueController implements PublicContr
             //     $fileContent,
             //     $fileSize
             // );
+
             $decodedFileData = json_decode($leadData['file'], true);
             if (isset($decodedFileData['base64'], $decodedFileData['name'], $decodedFileData['type'], $decodedFileData['size'])) {
-
                 $base64Attachment = new \OrangeHRM\Core\Dto\Base64Attachment(
                     $decodedFileData['name'],    // Nom du fichier
                     $decodedFileData['type'],    // Type MIME

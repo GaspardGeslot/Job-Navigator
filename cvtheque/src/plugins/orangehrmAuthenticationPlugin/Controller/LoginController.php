@@ -82,10 +82,10 @@ class LoginController extends AbstractVueController implements PublicControllerI
             )
         );
         $component->addProp(
-            new Prop('login-logo-src', Prop::TYPE_STRING, $request->getBasePath() . '/images/job_navigator_logo_small.png')
+            new Prop('login-logo-src', Prop::TYPE_STRING, $this->getThemeService()->getClientLogoURL($request->attributes->get('theme')))
         );
         $component->addProp(
-            new Prop('login-banner-src', Prop::TYPE_STRING, $this->getThemeService()->getLoginBannerURL($request))
+            new Prop('login-banner-src', Prop::TYPE_STRING, $this->getThemeService()->getLoginBannerURL($request->attributes->get('theme')))
         );
         $component->addProp(
             new Prop('show-social-media', Prop::TYPE_BOOLEAN, $this->getThemeService()->showSocialMediaImages())
@@ -113,7 +113,7 @@ class LoginController extends AbstractVueController implements PublicControllerI
     {
         if ($this->getAuthUser()->isAuthenticated()) {
             $homePagePath = $this->getHomePageService()->getHomePagePath();
-            return $this->redirect($homePagePath);
+            return $this->redirect($request->attributes->get('theme') . "/" . $homePagePath);
         }
         return parent::handle($request);
     }

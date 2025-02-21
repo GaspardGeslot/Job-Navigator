@@ -47,6 +47,7 @@ class CandidateStatusAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_CANDIDATE_ID = 'candidateId';
     public const PARAMETER_MATCHING_ID = 'matchingId';
     public const PARAMETER_CANDIDATURE_STATUS_ID = 'candidatureStatusId';
+    public const PARAMETER_THEME = 'theme';
 
     /**
      * @OA\Get(
@@ -85,7 +86,12 @@ class CandidateStatusAPI extends Endpoint implements CrudEndpoint
      */
     public function getValidationRuleForGetAll(): ParamRuleCollection
     {
-        return new ParamRuleCollection();
+        return new ParamRuleCollection(
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
+        );
     }
 
     /**
@@ -179,6 +185,10 @@ class CandidateStatusAPI extends Endpoint implements CrudEndpoint
                     new Rule(Rules::POSITIVE)
                 )
             ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
         );
     }
 

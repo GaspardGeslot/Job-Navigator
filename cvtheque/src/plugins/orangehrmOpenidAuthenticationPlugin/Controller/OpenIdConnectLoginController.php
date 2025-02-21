@@ -57,6 +57,7 @@ class OpenIdConnectLoginController extends AbstractVueController implements Publ
     public function handle(Request $request): RedirectResponse
     {
         $providerId = $request->attributes->get('providerId');
+        $theme = $request->attributes->get('theme');
 
         $provider = $this->getSocialMediaAuthenticationService()->getAuthProviderDao()
             ->getAuthProviderDetailsByProviderId($providerId);
@@ -67,7 +68,7 @@ class OpenIdConnectLoginController extends AbstractVueController implements Publ
         $oidcClient = $this->getSocialMediaAuthenticationService()->initiateAuthentication(
             $provider,
             $this->getSocialMediaAuthenticationService()->getScope(),
-            $this->getSocialMediaAuthenticationService()->getRedirectURL()
+            $this->getSocialMediaAuthenticationService()->getRedirectURL($theme)
         );
 
         $this->getAuthUser()->setAttribute(AuthUser::OPENID_PROVIDER_ID, $provider->getId());

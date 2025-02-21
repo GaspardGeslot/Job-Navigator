@@ -67,10 +67,10 @@ class User extends \OrangeHRM\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userName', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userPassword', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'deleted', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateEntered', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateModified', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'modifiedUserId', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'createdBy', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userRole', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'authProviders', 'entityDecorator'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userName', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userPassword', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'deleted', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateEntered', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateModified', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'modifiedUserId', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'createdBy', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'theme', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userRole', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'authProviders', 'entityDecorator'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userName', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userPassword', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'deleted', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateEntered', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateModified', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'modifiedUserId', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'createdBy', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userRole', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'authProviders', 'entityDecorator'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userName', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userPassword', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'deleted', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateEntered', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'dateModified', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'modifiedUserId', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'createdBy', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'theme', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'employee', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'userRole', '' . "\0" . 'OrangeHRM\\Entity\\User' . "\0" . 'authProviders', 'entityDecorator'];
     }
 
     /**
@@ -410,6 +410,28 @@ class User extends \OrangeHRM\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmployee', [$employee]);
 
         parent::setEmployee($employee);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTheme(): \OrangeHRM\Entity\Theme
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTheme', []);
+
+        return parent::getTheme();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTheme(\OrangeHRM\Entity\Theme $theme): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTheme', [$theme]);
+
+        parent::setTheme($theme);
     }
 
     /**

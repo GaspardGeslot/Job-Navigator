@@ -156,11 +156,22 @@ class Theme
     private ?int $loginBannerFileSize = null;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="client_id", type="integer", nullable=true)
+     */
+    private ?int $clientId = null;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="show_social_media_icons", type="boolean", options={"default" : 1})
      */
     private bool $showSocialMediaIcons = true;
+
+    public function __construct()
+    {
+    }
 
     /**
      * @return int

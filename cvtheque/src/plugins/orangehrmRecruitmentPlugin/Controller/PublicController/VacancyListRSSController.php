@@ -46,11 +46,12 @@ class VacancyListRSSController extends AbstractController implements PublicContr
      * @return Response
      * @throws DOMException
      */
-    public function handle(): Response
+    public function handle(Request $request): Response
     {
+        $theme = $request->attributes->get('theme');
         $response = $this->getResponse();
         $response->headers->set(self::CONTENT_TYPE_KEY, self::CONTENT_TYPE_XML);
-        $response->setContent($this->generateRSSFeed());
+        $response->setContent($this->generateRSSFeed($theme));
         return $response;
     }
 
@@ -58,7 +59,7 @@ class VacancyListRSSController extends AbstractController implements PublicContr
      * @return string
      * @throws DOMException
      */
-    private function generateRSSFeed(): string
+    private function generateRSSFeed(string $theme): string
     {
         $siteName = $this->getI18NHelper()->transBySource('Active Job Vacancies');
         $siteDescription = '';
@@ -74,7 +75,7 @@ class VacancyListRSSController extends AbstractController implements PublicContr
         );
         $webUrl = $urlGenerator->generate(
             'recruitment_view_vacancy_list',
-            [],
+            ['theem' => $theme],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $currentDateTime = $this->getDateTimeHelper()->getNow();
@@ -109,7 +110,8 @@ class VacancyListRSSController extends AbstractController implements PublicContr
             $title->appendChild($dom->createCDATASection($vacancy->getName()));
             $recruitmentApplyUrl = $urlGenerator->generate(
                 'recruitment_apply_job_vacancy',
-                ['id' => $vacancy->getId()],
+                ['id' => $vacancy->getId(),
+                    'theme' => $theme],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
             $item->appendChild($dom->createElement('link', $recruitmentApplyUrl));

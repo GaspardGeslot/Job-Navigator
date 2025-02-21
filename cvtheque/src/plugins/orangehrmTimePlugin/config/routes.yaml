@@ -201,76 +201,106 @@ apiv2_time_project_admins:
 ##########################
 
 time_module:
-  path: /time/viewTimeModule
+  path: /{theme}/time/viewTimeModule
   controller: OrangeHRM\Time\Controller\TimeModuleController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 view_time_sheet_config:
-  path: /time/defineTimesheetPeriod
+  path: /{theme}/time/defineTimesheetPeriod
   controller: OrangeHRM\Time\Controller\TimesheetPeriodConfigController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 view_customers:
-  path: /time/viewCustomers
+  path: /{theme}/time/viewCustomers
   controller: OrangeHRM\Time\Controller\CustomerController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 save_customer:
-  path: /time/addCustomer
+  path: /{theme}/time/addCustomer
   controller: OrangeHRM\Time\Controller\SaveCustomerController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 edit_customer:
-  path: /time/addCustomer/{id}
+  path: /{theme}/time/addCustomer/{id}
   controller: OrangeHRM\Time\Controller\SaveCustomerController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_my_timesheet:
-  path: /time/viewMyTimesheet
+  path: /{theme}/time/viewMyTimesheet
   controller: OrangeHRM\Time\Controller\MyTimesheetController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_edit_timesheet:
-  path: /time/editTimesheet/{id}
+  path: /{theme}/time/editTimesheet/{id}
   controller: OrangeHRM\Time\Controller\EditTimesheetController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_view_projects:
-  path: /time/viewProjects
+  path: /{theme}/time/viewProjects
   controller: OrangeHRM\Time\Controller\ProjectController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_save_project:
-  path: /time/saveProject
+  path: /{theme}/time/saveProject
   controller: OrangeHRM\Time\Controller\SaveProjectController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_edit_project:
-  path: /time/saveProject/{id}
+  path: /{theme}/time/saveProject/{id}
   controller: OrangeHRM\Time\Controller\SaveProjectController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_employee_timesheet:
-  path: /time/viewEmployeeTimesheet
+  path: /{theme}/time/viewEmployeeTimesheet
   controller: OrangeHRM\Time\Controller\EmployeeTimesheetController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_employee_view_timesheet:
-  path: /time/viewTimesheet/employeeId/{id}
+  path: /{theme}/time/viewTimesheet/employeeId/{id}
   controller: OrangeHRM\Time\Controller\EmployeeTimesheetController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_employee_report:
-  path: /time/displayEmployeeReportCriteria
+  path: /{theme}/time/displayEmployeeReportCriteria
   controller: OrangeHRM\Time\Controller\EmployeeTimeReportController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_project_activity_report:
-  path: /time/displayProjectReportCriteria
+  path: /{theme}/time/displayProjectReportCriteria
   controller: OrangeHRM\Time\Controller\ProjectActivityReportController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 time_activity_details_report:
-  path: /time/displayProjectActivityDetailsReport
+  path: /{theme}/time/displayProjectActivityDetailsReport
   controller: OrangeHRM\Time\Controller\ActivityDetailsReportController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio

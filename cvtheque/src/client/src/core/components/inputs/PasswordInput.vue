@@ -61,7 +61,7 @@
 import {
   required,
   shouldNotExceedCharLength,
-} from '@ohrm/core/util/validation/rules';
+} from '@/core/util/validation/rules';
 import {promiseDebounce} from '@ohrm/oxd';
 import {APIService} from '@/core/util/services/api.service';
 import usePasswordPolicy from '@/core/util/composable/usePasswordPolicy';

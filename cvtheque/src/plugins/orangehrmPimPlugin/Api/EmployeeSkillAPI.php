@@ -46,6 +46,7 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     use AuthUserTrait;
     use EmployeeServiceTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_SKILL_ID = 'skillId';
     public const PARAMETER_YEARS_OF_EXP = 'yearsOfExperience';
     public const PARAMETER_COMMENTS = 'comments';
@@ -151,6 +152,10 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     {
         return new ParamRuleCollection(
             new ParamRule(CommonParams::PARAMETER_ID),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             $this->getEmpNumberRule(),
         );
     }
@@ -268,6 +273,10 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
     {
         return new ParamRuleCollection(
             $this->getEmpNumberRule(),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
              ...$this->getSortingAndPaginationParamsRules(EmployeeSkillSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
     }
@@ -412,6 +421,10 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
             new Rule(Rules::LENGTH, [0, 100])  // Doit avoir une longueur entre 1 et 100 caractères
         ),
         new ParamRule(
+            self::PARAMETER_THEME,
+            new Rule(Rules::STRING_TYPE)
+        ),
+        new ParamRule(
             'description',  // Nom du paramètre
             new Rule(Rules::STRING_TYPE),  // Doit être une chaîne
             new Rule(Rules::LENGTH, [0, 300])  // Doit avoir une longueur entre 1 et 500 caractères
@@ -519,6 +532,10 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
         return new ParamRuleCollection(
             new ParamRule(CommonParams::PARAMETER_ID, new Rule(Rules::REQUIRED)),
             $this->getEmpNumberRule(),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            ),
             // ...$this->getCommonBodyValidationRules(),
         );
     }
@@ -637,6 +654,10 @@ class EmployeeSkillAPI extends Endpoint implements CrudEndpoint
                 'title',
                 new Rule(Rules::STRING_TYPE),
                 new Rule(Rules::LENGTH, [0, 100])
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
         );
     }

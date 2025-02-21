@@ -41,6 +41,7 @@ class PasswordStrengthValidationAPI extends Endpoint implements CollectionEndpoi
     use I18NHelperTrait;
     use PasswordStrengthServiceTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_PASSWORD = 'password';
     public const PARAMETER_PASSWORD_STRENGTH = 'strength';
     public const PARAMETER_MESSAGES = 'messages';
@@ -123,6 +124,10 @@ class PasswordStrengthValidationAPI extends Endpoint implements CollectionEndpoi
             new ParamRule(
                 self::PARAMETER_PASSWORD,
                 new Rule(Rules::STRING_TYPE),
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
         );
     }

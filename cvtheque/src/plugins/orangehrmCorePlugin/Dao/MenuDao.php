@@ -22,6 +22,7 @@ use OrangeHRM\Core\Menu\DetailedMenuItem;
 use OrangeHRM\Entity\MenuItem;
 use OrangeHRM\Entity\Module;
 use OrangeHRM\Entity\UserRole;
+use OrangeHRM\Entity\Theme;
 use OrangeHRM\ORM\ListSorter;
 use OrangeHRM\ORM\QueryBuilderWrapper;
 
@@ -79,8 +80,9 @@ class MenuDao extends BaseDao
      * @param string $screenName
      * @return MenuItem|null
      */
-    public function getMenuItemByModuleAndScreen(string $moduleName, string $screenName): ?MenuItem
+    public function getMenuItemByModuleAndScreen(string $moduleName, string $screenName, int $themeId): ?MenuItem
     {
+        $theme = $this->getThemeById($themeId);
         $q = $this->createQueryBuilder(MenuItem::class, 'mi');
         $q->leftJoin('mi.screen', 'sc');
         $q->leftJoin('sc.module', 'mo');
@@ -88,6 +90,10 @@ class MenuDao extends BaseDao
         $q->andWhere('mo.name = :moduleName');
         $q->setParameter('screenName', $screenName);
         $q->setParameter('moduleName', $moduleName);
+        if ($theme != null) {
+            $q->andWhere('mi.theme = :theme')
+                ->setParameter('theme', $theme);
+        }
         return $this->fetchOne($q);
     }
 
@@ -95,9 +101,9 @@ class MenuDao extends BaseDao
      * @param UserRole[] $userRoles
      * @return MenuItem[]
      */
-    public function getSidePanelMenuItems(array $userRoles): array
+    public function getSidePanelMenuItems(array $userRoles, int $themeId): array
     {
-        $q = $this->getMenuItemQueryBuilderWrapper($userRoles);
+        $q = $this->getMenuItemQueryBuilderWrapper($userRoles, $themeId);
         if (is_null($q)) {
             return [];
         }
@@ -114,9 +120,9 @@ class MenuDao extends BaseDao
      * @param UserRole[] $userRoles
      * @return DetailedMenuItem[]
      */
-    public function getTopMenuItems(array $userRoles, int $sideMenuItemId): array
+    public function getTopMenuItems(array $userRoles, int $sideMenuItemId, int $themeId): array
     {
-        $q = $this->getMenuItemQueryBuilderWrapper($userRoles);
+        $q = $this->getMenuItemQueryBuilderWrapper($userRoles, $themeId);
         if (is_null($q)) {
             return [];
         }
@@ -137,7 +143,7 @@ class MenuDao extends BaseDao
             );
         }
 
-        $q = $this->getMenuItemQueryBuilderWrapper($userRoles)->getQueryBuilder();
+        $q = $this->getMenuItemQueryBuilderWrapper($userRoles, $themeId)->getQueryBuilder();
         $q->andWhere('mi.level = :menuItemLevel')
             ->andWhere($q->expr()->in('mi.parent', ':parentIds'))
             ->setParameter('menuItemLevel', 3)
@@ -160,13 +166,13 @@ class MenuDao extends BaseDao
      * @param UserRole[] $userRoles
      * @return QueryBuilderWrapper|null
      */
-    private function getMenuItemQueryBuilderWrapper(array $userRoles): ?QueryBuilderWrapper
+    private function getMenuItemQueryBuilderWrapper(array $userRoles, ?int $themeId): ?QueryBuilderWrapper
     {
         $userRoleIds = array_map(fn (UserRole $userRole) => $userRole->getId(), $userRoles);
         if (empty($userRoleIds)) {
             return null;
         }
-
+        $theme = $this->getThemeById($themeId);
         $q = $this->createQueryBuilder(MenuItem::class, 'mi');
         $q->leftJoin('mi.screen', 'sc');
         $q->leftJoin('sc.module', 'mo');
@@ -185,6 +191,11 @@ class MenuDao extends BaseDao
         $q->orWhere($q->expr()->isNull('mi.screen'));
         $q->andWhere('mi.status = :menuItemStatus')
             ->setParameter('menuItemStatus', true);
+
+        if ($theme != null) {
+            $q->andWhere('mi.theme = :theme')
+                ->setParameter('theme', $theme);
+        }
 
         return $this->getQueryBuilderWrapper($q);
     }
@@ -213,5 +224,17 @@ class MenuDao extends BaseDao
     public function getModuleByName(string $moduleName): ?Module
     {
         return $this->getRepository(Module::class)->findOneBy(['name' => $moduleName]);
+    }
+
+    /**
+     * @param int $themeId
+     * @return Theme|null
+     */
+    public function getThemeById(int $themeId): ?Theme
+    {
+        $query = $this->createQueryBuilder(Theme::class, 't');
+        $query->andWhere('t.id = :themeId');
+        $query->setParameter('themeId', $themeId);
+        return $query->getQuery()->getOneOrNullResult();
     }
 }

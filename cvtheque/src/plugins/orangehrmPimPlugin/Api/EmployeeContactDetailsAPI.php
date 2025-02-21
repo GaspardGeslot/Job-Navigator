@@ -45,6 +45,7 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
     use UserRoleManagerTrait;
     use EmployeeServiceTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_EMP_NUMBER = 'empNumber';
     public const PARAMETER_STREET_1 = 'street1';
     public const PARAMETER_STREET_2 = 'street2';
@@ -154,6 +155,10 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
         );
     }
@@ -391,6 +396,10 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_EMP_NUMBER,
                 new Rule(Rules::IN_ACCESSIBLE_EMP_NUMBERS)
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(

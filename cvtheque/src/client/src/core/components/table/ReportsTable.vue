@@ -52,8 +52,8 @@
 <script>
 import {computed, onBeforeMount, ref, watch} from 'vue';
 import {APIService} from '@/core/util/services/api.service';
-import {navigate} from '@ohrm/core/util/helper/navigation';
-import usePaginate from '@ohrm/core/util/composable/usePaginate';
+import {navigate} from '@/core/util/helper/navigation';
+import usePaginate from '@/core/util/composable/usePaginate';
 import {CellAdapter, OxdMultilineCell, OxdReportTable} from '@ohrm/oxd';
 
 export default {

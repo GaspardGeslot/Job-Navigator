@@ -1,38 +1,50 @@
 apiv2_auth_openid_providers:
-  path: /api/v2/auth/openid-providers
+  path: /{theme}/api/v2/auth/openid-providers
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ POST, GET, DELETE ]
   defaults:
     _api: OrangeHRM\OpenidAuthentication\Api\ProviderAPI
+  requirements:
+    theme: constructys|olecio
 
 apiv2_auth_openid_provider:
-  path: /api/v2/auth/openid-providers/{id}
+  path: /{theme}/api/v2/auth/openid-providers/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
   methods: [ GET, PUT ]
   defaults:
     _api: OrangeHRM\OpenidAuthentication\Api\ProviderAPI
+  requirements:
+    theme: constructys|olecio
 
 ##########################
 #        Screens
 ##########################
 admin_add_auth_provider:
-  path: admin/addAuthProvider
+  path: /{theme}/admin/addAuthProvider
   controller: OrangeHRM\OpenidAuthentication\Controller\SaveSocialMediaAuthProviderController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 admin_edit_auth_provider:
-  path: admin/editAuthProvider/{id}
+  path: /{theme}/admin/editAuthProvider/{id}
   controller: OrangeHRM\OpenidAuthentication\Controller\EditSocialMediaAuthProviderController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 #add this url to maintain 4X backward compatibility
 auth_oidc_login_redirect:
-  path: /openidauth/openIdCredentials
+  path: /{theme}/openidauth/openIdCredentials
   controller: OrangeHRM\OpenidAuthentication\Controller\OpenIdConnectRedirectController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 
 auth_oidc_login:
-  path: /openidauth/openIdCredentials/{providerId}
+  path: /{theme}/openidauth/openIdCredentials/{providerId}
   controller: OrangeHRM\OpenidAuthentication\Controller\OpenIdConnectLoginController::handle
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
 

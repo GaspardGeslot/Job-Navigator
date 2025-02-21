@@ -41,8 +41,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class AuthenticationSubscriber extends AbstractEventSubscriber
 {
+    protected string $theme;
     use ServiceContainerTrait;
     use AuthUserTrait;
+
+    public function __construct(string $theme = 'constructys')
+    {
+        $this->theme = $theme;
+    }
 
     /**
      * @inheritDoc
@@ -124,7 +130,7 @@ class AuthenticationSubscriber extends AbstractEventSubscriber
             /** @var UrlGenerator $urlGenerator */
             $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
 
-            $loginUrl = $urlGenerator->generate('auth_login', [], UrlGenerator::ABSOLUTE_URL);
+            $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $this->theme], UrlGenerator::ABSOLUTE_URL);
             $response = new RedirectResponse($loginUrl);
 
             $event->setResponse($response);

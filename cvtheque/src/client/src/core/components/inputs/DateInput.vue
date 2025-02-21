@@ -31,13 +31,13 @@
 
 <script>
 import {onBeforeMount, reactive, toRefs} from 'vue';
-import {APIService} from '@ohrm/core/util/services/api.service';
+import {APIService} from '@/core/util/services/api.service';
 import {
   startOfYear,
   endOfYear,
   formatDate,
   parseDate,
-} from '@ohrm/core/util/helper/datefns';
+} from '@/core/util/helper/datefns';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import useLocale from '@/core/util/composable/useLocale';
 

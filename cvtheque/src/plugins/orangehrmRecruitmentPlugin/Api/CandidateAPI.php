@@ -98,6 +98,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_COMMENT = 'comment';
     public const PARAMETER_DATE_OF_APPLICATION = 'dateOfApplication';
     public const PARAMETER_CONSENT_TO_KEEP_DATA = 'consentToKeepData';
+    public const PARAMETER_THEME = 'theme';
 
     public const MODEL_DEFAULT = 'default';
     public const MODEL_CANDIDATE_LIST = 'list';
@@ -651,6 +652,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                 ),
                 true
             ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
             $this->getModelClassParamRule(),
             ...$this->getSortingAndPaginationParamsRules(CandidateSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
@@ -836,7 +843,16 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
      */
     public function getValidationRuleForCreate(): ParamRuleCollection
     {
-        return new ParamRuleCollection($this->getModelClassParamRule(), ...$this->getCommonBodyValidationRules());
+        return new ParamRuleCollection(
+            $this->getModelClassParamRule(),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            ...$this->getCommonBodyValidationRules()
+        );
     }
 
     /**
@@ -943,6 +959,10 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                 CommonParams::PARAMETER_IDS,
                 new Rule(Rules::ARRAY_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
         );
     }
 
@@ -1024,6 +1044,10 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                     self::FILTER_MATCHING_ID,
                     new Rule(Rules::POSITIVE)
                 )
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             )
         );
     }
@@ -1124,6 +1148,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                 new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
             ),
             $this->getModelClassParamRule(),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
             ...$this->getCommonBodyValidationRules(),
         );
     }

@@ -37,6 +37,7 @@ class WorkWeekAPI extends Endpoint implements ResourceEndpoint
 {
     use WorkWeekServiceTrait;
 
+    public const PARAMETER_THEME = 'theme';
     public const PARAMETER_MONDAY = 'monday';
     public const PARAMETER_TUESDAY = 'tuesday';
     public const PARAMETER_WEDNESDAY = 'wednesday';
@@ -130,7 +131,7 @@ class WorkWeekAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::FILTER_MODEL,
                 new Rule(Rules::IN, [array_keys(self::MODEL_MAP)])
-            )
+            ),
         );
     }
 
@@ -155,7 +156,14 @@ class WorkWeekAPI extends Endpoint implements ResourceEndpoint
      */
     public function getValidationRuleForGetOne(): ParamRuleCollection
     {
-        return new ParamRuleCollection($this->getIdParamRule(), $this->getModelParamRule());
+        return new ParamRuleCollection(
+            $this->getIdParamRule(),
+            $this->getModelParamRule(),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
+        );
     }
 
     /**
@@ -229,7 +237,14 @@ class WorkWeekAPI extends Endpoint implements ResourceEndpoint
      */
     public function getValidationRuleForUpdate(): ParamRuleCollection
     {
-        $paramRules = new ParamRuleCollection($this->getIdParamRule(), $this->getModelParamRule());
+        $paramRules = new ParamRuleCollection(
+            $this->getIdParamRule(),
+            $this->getModelParamRule(),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
+        );
         foreach (self::PARAMETER_WORKWEEK as $workWeekKey) {
             $paramRules->addParamValidation(
                 new ParamRule($workWeekKey, new Rule(Rules::IN, [WorkWeek::WORKWEEK_LENGTHS, true]))

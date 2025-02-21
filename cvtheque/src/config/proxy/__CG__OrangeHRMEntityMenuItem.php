@@ -67,10 +67,10 @@ class MenuItem extends \OrangeHRM\Entity\MenuItem implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'menuTitle', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'parent', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'level', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'orderHint', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'screen', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'additionalParams'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'menuTitle', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'parent', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'level', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'orderHint', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'screen', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'additionalParams', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'theme'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'menuTitle', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'parent', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'level', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'orderHint', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'screen', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'additionalParams'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'menuTitle', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'parent', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'level', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'orderHint', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'status', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'screen', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'additionalParams', '' . "\0" . 'OrangeHRM\\Entity\\MenuItem' . "\0" . 'theme'];
     }
 
     /**
@@ -267,6 +267,28 @@ class MenuItem extends \OrangeHRM\Entity\MenuItem implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLevel', [$level]);
 
         parent::setLevel($level);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTheme(): \OrangeHRM\Entity\Theme
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTheme', []);
+
+        return parent::getTheme();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTheme(\OrangeHRM\Entity\Theme $theme): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTheme', [$theme]);
+
+        parent::setTheme($theme);
     }
 
     /**

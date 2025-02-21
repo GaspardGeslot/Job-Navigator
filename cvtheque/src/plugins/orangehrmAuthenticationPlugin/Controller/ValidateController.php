@@ -84,11 +84,18 @@ class ValidateController extends AbstractController implements PublicControllerI
     {
         $username = $request->request->get(self::PARAMETER_USERNAME, '');
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
-        $credentials = new UserCredential($username, $password, 'ESS');
+        $theme = $request->attributes->get('theme');
+        $role = $request->attributes->get('role');
+        $role = $role !== null && $role === 'admin' ? 'Admin' : 'ESS';
+        $credentials = new UserCredential($username, $password, $role);
 
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        $loginUrl = $urlGenerator->generate('auth_login', [], UrlGenerator::ABSOLUTE_URL);
+        if ($role === 'Admin') {
+            $loginUrl = $urlGenerator->generate('auth_login_admin', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+        } else {
+            $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+        }
 
         try {
             $token = $request->request->get('_token');
@@ -98,14 +105,15 @@ class ValidateController extends AbstractController implements PublicControllerI
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticate(new AuthParams($credentials));
+            $token = $authProviderChain->authenticate(new AuthParams($credentials, null, $theme));
             $success = !is_null($token);
 
             if (!$success) {
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
-            $this->getAuthUser()->setIsCandidate(true);
+            $this->getAuthUser()->setIsAdmin($role === 'Admin');
+            $this->getAuthUser()->setIsCandidate($role !== 'Admin');
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
@@ -125,12 +133,12 @@ class ValidateController extends AbstractController implements PublicControllerI
             return new RedirectResponse($loginUrl);
         }
 
-        $redirectUrl = $this->handleSessionTimeoutRedirect();
+        $redirectUrl = $this->handleSessionTimeoutRedirect($theme);
         if ($redirectUrl) {
             return new RedirectResponse($redirectUrl);
         }
 
         $homePagePath = $this->getHomePageService()->getHomePagePath();
-        return $this->redirect($homePagePath);
+        return $this->redirect($theme . "/" . $homePagePath);
     }
 }

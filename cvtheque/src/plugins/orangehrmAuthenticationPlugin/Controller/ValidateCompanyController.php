@@ -87,11 +87,12 @@ class ValidateCompanyController extends AbstractController implements PublicCont
     {
         $siret = $request->request->get(self::PARAMETER_SIRET, '');
         $adherentCode = $request->request->get(self::PARAMETER_ADHERENT_CODE, '');
+        $theme = $request->attributes->get('theme');
 
         try{
             /** @var UrlGenerator $urlGenerator */
             $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-            $loginUrl = $urlGenerator->generate('auth_login_company', [], UrlGenerator::ABSOLUTE_URL);
+            $loginUrl = $urlGenerator->generate('auth_login_company', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
             
             $clientToken = $this->retrieveClientToken();    
             $isAuthorizedByClient = $this->checkIsAuthorizedByClient($siret, $adherentCode, $clientToken);
@@ -115,13 +116,14 @@ class ValidateCompanyController extends AbstractController implements PublicCont
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticateCompany(new AuthParams($credentials));
+            $token = $authProviderChain->authenticateCompany(new AuthParams($credentials, null, $theme));
             $success = !is_null($token);
 
             if (!$success) {
                 throw AuthenticationException::invalidCredentials();
             }
             $this->getAuthUser()->setIsAuthenticated($success);
+            $this->getAuthUser()->setIsAdmin(false);
             $this->getAuthUser()->setIsCandidate(false);
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
@@ -149,13 +151,13 @@ class ValidateCompanyController extends AbstractController implements PublicCont
             return new RedirectResponse($loginUrl);
         }
 
-        $redirectUrl = $this->handleSessionTimeoutRedirect();
+        $redirectUrl = $this->handleSessionTimeoutRedirect($theme);
         if ($redirectUrl) {
             return new RedirectResponse($redirectUrl);
         }
 
         $homePagePath = $this->getHomePageService()->getHomePagePath();
-        return $this->redirect($homePagePath);
+        return $this->redirect($theme . "/" . $homePagePath);
     }
 
     private function retrieveClientToken(): string

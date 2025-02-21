@@ -81,7 +81,7 @@ class CreateAccountController extends AbstractVueController implements PublicCon
     {
         if ($this->getAuthUser()->isAuthenticated()) {
             $homePagePath = $this->getHomePageService()->getHomePagePath();
-            return $this->redirect($homePagePath);
+            return $this->redirect($request->attributes->get('theme') . "/" . $homePagePath);
         }
         return parent::handle($request);
     }

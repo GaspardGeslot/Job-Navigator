@@ -17,7 +17,6 @@
 
 import {createApp} from 'vue';
 import components from './components';
-import pages from './pages';
 import acl, {AclAPI} from './core/plugins/acl/acl';
 import toaster, {ToasterAPI} from './core/plugins/toaster/toaster';
 import createI18n, {TranslateAPI} from './core/plugins/i18n/translate';
@@ -27,6 +26,24 @@ import '@ohrm/oxd/style.css';
 import './core/styles/global.scss';
 import './core/plugins/toaster/toaster.scss';
 import './core/plugins/loader/loader.scss';
+
+// @ts-expect-error: appGlobal is not in window object by default
+const baseUrl = window.appGlobal.baseUrl;
+
+const subspace =
+  window.location.pathname.split(baseUrl)[1].split('/')[1] || 'constructys';
+
+let pages;
+try {
+  // eslint-disable-next-line
+  pages = require(`../themes/${subspace}/pages`).default;
+} catch (e) {
+  // eslint-disable-next-line
+  pages = require('../themes/constructys/pages').default;
+  console.warn(
+    `Aucun fichier pages.ts trouvé pour le sous-espace : ${subspace}. Chargement des pages par défaut.`,
+  );
+}
 
 const app = createApp({
   name: 'App',
@@ -42,9 +59,6 @@ app.use(toaster, {
   animation: 'oxd-toast-list',
   position: 'bottom',
 });
-
-// @ts-expect-error: appGlobal is not in window object by default
-const baseUrl = window.appGlobal.baseUrl;
 
 const {i18n, init} = createI18n({
   baseUrl: baseUrl,
@@ -63,8 +77,17 @@ declare module '@vue/runtime-core' {
   }
 }
 
+const theme = subspace ?? 'constructys';
+
 app.config.globalProperties.global = {
   baseUrl,
+};
+
+// @ts-expect-error: appGlobal is not in window object by default
+window.appGlobal = {
+  // @ts-expect-error: appGlobal is not in window object by default
+  ...window.appGlobal,
+  theme,
 };
 
 init().then(() => app.mount('#app'));

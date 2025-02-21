@@ -8,10 +8,11 @@
 </template>
 
 <script>
-import {navigate} from '@ohrm/core/util/helper/navigation';
+import {navigate} from '@/core/util/helper/navigation';
 
 export default {
   name: 'BackButton',
+
   props: {
     to: {
       type: String,

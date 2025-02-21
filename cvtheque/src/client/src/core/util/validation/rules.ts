@@ -449,6 +449,43 @@ export const startDateShouldBeBeforeEndDate = (
   };
 };
 
+/**
+ * @param {string} endDate
+ * @param {string|undefined} message
+ * @param {object} options
+ */
+export const startDateShouldBeBeforeEndDateFrench = (
+  endDate: string | (() => string),
+  message?: string,
+  options: {
+    allowSameDate?: boolean;
+    dateFormat?: string;
+  } = {
+    allowSameDate: false,
+    dateFormat: 'dd-MM-yyyy',
+  },
+) => {
+  return (value: string): boolean | string => {
+    const resolvedEndDate = typeof endDate === 'function' ? endDate() : endDate;
+    const resolvedMessage =
+      typeof message === 'string'
+        ? message
+        : translate('general.start_date_should_be_before_end_date');
+    if (options.allowSameDate) {
+      return (
+        sameDate(value, resolvedEndDate) ||
+        beforeDate(value, resolvedEndDate, options.dateFormat) ||
+        resolvedMessage
+      );
+    } else {
+      return (
+        beforeDate(value, resolvedEndDate, options.dateFormat) ||
+        resolvedMessage
+      );
+    }
+  };
+};
+
 export const maxCurrency = function (maxValue: number) {
   return function (value: string): boolean | string {
     return (

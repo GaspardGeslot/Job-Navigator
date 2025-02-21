@@ -84,6 +84,7 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_RULE_NAME_MAX_LENGTH = 30;
     public const PARAMETER_RULE_KEYWORDS_MAX_LENGTH = 250;
     public const PARAMETER_RULE_COMMENT_MAX_LENGTH = 250;
+    public const PARAMETER_THEME = 'theme';
 
     /**
      * @OA\Get(
@@ -582,6 +583,12 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
                 true
             ),
             $this->getModelClassParamRule(),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
             ...$this->getSortingAndPaginationParamsRules(CandidateSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
     }
@@ -766,7 +773,16 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
      */
     public function getValidationRuleForCreate(): ParamRuleCollection
     {
-        return new ParamRuleCollection($this->getModelClassParamRule(), ...$this->getCommonBodyValidationRules());
+        return new ParamRuleCollection(
+            $this->getModelClassParamRule(),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            ...$this->getCommonBodyValidationRules()
+        );
     }
 
     /**
@@ -873,6 +889,10 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
                 CommonParams::PARAMETER_IDS,
                 new Rule(Rules::ARRAY_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
+            )
         );
     }
 
@@ -952,6 +972,10 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
                     self::FILTER_MATCHING_ID,
                     new Rule(Rules::POSITIVE)
                 )
+            ),
+            new ParamRule(
+                self::PARAMETER_THEME,
+                new Rule(Rules::STRING_TYPE)
             )
         );
     }
@@ -1052,6 +1076,12 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
                 new Rule(Rules::IN_ACCESSIBLE_ENTITY_ID, [Candidate::class])
             ),
             $this->getModelClassParamRule(),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_THEME,
+                    new Rule(Rules::STRING_TYPE)
+                )
+            ),
             ...$this->getCommonBodyValidationRules(),
         );
     }

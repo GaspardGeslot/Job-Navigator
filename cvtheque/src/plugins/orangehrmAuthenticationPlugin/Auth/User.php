@@ -30,6 +30,7 @@ class User
     public const IS_AUTHENTICATED = 'user.is_authenticated';
     public const HAS_ADMIN_ACCESS = 'user.has_admin_access';
     public const IS_CANDIDATE = 'user.is_candidate';
+    public const IS_ADMIN = 'user.is_admin';
     public const ADMIN_ACCESS_FORWARD_URL = 'admin_access.forward_url';
     public const ADMIN_ACCESS_BACK_URL = 'admin_access.back_url';
     public const USER_ID = 'user.user_id';
@@ -276,5 +277,21 @@ class User
     public function setIsCandidate(bool $isCandidate = true): void
     {
         $this->setAttribute(self::IS_CANDIDATE, $isCandidate);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAdmin(): bool
+    {
+        return $this->getAttribute(self::IS_ADMIN, false);
+    }
+
+    /**
+     * @param bool $isAdmin
+     */
+    public function setIsAdmin(bool $isAdmin = true): void
+    {
+        $this->setAttribute(self::IS_ADMIN, $isAdmin);
     }
 }
