@@ -223,13 +223,14 @@ class CandidatureController extends AbstractVueController implements PublicContr
     {
         $email = $request->request->get('email');
         $password = $request->request->get('password');
+        $theme = $request->attributes->get('theme');
         $credentials = new UserCredential($email, $password, 'ESS');
         try {
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
             
-            $token = $authProviderChain->signInFromCandidature(new AuthParams($credentials));
+            $token = $authProviderChain->signInFromCandidature(new AuthParams($credentials, null, $theme));
             $success = !is_null($token);
 
             if (!$success)

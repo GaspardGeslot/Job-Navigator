@@ -23,7 +23,10 @@ import { inject } from 'vue';
       <p v-if="cannotCreateAccount" class="alert-msg">
         Cette adresse mail est déjà liée à un compte, veuillez renseigner une
         autre adresse ou vous
-        <a style="text-decoration: underline" @click="sendLeadAndRedirect">
+        <a
+          style="text-decoration: underline; cursor: pointer"
+          @click="sendLeadAndRedirect"
+        >
           connecter à votre compte
         </a>
       </p>
@@ -178,7 +181,7 @@ export default {
   },
   methods: {
     navigateToCGU() {
-      navigate('/cgu/index');
+      navigate(`/${window.appGlobal.theme}/cgu/index`);
     },
     validateEmail() {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -244,7 +247,7 @@ export default {
       this.password = '';
       this.confirmPassword = '';
       this.onSubmit();
-      window.location.href = `${window.location.origin}/${window.appGlobal.theme}/web/index.php/auth/login`;
+      navigate(`/${window.appGlobal.theme}/auth/login`);
     },
     goBack() {
       this.$emit('go-back');
