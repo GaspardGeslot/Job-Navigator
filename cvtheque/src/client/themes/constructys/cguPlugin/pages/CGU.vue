@@ -571,10 +571,7 @@ export default {
       if (this.utmCamp) params.append('utm_campaign', this.utmCamp);
       const queryString = params.toString();
       console.log('queryString', queryString);
-      // Ajoute #apply pour ouvrir automatiquement le formulaire au retour
-      return queryString
-        ? `${baseUrl}?${queryString}#apply`
-        : `${baseUrl}#apply`;
+      return queryString ? `${baseUrl}?${queryString}` : `${baseUrl}`;
     },
 
     navigateToHome() {
