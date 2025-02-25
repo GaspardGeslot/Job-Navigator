@@ -253,9 +253,30 @@ export default {
     navigateToCGU() {
       navigate(`/${window.appGlobal.theme}/cgu/index`);
     },
+    // getUTMParameters() {
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   const utmSource = urlParams.get('utm_source');
+    //   console.log('UTM Source:', utmSource);
+    //   if (utmSource) {
+    //     this.utmStr = utmSource;
+    //   }
+    // },
     getUTMParameters() {
+      // Récupère la partie après le hash (#)
+      const hashPart = window.location.hash;
+      let utmSource = null;
+
+      // Vérifie d'abord les paramètres dans l'URL principale
       const urlParams = new URLSearchParams(window.location.search);
-      const utmSource = urlParams.get('utm_source');
+      utmSource = urlParams.get('utm_source');
+
+      // Si pas d'utm_source dans l'URL principale, cherche dans la partie hash
+      if (!utmSource && hashPart.includes('?')) {
+        // Extrait les paramètres après le hash (#apply?utm_source=...)
+        const hashParams = new URLSearchParams(hashPart.split('?')[1]);
+        utmSource = hashParams.get('utm_source');
+      }
+
       console.log('UTM Source:', utmSource);
       if (utmSource) {
         this.utmStr = utmSource;
