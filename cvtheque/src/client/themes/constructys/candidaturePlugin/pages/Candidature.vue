@@ -71,6 +71,7 @@
     <div v-if="formVisible" class="formContainer">
       <formComponent
         :options="options"
+        :utm-source="utmStr"
         class="formComponent"
         @close-form="hideForm"
         @login="navigateToLogin"
@@ -222,11 +223,16 @@ export default {
   },
   data() {
     return {
+      utmStr: '',
       formVisible: false,
     };
   },
   mounted() {
-    if (window.location.hash === '#apply') {
+    this.getUTMParameters();
+    // if (window.location.hash === '#apply') {
+    //   this.formVisible = true;
+    // }
+    if (window.location.href.includes('#apply')) {
       this.formVisible = true;
     }
   },
@@ -246,6 +252,14 @@ export default {
     },
     navigateToCGU() {
       navigate(`/${window.appGlobal.theme}/cgu/index`);
+    },
+    getUTMParameters() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const utmSource = urlParams.get('utm_source');
+      console.log('UTM Source:', utmSource);
+      if (utmSource) {
+        this.utmStr = utmSource;
+      }
     },
   },
 };

@@ -164,9 +164,13 @@ export default {
       type: Object,
       default: () => null,
     },
+    utmSource: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['close-form'],
-  setup() {
+  setup(props) {
     const cannotCreateAccount = ref(false);
     const currentStep = ref(1);
     const highestStep = ref(1);
@@ -393,18 +397,21 @@ export default {
     };
 
     async function createLead(formData) {
+      if (props.utmSource) {
+        formData.append('utm_source', props.utmSource);
+      }
       const leadHttp = new APIService(
         window.appGlobal.baseUrl,
         `${window.appGlobal.theme}/candidature/lead`,
       );
-      // console.log('FormData content before submission:', [
-      //   ...formData.entries(),
-      // ]);
+      console.log('FormData content before submission:', [
+        ...formData.entries(),
+      ]);
 
       try {
         isLoading.value = true;
         const leadResponse = await leadHttp.create(formData);
-        // console.log('Lead RESPONSE HERE !!!! ', leadResponse);
+        console.log('Lead RESPONSE HERE !!!! ', leadResponse);
         matchResponse.value = leadResponse.data.MatchResponse;
         // console.log('matchResponse.value in formComp', matchResponse.value);
         isLoading.value = false;

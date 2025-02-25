@@ -100,6 +100,7 @@ class CandidatureController extends AbstractVueController implements PublicContr
         $leadData = $request->request->all();
 
         $keyMapping = [
+            'utm_source' => 'utmSource',
             'BTPcheckedEXP' => 'specificProfessionalExperience',
             'checkedEXP' => 'professionalExperience',
             'permits' => 'drivingLicenses',
