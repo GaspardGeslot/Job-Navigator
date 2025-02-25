@@ -168,6 +168,14 @@ export default {
       type: String,
       default: '',
     },
+    utmMedium: {
+      type: String,
+      default: '',
+    },
+    utmCampaign: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['close-form'],
   setup(props) {
@@ -399,6 +407,12 @@ export default {
     async function createLead(formData) {
       if (props.utmSource) {
         formData.append('utm_source', props.utmSource);
+      }
+      if (props.utmMedium) {
+        formData.append('utm_medium', props.utmMedium);
+      }
+      if (props.utmCampaign) {
+        formData.append('utm_campaign', props.utmCampaign);
       }
       const leadHttp = new APIService(
         window.appGlobal.baseUrl,

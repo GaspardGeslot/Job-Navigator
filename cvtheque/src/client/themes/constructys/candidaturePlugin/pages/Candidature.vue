@@ -71,7 +71,9 @@
     <div v-if="formVisible" class="formContainer">
       <formComponent
         :options="options"
-        :utm-source="utmStr"
+        :utm-source="utmSrc"
+        :utm-medium="utmMed"
+        :utm-campaign="utmCamp"
         class="formComponent"
         @close-form="hideForm"
         @login="navigateToLogin"
@@ -223,7 +225,9 @@ export default {
   },
   data() {
     return {
-      utmStr: '',
+      utmSrc: '',
+      utmMed: '',
+      utmCamp: '',
       formVisible: false,
     };
   },
@@ -258,28 +262,74 @@ export default {
     //   const utmSource = urlParams.get('utm_source');
     //   console.log('UTM Source:', utmSource);
     //   if (utmSource) {
-    //     this.utmStr = utmSource;
+    //     this.utmSrc = utmSource;
+    //   }
+    // },
+    // getUTMParameters() {
+    //   // Récupère la partie après le hash (#)
+    //   const hashPart = window.location.hash;
+    //   let utmSource = null;
+
+    //   // Vérifie d'abord les paramètres dans l'URL principale
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   utmSource = urlParams.get('utm_source');
+
+    //   // Si pas d'utm_source dans l'URL principale, cherche dans la partie hash
+    //   if (!utmSource && hashPart.includes('?')) {
+    //     // Extrait les paramètres après le hash (#apply?utm_source=...)
+    //     const hashParams = new URLSearchParams(hashPart.split('?')[1]);
+    //     utmSource = hashParams.get('utm_source');
+    //   }
+
+    //   console.log('UTM Source:', utmSource);
+    //   if (utmSource) {
+    //     this.utmSrc = utmSource;
     //   }
     // },
     getUTMParameters() {
       // Récupère la partie après le hash (#)
       const hashPart = window.location.hash;
       let utmSource = null;
+      let utmMedium = null;
+      let utmCampaign = null;
 
       // Vérifie d'abord les paramètres dans l'URL principale
       const urlParams = new URLSearchParams(window.location.search);
       utmSource = urlParams.get('utm_source');
+      utmMedium = urlParams.get('utm_medium');
+      utmCampaign = urlParams.get('utm_campaign');
 
-      // Si pas d'utm_source dans l'URL principale, cherche dans la partie hash
-      if (!utmSource && hashPart.includes('?')) {
+      // Si pas de paramètres dans l'URL principale, cherche dans la partie hash
+      if (hashPart.includes('?')) {
         // Extrait les paramètres après le hash (#apply?utm_source=...)
         const hashParams = new URLSearchParams(hashPart.split('?')[1]);
-        utmSource = hashParams.get('utm_source');
+        // Récupère les paramètres s'ils n'ont pas été trouvés dans l'URL principale
+        if (!utmSource) {
+          utmSource = hashParams.get('utm_source');
+        }
+        if (!utmMedium) {
+          utmMedium = hashParams.get('utm_medium');
+        }
+        if (!utmCampaign) {
+          utmCampaign = hashParams.get('utm_campaign');
+        }
       }
 
-      console.log('UTM Source:', utmSource);
+      console.log('UTM Parameters:', {
+        source: utmSource,
+        medium: utmMedium,
+        campaign: utmCampaign,
+      });
+
+      // Stocke les valeurs si elles existent
       if (utmSource) {
-        this.utmStr = utmSource;
+        this.utmSrc = utmSource;
+      }
+      if (utmMedium) {
+        this.utmMed = utmMedium;
+      }
+      if (utmCampaign) {
+        this.utmCamp = utmCampaign;
       }
     },
   },

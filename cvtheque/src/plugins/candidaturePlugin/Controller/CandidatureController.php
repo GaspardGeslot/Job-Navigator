@@ -101,6 +101,8 @@ class CandidatureController extends AbstractVueController implements PublicContr
 
         $keyMapping = [
             'utm_source' => 'utmSource',
+            'utm_medium' => 'utmGroup',
+            'utm_campaign' => 'utmCampaign',
             'BTPcheckedEXP' => 'specificProfessionalExperience',
             'checkedEXP' => 'professionalExperience',
             'permits' => 'drivingLicenses',
