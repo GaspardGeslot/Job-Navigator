@@ -541,6 +541,9 @@ export default {
       utmCamp: '',
     };
   },
+  mounted() {
+    this.getUTMParameters();
+  },
   methods: {
     getUTMParameters() {
       // Récupère les paramètres de l'URL
