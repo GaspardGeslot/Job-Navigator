@@ -536,16 +536,47 @@ export default {
   data() {
     return {
       formVisible: false,
+      utmSrc: '',
+      utmMed: '',
+      utmCamp: '',
     };
   },
-  mounted() {
-    if (window.location.hash === '#apply') {
-      this.formVisible = true;
-    }
-  },
   methods: {
+    getUTMParameters() {
+      // Récupère les paramètres de l'URL
+      const urlParams = new URLSearchParams(window.location.search);
+      // Stocke les valeurs si elles existent
+      const utmSource = urlParams.get('utm_source');
+      const utmMedium = urlParams.get('utm_medium');
+      const utmCampaign = urlParams.get('utm_campaign');
+
+      if (utmSource) this.utmSrc = utmSource;
+      if (utmMedium) this.utmMed = utmMedium;
+      if (utmCampaign) this.utmCamp = utmCampaign;
+
+      console.log('UTM Parameters in CGU:', {
+        source: this.utmSrc,
+        medium: this.utmMed,
+        campaign: this.utmCamp,
+      });
+    },
+
+    buildUrlWithUtm(baseUrl) {
+      const params = new URLSearchParams();
+      if (this.utmSrc) params.append('utm_source', this.utmSrc);
+      if (this.utmMed) params.append('utm_medium', this.utmMed);
+      if (this.utmCamp) params.append('utm_campaign', this.utmCamp);
+      const queryString = params.toString();
+      console.log('queryString', queryString);
+      // Ajoute #apply pour ouvrir automatiquement le formulaire au retour
+      return queryString
+        ? `${baseUrl}?${queryString}#apply`
+        : `${baseUrl}#apply`;
+    },
+
     navigateToHome() {
-      navigate(`/${window.appGlobal.theme}/candidature/index`);
+      const baseUrl = `/${window.appGlobal.theme}/candidature/index`;
+      navigate(this.buildUrlWithUtm(baseUrl));
     },
   },
 };

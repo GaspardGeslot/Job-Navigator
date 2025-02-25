@@ -254,8 +254,21 @@ export default {
     navigateToLoginCompany() {
       navigate(`/${window.appGlobal.theme}/auth/company/login`);
     },
+    // navigateToCGU() {
+    //   navigate(`/${window.appGlobal.theme}/cgu/index`);
+    // },
+    buildUrlWithUtm(baseUrl) {
+      const params = new URLSearchParams();
+      if (this.utmSrc) params.append('utm_source', this.utmSrc);
+      if (this.utmMed) params.append('utm_medium', this.utmMed);
+      if (this.utmCamp) params.append('utm_campaign', this.utmCamp);
+      const queryString = params.toString();
+      console.log('queryString', queryString);
+      return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+    },
     navigateToCGU() {
-      navigate(`/${window.appGlobal.theme}/cgu/index`);
+      const baseUrl = `/${window.appGlobal.theme}/cgu/index`;
+      navigate(this.buildUrlWithUtm(baseUrl));
     },
     // getUTMParameters() {
     //   const urlParams = new URLSearchParams(window.location.search);
