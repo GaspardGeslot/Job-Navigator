@@ -7,7 +7,7 @@
             <oxd-grid-item>
               <oxd-input-field
                 v-model="startDateFilter"
-                :label="$t('general.start_date')"
+                :label="$t('Date de début')"
                 :rules="rules.fromDate"
                 required
               />
@@ -96,6 +96,14 @@
                 :options="professionalExperiences"
               />
             </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="utmSourceFilter"
+                type="select"
+                :label="$t('Source de candidature')"
+                :options="utmSources"
+              />
+            </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
         <oxd-divider />
@@ -174,10 +182,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    utmSources: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup() {
     const jobSector = ref('');
     const professionalExperienceFilter = ref(null);
+    const utmSourceFilter = ref(null);
     const jobTitleFilter = ref(null);
     const needFilter = ref(null);
     const studyLevelFilter = ref(null);
@@ -255,6 +268,9 @@ export default {
           ...(courseStartFilter.value
             ? {courseStartFilter: courseStartFilter.value.label}
             : {}),
+          ...(utmSourceFilter.value
+            ? {utmSourceFilter: utmSourceFilter.value.label}
+            : {}),
         })
         .then((response) => {
           state.candidates = response.data;
@@ -300,6 +316,8 @@ export default {
         borderRadius: 5,
       }));
 
+      let totalAmount = 0;
+
       // Fill datasets with data
       dates.forEach((date, index) => {
         const statusAmounts = {};
@@ -312,6 +330,7 @@ export default {
         candidatesData[date].forEach((item) => {
           const status = item.status || 'Sans Matching';
           statusAmounts[status] += item.amount;
+          totalAmount += item.amount;
         });
 
         // Add the amounts to respective datasets
@@ -323,6 +342,7 @@ export default {
       return {
         labels: formattedDates,
         datasets,
+        totalAmount,
       };
     };
 
@@ -334,6 +354,7 @@ export default {
         'rgba(75, 192, 192, 0.8)', // green
         'rgba(153, 102, 255, 0.8)', // purple
         'rgba(255, 159, 64, 0.8)', // orange
+        'rgba(255, 0, 255, 0.8)', // magenta
       ];
       return colors[index % colors.length];
     };
@@ -401,9 +422,20 @@ export default {
               },
               title: {
                 display: true,
-                text: 'Quantité de candidats par statut',
+                text: 'Nombre de candidats par jour et par statut',
                 font: {
                   size: 16,
+                },
+              },
+              subtitle: {
+                display: true,
+                text: `Nombre total de candidats : ${chartData.totalAmount}`,
+                font: {
+                  size: 14,
+                  style: 'italic',
+                },
+                padding: {
+                  bottom: 20,
                 },
               },
             },
@@ -442,6 +474,7 @@ export default {
       endDateFilter,
       needFilter,
       jobSector,
+      utmSourceFilter,
       professionalExperienceFilter,
       jobTitleFilter,
       studyLevelFilter,
@@ -490,6 +523,7 @@ export default {
       this.jobTitleFilter = null;
       this.jobSector = null;
       this.professionalExperienceFilter = null;
+      this.utmSourceFilter = null;
       this.needFilter = null;
       this.studyLevelFilter = null;
       this.courseStartFilter = null;

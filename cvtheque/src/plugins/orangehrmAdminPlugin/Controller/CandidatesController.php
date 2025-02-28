@@ -21,6 +21,7 @@ class CandidatesController extends AbstractVueController
     public const FILTER_COURSE_START = 'courseStartFilter';
     public const FILTER_START_DATE = 'startDate';
     public const FILTER_TO_DATE = 'toDate';
+    public const FILTER_UTM_SOURCE = 'utmSourceFilter';
 
     /**
      * @inheritDoc
@@ -30,7 +31,14 @@ class CandidatesController extends AbstractVueController
         $component = new Component('candidates-list');
 
         $options = $this->getHedwigeOptions();
+        $utmSources = $this->getUtmSourcesOptions();
 
+        $component->addProp(new Prop('utm-sources', Prop::TYPE_ARRAY, array_map(function($index, $label) {
+            return [
+                'id' => $index,
+                'label' => $label
+            ];
+        }, array_keys($utmSources), $utmSources)));
         $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($id, $label) {
             return [
                 'id' => $id,
@@ -86,12 +94,15 @@ class CandidatesController extends AbstractVueController
         $courseStartFilter = $request->query->get(
             self::FILTER_COURSE_START
         );
+        $utmSourceFilter = $request->query->get(
+            self::FILTER_UTM_SOURCE
+        );
         $fromDateFilter = $request->query->get(self::FILTER_START_DATE);
         $toDateFilter = $request->query->get(self::FILTER_TO_DATE);
         $fromDate = $fromDateFilter ? new \DateTime($fromDateFilter) : null;
         $toDate = $toDateFilter ? new \DateTime($toDateFilter) : null;
 
-        $candidates = $this->getCandidates($this->getAuthUser()->getUserHedwigeToken(), $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $fromDate, $toDate);
+        $candidates = $this->getCandidates($this->getAuthUser()->getUserHedwigeToken(), $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $utmSourceFilter, $fromDate, $toDate);
         return new Response(
             json_encode($candidates),
             Response::HTTP_OK,
@@ -100,7 +111,7 @@ class CandidatesController extends AbstractVueController
         
     }
 
-    protected function getCandidates(string $token, ?string $jobTitleFilter, ?string $needFilter, ?string $studyLevelFilter, ?string $courseStartFilter, ?string $professionalExperienceFilter, ?\DateTime $fromDate, ?\DateTime $toDate) : array
+    protected function getCandidates(string $token, ?string $jobTitleFilter, ?string $needFilter, ?string $studyLevelFilter, ?string $courseStartFilter, ?string $professionalExperienceFilter, ?string $utmSourceFilter, ?\DateTime $fromDate, ?\DateTime $toDate) : array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -127,6 +138,9 @@ class CandidatesController extends AbstractVueController
             }
             if ($professionalExperienceFilter != null && $professionalExperienceFilter !== '') {
                 $url .= 'professionalExperience=' . urlencode($professionalExperienceFilter) . '&';
+            }
+            if ($utmSourceFilter != null && $utmSourceFilter !== '') {
+                $url .= 'utmSource=' . urlencode($utmSourceFilter) . '&';
             }
             $response = $client->request('GET', $url, [
                 'headers' => [
@@ -155,6 +169,25 @@ class CandidatesController extends AbstractVueController
             return json_decode($response->getBody(), true);
         } catch (\Exceptionon $e) {
             return new \stdClass();
+        }
+    }
+
+    public function getUtmSourcesOptions(): array
+    {
+        $client = new Client();
+        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/utm-source", [
+                'headers' => [
+                    'Authorization' => $clientToken
+                ]
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exceptionon $e) {
+            return [];
         }
     }
 }
