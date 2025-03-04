@@ -55,42 +55,6 @@ p {
   display: flex;
   align-items: center;
 }
-/*
-.custom-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid #767676;
-    outline: none;
-    transition: background-color 0.3s;
-    position: relative;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    flex-shrink: 0;
-  }
-  .custom-input[type='checkbox']:checked {
-    background-color: #1069b3;
-    border-color: #1069b3;
-    border-width: 2px;
-  }
-  
-  .custom-input[type='checkbox']:checked::before {
-    content: '';
-    display: block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #1069b3;
-    border: 1.5px solid white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-*/
 .radio-group {
   display: flex;
   flex-direction: row;
@@ -318,5 +282,145 @@ p {
     line-height: 2rem;
     margin-top: 0rem;
     margin-bottom: 0rem;
+  }
+}
+
+// Modern form controls styling
+select, input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background-color: white;
+  font-family: 'Telegraf', sans-serif;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  outline: none;
+  
+  &:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  &:focus {
+    border-color: #e54021;
+    box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+  }
+
+  &::placeholder {
+    color: #a0aec0;
+    opacity: 1;
+  }
+
+  &:disabled {
+    background-color: #f7fafc;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+// Custom select styling
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+
+  &:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e54021' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+
+  // Style for the options
+  option {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  // Style for the placeholder option
+  option[value=""][disabled] {
+    color: #a0aec0;
+  }
+}
+
+// Custom styling for required fields
+select:required, input:required {
+  padding-right: 64px;
+}
+
+// Error state styling
+.error-input {
+  border-color: #e53e3e !important;
+  background-color: #fff5f5;
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+  }
+}
+
+// Success state styling
+.success-input {
+  border-color: #48bb78 !important;
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
+  }
+}
+
+// Floating label effect for inputs
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+
+  input, select {
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+
+  label {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    font-size: 0.95rem;
+    color: #a0aec0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label,
+  select:focus ~ label,
+  select:not([value=""]) ~ label {
+    top: 8px;
+    font-size: 0.75rem;
+    color: #e54021;
+  }
+}
+
+// Mobile optimizations
+@media screen and (max-width: 450px) {
+  select, input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea {
+    font-size: 16px; // Prevent zoom on iOS
+    padding: 10px 14px;
+  }
+
+  select {
+    padding-right: 36px;
+    background-size: 14px;
+  }
+
+  .input-group {
+    label {
+      font-size: 14px;
+    }
+
+    input:focus ~ label,
+    input:not(:placeholder-shown) ~ label,
+    select:focus ~ label,
+    select:not([value=""]) ~ label {
+      font-size: 12px;
+    }
   }
 }

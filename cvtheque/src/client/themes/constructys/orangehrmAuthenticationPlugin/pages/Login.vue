@@ -197,7 +197,7 @@ export default {
       navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);
     },
     navigateUrlCreateAccount() {
-      navigate(`/${window.appGlobal.theme}/auth/createAccount`);
+      navigate(`/${window.appGlobal.theme}/candidature/index#apply`);
     },
     navigateUrlLoginCompany() {
       navigate(`/${window.appGlobal.theme}/auth/company/login`);

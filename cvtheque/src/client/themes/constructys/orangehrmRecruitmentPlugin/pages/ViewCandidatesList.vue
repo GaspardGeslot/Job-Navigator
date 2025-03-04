@@ -453,6 +453,7 @@ export default {
   },
   data() {
     return {
+      isDateAscending: true,
       showModal: false,
       jobTitlesPerSector: [],
       checkedItems: [],

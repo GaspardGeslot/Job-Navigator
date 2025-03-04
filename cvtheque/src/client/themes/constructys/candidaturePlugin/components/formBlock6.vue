@@ -56,28 +56,7 @@ import { inject } from 'vue';
         class="blackPlaceholder"
         placeholder="Téléphone ex:0142274949"
       />
-      <!--
-      <input type="text" required />
-      <div class="placeholder">Téléphone <span>ex:0142274949</span></div>
-      -->
       <div class="AcceptanceofTerms-container">
-        <!--
-
-          
-        
-
-
-        <div class="checkbox-container">
-          <label class="switch short-switch">
-            <input type="checkbox" @change="toggle" />
-            <span class="slider round"></span>
-          </label>
-          <label class="AcceptanceofTermsText">
-            J’accepte d’être contacté par des entreprises qui recrutent et qui
-            sont intéressées par mon profil.
-          </label>
-        </div>
-        -->
         <div class="checkbox-container">
           <label class="switch">
             <input v-model="createAccount" type="checkbox" @change="toggle" />
