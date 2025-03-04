@@ -9810,12 +9810,13 @@ p {
 }
 .checkbox-container {
   display: flex;
+  align-items: center;
 }
 .checkbox-container input[type=checkbox] {
   margin-right: 0.5rem;
 }
 .AcceptanceofTermsText {
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   line-height: 0.8rem;
 }
 .submit-block {
@@ -10293,12 +10294,13 @@ p[data-v-c2f22a12] {
 }
 .checkbox-container[data-v-c2f22a12] {
   display: flex;
+  align-items: center;
 }
 .checkbox-container input[type=checkbox][data-v-c2f22a12] {
   margin-right: 0.5rem;
 }
 .AcceptanceofTermsText[data-v-c2f22a12] {
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   line-height: 0.8rem;
 }
 .submit-block[data-v-c2f22a12] {

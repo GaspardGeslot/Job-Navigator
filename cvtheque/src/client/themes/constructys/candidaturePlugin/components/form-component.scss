@@ -79,6 +79,7 @@ p {
 }
 .checkbox-container {
   display: flex;
+  align-items: center;
 }
 .checkbox-container input[type='checkbox'] {
   margin-right: 0.5rem;
@@ -86,25 +87,9 @@ p {
   // border-radius:50%;
 }
 .AcceptanceofTermsText {
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   line-height: 0.8rem;
 }
-// .custom-checkbox {
-//   appearance: none;
-//   -webkit-appearance: none;
-//   -moz-appearance: none;
-//   width: 16px;
-//   height: 16px;
-//   border-radius: 50%;
-//   border: 2px solid #ccc;
-//   outline: none;
-//   transition: background-color 0.3s;
-// }
-
-// .custom-checkbox:checked {
-//   background-color: #31ea3d;
-//   border-color: #31ea3d;
-// }
 .submit-block {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
