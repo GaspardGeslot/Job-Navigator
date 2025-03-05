@@ -103,7 +103,7 @@
             class="orangehrm-create-account-button"
             display-type="main"
             :label="$t('auth.create_accont')"
-            @click="navigateUrlCreateAccount"
+            @click="openConfirmDialog"
           />
         </oxd-form-actions>
         <div class="orangehrm-login-forgot">
@@ -120,6 +120,19 @@
         <social-media-auth :authenticators="authenticators"></social-media-auth>
       </template>
     </div>
+    <confirmation-dialog
+      ref="confirmDialog"
+      :title="$t('Avez-vous déjà candidaté ?')"
+      :subtitle="
+        $t(
+          'Souhaitez-vous modifier / compléter votre candidature ou bien candidater pour la première fois ?',
+        )
+      "
+      :cancel-label="$t('Compléter ma candidature')"
+      :confirm-label="$t('Candidater pour la première fois')"
+      confirm-button-type="secondary"
+      cancel-button-signal="createAccount"
+    ></confirmation-dialog>
   </login-layout>
 </template>
 
@@ -130,6 +143,7 @@ import {required} from '@/core/util/validation/rules';
 import {navigate, reloadPage} from '@/core/util/helper/navigation';
 import LoginLayout from '../components/LoginLayout.vue';
 import SocialMediaAuth from '../components/SocialMediaAuth.vue';
+import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog';
 
 export default {
   components: {
@@ -137,6 +151,7 @@ export default {
     'oxd-sheet': OxdSheet,
     'login-layout': LoginLayout,
     'social-media-auth': SocialMediaAuth,
+    'confirmation-dialog': ConfirmationDialog,
   },
 
   props: {
@@ -196,7 +211,17 @@ export default {
     navigateUrlForgotPassword() {
       navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);
     },
+    openConfirmDialog() {
+      this.$refs.confirmDialog.showDialog().then((confirmation) => {
+        if (confirmation === 'ok') this.navigateUrlCandidate();
+        else if (confirmation === 'createAccount')
+          this.navigateUrlCreateAccount();
+      });
+    },
     navigateUrlCreateAccount() {
+      navigate(`/${window.appGlobal.theme}/auth/createAccount`);
+    },
+    navigateUrlCandidate() {
       navigate(`/${window.appGlobal.theme}/candidature/index#apply`);
     },
     navigateUrlLoginCompany() {

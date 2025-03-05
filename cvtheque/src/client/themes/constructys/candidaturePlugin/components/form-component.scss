@@ -270,142 +270,354 @@ p {
   }
 }
 
-// Modern form controls styling
-select, input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea {
-  padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 10px;
-  background-color: white;
-  font-family: 'Telegraf', sans-serif;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  outline: none;
-  
-  &:hover {
-    border-color: #cbd5e0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
-  
-  &:focus {
-    border-color: #e54021;
-    box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
-  }
-
-  &::placeholder {
-    color: #a0aec0;
-    opacity: 1;
-  }
-
-  &:disabled {
-    background-color: #f7fafc;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-}
-
-// Custom select styling
-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 40px;
-
-  &:focus {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e54021' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  }
-
-  // Style for the options
-  option {
-    padding: 12px;
-    font-size: 0.95rem;
-  }
-
-  // Style for the placeholder option
-  option[value=""][disabled] {
-    color: #a0aec0;
-  }
-}
-
-// Custom styling for required fields
-select:required, input:required {
-  padding-right: 64px;
-}
-
-// Error state styling
-.error-input {
-  border-color: #e53e3e !important;
-  background-color: #fff5f5;
-  
-  &:focus {
-    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
-  }
-}
-
-// Success state styling
-.success-input {
-  border-color: #48bb78 !important;
-  
-  &:focus {
-    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
-  }
-}
-
-// Floating label effect for inputs
-.input-group {
-  position: relative;
-  margin-bottom: 1rem;
-
-  input, select {
-    padding-top: 20px;
-    padding-bottom: 4px;
-  }
-
-  label {
-    position: absolute;
-    top: 50%;
-    left: 16px;
-    transform: translateY(-50%);
-    font-size: 0.95rem;
-    color: #a0aec0;
-    pointer-events: none;
-    transition: all 0.2s ease;
-  }
-
-  input:focus ~ label,
-  input:not(:placeholder-shown) ~ label,
-  select:focus ~ label,
-  select:not([value=""]) ~ label {
-    top: 8px;
-    font-size: 0.75rem;
-    color: #e54021;
-  }
-}
-
-// Mobile optimizations
-@media screen and (max-width: 450px) {
+.candidature-form {
+  // Modern form controls styling
   select, input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea {
-    font-size: 16px; // Prevent zoom on iOS
-    padding: 10px 14px;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    background-color: white;
+    font-family: 'Telegraf', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    outline: none;
+    
+    &:hover {
+      border-color: #cbd5e0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    &:focus {
+      border-color: #e54021;
+      box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+    }
+
+    &::placeholder {
+      color: #a0aec0;
+      opacity: 1;
+    }
+
+    &:disabled {
+      background-color: #f7fafc;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
   }
 
+  // Custom select styling
   select {
-    padding-right: 36px;
-    background-size: 14px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+
+    &:focus {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e54021' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+
+    // Style for the options
+    option {
+      padding: 12px;
+      font-size: 0.95rem;
+    }
+
+    // Style for the placeholder option
+    option[value=""][disabled] {
+      color: #a0aec0;
+    }
   }
 
+  // Custom styling for required fields
+  select:required, input:required {
+    padding-right: 64px;
+  }
+
+  // Error state styling
+  .error-input {
+    border-color: #e53e3e !important;
+    background-color: #fff5f5;
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+    }
+  }
+
+  // Success state styling
+  .success-input {
+    border-color: #48bb78 !important;
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
+    }
+  }
+
+  // Floating label effect for inputs
   .input-group {
+    position: relative;
+    margin-bottom: 1rem;
+
+    input, select {
+      padding-top: 20px;
+      padding-bottom: 4px;
+    }
+
     label {
-      font-size: 14px;
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: #a0aec0;
+      pointer-events: none;
+      transition: all 0.2s ease;
     }
 
     input:focus ~ label,
     input:not(:placeholder-shown) ~ label,
     select:focus ~ label,
     select:not([value=""]) ~ label {
-      font-size: 12px;
+      top: 8px;
+      font-size: 0.75rem;
+      color: #e54021;
+    }
+  }
+
+  // Mobile optimizations
+  @media screen and (max-width: 450px) {
+    select, input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea {
+      font-size: 16px; // Prevent zoom on iOS
+      padding: 10px 14px;
+    }
+
+    select {
+      padding-right: 36px;
+      background-size: 14px;
+    }
+
+    .input-group {
+      label {
+        font-size: 14px;
+      }
+
+      input:focus ~ label,
+      input:not(:placeholder-shown) ~ label,
+      select:focus ~ label,
+      select:not([value=""]) ~ label {
+        font-size: 12px;
+      }
+    }
+  }
+
+  // Modern radio button styling
+  .radio-group {
+    display: flex;
+    gap: 2rem;
+    margin: 1rem 0;
+
+    .radio-item {
+      position: relative;
+
+      input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+
+        & + label {
+          position: relative;
+          padding-left: 35px;
+          cursor: pointer;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          display: inline-block;
+          color: #1b1f23;
+          transition: all 0.2s ease;
+
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            background: white;
+            transition: all 0.2s ease;
+          }
+
+          &:after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+          }
+        }
+
+        &:checked + label:before {
+          border-color: #e54021;
+          background: #e54021;
+        }
+
+        &:checked + label:after {
+          opacity: 1;
+          transform: scale(0.6);
+        }
+
+        &:focus + label:before {
+          box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+        }
+
+        &:hover:not(:checked) + label:before {
+          border-color: #cbd5e0;
+        }
+      }
+    }
+  }
+
+  // Modern file input styling
+  .file-select {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 1rem 0;
+    border: 2px dashed #e2e8f0;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #e54021;
+      background-color: rgba(229, 64, 33, 0.02);
+    }
+
+    .select-button {
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        color: #1b1f23;
+        font-size: 0.9rem;
+      }
+
+      svg {
+        transition: all 0.3s ease;
+        path {
+          transition: all 0.3s ease;
+        }
+      }
+
+      &:hover svg path {
+        stroke: #e54021;
+      }
+    }
+
+    input[type="file"] {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  // Password input with toggle
+  .password-input-wrapper {
+    position: relative;
+
+    input[type="password"],
+    input[type="text"] {
+      padding-right: 45px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      padding: 5px;
+      cursor: pointer;
+      color: #718096;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #e54021;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  // Switch styling
+  .switch-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+
+    input[type="checkbox"] {
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .switch-slider {
+        background-color: #e54021;
+
+        &:before {
+          transform: translateX(26px);
+        }
+      }
+
+      &:focus + .switch-slider {
+        box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+      }
+    }
+
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e2e8f0;
+      transition: .4s;
+      border-radius: 34px;
+
+      &:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
     }
   }
 }

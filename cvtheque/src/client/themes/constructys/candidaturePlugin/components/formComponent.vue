@@ -34,7 +34,7 @@
         </svg>
       </button>
       -->
-      <div ref="scrollContent" class="scroll-content">
+      <div ref="scrollContent" class="scroll-content candidature-form">
         <FormOne
           v-show="currentStep === 1"
           ref="formOne"

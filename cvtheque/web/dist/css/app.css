@@ -9999,39 +9999,39 @@ input, select, option {
     margin-bottom: 0rem;
 }
 }
-select, input:not([type=checkbox]):not([type=radio]):not([type=submit]), textarea {
+.candidature-form select, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]), .candidature-form textarea {
   padding: 12px 16px;
   border: 2px solid #e2e8f0;
   border-radius: 10px;
   background-color: white;
   font-family: "Telegraf", sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   outline: none;
 }
-select:hover, input:not([type=checkbox]):not([type=radio]):not([type=submit]):hover, textarea:hover {
+.candidature-form select:hover, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]):hover, .candidature-form textarea:hover {
   border-color: #cbd5e0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
-select:focus, input:not([type=checkbox]):not([type=radio]):not([type=submit]):focus, textarea:focus {
+.candidature-form select:focus, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]):focus, .candidature-form textarea:focus {
   border-color: #e54021;
   box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
 }
-select::-moz-placeholder, input:not([type=checkbox]):not([type=radio]):not([type=submit])::-moz-placeholder, textarea::-moz-placeholder {
+.candidature-form select::-moz-placeholder, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit])::-moz-placeholder, .candidature-form textarea::-moz-placeholder {
   color: #a0aec0;
   opacity: 1;
 }
-select::placeholder, input:not([type=checkbox]):not([type=radio]):not([type=submit])::placeholder, textarea::placeholder {
+.candidature-form select::placeholder, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit])::placeholder, .candidature-form textarea::placeholder {
   color: #a0aec0;
   opacity: 1;
 }
-select:disabled, input:not([type=checkbox]):not([type=radio]):not([type=submit]):disabled, textarea:disabled {
+.candidature-form select:disabled, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]):disabled, .candidature-form textarea:disabled {
   background-color: #f7fafc;
   cursor: not-allowed;
   opacity: 0.7;
 }
-select {
+.candidature-form select {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -10041,41 +10041,41 @@ select {
   background-size: 16px;
   padding-right: 40px;
 }
-select:focus {
+.candidature-form select:focus {
   background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23e54021%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E");
 }
-select option {
+.candidature-form select option {
   padding: 12px;
   font-size: 0.95rem;
 }
-select option[value=""][disabled] {
+.candidature-form select option[value=""][disabled] {
   color: #a0aec0;
 }
-select:required, input:required {
+.candidature-form select:required, .candidature-form input:required {
   padding-right: 64px;
 }
-.error-input {
+.candidature-form .error-input {
   border-color: #e53e3e !important;
   background-color: #fff5f5;
 }
-.error-input:focus {
+.candidature-form .error-input:focus {
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
 }
-.success-input {
+.candidature-form .success-input {
   border-color: #48bb78 !important;
 }
-.success-input:focus {
+.candidature-form .success-input:focus {
   box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
 }
-.input-group {
+.candidature-form .input-group {
   position: relative;
   margin-bottom: 1rem;
 }
-.input-group input, .input-group select {
+.candidature-form .input-group input, .candidature-form .input-group select {
   padding-top: 20px;
   padding-bottom: 4px;
 }
-.input-group label {
+.candidature-form .input-group label {
   position: absolute;
   top: 50%;
   left: 16px;
@@ -10085,40 +10085,217 @@ select:required, input:required {
   pointer-events: none;
   transition: all 0.2s ease;
 }
-.input-group input:not(:-moz-placeholder-shown) ~ label {
+.candidature-form .input-group input:not(:-moz-placeholder-shown) ~ label {
   top: 8px;
   font-size: 0.75rem;
   color: #e54021;
 }
-.input-group input:focus ~ label,
-.input-group input:not(:placeholder-shown) ~ label,
-.input-group select:focus ~ label,
-.input-group select:not([value=""]) ~ label {
+.candidature-form .input-group input:focus ~ label,
+.candidature-form .input-group input:not(:placeholder-shown) ~ label,
+.candidature-form .input-group select:focus ~ label,
+.candidature-form .input-group select:not([value=""]) ~ label {
   top: 8px;
   font-size: 0.75rem;
   color: #e54021;
 }
 @media screen and (max-width: 450px) {
-select, input:not([type=checkbox]):not([type=radio]):not([type=submit]), textarea {
+.candidature-form select, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]), .candidature-form textarea {
     font-size: 16px;
     padding: 10px 14px;
 }
-select {
+.candidature-form select {
     padding-right: 36px;
     background-size: 14px;
 }
-.input-group label {
+.candidature-form .input-group label {
     font-size: 14px;
 }
-.input-group input:not(:-moz-placeholder-shown) ~ label {
+.candidature-form .input-group input:not(:-moz-placeholder-shown) ~ label {
     font-size: 12px;
 }
-.input-group input:focus ~ label,
-  .input-group input:not(:placeholder-shown) ~ label,
-  .input-group select:focus ~ label,
-  .input-group select:not([value=""]) ~ label {
+.candidature-form .input-group input:focus ~ label,
+  .candidature-form .input-group input:not(:placeholder-shown) ~ label,
+  .candidature-form .input-group select:focus ~ label,
+  .candidature-form .input-group select:not([value=""]) ~ label {
     font-size: 12px;
 }
+}
+.candidature-form .radio-group {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+.candidature-form .radio-group .radio-item {
+  position: relative;
+}
+.candidature-form .radio-group .radio-item input[type=radio] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: inline-block;
+  color: #1b1f23;
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 50%;
+  background: white;
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label:after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio]:checked + label:before {
+  border-color: #e54021;
+  background: #e54021;
+}
+.candidature-form .radio-group .radio-item input[type=radio]:checked + label:after {
+  opacity: 1;
+  transform: scale(0.6);
+}
+.candidature-form .radio-group .radio-item input[type=radio]:focus + label:before {
+  box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+}
+.candidature-form .radio-group .radio-item input[type=radio]:hover:not(:checked) + label:before {
+  border-color: #cbd5e0;
+}
+.candidature-form .file-select {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  border: 2px dashed #e2e8f0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select:hover {
+  border-color: #e54021;
+  background-color: rgba(229, 64, 33, 0.02);
+}
+.candidature-form .file-select .select-button {
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #1b1f23;
+  font-size: 0.9rem;
+}
+.candidature-form .file-select .select-button svg {
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button svg path {
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button:hover svg path {
+  stroke: #e54021;
+}
+.candidature-form .file-select input[type=file] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.candidature-form .password-input-wrapper {
+  position: relative;
+}
+.candidature-form .password-input-wrapper input[type=password],
+.candidature-form .password-input-wrapper input[type=text] {
+  padding-right: 45px;
+}
+.candidature-form .password-input-wrapper .password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #718096;
+  transition: color 0.2s ease;
+}
+.candidature-form .password-input-wrapper .password-toggle:hover {
+  color: #e54021;
+}
+.candidature-form .password-input-wrapper .password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+.candidature-form .switch-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+.candidature-form .switch-wrapper input[type=checkbox] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.candidature-form .switch-wrapper input[type=checkbox]:checked + .switch-slider {
+  background-color: #e54021;
+}
+.candidature-form .switch-wrapper input[type=checkbox]:checked + .switch-slider:before {
+  transform: translateX(26px);
+}
+.candidature-form .switch-wrapper input[type=checkbox]:focus + .switch-slider {
+  box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+}
+.candidature-form .switch-wrapper .switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e2e8f0;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.candidature-form .switch-wrapper .switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
 }
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/candidaturePlugin/components/formBlock1.vue?vue&type=style&index=1&id=c30e5914&scoped=true&lang=css ***!
@@ -10483,39 +10660,39 @@ input[data-v-c2f22a12], select[data-v-c2f22a12], option[data-v-c2f22a12] {
     margin-bottom: 0rem;
 }
 }
-select[data-v-c2f22a12], input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]), textarea[data-v-c2f22a12] {
+.candidature-form select[data-v-c2f22a12], .candidature-form input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]), .candidature-form textarea[data-v-c2f22a12] {
   padding: 12px 16px;
   border: 2px solid #e2e8f0;
   border-radius: 10px;
   background-color: white;
   font-family: "Telegraf", sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   outline: none;
 }
-select[data-v-c2f22a12]:hover, input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]):hover, textarea[data-v-c2f22a12]:hover {
+.candidature-form select[data-v-c2f22a12]:hover, .candidature-form input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]):hover, .candidature-form textarea[data-v-c2f22a12]:hover {
   border-color: #cbd5e0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
-select[data-v-c2f22a12]:focus, input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]):focus, textarea[data-v-c2f22a12]:focus {
+.candidature-form select[data-v-c2f22a12]:focus, .candidature-form input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]):focus, .candidature-form textarea[data-v-c2f22a12]:focus {
   border-color: #e54021;
   box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
 }
-select[data-v-c2f22a12]::-moz-placeholder, input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit])::-moz-placeholder, textarea[data-v-c2f22a12]::-moz-placeholder {
+.candidature-form select[data-v-c2f22a12]::-moz-placeholder, .candidature-form input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit])::-moz-placeholder, .candidature-form textarea[data-v-c2f22a12]::-moz-placeholder {
   color: #a0aec0;
   opacity: 1;
 }
-select[data-v-c2f22a12]::placeholder, input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit])::placeholder, textarea[data-v-c2f22a12]::placeholder {
+.candidature-form select[data-v-c2f22a12]::placeholder, .candidature-form input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit])::placeholder, .candidature-form textarea[data-v-c2f22a12]::placeholder {
   color: #a0aec0;
   opacity: 1;
 }
-select[data-v-c2f22a12]:disabled, input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]):disabled, textarea[data-v-c2f22a12]:disabled {
+.candidature-form select[data-v-c2f22a12]:disabled, .candidature-form input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]):disabled, .candidature-form textarea[data-v-c2f22a12]:disabled {
   background-color: #f7fafc;
   cursor: not-allowed;
   opacity: 0.7;
 }
-select[data-v-c2f22a12] {
+.candidature-form select[data-v-c2f22a12] {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -10525,41 +10702,41 @@ select[data-v-c2f22a12] {
   background-size: 16px;
   padding-right: 40px;
 }
-select[data-v-c2f22a12]:focus {
+.candidature-form select[data-v-c2f22a12]:focus {
   background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23e54021%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E");
 }
-select option[data-v-c2f22a12] {
+.candidature-form select option[data-v-c2f22a12] {
   padding: 12px;
   font-size: 0.95rem;
 }
-select option[value=""][disabled][data-v-c2f22a12] {
+.candidature-form select option[value=""][disabled][data-v-c2f22a12] {
   color: #a0aec0;
 }
-select[data-v-c2f22a12]:required, input[data-v-c2f22a12]:required {
+.candidature-form select[data-v-c2f22a12]:required, .candidature-form input[data-v-c2f22a12]:required {
   padding-right: 64px;
 }
-.error-input[data-v-c2f22a12] {
+.candidature-form .error-input[data-v-c2f22a12] {
   border-color: #e53e3e !important;
   background-color: #fff5f5;
 }
-.error-input[data-v-c2f22a12]:focus {
+.candidature-form .error-input[data-v-c2f22a12]:focus {
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
 }
-.success-input[data-v-c2f22a12] {
+.candidature-form .success-input[data-v-c2f22a12] {
   border-color: #48bb78 !important;
 }
-.success-input[data-v-c2f22a12]:focus {
+.candidature-form .success-input[data-v-c2f22a12]:focus {
   box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
 }
-.input-group[data-v-c2f22a12] {
+.candidature-form .input-group[data-v-c2f22a12] {
   position: relative;
   margin-bottom: 1rem;
 }
-.input-group input[data-v-c2f22a12], .input-group select[data-v-c2f22a12] {
+.candidature-form .input-group input[data-v-c2f22a12], .candidature-form .input-group select[data-v-c2f22a12] {
   padding-top: 20px;
   padding-bottom: 4px;
 }
-.input-group label[data-v-c2f22a12] {
+.candidature-form .input-group label[data-v-c2f22a12] {
   position: absolute;
   top: 50%;
   left: 16px;
@@ -10569,40 +10746,217 @@ select[data-v-c2f22a12]:required, input[data-v-c2f22a12]:required {
   pointer-events: none;
   transition: all 0.2s ease;
 }
-.input-group input:not(:-moz-placeholder-shown) ~ label[data-v-c2f22a12] {
+.candidature-form .input-group input:not(:-moz-placeholder-shown) ~ label[data-v-c2f22a12] {
   top: 8px;
   font-size: 0.75rem;
   color: #e54021;
 }
-.input-group input:focus ~ label[data-v-c2f22a12],
-.input-group input:not(:placeholder-shown) ~ label[data-v-c2f22a12],
-.input-group select:focus ~ label[data-v-c2f22a12],
-.input-group select:not([value=""]) ~ label[data-v-c2f22a12] {
+.candidature-form .input-group input:focus ~ label[data-v-c2f22a12],
+.candidature-form .input-group input:not(:placeholder-shown) ~ label[data-v-c2f22a12],
+.candidature-form .input-group select:focus ~ label[data-v-c2f22a12],
+.candidature-form .input-group select:not([value=""]) ~ label[data-v-c2f22a12] {
   top: 8px;
   font-size: 0.75rem;
   color: #e54021;
 }
 @media screen and (max-width: 450px) {
-select[data-v-c2f22a12], input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]), textarea[data-v-c2f22a12] {
+.candidature-form select[data-v-c2f22a12], .candidature-form input[data-v-c2f22a12]:not([type=checkbox]):not([type=radio]):not([type=submit]), .candidature-form textarea[data-v-c2f22a12] {
     font-size: 16px;
     padding: 10px 14px;
 }
-select[data-v-c2f22a12] {
+.candidature-form select[data-v-c2f22a12] {
     padding-right: 36px;
     background-size: 14px;
 }
-.input-group label[data-v-c2f22a12] {
+.candidature-form .input-group label[data-v-c2f22a12] {
     font-size: 14px;
 }
-.input-group input:not(:-moz-placeholder-shown) ~ label[data-v-c2f22a12] {
+.candidature-form .input-group input:not(:-moz-placeholder-shown) ~ label[data-v-c2f22a12] {
     font-size: 12px;
 }
-.input-group input:focus ~ label[data-v-c2f22a12],
-  .input-group input:not(:placeholder-shown) ~ label[data-v-c2f22a12],
-  .input-group select:focus ~ label[data-v-c2f22a12],
-  .input-group select:not([value=""]) ~ label[data-v-c2f22a12] {
+.candidature-form .input-group input:focus ~ label[data-v-c2f22a12],
+  .candidature-form .input-group input:not(:placeholder-shown) ~ label[data-v-c2f22a12],
+  .candidature-form .input-group select:focus ~ label[data-v-c2f22a12],
+  .candidature-form .input-group select:not([value=""]) ~ label[data-v-c2f22a12] {
     font-size: 12px;
 }
+}
+.candidature-form .radio-group[data-v-c2f22a12] {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+.candidature-form .radio-group .radio-item[data-v-c2f22a12] {
+  position: relative;
+}
+.candidature-form .radio-group .radio-item input[type=radio][data-v-c2f22a12] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label[data-v-c2f22a12] {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: inline-block;
+  color: #1b1f23;
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label[data-v-c2f22a12]:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 50%;
+  background: white;
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label[data-v-c2f22a12]:after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio]:checked + label[data-v-c2f22a12]:before {
+  border-color: #e54021;
+  background: #e54021;
+}
+.candidature-form .radio-group .radio-item input[type=radio]:checked + label[data-v-c2f22a12]:after {
+  opacity: 1;
+  transform: scale(0.6);
+}
+.candidature-form .radio-group .radio-item input[type=radio]:focus + label[data-v-c2f22a12]:before {
+  box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+}
+.candidature-form .radio-group .radio-item input[type=radio]:hover:not(:checked) + label[data-v-c2f22a12]:before {
+  border-color: #cbd5e0;
+}
+.candidature-form .file-select[data-v-c2f22a12] {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  border: 2px dashed #e2e8f0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select[data-v-c2f22a12]:hover {
+  border-color: #e54021;
+  background-color: rgba(229, 64, 33, 0.02);
+}
+.candidature-form .file-select .select-button[data-v-c2f22a12] {
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button div[data-v-c2f22a12] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #1b1f23;
+  font-size: 0.9rem;
+}
+.candidature-form .file-select .select-button svg[data-v-c2f22a12] {
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button svg path[data-v-c2f22a12] {
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button:hover svg path[data-v-c2f22a12] {
+  stroke: #e54021;
+}
+.candidature-form .file-select input[type=file][data-v-c2f22a12] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.candidature-form .password-input-wrapper[data-v-c2f22a12] {
+  position: relative;
+}
+.candidature-form .password-input-wrapper input[type=password][data-v-c2f22a12],
+.candidature-form .password-input-wrapper input[type=text][data-v-c2f22a12] {
+  padding-right: 45px;
+}
+.candidature-form .password-input-wrapper .password-toggle[data-v-c2f22a12] {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #718096;
+  transition: color 0.2s ease;
+}
+.candidature-form .password-input-wrapper .password-toggle[data-v-c2f22a12]:hover {
+  color: #e54021;
+}
+.candidature-form .password-input-wrapper .password-toggle svg[data-v-c2f22a12] {
+  width: 20px;
+  height: 20px;
+}
+.candidature-form .switch-wrapper[data-v-c2f22a12] {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+.candidature-form .switch-wrapper input[type=checkbox][data-v-c2f22a12] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.candidature-form .switch-wrapper input[type=checkbox]:checked + .switch-slider[data-v-c2f22a12] {
+  background-color: #e54021;
+}
+.candidature-form .switch-wrapper input[type=checkbox]:checked + .switch-slider[data-v-c2f22a12]:before {
+  transform: translateX(26px);
+}
+.candidature-form .switch-wrapper input[type=checkbox]:focus + .switch-slider[data-v-c2f22a12] {
+  box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+}
+.candidature-form .switch-wrapper .switch-slider[data-v-c2f22a12] {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e2e8f0;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.candidature-form .switch-wrapper .switch-slider[data-v-c2f22a12]:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
 }
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/candidaturePlugin/components/formBlock2.vue?vue&type=style&index=1&id=c2f22a12&scoped=true&lang=css ***!

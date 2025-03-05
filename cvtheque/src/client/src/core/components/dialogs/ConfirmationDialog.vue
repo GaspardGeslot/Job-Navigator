@@ -37,7 +37,7 @@
           :label="cancelLabel"
           :display-type="cancelButtonType"
           class="orangehrm-button-margin"
-          @click="onCancel"
+          @click="onCancelButton"
         />
         <oxd-button
           :icon-name="icon"
@@ -90,6 +90,11 @@ export default {
       required: false,
       default: 'text',
     },
+    cancelButtonSignal: {
+      type: String,
+      required: false,
+      default: 'cancel',
+    },
   },
   data() {
     return {
@@ -113,6 +118,10 @@ export default {
     onCancel() {
       this.show = false;
       this.resolve && this.resolve('cancel');
+    },
+    onCancelButton() {
+      this.show = false;
+      this.resolve && this.resolve(this.cancelButtonSignal);
     },
   },
 };
