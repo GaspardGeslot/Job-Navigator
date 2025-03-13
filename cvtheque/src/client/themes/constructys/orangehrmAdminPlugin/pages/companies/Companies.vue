@@ -359,6 +359,8 @@ export default {
             return {
               siret: item.siret,
               name: item.companyName,
+              department: item.department,
+              jobs: item.jobTitle,
               amount: item.matchingAmount,
               lastUpdated: item.lastUpdated,
             };
@@ -675,6 +677,16 @@ export default {
           name: 'name',
           title: this.$t('company.name'),
           style: {flex: 1},
+        },
+        {
+          name: 'department',
+          title: this.$t('Département'),
+          style: {flex: 1},
+        },
+        {
+          name: 'jobs',
+          title: this.$t('Métiers recherchés'),
+          style: {flex: 1.5},
         },
         {
           name: 'amount',

@@ -431,6 +431,7 @@
 </template>
 
 <script>
+import {navigate} from '@/core/util/helper/navigation';
 import {urlFor} from '@/core/util/helper/url';
 import {APIService} from '@/core/util/services/api.service';
 import EditEmployeeLayout from '../../components/EditEmployeeLayout';
@@ -698,6 +699,9 @@ export default {
         })
         .then(() => {
           this.isLoading = false;
+          navigate(
+            `/${window.appGlobal.theme}/pim/contactDetails/empNumber/${this.empNumber}`,
+          );
         });
     },
 

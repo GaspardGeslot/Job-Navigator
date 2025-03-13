@@ -184,6 +184,7 @@
 </template>
 
 <script>
+import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
 import EditEmployeeLayout from '../../components/EditEmployeeLayout';
 import {
@@ -307,6 +308,9 @@ export default {
         })
         .then(() => {
           this.isLoading = false;
+          navigate(
+            `/${window.appGlobal.theme}/pim/viewJobDetails/empNumber/${this.empNumber}`,
+          );
         });
     },
 

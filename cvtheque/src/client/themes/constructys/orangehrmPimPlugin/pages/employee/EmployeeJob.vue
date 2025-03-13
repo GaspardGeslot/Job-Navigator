@@ -221,6 +221,7 @@
 </template>
 
 <script>
+import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
 //import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import EditEmployeeLayout from '../../components/EditEmployeeLayout';
@@ -511,6 +512,9 @@ export default {
         })
         .then(() => {
           this.isLoading = false;
+          navigate(
+            `/${window.appGlobal.theme}/pim/viewQualifications/empNumber/${this.empNumber}`,
+          );
         });
     },
 
