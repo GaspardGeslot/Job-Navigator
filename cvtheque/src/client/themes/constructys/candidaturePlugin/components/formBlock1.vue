@@ -55,7 +55,7 @@ import SubmitButton from '@/core/components/buttons/SubmitButton.vue';
         </option>
       </select>
       <select v-if="professionalXp.length" v-model="checkedEXP">
-        <option disabled value="">Mon expérience professionnelle</option>
+        <option disabled value="">Mon expérience professionnelle *</option>
         <option
           v-for="(item, index) in professionalXp"
           :key="index"
@@ -141,7 +141,8 @@ export default {
         this.need !== '' &&
         this.postalCode !== '' &&
         this.courseStart !== '' &&
-        this.studyLevel !== ''
+        this.studyLevel !== '' &&
+        this.checkedEXP !== ''
       );
     },
   },
@@ -151,9 +152,6 @@ export default {
     },
   },
   created() {
-    // console.log('this.courseStarts', this.courseStarts);
-    // console.log('this.studyLevel', this.studyLevels);
-    // console.log('professionalXp', this.professionalXp);
     if (
       typeof this.courseStarts === 'object' &&
       !Array.isArray(this.courseStarts)
@@ -194,31 +192,15 @@ export default {
         this.need === '' ||
         this.postalCode === '' ||
         this.courseStart === '' ||
-        this.studyLevel === ''
+        this.studyLevel === '' ||
+        this.checkedEXP === ''
       ) {
         this.errors.incompleteForm = true;
         hasError = true;
       }
-      // let arrayOfPostalCode = Array.from(this.postalCode, Number);
-      // console.log(typeof this.postalCode);
-      // console.log(arrayOfPostalCode, arrayOfPostalCode.length);
-      // if (this.postalCode != '' && arrayOfPostalCode.length < 5) {
-      //   if (arrayOfPostalCode.length < 4) return;
-      //   else if (arrayOfPostalCode.length == 4) {
-      //     arrayOfPostalCode.unshift(0);
-      //     return;
-      //   }
-      // }
-      // let postalCode_array = Array.from(
-      //   String(Number(this.postalCode)),
-      //   Number,
-      // );
-      // console.log(this.postalCode);
       if (this.postalCode.length != 5) {
         if (this.postalCode.length == 4) {
-          //this.postalCode.unshift(0);
           this.postalCode = '0' + this.postalCode;
-          // console.log('postalCode', this.postalCode);
         } else {
           this.errors.postalCode = true;
           hasError = true;
@@ -237,11 +219,6 @@ export default {
         BTPcheckedEXP: this.BTPcheckedEXP,
       };
       this.$emit('situation-submitted', situationReview);
-      // this.need = '';
-      // this.postalCode = '';
-      // this.courseStart = '';
-      // this.mobility = '';
-      // this.studyLevel = '';
     },
   },
 };
@@ -250,11 +227,6 @@ export default {
 <style src="./form-component.scss" lang="scss"></style>
 <style scoped>
 .formBlock1 select {
-  /* border: unset;
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.1); */
   padding-left: 1rem;
   appearance: none;
   background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
@@ -262,9 +234,6 @@ export default {
   background-position: right 1rem top 50%;
   background-size: 0.65rem auto;
 }
-/* #educationForm {
-  background-image: none;
-} */
 
 #formBlock1SubmitButton {
   margin-top: 0.5rem;

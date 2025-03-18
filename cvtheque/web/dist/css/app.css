@@ -10302,11 +10302,6 @@ input, select, option {
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
 .formBlock1 select[data-v-c30e5914] {
-  /* border: unset;
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.1); */
   padding-left: 1rem;
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -10316,9 +10311,6 @@ input, select, option {
   background-position: right 1rem top 50%;
   background-size: 0.65rem auto;
 }
-/* #educationForm {
-  background-image: none;
-} */
 #formBlock1SubmitButton[data-v-c30e5914] {
   margin-top: 0.5rem;
 }
