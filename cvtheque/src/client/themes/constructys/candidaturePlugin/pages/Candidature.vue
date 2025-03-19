@@ -254,51 +254,18 @@ export default {
     navigateToLoginCompany() {
       navigate(`/${window.appGlobal.theme}/auth/company/login`);
     },
-    // navigateToCGU() {
-    //   navigate(`/${window.appGlobal.theme}/cgu/index`);
-    // },
     buildUrlWithUtm(baseUrl) {
       const params = new URLSearchParams();
       if (this.utmSrc) params.append('utm_source', this.utmSrc);
       if (this.utmMed) params.append('utm_medium', this.utmMed);
       if (this.utmCamp) params.append('utm_campaign', this.utmCamp);
       const queryString = params.toString();
-      console.log('queryString', queryString);
       return queryString ? `${baseUrl}?${queryString}` : baseUrl;
     },
     navigateToCGU() {
       const baseUrl = `/${window.appGlobal.theme}/cgu/index`;
       navigate(this.buildUrlWithUtm(baseUrl));
     },
-    // getUTMParameters() {
-    //   const urlParams = new URLSearchParams(window.location.search);
-    //   const utmSource = urlParams.get('utm_source');
-    //   console.log('UTM Source:', utmSource);
-    //   if (utmSource) {
-    //     this.utmSrc = utmSource;
-    //   }
-    // },
-    // getUTMParameters() {
-    //   // Récupère la partie après le hash (#)
-    //   const hashPart = window.location.hash;
-    //   let utmSource = null;
-
-    //   // Vérifie d'abord les paramètres dans l'URL principale
-    //   const urlParams = new URLSearchParams(window.location.search);
-    //   utmSource = urlParams.get('utm_source');
-
-    //   // Si pas d'utm_source dans l'URL principale, cherche dans la partie hash
-    //   if (!utmSource && hashPart.includes('?')) {
-    //     // Extrait les paramètres après le hash (#apply?utm_source=...)
-    //     const hashParams = new URLSearchParams(hashPart.split('?')[1]);
-    //     utmSource = hashParams.get('utm_source');
-    //   }
-
-    //   console.log('UTM Source:', utmSource);
-    //   if (utmSource) {
-    //     this.utmSrc = utmSource;
-    //   }
-    // },
     getUTMParameters() {
       // Récupère la partie après le hash (#)
       const hashPart = window.location.hash;
@@ -327,12 +294,6 @@ export default {
           utmCampaign = hashParams.get('utm_campaign');
         }
       }
-
-      console.log('UTM Parameters:', {
-        source: utmSource,
-        medium: utmMedium,
-        campaign: utmCampaign,
-      });
 
       // Stocke les valeurs si elles existent
       if (utmSource) {

@@ -8,32 +8,6 @@
       class="scroll-container"
       :class="{'scroll-active': needsScroll}"
     >
-      <!--
-      <button
-        class="exit-button"
-        style="
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background-color: transparent;
-          border: none;
-        "
-        @click="closeForm"
-      >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4.70711 3.29289C4.31658 2.90237 3.68342 2.90237 3.29289 3.29289C2.90237 3.68342 2.90237 4.31658 3.29289 4.70711L10.5858 12L3.29289 19.2929C2.90237 19.6834 2.90237 20.3166 3.29289 20.7071C3.68342 21.0976 4.31658 21.0976 4.70711 20.7071L12 13.4142L19.2929 20.7071C19.6834 21.0976 20.3166 21.0976 20.7071 20.7071C21.0976 20.3166 21.0976 19.6834 20.7071 19.2929L13.4142 12L20.7071 4.70711C21.0976 4.31658 21.0976 3.68342 20.7071 3.29289C20.3166 2.90237 19.6834 2.90237 19.2929 3.29289L12 10.5858L4.70711 3.29289Z"
-            fill="black"
-          />
-        </svg>
-      </button>
-      -->
       <div ref="scrollContent" class="scroll-content candidature-form">
         <FormOne
           v-show="currentStep === 1"
@@ -85,23 +59,6 @@
           :match-response="matchResponse"
           @login="$emit('login')"
         />
-        <!--
-          <FormEight
-          v-show="currentStep === 9"
-          ref="formEight"
-          @go-back="previousStep"
-          @situation-submitted="addReview"
-        />
-        <FormNine
-          v-show="currentStep === 8"
-          ref="formNine"
-          @situation-submitted="addReview"
-        />
-        <p v-if="cannotCreateAccount" class="alert-msg">
-          La création de compte a échoué. Veuillez réessayer.
-        </p>
-        <h1>{{ cannotCreateAccount }}</h1>
-        -->
       </div>
     </div>
     <img
@@ -125,12 +82,10 @@
       </svg>
     </button>
   </div>
-  <!--<ReviewList :reviews="reviews" />-->
 </template>
 
 <script>
 import {ref, onMounted, onBeforeUnmount, nextTick} from 'vue';
-//import axios from 'axios';
 import FormOne from './formBlock1';
 import FormTwo from './formBlock2';
 import FormThree from './formBlock3';
@@ -138,12 +93,8 @@ import FormFour from './formBlock4';
 import FormFive from './formBlock5';
 import FormSix from './formBlock6';
 import FormSeven from './formBlock7';
-// import FormEight from './formBlock8';
-// import FormNine from './formBlock9';
 import {v4 as uuidv4} from 'uuid';
-//import axios from 'axios';
 import {APIService} from '@/core/util/services/api.service';
-//import ReviewList from './review_list';
 
 export default {
   name: 'FormComponent',
@@ -155,9 +106,6 @@ export default {
     FormFive,
     FormSix,
     FormSeven,
-    // FormEight,
-    // FormNine,
-    //ReviewList,
   },
   props: {
     options: {
@@ -205,17 +153,12 @@ export default {
         sessionId: sessionId.value,
       };
 
-      //console.log('data from createSession', data);
-
       try {
         const http = new APIService(
           window.appGlobal.baseUrl,
           `${window.appGlobal.theme}/events/push/form-session`,
         );
         await http.create(data);
-        // const response = await http.create(data);
-        // console.log('Session created:', sessionId.value);
-        // console.log('Response data:', response);
       } catch (error) {
         console.error('Error creating session:', error);
       }
@@ -224,7 +167,6 @@ export default {
     const updateHighestStep = async () => {
       if (currentStep.value > highestStep.value) {
         highestStep.value = currentStep.value;
-        //console.log('highestStep', highestStep.value);
 
         const data = {
           sessionId: sessionId.value,
@@ -236,13 +178,7 @@ export default {
             window.appGlobal.baseUrl,
             `${window.appGlobal.theme}/events/push/form-session`,
           );
-          // console.log('Données envoyées pour la mise à jour:', {
-          //   sessionId: sessionId.value,
-          //   step: highestStep.value,
-          // });
           await http.update(sessionId.value, data);
-          // const response = await http.update(sessionId.value, data);
-          // console.log('Session updated:', response);
         } catch (error) {
           console.error('Error updating session:', error);
         }
@@ -274,8 +210,6 @@ export default {
         ? formImg.value.getBoundingClientRect().height
         : 0;
 
-      // console.log('activeForm height:', activeFormHeight);
-      // console.log('image height:', imageHeight);
       if (scrollContainer.value && formImg.value && imageHeight != 0) {
         scrollContainer.value.style.maxHeight = `${imageHeight}px`;
         scrollContainer.value.style.height = `${imageHeight}px`;
@@ -307,12 +241,10 @@ export default {
     });
 
     const addReviewSkip = (review) => {
-      //reviews.value.push(review);
       reviews.value[currentStep.value - 1] = review;
       skipNextStep();
     };
     const addReview = (review) => {
-      //reviews.value.push(review);
       reviews.value[currentStep.value - 1] = review;
       nextStep();
     };
@@ -330,12 +262,6 @@ export default {
       if (currentStep.value == 5) {
         const dataToProcess = reviews.value.slice(0, 5);
         const combinedData = combineData(dataToProcess);
-        // console.log(
-        //   'Array.isArray(combinedData[key])',
-        //   Array.isArray(combinedData['file']),
-        // );
-        // console.log('combinedData', combinedData);
-        // delete combinedData.checkedEXP;
         if (combinedData.file == null) {
           delete combinedData.file;
         }
@@ -350,12 +276,7 @@ export default {
               formData.append(key, JSON.stringify(combinedData[key]));
             } else if (key === 'file' && combinedData[key].base64) {
               formData.append(key, JSON.stringify(combinedData[key]));
-            }
-            // else if (key === 'file' && combinedData[key] instanceof File) {
-            //   console.log('on entre dans la condition de file');
-            //   formData.append(key, combinedData[key]);
-            // }
-            else {
+            } else {
               formData.append(key, combinedData[key]);
             }
           }
@@ -363,20 +284,13 @@ export default {
 
         if (formData.has('password')) {
           try {
-            //console.log('password here', formData.get('password'));
             const http = new APIService(
               window.appGlobal.baseUrl,
               `${window.appGlobal.theme}/candidature/account`,
             );
-            // console.log('FormData content before submission:', [
-            //   ...formData.entries(),
-            // ]);
 
             await http.create(formData);
-            // const response = await http.create(formData);
-            // console.log('RESPONSE HERE !!!! ', response);
 
-            // Si la création de compte réussit, passez à la création de lead
             await createLead(formData);
           } catch (error) {
             console.error(
@@ -418,16 +332,15 @@ export default {
         window.appGlobal.baseUrl,
         `${window.appGlobal.theme}/candidature/lead`,
       );
-      console.log('FormData content before submission:', [
-        ...formData.entries(),
-      ]);
 
       try {
         isLoading.value = true;
         const leadResponse = await leadHttp.create(formData);
-        console.log('Lead RESPONSE HERE !!!! ', leadResponse);
+        if (typeof gtag_report_conversion === 'function') {
+          // eslint-disable-next-line no-undef
+          gtag_report_conversion();
+        }
         matchResponse.value = leadResponse.data.MatchResponse;
-        // console.log('matchResponse.value in formComp', matchResponse.value);
         isLoading.value = false;
       } catch (error) {
         console.error(
@@ -438,9 +351,7 @@ export default {
     }
 
     const previousStep = () => {
-      //console.log('currentStep before = ', currentStep);
       currentStep.value--;
-      //console.log('currentStep after = ', currentStep);
       nextTick(() => {
         setTimeout(() => {
           checkScroll();
