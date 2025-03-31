@@ -9,8 +9,8 @@
         >{{ matchResponse }} entreprise qui correspond à votre profil et avons
         partagé vos informations avec elle.</span
       ><span v-else
-        >{{ matchResponse }} entreprises qui correspondent à votre profil et avons
-        partagé vos informations avec elles.</span
+        >{{ matchResponse }} entreprises qui correspondent à votre profil et
+        avons partagé vos informations avec elles.</span
       >
     </div>
     <p class="formSubTitle">
