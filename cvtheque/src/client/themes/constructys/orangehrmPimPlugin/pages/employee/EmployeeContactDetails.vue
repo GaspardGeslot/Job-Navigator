@@ -308,9 +308,11 @@ export default {
         })
         .then(() => {
           this.isLoading = false;
-          navigate(
-            `/${window.appGlobal.theme}/pim/viewJobDetails/empNumber/${this.empNumber}`,
-          );
+          if (this.isCandidate) {
+            navigate(
+              `/${window.appGlobal.theme}/pim/viewJobDetails/empNumber/${this.empNumber}`,
+            );
+          }
         });
     },
 

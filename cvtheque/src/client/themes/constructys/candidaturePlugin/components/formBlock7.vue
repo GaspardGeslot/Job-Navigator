@@ -6,11 +6,11 @@
     <div v-if="matchResponse && matchResponse >= 1" class="matchResponse-txt">
       Superbe nouvelle ! Nous avons déjà identifié
       <span v-if="matchResponse == 1"
-        >{{ matchResponse }} entreprise qui correspond à ton profil et avons
-        partagé tes informations avec elle.</span
+        >{{ matchResponse }} entreprise qui correspond à votre profil et avons
+        partagé vos informations avec elle.</span
       ><span v-else
-        >{{ matchResponse }} entreprises qui correspondent à ton profil et avons
-        partagé tes informations avec elles.</span
+        >{{ matchResponse }} entreprises qui correspondent à votre profil et avons
+        partagé vos informations avec elles.</span
       >
     </div>
     <p class="formSubTitle">

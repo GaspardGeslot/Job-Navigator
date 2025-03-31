@@ -71,6 +71,7 @@ import AddProvider from './pages/socialMediaAuth/AddProvider.vue';
 import EditProvider from './pages/socialMediaAuth/EditProvider.vue';
 import FixLanguageErrors from './pages/languageImport/FixLanguageStringErrors.vue';
 import Matching from './pages/matching/Matching.vue';
+import CourseStart from './pages/courseStart/CourseStart.vue';
 
 export default {
   'job-title-list': JobTitle,
@@ -129,4 +130,5 @@ export default {
   'edit-auth-provider': EditProvider,
   'fix-language-errors': FixLanguageErrors,
   'matching-list': Matching,
+  'course-start-list': CourseStart,
 };

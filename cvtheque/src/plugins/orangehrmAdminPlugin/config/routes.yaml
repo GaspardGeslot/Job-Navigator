@@ -511,6 +511,20 @@ apiv2_admin_companies_matchings_count:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_course_start:
+  path: /{theme}/api/v2/admin/course-start
+  controller: OrangeHRM\Admin\Controller\CourseStartController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_course_start_add:
+  path: /{theme}/api/v2/admin/course-start
+  controller: OrangeHRM\Admin\Controller\CourseStartController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
 ##########################
 #        Files
 ##########################
@@ -923,6 +937,13 @@ admin_ldap_configuration:
 admin_matching_configuration:
   path: /{theme}/admin/matching
   controller: OrangeHRM\Admin\Controller\MatchingController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_course_start:
+  path: /{theme}/admin/viewCourseStarts
+  controller: OrangeHRM\Admin\Controller\CourseStartController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
