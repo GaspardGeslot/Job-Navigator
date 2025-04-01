@@ -196,19 +196,15 @@ class UserService
     public function getCredentials(UserCredential $credentials, string $theme): ?User
     {
         $themeId = $this->getThemeDao()->getId($theme);
-        error_log("GetCredentials ThemeId : " . json_encode($themeId) . " ; Theme : " . json_encode($theme));
         if ($themeId === null)
             return null;
-        error_log("GetCredentials Credentials : " . json_encode($credentials));
-        error_log("GetCredentials Credentials Username : " . json_encode($credentials->getUsername()));
-        error_log("GetCredentials Credentials Password : " . json_encode($credentials->getPassword()));
-        error_log("GetCredentials Credentials Role : " . json_encode($credentials->getRole()));
         $user = $this->getUserDao()->isExistingSystemUser($credentials, $themeId);
         error_log("GetCredentials User : " . json_encode($user instanceof User));
         error_log("GetCredentials User name : " . json_encode($user->getUserName()));
 
         if ($user instanceof User) {
             $hash = $user->getUserPassword();
+            error_log("GetCredentials User hash : " . $this->checkPasswordHash($credentials->getPassword(), $hash));
             if ($this->checkPasswordHash($credentials->getPassword(), $hash)) {
                 return $user;
             } elseif ($this->checkForOldHash($credentials->getPassword(), $hash)) {
