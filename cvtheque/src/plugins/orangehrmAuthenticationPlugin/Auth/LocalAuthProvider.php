@@ -58,6 +58,10 @@ class LocalAuthProvider extends AbstractAuthProvider
         if (!$authParams->getCredential() instanceof UserCredentialInterface) {
             return false;
         }
+        error_log("LocalAuthProvider Credentials : " . json_encode($authParams->getCredential()));
+        error_log("LocalAuthProvider Credentials Username : " . json_encode($authParams->getCredential()->getUsername()));
+        error_log("LocalAuthProvider Credentials Password : " . json_encode($authParams->getCredential()->getPassword()));
+        error_log("LocalAuthProvider Credentials Role : " . json_encode($authParams->getCredential()->getRole()));
         $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential(), $isCompany, $authParams->getTheme());
         error_log("LocalAuthProvider : " . $token);
         if (!is_null($token)) {

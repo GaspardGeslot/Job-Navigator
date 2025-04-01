@@ -200,6 +200,9 @@ class UserService
         if ($themeId === null)
             return null;
         error_log("GetCredentials Credentials : " . json_encode($credentials));
+        error_log("GetCredentials Credentials Username : " . json_encode($credentials->getUsername()));
+        error_log("GetCredentials Credentials Password : " . json_encode($credentials->getPassword()));
+        error_log("GetCredentials Credentials Role : " . json_encode($credentials->getRole()));
         $user = $this->getUserDao()->isExistingSystemUser($credentials, $themeId);
         error_log("GetCredentials User : " . json_encode($user));
         if ($user instanceof User) {
