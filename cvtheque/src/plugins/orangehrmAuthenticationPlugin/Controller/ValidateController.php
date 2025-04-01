@@ -123,6 +123,7 @@ class ValidateController extends AbstractController implements PublicControllerI
             }
             return new RedirectResponse($loginUrl);
         } catch (Throwable $e) {
+            error_log('Error when authenticating : ' . $e->getTraceAsString());
             $this->getAuthUser()->addFlash(
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
