@@ -525,6 +525,13 @@ apiv2_admin_course_start_add:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_course_start_delete:
+  path: /{theme}/api/v2/admin/course-start
+  controller: OrangeHRM\Admin\Controller\CourseStartController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
 ##########################
 #        Files
 ##########################

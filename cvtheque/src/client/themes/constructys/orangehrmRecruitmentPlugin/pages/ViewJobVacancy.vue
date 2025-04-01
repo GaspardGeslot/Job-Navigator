@@ -407,55 +407,6 @@ export default {
       isNomAscending: false,
       leads: [],
       otherLeads: [],
-      /*headers: [
-        {
-          name: 'vacancy',
-          slot: 'title',
-          title: this.$t('recruitment.vacancy'),
-          sortField: 'vacancy.name',
-          style: {flex: 3},
-        },
-        {
-          name: 'jobTitle',
-          title: this.$t('general.job_title'),
-          sortField: 'jobTitle.jobTitleName',
-          style: {flex: 3},
-        },
-        {
-          name: 'hiringManager',
-          title: this.$t('recruitment.hiring_manager'),
-          sortField: 'hiringManager.lastName',
-          style: {flex: 3},
-        },
-        {
-          name: 'status',
-          title: this.$t('general.status'),
-          sortField: 'vacancy.status',
-          style: {flex: 2},
-        },
-        {
-          name: 'actions',
-          slot: 'action',
-          title: this.$t('general.actions'),
-          style: {flex: 2},
-          cellType: 'oxd-table-cell-actions',
-          cellConfig: {
-            delete: {
-              onClick: this.onClickDelete,
-              component: 'oxd-icon-button',
-              props: {
-                name: 'trash',
-              },
-            },
-            edit: {
-              onClick: this.onClickEdit,
-              props: {
-                name: 'pencil-fill',
-              },
-            },
-          },
-        },
-      ],*/
       headers: [
         {
           name: 'jobTitle',
@@ -571,15 +522,6 @@ export default {
           },
         },
       };
-      /*if (row.isSelectable) {
-        cellConfig.delete = {
-          onClick: this.onClickDelete,
-          component: 'oxd-icon-button',
-          props: {
-            name: 'trash',
-          },
-        };
-      }*/
       if (row.resume) {
         cellConfig.download = {
           onClick: this.onDownload,

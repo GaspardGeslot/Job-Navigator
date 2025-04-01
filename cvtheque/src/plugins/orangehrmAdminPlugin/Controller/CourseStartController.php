@@ -44,6 +44,17 @@ class CourseStartController extends AbstractVueController
         );
     }
 
+    public function delete(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $this->deleteCourseStart($data['title'], $this->getAuthUser()->getUserHedwigeToken());
+        return new Response(
+            null,
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
     private function getCourseStarts(string $token): array
     {
         $client = new Client();
@@ -74,7 +85,24 @@ class CourseStartController extends AbstractVueController
             'body' => $title
             ]);
         } catch (\Exception $e) {
-            error_log('error: ' . $e->getMessage());
+            error_log('error add course start: ' . $e->getMessage());
+        }
+    }
+
+    private function deleteCourseStart(string $title, string $token)
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/course-start";
+        try {
+            $client->request('DELETE', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ],
+                'body' => $title
+            ]);
+        } catch (\Exception $e) {
+            error_log('error delete course start: ' . $e->getMessage());
         }
     }
 }

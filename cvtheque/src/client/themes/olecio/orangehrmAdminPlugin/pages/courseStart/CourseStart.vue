@@ -35,6 +35,7 @@
       </div>
       <div class="orangehrm-container">
         <oxd-card-table
+          v-model:selected="checkedItems"
           v-model:order="sortDefinition"
           :headers="headers"
           :items="items"
@@ -59,7 +60,6 @@
 <script>
 import {reactive, toRefs} from 'vue';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
-import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
 import useSort from '@/core/util/composable/useSort';
 import useToast from '@/core/util/composable/useToast';
@@ -84,11 +84,7 @@ export default {
     const {sortDefinition, sortField, sortOrder, onSort} = useSort({
       sortDefinition: defaultSortOrder,
     });
-    const httpGetAll = new APIService(
-      window.appGlobal.baseUrl,
-      `${window.appGlobal.theme}/api/v2/admin/course-start`,
-    );
-    const httpAdd = new APIService(
+    const http = new APIService(
       window.appGlobal.baseUrl,
       `${window.appGlobal.theme}/api/v2/admin/course-start`,
     );
@@ -102,7 +98,7 @@ export default {
 
     const fetchCourseStartData = () => {
       state.isLoading = true;
-      httpGetAll
+      http
         .getAll()
         .then((response) => {
           state.items = response.data.map((item) => ({title: item}));
@@ -120,7 +116,7 @@ export default {
       if (state.courseStart === '') return;
       else if (state.items.find((item) => item.title === state.courseStart))
         return error({title: 'Conflit', message: 'Ce titre existe déjà'});
-      httpAdd
+      http
         .create({title: state.courseStart})
         .then(() => {
           state.courseStart = '';
@@ -141,9 +137,8 @@ export default {
     onSort(sort);
 
     return {
-      httpGetAll,
+      http,
       onClickValidate,
-      httpAdd,
       fetchCourseStartData,
       ...toRefs(state),
       sortDefinition,
@@ -157,18 +152,17 @@ export default {
           name: 'title',
           title: this.$t('Titre'),
           sortField: 'title',
-          style: {flex: 3},
+          style: {flex: 1},
         },
         {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 1},
+          style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellConfig: {
             delete: {
               onClick: this.onClickDelete,
-              component: 'oxd-icon-button',
               props: {
                 name: 'trash',
               },
@@ -198,29 +192,27 @@ export default {
       }
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems([item.id]);
+          this.deleteItems(item.title);
         }
       });
     },
-    deleteItems(items) {
-      if (items instanceof Array) {
-        this.isLoading = true;
-        this.http
-          .deleteAll({
-            ids: items,
-          })
-          .then(() => {
-            return this.$toast.deleteSuccess();
-          })
-          .then(() => {
-            this.isLoading = false;
-            this.resetDataTable();
-          });
-      }
+    deleteItems(item) {
+      this.isLoading = true;
+      this.http
+        .deleteAll({
+          title: item,
+        })
+        .then(() => {
+          return this.$toast.deleteSuccess();
+        })
+        .then(() => {
+          this.isLoading = false;
+          this.resetDataTable();
+        });
     },
     async resetDataTable() {
       this.checkedItems = [];
-      await this.execQuery();
+      await this.fetchCourseStartData();
     },
   },
 };
