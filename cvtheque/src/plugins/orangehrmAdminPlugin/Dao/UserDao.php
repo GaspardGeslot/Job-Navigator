@@ -134,7 +134,7 @@ class UserDao extends BaseDao
             $query->andWhere('u.theme = :theme')
                 ->setParameter('theme', $theme);
         }
-
+        error_log("UserDao Query : " . $query->getQuery()->getSQL());
         return $query->getQuery()->getOneOrNullResult();
     }
 

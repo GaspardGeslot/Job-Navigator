@@ -204,7 +204,9 @@ class UserService
         error_log("GetCredentials Credentials Password : " . json_encode($credentials->getPassword()));
         error_log("GetCredentials Credentials Role : " . json_encode($credentials->getRole()));
         $user = $this->getUserDao()->isExistingSystemUser($credentials, $themeId);
-        error_log("GetCredentials User : " . json_encode($user));
+        error_log("GetCredentials User : " . json_encode($user instanceof User));
+        error_log("GetCredentials User name : " . json_encode($user->getUserName()));
+
         if ($user instanceof User) {
             $hash = $user->getUserPassword();
             if ($this->checkPasswordHash($credentials->getPassword(), $hash)) {
