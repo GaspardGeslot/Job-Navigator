@@ -59,6 +59,7 @@ class LocalAuthProvider extends AbstractAuthProvider
             return false;
         }
         $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential(), $isCompany, $authParams->getTheme());
+        error_log("LocalAuthProvider : " . $token);
         if (!is_null($token)) {
             if ($this->getConfigService()->getConfigDao()
                     ->getValue(ConfigService::KEY_ENFORCE_PASSWORD_STRENGTH) === 'on') {

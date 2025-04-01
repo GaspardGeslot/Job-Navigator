@@ -102,7 +102,7 @@ class ValidateController extends AbstractController implements PublicControllerI
             if (!$this->getCsrfTokenManager()->isValid('login', $token)) {
                 throw AuthenticationException::invalidCsrfToken();
             }
-
+            error_log("Controller : \nUsername : " . $username . "\nPassword : " . $password . "\nTheme : " . $theme . "\nRole : " . $role);
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
             $token = $authProviderChain->authenticate(new AuthParams($credentials, null, $theme));
@@ -117,13 +117,14 @@ class ValidateController extends AbstractController implements PublicControllerI
             $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
         } catch (AuthenticationException $e) {
+            error_log('Info error when authenticating : ' . $e->getTraceAsString());
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());
             if ($e instanceof RedirectableException) {
                 return new RedirectResponse($e->getRedirectUrl());
             }
             return new RedirectResponse($loginUrl);
         } catch (Throwable $e) {
-            error_log('Error when authenticating : ' . $e->getTraceAsString());
+            error_log('Unexpected error when authenticating : ' . $e->getTraceAsString());
             $this->getAuthUser()->addFlash(
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
