@@ -74,20 +74,11 @@ class AuthenticationService
      */
     public function setCredentials(UserCredential $credentials, bool $isCompany, string $theme): ?string
     {
-        error_log("SetCredentials Credentials : " . json_encode($credentials));
-        error_log("SetCredentials Credentials Username : " . json_encode($credentials->getUsername()));
-        error_log("SetCredentials Credentials Password : " . json_encode($credentials->getPassword()));
-        error_log("SetCredentials Credentials Role : " . json_encode($credentials->getRole()));
         $user = $this->getUserService()->getCredentials($credentials, $theme);
-        error_log("SetCredentials User : " . json_encode($user));
         $success = $this->setCredentialsForUser($user);
-        error_log("SetCredentials Success : " . json_encode($success));
         $token = null;
         if ($success)
-        {
             $token = $this->setHedwigeCredentials($credentials, $isCompany, $theme);
-            error_log("SetCredentials Token : " . json_encode($token));
-        }
         return $token;
     }
 

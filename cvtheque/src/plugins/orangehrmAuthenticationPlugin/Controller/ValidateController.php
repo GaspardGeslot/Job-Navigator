@@ -102,7 +102,6 @@ class ValidateController extends AbstractController implements PublicControllerI
             if (!$this->getCsrfTokenManager()->isValid('login', $token)) {
                 throw AuthenticationException::invalidCsrfToken();
             }
-            error_log("Controller : \nUsername : " . $username . "\nPassword : " . $password . "\nTheme : " . $theme . "\nRole : " . $role);
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
             $token = $authProviderChain->authenticate(new AuthParams($credentials, null, $theme));

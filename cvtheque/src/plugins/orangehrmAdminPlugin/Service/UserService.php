@@ -199,16 +199,12 @@ class UserService
         if ($themeId === null)
             return null;
         $user = $this->getUserDao()->isExistingSystemUser($credentials, $themeId);
-        error_log("GetCredentials User : " . json_encode($user instanceof User));
-        error_log("GetCredentials User name : " . json_encode($user->getUserName()));
 
         if ($user instanceof User) {
             $hash = $user->getUserPassword();
-            error_log("GetCredentials User hash : " . $this->checkPasswordHash($credentials->getPassword(), $hash));
             if ($this->checkPasswordHash($credentials->getPassword(), $hash)) {
                 return $user;
             } elseif ($this->checkForOldHash($credentials->getPassword(), $hash)) {
-                // password matches, but in old format. Need to update hash
                 $user->getDecorator()->setNonHashedPassword($credentials->getPassword());
                 return $this->saveSystemUser($user);
             }
