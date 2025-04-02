@@ -67,13 +67,22 @@
         </oxd-form-row>-->
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+            <oxd-grid-item
+              style="display: flex; align-items: center; gap: 1rem"
+            >
               <oxd-input-field
                 v-model="profile.email"
                 :label="$t('general.email')"
                 :rules="rules.email"
                 :disabled="!editable"
               />
+              <oxd-icon-button
+                v-if="profile.email"
+                style="height: 1px"
+                display-type="success"
+                name="envelope-fill"
+                @click.stop="openClientEmail"
+              ></oxd-icon-button>
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
@@ -724,6 +733,9 @@ export default {
         this.attachment = {...CandidateAttachmentModel};
       }*/
       this.isLoading = false;
+    },
+    openClientEmail() {
+      window.location.href = 'mailto:' + this.profile.email;
     },
   },
 };

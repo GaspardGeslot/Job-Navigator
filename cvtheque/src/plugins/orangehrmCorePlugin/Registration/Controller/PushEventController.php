@@ -91,7 +91,6 @@ class PushEventController extends AbstractController implements PublicController
                 // $this->eventQueueDao->saveFormSessionEvent($sessionId, $step, $createdAt);
                 // $eventQueueDao = new RegistrationEventQueueDao();
                 // $eventQueueDao->saveFormSessionEvent($sessionId, $step, $createdAt);
-                error_log("Form session event saved successfully");
                 return $this->getResponse()->setContent(json_encode([
                     'message' => 'Form session event created successfully',
                     'sessionId' => $sessionId,
@@ -135,7 +134,6 @@ class PushEventController extends AbstractController implements PublicController
         $event->setEventType($step);
         $this->getRegistrationEventQueueDao()->saveRegistrationEvent($event);
 
-        error_log("Form session event updated successfully");
         return $this->getResponse()->setContent(json_encode([
             'message' => 'Form session event updated successfully',
             'sessionId' => $sessionId,

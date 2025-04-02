@@ -147,6 +147,15 @@
     <table-filter
       :filter-title="$t('Quantité de besoin en recrutement par entreprise')"
     >
+      <div class="orangehrm-header-container">
+        <oxd-button
+          display-type="secondary"
+          :label="$t('Exporter en Excel')"
+          @click="exportToExcel"
+          icon-name="download"
+          class="export-button"
+        />
+      </div>
       <div class="orangehrm-container">
         <oxd-card-table
           :headers="headers"
@@ -184,6 +193,7 @@ import JobCategorySelectionModal from '../../../orangehrmRecruitmentPlugin/compo
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import {Chart, registerables} from 'chart.js';
+import * as XLSX from 'xlsx';
 Chart.register(...registerables);
 
 export default {
@@ -361,8 +371,12 @@ export default {
               name: item.companyName,
               department: item.department,
               jobs: item.jobTitle,
+              workforce: item.workforce,
               amount: item.matchingAmount,
-              lastUpdated: item.lastUpdated,
+              lastUpdated: formatDate(
+                parseDate(item.lastUpdated, 'yyyy-MM-dd'),
+                'dd-MM-yyyy',
+              ),
             };
           });
           state.total = response.data.length;
@@ -684,6 +698,11 @@ export default {
           style: {flex: 1},
         },
         {
+          name: 'workforce',
+          title: this.$t('Effectif'),
+          style: {flex: 1},
+        },
+        {
           name: 'jobs',
           title: this.$t('Métiers recherchés'),
           style: {flex: 1.5},
@@ -691,7 +710,7 @@ export default {
         {
           name: 'amount',
           title: this.$t('Quantité de besoin en recrutement'),
-          style: {flex: 1},
+          style: {flex: 1, textAlign: 'center'},
         },
         {
           name: 'lastUpdated',
@@ -755,6 +774,49 @@ export default {
       this.courseStartFilter = null;
       this.fetchCompaniesMatchingData();
     },
+    exportToExcel() {
+      // Create worksheet from the companiesMatchings data
+      const worksheet = XLSX.utils.json_to_sheet(
+        this.companiesMatchings.map((item) => {
+          const row = {};
+          this.headers.forEach((header) => {
+            row[header.title] = item[header.name];
+          });
+          return row;
+        }),
+      );
+
+      // Create workbook and add the worksheet
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Besoins Recrutement');
+
+      // Generate Excel file
+      XLSX.writeFile(workbook, 'jobnavigator_besoins_recrutement.xlsx');
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.orangehrm-header-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.export-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+</style>
