@@ -968,3 +968,255 @@ admin_companies:
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
+
+apiv2_admin_countries:
+  path: /{theme}/api/v2/admin/countries
+  controller: OrangeHRM\Admin\Controller\CountryController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_country_add:
+  path: /{theme}/api/v2/admin/countries
+  controller: OrangeHRM\Admin\Controller\CountryController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_country_delete:
+  path: /{theme}/api/v2/admin/countries
+  controller: OrangeHRM\Admin\Controller\CountryController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_countries:
+  path: /{theme}/admin/viewCountries
+  controller: OrangeHRM\Admin\Controller\CountryController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_driving_licenses:
+  path: /{theme}/api/v2/admin/driving-licenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_driving_license_add:
+  path: /{theme}/api/v2/admin/driving-licenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_driving_license_delete:
+  path: /{theme}/api/v2/admin/driving-licenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_driving_licenses:
+  path: /{theme}/admin/viewDrivingLicenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_funding:
+  path: /{theme}/api/v2/admin/funding
+  controller: OrangeHRM\Admin\Controller\FundingController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_funding_add:
+  path: /{theme}/api/v2/admin/funding
+  controller: OrangeHRM\Admin\Controller\FundingController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_funding_delete:
+  path: /{theme}/api/v2/admin/funding
+  controller: OrangeHRM\Admin\Controller\FundingController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_funding:
+  path: /{theme}/admin/viewFundings
+  controller: OrangeHRM\Admin\Controller\FundingController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_handicap:
+  path: /{theme}/api/v2/admin/handicap
+  controller: OrangeHRM\Admin\Controller\HandicapController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_handicap_add:
+  path: /{theme}/api/v2/admin/handicap
+  controller: OrangeHRM\Admin\Controller\HandicapController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_handicap_delete:
+  path: /{theme}/api/v2/admin/handicap
+  controller: OrangeHRM\Admin\Controller\HandicapController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_handicap:
+  path: /{theme}/admin/viewHandicaps
+  controller: OrangeHRM\Admin\Controller\HandicapController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_need:
+  path: /{theme}/api/v2/admin/need
+  controller: OrangeHRM\Admin\Controller\NeedController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_need_add:
+  path: /{theme}/api/v2/admin/need
+  controller: OrangeHRM\Admin\Controller\NeedController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_need_delete:
+  path: /{theme}/api/v2/admin/need
+  controller: OrangeHRM\Admin\Controller\NeedController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_need:
+  path: /{theme}/admin/viewNeeds
+  controller: OrangeHRM\Admin\Controller\NeedController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_phone:
+  path: /{theme}/api/v2/admin/phone
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_phone_add:
+  path: /{theme}/api/v2/admin/phone
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_phone_delete:
+  path: /{theme}/api/v2/admin/phone
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_phone:
+  path: /{theme}/admin/viewPhones
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_status:
+  path: /{theme}/api/v2/admin/status
+  controller: OrangeHRM\Admin\Controller\StatusController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_status_add:
+  path: /{theme}/api/v2/admin/status
+  controller: OrangeHRM\Admin\Controller\StatusController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_status_delete:
+  path: /{theme}/api/v2/admin/status
+  controller: OrangeHRM\Admin\Controller\StatusController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_status:
+  path: /{theme}/admin/viewStatus
+  controller: OrangeHRM\Admin\Controller\StatusController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_study_level:
+  path: /{theme}/api/v2/admin/study-level
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_study_level_add:
+  path: /{theme}/api/v2/admin/study-level
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_study_level_delete:
+  path: /{theme}/api/v2/admin/study-level
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_study_level:
+  path: /{theme}/admin/viewStudyLevels
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_training_method:
+  path: /{theme}/api/v2/admin/training-method
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_training_method_add:
+  path: /{theme}/api/v2/admin/training-method
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_training_method_delete:
+  path: /{theme}/api/v2/admin/training-method
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_training_method:
+  path: /{theme}/admin/viewTrainingMethods
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio

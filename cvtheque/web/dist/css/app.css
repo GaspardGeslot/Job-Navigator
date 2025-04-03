@@ -13175,6 +13175,61 @@ h5[data-v-c7c92d34] {
   font-weight: 600;
   color: #64728c;
 }
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/pages/studyLevel/StudyLevel.vue?vue&type=style&index=0&id=742ccaf9&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.modal-overlay[data-v-742ccaf9] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-container[data-v-742ccaf9] {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  width: 700px;
+  max-width: 90%;
+  z-index: 1001;
+}
+.modal-header[data-v-742ccaf9] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid var(--oxd-border-light-color);
+}
+.modal-header h3[data-v-742ccaf9] {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.modal-header .close-icon[data-v-742ccaf9] {
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+}
+.modal-header .close-icon[data-v-742ccaf9]:hover {
+  color: #333;
+}
+.modal-body[data-v-742ccaf9] {
+  padding: 2rem;
+}
+.modal-footer[data-v-742ccaf9] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 2rem;
+  border-top: 1px solid var(--oxd-border-light-color);
+}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmPimPlugin/components/ProfileImageInput.vue?vue&type=style&index=0&id=555cf975&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
