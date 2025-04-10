@@ -66,6 +66,7 @@
             label-icon="person"
             :placeholder="$t('auth.siret')"
             :rules="rules.siret"
+            :readonly="siretLocked"
             autofocus
           />
         </oxd-form-row>
@@ -159,6 +160,7 @@ export default {
     return {
       siret: '',
       adherentCode: '',
+      siretLocked: false,
       rules: {
         siret: [required],
         adherentCode: [required],
@@ -180,7 +182,19 @@ export default {
     }, 1200000); // 20 * 60 * 1000 (20 minutes);
   },
 
+  mounted() {
+    this.getSiretParameter();
+  },
+
   methods: {
+    getSiretParameter() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const siretParam = urlParams.get('siret');
+      if (siretParam) {
+        this.siret = siretParam;
+        this.siretLocked = true;
+      }
+    },
     onSubmit() {
       if (isNaN(this.adherentCode)) {
         this.error_adherent_code = true;
