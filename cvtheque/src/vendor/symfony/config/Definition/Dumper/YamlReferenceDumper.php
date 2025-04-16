@@ -28,7 +28,7 @@ use Symfony\Component\Yaml\Inline;
  */
 class YamlReferenceDumper
 {
-    private $reference;
+    private ?string $reference = null;
 
     public function dump(ConfigurationInterface $configuration)
     {
@@ -71,7 +71,7 @@ class YamlReferenceDumper
         return $ref;
     }
 
-    private function writeNode(NodeInterface $node, ?NodeInterface $parentNode = null, int $depth = 0, bool $prototypedArray = false)
+    private function writeNode(NodeInterface $node, NodeInterface $parentNode = null, int $depth = 0, bool $prototypedArray = false)
     {
         $comments = [];
         $default = '';

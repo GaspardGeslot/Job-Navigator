@@ -125,6 +125,16 @@
         <div style="width: 100%; height: 400px">
           <canvas ref="chartRef"></canvas>
         </div>
+        <br />
+        <div class="orangehrm-container">
+          <oxd-card-table
+            :headers="headers"
+            :items="candidateStatus"
+            :selectable="false"
+            :clickable="false"
+            row-decorator="oxd-table-decorator-card"
+          />
+        </div>
       </oxd-form>
     </div>
     <br />
@@ -235,6 +245,7 @@ export default {
       offset: 0,
       candidates: [],
       isLoading: false,
+      candidateStatus: [],
     });
 
     const fetchData = () => {
@@ -274,6 +285,21 @@ export default {
         })
         .then((response) => {
           state.candidates = response.data;
+          state.candidateStatus = Object.values(response.data)
+            .flatMap((candidates) => candidates)
+            .reduce((acc, candidate) => {
+              const status = candidate.status || 'Sans matching';
+              const existingStatus = acc.find((item) => item.status === status);
+              if (existingStatus) {
+                existingStatus.amount += candidate.amount;
+              } else {
+                acc.push({
+                  status: status,
+                  amount: candidate.amount,
+                });
+              }
+              return acc;
+            }, []);
           state.total = response.data.length;
           if (state.total === 0) {
             noRecordsFound();
@@ -487,6 +513,18 @@ export default {
     return {
       showModal: false,
       jobTitlesPerSector: [],
+      headers: [
+        {
+          name: 'status',
+          title: this.$t('Statut'),
+          style: {flex: 1},
+        },
+        {
+          name: 'amount',
+          title: this.$t('Nombre de candidats'),
+          style: {flex: 1},
+        },
+      ],
     };
   },
   watch: {

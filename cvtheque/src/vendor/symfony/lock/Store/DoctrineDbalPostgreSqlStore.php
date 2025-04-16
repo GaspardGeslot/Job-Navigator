@@ -11,12 +11,9 @@
 
 namespace Symfony\Component\Lock\Store;
 
-use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
-use Doctrine\DBAL\Tools\DsnParser;
 use Symfony\Component\Lock\BlockingSharedLockStoreInterface;
 use Symfony\Component\Lock\BlockingStoreInterface;
 use Symfony\Component\Lock\Exception\InvalidArgumentException;
@@ -39,45 +36,20 @@ class DoctrineDbalPostgreSqlStore implements BlockingSharedLockStoreInterface, B
      * You can either pass an existing database connection a Doctrine DBAL Connection
      * or a URL that will be used to connect to the database.
      *
-     * @param Connection|string $connOrUrl A Connection instance or Doctrine URL
-     *
      * @throws InvalidArgumentException When first argument is not Connection nor string
      */
-    public function __construct($connOrUrl)
+    public function __construct(Connection|string $connOrUrl)
     {
         if ($connOrUrl instanceof Connection) {
             if (!$connOrUrl->getDatabasePlatform() instanceof PostgreSQLPlatform) {
                 throw new InvalidArgumentException(sprintf('The adapter "%s" does not support the "%s" platform.', __CLASS__, \get_class($connOrUrl->getDatabasePlatform())));
             }
             $this->conn = $connOrUrl;
-        } elseif (\is_string($connOrUrl)) {
-            if (!class_exists(DriverManager::class)) {
-                throw new InvalidArgumentException('Failed to parse DSN. Try running "composer require doctrine/dbal".');
-            }
-            if (class_exists(DsnParser::class)) {
-                $params = (new DsnParser([
-                    'db2' => 'ibm_db2',
-                    'mssql' => 'pdo_sqlsrv',
-                    'mysql' => 'pdo_mysql',
-                    'mysql2' => 'pdo_mysql',
-                    'postgres' => 'pdo_pgsql',
-                    'postgresql' => 'pdo_pgsql',
-                    'pgsql' => 'pdo_pgsql',
-                    'sqlite' => 'pdo_sqlite',
-                    'sqlite3' => 'pdo_sqlite',
-                ]))->parse($this->filterDsn($connOrUrl));
-            } else {
-                $params = ['url' => $this->filterDsn($connOrUrl)];
-            }
-
-            $config = new Configuration();
-            if (class_exists(DefaultSchemaManagerFactory::class)) {
-                $config->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
-            }
-
-            $this->conn = DriverManager::getConnection($params, $config);
         } else {
-            throw new \TypeError(sprintf('Argument 1 passed to "%s()" must be "%s" or string, "%s" given.', Connection::class, __METHOD__, get_debug_type($connOrUrl)));
+            if (!class_exists(DriverManager::class)) {
+                throw new InvalidArgumentException(sprintf('Failed to parse the DSN "%s". Try running "composer require doctrine/dbal".', $connOrUrl));
+            }
+            $this->conn = DriverManager::getConnection(['url' => $this->filterDsn($connOrUrl)]);
         }
     }
 
@@ -176,7 +148,7 @@ class DoctrineDbalPostgreSqlStore implements BlockingSharedLockStoreInterface, B
         $store->delete($key);
     }
 
-    public function exists(Key $key)
+    public function exists(Key $key): bool
     {
         $sql = "SELECT count(*) FROM pg_locks WHERE locktype='advisory' AND objid=:key AND pid=pg_backend_pid()";
         $result = $this->conn->executeQuery($sql, [
@@ -274,7 +246,7 @@ class DoctrineDbalPostgreSqlStore implements BlockingSharedLockStoreInterface, B
     private function filterDsn(string $dsn): string
     {
         if (!str_contains($dsn, '://')) {
-            throw new InvalidArgumentException('DSN is invalid for Doctrine DBAL.');
+            throw new InvalidArgumentException(sprintf('String "%" is not a valid DSN for Doctrine DBAL.', $dsn));
         }
 
         [$scheme, $rest] = explode(':', $dsn, 2);

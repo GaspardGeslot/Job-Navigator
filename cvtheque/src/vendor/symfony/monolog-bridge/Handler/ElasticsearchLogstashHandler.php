@@ -45,20 +45,17 @@ class ElasticsearchLogstashHandler extends AbstractHandler
     use FormattableHandlerTrait;
     use ProcessableHandlerTrait;
 
-    private $endpoint;
-    private $index;
+    private string $endpoint;
+    private string $index;
     private $client;
+    private string $elasticsearchVersion;
 
     /**
      * @var \SplObjectStorage<ResponseInterface, null>
      */
-    private $responses;
-    private $elasticsearchVersion;
+    private \SplObjectStorage $responses;
 
-    /**
-     * @param string|int $level The minimum logging level at which this handler will be triggered
-     */
-    public function __construct(string $endpoint = 'http://127.0.0.1:9200', string $index = 'monolog', ?HttpClientInterface $client = null, $level = Logger::DEBUG, bool $bubble = true, string $elasticsearchVersion = '1.0.0')
+    public function __construct(string $endpoint = 'http://127.0.0.1:9200', string $index = 'monolog', HttpClientInterface $client = null, string|int $level = Logger::DEBUG, bool $bubble = true, string $elasticsearchVersion = '1.0.0')
     {
         if (!interface_exists(HttpClientInterface::class)) {
             throw new \LogicException(sprintf('The "%s" handler needs an HTTP client. Try running "composer require symfony/http-client".', __CLASS__));
@@ -146,10 +143,7 @@ class ElasticsearchLogstashHandler extends AbstractHandler
         $this->wait(false);
     }
 
-    /**
-     * @return array
-     */
-    public function __sleep()
+    public function __sleep(): array
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
     }

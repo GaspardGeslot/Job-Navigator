@@ -11,15 +11,12 @@
 
 namespace Symfony\Component\Lock\Store;
 
-use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Tools\DsnParser;
 use Symfony\Component\Lock\Exception\InvalidArgumentException;
 use Symfony\Component\Lock\Exception\InvalidTtlException;
 use Symfony\Component\Lock\Exception\LockConflictedException;
@@ -61,40 +58,17 @@ class DoctrineDbalStore implements PersistingStoreInterface
      * @throws InvalidArgumentException When namespace contains invalid characters
      * @throws InvalidArgumentException When the initial ttl is not valid
      */
-    public function __construct($connOrUrl, array $options = [], float $gcProbability = 0.01, int $initialTtl = 300)
+    public function __construct(Connection|string $connOrUrl, array $options = [], float $gcProbability = 0.01, int $initialTtl = 300)
     {
         $this->init($options, $gcProbability, $initialTtl);
 
         if ($connOrUrl instanceof Connection) {
             $this->conn = $connOrUrl;
-        } elseif (\is_string($connOrUrl)) {
-            if (!class_exists(DriverManager::class)) {
-                throw new InvalidArgumentException('Failed to parse the DSN. Try running "composer require doctrine/dbal".');
-            }
-            if (class_exists(DsnParser::class)) {
-                $params = (new DsnParser([
-                    'db2' => 'ibm_db2',
-                    'mssql' => 'pdo_sqlsrv',
-                    'mysql' => 'pdo_mysql',
-                    'mysql2' => 'pdo_mysql',
-                    'postgres' => 'pdo_pgsql',
-                    'postgresql' => 'pdo_pgsql',
-                    'pgsql' => 'pdo_pgsql',
-                    'sqlite' => 'pdo_sqlite',
-                    'sqlite3' => 'pdo_sqlite',
-                ]))->parse($connOrUrl);
-            } else {
-                $params = ['url' => $connOrUrl];
-            }
-
-            $config = new Configuration();
-            if (class_exists(DefaultSchemaManagerFactory::class)) {
-                $config->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
-            }
-
-            $this->conn = DriverManager::getConnection($params, $config);
         } else {
-            throw new \TypeError(sprintf('Argument 1 passed to "%s()" must be "%s" or string, "%s" given.', Connection::class, __METHOD__, get_debug_type($connOrUrl)));
+            if (!class_exists(DriverManager::class)) {
+                throw new InvalidArgumentException(sprintf('Failed to parse the DSN "%s". Try running "composer require doctrine/dbal".', $connOrUrl));
+            }
+            $this->conn = DriverManager::getConnection(['url' => $connOrUrl]);
         }
     }
 
@@ -188,7 +162,7 @@ class DoctrineDbalStore implements PersistingStoreInterface
     /**
      * {@inheritdoc}
      */
-    public function exists(Key $key)
+    public function exists(Key $key): bool
     {
         $sql = "SELECT 1 FROM $this->table WHERE $this->idCol = ? AND $this->tokenCol = ? AND $this->expirationCol > {$this->getCurrentTimestampStatement()}";
         $result = $this->conn->fetchOne($sql, [

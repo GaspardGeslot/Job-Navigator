@@ -24,11 +24,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
  */
 class FirePHPHandler extends BaseFirePHPHandler
 {
-    private $headers = [];
-
-    /**
-     * @var Response
-     */
+    private array $headers = [];
     private $response;
 
     /**
@@ -41,7 +37,7 @@ class FirePHPHandler extends BaseFirePHPHandler
         }
 
         $request = $event->getRequest();
-        if (!preg_match('{\bFirePHP/\d+\.\d+\b}', $request->headers->get('User-Agent', ''))
+        if (!preg_match('{\bFirePHP/\d+\.\d+\b}', $request->headers->get('User-Agent'))
             && !$request->headers->has('X-FirePHP-Version')) {
             self::$sendHeaders = false;
             $this->headers = [];

@@ -25,13 +25,13 @@ final class NativePasswordHasher implements PasswordHasherInterface
 {
     use CheckPasswordLengthTrait;
 
-    private $algorithm = \PASSWORD_BCRYPT;
-    private $options;
+    private string $algorithm = \PASSWORD_BCRYPT;
+    private array $options;
 
     /**
      * @param string|null $algorithm An algorithm supported by password_hash() or null to use the best available algorithm
      */
-    public function __construct(?int $opsLimit = null, ?int $memLimit = null, ?int $cost = null, ?string $algorithm = null)
+    public function __construct(int $opsLimit = null, int $memLimit = null, int $cost = null, string $algorithm = null)
     {
         $cost = $cost ?? 13;
         $opsLimit = $opsLimit ?? max(4, \defined('SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE') ? \SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE : 4);

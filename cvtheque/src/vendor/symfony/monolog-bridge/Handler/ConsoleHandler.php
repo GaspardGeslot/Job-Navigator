@@ -44,14 +44,14 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 class ConsoleHandler extends AbstractProcessingHandler implements EventSubscriberInterface
 {
     private $output;
-    private $verbosityLevelMap = [
+    private array $verbosityLevelMap = [
         OutputInterface::VERBOSITY_QUIET => Logger::ERROR,
         OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
         OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
         OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
     ];
-    private $consoleFormatterOptions;
+    private array $consoleFormatterOptions;
 
     /**
      * @param OutputInterface|null $output            The console output to use (the handler remains disabled when passing null
@@ -60,7 +60,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
      * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
      *                                                level (leave empty to use the default mapping)
      */
-    public function __construct(?OutputInterface $output = null, bool $bubble = true, array $verbosityLevelMap = [], array $consoleFormatterOptions = [])
+    public function __construct(OutputInterface $output = null, bool $bubble = true, array $verbosityLevelMap = [], array $consoleFormatterOptions = [])
     {
         parent::__construct(Logger::DEBUG, $bubble);
         $this->output = $output;
@@ -133,7 +133,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ConsoleEvents::COMMAND => ['onCommand', 255],
