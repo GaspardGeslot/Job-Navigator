@@ -13178,6 +13178,23 @@ h5[data-v-c7c92d34] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/components/MatchingCard.vue?vue&type=style&index=0&id=7c1f0e0a&scoped=true&lang=scss ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
+.orangehrm-job-selection-criteria[data-v-7c1f0e0a] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-job-selection-criteria-selected[data-v-7c1f0e0a] {
+  display: flex;
+  align-items: baseline;
+}
+.orangehrm-job-selection-criteria-name[data-v-7c1f0e0a] {
+  margin-left: 1rem;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0.675rem 0rem;
+}
+.orangehrm-job-selection-icon[data-v-7c1f0e0a] {
+  margin-left: 1rem;
+}
 .orangerhrm-switch-wrapper[data-v-7c1f0e0a] {
   display: flex;
   flex-direction: row;
