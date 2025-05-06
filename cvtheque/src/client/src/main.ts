@@ -38,6 +38,7 @@ try {
   // eslint-disable-next-line
   pages = require(`../themes/${subspace}/pages`).default;
 } catch (e) {
+  //console.log('e : ' + e);
   // eslint-disable-next-line
   pages = require('../themes/constructys/pages').default;
   console.warn(

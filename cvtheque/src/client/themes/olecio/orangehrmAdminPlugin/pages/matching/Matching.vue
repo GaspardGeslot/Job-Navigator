@@ -1,35 +1,31 @@
 <template>
   <div class="orangehrm-background-container">
-    <!--<oxd-table-filter :filter-title="$t('admin.system_users')">
+    <oxd-table-filter :filter-title="$t('Besoins en recrutement')">
       <oxd-form @submit-valid="filterItems">
         <oxd-form-row>
-          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
-              <oxd-input-field
-                v-model="filters.username"
-                :label="$t('general.username')"
-              />
+              <oxd-input-field v-model="titleFilter" :label="$t('Titre')" />
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="filters.userRoleId"
+                v-model="actorFilter"
                 type="select"
-                :label="$t('general.user_role')"
-                :options="userRoles"
+                :label="$t('Acteur')"
+                :options="actors"
               />
             </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
-              <employee-autocomplete
-                v-model="filters.empNumber"
-                :rules="rules.employee"
-              />
+              <oxd-input-field v-model="jobFilter" :label="$t('Métier')" />
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="filters.status"
-                type="select"
-                :label="$t('general.status')"
-                :options="userStatuses"
+                v-model="courseFilter"
+                :label="$t('Formation (ID)')"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -50,7 +46,7 @@
         </oxd-form-actions>
       </oxd-form>
     </oxd-table-filter>
-    <br />-->
+    <br />
     <div class="orangehrm-paper-container">
       <div class="orangehrm-header-container">
         <oxd-button
@@ -72,6 +68,7 @@
       >
         <div class="orangehrm-container">
           <matching-card
+            :actors="actors"
             :countries="countries"
             :course-starts="courseStarts"
             :fundings="fundings"
@@ -81,6 +78,8 @@
             :phone-numbers="phoneNumbers"
             :status="status"
             :training-methods="trainingMethods"
+            :professional-experiences="professionalExperiences"
+            :driving-licenses="drivingLicenses"
             :matching-current="matching"
             @edit="onClickEdit(matching)"
             @delete="onClickDelete(matching)"
@@ -93,6 +92,8 @@
   </div>
 </template>
 <script>
+import {ref, reactive, onMounted} from 'vue';
+import useToast from '@/core/util/composable/useToast';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
@@ -120,8 +121,8 @@ export default {
       default: () => [],
     },
     fundings: {
-      type: Array,
       default: () => [],
+      type: Array,
     },
     handicaps: {
       type: Array,
@@ -147,6 +148,18 @@ export default {
       type: Array,
       default: () => [],
     },
+    actors: {
+      type: Array,
+      default: () => [],
+    },
+    professionalExperiences: {
+      type: Array,
+      default: () => [],
+    },
+    drivingLicenses: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   setup() {
@@ -154,20 +167,55 @@ export default {
       window.appGlobal.baseUrl,
       `${window.appGlobal.theme}/api/v2/admin/matchings`,
     );
-    return {
-      http,
-    };
-  },
+    const {noRecordsFound} = useToast();
+    const titleFilter = ref(null);
+    const actorFilter = ref(null);
+    const jobFilter = ref(null);
+    const courseFilter = ref(null);
 
-  data() {
-    return {
+    const state = reactive({
+      total: 0,
+      offset: 0,
+      //matchings: [],
       isLoading: false,
-      matchings: [],
+    });
+
+    const fetchData = () => {
+      state.isLoading = true;
+      //state.matchings = [];
+      http
+        .getAll({
+          title: titleFilter.value,
+          actor: actorFilter.value,
+          job: jobFilter.value,
+          courseId: courseFilter.value,
+        })
+        .then((response) => {
+          //state.matchings = response.data;
+          //console.log('Matchings : ', state.matchings);
+          state.total = response.data.length;
+          if (state.total === 0) {
+            noRecordsFound();
+          }
+        })
+        .finally(() => {
+          state.isLoading = false;
+        });
+    };
+
+    onMounted(() => {
+      fetchData();
+    });
+
+    return {
+      state,
+      titleFilter,
+      actorFilter,
+      jobFilter,
+      courseFilter,
     };
   },
   created() {
-    this.isLoading = true;
-
     this.matchings = [
       {
         id: 0,
@@ -179,15 +227,15 @@ export default {
             max: 25,
           },
         ],
-        checkedCountries: ['Brasil'],
-        checkedCourseStarts: ['Immédiatement'],
+        countries: ['Belgique'],
+        courseStarts: ['Dans plus de 6 mois'],
         courses: [],
         departments: ['75'],
-        checkedNeeds: ['CDI'],
+        needs: ["J'ai arrêté ou je souhaite arrêter l'école", 'Temp 3, Temp 4'],
         endBreakDate: {
           dayOfWeek: 5,
           hour: 12,
-          minutes: 0,
+          minutes: 5,
         },
         startBreakDate: {
           dayOfWeek: 7,
@@ -196,55 +244,48 @@ export default {
         },
         endDate: '2021-09-30',
         startDate: '2021-09-01',
-        checkedFundings: ['Moi-même'],
-        checkedHandicaps: ['Aucun'],
+        fundings: ['Un mix de tout ça'],
+        handicaps: ['Aucun'],
         title: 'Matching 1',
         jobs: ['Développeur'],
-        checkedLevels: ['Bac +5', 'Bac +3', 'Bac +1'],
+        levels: ['Bac +5', 'Bac +3', 'Bac +1'],
         locationPostalCodes: ['75015'],
-        maxAmount: 42,
-        checkedPhones: ['+33'],
+        maxAmountPerDay: 42,
+        phones: ['+33'],
         price: 15.27,
         resumeNeeded: false,
-        checkedStatus: ['En formation'],
-        checkedTrainingMethods: ['Présentiel'],
+        status: ['En formation'],
+        trainingMethods: ['En présentiel'],
+        isResumeNeeded: true,
       },
       {
         id: 1,
         isActive: false,
         actor: 'Actor 2',
         ages: [],
-        checkedCountries: [],
-        checkedCourseStarts: [],
+        countries: [],
+        courseStarts: [],
         courses: [],
         departments: [],
-        checkedNeeds: [],
+        needs: [],
         endBreakDate: null,
         startBreakDate: null,
         endDate: null,
         startDate: null,
-        checkedFundings: [],
-        checkedHandicaps: [],
+        fundings: [],
+        handicaps: [],
         title: null,
         jobs: [],
-        checkedLevels: [],
+        levels: [],
         locationPostalCodes: [],
-        maxAmount: 0,
-        checkedPhones: [],
+        maxAmountPerDay: 0,
+        phones: [],
         price: 15,
         resumeNeeded: true,
-        checkedStatus: [],
-        checkedTrainingMethods: [],
+        status: [],
+        trainingMethods: [],
       },
     ];
-    /*this.http
-      .get()
-      .then((response) => {
-        this.matchings = response.data;
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });*/
   },
   methods: {
     onClickAdd() {

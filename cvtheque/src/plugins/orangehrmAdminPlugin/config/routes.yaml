@@ -595,6 +595,20 @@ apiv2_admin_course_start_delete:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_matchings:
+  path: /{theme}/api/v2/admin/matchings
+  controller: OrangeHRM\Admin\Controller\MatchingController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_job_search:
+  path: /{theme}/api/v2/admin/job/search
+  controller: OrangeHRM\Admin\Controller\JobController::search
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 ##########################
 #        Files
 ##########################
