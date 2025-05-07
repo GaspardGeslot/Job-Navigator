@@ -18,7 +18,6 @@ class JobController extends AbstractVueController
 
     public function search(Request $request): Response
     {
-        error_log('in search : ');
         $title = $request->query->get(
             self::FILTER_TITLE
         );

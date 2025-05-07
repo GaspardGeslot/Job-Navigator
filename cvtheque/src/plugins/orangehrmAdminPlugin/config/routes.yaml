@@ -532,10 +532,33 @@ apiv2_admin_course_start_delete:
   requirements:
     theme: constructys|olecio
 
-apiv2_admin_matchings:
-  path: /{theme}/api/v2/admin/matchings
+apiv2_admin_matching:
+  path: /{theme}/api/v2/admin/matching
   controller: OrangeHRM\Admin\Controller\MatchingController::getAll
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_matching_delete:
+  path: /{theme}/api/v2/admin/matching/{id}
+  controller: OrangeHRM\Admin\Controller\MatchingController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_matching_update:
+  path: /{theme}/api/v2/admin/matching/{id}
+  controller: OrangeHRM\Admin\Controller\MatchingController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_matching_create:
+  path: /{theme}/api/v2/admin/matching
+  controller: OrangeHRM\Admin\Controller\MatchingController::create
+  methods: [ POST ]
   requirements:
     theme: constructys|olecio
 
@@ -958,6 +981,13 @@ admin_ldap_configuration:
 admin_matching_configuration:
   path: /{theme}/admin/matching
   controller: OrangeHRM\Admin\Controller\MatchingController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_save_matching:
+  path: /{theme}/admin/saveMatching
+  controller: OrangeHRM\Admin\Controller\SaveMatchingController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
