@@ -132,6 +132,21 @@ class MatchingController extends AbstractVueController
         );
     }
 
+    public function create(Request $request): Response
+    {
+        $matching = json_decode($request->getContent(), true);
+        $this->createMatching($this->getAuthUser()->getUserHedwigeToken(), $matching);
+        return new Response(json_encode(['message' => 'Matching created successfully']), Response::HTTP_OK);
+    }
+
+    public function delete(Request $request): Response
+    {
+        error_log('delete : ' . $request->attributes->get('id'));
+        $id = $request->attributes->get('id');
+        $this->deleteMatching($this->getAuthUser()->getUserHedwigeToken(), $id);
+        return new Response(json_encode(['message' => 'Matching deleted successfully']), Response::HTTP_OK);
+    }
+
     private function getMatchings(string $token, ?string $titleFilter, ?string $actorFilter, ?string $jobFilter, ?string $courseIdFilter): array
     {
         $client = new Client();
@@ -177,6 +192,46 @@ class MatchingController extends AbstractVueController
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             return null;
+        }
+    }
+
+    private function createMatching(string $token, array $matching): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        $data = json_encode($matching);
+        error_log('data : ' . $data);
+
+        try {
+            $url = "{$clientBaseUrl}/matching";
+            $response = $client->request('POST', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => $data
+            ]);
+        } catch (\Exception $e) {   
+            error_log($e->getMessage());
+            throw new \Exception('Error creating matching');
+        }
+    }
+
+    private function deleteMatching(string $token, int $id): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/matching/{$id}";
+            $response = $client->request('DELETE', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            throw new \Exception('Error deleting matching');
         }
     }
 }

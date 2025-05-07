@@ -59,10 +59,14 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
 
-  setup() {
-    const isActive = ref(true);
+  setup(props) {
+    const isActive = ref(props.active);
 
     const toggleFilters = () => {
       isActive.value = !isActive.value;

@@ -71,6 +71,7 @@ import AddProvider from './pages/socialMediaAuth/AddProvider.vue';
 import EditProvider from './pages/socialMediaAuth/EditProvider.vue';
 import FixLanguageErrors from './pages/languageImport/FixLanguageStringErrors.vue';
 import Matching from './pages/matching/Matching.vue';
+import SaveMatching from './pages/matching/SaveMatching.vue';
 import CourseStart from './pages/courseStart/CourseStart.vue';
 import viewCourses from './pages/courses/viewCourses.vue';
 import viewOF from './pages/of/viewOF.vue';
@@ -132,6 +133,7 @@ export default {
   'edit-auth-provider': EditProvider,
   'fix-language-errors': FixLanguageErrors,
   'matching-list': Matching,
+  'save-matching': SaveMatching,
   'course-start-list': CourseStart,
   'course-list': viewCourses,
   'of-list': viewOF,

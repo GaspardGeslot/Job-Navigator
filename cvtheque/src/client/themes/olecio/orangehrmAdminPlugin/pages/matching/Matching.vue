@@ -58,8 +58,9 @@
       </div>
     </div>
     <br />
-    <div v-for="(matching, index) in matchings" :key="index">
-      <oxd-table-filter
+    <div v-for="(matching, index) in state.matchings" :key="index">
+      <table-filter
+        :active="false"
         :filter-title="
           matching.title
             ? `${matching.title} - ${matching.actor}`
@@ -81,11 +82,13 @@
             :professional-experiences="professionalExperiences"
             :driving-licenses="drivingLicenses"
             :matching-current="matching"
-            @edit="onClickEdit(matching)"
-            @delete="onClickDelete(matching)"
+            @delete="onClickDelete(matching.id)"
+            @save="
+              (updatedMatching) => onClickSave(updatedMatching, matching.id)
+            "
           />
         </div>
-      </oxd-table-filter>
+      </table-filter>
       <br />
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
@@ -98,6 +101,7 @@ import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmati
 import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
 import MatchingCard from '../../components/MatchingCard.vue';
+import TableFilter from '@/core/components/dropdown/TableFilter.vue';
 
 const defaultFilters = {
   username: '',
@@ -110,6 +114,7 @@ export default {
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
     'matching-card': MatchingCard,
+    'table-filter': TableFilter,
   },
   props: {
     countries: {
@@ -165,7 +170,7 @@ export default {
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
-      `${window.appGlobal.theme}/api/v2/admin/matchings`,
+      `${window.appGlobal.theme}/api/v2/admin/matching`,
     );
     const {noRecordsFound} = useToast();
     const titleFilter = ref(null);
@@ -176,13 +181,13 @@ export default {
     const state = reactive({
       total: 0,
       offset: 0,
-      //matchings: [],
+      matchings: [],
       isLoading: false,
     });
 
     const fetchData = () => {
       state.isLoading = true;
-      //state.matchings = [];
+      state.matchings = [];
       http
         .getAll({
           title: titleFilter.value,
@@ -191,8 +196,7 @@ export default {
           courseId: courseFilter.value,
         })
         .then((response) => {
-          //state.matchings = response.data;
-          //console.log('Matchings : ', state.matchings);
+          state.matchings = response.data;
           state.total = response.data.length;
           if (state.total === 0) {
             noRecordsFound();
@@ -208,6 +212,7 @@ export default {
     });
 
     return {
+      http,
       state,
       titleFilter,
       actorFilter,
@@ -215,127 +220,35 @@ export default {
       courseFilter,
     };
   },
-  created() {
-    this.matchings = [
-      {
-        id: 0,
-        isActive: true,
-        actor: 'Actor 1',
-        ages: [
-          {
-            min: 18,
-            max: 25,
-          },
-        ],
-        countries: ['Belgique'],
-        courseStarts: ['Dans plus de 6 mois'],
-        courses: [],
-        departments: ['75'],
-        needs: ["J'ai arrêté ou je souhaite arrêter l'école", 'Temp 3, Temp 4'],
-        endBreakDate: {
-          dayOfWeek: 5,
-          hour: 12,
-          minutes: 5,
-        },
-        startBreakDate: {
-          dayOfWeek: 7,
-          hour: 23,
-          minutes: 0,
-        },
-        endDate: '2021-09-30',
-        startDate: '2021-09-01',
-        fundings: ['Un mix de tout ça'],
-        handicaps: ['Aucun'],
-        title: 'Matching 1',
-        jobs: ['Développeur'],
-        levels: ['Bac +5', 'Bac +3', 'Bac +1'],
-        locationPostalCodes: ['75015'],
-        maxAmountPerDay: 42,
-        phones: ['+33'],
-        price: 15.27,
-        resumeNeeded: false,
-        status: ['En formation'],
-        trainingMethods: ['En présentiel'],
-        isResumeNeeded: true,
-      },
-      {
-        id: 1,
-        isActive: false,
-        actor: 'Actor 2',
-        ages: [],
-        countries: [],
-        courseStarts: [],
-        courses: [],
-        departments: [],
-        needs: [],
-        endBreakDate: null,
-        startBreakDate: null,
-        endDate: null,
-        startDate: null,
-        fundings: [],
-        handicaps: [],
-        title: null,
-        jobs: [],
-        levels: [],
-        locationPostalCodes: [],
-        maxAmountPerDay: 0,
-        phones: [],
-        price: 15,
-        resumeNeeded: true,
-        status: [],
-        trainingMethods: [],
-      },
-    ];
-  },
   methods: {
     onClickAdd() {
-      navigate('/admin/saveSystemUser');
+      navigate(`/${window.appGlobal.theme}/admin/saveMatching`);
     },
-    onClickEdit(item) {
-      navigate('/admin/saveSystemUser/{id}', {id: item.id});
+    onClickSave(updatedMatching, id) {
+      console.log('Matching : ', updatedMatching);
+      console.log('ID : ', id);
     },
-    onClickDeleteSelected() {
-      const ids = this.checkedItems.map((index) => {
-        return this.items?.data[index].id;
-      });
+    onClickDelete(id) {
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems(ids);
+          this.deleteItems(id);
         }
       });
     },
-    onClickDelete(item) {
-      const isSelectable = this.unselectableIds.findIndex(
-        (id) => id == item.id,
-      );
-      if (isSelectable > -1) {
-        return this.$toast.cannotDelete();
-      }
-      this.$refs.deleteDialog.showDialog().then((confirmation) => {
-        if (confirmation === 'ok') {
-          this.deleteItems([item.id]);
-        }
-      });
-    },
-    deleteItems(items) {
-      if (items instanceof Array) {
+    deleteItems(id) {
+      console.log('ID : ', id);
+      if (id) {
         this.isLoading = true;
         this.http
-          .deleteAll({
-            ids: items,
-          })
+          .delete(id)
           .then(() => {
             return this.$toast.deleteSuccess();
           })
           .then(() => {
             this.isLoading = false;
-            this.resetDataTable();
+            this.fetchData();
           });
       }
-    },
-    async resetDataTable() {
-      this.checkedItems = [];
-      await this.execQuery();
     },
     async filterItems() {
       await this.execQuery();
