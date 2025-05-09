@@ -16,6 +16,8 @@
         :driving-licenses="drivingLicenses"
         :matching-current="matching"
         :is-adding="true"
+        :departments-options="departments"
+        :is-loading="isLoading"
         @cancel="onClickCancel"
         @save="(updatedMatching) => onClickSave(updatedMatching)"
       />
@@ -80,6 +82,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    departments: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   setup() {
@@ -103,6 +109,7 @@ export default {
     },
     onClickSave(updatedMatching) {
       this.isLoading = true;
+      let matchingData = updatedMatching;
       if (
         !updatedMatching.startBreakDate ||
         !updatedMatching.startBreakDate.dayOfWeek ||
@@ -112,7 +119,7 @@ export default {
         !updatedMatching.startBreakDate.minutes ||
         updatedMatching.startBreakDate.minutes === null
       )
-        updatedMatching.startBreakDate = null;
+        matchingData.startBreakDate = null;
       if (
         !updatedMatching.endBreakDate ||
         !updatedMatching.endBreakDate.dayOfWeek ||
@@ -122,12 +129,35 @@ export default {
         !updatedMatching.endBreakDate.minutes ||
         updatedMatching.endBreakDate.minutes === null
       )
-        updatedMatching.endBreakDate = null;
-      this.http.create({...updatedMatching}).then((response) => {
-        this.isLoading = false;
-        this.$toast.saveSuccess();
-        navigate(`/${window.appGlobal.theme}/admin/matching`);
-      });
+        matchingData.endBreakDate = null;
+      if (updatedMatching.departments) {
+        matchingData.departments = updatedMatching.departments.map(
+          (department) => department.id,
+        );
+      }
+      if (updatedMatching.courses) {
+        matchingData.courses = updatedMatching.courses.reduce((map, course) => {
+          const courseId = !isNaN(parseInt(course.id))
+            ? parseInt(course.id)
+            : null;
+          if (courseId !== null) {
+            map[courseId] = course.label;
+          }
+          return map;
+        }, {});
+      }
+      this.http
+        .create({...matchingData})
+        .then(() => {
+          this.$toast.saveSuccess();
+          navigate(`/${window.appGlobal.theme}/admin/matching`);
+        })
+        .catch((error) => {
+          return this.$toast.unexpectedError(error.response.data.message);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
   },
 };

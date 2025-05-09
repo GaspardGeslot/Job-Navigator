@@ -52,7 +52,7 @@ export default {
     const {jsDateFormat, userDateFormat} = useDateFormat();
     const {locale} = useLocale();
 
-    const responseValidator = (status) => {
+    /*const responseValidator = (status) => {
       return (status >= 200 && status < 300) || status === 403;
     };
 
@@ -81,9 +81,9 @@ export default {
             });
           }
         });
-    };
+    };*/
 
-    const fetchEvents = async (fromDate, toDate) => {
+    /*const fetchEvents = async (fromDate, toDate) => {
       http
         .request({
           method: 'GET',
@@ -105,17 +105,17 @@ export default {
             });
           }
         });
-    };
+    };*/
 
     const onSelectYear = async ({year}) => {
       const now = new Date().setFullYear(year);
       const fromDate = formatDate(startOfYear(now), 'yyyy-MM-dd');
       const endDate = formatDate(endOfYear(now), 'yyyy-MM-dd');
-      fetchEvents(fromDate, endDate);
+      //fetchEvents(fromDate, endDate);
     };
 
     onBeforeMount(async () => {
-      await fetchWorkWeek();
+      //await fetchWorkWeek();
       await onSelectYear({year: new Date().getFullYear()});
     });
 
