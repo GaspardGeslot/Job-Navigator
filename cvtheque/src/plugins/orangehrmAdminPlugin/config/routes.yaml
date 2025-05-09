@@ -632,6 +632,13 @@ apiv2_admin_job_search:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_course_search:
+  path: /{theme}/api/v2/admin/course/search
+  controller: OrangeHRM\Admin\Controller\CourseController::search
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 ##########################
 #        Files
 ##########################

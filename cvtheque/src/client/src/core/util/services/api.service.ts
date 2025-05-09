@@ -28,6 +28,7 @@ import {ComponentInternalInstance, getCurrentInstance} from '@vue/runtime-core';
 import {reloadPage} from '@/core/util/helper/navigation';
 
 interface ErrorResponse {
+  message?: string;
   error: {
     message?: string;
   };
@@ -157,7 +158,9 @@ export class APIService {
         const $toast = vm?.appContext.config.globalProperties.$toast;
         if ($toast && error.code !== 'ECONNABORTED') {
           const response = error.response?.data;
-          $toast.unexpectedError(response?.error.message || null);
+          $toast.unexpectedError(
+            response?.error.message || response?.message || null,
+          );
         }
         return Promise.reject(error);
       },

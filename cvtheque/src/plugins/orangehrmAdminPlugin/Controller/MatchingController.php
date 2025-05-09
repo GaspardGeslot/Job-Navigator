@@ -9,15 +9,16 @@ use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class MatchingController extends AbstractVueController
 {
     use AuthUserTrait;
 
-    public const FILTER_TITLE = 'titleFilter';
-    public const FILTER_ACTOR = 'actorFilter';
-    public const FILTER_JOB = 'jobFilter';
-    public const FILTER_COURSE_ID = 'courseIdFilter';
+    public const FILTER_TITLE = 'title';
+    public const FILTER_ACTOR = 'actor';
+    public const FILTER_JOB = 'job';
+    public const FILTER_COURSE_ID = 'courseId';
 
     /**
      * @inheritDoc
@@ -100,12 +101,12 @@ class MatchingController extends AbstractVueController
                 'label' => $label
             ];
         }, $options['phoneNumbers'], array_keys($options['phoneNumbers']))));
-        $component->addProp(new Prop('actors', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+        $component->addProp(new Prop('departments', Prop::TYPE_ARRAY, array_map(function($id, $label) {
             return [
-                'id' => $index,
-                'label' => $label
+                'id' => $id,
+                'label' => $id . ' - ' . $label
             ];
-        }, $options['actors'], array_keys($options['actors']))));
+        }, array_keys($options['departments']), $options['departments'])));
 
         $this->setComponent($component);
     }
@@ -134,14 +135,45 @@ class MatchingController extends AbstractVueController
 
     public function create(Request $request): Response
     {
-        $matching = json_decode($request->getContent(), true);
-        $this->createMatching($this->getAuthUser()->getUserHedwigeToken(), $matching);
-        return new Response(json_encode(['message' => 'Matching created successfully']), Response::HTTP_OK);
+        try {
+            $matching = json_decode($request->getContent(), true);
+            $this->createMatching($this->getAuthUser()->getUserHedwigeToken(), $matching);
+            return new Response(json_encode(['message' => 'Matching created successfully']), Response::HTTP_OK);
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => 'Error creating matching'
+            ]), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function update(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $matching = json_decode($request->getContent(), true);
+            $this->updateMatching($this->getAuthUser()->getUserHedwigeToken(), $id, $matching);
+            return new Response(json_encode(['message' => 'Matching updated successfully']), Response::HTTP_OK);
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return new Response(json_encode([
+                'error' => true, 
+                'message' => 'Error updating matching'
+            ]), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function delete(Request $request): Response
     {
-        error_log('delete : ' . $request->attributes->get('id'));
         $id = $request->attributes->get('id');
         $this->deleteMatching($this->getAuthUser()->getUserHedwigeToken(), $id);
         return new Response(json_encode(['message' => 'Matching deleted successfully']), Response::HTTP_OK);
@@ -201,21 +233,32 @@ class MatchingController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         $data = json_encode($matching);
-        error_log('data : ' . $data);
 
-        try {
-            $url = "{$clientBaseUrl}/matching";
-            $response = $client->request('POST', $url, [
-                'headers' => [
-                    'Authorization' => $token,
-                    'Content-Type' => 'application/json',
-                ],
-                'body' => $data
-            ]);
-        } catch (\Exception $e) {   
-            error_log($e->getMessage());
-            throw new \Exception('Error creating matching');
-        }
+        $url = "{$clientBaseUrl}/matching";
+        $response = $client->request('POST', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => $data
+        ]);
+    }
+
+    private function updateMatching(string $token, int $id, array $matching): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        $data = json_encode($matching);
+
+        $url = "{$clientBaseUrl}/matching/{$id}";
+        $response = $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => $data
+        ]);
     }
 
     private function deleteMatching(string $token, int $id): void

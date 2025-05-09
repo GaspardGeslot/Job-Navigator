@@ -6,9 +6,9 @@ use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
-use OrangeHRM\Framework\Http\Response;
 use GuzzleHttp\Client;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseController extends AbstractVueController
 {
@@ -35,7 +35,6 @@ class CourseController extends AbstractVueController
 
     public function getAllCourses(Request $request) {
         $params = $request->query->all();
-        error_log('$params ' . json_encode($params));
         
         $queryParams = [];
         
@@ -52,7 +51,6 @@ class CourseController extends AbstractVueController
         $queryParams['page'] = !empty($params['page']) ? intval($params['page']) : 0;
         $queryParams['size'] = !empty($params['size']) ? intval($params['size']) : 20;
         
-        error_log('Query params before getCourses: ' . json_encode($queryParams));
         
         $courses = $this->getCourses($this->getAuthUser()->getUserHedwigeToken(), $queryParams);
         return new Response(
@@ -62,24 +60,50 @@ class CourseController extends AbstractVueController
         );
     }
 
+    public function search(Request $request): Response
+    {
+        $value = $request->query->get(
+            self::FILTER_VALUE
+        );
+        $courses = $this->searchCourses($this->getAuthUser()->getUserHedwigeToken(), $value);
+        $courses = array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $id . ' - ' . $label
+            ];
+        }, array_keys($courses), $courses);
+        return new Response(
+            json_encode($courses),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    private function searchCourses(string $token, ?string $value): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/course/search?value=" . urlencode($value);
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);    
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     private function getOptions(string $token): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
-        if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
-            return [];
-        }
-
-        if (!$token) {
-            error_log('No authentication token provided');
-            return [];
-        }
-
         try {
             $url = "{$clientBaseUrl}/actor/options";
-            error_log("Calling Hedwige API: {$url}");
             
             $response = $client->request('GET', $url, [
                 'headers' => [
@@ -87,13 +111,9 @@ class CourseController extends AbstractVueController
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
                 ]
-                // 'query' => [
-                //     'maxAmountPerDay' => 0
-                // ]
             ]);
             
             $data = json_decode($response->getBody(), true);
-            error_log("Hedwige API response: " . json_encode($data));
             
             $options = [];
             if (is_array($data)) {
@@ -106,7 +126,6 @@ class CourseController extends AbstractVueController
             }
             return $options;
         } catch (\Exception $e) {
-            error_log("Error calling Hedwige API: " . $e->getMessage());
             return [];
         }
     }
@@ -116,20 +135,8 @@ class CourseController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
-        if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
-            return [];
-        }
-
-        if (!$token) {
-            error_log('No authentication token provided');
-            return [];
-        }
-
         try {
             $url = "{$clientBaseUrl}/course";
-            error_log("Calling Hedwige API: {$url}");
-            error_log("Params received in getCourses: " . json_encode($params));
             
             $queryParams = [];
             
@@ -146,8 +153,6 @@ class CourseController extends AbstractVueController
             $queryParams['page'] = $params['page'];
             $queryParams['size'] = $params['size'];
             
-            error_log("Final query params: " . json_encode($queryParams));
-            
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => "Bearer " . $token,
@@ -158,7 +163,6 @@ class CourseController extends AbstractVueController
             ]);
             
             $data = json_decode($response->getBody(), true);
-            error_log("Hedwige API response: " . json_encode($data));
             
             $formattedData = [
                 'data' => [],
@@ -175,7 +179,6 @@ class CourseController extends AbstractVueController
 
             if (isset($data['content']) && is_array($data['content'])) {
                 foreach ($data['content'] as $course) {
-                    error_log("Processing course: " . json_encode($course));
                     $formattedCourse = [
                         'id' => $course['id'],
                         'name' => $course['title'],
@@ -188,14 +191,12 @@ class CourseController extends AbstractVueController
                         'utmCampaign' => $course['utmCampaign'] ?? '',
                         'thematic' => $course['thematic'] ?? ''
                     ];
-                    error_log("Formatted course: " . json_encode($formattedCourse));
                     $formattedData['data'][] = $formattedCourse;
                 }
             }
 
             return $formattedData;
         } catch (\Exception $e) {
-            error_log("Error calling Hedwige API: " . $e->getMessage());
             return [
                 'data' => [],
                 'meta' => [
@@ -216,19 +217,8 @@ class CourseController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
-        if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
-            return [];
-        }
-
-        if (!$id) {
-            error_log('Course ID is required');
-            return [];
-        }
-
         try {
             $url = "{$clientBaseUrl}/course/{$id}";
-            error_log("Calling Hedwige API for deletion: {$url}");
             
             $response = $client->request('DELETE', $url, [
                 'headers' => [
@@ -244,7 +234,6 @@ class CourseController extends AbstractVueController
                 ['Content-Type' => 'application/json']
             );
         } catch (\Exception $e) {
-            error_log("Error deleting course: " . $e->getMessage());
             return new Response(
                 json_encode(['error' => $e->getMessage()]),
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -257,24 +246,11 @@ class CourseController extends AbstractVueController
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        
-        if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
-            return new Response(
-                json_encode(['error' => 'Configuration error']),
-                Response::HTTP_INTERNAL_SERVER_ERROR,
-                ['Content-Type' => 'application/json']
-            );
-        }
 
         try {
             $data = json_decode($request->getContent(), true);
-            error_log('Received data: ' . json_encode($data));
-            error_log('$data["id"]: ' . $data['id']);
-            error_log('intval($data["id"] ?? 0): ' . intval($data['id'] ?? 0));
 
             $url = "{$clientBaseUrl}/course";
-            error_log("Calling Hedwige API for creation: {$url}");
             
             $body = [
                 'id' => intval($data['id'] ?? 0),
@@ -293,8 +269,6 @@ class CourseController extends AbstractVueController
                 'utmCampaign' => $data['utmCampaign'] ?? null
             ];
             
-            error_log("Request body: " . json_encode($body));
-            
             $response = $client->request('POST', $url, [
                 'headers' => [
                     'Authorization' => "Bearer " . $this->getAuthUser()->getUserHedwigeToken(),
@@ -310,7 +284,6 @@ class CourseController extends AbstractVueController
                 ['Content-Type' => 'application/json']
             );
         } catch (\Exception $e) {
-            error_log("Error creating course: " . $e->getMessage());
             return new Response(
                 json_encode(['error' => $e->getMessage()]),
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -325,7 +298,6 @@ class CourseController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
         if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
             return new Response(
                 json_encode(['error' => 'Configuration error']),
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -334,7 +306,6 @@ class CourseController extends AbstractVueController
         }
 
         if (!$id) {
-            error_log('Course ID is required');
             return new Response(
                 json_encode(['error' => 'Course ID is required']),
                 Response::HTTP_BAD_REQUEST,
@@ -344,7 +315,6 @@ class CourseController extends AbstractVueController
 
         try {
             $data = json_decode($request->getContent(), true);
-            error_log('Received data for update: ' . json_encode($data));
 
             $body = [
                 'title' => $data['title'] ?? null,
@@ -360,10 +330,7 @@ class CourseController extends AbstractVueController
                 'utmCampaign' => $data['utmCampaign'] ?? null
             ];
 
-            error_log('Request body for update: ' . json_encode($body));
-
             $url = "{$clientBaseUrl}/course/{$id}";
-            error_log("Calling Hedwige API for update: {$url}");
             
             $response = $client->request('PUT', $url, [
                 'headers' => [
@@ -380,7 +347,6 @@ class CourseController extends AbstractVueController
                 ['Content-Type' => 'application/json']
             );
         } catch (\Exception $e) {
-            error_log("Error updating course: " . $e->getMessage());
             return new Response(
                 json_encode(['error' => $e->getMessage()]),
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -388,4 +354,5 @@ class CourseController extends AbstractVueController
             );
         }
     }
+
 }

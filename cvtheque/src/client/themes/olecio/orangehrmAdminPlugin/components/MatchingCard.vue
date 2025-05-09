@@ -22,6 +22,7 @@
             :required="true"
             type="select"
             :options="actors"
+            :rules="rules.actor"
           />
         </oxd-grid-item>
       </oxd-grid>
@@ -31,6 +32,7 @@
             v-model="matching.title"
             :label="$t('recruitment.vacancy_name')"
             :disabled="!editable"
+            :rules="rules.title"
           />
         </oxd-grid-item>
         <oxd-grid-item>
@@ -39,6 +41,7 @@
             :label="$t('Prix')"
             :disabled="!editable"
             :required="true"
+            :rules="rules.price"
           />
         </oxd-grid-item>
       </oxd-grid>
@@ -48,6 +51,7 @@
             v-model="matching.maxAmountPerDay"
             :label="$t('Quantité maximale par jour')"
             :disabled="!editable"
+            :rules="rules.maxAmountPerDay"
           />
         </oxd-grid-item>
         <oxd-grid-item>
@@ -55,6 +59,7 @@
             v-model="matching.maxAmountPerMonth"
             :label="$t('Quantité maximale par mois')"
             :disabled="!editable"
+            :rules="rules.maxAmountPerMonth"
           />
         </oxd-grid-item>
       </oxd-grid>
@@ -154,173 +159,45 @@
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t('Métiers') }}
       </oxd-text>
-      <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-        <oxd-grid-item class="orangehrm-job-selection-criteria --span-column-2">
-          <oxd-input-field
-            v-model="selectedJobs"
-            type="autocomplete"
-            :label="$t('Métier')"
-            :clear="true"
-            :create-options="loadJobs"
-            :placeholder="$t('Rechercher un métier')"
-            :multiple="true"
-          />
-          <oxd-input-group>
-            <oxd-icon-button
-              style="margin-left: 1rem; margin-bottom: 1rem"
-              name="plus"
-              @click="addJob"
-            />
-          </oxd-input-group>
-        </oxd-grid-item>
-        <oxd-grid-item
-          v-for="(job, index) in matching.jobs"
-          :key="index"
-          class="orangehrm-job-selection-criteria-selected --offset-column-1"
-        >
-          <oxd-icon-button name="trash-fill" @click="onClickDeleteJob(job)" />
-          <oxd-text class="orangehrm-job-selection-criteria-name">
-            {{ job }}
-          </oxd-text>
-        </oxd-grid-item>
-      </oxd-grid>
+      <jobs-autocomplete
+        :jobs="matching.jobs"
+        @delete-job="onClickDeleteJob"
+        @add-jobs="addJobs"
+      />
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t('Formations') }}
       </oxd-text>
-      <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-        <oxd-grid-item class="orangehrm-job-selection-criteria --span-column-2">
-          <oxd-input-field v-model="course" :disabled="!editable" />
-          <oxd-input-group>
-            <oxd-icon-button
-              style="margin-left: 1rem; margin-bottom: 1rem"
-              name="plus"
-              @click="addCourse"
-            />
-          </oxd-input-group>
-        </oxd-grid-item>
-        <oxd-grid-item
-          v-for="(course, index) in matching.courses"
-          :key="index"
-          class="orangehrm-job-selection-criteria-selected --offset-column-1"
-        >
-          <oxd-icon-button
-            name="trash-fill"
-            @click="onClickDeleteCourse(course)"
-          />
-          <oxd-text class="orangehrm-job-selection-criteria-name">
-            {{ course }}
-          </oxd-text>
-        </oxd-grid-item>
-      </oxd-grid>
+      <courses-autocomplete
+        :courses="matching.courses"
+        :disabled="!editable"
+        @delete-course="onClickDeleteCourse"
+        @add-courses="addCourses"
+      />
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t('Ages') }}
       </oxd-text>
-      <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-        <oxd-grid-item
-          class="orangehrm-job-selection-criteria --span-column-2"
-          style="gap: 1rem"
-        >
-          <oxd-input-field
-            v-model="ageMin"
-            :disabled="!editable"
-            :label="$t('Age minimum (inclusif)')"
-          />
-          <oxd-input-field
-            v-model="ageMax"
-            :disabled="!editable"
-            :label="$t('Age maximum (exclusif)')"
-          />
-          <oxd-input-group>
-            <oxd-icon-button
-              style="margin-bottom: 1rem"
-              name="plus"
-              @click="addAge"
-            />
-          </oxd-input-group>
-        </oxd-grid-item>
-        <oxd-grid-item
-          v-for="(age, index) in matching.ages"
-          :key="index"
-          class="orangehrm-job-selection-criteria-selected --offset-column-1"
-        >
-          <oxd-icon-button name="trash-fill" @click="onClickDeleteAge(age)" />
-          <oxd-text class="orangehrm-job-selection-criteria-name">
-            {{ age.min }} - {{ age.max }}
-          </oxd-text>
-        </oxd-grid-item>
-      </oxd-grid>
+      <age-autocomplete
+        :ages="matching.ages"
+        :disabled="!editable"
+        @delete-age="onClickDeleteAge"
+        @add-age="addAgeRange"
+      />
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t('Localisation') }}
       </oxd-text>
-      <oxd-grid :cols="2" class="orangehrm-full-width-grid" style="gap: 1rem">
-        <oxd-grid>
-          <oxd-grid-item
-            class="orangehrm-job-selection-criteria"
-            style="gap: 1rem"
-          >
-            <oxd-input-field
-              v-model="department"
-              :disabled="!editable"
-              :label="$t('Département')"
-            />
-            <oxd-input-group>
-              <oxd-icon-button
-                style="margin-bottom: 1rem"
-                name="plus"
-                @click="addDepartment"
-              />
-            </oxd-input-group>
-          </oxd-grid-item>
-          <oxd-grid-item
-            v-for="(department, index) in matching.departments"
-            :key="index"
-            class="orangehrm-job-selection-criteria-selected --offset-column-1"
-          >
-            <oxd-icon-button
-              name="trash-fill"
-              @click="onClickDeleteDepartment(department)"
-            />
-            <oxd-text class="orangehrm-job-selection-criteria-name">
-              {{ department }}
-            </oxd-text>
-          </oxd-grid-item>
-        </oxd-grid>
-        <oxd-grid>
-          <oxd-grid-item
-            class="orangehrm-job-selection-criteria"
-            style="gap: 1rem"
-          >
-            <oxd-input-field
-              v-model="locationPostalCode"
-              :disabled="!editable"
-              :label="$t('Code postal')"
-            />
-            <oxd-input-group>
-              <oxd-icon-button
-                style="margin-bottom: 1rem"
-                name="plus"
-                @click="addLocationPostalCode"
-              />
-            </oxd-input-group>
-          </oxd-grid-item>
-          <oxd-grid-item
-            v-for="(locationPostalCode, index) in matching.locationPostalCodes"
-            :key="index"
-            class="orangehrm-job-selection-criteria-selected"
-          >
-            <oxd-icon-button
-              name="trash-fill"
-              @click="onClickDeleteLocationPostalCode(locationPostalCode)"
-            />
-            <oxd-text class="orangehrm-job-selection-criteria-name">
-              {{ locationPostalCode }}
-            </oxd-text>
-          </oxd-grid-item>
-        </oxd-grid>
-      </oxd-grid>
+      <location-autocomplete
+        :departments="matching.departments"
+        :location-postal-codes="matching.locationPostalCodes"
+        :disabled="!editable"
+        :departments-options="departmentsOptions"
+        @delete-department="onClickDeleteDepartment"
+        @add-department="addDepartment"
+        @delete-location-postal-code="onClickDeleteLocationPostalCode"
+        @add-location-postal-code="addLocationPostalCode"
+      />
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t('Pays') }}
@@ -544,6 +421,20 @@
 import {OxdSwitchInput} from '@ohrm/oxd';
 import {APIService} from '@/core/util/services/api.service';
 import BackButton from '@/core/components/buttons/BackButton';
+import JobsAutocomplete from '@/core/components/inputs/JobsAutocomplete';
+import CoursesAutocomplete from '@/core/components/inputs/CoursesAutocomplete';
+import AgeAutocomplete from '@/core/components/inputs/AgeAutocomplete';
+import LocationAutocomplete from '@/core/components/inputs/LocationAutocomplete';
+import {
+  required,
+  numericOnly,
+  digitsOnlyWithTwoDecimalPoints,
+  shouldNotExceedCharLength,
+  beforeDate,
+  afterDate,
+  validDateFormat,
+} from '@/core/util/validation/rules';
+import usei18n from '@/core/util/composable/usei18n';
 
 const MatchingModel = {
   id: null,
@@ -611,6 +502,10 @@ export default {
   components: {
     'oxd-switch-input': OxdSwitchInput,
     'back-button': BackButton,
+    'jobs-autocomplete': JobsAutocomplete,
+    'courses-autocomplete': CoursesAutocomplete,
+    'age-autocomplete': AgeAutocomplete,
+    'location-autocomplete': LocationAutocomplete,
   },
 
   props: {
@@ -670,27 +565,38 @@ export default {
       type: Boolean,
       default: false,
     },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    departmentsOptions: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup() {
     const httpJob = new APIService(
       window.appGlobal.baseUrl,
       `${window.appGlobal.theme}/api/v2/admin/job/search`,
     );
+    const {$t} = usei18n();
+    const rules = {
+      actor: [required],
+      title: [shouldNotExceedCharLength(100)],
+      price: [digitsOnlyWithTwoDecimalPoints],
+      maxAmountPerDay: [numericOnly],
+      maxAmountPerMonth: [numericOnly],
+      postalCode: [numericOnly],
+    };
     return {
       httpJob,
+      rules,
     };
   },
   data() {
     return {
-      isLoading: false,
       editable: true,
       matching: {...MatchingModel},
-      selectedJobs: [],
-      ageMin: null,
-      ageMax: null,
-      department: null,
-      locationPostalCode: null,
-      course: null,
     };
   },
   watch: {
@@ -723,13 +629,22 @@ export default {
     onClickDeleteJob(job) {
       this.matching.jobs = this.matching.jobs.filter((j) => j !== job);
     },
+    addJobs(newJobs) {
+      this.matching.jobs = [...this.matching.jobs, ...newJobs];
+    },
     onClickDeleteAge(age) {
       this.matching.ages = this.matching.ages.filter((a) => a !== age);
+    },
+    addAgeRange(age) {
+      this.matching.ages.push(age);
     },
     onClickDeleteDepartment(department) {
       this.matching.departments = this.matching.departments.filter(
         (d) => d !== department,
       );
+    },
+    addDepartment(department) {
+      this.matching.departments.push(department);
     },
     onClickDeleteLocationPostalCode(locationPostalCode) {
       this.matching.locationPostalCodes =
@@ -737,51 +652,17 @@ export default {
           (l) => l !== locationPostalCode,
         );
     },
+    addLocationPostalCode(postalCode) {
+      this.matching.locationPostalCodes.push(postalCode);
+    },
     onClickDeleteCourse(course) {
       this.matching.courses = this.matching.courses.filter((c) => c !== course);
     },
+    addCourses(courses) {
+      this.matching.courses.push(...courses);
+    },
     onClickDelete() {
       this.$emit('delete', this.matching.id);
-    },
-    addJob() {
-      for (const job of this.selectedJobs)
-        if (!this.matching.jobs.includes(job.label))
-          this.matching.jobs.push(job.label);
-      this.selectedJobs = [];
-    },
-    addAge() {
-      if (this.ageMin === null && this.ageMax === null) return;
-      if (this.ageMin === this.ageMax) return;
-      if (this.ageMin !== null && isNaN(this.ageMin)) return;
-      if (this.ageMax !== null && isNaN(this.ageMax)) return;
-      const ageMin = this.ageMin === null ? null : parseInt(this.ageMin);
-      const ageMax = this.ageMax === null ? null : parseInt(this.ageMax);
-      if (ageMin !== null && ageMax !== null && ageMin > ageMax) return;
-      let includes = false;
-      for (const age of this.matching.ages)
-        if (age.min === ageMin && age.max === ageMax) {
-          includes = true;
-          break;
-        }
-      if (!includes) this.matching.ages.push({min: ageMin, max: ageMax});
-      this.ageMin = null;
-      this.ageMax = null;
-    },
-    addDepartment() {
-      if (!this.matching.departments.includes(this.department))
-        this.matching.departments.push(this.department);
-      this.department = null;
-    },
-    addLocationPostalCode() {
-      if (!this.matching.locationPostalCodes.includes(this.locationPostalCode))
-        this.matching.locationPostalCodes.push(this.locationPostalCode);
-      this.locationPostalCode = null;
-    },
-    addCourse() {
-      if (!this.matching.courses.includes(this.course)) {
-        this.matching.courses.push(this.course);
-      }
-      this.course = null;
     },
     loadJobs(searchParam) {
       return new Promise((resolve) => {
@@ -799,7 +680,6 @@ export default {
       });
     },
     fetchMatching() {
-      this.isLoading = true;
       this.matching.id = this.matchingCurrent.id;
       this.matching.title = this.matchingCurrent.title;
       this.matching.isActive = this.matchingCurrent.isActive;
@@ -831,11 +711,25 @@ export default {
       this.matching.isResumeNeeded = this.matchingCurrent.isResumeNeeded;
       this.matching.jobs = this.matchingCurrent.jobs;
       this.matching.ages = this.matchingCurrent.ages;
-      this.matching.departments = this.matchingCurrent.departments;
+      this.matching.departments = [];
+      for (const department of this.matchingCurrent.departments) {
+        const departmentOption = this.departmentsOptions.find(
+          (d) => String(d.id) === String(department),
+        );
+        this.matching.departments.push({
+          id: departmentOption.id,
+          label: departmentOption.label,
+        });
+      }
+      this.matching.courses = [];
+      for (const [id, label] of Object.entries(this.matchingCurrent.courses)) {
+        this.matching.courses.push({
+          id: id,
+          label: id + ' - ' + label,
+        });
+      }
       this.matching.locationPostalCodes =
         this.matchingCurrent.locationPostalCodes;
-      this.matching.courses = this.matchingCurrent.courses;
-      this.isLoading = false;
     },
   },
 };

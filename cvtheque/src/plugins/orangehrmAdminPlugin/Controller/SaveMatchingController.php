@@ -95,12 +95,12 @@ class SaveMatchingController extends AbstractVueController
                 'label' => $label
             ];
         }, $options['phoneNumbers'], array_keys($options['phoneNumbers']))));
-        $component->addProp(new Prop('actors', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+        $component->addProp(new Prop('departments', Prop::TYPE_ARRAY, array_map(function($id, $label) {
             return [
-                'id' => $index,
-                'label' => $label
+                'id' => $id,
+                'label' => $id . ' - ' . $label
             ];
-        }, $options['actors'], array_keys($options['actors']))));
+        }, array_keys($options['departments']), $options['departments'])));
 
         $this->setComponent($component);
     }
