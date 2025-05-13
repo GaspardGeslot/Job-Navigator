@@ -1,7 +1,7 @@
 <template>
   <div class="orangehrm-background-container">
     <div class="orangehrm-paper-container">
-      <div class="orangehrm-left-header-container" v-if="!isAdding">
+      <div v-if="!isAdding" class="orangehrm-left-header-container">
         <oxd-button
           :label="$t('general.add')"
           icon-name="plus"
@@ -9,7 +9,7 @@
           @click="onClickAdd"
         />
       </div>
-      <div class="orangehrm-left-header-container" v-else>
+      <div v-else class="orangehrm-left-header-container">
         <oxd-button
           :label="$t('Annuler')"
           display-type="ghost"
@@ -81,7 +81,7 @@ export default {
 
   setup() {
     const {noRecordsFound, error} = useToast();
-    const {sortDefinition, sortField, sortOrder, onSort} = useSort({
+    const {sortDefinition, sortOrder, onSort} = useSort({
       sortDefinition: defaultSortOrder,
     });
     const http = new APIService(

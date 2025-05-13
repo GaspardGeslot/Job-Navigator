@@ -35,16 +35,12 @@
   opacity: 1;
   transition: 0.1s all 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group1
-  .orangehrm-heart-icon-oval1 {
+.orangehrm-like-animation .orangehrm-heart-icon-group1 .orangehrm-heart-icon-oval1 {
   transform: scale(0) translate(0, -30px);
   transform-origin: 0 0 0;
   transition: 0.5s transform 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group1
-  .orangehrm-heart-icon-oval2 {
+.orangehrm-like-animation .orangehrm-heart-icon-group1 .orangehrm-heart-icon-oval2 {
   transform: scale(0) translate(10px, -50px);
   transform-origin: 0 0 0;
   transition: 1.5s transform 0.3s;
@@ -53,16 +49,12 @@
   opacity: 1;
   transition: 0.1s all 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group2
-  .orangehrm-heart-icon-oval1 {
+.orangehrm-like-animation .orangehrm-heart-icon-group2 .orangehrm-heart-icon-oval1 {
   transform: scale(0) translate(30px, -15px);
   transform-origin: 0 0 0;
   transition: 0.5s transform 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group2
-  .orangehrm-heart-icon-oval2 {
+.orangehrm-like-animation .orangehrm-heart-icon-group2 .orangehrm-heart-icon-oval2 {
   transform: scale(0) translate(60px, -15px);
   transform-origin: 0 0 0;
   transition: 1.5s transform 0.3s;
@@ -71,16 +63,12 @@
   opacity: 1;
   transition: 0.1s all 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group3
-  .orangehrm-heart-icon-oval1 {
+.orangehrm-like-animation .orangehrm-heart-icon-group3 .orangehrm-heart-icon-oval1 {
   transform: scale(0) translate(30px, 0px);
   transform-origin: 0 0 0;
   transition: 0.5s transform 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group3
-  .orangehrm-heart-icon-oval2 {
+.orangehrm-like-animation .orangehrm-heart-icon-group3 .orangehrm-heart-icon-oval2 {
   transform: scale(0) translate(60px, 10px);
   transform-origin: 0 0 0;
   transition: 1.5s transform 0.3s;
@@ -89,16 +77,12 @@
   opacity: 1;
   transition: 0.1s all 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group4
-  .orangehrm-heart-icon-oval1 {
+.orangehrm-like-animation .orangehrm-heart-icon-group4 .orangehrm-heart-icon-oval1 {
   transform: scale(0) translate(30px, 15px);
   transform-origin: 0 0 0;
   transition: 0.5s transform 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group4
-  .orangehrm-heart-icon-oval2 {
+.orangehrm-like-animation .orangehrm-heart-icon-group4 .orangehrm-heart-icon-oval2 {
   transform: scale(0) translate(40px, 50px);
   transform-origin: 0 0 0;
   transition: 1.5s transform 0.3s;
@@ -107,16 +91,12 @@
   opacity: 1;
   transition: 0.1s all 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group5
-  .orangehrm-heart-icon-oval1 {
+.orangehrm-like-animation .orangehrm-heart-icon-group5 .orangehrm-heart-icon-oval1 {
   transform: scale(0) translate(-10px, 20px);
   transform-origin: 0 0 0;
   transition: 0.5s transform 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group5
-  .orangehrm-heart-icon-oval2 {
+.orangehrm-like-animation .orangehrm-heart-icon-group5 .orangehrm-heart-icon-oval2 {
   transform: scale(0) translate(-60px, 30px);
   transform-origin: 0 0 0;
   transition: 1.5s transform 0.3s;
@@ -125,16 +105,12 @@
   opacity: 1;
   transition: 0.1s all 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group6
-  .orangehrm-heart-icon-oval1 {
+.orangehrm-like-animation .orangehrm-heart-icon-group6 .orangehrm-heart-icon-oval1 {
   transform: scale(0) translate(-30px, 0px);
   transform-origin: 0 0 0;
   transition: 0.5s transform 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group6
-  .orangehrm-heart-icon-oval2 {
+.orangehrm-like-animation .orangehrm-heart-icon-group6 .orangehrm-heart-icon-oval2 {
   transform: scale(0) translate(-60px, -5px);
   transform-origin: 0 0 0;
   transition: 1.5s transform 0.3s;
@@ -143,16 +119,12 @@
   opacity: 1;
   transition: 0.1s all 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group7
-  .orangehrm-heart-icon-oval1 {
+.orangehrm-like-animation .orangehrm-heart-icon-group7 .orangehrm-heart-icon-oval1 {
   transform: scale(0) translate(-30px, -15px);
   transform-origin: 0 0 0;
   transition: 0.5s transform 0.3s;
 }
-.orangehrm-like-animation
-  .orangehrm-heart-icon-group7
-  .orangehrm-heart-icon-oval2 {
+.orangehrm-like-animation .orangehrm-heart-icon-group7 .orangehrm-heart-icon-oval2 {
   transform: scale(0) translate(-55px, -30px);
   transform-origin: 0 0 0;
   transition: 1.5s transform 0.3s;
@@ -220,4 +192,4 @@
   100% {
     transform: scale(1);
   }
-} /*# sourceMappingURL=post-like-button.css.map */
+}/*# sourceMappingURL=post-like-button.css.map */

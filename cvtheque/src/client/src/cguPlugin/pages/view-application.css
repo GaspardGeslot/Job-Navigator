@@ -133,10 +133,7 @@
 @media screen and (min-width: 1920px) {
   .orangehrm-buzz-layout {
     gap: 2rem;
-    grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(
-        0,
-        375px
-      );
+    grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(0, 375px);
   }
 }
 
@@ -279,4 +276,4 @@
   .bot_button {
     margin-left: 4rem;
   }
-} /*# sourceMappingURL=view-application.css.map */
+}/*# sourceMappingURL=view-application.css.map */

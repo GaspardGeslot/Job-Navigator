@@ -5,9 +5,6 @@
 @media screen and (min-width: 1920px) {
   .orangehrm-buzz-layout {
     gap: 2rem;
-    grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(
-        0,
-        375px
-      );
+    grid-template-columns: minmax(0, 375px) minmax(240px, 640px) minmax(0, 375px);
   }
-} /*# sourceMappingURL=view-buzz.css.map */
+}/*# sourceMappingURL=view-buzz.css.map */

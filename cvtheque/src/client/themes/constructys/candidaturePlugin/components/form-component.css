@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Telegram:wght@400;700&display=swap");
 .bg-white {
   background-color: white;
 }
@@ -22,7 +22,7 @@
 
 .formTitle {
   color: black;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 900 !important;
   font-size: 1.875rem;
   line-height: 2.25rem;
@@ -47,7 +47,7 @@
 }
 
 p {
-  font-family: 'Telegraf', sans-serif;
+  font-family: "Telegraf", sans-serif;
 }
 
 .checkbox-item {
@@ -55,42 +55,6 @@ p {
   align-items: center;
 }
 
-/*
-.custom-input {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid #767676;
-    outline: none;
-    transition: background-color 0.3s;
-    position: relative;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    flex-shrink: 0;
-  }
-  .custom-input[type='checkbox']:checked {
-    background-color: #1069b3;
-    border-color: #1069b3;
-    border-width: 2px;
-  }
-
-  .custom-input[type='checkbox']:checked::before {
-    content: '';
-    display: block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #1069b3;
-    border: 1.5px solid white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-*/
 .radio-group {
   display: flex;
   flex-direction: row;
@@ -102,7 +66,7 @@ p {
 }
 
 #review {
-  height: 6rem;
+  height: 12rem;
   margin-bottom: 0.5rem;
 }
 
@@ -126,19 +90,21 @@ p {
 
 .checkbox-container {
   display: flex;
+  align-items: center;
 }
 
-.checkbox-container input[type='checkbox'] {
+.checkbox-container input[type=checkbox] {
   margin-right: 0.5rem;
 }
 
 .AcceptanceofTermsText {
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   line-height: 0.8rem;
 }
 
 .submit-block {
-  margin-top: 2rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
   height: 3rem;
 }
 
@@ -167,6 +133,11 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
+}
+.mainSubmitButton:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 
 .mainSubmitButtonTxt {
@@ -192,7 +163,12 @@ p {
   justify-content: center;
   align-items: center;
   border-radius: 1.5rem;
-  font-family: 'Telegraf', sans-serif;
+  font-family: "Telegraf", sans-serif;
+  cursor: pointer;
+}
+.submitButton:disabled {
+  opacity: 10%;
+  cursor: not-allowed;
 }
 
 .submit-block {
@@ -204,14 +180,14 @@ p {
   font-size: 0.75rem;
   line-height: 1rem;
   /* padding-top: 0.15rem;
-  padding-bottom: 0.15rem; */
+    padding-bottom: 0.15rem; */
   color: red;
 }
 
 .formBlockLayout {
   background-color: white;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1.5rem;
   padding-left: 1.75rem;
   padding-right: 1.75rem;
   display: flex;
@@ -260,6 +236,13 @@ p {
   margin-top: 1.75rem;
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
+}
+
+.formBlock7 > .submitButton {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 
 .blackPlaceholder::-moz-placeholder {
@@ -317,11 +300,309 @@ p {
   }
   .formTitle {
     color: black;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 900 !important;
     font-size: 1.5rem;
     line-height: 2rem;
     margin-top: 0rem;
     margin-bottom: 0rem;
   }
-} /*# sourceMappingURL=form-component.css.map */
+}
+.candidature-form select, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]), .candidature-form textarea {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background-color: white;
+  font-family: "Telegraf", sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  outline: none;
+}
+.candidature-form select:hover, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]):hover, .candidature-form textarea:hover {
+  border-color: #cbd5e0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+.candidature-form select:focus, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]):focus, .candidature-form textarea:focus {
+  border-color: #e54021;
+  box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+}
+.candidature-form select::-moz-placeholder, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit])::-moz-placeholder, .candidature-form textarea::-moz-placeholder {
+  color: #a0aec0;
+  opacity: 1;
+}
+.candidature-form select::placeholder, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit])::placeholder, .candidature-form textarea::placeholder {
+  color: #a0aec0;
+  opacity: 1;
+}
+.candidature-form select:disabled, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]):disabled, .candidature-form textarea:disabled {
+  background-color: #f7fafc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.candidature-form select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+.candidature-form select:focus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e54021' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+.candidature-form select option {
+  padding: 12px;
+  font-size: 0.95rem;
+}
+.candidature-form select option[value=""][disabled] {
+  color: #a0aec0;
+}
+.candidature-form select:required, .candidature-form input:required {
+  padding-right: 64px;
+}
+.candidature-form .error-input {
+  border-color: #e53e3e !important;
+  background-color: #fff5f5;
+}
+.candidature-form .error-input:focus {
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+.candidature-form .success-input {
+  border-color: #48bb78 !important;
+}
+.candidature-form .success-input:focus {
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
+}
+.candidature-form .input-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.candidature-form .input-group input, .candidature-form .input-group select {
+  padding-top: 20px;
+  padding-bottom: 4px;
+}
+.candidature-form .input-group label {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: 0.95rem;
+  color: #a0aec0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+.candidature-form .input-group input:not(:-moz-placeholder-shown) ~ label {
+  top: 8px;
+  font-size: 0.75rem;
+  color: #e54021;
+}
+.candidature-form .input-group input:focus ~ label,
+.candidature-form .input-group input:not(:placeholder-shown) ~ label,
+.candidature-form .input-group select:focus ~ label,
+.candidature-form .input-group select:not([value=""]) ~ label {
+  top: 8px;
+  font-size: 0.75rem;
+  color: #e54021;
+}
+@media screen and (max-width: 450px) {
+  .candidature-form select, .candidature-form input:not([type=checkbox]):not([type=radio]):not([type=submit]), .candidature-form textarea {
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+  .candidature-form select {
+    padding-right: 36px;
+    background-size: 14px;
+  }
+  .candidature-form .input-group label {
+    font-size: 14px;
+  }
+  .candidature-form .input-group input:not(:-moz-placeholder-shown) ~ label {
+    font-size: 12px;
+  }
+  .candidature-form .input-group input:focus ~ label,
+  .candidature-form .input-group input:not(:placeholder-shown) ~ label,
+  .candidature-form .input-group select:focus ~ label,
+  .candidature-form .input-group select:not([value=""]) ~ label {
+    font-size: 12px;
+  }
+}
+.candidature-form .radio-group {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+.candidature-form .radio-group .radio-item {
+  position: relative;
+}
+.candidature-form .radio-group .radio-item input[type=radio] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: inline-block;
+  color: #1b1f23;
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 50%;
+  background: white;
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio] + label:after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+.candidature-form .radio-group .radio-item input[type=radio]:checked + label:before {
+  border-color: #e54021;
+  background: #e54021;
+}
+.candidature-form .radio-group .radio-item input[type=radio]:checked + label:after {
+  opacity: 1;
+  transform: scale(0.6);
+}
+.candidature-form .radio-group .radio-item input[type=radio]:focus + label:before {
+  box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+}
+.candidature-form .radio-group .radio-item input[type=radio]:hover:not(:checked) + label:before {
+  border-color: #cbd5e0;
+}
+.candidature-form .file-select {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  border: 2px dashed #e2e8f0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select:hover {
+  border-color: #e54021;
+  background-color: rgba(229, 64, 33, 0.02);
+}
+.candidature-form .file-select .select-button {
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #1b1f23;
+  font-size: 0.9rem;
+}
+.candidature-form .file-select .select-button svg {
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button svg path {
+  transition: all 0.3s ease;
+}
+.candidature-form .file-select .select-button:hover svg path {
+  stroke: #e54021;
+}
+.candidature-form .file-select input[type=file] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.candidature-form .password-input-wrapper {
+  position: relative;
+}
+.candidature-form .password-input-wrapper input[type=password],
+.candidature-form .password-input-wrapper input[type=text] {
+  padding-right: 45px;
+}
+.candidature-form .password-input-wrapper .password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #718096;
+  transition: color 0.2s ease;
+}
+.candidature-form .password-input-wrapper .password-toggle:hover {
+  color: #e54021;
+}
+.candidature-form .password-input-wrapper .password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+.candidature-form .switch-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+.candidature-form .switch-wrapper input[type=checkbox] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.candidature-form .switch-wrapper input[type=checkbox]:checked + .switch-slider {
+  background-color: #e54021;
+}
+.candidature-form .switch-wrapper input[type=checkbox]:checked + .switch-slider:before {
+  transform: translateX(26px);
+}
+.candidature-form .switch-wrapper input[type=checkbox]:focus + .switch-slider {
+  box-shadow: 0 0 0 3px rgba(229, 64, 33, 0.1);
+}
+.candidature-form .switch-wrapper .switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e2e8f0;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.candidature-form .switch-wrapper .switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}/*# sourceMappingURL=form-component.css.map */

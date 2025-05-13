@@ -511,6 +511,41 @@ apiv2_admin_companies_matchings_count:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_course_actor_options:
+  path: /{theme}/api/v2/admin/actor/options
+  controller: OrangeHRM\Admin\Controller\CourseController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_courses:
+  path: /{theme}/api/v2/admin/course
+  controller: OrangeHRM\Admin\Controller\CourseController::getAllCourses
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_courses_create:
+  path: /{theme}/api/v2/admin/course
+  controller: OrangeHRM\Admin\Controller\CourseController::create
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_courses_update:
+  path: /{theme}/api/v2/admin/course/{id}
+  controller: OrangeHRM\Admin\Controller\CourseController::update
+  methods: [ PUT ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_courses_delete:
+  path: /{theme}/api/v2/admin/course/{id}
+  controller: OrangeHRM\Admin\Controller\CourseController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
 apiv2_admin_course_start:
   path: /{theme}/api/v2/admin/course-start
   controller: OrangeHRM\Admin\Controller\CourseStartController::getAll
@@ -951,6 +986,13 @@ admin_matching_configuration:
 admin_course_start:
   path: /{theme}/admin/viewCourseStarts
   controller: OrangeHRM\Admin\Controller\CourseStartController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_course_list:
+  path: /{theme}/admin/viewCourses
+  controller: OrangeHRM\Admin\Controller\CourseController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio

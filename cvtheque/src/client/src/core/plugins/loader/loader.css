@@ -1,11 +1,9 @@
 .orangehrm-loader {
   z-index: 1100 !important;
 }
-.orangehrm-loader-fade-enter-active,
-.orangehrm-loader-fade-leave-active {
+.orangehrm-loader-fade-enter-active, .orangehrm-loader-fade-leave-active {
   transition: opacity 0.25s ease;
 }
-.orangehrm-loader-fade-enter-from,
-.orangehrm-loader-fade-leave-to {
+.orangehrm-loader-fade-enter-from, .orangehrm-loader-fade-leave-to {
   opacity: 0;
-} /*# sourceMappingURL=loader.css.map */
+}/*# sourceMappingURL=loader.css.map */
