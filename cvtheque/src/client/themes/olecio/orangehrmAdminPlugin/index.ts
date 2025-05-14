@@ -75,6 +75,7 @@ import SaveMatching from './pages/matching/SaveMatching.vue';
 import CourseStart from './pages/courseStart/CourseStart.vue';
 import viewCourses from './pages/courses/viewCourses.vue';
 import viewOF from './pages/of/viewOF.vue';
+import Leads from './pages/reporting/Leads.vue';
 
 export default {
   'job-title-list': JobTitle,
@@ -137,4 +138,5 @@ export default {
   'course-start-list': CourseStart,
   'course-list': viewCourses,
   'of-list': viewOF,
+  'leads-list': Leads,
 };
