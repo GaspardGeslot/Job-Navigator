@@ -576,6 +576,13 @@ apiv2_admin_course_search:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_leads:
+  path: /{theme}/api/v2/admin/leads
+  controller: OrangeHRM\Admin\Controller\LeadsController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 ##########################
 #        Files
 ##########################
@@ -1016,6 +1023,13 @@ admin_candidates:
 admin_companies:
   path: /{theme}/admin/viewCompanies
   controller: OrangeHRM\Admin\Controller\CompaniesController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_leads:
+  path: /{theme}/admin/viewLeads
+  controller: OrangeHRM\Admin\Controller\LeadsController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
