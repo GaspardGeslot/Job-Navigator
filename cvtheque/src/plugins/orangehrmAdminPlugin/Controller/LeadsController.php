@@ -21,6 +21,7 @@ class LeadsController extends AbstractVueController
     public const FILTER_ONLY_DUPLICATE = 'onlyDuplicate';
     public const FILTER_ONLY_MATCHING_NOT_AVAILABLE = 'onlyMatchingNotAvailable';
     public const FILTER_ACTOR = 'actor';
+    public const FILTER_JOBS = 'jobs';
 
     /**
      * @inheritDoc
@@ -49,7 +50,8 @@ class LeadsController extends AbstractVueController
         $onlyDuplicate = $request->query->get(self::FILTER_ONLY_DUPLICATE);
         $onlyMatchingNotAvailable = $request->query->get(self::FILTER_ONLY_MATCHING_NOT_AVAILABLE);
         $actor = $request->query->get(self::FILTER_ACTOR);
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $onlyBillable, $onlyDuplicate, $onlyMatchingNotAvailable, $actor);
+        $jobs = $request->query->get(self::FILTER_JOBS);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $onlyBillable, $onlyDuplicate, $onlyMatchingNotAvailable, $actor, $jobs);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -57,7 +59,30 @@ class LeadsController extends AbstractVueController
         );
     }
 
-    public function getLeads(string $token, string $from, string $to, string $onlyBillable, string $onlyDuplicate, string $onlyMatchingNotAvailable, ?string $actor): array
+    public function reprocess(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $this->reprocessLead($this->getAuthUser()->getUserHedwigeToken(), $id);
+            return new Response(
+                json_encode(['message' => 'Lead reprocessed successfully']),
+                Response::HTTP_OK,
+                    ['Content-Type' => 'application/json']
+                );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => 'Error reprocessing lead'
+            ]), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getLeads(string $token, string $from, string $to, string $onlyBillable, string $onlyDuplicate, string $onlyMatchingNotAvailable, ?string $actor, ?array $jobs): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -76,6 +101,8 @@ class LeadsController extends AbstractVueController
                 $url .= 'onlyMatchingNotAvailable=' . urlencode($onlyMatchingNotAvailable) . '&';
             if ($actor != null && $actor !== '')
                 $url .= 'actor=' . urlencode($actor) . '&';
+            if ($jobs != null && $jobs !== [])
+                $url .= 'jobs=' . urlencode(implode(',', $jobs)) . '&';
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
@@ -103,5 +130,19 @@ class LeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function reprocessLead(string $token, int $id): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        $url = "{$clientBaseUrl}/lead/{$id}";
+        $response = $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ]
+        ]);
     }
 }

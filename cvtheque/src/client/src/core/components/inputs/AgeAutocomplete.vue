@@ -78,6 +78,8 @@ export default {
     };
   },
 
+  emits: ['delete-age', 'add-age'],
+
   methods: {
     onClickDeleteAge(age) {
       this.$emit('delete-age', age);

@@ -32,6 +32,14 @@
                 :options="actors"
               />
             </oxd-grid-item>
+            <oxd-grid-item>
+              <job-autocomplete
+                v-model="jobsFilter"
+                :multiple="true"
+                @update-jobs="updateJobs"
+                ref="jobAutocomplete"
+              />
+            </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
         <oxd-form-row>
@@ -112,13 +120,25 @@
         <table class="orangehrm-custom-table">
           <thead>
             <tr>
+              <th class="reload-column"></th>
               <th v-for="(header, index) in tableHeaders" :key="index">
                 {{ header.label }}
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in tableData" :key="index">
+            <tr
+              v-for="(item, index) in tableData"
+              :key="index"
+              :class="{'highlighted-row': selectedRow === index}"
+            >
+              <td class="reload-column">
+                <oxd-icon-button
+                  name="arrow-clockwise"
+                  class="reload-button"
+                  @click.stop="reloadLead(item.id)"
+                />
+              </td>
               <td
                 v-for="(header, headerIndex) in tableHeaders"
                 :key="headerIndex"
@@ -134,12 +154,20 @@
               </td>
             </tr>
             <tr v-if="tableData.length === 0">
-              <td colspan="37">{{ $t('general.no_records_found') }}</td>
+              <td colspan="38">{{ $t('general.no_records_found') }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+    <confirmation-dialog
+      ref="confirmationDialog"
+      :title="$t('Confirmer le retraitement')"
+      :subtitle="$t('Êtes-vous sûrs de vouloir retraiter ce lead ?')"
+      :confirm-label="$t('Confirmer')"
+      :cancel-label="$t('Annuler')"
+      :confirm-button-type="'secondary'"
+    />
   </div>
 </template>
 <script>
@@ -153,13 +181,17 @@ import {
 } from '@/core/util/validation/rules';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import useToast from '@/core/util/composable/useToast';
+import JobAutocomplete from '@/core/components/inputs/JobAutocomplete.vue';
 import {APIService} from '@/core/util/services/api.service';
 import {OxdSpinner} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
+import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog.vue';
 
 export default {
   components: {
     'oxd-loading-spinner': OxdSpinner,
+    'job-autocomplete': JobAutocomplete,
+    'confirmation-dialog': ConfirmationDialog,
   },
   props: {
     actors: {
@@ -169,6 +201,7 @@ export default {
   },
   setup() {
     const {$t} = usei18n();
+    const jobAutocomplete = ref(null);
     const startDateFilter = ref(
       formatDate(
         new Date(new Date().setMonth(new Date().getMonth() - 1)),
@@ -178,6 +211,7 @@ export default {
     const endDateFilter = ref(formatDate(new Date(), 'dd-MM-yyyy'));
     const statusFilter = ref(null);
     const actorFilter = ref(null);
+    const jobsFilter = ref([]);
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
@@ -186,6 +220,7 @@ export default {
     const itemsPerPage = 50;
     const currentPage = ref(1);
     const selectedCell = ref({row: null, col: null});
+    const selectedRow = ref(null);
     const rules = {
       fromDate: [
         required,
@@ -406,6 +441,9 @@ export default {
           onlyMatchingNotAvailable:
             statusFilter.value === statusOptions.matchingNotAvailable.value,
           actor: actorFilter.value?.label,
+          jobs: jobsFilter.value
+            ? jobsFilter.value.map((job) => job.label)
+            : [],
         })
         .then((response) => {
           leads.value = response.data;
@@ -442,12 +480,17 @@ export default {
       endDateFilter.value = formatDate(new Date(), 'dd-MM-yyyy');
       statusFilter.value = null;
       actorFilter.value = null;
+      jobsFilter.value = [];
       currentPage.value = 1;
+      if (jobAutocomplete.value) {
+        jobAutocomplete.value.reset();
+      }
       fetchData();
     };
 
     const selectCell = (rowIndex, colIndex) => {
       selectedCell.value = {row: rowIndex, col: colIndex};
+      selectedRow.value = rowIndex;
     };
 
     const exportToExcel = () => {
@@ -482,21 +525,29 @@ export default {
         );
     });
 
+    const updateJobs = (jobs) => {
+      jobsFilter.value = jobs;
+    };
+
     onMounted(() => {
       fetchData();
     });
 
     return {
-      actorFilter,
+      http,
+      jobAutocomplete,
       startDateFilter,
       endDateFilter,
       statusFilter,
+      actorFilter,
+      jobsFilter,
       tableData,
       tableHeaders,
       totalRecords,
       currentPage,
       totalPages,
       selectedCell,
+      selectedRow,
       filterItems,
       onClickReset,
       selectCell,
@@ -505,7 +556,33 @@ export default {
       statusOptions,
       isLoading,
       exportToExcel,
+      updateJobs,
+      fetchData,
     };
+  },
+  methods: {
+    reloadLead(leadId) {
+      this.$refs.confirmationDialog.showDialog().then((confirmation) => {
+        if (confirmation === 'ok') {
+          this.reprocessLead(leadId);
+        }
+      });
+    },
+    reprocessLead(leadId) {
+      this.isLoading = true;
+      this.http
+        .update(leadId, {})
+        .then(() => {
+          this.$toast.saveSuccess();
+          this.fetchData();
+        })
+        .catch((error) => {
+          return this.$toast.unexpectedError(error?.response?.data?.message);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
   },
 };
 </script>
@@ -600,5 +677,20 @@ export default {
 .records-count {
   font-size: 0.9rem;
   color: var(--oxd-interface-gray-color);
+}
+
+.reload-column {
+  width: 30px;
+  min-width: 30px;
+  padding: 0.25rem !important;
+  text-align: center !important;
+}
+
+.reload-button {
+  margin: 0 auto;
+
+  &:hover {
+    color: var(--oxd-primary-one-color);
+  }
 }
 </style>

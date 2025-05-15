@@ -50,6 +50,8 @@ export default {
     },
   },
 
+  emits: ['delete-job', 'add-jobs'],
+
   setup(props) {
     const httpJob = new APIService(
       window.appGlobal.baseUrl,

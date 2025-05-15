@@ -574,6 +574,9 @@ export default {
       default: () => [],
     },
   },
+
+  emits: ['cancel', 'delete', 'save'],
+
   setup() {
     const httpJob = new APIService(
       window.appGlobal.baseUrl,

@@ -252,10 +252,11 @@ class ThemeService
      * @param string $theme
      * @return string
      */
-    public function getLoginBannerURL(string $theme): string
+    public function getLoginBannerURL(Request $request): string
     {
+        $themeName = $request->attributes->get('theme');
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
-        $theme = $this->getThemeDao()->getThemeByThemeName($theme);
+        $theme = $this->getThemeDao()->getThemeByThemeName($themeName);
         return $theme !== null ? $theme->getLoginBannerFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/constructys_branding.png";
         /*if ($this->getImageETag('login_banner') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/loginBanner?v=$assetsVersion";
