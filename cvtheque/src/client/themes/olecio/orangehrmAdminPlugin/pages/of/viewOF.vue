@@ -203,7 +203,6 @@ export default {
     const isCreatingNewOrganisme = ref(false);
 
     const sizeOptions = [
-      {id: 2, label: '2'},
       {id: 25, label: '25'},
       {id: 50, label: '50'},
       {id: 100, label: '100'},
