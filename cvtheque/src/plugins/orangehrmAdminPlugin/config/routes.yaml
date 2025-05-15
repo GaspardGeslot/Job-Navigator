@@ -646,6 +646,14 @@ apiv2_admin_leads:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_leads_reprocess:
+  path: /{theme}/api/v2/admin/leads/{id}
+  controller: OrangeHRM\Admin\Controller\LeadsController::reprocess
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
 ##########################
 #        Files
 ##########################

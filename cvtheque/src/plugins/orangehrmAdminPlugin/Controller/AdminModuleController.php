@@ -34,7 +34,7 @@ class AdminModuleController extends AbstractModuleController
         $defaultPath = '';
         switch ($request->attributes->get('theme')) {
             case 'olecio':
-                $defaultPath = 'admin/matching';
+                $defaultPath = 'admin/viewLeads';
                 break;
             case 'constructys':
                 $defaultPath = 'admin/viewCandidates';

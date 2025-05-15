@@ -54,6 +54,9 @@ export default {
       default: '/api/v2/admin/course/search',
     },
   },
+
+  emits: ['delete-course', 'add-courses'],
+
   setup(props) {
     const httpCourse = new APIService(
       window.appGlobal.baseUrl,

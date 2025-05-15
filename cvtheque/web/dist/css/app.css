@@ -13380,6 +13380,18 @@ h5[data-v-c7c92d34] {
   font-size: 0.9rem;
   color: var(--oxd-interface-gray-color);
 }
+.reload-column[data-v-3932e0c0] {
+  width: 30px;
+  min-width: 30px;
+  padding: 0.25rem !important;
+  text-align: center !important;
+}
+.reload-button[data-v-3932e0c0] {
+  margin: 0 auto;
+}
+.reload-button[data-v-3932e0c0]:hover {
+  color: var(--oxd-primary-one-color);
+}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmPimPlugin/components/ProfileImageInput.vue?vue&type=style&index=0&id=555cf975&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

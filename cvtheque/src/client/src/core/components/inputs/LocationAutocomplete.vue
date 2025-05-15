@@ -112,6 +112,13 @@ export default {
     };
   },
 
+  emits: [
+    'delete-department',
+    'delete-location-postal-code',
+    'add-department',
+    'add-location-postal-code',
+  ],
+
   methods: {
     onClickDeleteDepartment(department) {
       this.$emit('delete-department', department);
