@@ -73,6 +73,7 @@ import FixLanguageErrors from './pages/languageImport/FixLanguageStringErrors.vu
 import Matching from './pages/matching/Matching.vue';
 import CourseStart from './pages/courseStart/CourseStart.vue';
 import viewCourses from './pages/courses/viewCourses.vue';
+import viewOF from './pages/of/viewOF.vue';
 
 export default {
   'job-title-list': JobTitle,
@@ -133,4 +134,5 @@ export default {
   'matching-list': Matching,
   'course-start-list': CourseStart,
   'course-list': viewCourses,
+  'of-list': viewOF,
 };

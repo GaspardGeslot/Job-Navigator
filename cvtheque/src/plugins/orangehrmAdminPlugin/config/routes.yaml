@@ -518,6 +518,34 @@ apiv2_admin_course_actor_options:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_of:
+  path: /{theme}/api/v2/admin/of
+  controller: OrangeHRM\Admin\Controller\OFController::getAllOFs
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_of_create:
+  path: /{theme}/api/v2/admin/of
+  controller: OrangeHRM\Admin\Controller\OFController::create
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_of_update:
+  path: /{theme}/api/v2/admin/of/{id}
+  controller: OrangeHRM\Admin\Controller\OFController::update
+  methods: [ PUT ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_of_delete:
+  path: /{theme}/api/v2/admin/of/{id}
+  controller: OrangeHRM\Admin\Controller\OFController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+    
 apiv2_admin_courses:
   path: /{theme}/api/v2/admin/course
   controller: OrangeHRM\Admin\Controller\CourseController::getAllCourses
@@ -993,6 +1021,13 @@ admin_course_start:
 admin_course_list:
   path: /{theme}/admin/viewCourses
   controller: OrangeHRM\Admin\Controller\CourseController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_of_list:
+  path: /{theme}/admin/viewOFs
+  controller: OrangeHRM\Admin\Controller\OFController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio

@@ -156,7 +156,7 @@
                 :rules="isCreatingNewOrganisme ? [{required: true}] : []"
               />
             </oxd-grid-item>
-            <oxd-grid-item class="orangehrm-switch-wrapper">
+            <oxd-grid-item v-if="!isEditing" class="orangehrm-switch-wrapper">
               <oxd-text
                 class="oxd-label"
                 :style="{
@@ -164,6 +164,7 @@
                   fontSize: '12px',
                   fontWeight: '600',
                   color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                  marginBottom: '0.5rem',
                 }"
               >
                 Créer l'OF ?
@@ -283,7 +284,7 @@ export default {
       organisme: '',
       actor: null,
       page: 0,
-      size: 20,
+      size: 25,
     };
 
     const filters = ref({
@@ -291,7 +292,7 @@ export default {
       organisme: '',
       actor: null,
       page: 0,
-      size: 5,
+      size: 25,
     });
 
     const actorOptions = ref([]);
@@ -449,13 +450,7 @@ export default {
       courseForm.title = item.name;
       courseForm.code = item.code || '';
       courseForm.organisme = item.of || '';
-
-      const actorCourseTitle = item.actorCourseTitle;
-      const matchingActor = actorOptions.value.find(
-        (opt) => opt.label === actorCourseTitle,
-      );
-      courseForm.actor = matchingActor || null;
-
+      courseForm.actor = item.actorCourseTitle;
       courseForm.actorCourseId = item.actorCourseId || null;
       courseForm.trainingCode = item.trainingCode || null;
       courseForm.trainingId = item.trainingId || null;
