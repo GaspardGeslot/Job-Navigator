@@ -47,12 +47,10 @@ class CourseController extends AbstractVueController
         }
         if (!empty($params['actor'])) {
             $queryParams['actor'] = $params['actor'];
-            // if ($params['actor'] == 'Aucun') {
-            //     $queryParams['actor'] = null;
-            // } else {
-            //     $queryParams['actor'] = $params['actor'];
-            // }
         }
+
+        $queryParams['page'] = !empty($params['page']) ? intval($params['page']) : 0;
+        $queryParams['size'] = !empty($params['size']) ? intval($params['size']) : 20;
         
         error_log('Query params before getCourses: ' . json_encode($queryParams));
         
@@ -145,6 +143,9 @@ class CourseController extends AbstractVueController
                 $queryParams['actor'] = $params['actor'];
             }
             
+            $queryParams['page'] = $params['page'];
+            $queryParams['size'] = $params['size'];
+            
             error_log("Final query params: " . json_encode($queryParams));
             
             $response = $client->request('GET', $url, [
@@ -165,6 +166,10 @@ class CourseController extends AbstractVueController
                     'total' => $data['totalElements'] ?? 0,
                     'currentPage' => $data['number'] ?? 0,
                     'pageSize' => $data['size'] ?? 0,
+                    'totalPages' => $data['totalPages'] ?? 0,
+                    'first' => $data['first'] ?? true,
+                    'last' => $data['last'] ?? true,
+                    'empty' => $data['empty'] ?? true
                 ]
             ];
 
@@ -197,6 +202,10 @@ class CourseController extends AbstractVueController
                     'total' => 0,
                     'currentPage' => 0,
                     'pageSize' => 0,
+                    'totalPages' => 0,
+                    'first' => true,
+                    'last' => true,
+                    'empty' => true
                 ]
             ];
         }
@@ -272,7 +281,9 @@ class CourseController extends AbstractVueController
                 'title' => $data['title'] ?? null,
                 'code' => $data['code'] ?? null,
                 'of' => [
-                    'name' => $data['of']['name'] ?? null
+                    'name' => $data['of']['name'] ?? null,
+                    'contact' => $data['of']['contact'] ?? null,
+                    'actor' => $data['of']['actor'] ?? null
                 ],
                 'actorCourseTitle' => $data['actorCourseTitle'] ?? null,
                 'actorCourseId' => !empty($data['actorCourseId']) ? intval($data['actorCourseId']) : null,

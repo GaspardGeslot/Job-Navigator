@@ -26,6 +26,22 @@
                 :options="actorOptions"
               />
             </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="filters.page"
+                :label="'Page'"
+                type="select"
+                :options="pageOptions"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="filters.size"
+                :label="'Éléments par page'"
+                type="select"
+                :options="sizeOptions"
+              />
+            </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
         <oxd-divider />
@@ -126,17 +142,60 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="courseForm.organisme"
-                :label="$t('Organisme')"
-                :placeholder="$t('Entrez l\'organisme')"
+                v-model="courseForm.thematic"
+                :label="$t('thematic')"
+                :placeholder="$t('Entrez la thématique')"
+                :rules="[]"
               />
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
+                v-model="courseForm.organisme"
+                :label="$t('Organisme')"
+                :placeholder="$t('Entrez l\'organisme')"
+                :rules="isCreatingNewOrganisme ? [{required: true}] : []"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item class="orangehrm-switch-wrapper">
+              <oxd-text
+                class="oxd-label"
+                :style="{
+                  fontFamily: 'Nunito Sans, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                }"
+              >
+                Créer l'OF ?
+              </oxd-text>
+              <oxd-switch-input
+                v-model="isCreatingNewOrganisme"
+                :label="$t(`Créer l'OF ?`)"
+                :disabled="isEditing"
+              />
+            </oxd-grid-item>
+            <template v-if="isCreatingNewOrganisme">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="courseForm.organismeContact"
+                  :label="$t('Contact de l\'organisme')"
+                  :placeholder="$t('Entrez le contact')"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="courseForm.organismeActor"
+                  :label="$t('Acteur de l\'organisme')"
+                  type="select"
+                  :options="actorOptions"
+                />
+              </oxd-grid-item>
+            </template>
+            <oxd-grid-item>
+              <oxd-input-field
                 v-model="courseForm.actor"
-                :label="$t('Acteur')"
-                type="select"
-                :options="actorOptions"
+                :label="$t('ActorCourseTitle')"
+                :placeholder="$t('Entrez le titre')"
                 :rules="[]"
                 :disabled="isEditing"
               />
@@ -144,7 +203,7 @@
             <oxd-grid-item>
               <oxd-input-field
                 v-model="courseForm.actorCourseId"
-                :label="$t('Acteur Id')"
+                :label="$t('ActorCourseId')"
                 :placeholder="$t('Entrez l\'id')"
                 :rules="[]"
               />
@@ -170,14 +229,6 @@
                 v-model="courseForm.utmCampaign"
                 :label="$t('utmCampaign')"
                 :placeholder="$t('Entrez l\'utm')"
-                :rules="[]"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="courseForm.thematic"
-                :label="$t('thematic')"
-                :placeholder="$t('Entrez la thématique')"
                 :rules="[]"
               />
             </oxd-grid-item>
@@ -208,11 +259,13 @@ import {APIService} from '@/core/util/services/api.service';
 import usePaginate from '@/core/util/composable/usePaginate';
 import useToast from '@/core/util/composable/useToast';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
+import {OxdSwitchInput} from '@ohrm/oxd';
 
 export default {
   name: 'MaVue',
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
+    'oxd-switch-input': OxdSwitchInput,
   },
   setup() {
     const {error, deleteSuccess} = useToast();
@@ -225,10 +278,20 @@ export default {
       `${window.appGlobal.theme}/api/v2/admin/actor/options`,
     );
 
+    const initialFilters = {
+      titre: '',
+      organisme: '',
+      actor: null,
+      page: 0,
+      size: 20,
+    };
+
     const filters = ref({
       titre: '',
       organisme: '',
       actor: null,
+      page: 0,
+      size: 5,
     });
 
     const actorOptions = ref([]);
@@ -240,12 +303,34 @@ export default {
       title: '',
       code: '',
       organisme: '',
+      organismeContact: '',
+      organismeActor: null,
       actor: null,
       actorCourseId: null,
       trainingCode: null,
       trainingId: null,
       utmCampaign: null,
       thematic: null,
+    });
+
+    const isCreatingNewOrganisme = ref(false);
+
+    const sizeOptions = [
+      // {id: 2, label: '2'},
+      // {id: 5, label: '5'},
+      // {id: 20, label: '20'},
+      {id: 25, label: '25'},
+      {id: 50, label: '50'},
+      {id: 100, label: '100'},
+    ];
+
+    const pageOptions = computed(() => {
+      const totalPages = response.value?.meta?.totalPages || 0;
+      console.log('totalPages here ', totalPages);
+      return Array.from({length: totalPages}, (_, i) => ({
+        id: i,
+        label: (i + 1).toString(),
+      }));
     });
 
     const fetchActorOptions = async () => {
@@ -280,11 +365,23 @@ export default {
         filterParams['actor'] = filters.value.actor.label;
       }
 
+      if (filters.value.size) {
+        filterParams['size'] = filters.value.size.id;
+      }
+      if (filters.value.page) {
+        filterParams['page'] = filters.value.page.id;
+      }
       return filterParams;
     });
 
     const canUpdate = computed(() => {
-      return Object.keys(serializedFilters.value).length > 0;
+      return (
+        filters.value.titre !== initialFilters.titre ||
+        filters.value.organisme !== initialFilters.organisme ||
+        filters.value.actor !== initialFilters.actor ||
+        filters.value.page !== initialFilters.page ||
+        filters.value.size !== initialFilters.size
+      );
     });
 
     const {
@@ -309,15 +406,13 @@ export default {
           trainingCode: course.trainingCode || '',
           trainingId: course.trainingId || null,
           utmCampaign: course.utmCampaign || '',
-          thematic: course.thematic || ''
+          thematic: course.thematic || '',
         }));
       },
     });
 
     const resetFiltre = async () => {
-      filters.value.titre = '';
-      filters.value.organisme = '';
-      filters.value.actor = null;
+      filters.value = {...initialFilters};
       await execQuery();
     };
 
@@ -326,12 +421,15 @@ export default {
       courseForm.title = '';
       courseForm.code = '';
       courseForm.organisme = '';
+      courseForm.organismeContact = '';
+      courseForm.organismeActor = null;
       courseForm.actor = null;
       courseForm.actorCourseId = null;
       courseForm.trainingCode = null;
       courseForm.trainingId = null;
       courseForm.utmCampaign = null;
       courseForm.thematic = null;
+      isCreatingNewOrganisme.value = false;
     };
 
     const onClickCancel = () => {
@@ -351,11 +449,13 @@ export default {
       courseForm.title = item.name;
       courseForm.code = item.code || '';
       courseForm.organisme = item.of || '';
-      
+
       const actorCourseTitle = item.actorCourseTitle;
-      const matchingActor = actorOptions.value.find(opt => opt.label === actorCourseTitle);
+      const matchingActor = actorOptions.value.find(
+        (opt) => opt.label === actorCourseTitle,
+      );
       courseForm.actor = matchingActor || null;
-      
+
       courseForm.actorCourseId = item.actorCourseId || null;
       courseForm.trainingCode = item.trainingCode || null;
       courseForm.trainingId = item.trainingId || null;
@@ -377,9 +477,17 @@ export default {
         const data = {
           title: courseForm.title,
           code: courseForm.code,
-          of: {
-            name: courseForm.organisme,
-          },
+          of: isCreatingNewOrganisme.value
+            ? {
+                name: courseForm.organisme,
+                contact: courseForm.organismeContact,
+                actor: courseForm.organismeActor
+                  ? courseForm.organismeActor.label
+                  : null,
+              }
+            : {
+                name: courseForm.organisme,
+              },
           actorCourseTitle: courseForm.actor ? courseForm.actor.label : null,
           actorCourseId: courseForm.actorCourseId,
           thematic: courseForm.thematic,
@@ -451,6 +559,9 @@ export default {
       onClickValidate,
       onClickDelete,
       deleteDialog,
+      sizeOptions,
+      pageOptions,
+      isCreatingNewOrganisme,
     };
   },
   data() {
