@@ -73,8 +73,8 @@ import FixLanguageErrors from './pages/languageImport/FixLanguageStringErrors.vu
 import Matching from './pages/matching/Matching.vue';
 import SaveMatching from './pages/matching/SaveMatching.vue';
 import CourseStart from './pages/courseStart/CourseStart.vue';
-import viewCourses from './pages/courses/viewCourses.vue';
-import viewOF from './pages/of/viewOF.vue';
+import Courses from './pages/courses/Courses.vue';
+import OFs from './pages/courses/OFs.vue';
 import Leads from './pages/reporting/Leads.vue';
 
 export default {
@@ -136,7 +136,7 @@ export default {
   'matching-list': Matching,
   'save-matching': SaveMatching,
   'course-start-list': CourseStart,
-  'course-list': viewCourses,
-  'of-list': viewOF,
+  'course-list': Courses,
+  'of-list': OFs,
   'leads-list': Leads,
 };

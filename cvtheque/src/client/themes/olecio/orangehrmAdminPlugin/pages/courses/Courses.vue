@@ -3,11 +3,18 @@
     <oxd-table-filter>
       <oxd-form @submit-valid="filterItems" @reset="onReset">
         <oxd-form-row>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="filters.titre"
+                :label="'Titre'"
+                :placeholder="$t('Entrez le titre')"
+              />
+            </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
                 v-model="filters.organisme"
-                :label="'Nom'"
+                :label="'Organisme'"
                 :placeholder="$t('Entrez le nom de l\'organisme')"
               />
             </oxd-grid-item>
@@ -78,6 +85,8 @@
       />
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
+
+    <!-- Modal pour l'ajout/édition -->
     <div
       v-if="showModal"
       class="orangehrm-paper-container"
@@ -99,8 +108,8 @@
         <h2>
           {{
             isEditing
-              ? $t(`Modifier l'organisme de formation`)
-              : $t('Ajouter un organisme de formation')
+              ? $t('Modifier la formation')
+              : $t('Ajouter une formation')
           }}
         </h2>
       </div>
@@ -109,25 +118,119 @@
           <oxd-grid :cols="4" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="ofForm.organisme"
+                v-model="courseForm.id"
+                :label="$t('Id')"
+                :placeholder="$t('Entrez l\'id')"
+                :rules="[{required: true}]"
+                :disabled="isEditing"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseForm.title"
+                :label="$t('Titre')"
+                :placeholder="$t('Entrez le titre')"
+                :rules="[{required: true}]"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseForm.code"
+                :label="$t('Code')"
+                :placeholder="$t('Entrez le code')"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseForm.thematic"
+                :label="$t('thematic')"
+                :placeholder="$t('Entrez la thématique')"
+                :rules="[]"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseForm.organisme"
                 :label="$t('Organisme')"
                 :placeholder="$t('Entrez l\'organisme')"
                 :rules="isCreatingNewOrganisme ? [{required: true}] : []"
               />
             </oxd-grid-item>
+            <oxd-grid-item v-if="!isEditing" class="orangehrm-switch-wrapper">
+              <oxd-text
+                class="oxd-label"
+                :style="{
+                  fontFamily: 'Nunito Sans, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                  marginBottom: '0.5rem',
+                }"
+              >
+                Créer l'OF ?
+              </oxd-text>
+              <oxd-switch-input
+                v-model="isCreatingNewOrganisme"
+                :label="$t(`Créer l'OF ?`)"
+                :disabled="isEditing"
+              />
+            </oxd-grid-item>
+            <template v-if="isCreatingNewOrganisme">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="courseForm.organismeContact"
+                  :label="$t('Contact de l\'organisme')"
+                  :placeholder="$t('Entrez le contact')"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="courseForm.organismeActor"
+                  :label="$t('Acteur de l\'organisme')"
+                  type="select"
+                  :options="actorOptions"
+                />
+              </oxd-grid-item>
+            </template>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="ofForm.organismeContact"
-                :label="$t('Contact de l\'organisme')"
-                :placeholder="$t('Entrez le contact')"
+                v-model="courseForm.actor"
+                :label="$t('ActorCourseTitle')"
+                :placeholder="$t('Entrez le titre')"
+                :rules="[]"
+                :disabled="isEditing"
               />
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="ofForm.organismeActor"
-                :label="$t('Acteur de l\'organisme')"
-                type="select"
-                :options="actorOptions"
+                v-model="courseForm.actorCourseId"
+                :label="$t('ActorCourseId')"
+                :placeholder="$t('Entrez l\'id')"
+                :rules="[]"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseForm.trainingCode"
+                :label="$t('trainingCode')"
+                :placeholder="$t('Entrez le code')"
+                :rules="[]"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseForm.trainingId"
+                :label="$t('trainingId')"
+                :placeholder="$t('Entrez l\'id')"
+                :rules="[]"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="courseForm.utmCampaign"
+                :label="$t('utmCampaign')"
+                :placeholder="$t('Entrez l\'utm')"
+                :rules="[]"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -157,17 +260,19 @@ import {APIService} from '@/core/util/services/api.service';
 import usePaginate from '@/core/util/composable/usePaginate';
 import useToast from '@/core/util/composable/useToast';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
+import {OxdSwitchInput} from '@ohrm/oxd';
 
 export default {
-  name: 'MaVue',
+  name: 'Courses',
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
+    'oxd-switch-input': OxdSwitchInput,
   },
   setup() {
     const {error, deleteSuccess} = useToast();
     const http = new APIService(
       window.appGlobal.baseUrl,
-      `${window.appGlobal.theme}/api/v2/admin/of`,
+      `${window.appGlobal.theme}/api/v2/admin/course`,
     );
     const actorHttp = new APIService(
       window.appGlobal.baseUrl,
@@ -175,6 +280,7 @@ export default {
     );
 
     const initialFilters = {
+      titre: '',
       organisme: '',
       actor: null,
       page: 0,
@@ -182,6 +288,7 @@ export default {
     };
 
     const filters = ref({
+      titre: '',
       organisme: '',
       actor: null,
       page: 0,
@@ -192,17 +299,27 @@ export default {
     const showModal = ref(false);
     const isEditing = ref(false);
     const deleteDialog = ref(null);
-    const ofForm = reactive({
+    const courseForm = reactive({
       id: null,
+      title: '',
+      code: '',
       organisme: '',
       organismeContact: '',
       organismeActor: null,
       actor: null,
+      actorCourseId: null,
+      trainingCode: null,
+      trainingId: null,
+      utmCampaign: null,
+      thematic: null,
     });
 
     const isCreatingNewOrganisme = ref(false);
 
     const sizeOptions = [
+      // {id: 2, label: '2'},
+      // {id: 5, label: '5'},
+      // {id: 20, label: '20'},
       {id: 25, label: '25'},
       {id: 50, label: '50'},
       {id: 100, label: '100'},
@@ -237,8 +354,12 @@ export default {
     const serializedFilters = computed(() => {
       const filterParams = {};
 
+      if (filters.value.titre) {
+        filterParams['title'] = filters.value.titre;
+      }
+
       if (filters.value.organisme) {
-        filterParams['name'] = filters.value.organisme;
+        filterParams['of'] = filters.value.organisme;
       }
 
       if (filters.value.actor) {
@@ -256,6 +377,7 @@ export default {
 
     const canUpdate = computed(() => {
       return (
+        filters.value.titre !== initialFilters.titre ||
         filters.value.organisme !== initialFilters.organisme ||
         filters.value.actor !== initialFilters.actor ||
         filters.value.page !== initialFilters.page ||
@@ -275,11 +397,17 @@ export default {
     } = usePaginate(http, {
       query: serializedFilters,
       normalizer: (data) => {
-        return data.map((of) => ({
-          id: of.id,
-          name: of.name,
-          contact: of.contact || '',
-          actor: of.actor || '',
+        return data.map((course) => ({
+          id: course.id,
+          name: course.name,
+          code: course.code || '',
+          of: course.of || '',
+          actorCourseTitle: course.actorCourseTitle || '',
+          actorCourseId: course.actorCourseId || null,
+          trainingCode: course.trainingCode || '',
+          trainingId: course.trainingId || null,
+          utmCampaign: course.utmCampaign || '',
+          thematic: course.thematic || '',
         }));
       },
     });
@@ -290,13 +418,18 @@ export default {
     };
 
     const resetForm = () => {
-      ofForm.id = null;
-      ofForm.title = '';
-      ofForm.code = '';
-      ofForm.organisme = '';
-      ofForm.organismeContact = '';
-      ofForm.organismeActor = null;
-      ofForm.actor = null;
+      courseForm.id = null;
+      courseForm.title = '';
+      courseForm.code = '';
+      courseForm.organisme = '';
+      courseForm.organismeContact = '';
+      courseForm.organismeActor = null;
+      courseForm.actor = null;
+      courseForm.actorCourseId = null;
+      courseForm.trainingCode = null;
+      courseForm.trainingId = null;
+      courseForm.utmCampaign = null;
+      courseForm.thematic = null;
       isCreatingNewOrganisme.value = false;
     };
 
@@ -313,30 +446,55 @@ export default {
 
     const onClickEdit = (item) => {
       isEditing.value = true;
-      ofForm.id = item.id;
-      ofForm.organisme = item.name;
-      ofForm.organismeContact = item.contact;
-      const matchingActor = actorOptions.value.find(
-        (opt) => opt.label === item.actor,
-      );
-      ofForm.organismeActor = matchingActor || null;
+      courseForm.id = item.id;
+      courseForm.title = item.name;
+      courseForm.code = item.code || '';
+      courseForm.organisme = item.of || '';
+      courseForm.actor = item.actorCourseTitle;
+      courseForm.actorCourseId = item.actorCourseId || null;
+      courseForm.trainingCode = item.trainingCode || null;
+      courseForm.trainingId = item.trainingId || null;
+      courseForm.utmCampaign = item.utmCampaign || null;
+      courseForm.thematic = item.thematic || null;
       showModal.value = true;
     };
 
     const onClickValidate = async (event) => {
       event.preventDefault();
+      if (!courseForm.title) {
+        return error({title: 'Erreur', message: 'Le titre est requis'});
+      }
+      if (!isEditing.value && !courseForm.id) {
+        return error({title: 'Erreur', message: `L'ID est requis`});
+      }
 
       try {
         const data = {
-          name: ofForm.organisme,
-          contact: ofForm.organismeContact,
-          actor: ofForm.organismeActor ? ofForm.organismeActor.label : null,
+          title: courseForm.title,
+          code: courseForm.code,
+          of: isCreatingNewOrganisme.value
+            ? {
+                name: courseForm.organisme,
+                contact: courseForm.organismeContact,
+                actor: courseForm.organismeActor
+                  ? courseForm.organismeActor.label
+                  : null,
+              }
+            : {
+                name: courseForm.organisme,
+              },
+          actorCourseTitle: courseForm.actor ? courseForm.actor.label : null,
+          actorCourseId: courseForm.actorCourseId,
+          thematic: courseForm.thematic,
+          trainingCode: courseForm.trainingCode,
+          trainingId: courseForm.trainingId,
+          utmCampaign: courseForm.utmCampaign,
         };
 
         if (isEditing.value) {
-          await http.update(ofForm.id, data);
+          await http.update(courseForm.id, data);
         } else {
-          //   data.id = ofForm.id;
+          data.id = courseForm.id;
           await http.create(data);
         }
         onClickCancel();
@@ -389,7 +547,7 @@ export default {
       resetFiltre,
       showModal,
       isEditing,
-      ofForm,
+      courseForm,
       onClickCancel,
       onClickAdd,
       onClickEdit,
@@ -406,21 +564,27 @@ export default {
       checkedItems: [],
       headers: [
         {
+          name: 'id',
+          title: 'ID',
+          sortField: 'id',
+          style: {flex: 1},
+        },
+        {
           name: 'name',
           title: 'Titre',
           sortField: 'title',
           style: {flex: 1},
         },
         {
-          name: 'contact',
-          title: 'Contact',
-          sortField: 'contact',
+          name: 'code',
+          title: 'Code',
+          sortField: 'code',
           style: {flex: 1},
         },
         {
-          name: 'actor',
-          title: 'Actor',
-          sortField: 'actor',
+          name: 'of',
+          title: 'Organisme',
+          sortField: 'of',
           style: {flex: 1},
         },
         {
