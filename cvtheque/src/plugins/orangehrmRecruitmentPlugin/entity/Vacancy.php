@@ -153,7 +153,7 @@ class Vacancy
         $this->setCountries(json_encode($matching['countries'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $this->setProfessionalExperiences(json_encode($matching['professionalExperiences'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $this->setDrivingLicenses(json_encode($matching['drivingLicenses'] ?? '', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-        $this->setStatus($matching['active']);
+        $this->setStatus($matching['isActive']);
     }
 
     /**

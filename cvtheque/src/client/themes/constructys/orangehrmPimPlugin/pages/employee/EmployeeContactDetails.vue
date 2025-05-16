@@ -156,6 +156,7 @@
                 v-model="contact.otherEmail"
                 :label="$t('general.other_email')"
                 :rules="rules.otherEmail"
+                required
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -176,6 +177,7 @@
 
         <oxd-divider />
         <oxd-form-actions>
+          <required-text />
           <submit-button />
         </oxd-form-actions>
       </oxd-form>
@@ -191,6 +193,7 @@ import {
   shouldNotExceedCharLength,
   validPhoneNumberFormat,
   validEmailFormat,
+  required,
 } from '@/core/util/validation/rules';
 import {promiseDebounce} from '@ohrm/oxd';
 import {OxdSwitchInput} from '@ohrm/oxd';
@@ -264,6 +267,7 @@ export default {
         otherEmail: [
           shouldNotExceedCharLength(50),
           validEmailFormat,
+          required,
           //promiseDebounce(this.validateOtherEmail, 500),
         ],
       },
