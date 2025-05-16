@@ -449,7 +449,7 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
         
         $data = [
             'title' => $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NAME),
-            'active' => $this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true),
+            'isActive' => $this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true),
             'jobs' => [$this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_JOB_TITLE)],
             'needs' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEEDS), true),
             'levels' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVELS), true),
@@ -730,7 +730,7 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
         
         $data = [
             'title' => $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NAME),
-            'active' => $this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true),
+            'isActive' => $this->getRequestParams()->getBoolean(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STATUS, true),
             'jobs' => [$this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_JOB_TITLE)],
             'needs' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NEEDS), true),
             'levels' => json_decode($this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_STUDY_LEVELS), true),
