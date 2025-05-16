@@ -72,15 +72,30 @@
         </oxd-form-row>
 
         <oxd-form-row>
-          <oxd-input-field
-            v-model="adherentCode"
-            name="adherentCode"
-            :label="$t('auth.adherent_code_constructys')"
-            label-icon="key"
-            :placeholder="$t('auth.adherent_code_constructys')"
-            type="password"
-            :rules="rules.adherentCode"
-          />
+          <oxd-input-group :classes="{wrapper: '--status-grouped-field'}">
+            <template #label>
+              <div class="label-is-entitlement-situational">
+                <oxd-icon name="key" />
+                <oxd-label
+                  style="margin-left: 5px"
+                  :label="$t('auth.adherent_code_constructys')"
+                />
+                <oxd-icon-button
+                  style="margin-left: 5px; font-size: 12px"
+                  name="exclamation-circle"
+                  :with-container="false"
+                  @click="onModalOpen"
+                />
+              </div>
+            </template>
+            <oxd-input-field
+              v-model="adherentCode"
+              name="adherentCode"
+              :placeholder="$t('auth.adherent_code_constructys')"
+              type="password"
+              :rules="rules.adherentCode"
+            />
+          </oxd-input-group>
         </oxd-form-row>
 
         <div class="orangehrm-login-error">
@@ -113,24 +128,29 @@
         <oxd-divider class="orangehrm-login-seperator"></oxd-divider>
         <social-media-auth :authenticators="authenticators"></social-media-auth>
       </template>
+      <adherent-code-modal v-if="showModal" @close="onModalClose" />
     </div>
   </login-layout>
 </template>
 
 <script>
 import {urlFor} from '@/core/util/helper/url';
-import {OxdAlert} from '@ohrm/oxd';
+import {OxdAlert, OxdLabel, OxdIcon} from '@ohrm/oxd';
 import {required} from '@/core/util/validation/rules';
 import {navigate, reloadPage} from '@/core/util/helper/navigation';
 import LoginLayout from '../components/LoginLayout.vue';
 import SocialMediaAuth from '../components/SocialMediaAuth.vue';
+import AdherentCodeModal from '../components/AdherentCodeModal.vue';
 
 export default {
   components: {
     'oxd-alert': OxdAlert,
+    'oxd-label': OxdLabel,
+    'oxd-icon': OxdIcon,
     //'oxd-sheet': OxdSheet,
     'login-layout': LoginLayout,
     'social-media-auth': SocialMediaAuth,
+    'adherent-code-modal': AdherentCodeModal,
   },
 
   props: {
@@ -161,6 +181,7 @@ export default {
       siret: '',
       adherentCode: '',
       siretLocked: false,
+      showModal: false,
       rules: {
         siret: [required],
         adherentCode: [required],
@@ -187,6 +208,12 @@ export default {
   },
 
   methods: {
+    onModalOpen() {
+      this.showModal = true;
+    },
+    onModalClose() {
+      this.showModal = false;
+    },
     getSiretParameter() {
       const urlParams = new URLSearchParams(window.location.search);
       const siretParam = urlParams.get('siret');
