@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 class CourseController extends AbstractVueController
 {
     use AuthUserTrait;
-
+    
+    public const FILTER_VALUE = 'value';
     /**
      * @inheritDoc
      */
