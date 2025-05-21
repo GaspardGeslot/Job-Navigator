@@ -625,6 +625,36 @@ apiv2_admin_matching_create:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_actor:
+  path: /{theme}/api/v2/admin/actor
+  controller: OrangeHRM\Admin\Controller\ActorController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_actor_delete:
+  path: /{theme}/api/v2/admin/actor/{id}
+  controller: OrangeHRM\Admin\Controller\ActorController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_actor_update:
+  path: /{theme}/api/v2/admin/actor/{id}
+  controller: OrangeHRM\Admin\Controller\ActorController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_actor_create:
+  path: /{theme}/api/v2/admin/actor
+  controller: OrangeHRM\Admin\Controller\ActorController::create
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
 apiv2_admin_job_search:
   path: /{theme}/api/v2/admin/job/search
   controller: OrangeHRM\Admin\Controller\JobController::search
@@ -1077,6 +1107,13 @@ admin_save_matching:
   requirements:
     theme: constructys|olecio
 
+admin_save_actor:
+  path: /{theme}/admin/saveActor
+  controller: OrangeHRM\Admin\Controller\SaveActorController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 admin_course_start:
   path: /{theme}/admin/viewCourseStarts
   controller: OrangeHRM\Admin\Controller\CourseStartController::handle
@@ -1367,6 +1404,13 @@ apiv2_admin_training_method_delete:
 admin_training_method:
   path: /{theme}/admin/viewTrainingMethods
   controller: OrangeHRM\Admin\Controller\TrainingMethodController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_actor:
+  path: /{theme}/admin/viewActor
+  controller: OrangeHRM\Admin\Controller\ActorController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio

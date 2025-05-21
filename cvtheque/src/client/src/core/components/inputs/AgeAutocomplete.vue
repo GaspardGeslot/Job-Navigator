@@ -1,22 +1,3 @@
-<!--
-/**
- * OrangeHRM is a comprehensive Human Resource Management (HRM) System that captures
- * all the essential functionalities required for any enterprise.
- * Copyright (C) 2006 OrangeHRM Inc., http://www.orangehrm.com
- *
- * OrangeHRM is free software: you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later version.
- *
- * OrangeHRM is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with OrangeHRM.
- * If not, see <https://www.gnu.org/licenses/>.
- */
- -->
-
 <template>
   <oxd-grid :cols="2" class="orangehrm-full-width-grid">
     <oxd-grid-item
@@ -27,11 +8,13 @@
         v-model="ageMin"
         :disabled="disabled"
         :label="$t('Age minimum (inclusif)')"
+        :rules="rules.ageMin"
       />
       <oxd-input-field
         v-model="ageMax"
         :disabled="disabled"
         :label="$t('Age maximum (exclusif)')"
+        :rules="rules.ageMax"
       />
       <oxd-input-group>
         <oxd-icon-button
@@ -42,7 +25,7 @@
       </oxd-input-group>
     </oxd-grid-item>
   </oxd-grid>
-  <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+  <oxd-grid v-if="!isActorSpecific" :cols="4" class="orangehrm-full-width-grid">
     <oxd-grid-item
       v-for="(age, index) in ages"
       :key="index"
@@ -54,9 +37,35 @@
       </oxd-text>
     </oxd-grid-item>
   </oxd-grid>
+  <oxd-grid
+    v-else
+    v-for="(age, index) in ages"
+    :key="index"
+    :cols="3"
+    class="orangehrm-full-width-grid"
+  >
+    <oxd-grid-item class="orangehrm-job-selection-criteria-selected">
+      <oxd-icon-button name="trash-fill" @click="onClickDeleteAge(age)" />
+      <oxd-text class="orangehrm-job-selection-criteria-name">
+        {{ age.min }} - {{ age.max }}
+      </oxd-text>
+    </oxd-grid-item>
+    <oxd-grid-item>
+      <oxd-input-field
+        v-model="age.custom"
+        :label="$t('Dénomination spécifique')"
+        :rules="rules.custom"
+      />
+    </oxd-grid-item>
+  </oxd-grid>
 </template>
 
 <script>
+import {
+  numericOnly,
+  shouldNotExceedCharLength,
+} from '@/core/util/validation/rules';
+
 export default {
   name: 'AgeAutocomplete',
 
@@ -69,12 +78,27 @@ export default {
       type: Boolean,
       default: false,
     },
+    isActorSpecific: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
-      ageMin: null,
-      ageMax: null,
+      ageMin: '',
+      ageMax: '',
+    };
+  },
+
+  setup() {
+    const rules = {
+      ageMin: [numericOnly],
+      ageMax: [numericOnly],
+      custom: [shouldNotExceedCharLength(100)],
+    };
+    return {
+      rules,
     };
   },
 
@@ -103,13 +127,13 @@ export default {
           break;
         }
       }
-
+      console.log(ageMin, ageMax, includes);
       if (!includes) {
         this.$emit('add-age', {min: ageMin, max: ageMax});
       }
 
-      this.ageMin = null;
-      this.ageMax = null;
+      this.ageMin = '';
+      this.ageMax = '';
     },
   },
 };
@@ -123,7 +147,7 @@ export default {
   }
   &-criteria-selected {
     display: flex;
-    align-items: baseline;
+    align-items: center;
   }
   &-criteria-name {
     margin-left: 1rem;

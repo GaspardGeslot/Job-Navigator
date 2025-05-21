@@ -13201,7 +13201,7 @@ h5[data-v-c7c92d34] {
 }
 .orangehrm-job-selection-criteria-selected[data-v-6fee2612] {
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 .orangehrm-job-selection-criteria-name[data-v-6fee2612] {
   margin-left: 1rem;
@@ -13211,6 +13211,28 @@ h5[data-v-c7c92d34] {
 }
 .orangehrm-job-selection-icon[data-v-6fee2612] {
   margin-left: 1rem;
+}
+.orangerhrm-switch-wrapper[data-v-6fee2612] {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 1rem;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-6fee2612] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-6fee2612] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-6fee2612] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
 }
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/inputs/CoursesAutocomplete.vue?vue&type=style&index=0&id=1fa38488&scoped=true&lang=scss ***!
@@ -13222,7 +13244,7 @@ h5[data-v-c7c92d34] {
 }
 .orangehrm-job-selection-criteria-selected[data-v-1fa38488] {
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 .orangehrm-job-selection-criteria-name[data-v-1fa38488] {
   margin-left: 1rem;
@@ -13243,7 +13265,7 @@ h5[data-v-c7c92d34] {
 }
 .orangehrm-job-selection-criteria-selected[data-v-f4b711fa] {
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 .orangehrm-job-selection-criteria-name[data-v-f4b711fa] {
   margin-left: 1rem;
@@ -13264,7 +13286,7 @@ h5[data-v-c7c92d34] {
 }
 .orangehrm-job-selection-criteria-selected[data-v-1b805d71] {
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 .orangehrm-job-selection-criteria-name[data-v-1b805d71] {
   margin-left: 1rem;
@@ -13312,6 +13334,69 @@ h5[data-v-c7c92d34] {
 }
 }
 .orangehrm-text[data-v-7c1f0e0a] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/inputs/CustomFieldAutocomplete.vue?vue&type=style&index=0&id=5db9aa0d&scoped=true&lang=scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-job-selection-criteria[data-v-5db9aa0d] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-job-selection-criteria-selected[data-v-5db9aa0d] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-job-selection-criteria-name[data-v-5db9aa0d] {
+  margin-left: 1rem;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0.675rem 0rem;
+}
+.orangehrm-job-selection-icon[data-v-5db9aa0d] {
+  margin-left: 1rem;
+}
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/components/ActorCard.vue?vue&type=style&index=0&id=1fe1ba47&scoped=true&lang=scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-job-selection-criteria[data-v-1fe1ba47] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-job-selection-criteria-selected[data-v-1fe1ba47] {
+  display: flex;
+  align-items: baseline;
+}
+.orangehrm-job-selection-criteria-name[data-v-1fe1ba47] {
+  margin-left: 1rem;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0.675rem 0rem;
+}
+.orangehrm-job-selection-icon[data-v-1fe1ba47] {
+  margin-left: 1rem;
+}
+.orangerhrm-switch-wrapper[data-v-1fe1ba47] {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  gap: 1rem;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-1fe1ba47] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-1fe1ba47] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-1fe1ba47] {
   font-size: 12px;
   font-weight: 600;
   color: #64728c;

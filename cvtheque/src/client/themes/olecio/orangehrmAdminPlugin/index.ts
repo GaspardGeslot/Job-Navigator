@@ -72,6 +72,7 @@ import EditProvider from './pages/socialMediaAuth/EditProvider.vue';
 import FixLanguageErrors from './pages/languageImport/FixLanguageStringErrors.vue';
 import Matching from './pages/matching/Matching.vue';
 import SaveMatching from './pages/matching/SaveMatching.vue';
+import Actor from './pages/actor/Actor.vue';
 import Courses from './pages/courses/Courses.vue';
 import OFs from './pages/courses/OFs.vue';
 import Leads from './pages/reporting/Leads.vue';
@@ -144,6 +145,7 @@ export default {
   'fix-language-errors': FixLanguageErrors,
   'matching-list': Matching,
   'save-matching': SaveMatching,
+  'actor-list': Actor,
   'course-list': Courses,
   'of-list': OFs,
   'leads-list': Leads,

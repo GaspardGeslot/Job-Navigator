@@ -419,7 +419,6 @@
 </template>
 <script>
 import {OxdSwitchInput} from '@ohrm/oxd';
-import {APIService} from '@/core/util/services/api.service';
 import BackButton from '@/core/components/buttons/BackButton';
 import JobsAutocomplete from '@/core/components/inputs/JobsAutocomplete';
 import CoursesAutocomplete from '@/core/components/inputs/CoursesAutocomplete';
@@ -430,11 +429,7 @@ import {
   numericOnly,
   digitsOnlyWithTwoDecimalPoints,
   shouldNotExceedCharLength,
-  beforeDate,
-  afterDate,
-  validDateFormat,
 } from '@/core/util/validation/rules';
-import usei18n from '@/core/util/composable/usei18n';
 
 const MatchingModel = {
   id: null,
@@ -578,11 +573,6 @@ export default {
   emits: ['cancel', 'delete', 'save'],
 
   setup() {
-    const httpJob = new APIService(
-      window.appGlobal.baseUrl,
-      `${window.appGlobal.theme}/api/v2/admin/job/search`,
-    );
-    const {$t} = usei18n();
     const rules = {
       actor: [required],
       title: [shouldNotExceedCharLength(100)],
@@ -592,7 +582,6 @@ export default {
       postalCode: [numericOnly],
     };
     return {
-      httpJob,
       rules,
     };
   },
@@ -666,21 +655,6 @@ export default {
     },
     onClickDelete() {
       this.$emit('delete', this.matching.id);
-    },
-    loadJobs(searchParam) {
-      return new Promise((resolve) => {
-        if (searchParam.trim() && searchParam.length < 100) {
-          this.httpJob
-            .getAll({
-              title: searchParam.trim(),
-            })
-            .then(({data}) => {
-              resolve(data);
-            });
-        } else {
-          resolve([]);
-        }
-      });
     },
     fetchMatching() {
       this.matching.id = this.matchingCurrent.id;

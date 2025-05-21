@@ -121,7 +121,7 @@ export default {
   }
   &-criteria-selected {
     display: flex;
-    align-items: baseline;
+    align-items: center;
   }
   &-criteria-name {
     margin-left: 1rem;

@@ -1,22 +1,3 @@
-<!--
-/**
- * OrangeHRM is a comprehensive Human Resource Management (HRM) System that captures
- * all the essential functionalities required for any enterprise.
- * Copyright (C) 2006 OrangeHRM Inc., http://www.orangehrm.com
- *
- * OrangeHRM is free software: you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later version.
- *
- * OrangeHRM is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with OrangeHRM.
- * If not, see <https://www.gnu.org/licenses/>.
- */
- -->
-
 <template>
   <oxd-grid :cols="2" class="orangehrm-full-width-grid" style="gap: 1rem">
     <oxd-grid>
@@ -156,7 +137,7 @@ export default {
   }
   &-criteria-selected {
     display: flex;
-    align-items: baseline;
+    align-items: center;
   }
   &-criteria-name {
     margin-left: 1rem;

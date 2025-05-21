@@ -116,9 +116,6 @@ class AuthenticationService
 
         try {
             $url = $isCompany ? "{$clientBaseUrl}/company/{$clientId}/login" : "{$clientBaseUrl}/user/{$clientId}/login";
-            error_log('error $url ' . $url);
-            error_log('error $credentials->getUsername() ' . $credentials->getUsername());
-            error_log('$credentials->getPassword() ' . $credentials->getPassword());
             $response = $client->request('POST', $url, [
                 'json' => [
                     'email' => $credentials->getUsername(),
