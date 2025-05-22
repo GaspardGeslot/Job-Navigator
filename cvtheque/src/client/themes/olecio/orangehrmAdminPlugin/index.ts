@@ -76,6 +76,7 @@ import Actor from './pages/actor/Actor.vue';
 import SaveActor from './pages/actor/SaveActor.vue';
 import Courses from './pages/courses/Courses.vue';
 import OFs from './pages/courses/OFs.vue';
+import Jobs from './pages/jobs/jobs.vue';
 import Leads from './pages/reporting/Leads.vue';
 import Country from './pages/country/Country.vue';
 import CourseStart from './pages/courseStart/CourseStart.vue';
@@ -154,6 +155,7 @@ export default {
   'save-sector': SaveSector,
   'course-list': Courses,
   'of-list': OFs,
+  'job-list': Jobs,
   'leads-list': Leads,
   'country-list': Country,
   'course-start-list': CourseStart,
