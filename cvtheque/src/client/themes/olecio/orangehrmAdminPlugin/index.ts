@@ -74,6 +74,7 @@ import Matching from './pages/matching/Matching.vue';
 import SaveMatching from './pages/matching/SaveMatching.vue';
 import Courses from './pages/courses/Courses.vue';
 import OFs from './pages/courses/OFs.vue';
+import Jobs from './pages/jobs/jobs.vue';
 import Leads from './pages/reporting/Leads.vue';
 import Country from './pages/country/Country.vue';
 import CourseStart from './pages/courseStart/CourseStart.vue';
@@ -146,6 +147,7 @@ export default {
   'save-matching': SaveMatching,
   'course-list': Courses,
   'of-list': OFs,
+  'job-list': Jobs,
   'leads-list': Leads,
   'country-list': Country,
   'course-start-list': CourseStart,
