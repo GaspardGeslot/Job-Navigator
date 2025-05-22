@@ -655,6 +655,36 @@ apiv2_admin_actor_create:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_sectors:
+  path: /{theme}/api/v2/admin/sector
+  controller: OrangeHRM\Admin\Controller\SectorController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_sector_add:
+  path: /{theme}/api/v2/admin/sector
+  controller: OrangeHRM\Admin\Controller\SectorController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_sector_update:
+  path: /{theme}/api/v2/admin/sector/{id}
+  controller: OrangeHRM\Admin\Controller\SectorController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_sector_delete:
+  path: /{theme}/api/v2/admin/sector/{id}
+  controller: OrangeHRM\Admin\Controller\SectorController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
 apiv2_admin_job_search:
   path: /{theme}/api/v2/admin/job/search
   controller: OrangeHRM\Admin\Controller\JobController::search
@@ -1414,3 +1444,18 @@ admin_actor:
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
+
+admin_sectors:
+  path: /{theme}/admin/viewSectors
+  controller: OrangeHRM\Admin\Controller\SectorController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+save_sector:
+  path: /{theme}/admin/saveSector
+  controller: OrangeHRM\Admin\Controller\SaveSectorController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+

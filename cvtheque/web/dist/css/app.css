@@ -13563,6 +13563,48 @@ h5[data-v-c7c92d34] {
   padding: 2rem;
   border-top: 1px solid var(--oxd-border-light-color);
 }
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/components/SectorCard.vue?vue&type=style&index=0&id=713b7e38&scoped=true&lang=scss ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-job-selection-criteria[data-v-713b7e38] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-job-selection-criteria-selected[data-v-713b7e38] {
+  display: flex;
+  align-items: baseline;
+}
+.orangehrm-job-selection-criteria-name[data-v-713b7e38] {
+  margin-left: 1rem;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0.675rem 0rem;
+}
+.orangehrm-job-selection-icon[data-v-713b7e38] {
+  margin-left: 1rem;
+}
+.orangerhrm-switch-wrapper[data-v-713b7e38] {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  gap: 1rem;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-713b7e38] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-713b7e38] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-713b7e38] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmPimPlugin/components/ProfileImageInput.vue?vue&type=style&index=0&id=555cf975&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

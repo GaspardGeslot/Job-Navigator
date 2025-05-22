@@ -1,6 +1,6 @@
 <template>
   <div class="orangehrm-background-container">
-    <oxd-table-filter :filter-title="$t('Leads')">
+    <oxd-table-filter :filter-title="$t('Filtres')">
       <oxd-form @submit-valid="filterItems">
         <oxd-form-row>
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">

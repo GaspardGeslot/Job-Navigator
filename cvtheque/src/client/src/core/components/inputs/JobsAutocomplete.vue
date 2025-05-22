@@ -19,7 +19,11 @@
       </oxd-input-group>
     </oxd-grid-item>
   </oxd-grid>
-  <oxd-grid v-if="!isActorSpecific" :cols="4" class="orangehrm-full-width-grid">
+  <oxd-grid
+    v-if="!isActorSpecific && !isSectorSpecific"
+    :cols="4"
+    class="orangehrm-full-width-grid"
+  >
     <oxd-grid-item
       v-for="(job, index) in jobs"
       :key="index"
@@ -31,7 +35,11 @@
       </oxd-text>
     </oxd-grid-item>
   </oxd-grid>
-  <div v-else v-for="(job, index) in jobs" :key="index">
+  <div
+    v-else-if="isActorSpecific && !isSectorSpecific"
+    v-for="(job, index) in jobs"
+    :key="index"
+  >
     <oxd-grid :cols="4" class="orangehrm-full-width-grid">
       <oxd-grid-item class="orangehrm-job-selection-criteria-selected">
         <oxd-icon-button name="trash-fill" @click="onClickDeleteJob(job)" />
@@ -92,6 +100,30 @@
       </oxd-grid-item>
     </oxd-grid>
   </div>
+  <div v-else-if="isSectorSpecific" v-for="job in jobs" :key="job.id">
+    <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+      <oxd-grid-item class="orangehrm-job-selection-criteria-selected">
+        <oxd-icon-button name="trash-fill" @click="onClickDeleteJob(job)" />
+        <oxd-text class="orangehrm-job-selection-criteria-name">
+          {{ job.title }}
+        </oxd-text>
+      </oxd-grid-item>
+      <oxd-grid-item>
+        <oxd-input-field
+          v-model="job.customTitle"
+          :label="$t('Dénomination spécifique')"
+          :rules="rules.text"
+        />
+      </oxd-grid-item>
+      <oxd-grid-item>
+        <oxd-input-field
+          v-model="job.priority"
+          :label="$t('Priorité')"
+          :rules="rules.numeric"
+        />
+      </oxd-grid-item>
+    </oxd-grid>
+  </div>
 </template>
 
 <script>
@@ -117,6 +149,10 @@ export default {
     apiPath: {
       type: String,
       default: '/api/v2/admin/job/search',
+    },
+    isSectorSpecific: {
+      type: Boolean,
+      default: false,
     },
     isActorSpecific: {
       type: Boolean,
@@ -156,11 +192,15 @@ export default {
       const newJobs = [];
       for (const job of this.selectedJobs) {
         if (
-          this.isActorSpecific &&
+          (this.isActorSpecific || this.isSectorSpecific) &&
           !this.jobs.some((j) => j.title === job.label)
         )
           newJobs.push(job.label);
-        else if (!this.isActorSpecific && !this.jobs.includes(job.label))
+        else if (
+          !this.isActorSpecific &&
+          !this.isSectorSpecific &&
+          !this.jobs.includes(job.label)
+        )
           newJobs.push(job.label);
       }
 

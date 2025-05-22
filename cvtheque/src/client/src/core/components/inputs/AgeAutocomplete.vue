@@ -55,6 +55,7 @@
         v-model="age.custom"
         :label="$t('Dénomination spécifique')"
         :rules="rules.custom"
+        required
       />
     </oxd-grid-item>
   </oxd-grid>
@@ -64,6 +65,7 @@
 import {
   numericOnly,
   shouldNotExceedCharLength,
+  required,
 } from '@/core/util/validation/rules';
 
 export default {
@@ -95,7 +97,7 @@ export default {
     const rules = {
       ageMin: [numericOnly],
       ageMax: [numericOnly],
-      custom: [shouldNotExceedCharLength(100)],
+      custom: [shouldNotExceedCharLength(100), required],
     };
     return {
       rules,

@@ -73,6 +73,7 @@ import FixLanguageErrors from './pages/languageImport/FixLanguageStringErrors.vu
 import Matching from './pages/matching/Matching.vue';
 import SaveMatching from './pages/matching/SaveMatching.vue';
 import Actor from './pages/actor/Actor.vue';
+import SaveActor from './pages/actor/SaveActor.vue';
 import Courses from './pages/courses/Courses.vue';
 import OFs from './pages/courses/OFs.vue';
 import Leads from './pages/reporting/Leads.vue';
@@ -86,6 +87,8 @@ import Phone from './pages/phone/Phone.vue';
 import Status from './pages/status/Status.vue';
 import StudyLevel from './pages/studyLevel/StudyLevel.vue';
 import TrainingMethod from './pages/trainingMethod/TrainingMethod.vue';
+import Sector from './pages/sector/Sector.vue';
+import SaveSector from './pages/sector/SaveSector.vue';
 
 export default {
   'job-title-list': JobTitle,
@@ -146,6 +149,9 @@ export default {
   'matching-list': Matching,
   'save-matching': SaveMatching,
   'actor-list': Actor,
+  'save-actor': SaveActor,
+  'sector-list': Sector,
+  'save-sector': SaveSector,
   'course-list': Courses,
   'of-list': OFs,
   'leads-list': Leads,

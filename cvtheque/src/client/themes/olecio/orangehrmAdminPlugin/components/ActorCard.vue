@@ -20,6 +20,7 @@
             :label="$t('Nom')"
             :disabled="!editable"
             :rules="rules.title"
+            required
           />
         </oxd-grid-item>
         <oxd-grid-item>
@@ -284,7 +285,7 @@ export default {
   setup() {
     const rules = {
       actor: [required],
-      title: [shouldNotExceedCharLength(100)],
+      title: [shouldNotExceedCharLength(100), required],
       price: [digitsOnlyWithTwoDecimalPoints],
       maxAmountPerDay: [numericOnly],
       maxAmountPerMonth: [numericOnly],

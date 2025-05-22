@@ -5,9 +5,6 @@
         <oxd-form-row>
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
-              <oxd-input-field v-model="nameFilter" :label="$t('Nom')" />
-            </oxd-grid-item>
-            <oxd-grid-item>
               <job-autocomplete v-model="jobFilter" />
             </oxd-grid-item>
           </oxd-grid>
@@ -47,23 +44,18 @@
     >
       <oxd-loading-spinner class="orangehrm-container-loader" />
     </div>
-    <div v-else v-for="(actor, index) in state.actors" :key="index">
+    <div v-else v-for="(sector, index) in state.sectors" :key="index">
       <table-filter
         :active="false"
-        :filter-title="actor.name ? `${actor.name}` : `Actor N°${actor.id}`"
+        :filter-title="
+          sector.title ? `${sector.title}` : `Secteur N°${sector.id}`
+        "
       >
         <div class="orangehrm-container">
-          <actor-card
-            :countries="countries"
-            :fundings="fundings"
-            :study-levels="studyLevels"
-            :needs="needs"
-            :status="status"
-            :training-methods="trainingMethods"
-            :sources="sources"
-            :actor-current="actor"
-            @delete="onClickDelete(actor.id)"
-            @save="(updatedActor) => onClickSave(updatedActor, actor.id)"
+          <sector-card
+            :sector-current="sector"
+            @delete="onClickDelete(sector.id)"
+            @save="(updatedSector) => onClickSave(updatedSector, sector.id)"
           />
         </div>
       </table-filter>
@@ -78,7 +70,7 @@ import useToast from '@/core/util/composable/useToast';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
-import ActorCard from '../../components/ActorCard.vue';
+import SectorCard from '../../components/SectorCard.vue';
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
 import JobAutocomplete from '@/core/components/inputs/JobAutocomplete.vue';
 import {OxdSpinner} from '@ohrm/oxd';
@@ -86,68 +78,36 @@ import {OxdSpinner} from '@ohrm/oxd';
 export default {
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
-    'actor-card': ActorCard,
+    'sector-card': SectorCard,
     'table-filter': TableFilter,
     'oxd-loading-spinner': OxdSpinner,
     'job-autocomplete': JobAutocomplete,
-  },
-  props: {
-    countries: {
-      type: Array,
-      default: () => [],
-    },
-    fundings: {
-      default: () => [],
-      type: Array,
-    },
-    studyLevels: {
-      type: Array,
-      default: () => [],
-    },
-    needs: {
-      type: Array,
-      default: () => [],
-    },
-    status: {
-      type: Array,
-      default: () => [],
-    },
-    trainingMethods: {
-      type: Array,
-      default: () => [],
-    },
-    sources: {
-      type: Array,
-      default: () => [],
-    },
   },
 
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
-      `${window.appGlobal.theme}/api/v2/admin/actor`,
+      `${window.appGlobal.theme}/api/v2/admin/sector`,
     );
     const {noRecordsFound} = useToast();
-    const nameFilter = ref(null);
     const jobFilter = ref(null);
 
     const state = reactive({
       total: 0,
       offset: 0,
-      actors: [],
+      sectors: [],
       isLoading: false,
     });
 
     const fetchData = () => {
       state.isLoading = true;
-      state.actors = [];
+      state.sectors = [];
       http
         .getAll({
-          name: nameFilter.value,
           job: jobFilter.value?.label,
         })
         .then((response) => {
-          state.actors = response.data;
+          state.sectors = response.data;
           state.total = response.data.length;
           if (state.total === 0) {
             noRecordsFound();
@@ -165,20 +125,19 @@ export default {
     return {
       http,
       state,
-      nameFilter,
       jobFilter,
       fetchData,
     };
   },
   methods: {
     onClickAdd() {
-      navigate(`/${window.appGlobal.theme}/admin/saveActor`);
+      navigate(`/${window.appGlobal.theme}/admin/saveSector`);
     },
-    onClickSave(updatedActor, id) {
+    onClickSave(updatedSector, id) {
       this.state.isLoading = true;
-      let actorData = updatedActor;
+      let sectorData = updatedSector;
       this.http
-        .update(id, {...actorData})
+        .update(id, {...sectorData})
         .then(() => {
           this.$toast.saveSuccess();
           this.fetchData();
@@ -206,8 +165,8 @@ export default {
             return this.$toast.deleteSuccess();
           })
           .then(() => {
-            this.state.actors = this.state.actors.filter(
-              (actor) => actor.id !== id,
+            this.state.sectors = this.state.sectors.filter(
+              (sector) => sector.id !== id,
             );
             this.state.isLoading = false;
           });
@@ -217,7 +176,6 @@ export default {
       this.fetchData();
     },
     onClickReset() {
-      this.nameFilter = null;
       this.jobFilter = null;
       this.filterItems();
     },

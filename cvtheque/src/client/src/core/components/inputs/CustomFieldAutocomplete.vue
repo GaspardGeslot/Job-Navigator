@@ -34,13 +34,17 @@
         v-model="c.custom"
         :label="customFieldLabel"
         :rules="rules.custom"
+        required
       />
     </oxd-grid-item>
   </oxd-grid>
 </template>
 
 <script>
-import {shouldNotExceedCharLength} from '@/core/util/validation/rules';
+import {
+  shouldNotExceedCharLength,
+  required,
+} from '@/core/util/validation/rules';
 
 export default {
   name: 'CustomFieldAutocomplete',
@@ -76,7 +80,7 @@ export default {
 
   setup() {
     const rules = {
-      custom: [shouldNotExceedCharLength(100)],
+      custom: [shouldNotExceedCharLength(100), required],
     };
     return {
       rules,
