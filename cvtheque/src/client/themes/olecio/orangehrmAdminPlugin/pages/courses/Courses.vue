@@ -26,6 +26,7 @@
                 :options="actorOptions"
               />
             </oxd-grid-item>
+            <!--
             <oxd-grid-item>
               <oxd-input-field
                 v-model="filters.page"
@@ -42,6 +43,7 @@
                 :options="sizeOptions"
               />
             </oxd-grid-item>
+            -->
           </oxd-grid>
         </oxd-form-row>
         <oxd-divider />
@@ -82,6 +84,13 @@
         :selectable="true"
         :clickable="false"
         row-decorator="oxd-table-decorator-card"
+      />
+    </div>
+    <div class="orangehrm-pagination-wrapper">
+      <oxd-pagination
+        v-model:current="paginateCurrentPage"
+        :length="totalPages"
+        @update:current="onPageChange"
       />
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
@@ -316,14 +325,14 @@ export default {
 
     const isCreatingNewOrganisme = ref(false);
 
-    const sizeOptions = [
-      // {id: 2, label: '2'},
-      // {id: 5, label: '5'},
-      // {id: 20, label: '20'},
-      {id: 25, label: '25'},
-      {id: 50, label: '50'},
-      {id: 100, label: '100'},
-    ];
+    // const sizeOptions = [
+    // {id: 2, label: '2'},
+    // {id: 5, label: '5'},
+    // {id: 20, label: '20'},
+    //   {id: 25, label: '25'},
+    //   {id: 50, label: '50'},
+    //   {id: 100, label: '100'},
+    // ];
 
     const pageOptions = computed(() => {
       const totalPages = response.value?.meta?.totalPages || 0;
@@ -352,7 +361,10 @@ export default {
     };
 
     const serializedFilters = computed(() => {
-      const filterParams = {};
+      const filterParams = {
+        page: filters.value.page,
+        size: filters.value.size,
+      };
 
       if (filters.value.titre) {
         filterParams['title'] = filters.value.titre;
@@ -366,12 +378,6 @@ export default {
         filterParams['actor'] = filters.value.actor.label;
       }
 
-      if (filters.value.size) {
-        filterParams['size'] = filters.value.size.id;
-      }
-      if (filters.value.page) {
-        filterParams['page'] = filters.value.page.id;
-      }
       return filterParams;
     });
 
@@ -387,7 +393,7 @@ export default {
 
     const {
       showPaginator,
-      currentPage,
+      paginateCurrentPage,
       total,
       pages,
       pageSize,
@@ -411,6 +417,22 @@ export default {
         }));
       },
     });
+
+    const totalPages = computed(() => {
+      const meta = response.value?.meta;
+      if (typeof meta?.totalPages === 'number') {
+        return meta.totalPages;
+      }
+      if (typeof meta?.total === 'number' && filters.value.size > 0) {
+        return Math.ceil(meta.total / filters.value.size);
+      }
+      return 0;
+    });
+
+    const onPageChange = (page) => {
+      filters.value.page = page - 1;
+      execQuery();
+    };
 
     const resetFiltre = async () => {
       filters.value = {...initialFilters};
@@ -536,7 +558,7 @@ export default {
       actorOptions,
       canUpdate,
       showPaginator,
-      currentPage,
+      paginateCurrentPage,
       total,
       pages,
       pageSize,
@@ -554,9 +576,11 @@ export default {
       onClickValidate,
       onClickDelete,
       deleteDialog,
-      sizeOptions,
+      // sizeOptions,
       pageOptions,
       isCreatingNewOrganisme,
+      totalPages,
+      onPageChange,
     };
   },
   data() {

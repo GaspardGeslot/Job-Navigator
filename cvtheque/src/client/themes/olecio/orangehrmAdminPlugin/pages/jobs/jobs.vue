@@ -3,7 +3,7 @@
     <oxd-table-filter>
       <oxd-form @submit-valid="filterItems" @reset="onReset">
         <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="filters.title"
@@ -11,14 +11,7 @@
                 :placeholder="$t('Entrez le nom du job')"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="filters.page"
-                :label="'Page'"
-                type="select"
-                :options="pageOptions"
-              />
-            </oxd-grid-item>
+            <!--
             <oxd-grid-item>
               <oxd-input-field
                 v-model="filters.size"
@@ -27,6 +20,7 @@
                 :options="sizeOptions"
               />
             </oxd-grid-item>
+            -->
           </oxd-grid>
         </oxd-form-row>
         <oxd-divider />
@@ -67,6 +61,14 @@
         :selectable="true"
         :clickable="false"
         row-decorator="oxd-table-decorator-card"
+      />
+    </div>
+    <div class="orangehrm-pagination-wrapper">
+      <oxd-pagination
+        v-model:current="paginateCurrentPage"
+        :length="totalPages"
+        :max="10"
+        @update:current="onPageChange"
       />
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
@@ -211,15 +213,14 @@ export default {
     });
     const isCreatingNewOrganisme = ref(false);
 
-    const sizeOptions = [
-      {id: 25, label: '25'},
-      {id: 50, label: '50'},
-      {id: 100, label: '100'},
-    ];
+    // const sizeOptions = [
+    //   {id: 25, label: '25'},
+    //   {id: 50, label: '50'},
+    //   {id: 100, label: '100'},
+    // ];
 
     const pageOptions = computed(() => {
       const totalPages = response.value?.meta?.totalPages || 0;
-      console.log('totalPages here ', totalPages);
       return Array.from({length: totalPages}, (_, i) => ({
         id: i,
         label: (i + 1).toString(),
@@ -228,16 +229,14 @@ export default {
 
     const serializedFilters = computed(() => {
       const filterParams = {};
-
-      console.log('filters here ', filters);
       if (filters.value.title) {
         filterParams['title'] = filters.value.title;
       }
       if (filters.value.size) {
-        filterParams['size'] = filters.value.size.id;
+        filterParams['size'] = filters.value.size;
       }
       if (filters.value.page) {
-        filterParams['page'] = filters.value.page.id;
+        filterParams['page'] = filters.value.page;
       }
       return filterParams;
     });
@@ -252,7 +251,7 @@ export default {
 
     const {
       showPaginator,
-      currentPage,
+      paginateCurrentPage,
       total,
       pages,
       pageSize,
@@ -269,10 +268,18 @@ export default {
           otherTitle: job.otherTitle,
           inOlecio: job.inOlecio,
         }));
-        console.log(data);
         return data;
       },
     });
+
+    const totalPages = computed(() => {
+      return response.value?.meta?.totalPages || 0;
+    });
+
+    const onPageChange = (page) => {
+      filters.value.page = page - 1;
+      execQuery();
+    };
 
     const resetFiltre = async () => {
       filters.value = {...initialFilters};
@@ -366,7 +373,7 @@ export default {
       filters,
       canUpdate,
       showPaginator,
-      currentPage,
+      paginateCurrentPage,
       total,
       pages,
       pageSize,
@@ -383,9 +390,11 @@ export default {
       onClickValidate,
       onClickDelete,
       deleteDialog,
-      sizeOptions,
+      // sizeOptions,
       pageOptions,
       isCreatingNewOrganisme,
+      totalPages,
+      onPageChange,
     };
   },
   data() {
@@ -462,5 +471,12 @@ export default {
 <style lang="scss" scoped>
 .orangehrm-dialog-modal {
   z-index: 1000;
+}
+
+.orangehrm-pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 1rem;
 }
 </style>
