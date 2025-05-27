@@ -129,10 +129,7 @@ export default {
           break;
         }
       }
-      console.log(ageMin, ageMax, includes);
-      if (!includes) {
-        this.$emit('add-age', {min: ageMin, max: ageMax});
-      }
+      if (!includes) this.$emit('add-age', {min: ageMin, max: ageMax});
 
       this.ageMin = '';
       this.ageMax = '';

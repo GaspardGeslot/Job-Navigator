@@ -261,7 +261,7 @@ export default {
           (department) => department.id,
         );
       }
-      if (updatedMatching.courses) {
+      if (updatedMatching.courses && updatedMatching.courses.length > 0) {
         matchingData.courses = updatedMatching.courses.reduce((map, course) => {
           const courseId = !isNaN(parseInt(course.id))
             ? parseInt(course.id)
@@ -271,6 +271,8 @@ export default {
           }
           return map;
         }, {});
+      } else {
+        matchingData.courses = null;
       }
       this.http
         .update(id, {...matchingData})

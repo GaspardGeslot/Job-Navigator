@@ -688,6 +688,7 @@ export default {
       this.matching.isResumeNeeded = this.matchingCurrent.isResumeNeeded;
       this.matching.jobs = this.matchingCurrent.jobs;
       this.matching.ages = this.matchingCurrent.ages;
+      this.matching.ages.sort((a, b) => a.min - b.min);
       this.matching.departments = [];
       for (const department of this.matchingCurrent.departments) {
         const departmentOption = this.departmentsOptions.find(
