@@ -1445,6 +1445,41 @@ admin_study_level:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_professional_experience:
+  path: /{theme}/api/v2/admin/professional-experience
+  controller: OrangeHRM\Admin\Controller\ProfessionalExperienceController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+    
+apiv2_admin_professional-experience_delete:
+  path: /{theme}/api/v2/admin/professional-experience/{id}
+  controller: OrangeHRM\Admin\Controller\ProfessionalExperienceController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_professional_experience_create:
+  path: /{theme}/api/v2/admin/professional-experience
+  controller: OrangeHRM\Admin\Controller\ProfessionalExperienceController::create
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_professional_experience_update:
+  path: /{theme}/api/v2/admin/professional-experience/{id}
+  controller: OrangeHRM\Admin\Controller\ProfessionalExperienceController::update
+  methods: [ PUT ]
+  requirements:
+    theme: constructys|olecio
+
+admin_professional_experience:
+  path: /{theme}/admin/viewProfessionalExperience
+  controller: OrangeHRM\Admin\Controller\ProfessionalExperienceController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 apiv2_admin_training_method:
   path: /{theme}/api/v2/admin/training-method
   controller: OrangeHRM\Admin\Controller\TrainingMethodController::getAll
