@@ -50,6 +50,10 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
     public const PARAMETER_LAST_NAME = 'lastName';
+    public const PARAMETER_CONTACT_EMAIL = 'contactEmail' ;
+    public const PARAMETER_PHONE_NUMBER = 'phoneNumber' ;
+    public const PARAMETER_ALLOW_EMAIL = 'companyAllowContactViaEmail';
+    public const PARAMETER_ALLOW_PHONE = 'companyAllowContactViaPhone';
     public const PARAMETER_NEED = 'need';
     public const PARAMETER_ATTACHMENT = 'attachment';
     public const PARAMETER_ATTACHMENT_METHOD = 'attachmentMethod';
@@ -104,6 +108,8 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
     public const PARAM_RULE_MILITARY_SERVICE_MAX_LENGTH = 100;
     public const PARAM_RULE_SSN_NUMBER_MAX_LENGTH = 100;
     public const PARAM_RULE_SIN_NUMBER_MAX_LENGTH = 100;
+    public const PARAM_RULE_PHONE_NUMBER_MAX_LENGTH = 25;
+    public const PARAM_RULE_CONTACT_EMAIL_MAX_LENGTH = 50;
 
     /**
      * @var EmployeeAttachmentService|null
@@ -152,13 +158,11 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $profile = $this->getHedwigeProfile($this->getAuthUser()->getUserHedwigeToken());
-        
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
 
         if ($this->getAuthUser()->getIsCandidate())
             $employee->setProfileInfo($profile);
         else $employee->setCompany($profile);
-        
         $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
         $userRoleNames = array_map(fn (UserRole $userRole) => $userRole->getName(), $userRoles);
         $employee->setOtherId(json_encode($userRoleNames));
@@ -236,6 +240,10 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
      *             @OA\Property(property="nickname", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_NICKNAME_MAX_LENGTH),
      *             @OA\Property(property="smoker", type="boolean"),
      *             @OA\Property(property="militaryService", type="string", maxLength=OrangeHRM\Pim\Api\EmployeePersonalDetailAPI::PARAM_RULE_MILITARY_SERVICE_MAX_LENGTH),
+     *             @OA\Property(property="contactEmail", type="string"),
+     *             @OA\Property(property="phoneNumber", type="string"),
+     *             @OA\Property(property="companyAllowContactViaEmail", type="boolean"),
+     *             @OA\Property(property="companyAllowContactViaPhone", type="boolean"),
      *             required={"lastName", "firstName"},
      *         )
      *     ),
@@ -256,7 +264,6 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
      */
     public function update(): EndpointResourceResult
     {
-        // error_log('find motivation' . $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_MOTIVATION));
         $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $this->throwRecordNotFoundExceptionIfNotExist($employee, Employee::class);
@@ -292,6 +299,18 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
 
         } else {
             $employee->setCompanySiret($employee->getEmployeeId());
+            $employee->setOtherEmail(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_CONTACT_EMAIL)
+            );
+            $employee->setMobile(
+                $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_PHONE_NUMBER)
+            );
+            $employee->setCompanyAllowContactViaEmail(
+                $this->getRequestParams()->getBooleanOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ALLOW_EMAIL)
+            );
+            $employee->setCompanyAllowContactViaPhone(
+                $this->getRequestParams()->getBooleanOrNull(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ALLOW_PHONE)
+            );
             $employee->setCompanyWorkforce(
                 $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_COMPANY_WORKFORCE)
             );
@@ -387,7 +406,6 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
         }
             
         $attachmentMethod = $this->getRequestParams()->getString(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_METHOD);
-        error_log('attachmentMethod' . $attachmentMethod);
         $attachmentId = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_ATTACHMENT_ID);
         if ($attachmentMethod && $attachmentMethod !== 'keepCurrent') {
             if ($attachmentMethod === 'deleteCurrent') {
@@ -477,6 +495,10 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
             'workforce' => $employee->getCompanyWorkforce(),
             'website' => $employee->getCompanyWebsite(),
             'presentation' => $employee->getCompanyPresentation(),
+            'contactEmail' => $employee->getOtherEmail(),
+            'phoneNumber' => $employee->getMobile(),
+            'allowContactViaEmail' => $employee->getCompanyAllowContactViaEmail(),
+            'allowContactViaPhone' => $employee->getCompanyAllowContactViaPhone()
         ];
 
         try {
@@ -591,6 +613,36 @@ class EmployeePersonalDetailAPI extends Endpoint implements ResourceEndpoint
                 new ParamRule(
                     self::PARAMETER_ATTACHMENT_ID,
                     new Rule(Rules::INT_TYPE),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_PHONE_NUMBER,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_PHONE_NUMBER_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_CONTACT_EMAIL,
+                    new Rule(Rules::STRING_TYPE),
+                    new Rule(Rules::LENGTH, [null, self::PARAM_RULE_CONTACT_EMAIL_MAX_LENGTH]),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ALLOW_EMAIL,
+                    new Rule(Rules::BOOL_TYPE),
+                ),
+                true
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_ALLOW_PHONE,
+                    new Rule(Rules::BOOL_TYPE),
                 ),
                 true
             ),

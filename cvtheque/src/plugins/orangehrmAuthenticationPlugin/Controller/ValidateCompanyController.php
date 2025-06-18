@@ -93,7 +93,6 @@ class ValidateCompanyController extends AbstractController implements PublicCont
             /** @var UrlGenerator $urlGenerator */
             $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
             $loginUrl = $urlGenerator->generate('auth_login_company', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
-            
             $clientToken = $this->retrieveClientToken();    
             $isAuthorizedByClient = $this->checkIsAuthorizedByClient($siret, $adherentCode, $clientToken);
             if (!$isAuthorizedByClient) {
@@ -145,7 +144,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => "Une erreur inattendue s'est produite. Veuillez contacter votre conseiller Constructys.",
+                    'message' => "Une erreur inattendue s'est produite. Veuillez contacter votre conseiller Constructys." . $e->getTraceAsString(),
                 ]
             );
             return new RedirectResponse($loginUrl);

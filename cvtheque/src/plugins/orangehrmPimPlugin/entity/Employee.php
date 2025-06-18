@@ -797,8 +797,8 @@ class Employee
     public function setProfileContact(mixed $profileContact): void 
     {
         $this->setWorkEmail($profileContact['email'] ?? '');
-        $this->setOtherEmail($profileContact['contactEmail'] ?? '');
-        $this->setMobile($profileContact['phoneNumber'] ?? '');
+        // $this->setOtherEmail($profileContact['contactEmail'] ?? '');
+        // $this->setMobile($profileContact['phoneNumber'] ?? '');
         $this->setMobility($profileContact['mobility'] ?? '');
         $this->setStreet1($profileContact['address']['street'] ?? '');
         $this->setCity($profileContact['address']['city'] ?? '');
@@ -812,14 +812,14 @@ class Employee
      */
     public function setCompanyContact(mixed $companyContact): void 
     {
-        $this->setOtherEmail($companyContact['contactEmail'] ?? '');
-        $this->setMobile($companyContact['phoneNumber'] ?? '');
+        // $this->setOtherEmail($companyContact['contactEmail'] ?? '');
+        // $this->setMobile($companyContact['phoneNumber'] ?? '');
         $this->setStreet1($companyContact['address']['street'] ?? '');
         $this->setCity($companyContact['address']['city'] ?? '');
         $this->setProvince($companyContact['address']['state'] ?? '');
         $this->setZipcode($companyContact['address']['postalCode'] ?? '');
-        $this->setCompanyAllowContactViaEmail($companyContact['allowContactViaEmail'] ?? true);
-        $this->setCompanyAllowContactViaPhone($companyContact['allowContactViaPhone'] ?? true);
+        // $this->setCompanyAllowContactViaEmail($companyContact['allowContactViaEmail'] ?? true);
+        // $this->setCompanyAllowContactViaPhone($companyContact['allowContactViaPhone'] ?? true);
     }
 
     /**
@@ -828,6 +828,10 @@ class Employee
     public function setCompany(mixed $company): void 
     {
         $this->setCompanyId($company['id'] ?? -1);
+        $this->setOtherEmail($company['contactEmail'] ?? '');   
+        $this->setMobile($company['phoneNumber'] ?? '');
+        $this->setCompanyAllowContactViaEmail($company['allowContactViaEmail'] ?? true);
+        $this->setCompanyAllowContactViaPhone($company['allowContactViaPhone'] ?? true);
         $this->setAttachment(array_key_exists('attachment', $company) && $company['attachment'] != null ? (int) $company['attachment'] : -1);
         $this->setCompanyName($company['name'] ?? '');
         $this->setCompanySiret($company['siret'] ?? '');
@@ -854,6 +858,8 @@ class Employee
         $this->setProfileContact([]);
         $this->setProfileInfo([]);
         if (array_key_exists('info', $company)) {
+            $this->setCompanyPhoneNumberContact($company['info']['phoneNumber'] ?? '');
+            $this->setCompanyEmailContact($company['info']['contactEmail'] ?? '');
             $this->setAttachment(array_key_exists('attachment', $company['info']) && $company['info']['attachment'] != null ? (int) $company['info']['attachment'] : -1);
             $this->setCompanyName($company['info']['name'] ?? '');
             $this->setCompanySiret($company['info']['siret'] ?? '');
@@ -864,8 +870,8 @@ class Employee
             $this->setCompanyLogo($company['info']['logo'] ?? '');
         }
         if (array_key_exists('contact', $company)) {
-            $this->setCompanyPhoneNumberContact($company['contact']['phoneNumber'] ?? '');
-            $this->setCompanyEmailContact($company['contact']['contactEmail'] ?? '');
+            /*$this->setCompanyPhoneNumberContact($company['contact']['phoneNumber'] ?? '');
+            $this->setCompanyEmailContact($company['contact']['contactEmail'] ?? '');*/
             if (array_key_exists('address', $company['contact'])) {
                 $this->setStreet1($company['contact']['address']['street'] ?? '');
                 $this->setCity($company['contact']['address']['city'] ?? '');

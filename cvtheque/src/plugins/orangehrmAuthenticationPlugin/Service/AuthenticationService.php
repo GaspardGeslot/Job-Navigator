@@ -111,7 +111,6 @@ class AuthenticationService
         $clientId = $this->getThemeService()->getClientId($theme);
 
         $client = new Client();
-        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
@@ -124,7 +123,6 @@ class AuthenticationService
             ]);
             return (string) $response->getBody();
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            error_log('error here' . $e->getTraceAsString());
             return null;
         }
     }

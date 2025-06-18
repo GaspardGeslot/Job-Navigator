@@ -94,38 +94,40 @@
           </oxd-grid>
           <br />
         </oxd-form-row>
-        <oxd-text class="orangehrm-sub-title" tag="h6">{{
-          $t('pim.telephone')
-        }}</oxd-text>
-        <oxd-divider />
-        <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <!--<oxd-grid-item>
+        <div v-if="isCandidate">
+          <oxd-text class="orangehrm-sub-title" tag="h6">{{
+            $t('pim.telephone')
+          }}</oxd-text>
+          <oxd-divider />
+          <oxd-form-row>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <!--<oxd-grid-item>
               <oxd-input-field
                 v-model.trim="contact.homeTelephone"
                 :label="$t('pim.home')"
                 :rules="rules.homeTelephone"
               />
             </oxd-grid-item>-->
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model.trim="contact.mobile"
-                :label="$t('general.mobile')"
-                :rules="rules.mobile"
-              />
-            </oxd-grid-item>
-            <!--<oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model.trim="contact.mobile"
+                  :label="$t('general.mobile')"
+                  :rules="rules.mobile"
+                />
+              </oxd-grid-item>
+              <!--<oxd-grid-item>
               <oxd-input-field
                 v-model.trim="contact.workTelephone"
                 :label="$t('pim.work')"
                 :rules="rules.workTelephone"
               />
             </oxd-grid-item>-->
-          </oxd-grid>
+            </oxd-grid>
+            <!--
           <oxd-grid
+            v-if="!isCandidate"
             :cols="3"
             class="orangehrm-full-width-grid"
-            v-if="!isCandidate"
           >
             <oxd-grid-item class="orangerhrm-switch-wrapper">
               <oxd-text class="orangehrm-text" tag="p">
@@ -134,47 +136,54 @@
               <oxd-switch-input v-model="contact.companyAllowContactViaPhone" />
             </oxd-grid-item>
           </oxd-grid>
-          <br />
-        </oxd-form-row>
+          -->
+            <br />
+          </oxd-form-row>
+        </div>
 
-        <oxd-text class="orangehrm-sub-title" tag="h6">{{
-          $t('general.email')
-        }}</oxd-text>
-        <oxd-divider />
-        <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item v-if="isCandidate">
-              <oxd-input-field
-                v-model="contact.workEmail"
-                :label="$t('general.work_email')"
-                :rules="rules.workEmail"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="contact.otherEmail"
-                :label="$t('general.other_email')"
-                :rules="rules.otherEmail"
-                required
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-          <oxd-grid
-            :cols="3"
-            class="orangehrm-full-width-grid"
-            v-if="!isCandidate"
-          >
-            <oxd-grid-item class="orangerhrm-switch-wrapper">
-              <oxd-text class="orangehrm-text" tag="p">
-                {{ $t('pim.allow_contact_via_email') }}
-              </oxd-text>
-              <oxd-switch-input v-model="contact.companyAllowContactViaEmail" />
-            </oxd-grid-item>
-          </oxd-grid>
-          <br />
-        </oxd-form-row>
-
+        <div v-if="isCandidate">
+          <oxd-text class="orangehrm-sub-title" tag="h6">{{
+            $t('general.email')
+          }}</oxd-text>
+          <oxd-divider />
+          <oxd-form-row>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="contact.workEmail"
+                  :label="$t('general.work_email')"
+                  :rules="rules.workEmail"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="contact.otherEmail"
+                  :label="$t('general.other_email')"
+                  :rules="rules.otherEmail"
+                  required
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <!--
+            <oxd-grid
+              v-if="!isCandidate"
+              :cols="3"
+              class="orangehrm-full-width-grid"
+            >
+              <oxd-grid-item class="orangerhrm-switch-wrapper">
+                <oxd-text class="orangehrm-text" tag="p">
+                  {{ $t('pim.allow_contact_via_email') }}
+                </oxd-text>
+                <oxd-switch-input
+                  v-model="contact.companyAllowContactViaEmail"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            -->
+            <br />
+          </oxd-form-row>
+        </div>
         <oxd-divider />
         <oxd-form-actions>
           <required-text />
@@ -196,7 +205,7 @@ import {
   required,
 } from '@/core/util/validation/rules';
 import {promiseDebounce} from '@ohrm/oxd';
-import {OxdSwitchInput} from '@ohrm/oxd';
+// import {OxdSwitchInput} from '@ohrm/oxd';
 
 const contactDetailsModel = {
   street1: '',
@@ -219,7 +228,7 @@ const contactDetailsModel = {
 export default {
   components: {
     'edit-employee-layout': EditEmployeeLayout,
-    'oxd-switch-input': OxdSwitchInput,
+    // 'oxd-switch-input': OxdSwitchInput,
   },
 
   props: {

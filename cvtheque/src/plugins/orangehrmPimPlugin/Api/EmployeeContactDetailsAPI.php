@@ -110,7 +110,6 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
         $empNumber = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_ATTRIBUTE, self::PARAMETER_EMP_NUMBER);
         $employee = $this->getEmployeeService()->getEmployeeByEmpNumber($empNumber);
         $contact = $this->getHedwigeContactDetails($this->getAuthUser()->getUserHedwigeToken());
-        
         if ($this->getAuthUser()->getIsCandidate())
             $employee->setProfileContact($contact);
         else $employee->setCompanyContact($contact);

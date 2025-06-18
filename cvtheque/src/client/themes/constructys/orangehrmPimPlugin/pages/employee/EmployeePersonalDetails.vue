@@ -131,7 +131,53 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row v-else>
+        <oxd-text v-if="!isCandidate" class="orangehrm-sub-title" tag="h6">{{
+          $t('pim.telephone')
+        }}</oxd-text>
+        <oxd-form-row v-if="!isCandidate">
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model.trim="employee.phoneNumber"
+                :label="$t('general.mobile')"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item class="orangerhrm-switch-wrapper">
+              <oxd-text class="orangehrm-text" tag="p">
+                {{ $t('pim.allow_contact_via_phone') }}
+              </oxd-text>
+              <oxd-switch-input
+                v-model="employee.companyAllowContactViaPhone"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <br />
+        <oxd-text v-if="!isCandidate" class="orangehrm-sub-title" tag="h6">{{
+          $t('general.email')
+        }}</oxd-text>
+        <oxd-form-row v-if="!isCandidate">
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="employee.contactEmail"
+                :label="$t('general.other_email')"
+                required
+              />
+            </oxd-grid-item>
+            <oxd-grid-item class="orangerhrm-switch-wrapper">
+              <oxd-text class="orangehrm-text" tag="p">
+                {{ $t('pim.allow_contact_via_email') }}
+              </oxd-text>
+              <oxd-switch-input
+                v-model="employee.companyAllowContactViaEmail"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+          <br />
+        </oxd-form-row>
+        <oxd-divider />
+        <oxd-form-row v-if="!isCandidate">
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
@@ -449,6 +495,7 @@ import {
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import FileUploadInput from '@/core/components/inputs/FileUploadInput';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
+import {OxdSwitchInput} from '@ohrm/oxd';
 
 const employeeModel = {
   firstName: '',
@@ -473,6 +520,10 @@ const employeeModel = {
   nickname: '',
   smoker: '',
   militaryService: '',
+  contactEmail: '',
+  phoneNumber: '',
+  companyAllowContactViaEmail: true,
+  companyAllowContactViaPhone: true,
   companyName: null,
   companySiret: '',
   companyWebsite: '',
@@ -495,6 +546,7 @@ export default {
     'edit-employee-layout': EditEmployeeLayout,
     'full-name-input': FullNameInput,
     'file-upload-input': FileUploadInput,
+    'oxd-switch-input': OxdSwitchInput,
   },
 
   props: {
@@ -651,6 +703,12 @@ export default {
             firstName: this.employee.firstName,
             middleName: this.employee.middleName,
             employeeId: this.employee.employeeId,
+            phoneNumber: this.employee.phoneNumber,
+            contactEmail: this.employee.contactEmail,
+            companyAllowContactViaEmail:
+              this.employee.companyAllowContactViaEmail,
+            companyAllowContactViaPhone:
+              this.employee.companyAllowContactViaPhone,
             otherId: this.employee.otherId,
             drivingLicenseNo: this.employee.drivingLicenseNo,
             drivingLicenseExpiredDate: this.employee.drivingLicenseExpiredDate,

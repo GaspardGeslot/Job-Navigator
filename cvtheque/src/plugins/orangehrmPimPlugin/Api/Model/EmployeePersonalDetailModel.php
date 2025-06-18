@@ -58,6 +58,10 @@ use OrangeHRM\Entity\Employee;
  *     @OA\Property(property="nickname", type="string", nullable=true),
  *     @OA\Property(property="smoker", type="integer", nullable=true),
  *     @OA\Property(property="militaryService", type="string", nullable=true),
+ *     @OA\Property(property="contactEmail", type="string"),
+ *     @OA\Property(property="phoneNumber", type="string"),
+ *     @OA\Property(property="companyAllowContactViaEmail", type="boolean"),
+ *     @OA\Property(property="companyAllowContactViaPhone", type="boolean"),
  * )
  */
 class EmployeePersonalDetailModel implements Normalizable
@@ -80,6 +84,10 @@ class EmployeePersonalDetailModel implements Normalizable
             'empNumber',
             'profileId',
             'courseStart',
+            ['getOtherEmail'],
+            ['getMobile'],
+            ['getCompanyAllowContactViaEmail'],
+            ['getCompanyAllowContactViaPhone'],
             'studyLevel',
             'need',
             'drivingLicense',
@@ -113,6 +121,10 @@ class EmployeePersonalDetailModel implements Normalizable
             'empNumber',
             'profileId',
             'courseStart',
+            'contactEmail',
+            'phoneNumber',
+            'companyAllowContactViaEmail',
+            'companyAllowContactViaPhone',
             'studyLevel',
             'need',
             'drivingLicense',
