@@ -438,11 +438,12 @@ class EmailService
         $client = new Client();
         $template = getenv('BREVO_RESET_PASSWORD_TEMPLATE_ID');
         $clientToken = getenv('BREVO_API_KEY');
-        $clientBaseUrl = getenv('BREVO_URL');
+        $clientBaseUrl = getenv('OLECIO_PROXY_URL');
+        $url = $clientBaseUrl . '/brevo/email';
 
         $destination = [['email' => $email]];
         try {
-            $client->request('POST', $clientBaseUrl, [
+            $client->request('POST', $url, [
                 'headers' => [
                     'api-key' => $clientToken,
                 ],
