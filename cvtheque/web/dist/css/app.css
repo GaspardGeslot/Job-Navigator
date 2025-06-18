@@ -13287,9 +13287,10 @@ h5[data-v-c7c92d34] {
 .orangehrm-job-selection-criteria-selected[data-v-1b805d71] {
   display: flex;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 .orangehrm-job-selection-criteria-name[data-v-1b805d71] {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   font-weight: 700;
   font-size: 12px;
   padding: 0.675rem 0rem;
@@ -13337,6 +13338,13 @@ h5[data-v-c7c92d34] {
   font-size: 12px;
   font-weight: 600;
   color: #64728c;
+}
+.orangehrm-section-header[data-v-7c1f0e0a] {
+  margin-bottom: 1rem;
+}
+.orangehrm-select-all[data-v-7c1f0e0a] {
+  display: flex;
+  justify-content: flex-end;
 }
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/inputs/CustomFieldAutocomplete.vue?vue&type=style&index=0&id=5db9aa0d&scoped=true&lang=scss ***!

@@ -193,15 +193,30 @@
         :location-postal-codes="matching.locationPostalCodes"
         :disabled="!editable"
         :departments-options="departmentsOptions"
+        :is-all-departments-selected="isAllDepartmentsSelected"
         @delete-department="onClickDeleteDepartment"
         @add-department="addDepartment"
         @delete-location-postal-code="onClickDeleteLocationPostalCode"
         @add-location-postal-code="addLocationPostalCode"
+        @toggle-all-departments="toggleAllDepartments"
       />
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Pays') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Pays') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('countries')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('countries')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in countries"
@@ -217,9 +232,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Début de formation') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Début de formation') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('courseStarts')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('courseStarts')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in courseStarts"
@@ -235,9 +263,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Financement') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Financement') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('fundings')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('fundings')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in fundings"
@@ -253,9 +294,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Handicap') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Handicap') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('handicaps')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('handicaps')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in handicaps"
@@ -271,9 +325,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t(`Niveau d'étude`) }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t(`Niveau d'étude`) }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('studyLevels')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('studyLevels')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in studyLevels"
@@ -289,9 +356,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Besoin') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Besoin') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('needs')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('needs')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in needs"
@@ -307,9 +387,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Préfixe téléphonique') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Préfixe téléphonique') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('phones')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('phones')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in phoneNumbers"
@@ -325,9 +418,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Expérience professionnelle') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Expérience professionnelle') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('professionalExperiences')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('professionalExperiences')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in professionalExperiences"
@@ -343,9 +449,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Situation actuelle') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Situation actuelle') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('status')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('status')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in status"
@@ -361,9 +480,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Modalité de formation') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Modalité de formation') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('trainingMethods')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('trainingMethods')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in trainingMethods"
@@ -379,9 +511,22 @@
         </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
-      <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Permis de conduire') }}
-      </oxd-text>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Permis de conduire') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('drivingLicenses')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('drivingLicenses')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
           v-for="(elem, elemIndex) in drivingLicenses"
@@ -591,6 +736,33 @@ export default {
       matching: {...MatchingModel},
     };
   },
+  computed: {
+    isAllSelected() {
+      return (field) => {
+        let optionsList, selectedList;
+        if (field === 'phones') {
+          optionsList = this.phoneNumbers;
+          selectedList = this.matching.phones;
+        } else if (field === 'studyLevels') {
+          optionsList = this.studyLevels;
+          selectedList = this.matching.levels;
+        } else {
+          optionsList = this[field] || [];
+          selectedList = this.matching[field] || [];
+        }
+
+        return (
+          optionsList.length > 0 && selectedList.length === optionsList.length
+        );
+      };
+    },
+    isAllDepartmentsSelected() {
+      return (
+        this.departmentsOptions.length > 0 &&
+        this.matching.departments.length === this.departmentsOptions.length
+      );
+    },
+  },
   watch: {
     matchingCurrent() {
       this.fetchMatching();
@@ -637,6 +809,7 @@ export default {
     },
     addDepartment(department) {
       this.matching.departments.push(department);
+      this.matching.departments.sort((a, b) => a.label.localeCompare(b.label));
     },
     onClickDeleteLocationPostalCode(locationPostalCode) {
       this.matching.locationPostalCodes =
@@ -709,6 +882,49 @@ export default {
       this.matching.locationPostalCodes =
         this.matchingCurrent.locationPostalCodes;
     },
+    toggleAll(field) {
+      let optionsList, selectedList;
+      if (field === 'phones') {
+        optionsList = this.phoneNumbers;
+        selectedList = this.matching.phones;
+      } else if (field === 'studyLevels') {
+        optionsList = this.studyLevels;
+        selectedList = this.matching.levels;
+      } else {
+        optionsList = this[field] || [];
+        selectedList = this.matching[field] || [];
+      }
+      if (selectedList.length === optionsList.length) {
+        if (field === 'studyLevels') {
+          this.matching.levels = [];
+        } else {
+          this.matching[field] = [];
+        }
+      } else {
+        if (field === 'studyLevels') {
+          this.matching.levels = optionsList.map((elem) => elem.label);
+        } else {
+          this.matching[field] = optionsList.map((elem) => elem.label);
+        }
+      }
+    },
+    toggleAllDepartments(selected) {
+      if (selected) {
+        this.departmentsOptions.forEach((dept) => {
+          if (!this.matching.departments.some((d) => d.id === dept.id)) {
+            this.addDepartment(dept);
+          }
+        });
+        this.matching.departments.sort((a, b) =>
+          a.label.localeCompare(b.label),
+        );
+      } else {
+        const departmentsToRemove = [...this.matching.departments];
+        departmentsToRemove.forEach((dept) => {
+          this.onClickDeleteDepartment(dept);
+        });
+      }
+    },
   },
 };
 </script>
@@ -749,5 +965,14 @@ export default {
   font-size: 12px;
   font-weight: 600;
   color: $oxd-interface-gray-darken-1-color;
+}
+
+.orangehrm-section-header {
+  margin-bottom: 1rem;
+}
+
+.orangehrm-select-all {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

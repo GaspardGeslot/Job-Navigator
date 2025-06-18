@@ -1,6 +1,6 @@
 <template>
-  <oxd-grid :cols="2" class="orangehrm-full-width-grid" style="gap: 1rem">
-    <oxd-grid>
+  <oxd-grid class="orangehrm-full-width-grid" style="gap: 1rem">
+    <oxd-grid :cols="2">
       <oxd-grid-item class="orangehrm-job-selection-criteria" style="gap: 1rem">
         <oxd-input-field
           v-model="department"
@@ -17,10 +17,21 @@
           />
         </oxd-input-group>
       </oxd-grid-item>
+      <oxd-grid-item>
+        <oxd-input-field
+          :model-value="isAllDepartmentsSelected"
+          type="checkbox"
+          :label="$t('Tout sélectionner')"
+          :disabled="disabled"
+          @change="(event) => toggleAllDepartments(event.target.checked)"
+        />
+      </oxd-grid-item>
+    </oxd-grid>
+    <oxd-grid :cols="4" class="orangehrm-full-width-grid">
       <oxd-grid-item
         v-for="(department, index) in departments"
         :key="index"
-        class="orangehrm-job-selection-criteria-selected --offset-column-1"
+        class="orangehrm-job-selection-criteria-selected"
       >
         <oxd-icon-button
           name="trash-fill"
@@ -84,13 +95,10 @@ export default {
       type: Array,
       required: true,
     },
-  },
-
-  data() {
-    return {
-      department: null,
-      locationPostalCode: null,
-    };
+    isAllDepartmentsSelected: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   emits: [
@@ -98,7 +106,15 @@ export default {
     'delete-location-postal-code',
     'add-department',
     'add-location-postal-code',
+    'toggle-all-departments',
   ],
+
+  data() {
+    return {
+      department: null,
+      locationPostalCode: null,
+    };
+  },
 
   methods: {
     onClickDeleteDepartment(department) {
@@ -125,6 +141,10 @@ export default {
       }
       this.locationPostalCode = null;
     },
+
+    toggleAllDepartments(selected) {
+      this.$emit('toggle-all-departments', selected);
+    },
   },
 };
 </script>
@@ -138,9 +158,10 @@ export default {
   &-criteria-selected {
     display: flex;
     align-items: center;
+    margin-bottom: 0.5rem;
   }
   &-criteria-name {
-    margin-left: 1rem;
+    margin-left: 0.5rem;
     font-weight: 700;
     font-size: $oxd-input-control-font-size;
     padding: $oxd-input-control-vertical-padding 0rem;
