@@ -401,6 +401,7 @@ export default {
       this.actor.maxAmountPerDay = this.actorCurrent.maxAmountPerDay;
       this.actor.maxAmountPerMonth = this.actorCurrent.maxAmountPerMonth;
       this.actor.ages = this.actorCurrent.ages;
+      this.actor.ages.sort((a, b) => a.min - b.min);
       this.actor.countries = this.actorCurrent.countries;
       this.actor.needs = this.actorCurrent.needs;
       this.actor.fundings = this.actorCurrent.fundings;
