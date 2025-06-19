@@ -110,6 +110,7 @@ class NeedController extends AbstractVueController
             $client->request('POST', $url, [
                 'headers' => [
                     'Authorization' => $token,
+                    'Content-Type' => 'application/json',
                 ],
                 'body' => $name
             ]);

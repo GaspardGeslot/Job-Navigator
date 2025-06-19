@@ -34,10 +34,10 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <job-autocomplete
+                ref="jobAutocomplete"
                 v-model="jobsFilter"
                 :multiple="true"
                 @update-jobs="updateJobs"
-                ref="jobAutocomplete"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -100,9 +100,9 @@
           <oxd-button
             display-type="secondary"
             :label="$t('Exporter en Excel')"
-            @click="exportToExcel"
             class="export-button"
             icon-name="download"
+            @click="exportToExcel"
           />
           <span class="orangehrm-text">
             {{
@@ -202,9 +202,15 @@ export default {
   setup() {
     const {$t} = usei18n();
     const jobAutocomplete = ref(null);
+    // const startDateFilter = ref(
+    //   formatDate(
+    //     new Date(new Date().setMonth(new Date().getMonth() - 1)),
+    //     'dd-MM-yyyy',
+    //   ),
+    // );
     const startDateFilter = ref(
       formatDate(
-        new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        new Date(new Date().setDate(new Date().getDate() - 2)),
         'dd-MM-yyyy',
       ),
     );
@@ -474,7 +480,7 @@ export default {
 
     const onClickReset = () => {
       startDateFilter.value = formatDate(
-        new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        new Date(new Date().setDate(new Date().getDate() - 2)),
         'dd-MM-yyyy',
       );
       endDateFilter.value = formatDate(new Date(), 'dd-MM-yyyy');

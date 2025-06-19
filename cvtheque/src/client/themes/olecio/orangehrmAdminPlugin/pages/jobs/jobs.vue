@@ -207,9 +207,9 @@ export default {
     const ofForm = reactive({
       title: '',
       inOlecio: true,
-      domain: '',
-      typeFormTitle: '',
-      otherTitle: '',
+      domain: null,
+      typeFormTitle: null,
+      otherTitle: null,
     });
     const isCreatingNewOrganisme = ref(false);
 
@@ -324,12 +324,14 @@ export default {
       try {
         const data = {
           title: ofForm.title,
-          domain: ofForm.domain,
-          typeFormTitle: ofForm.typeFormTitle,
-          otherTitle: ofForm.otherTitle,
+          domain: ofForm.domain !== '' ? ofForm.domain : null,
+          typeFormTitle:
+            ofForm.typeFormTitle !== '' ? ofForm.typeFormTitle : null,
+          otherTitle: ofForm.otherTitle !== '' ? ofForm.otherTitle : null,
           inOlecio: ofForm.inOlecio,
         };
 
+        // console.log('data to send ', data);
         if (isEditing.value) {
           await http.update(ofForm.id, data);
         } else {

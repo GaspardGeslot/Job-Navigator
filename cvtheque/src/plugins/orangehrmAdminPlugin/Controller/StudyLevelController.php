@@ -25,19 +25,13 @@ class StudyLevelController extends AbstractVueController
 
     public function getAll()
     {
-        error_log('Début de getAll()');
         $token = $this->getAuthUser()->getUserHedwigeToken();
-        error_log('Token récupéré: ' . $token);
-        
         $studyLevels = $this->getStudyLevels($token);
-        error_log('Niveaux d\'études récupérés: ' . json_encode($studyLevels));
-        
         $response = new Response(
             json_encode($studyLevels),
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
-        error_log('Réponse envoyée: ' . $response->getContent());
         return $response;
     }
 
@@ -65,10 +59,8 @@ class StudyLevelController extends AbstractVueController
 
     private function getStudyLevels(string $token): array
     {
-        error_log('Début de getStudyLevels()');
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        error_log('URL de base: ' . $clientBaseUrl);
         
         try {
             $url = "{$clientBaseUrl}/study-level";
@@ -80,12 +72,7 @@ class StudyLevelController extends AbstractVueController
                 ],
             ]);
             
-            error_log('Statut de la réponse: ' . $response->getStatusCode());
-            error_log('Corps de la réponse brute: ' . $response->getBody());
-            
             $data = json_decode($response->getBody(), true);
-            error_log('Données décodées: ' . json_encode($data));
-            
             if (!is_array($data)) {
                 error_log('Les données ne sont pas un tableau');
                 return [];
@@ -114,6 +101,7 @@ class StudyLevelController extends AbstractVueController
             $client->request('POST', $url, [
                 'headers' => [
                     'Authorization' => $token,
+                    'Content-Type' => 'application/json',
                 ],
                 'body' => $name
             ]);
