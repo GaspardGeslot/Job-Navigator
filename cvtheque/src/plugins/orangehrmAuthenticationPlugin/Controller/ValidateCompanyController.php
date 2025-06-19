@@ -115,7 +115,9 @@ class ValidateCompanyController extends AbstractController implements PublicCont
 
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticateCompany(new AuthParams($credentials, null, $theme));
+            $result = $authProviderChain->authenticateCompany(new AuthParams($credentials, null, $theme));
+            $token = $result['token'];
+            $isExistingUser = $result['isExistingUser'];
             $success = !is_null($token);
 
             if (!$success) {
@@ -155,6 +157,9 @@ class ValidateCompanyController extends AbstractController implements PublicCont
             return new RedirectResponse($redirectUrl);
         }
 
+        if (!$isExistingUser){
+            return $this->redirect("/" . $theme . "/pim/viewMyDetails");
+        }
         $homePagePath = $this->getHomePageService()->getHomePagePath();
         return $this->redirect($theme . "/" . $homePagePath);
     }

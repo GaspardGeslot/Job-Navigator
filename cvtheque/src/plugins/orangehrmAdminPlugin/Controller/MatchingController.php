@@ -143,7 +143,6 @@ class MatchingController extends AbstractVueController
             ) {
                 unset($matching['courses']);
             }
-            error_log(print_r($matching, true));
             $this->createMatching($this->getAuthUser()->getUserHedwigeToken(), $matching);
             return new Response(json_encode(['message' => 'Matching created successfully']), Response::HTTP_OK);
         } catch (ClientException $e) {
@@ -238,10 +237,7 @@ class MatchingController extends AbstractVueController
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-
         $data = json_encode($matching);
-
-        // error_log(print_r($matching, true));
         $url = "{$clientBaseUrl}/matching";
         $response = $client->request('POST', $url, [
             'headers' => [

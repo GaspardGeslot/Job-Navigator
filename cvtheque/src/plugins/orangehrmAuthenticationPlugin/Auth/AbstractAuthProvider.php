@@ -32,10 +32,10 @@ abstract class AbstractAuthProvider
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return ?string
+     * @return array
      * @throws AuthenticationException
      */
-    abstract public function authenticateCompany(AuthParamsInterface $authParams): ?string;
+    abstract public function authenticateCompany(AuthParamsInterface $authParams): array;
 
     /**
      * @param AuthParamsInterface $authParams

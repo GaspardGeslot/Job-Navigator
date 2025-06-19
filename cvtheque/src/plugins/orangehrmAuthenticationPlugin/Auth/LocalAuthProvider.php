@@ -87,18 +87,21 @@ class LocalAuthProvider extends AbstractAuthProvider
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return ?string
+     * @return array
      * @throws AuthenticationException
      * @throws PasswordEnforceException
      */
-    public function authenticateCompany(AuthParamsInterface $authParams): ?string
+    public function authenticateCompany(AuthParamsInterface $authParams): array
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface)
-            return false;
+            return ['token' => null, 'isExistingUser' => false];
         $exists = $this->getAuthenticationService()->hasCredentials($authParams->getCredential(), $authParams->getTheme());
-        if ($exists)
-            return $this->authenticate($authParams, true);
-        return $this->getAuthenticationService()->createCredentials($authParams->getCredential(), true, $authParams->getTheme());
+        if ($exists) {
+            $token = $this->authenticate($authParams, true);
+            return ['token' => $token, 'isExistingUser' => $exists];
+        }
+        $token = $this->getAuthenticationService()->createCredentials($authParams->getCredential(), true, $authParams->getTheme());
+        return ['token' => $token, 'isExistingUser' => false];
     }
 
     /**
