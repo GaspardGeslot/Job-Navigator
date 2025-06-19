@@ -137,6 +137,13 @@ class MatchingController extends AbstractVueController
     {
         try {
             $matching = json_decode($request->getContent(), true);
+            if (
+                isset($matching['courses']) &&
+                (empty($matching['courses']) || array_values($matching['courses']) === $matching['courses'])
+            ) {
+                unset($matching['courses']);
+            }
+            error_log(print_r($matching, true));
             $this->createMatching($this->getAuthUser()->getUserHedwigeToken(), $matching);
             return new Response(json_encode(['message' => 'Matching created successfully']), Response::HTTP_OK);
         } catch (ClientException $e) {
@@ -234,6 +241,7 @@ class MatchingController extends AbstractVueController
 
         $data = json_encode($matching);
 
+        // error_log(print_r($matching, true));
         $url = "{$clientBaseUrl}/matching";
         $response = $client->request('POST', $url, [
             'headers' => [

@@ -91,7 +91,11 @@
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t(`Date d'arrêt - Début`) }}
       </oxd-text>
-      <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+      <oxd-grid
+        v-if="matching.startBreakDate"
+        :cols="3"
+        class="orangehrm-full-width-grid"
+      >
         <oxd-grid-item>
           <oxd-input-field
             v-model="matching.startBreakDate.dayOfWeek"
@@ -118,7 +122,11 @@
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t(`Date d'arrêt - Fin`) }}
       </oxd-text>
-      <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+      <oxd-grid
+        v-if="matching.endBreakDate"
+        :cols="3"
+        class="orangehrm-full-width-grid"
+      >
         <oxd-grid-item>
           <oxd-input-field
             v-model="matching.endBreakDate.dayOfWeek"
@@ -587,36 +595,8 @@ const MatchingModel = {
   courses: [],
   departments: [],
   needs: [],
-  endBreakDate: {
-    type: Object,
-    default: () => ({
-      dayOfWeek: null,
-      hour: null,
-      minutes: null,
-    }),
-    validator: (value) => {
-      return (
-        (value.dayOfWeek === null || Number.isInteger(value.dayOfWeek)) &&
-        (value.hour === null || Number.isInteger(value.hour)) &&
-        (value.minutes === null || Number.isInteger(value.minutes))
-      );
-    },
-  },
-  startBreakDate: {
-    type: Object,
-    default: () => ({
-      dayOfWeek: null,
-      hour: null,
-      minutes: null,
-    }),
-    validator: (value) => {
-      return (
-        (value.dayOfWeek === null || Number.isInteger(value.dayOfWeek)) &&
-        (value.hour === null || Number.isInteger(value.hour)) &&
-        (value.minutes === null || Number.isInteger(value.minutes))
-      );
-    },
-  },
+  endBreakDate: defaultBreakTime(),
+  startBreakDate: defaultBreakTime(),
   endDate: null,
   startDate: null,
   fundings: [],
@@ -635,7 +615,21 @@ const MatchingModel = {
   professionalExperiences: [],
   drivingLicenses: [],
 };
-
+function defaultBreakTime() {
+  return {
+    dayOfWeek: null,
+    hour: null,
+    minutes: null,
+  };
+}
+function isValidBreakTime(breakTime) {
+  return (
+    breakTime &&
+    (breakTime.dayOfWeek === null || Number.isInteger(breakTime.dayOfWeek)) &&
+    (breakTime.hour === null || Number.isInteger(breakTime.hour)) &&
+    (breakTime.minutes === null || Number.isInteger(breakTime.minutes))
+  );
+}
 export default {
   name: 'MatchingCard',
 
@@ -733,7 +727,19 @@ export default {
   data() {
     return {
       editable: true,
-      matching: {...MatchingModel},
+      matching: {
+        ...MatchingModel,
+        startBreakDate: {
+          dayOfWeek: null,
+          hour: null,
+          minutes: null,
+        },
+        endBreakDate: {
+          dayOfWeek: null,
+          hour: null,
+          minutes: null,
+        },
+      },
     };
   },
   computed: {
@@ -776,6 +782,13 @@ export default {
       this.$emit('cancel');
     },
     onSave() {
+      if (
+        !isValidBreakTime(this.matching.startBreakDate) ||
+        !isValidBreakTime(this.matching.endBreakDate)
+      ) {
+        alert('Les horaires ne sont pas valides.');
+        return;
+      }
       if (this.matching.actor) this.matching.actor = this.matching.actor.label;
       this.matching.price = parseFloat(this.matching.price);
       this.matching.maxAmountPerDay = parseInt(this.matching.maxAmountPerDay);
@@ -838,14 +851,25 @@ export default {
       this.matching.price = this.matchingCurrent.price;
       this.matching.startDate = this.matchingCurrent.startDate;
       this.matching.endDate = this.matchingCurrent.endDate;
-      this.matching.startBreakDate =
-        this.matchingCurrent.startBreakDate !== null
-          ? this.matchingCurrent.startBreakDate
-          : {dayOfWeek: '', hour: '', minutes: ''};
-      this.matching.endBreakDate =
-        this.matchingCurrent.endBreakDate !== null
-          ? this.matchingCurrent.endBreakDate
-          : {dayOfWeek: '', hour: '', minutes: ''};
+      // this.matching.startBreakDate =
+      //   this.matchingCurrent.startBreakDate !== null
+      //     ? this.matchingCurrent.startBreakDate
+      //     : {dayOfWeek: '', hour: '', minutes: ''};
+      // this.matching.endBreakDate =
+      //   this.matchingCurrent.endBreakDate !== null
+      //     ? this.matchingCurrent.endBreakDate
+      //     : {dayOfWeek: '', hour: '', minutes: ''};
+      this.matching.startBreakDate = isValidBreakTime(
+        this.matchingCurrent.startBreakDate,
+      )
+        ? this.matchingCurrent.startBreakDate
+        : defaultBreakTime();
+
+      this.matching.endBreakDate = isValidBreakTime(
+        this.matchingCurrent.endBreakDate,
+      )
+        ? this.matchingCurrent.endBreakDate
+        : defaultBreakTime();
       this.matching.countries = this.matchingCurrent.countries;
       this.matching.courseStarts = this.matchingCurrent.courseStarts;
       this.matching.fundings = this.matchingCurrent.fundings;
