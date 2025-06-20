@@ -153,6 +153,33 @@ export default {
           navigate(`/${window.appGlobal.theme}/admin/matching`);
         })
         .catch((error) => {
+          console.log(
+            'matchingData.startBreakDate ',
+            matchingData.startBreakDate,
+          );
+          if (matchingData.startBreakDate === null) {
+            matchingData.startBreakDate = {
+              dayOfWeek: null,
+              hour: null,
+              minutes: null,
+            };
+          }
+
+          if (matchingData.endBreakDate === null) {
+            matchingData.endBreakDate = {
+              dayOfWeek: null,
+              hour: null,
+              minutes: null,
+            };
+          }
+
+          matchingData.startBreakDate.dayOfWeek = '';
+          matchingData.startBreakDate.hour = '';
+          matchingData.startBreakDate.minutes = '';
+
+          matchingData.endBreakDate.dayOfWeek = '';
+          matchingData.endBreakDate.hour = '';
+          matchingData.endBreakDate.minutes = '';
           return this.$toast.unexpectedError(error.response.data.message);
         })
         .finally(() => {
