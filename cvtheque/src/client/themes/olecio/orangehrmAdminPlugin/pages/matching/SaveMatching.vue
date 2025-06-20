@@ -109,7 +109,7 @@ export default {
     },
     onClickSave(updatedMatching) {
       this.isLoading = true;
-      let matchingData = updatedMatching;
+      let matchingData = JSON.parse(JSON.stringify(updatedMatching));
       if (
         !updatedMatching.startBreakDate ||
         !updatedMatching.startBreakDate.dayOfWeek ||
