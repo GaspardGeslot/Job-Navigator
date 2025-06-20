@@ -25,19 +25,15 @@ class StatusController extends AbstractVueController
 
     public function getAll()
     {
-        error_log('Début de getAll()');
         $token = $this->getAuthUser()->getUserHedwigeToken();
-        error_log('Token récupéré: ' . $token);
         
         $statuses = $this->getStatuses($token);
-        error_log('Statuts récupérés: ' . json_encode($statuses));
         
         $response = new Response(
             json_encode($statuses),
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
-        error_log('Réponse envoyée: ' . $response->getContent());
         return $response;
     }
 
@@ -65,14 +61,11 @@ class StatusController extends AbstractVueController
 
     private function getStatuses(string $token): array
     {
-        error_log('Début de getStatuses()');
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        error_log('URL de base: ' . $clientBaseUrl);
         
         try {
             $url = "{$clientBaseUrl}/status";
-            error_log('URL complète: ' . $url);
             
             $response = $client->request('GET', $url, [
                 'headers' => [
@@ -80,14 +73,9 @@ class StatusController extends AbstractVueController
                 ],
             ]);
             
-            error_log('Statut de la réponse: ' . $response->getStatusCode());
-            error_log('Corps de la réponse brute: ' . $response->getBody());
-            
             $data = json_decode($response->getBody(), true);
-            error_log('Données décodées: ' . json_encode($data));
             
             if (!is_array($data)) {
-                error_log('Les données ne sont pas un tableau');
                 return [];
             }
             
@@ -95,12 +83,10 @@ class StatusController extends AbstractVueController
                 return ['name' => $status];
             }, $data);
             
-            error_log('Données transformées: ' . json_encode($transformedData));
             return $transformedData;
             
         } catch (\Exception $e) {
             error_log('Erreur lors de la récupération des statuts: ' . $e->getMessage());
-            error_log('Stack trace: ' . $e->getTraceAsString());
             return [];
         }
     }
@@ -132,6 +118,7 @@ class StatusController extends AbstractVueController
             $client->request('DELETE', $url, [
                 'headers' => [
                     'Authorization' => $token,
+                    'Content-Type' => 'application/json',
                 ],
                 'body' => $name
             ]);

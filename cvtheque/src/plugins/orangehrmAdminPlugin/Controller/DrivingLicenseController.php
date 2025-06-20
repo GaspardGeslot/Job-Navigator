@@ -132,6 +132,7 @@ class DrivingLicenseController extends AbstractVueController
             $client->request('DELETE', $url, [
                 'headers' => [
                     'Authorization' => $token,
+                    'Content-Type' => 'application/json',
                 ],
                 'body' => $name
             ]);
