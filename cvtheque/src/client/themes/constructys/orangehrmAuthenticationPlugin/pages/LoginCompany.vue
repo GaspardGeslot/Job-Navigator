@@ -95,6 +95,22 @@
               type="password"
               :rules="rules.adherentCode"
             />
+            <span
+              class="label-is-entitlement-situational"
+              style="
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                margin-left: 10px;
+                font-size: 12px;
+                text-decoration: underline;
+                color: #64728c;
+                cursor: pointer;
+              "
+              @click="onModalOpen"
+            >
+              Je ne connais pas mon n° adhérent
+            </span>
           </oxd-input-group>
         </oxd-form-row>
 
