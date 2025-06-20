@@ -153,10 +153,6 @@ export default {
           navigate(`/${window.appGlobal.theme}/admin/matching`);
         })
         .catch((error) => {
-          console.log(
-            'matchingData.startBreakDate ',
-            matchingData.startBreakDate,
-          );
           if (matchingData.startBreakDate === null) {
             matchingData.startBreakDate = {
               dayOfWeek: null,
