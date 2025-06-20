@@ -25,7 +25,6 @@ class OFController extends AbstractVueController
     
     public function getAllOFs(Request $request) {
         $params = $request->query->all();
-        error_log('$params ' . json_encode($params));
         
         $queryParams = [];
 
@@ -38,8 +37,6 @@ class OFController extends AbstractVueController
 
         $queryParams['page'] = !empty($params['page']) ? intval($params['page']) : 0;
         $queryParams['size'] = !empty($params['size']) ? intval($params['size']) : 20;
-        
-        error_log('Query params before getOFs: ' . json_encode($queryParams));
         
         $ofs = $this->getOFs($this->getAuthUser()->getUserHedwigeToken(), $queryParams);
         return new Response(
@@ -55,23 +52,17 @@ class OFController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
         if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
             return [];
         }
 
         if (!$token) {
-            error_log('No authentication token provided');
             return [];
         }
 
         try {
             $url = "{$clientBaseUrl}/OF";
-            error_log("Calling Hedwige API: {$url}");
-            error_log("Params received in getofs: " . json_encode($params));
             
             $queryParams = $params;
-            
-            error_log("Final query params: " . json_encode($queryParams));
             
             $response = $client->request('GET', $url, [
                 'headers' => [
@@ -83,7 +74,6 @@ class OFController extends AbstractVueController
             ]);
             
             $data = json_decode($response->getBody(), true);
-            error_log("Hedwige API response: " . json_encode($data));
             
             $formattedData = [
                 'data' => [],
@@ -100,21 +90,18 @@ class OFController extends AbstractVueController
 
             if (isset($data['content']) && is_array($data['content'])) {
                 foreach ($data['content'] as $of) {
-                    error_log("Processing OF: " . json_encode($of));
                     $formattedOF = [
                         'id' => $of['id'],
                         'name' => $of['name'],
                         'contact' => $of['contact'],
                         'actor' => $of['actor'],
                     ];
-                    error_log("Formatted OF: " . json_encode($formattedOF));
                     $formattedData['data'][] = $formattedOF;
                 }
             }
 
             return $formattedData;
         } catch (\Exception $e) {
-            error_log("Error calling Hedwige API: " . $e->getMessage());
             return [
                 'data' => [],
                 'meta' => [
@@ -136,7 +123,6 @@ class OFController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
         if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
             return new Response(
                 json_encode(['error' => 'Configuration error']),
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -146,18 +132,14 @@ class OFController extends AbstractVueController
 
         try {
             $data = json_decode($request->getContent(), true);
-            error_log('Received data: ' . json_encode($data));
 
             $url = "{$clientBaseUrl}/OF";
-            error_log("Calling Hedwige API for creation: {$url}");
             
             $body = [
                     'name' => $data['name'] ?? null,
                     'contact' => $data['contact'] ?? null,
                     'actor' => $data['actor'] ?? null,
             ];
-            
-            error_log("Request body: " . json_encode($body));
             
             $response = $client->request('POST', $url, [
                 'headers' => [
@@ -174,7 +156,6 @@ class OFController extends AbstractVueController
                 ['Content-Type' => 'application/json']
             );
         } catch (\Exception $e) {
-            error_log("Error creating course: " . $e->getMessage());
             return new Response(
                 json_encode(['error' => $e->getMessage()]),
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -189,18 +170,15 @@ class OFController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
         if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
             return [];
         }
 
         if (!$id) {
-            error_log('Course ID is required');
             return [];
         }
 
         try {
             $url = "{$clientBaseUrl}/OF/{$id}";
-            error_log("Calling Hedwige API for deletion: {$url}");
             
             $response = $client->request('DELETE', $url, [
                 'headers' => [
@@ -231,7 +209,6 @@ class OFController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
         
         if (!$clientBaseUrl) {
-            error_log('HEDWIGE_URL environment variable is not set');
             return new Response(
                 json_encode(['error' => 'Configuration error']),
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -240,7 +217,6 @@ class OFController extends AbstractVueController
         }
 
         if (!$id) {
-            error_log('OF ID is required');
             return new Response(
                 json_encode(['error' => 'OF ID is required']),
                 Response::HTTP_BAD_REQUEST,
@@ -250,7 +226,6 @@ class OFController extends AbstractVueController
 
         try {
             $data = json_decode($request->getContent(), true);
-            error_log('Received data for update: ' . json_encode($data));
 
             $body = [
                 'name' => $data['name'] ?? null,
@@ -258,10 +233,8 @@ class OFController extends AbstractVueController
                 'actor' => $data['actor'] ?? null,
             ];
 
-            error_log('Request body for update: ' . json_encode($body));
 
             $url = "{$clientBaseUrl}/OF/{$id}";
-            error_log("Calling Hedwige API for update: {$url}");
             
             $response = $client->request('PUT', $url, [
                 'headers' => [
@@ -278,7 +251,6 @@ class OFController extends AbstractVueController
                 ['Content-Type' => 'application/json']
             );
         } catch (\Exception $e) {
-            error_log("Error updating of: " . $e->getMessage());
             return new Response(
                 json_encode(['error' => $e->getMessage()]),
                 Response::HTTP_INTERNAL_SERVER_ERROR,

@@ -582,7 +582,7 @@ class ConfigService
         try {
             return new DateInterval($refreshTokenTTL);
         } catch (Exception $e) {
-            return new DateInterval('P1M');
+            return new DateInterval('P01Y');
         }
     }
 
