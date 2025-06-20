@@ -622,6 +622,21 @@ function defaultBreakTime() {
     minutes: null,
   };
 }
+function transformBreakTimeToIntegers(breakTime) {
+  if (breakTime == null) {
+    return null;
+  }
+
+  const transformedBreakTime = {
+    dayOfWeek:
+      breakTime.dayOfWeek !== null ? parseInt(breakTime.dayOfWeek, 10) : null,
+    hour: breakTime.hour !== null ? parseInt(breakTime.hour, 10) : null,
+    minutes:
+      breakTime.minutes !== null ? parseInt(breakTime.minutes, 10) : null,
+  };
+
+  return transformedBreakTime;
+}
 function isValidBreakTime(breakTime) {
   return (
     breakTime &&
@@ -782,6 +797,12 @@ export default {
       this.$emit('cancel');
     },
     onSave() {
+      this.matching.startBreakDate = transformBreakTimeToIntegers(
+        this.matching.startBreakDate,
+      );
+      this.matching.endBreakDate = transformBreakTimeToIntegers(
+        this.matching.endBreakDate,
+      );
       if (
         !isValidBreakTime(this.matching.startBreakDate) ||
         !isValidBreakTime(this.matching.endBreakDate)
