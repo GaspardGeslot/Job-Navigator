@@ -162,6 +162,7 @@
               <oxd-input-field
                 v-model="employee.contactEmail"
                 :label="$t('general.other_email')"
+                :rules="rules.contactEmail"
                 required
               />
             </oxd-grid-item>
@@ -487,6 +488,7 @@ import {
   shouldNotExceedCharLength,
   validDateFormat,
   validDateFormatFrench,
+  validEmailFormat,
   maxFileSize,
   validFileTypes,
   validWebsiteFormat,
@@ -643,6 +645,11 @@ export default {
         attachment: [
           maxFileSize(this.maxFileSize),
           validFileTypes(this.allowedFileTypes),
+        ],
+        contactEmail: [
+          shouldNotExceedCharLength(50),
+          validEmailFormat,
+          required,
         ],
       },
       maritalStatuses: [

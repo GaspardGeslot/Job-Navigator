@@ -64,7 +64,6 @@ class StudyLevelController extends AbstractVueController
         
         try {
             $url = "{$clientBaseUrl}/study-level";
-            error_log('URL complète: ' . $url);
             
             $response = $client->request('GET', $url, [
                 'headers' => [
@@ -74,7 +73,6 @@ class StudyLevelController extends AbstractVueController
             
             $data = json_decode($response->getBody(), true);
             if (!is_array($data)) {
-                error_log('Les données ne sont pas un tableau');
                 return [];
             }
             
@@ -82,12 +80,10 @@ class StudyLevelController extends AbstractVueController
                 return ['name' => $studyLevel];
             }, $data);
             
-            error_log('Données transformées: ' . json_encode($transformedData));
             return $transformedData;
             
         } catch (\Exception $e) {
             error_log('Erreur lors de la récupération des niveaux d\'études: ' . $e->getMessage());
-            error_log('Stack trace: ' . $e->getTraceAsString());
             return [];
         }
     }
@@ -119,6 +115,7 @@ class StudyLevelController extends AbstractVueController
             $client->request('DELETE', $url, [
                 'headers' => [
                     'Authorization' => $token,
+                    'Content-Type' => 'application/json',
                 ],
                 'body' => $name
             ]);
