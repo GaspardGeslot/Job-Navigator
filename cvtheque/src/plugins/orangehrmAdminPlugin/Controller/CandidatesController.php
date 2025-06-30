@@ -22,7 +22,7 @@ class CandidatesController extends AbstractVueController
     public const FILTER_START_DATE = 'startDate';
     public const FILTER_TO_DATE = 'toDate';
     public const FILTER_UTM_SOURCE = 'utmSourceFilter';
-
+    public const FILTER_UTM_CAMPAIGN = 'utmCampaignFilter';
     /**
      * @inheritDoc
      */
@@ -31,14 +31,20 @@ class CandidatesController extends AbstractVueController
         $component = new Component('candidates-list');
 
         $options = $this->getHedwigeOptions();
-        $utmSources = $this->getUtmSourcesOptions();
+        $utmOptions = $this->getUtmOptions();
 
         $component->addProp(new Prop('utm-sources', Prop::TYPE_ARRAY, array_map(function($index, $label) {
             return [
                 'id' => $index,
                 'label' => $label
             ];
-        }, array_keys($utmSources), $utmSources)));
+        }, array_keys($utmOptions['sources']), $utmOptions['sources'])));
+        $component->addProp(new Prop('utm-campaigns', Prop::TYPE_ARRAY, array_map(function($index, $label) {
+            return [
+                'id' => $index,
+                'label' => $label
+            ];
+        }, array_keys($utmOptions['campaigns']), $utmOptions['campaigns'])));
         $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($id, $label) {
             return [
                 'id' => $id,
@@ -97,12 +103,15 @@ class CandidatesController extends AbstractVueController
         $utmSourceFilter = $request->query->get(
             self::FILTER_UTM_SOURCE
         );
+        $utmCampaignFilter = $request->query->get(
+            self::FILTER_UTM_CAMPAIGN
+        );
         $fromDateFilter = $request->query->get(self::FILTER_START_DATE);
         $toDateFilter = $request->query->get(self::FILTER_TO_DATE);
         $fromDate = $fromDateFilter ? new \DateTime($fromDateFilter) : null;
         $toDate = $toDateFilter ? new \DateTime($toDateFilter) : null;
 
-        $candidates = $this->getCandidates($this->getAuthUser()->getUserHedwigeToken(), $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $utmSourceFilter, $fromDate, $toDate);
+        $candidates = $this->getCandidates($this->getAuthUser()->getUserHedwigeToken(), $jobTitleFilter, $needFilter, $studyLevelFilter, $courseStartFilter, $professionalExperienceFilter, $utmSourceFilter, $utmCampaignFilter, $fromDate, $toDate);
         return new Response(
             json_encode($candidates),
             Response::HTTP_OK,
@@ -111,7 +120,7 @@ class CandidatesController extends AbstractVueController
         
     }
 
-    protected function getCandidates(string $token, ?string $jobTitleFilter, ?string $needFilter, ?string $studyLevelFilter, ?string $courseStartFilter, ?string $professionalExperienceFilter, ?string $utmSourceFilter, ?\DateTime $fromDate, ?\DateTime $toDate) : array
+    protected function getCandidates(string $token, ?string $jobTitleFilter, ?string $needFilter, ?string $studyLevelFilter, ?string $courseStartFilter, ?string $professionalExperienceFilter, ?string $utmSourceFilter, ?string $utmCampaignFilter, ?\DateTime $fromDate, ?\DateTime $toDate) : array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -141,6 +150,9 @@ class CandidatesController extends AbstractVueController
             }
             if ($utmSourceFilter != null && $utmSourceFilter !== '') {
                 $url .= 'utmSource=' . urlencode($utmSourceFilter) . '&';
+            }
+            if ($utmCampaignFilter != null && $utmCampaignFilter !== '') {
+                $url .= 'utmCampaign=' . urlencode($utmCampaignFilter) . '&';
             }
             $response = $client->request('GET', $url, [
                 'headers' => [
@@ -172,14 +184,14 @@ class CandidatesController extends AbstractVueController
         }
     }
 
-    public function getUtmSourcesOptions(): array
+    public function getUtmOptions(): array
     {
         $client = new Client();
         $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $response = $client->request('GET', "{$clientBaseUrl}/client/utm-source", [
+            $response = $client->request('GET', "{$clientBaseUrl}/client/utm", [
                 'headers' => [
                     'Authorization' => $clientToken
                 ]
