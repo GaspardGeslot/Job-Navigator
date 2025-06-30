@@ -40,6 +40,24 @@
       </div>
     </div>
     <br />
+    <div class="orangehrm-corporate-directory">
+      <div class="orangehrm-paper-container">
+        <div
+          v-if="!state.isLoading && state.actors.length == 0"
+          class="orangehrm-corporate-directory-nocontent"
+          style="display: flex; flex-direction: row; align-items: center"
+        >
+          <img
+            :src="noContentPic"
+            alt="No Content"
+            style="max-width: 60px; margin: 0.85rem"
+          />
+          <oxd-text tag="p">
+            Effectuez une recherche pour consulter les acteurs
+          </oxd-text>
+        </div>
+      </div>
+    </div>
     <div
       v-if="state.isLoading"
       class="orangehrm-header-container"
@@ -47,7 +65,7 @@
     >
       <oxd-loading-spinner class="orangehrm-container-loader" />
     </div>
-    <div v-else v-for="(actor, index) in state.actors" :key="index">
+    <div v-for="(actor, index) in state.actors" v-else :key="index">
       <table-filter
         :active="false"
         :filter-title="actor.name ? `${actor.name}` : `Actor N°${actor.id}`"
@@ -130,6 +148,7 @@ export default {
     const {noRecordsFound} = useToast();
     const nameFilter = ref(null);
     const jobFilter = ref(null);
+    const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
 
     const state = reactive({
       total: 0,
@@ -147,10 +166,21 @@ export default {
           job: jobFilter.value?.label,
         })
         .then((response) => {
-          state.actors = response.data;
-          state.total = response.data.length;
+          const allActors = response.data;
+          state.total = allActors.length;
+
           if (state.total === 0) {
             noRecordsFound();
+          } else {
+            if (allActors.length > 0) {
+              state.actors.push(allActors[0]);
+            }
+
+            for (let i = 1; i < allActors.length; i++) {
+              setTimeout(() => {
+                state.actors.push(allActors[i]);
+              }, i * 30);
+            }
           }
         })
         .finally(() => {
@@ -158,15 +188,16 @@ export default {
         });
     };
 
-    onMounted(() => {
-      fetchData();
-    });
+    // onMounted(() => {
+    //   fetchData();
+    // });
 
     return {
       http,
       state,
       nameFilter,
       jobFilter,
+      noContentPic,
       fetchData,
     };
   },
