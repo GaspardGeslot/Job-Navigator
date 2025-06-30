@@ -104,6 +104,14 @@
                 :options="utmSources"
               />
             </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="utmCampaignFilter"
+                type="select"
+                :label="$t('Campagne de candidature')"
+                :options="utmCampaigns"
+              />
+            </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
         <oxd-divider />
@@ -196,11 +204,16 @@ export default {
       type: Array,
       default: () => [],
     },
+    utmCampaigns: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup() {
     const jobSector = ref('');
     const professionalExperienceFilter = ref(null);
     const utmSourceFilter = ref(null);
+    const utmCampaignFilter = ref(null);
     const jobTitleFilter = ref(null);
     const needFilter = ref(null);
     const studyLevelFilter = ref(null);
@@ -278,6 +291,9 @@ export default {
             : {}),
           ...(courseStartFilter.value
             ? {courseStartFilter: courseStartFilter.value.label}
+            : {}),
+          ...(utmCampaignFilter.value
+            ? {utmCampaignFilter: utmCampaignFilter.value.label}
             : {}),
           ...(utmSourceFilter.value
             ? {utmSourceFilter: utmSourceFilter.value.label}
@@ -501,6 +517,7 @@ export default {
       needFilter,
       jobSector,
       utmSourceFilter,
+      utmCampaignFilter,
       professionalExperienceFilter,
       jobTitleFilter,
       studyLevelFilter,
@@ -562,6 +579,7 @@ export default {
       this.jobSector = null;
       this.professionalExperienceFilter = null;
       this.utmSourceFilter = null;
+      this.utmCampaignFilter = null;
       this.needFilter = null;
       this.studyLevelFilter = null;
       this.courseStartFilter = null;
