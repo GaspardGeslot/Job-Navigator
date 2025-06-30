@@ -55,6 +55,40 @@
       </div>
     </div>
     <br />
+    <!--
+          <oxd-text
+      v-if="state.matchings.length == 0"
+      class="oxd-label"
+      :style="{
+        fontFamily: 'Nunito Sans, sans-serif',
+        fontSize: '18px',
+        fontWeight: '600',
+        color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+        marginBottom: '0.5rem',
+        marginLeft: '0.5rem',
+      }"
+    >
+      Effectuez une recherche pour consulter les matchings
+    </oxd-text>
+  -->
+    <div class="orangehrm-corporate-directory">
+      <div class="orangehrm-paper-container">
+        <div
+          v-if="!state.isLoading && state.matchings.length == 0"
+          class="orangehrm-corporate-directory-nocontent"
+          style="display: flex; flex-direction: row; align-items: center"
+        >
+          <img
+            :src="noContentPic"
+            alt="No Content"
+            style="max-width: 60px; margin: 0.85rem"
+          />
+          <oxd-text tag="p">
+            Effectuez une recherche pour consulter les matchings
+          </oxd-text>
+        </div>
+      </div>
+    </div>
     <div
       v-if="state.isLoading"
       class="orangehrm-header-container"
@@ -62,7 +96,7 @@
     >
       <oxd-loading-spinner class="orangehrm-container-loader" />
     </div>
-    <div v-else v-for="(matching, index) in state.matchings" :key="index">
+    <div v-for="(matching, index) in state.matchings" v-else :key="index">
       <table-filter
         :active="false"
         :filter-title="
@@ -185,6 +219,7 @@ export default {
     const actorFilter = ref(null);
     const jobFilter = ref(null);
     const courseFilter = ref(null);
+    const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
 
     const state = reactive({
       total: 0,
@@ -204,10 +239,21 @@ export default {
           courseId: courseFilter.value?.id,
         })
         .then((response) => {
-          state.matchings = response.data;
-          state.total = response.data.length;
+          const allMatchings = response.data;
+          state.total = allMatchings.length;
+
           if (state.total === 0) {
             noRecordsFound();
+          } else {
+            if (allMatchings.length > 0) {
+              state.matchings.push(allMatchings[0]);
+            }
+
+            for (let i = 1; i < allMatchings.length; i++) {
+              setTimeout(() => {
+                state.matchings.push(allMatchings[i]);
+              }, i * 30);
+            }
           }
         })
         .finally(() => {
@@ -215,9 +261,9 @@ export default {
         });
     };
 
-    onMounted(() => {
-      fetchData();
-    });
+    // onMounted(() => {
+    //   fetchData();
+    // });
 
     return {
       http,
@@ -225,6 +271,7 @@ export default {
       titleFilter,
       actorFilter,
       jobFilter,
+      noContentPic,
       courseFilter,
       fetchData,
     };

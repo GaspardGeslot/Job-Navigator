@@ -772,9 +772,11 @@ export default {
           selectedList = this.matching[field] || [];
         }
 
-        return (
-          optionsList.length > 0 && selectedList.length === optionsList.length
-        );
+        // OPTIMISATION: Vérifications rapides pour éviter les calculs inutiles
+        if (optionsList.length === 0) return false;
+        if (selectedList.length === 0) return false;
+
+        return selectedList.length === optionsList.length;
       };
     },
     isAllDepartmentsSelected() {
@@ -785,8 +787,11 @@ export default {
     },
   },
   watch: {
-    matchingCurrent() {
-      this.fetchMatching();
+    matchingCurrent: {
+      handler() {
+        this.fetchMatching();
+      },
+      deep: false, // OPTIMISATION: Évite les watchers profonds coûteux
     },
   },
   beforeMount() {
@@ -907,23 +912,38 @@ export default {
       this.matching.jobs = this.matchingCurrent.jobs;
       this.matching.ages = this.matchingCurrent.ages;
       this.matching.ages.sort((a, b) => a.min - b.min);
+
+      // OPTIMISATION 1: Map pour les départements (O(1) au lieu de O(n²))
+      const departmentMap = new Map();
+      this.departmentsOptions.forEach((dept) => {
+        departmentMap.set(String(dept.id), dept);
+      });
+
       this.matching.departments = [];
       for (const department of this.matchingCurrent.departments) {
-        const departmentOption = this.departmentsOptions.find(
-          (d) => String(d.id) === String(department),
-        );
-        this.matching.departments.push({
-          id: departmentOption.id,
-          label: departmentOption.label,
-        });
+        const departmentOption = departmentMap.get(String(department));
+        if (departmentOption) {
+          this.matching.departments.push({
+            id: departmentOption.id,
+            label: departmentOption.label,
+          });
+        }
       }
+
+      // OPTIMISATION 2: Boucle optimisée pour les cours
       this.matching.courses = [];
-      for (const [id, label] of Object.entries(this.matchingCurrent.courses)) {
-        this.matching.courses.push({
+      if (
+        this.matchingCurrent.courses &&
+        typeof this.matchingCurrent.courses === 'object'
+      ) {
+        this.matching.courses = Object.entries(
+          this.matchingCurrent.courses,
+        ).map(([id, label]) => ({
           id: id,
           label: id + ' - ' + label,
-        });
+        }));
       }
+
       this.matching.locationPostalCodes =
         this.matchingCurrent.locationPostalCodes;
     },
