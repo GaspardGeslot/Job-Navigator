@@ -22,6 +22,7 @@ class LeadsController extends AbstractVueController
     public const FILTER_ONLY_MATCHING_NOT_AVAILABLE = 'onlyMatchingNotAvailable';
     public const FILTER_ACTOR = 'actor';
     public const FILTER_JOBS = 'jobs';
+    public const FILTER_COURSE_ONLY = 'courseOnly';
 
     /**
      * @inheritDoc
@@ -51,7 +52,12 @@ class LeadsController extends AbstractVueController
         $onlyMatchingNotAvailable = $request->query->get(self::FILTER_ONLY_MATCHING_NOT_AVAILABLE);
         $actor = $request->query->get(self::FILTER_ACTOR);
         $jobs = $request->query->get(self::FILTER_JOBS);
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $onlyBillable, $onlyDuplicate, $onlyMatchingNotAvailable, $actor, $jobs);
+        $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
+        if ($courseOnly !== null) {
+            $courseOnly = filter_var($courseOnly, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        }
+        // error_log('$courseOnly ' . var_export($courseOnly, true));
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $onlyBillable, $onlyDuplicate, $onlyMatchingNotAvailable, $actor, $jobs, $courseOnly);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -82,7 +88,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, string $onlyBillable, string $onlyDuplicate, string $onlyMatchingNotAvailable, ?string $actor, ?array $jobs): array
+    public function getLeads(string $token, string $from, string $to, string $onlyBillable, string $onlyDuplicate, string $onlyMatchingNotAvailable, ?string $actor, ?array $jobs, ?bool $courseOnly): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -103,6 +109,10 @@ class LeadsController extends AbstractVueController
                 $url .= 'actor=' . urlencode($actor) . '&';
             if ($jobs != null && $jobs !== [])
                 $url .= 'jobs=' . urlencode(implode(',', $jobs)) . '&';
+            if ($courseOnly !== null) {
+                $url .= 'courseOnly=' . ($courseOnly ? 'true' : 'false') . '&';
+            }
+            // error_log("url " . $url);
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,

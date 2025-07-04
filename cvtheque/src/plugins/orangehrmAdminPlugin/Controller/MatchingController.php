@@ -19,6 +19,18 @@ class MatchingController extends AbstractVueController
     public const FILTER_ACTOR = 'actor';
     public const FILTER_JOB = 'job';
     public const FILTER_COURSE_ID = 'courseId';
+    public const FILTER_IS_ACTIVE = 'isActive';
+    public const FILTER_COUNTRIES = 'countries';
+    public const FILTER_COURSE_STARTS = 'courseStarts';
+    public const FILTER_FUNDINGS = 'fundings';
+    public const FILTER_HANDICAPS = 'handicaps';
+    public const FILTER_STUDY_LEVELS = 'studyLevels';
+    public const FILTER_NEEDS = 'needs';
+    public const FILTER_PHONE_NUMBERS = 'phoneNumbers';
+    public const FILTER_PROFESSIONAL_EXPERIENCES = 'professionalExperiences';
+    public const FILTER_STATUS = 'status';
+    public const FILTER_TRAINING_METHODS = 'trainingMethods';
+    public const FILTER_DRIVING_LICENSES = 'drivingLicenses';
 
     /**
      * @inheritDoc
@@ -125,7 +137,44 @@ class MatchingController extends AbstractVueController
         $courseIdFilter = $request->query->get(
             self::FILTER_COURSE_ID
         );
-        $matchings = $this->getMatchings($this->getAuthUser()->getUserHedwigeToken(), $titleFilter, $actorFilter, $jobFilter, $courseIdFilter);
+        $isActiveFilter = $request->query->get(
+            self::FILTER_IS_ACTIVE
+        );
+        if ($isActiveFilter !== null) {
+            $isActiveFilter = filter_var($isActiveFilter, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        }
+        
+        $countriesFilter = $request->query->get('countries');
+        $courseStartsFilter = $request->query->get('courseStarts');
+        $fundingsFilter = $request->query->get('fundings');
+        $handicapsFilter = $request->query->get('handicaps');
+        $studyLevelsFilter = $request->query->get('studyLevels');
+        $needsFilter = $request->query->get('needs');
+        $phoneNumbersFilter = $request->query->get('phoneNumbers');
+        $professionalExperiencesFilter = $request->query->get('professionalExperiences');
+        $statusFilter = $request->query->get('status');
+        $trainingMethodsFilter = $request->query->get('trainingMethods');
+        $drivingLicensesFilter = $request->query->get('drivingLicenses');
+        
+        $matchings = $this->getMatchings(
+            $this->getAuthUser()->getUserHedwigeToken(), 
+            $titleFilter, 
+            $actorFilter, 
+            $jobFilter, 
+            $courseIdFilter, 
+            $isActiveFilter, 
+            $countriesFilter,
+            $courseStartsFilter,
+            $fundingsFilter,
+            $handicapsFilter,
+            $studyLevelsFilter,
+            $needsFilter,
+            $phoneNumbersFilter,
+            $professionalExperiencesFilter,
+            $statusFilter,
+            $trainingMethodsFilter,
+            $drivingLicensesFilter
+        );
         return new Response(
             json_encode($matchings),
             Response::HTTP_OK,
@@ -185,7 +234,7 @@ class MatchingController extends AbstractVueController
         return new Response(json_encode(['message' => 'Matching deleted successfully']), Response::HTTP_OK);
     }
 
-    private function getMatchings(string $token, ?string $titleFilter, ?string $actorFilter, ?string $jobFilter, ?string $courseIdFilter): array
+    private function getMatchings(string $token, ?string $titleFilter, ?string $actorFilter, ?string $jobFilter, ?string $courseIdFilter, ?bool $isActiveFilter, ?array $countriesFilter = null, ?array $courseStartsFilter = null, ?array $fundingsFilter = null, ?array $handicapsFilter = null, ?array $studyLevelsFilter = null, ?array $needsFilter = null, ?array $phoneNumbersFilter = null, ?array $professionalExperiencesFilter = null, ?array $statusFilter = null, ?array $trainingMethodsFilter = null, ?array $drivingLicensesFilter = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -204,6 +253,98 @@ class MatchingController extends AbstractVueController
             if ($courseIdFilter != null && $courseIdFilter !== '') {
                 $url .= 'course=' . urlencode($courseIdFilter) . '&';
             }
+            if ($isActiveFilter !== null) {
+                $url .= 'isActive=' . ($isActiveFilter ? 'true' : 'false') . '&';
+            }
+            // if ($countriesFilter != null && !empty($countriesFilter)) {
+            //     $url .= 'countries=' . urlencode(implode(',', $countriesFilter)) . '&';
+            // }
+            if ($countriesFilter != null && !empty($countriesFilter)) {
+                foreach ($countriesFilter as $country) {
+                    $url .= 'countries=' . urlencode($country) . '&';
+                }
+            }
+            if ($courseStartsFilter != null && !empty($courseStartsFilter)) {
+                foreach ($courseStartsFilter as $courseStarts) {
+                    $url .= 'courseStarts=' . urlencode($courseStarts) . '&';
+                }
+            }
+            // if ($courseStartsFilter != null && !empty($courseStartsFilter)) {
+            //     $url .= 'courseStarts=' . urlencode(implode(',', $courseStartsFilter)) . '&';
+            // }
+            if ($fundingsFilter != null && !empty($fundingsFilter)) {
+                foreach ($fundingsFilter as $funding) {
+                    $url .= 'fundings=' . urlencode($funding) . '&';
+                }
+            }
+            // if ($fundingsFilter != null && !empty($fundingsFilter)) {
+            //     $url .= 'fundings=' . urlencode(implode(',', $fundingsFilter)) . '&';
+            // }
+            // if ($handicapsFilter != null && !empty($handicapsFilter)) {
+            //     $url .= 'handicaps=' . urlencode(implode(',', $handicapsFilter)) . '&';
+            // }
+            if ($handicapsFilter != null && !empty($handicapsFilter)) {
+                foreach ($handicapsFilter as $handicap) {
+                    $url .= 'handicaps=' . urlencode($handicap) . '&';
+                }
+            }
+            if ($studyLevelsFilter != null && !empty($studyLevelsFilter)) {
+                foreach ($studyLevelsFilter as $studyLevel) {
+                    $url .= 'studyLevels=' . urlencode($studyLevel) . '&';
+                }
+            }
+            // if ($studyLevelsFilter != null && !empty($studyLevelsFilter)) {
+            //     $url .= 'studyLevels=' . urlencode(implode(',', $studyLevelsFilter)) . '&';
+            // }
+            // if ($needsFilter != null && !empty($needsFilter)) {
+            //     $url .= 'needs=' . urlencode(implode(',', $needsFilter)) . '&';
+            // }
+            // if ($phoneNumbersFilter != null && !empty($phoneNumbersFilter)) {
+            //     $url .= 'phoneNumbers=' . urlencode(implode(',', $phoneNumbersFilter)) . '&';
+            // }
+            // if ($professionalExperiencesFilter != null && !empty($professionalExperiencesFilter)) {
+            //     $url .= 'professionalExperiences=' . urlencode(implode(',', $professionalExperiencesFilter)) . '&';
+            // }
+            // if ($statusFilter != null && !empty($statusFilter)) {
+            //     $url .= 'status=' . urlencode(implode(',', $statusFilter)) . '&';
+            // }
+            // if ($trainingMethodsFilter != null && !empty($trainingMethodsFilter)) {
+            //     $url .= 'trainingMethods=' . urlencode(implode(',', $trainingMethodsFilter)) . '&';
+            // }
+            // if ($drivingLicensesFilter != null && !empty($drivingLicensesFilter)) {
+            //     $url .= 'drivingLicenses=' . urlencode(implode(',', $drivingLicensesFilter)) . '&';
+            // }
+            if ($needsFilter != null && !empty($needsFilter)) {
+                foreach ($needsFilter as $need) {
+                    $url .= 'needs=' . urlencode($need) . '&';
+                }
+            }
+            if ($phoneNumbersFilter != null && !empty($phoneNumbersFilter)) {
+                foreach ($phoneNumbersFilter as $phoneNumber) {
+                    $url .= 'phoneNumbers=' . urlencode($phoneNumber) . '&';
+                }
+            }
+            if ($professionalExperiencesFilter != null && !empty($professionalExperiencesFilter)) {
+                foreach ($professionalExperiencesFilter as $professionalExperience) {
+                    $url .= 'professionalExperiences=' . urlencode($professionalExperience) . '&';
+                }
+            }
+            if ($statusFilter != null && !empty($statusFilter)) {
+                foreach ($statusFilter as $status) {
+                    $url .= 'status=' . urlencode($status) . '&';
+                }
+            }
+            if ($trainingMethodsFilter != null && !empty($trainingMethodsFilter)) {
+                foreach ($trainingMethodsFilter as $trainingMethod) {
+                    $url .= 'trainingMethods=' . urlencode($trainingMethod) . '&';
+                }
+            }
+            if ($drivingLicensesFilter != null && !empty($drivingLicensesFilter)) {
+                foreach ($drivingLicensesFilter as $drivingLicense) {
+                    $url .= 'drivingLicenses=' . urlencode($drivingLicense) . '&';
+                }
+            }
+            // error_log("URL de requête : " . urldecode($url));
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,

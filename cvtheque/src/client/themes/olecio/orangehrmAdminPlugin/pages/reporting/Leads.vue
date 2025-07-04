@@ -43,7 +43,7 @@
           </oxd-grid>
         </oxd-form-row>
         <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="statusFilter"
@@ -67,6 +67,27 @@
                 :option-label="statusOptions.matchingNotAvailable.label"
                 :value="statusOptions.matchingNotAvailable.value"
               />
+            </oxd-grid-item>
+            <oxd-grid-item
+              class="orangehrm-switch-wrapper"
+              style="display: flex; flex-direction: row; margin-top: 0.5rem"
+            >
+              <oxd-switch-input
+                v-model="courseOnly"
+                :label="$t(`Uniquement avec formation`)"
+              />
+              <oxd-text
+                class="oxd-label"
+                :style="{
+                  fontFamily: 'Nunito Sans, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                  marginBottom: '0.5rem',
+                }"
+              >
+                Uniquement avec formation
+              </oxd-text>
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
@@ -183,7 +204,7 @@ import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import useToast from '@/core/util/composable/useToast';
 import JobAutocomplete from '@/core/components/inputs/JobAutocomplete.vue';
 import {APIService} from '@/core/util/services/api.service';
-import {OxdSpinner} from '@ohrm/oxd';
+import {OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog.vue';
 
@@ -192,6 +213,7 @@ export default {
     'oxd-loading-spinner': OxdSpinner,
     'job-autocomplete': JobAutocomplete,
     'confirmation-dialog': ConfirmationDialog,
+    'oxd-switch-input': OxdSwitchInput,
   },
   props: {
     actors: {
@@ -218,6 +240,7 @@ export default {
     const statusFilter = ref(null);
     const actorFilter = ref(null);
     const jobsFilter = ref([]);
+    const courseOnly = ref(false);
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
@@ -450,6 +473,7 @@ export default {
           jobs: jobsFilter.value
             ? jobsFilter.value.map((job) => job.label)
             : [],
+          courseOnly: courseOnly.value,
         })
         .then((response) => {
           leads.value = response.data;
@@ -535,9 +559,9 @@ export default {
       jobsFilter.value = jobs;
     };
 
-    onMounted(() => {
-      fetchData();
-    });
+    // onMounted(() => {
+    //   fetchData();
+    // });
 
     return {
       http,
@@ -547,6 +571,7 @@ export default {
       statusFilter,
       actorFilter,
       jobsFilter,
+      courseOnly,
       tableData,
       tableHeaders,
       totalRecords,
