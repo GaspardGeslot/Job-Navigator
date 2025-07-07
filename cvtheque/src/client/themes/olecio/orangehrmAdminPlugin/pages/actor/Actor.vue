@@ -45,12 +45,17 @@
         <div
           v-if="!state.isLoading && state.actors.length == 0"
           class="orangehrm-corporate-directory-nocontent"
-          style="display: flex; flex-direction: row; align-items: center"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+          "
         >
           <img
             :src="noContentPic"
             alt="No Content"
-            style="max-width: 60px; margin: 0.85rem"
+            style="max-width: 60px; margin: 0 0 0.85rem 0"
           />
           <oxd-text tag="p">
             Effectuez une recherche pour consulter les acteurs

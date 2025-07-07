@@ -37,26 +37,6 @@
                 :options="isActiveOptions"
               />
             </oxd-grid-item>
-            <!--
-            <oxd-grid-item class="orangehrm-switch-wrapper">
-              <oxd-text
-                class="oxd-label"
-                :style="{
-                  fontFamily: 'Nunito Sans, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: '600',
-                  color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
-                  marginBottom: '0.5rem',
-                }"
-              >
-                Uniquement avec formation
-              </oxd-text>
-              <oxd-switch-input
-                v-model="courseOnly"
-                :label="$t(`Uniquement avec formation`)"
-              />
-            </oxd-grid-item>
-            -->
             <oxd-grid-item class="orangehrm-switch-wrapper">
               <oxd-text
                 class="oxd-label"
@@ -84,6 +64,7 @@
           </oxd-grid>
         </oxd-form-row>
         <div v-if="showMoreFilters">
+          <oxd-divider />
           <oxd-form-row>
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
@@ -113,6 +94,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -141,6 +123,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -169,6 +152,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -197,6 +181,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -225,6 +210,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -253,6 +239,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -281,6 +268,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -309,6 +297,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -337,6 +326,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -365,6 +355,7 @@
                 />
               </oxd-grid-item>
             </oxd-grid>
+            <oxd-divider />
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -444,12 +435,17 @@
         <div
           v-if="!state.isLoading && state.matchings.length == 0"
           class="orangehrm-corporate-directory-nocontent"
-          style="display: flex; flex-direction: row; align-items: center"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+          "
         >
           <img
             :src="noContentPic"
             alt="No Content"
-            style="max-width: 60px; margin: 0.85rem"
+            style="max-width: 60px; margin: 0 0 0.85rem 0"
           />
           <oxd-text tag="p">
             Effectuez une recherche pour consulter les matchings
@@ -590,7 +586,6 @@ export default {
     const courseFilter = ref(null);
     const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
     const isActiveOptions = [
-      {id: null, label: 'Sans filtre'},
       {id: false, label: 'Inactif'},
       {id: true, label: 'Actif'},
     ];
@@ -619,25 +614,6 @@ export default {
     const fetchData = () => {
       state.isLoading = true;
       state.matchings = [];
-      // const data = {
-      //   title: titleFilter.value,
-      //   actor: actorFilter.value?.label,
-      //   job: jobFilter.value?.label,
-      //   courseId: courseFilter.value?.id,
-      //   isActive: isActiveFilter.value?.id,
-      //   countries: countriesFilter.value,
-      //   courseStarts: courseStartFilter.value,
-      //   fundings: fundingsFilter.value,
-      //   handicaps: handicapsFilter.value,
-      //   studyLevels: studyLevelsFilter.value,
-      //   needs: needsFilter.value,
-      //   phoneNumbers: phoneNumbersFilter.value,
-      //   professionalExperiences: professionalExperiencesFilter.value,
-      //   status: statusFilter.value,
-      //   trainingMethods: trainingMethodsFilter.value,
-      //   drivingLicenses: drivingLicensesFilter.value,
-      // };
-      // console.log('data here ', data);
       http
         .getAll({
           title: titleFilter.value,
@@ -665,6 +641,7 @@ export default {
           if (state.total === 0) {
             noRecordsFound();
           } else {
+            allMatchings.sort((a, b) => a.id - b.id);
             if (allMatchings.length > 0) {
               state.matchings.push(allMatchings[0]);
             }
