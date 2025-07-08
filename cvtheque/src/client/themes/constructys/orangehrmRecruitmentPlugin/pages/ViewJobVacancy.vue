@@ -53,9 +53,9 @@
             </oxd-grid-item>-->
           </oxd-grid>
           <oxd-grid
+            v-if="canUpdate"
             :cols="2"
             class="orangehrm-full-width-grid"
-            v-if="canUpdate"
           >
             <oxd-grid-item>
               <oxd-input-field
@@ -115,7 +115,7 @@
     </table-filter>
     <br />
     <div class="orangehrm-paper-container">
-      <div class="orangehrm-header-container" v-if="hasName">
+      <div v-if="hasName" class="orangehrm-header-container">
         <oxd-button
           :label="$t('recruitment.add_matching')"
           icon-name="plus"
@@ -123,7 +123,7 @@
           @click="onClickAdd"
         />
       </div>
-      <div class="orangehrm-header-container" v-else>
+      <div v-else class="orangehrm-header-container">
         <oxd-text class="orangehrm-sub-title" style="color: red" tag="h6">
           {{ $t('recruitment.company_has_no_name') }}
         </oxd-text>
@@ -137,8 +137,8 @@
       @delete="onClickDeleteSelected"
     ></table-header>-->
     <oxd-table-filter
-      :filter-title="$t('Découvrez les candidats qui correspondent')"
       v-if="isSearching"
+      :filter-title="$t('Découvrez les candidats qui correspondent')"
     >
       <div class="boutonTriBloc">
         <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
@@ -157,18 +157,18 @@
         <!--class="orangehrm-vacancy-list"-->
       </div>
     </oxd-table-filter>
-    <div class="orangehrm-bottom-container" v-if="showPaginator">
+    <div v-if="showPaginator" class="orangehrm-bottom-container">
       <oxd-pagination v-model:current="currentPage" :length="pages" />
     </div>
     <br v-if="!showPaginator" />
     <oxd-table-filter
-      :filter-title="$t('Découvrez les autres candidats sur ce métier')"
       v-if="isSearchingNoStatut"
+      :filter-title="$t('Découvrez les autres candidats sur ce métier')"
     >
       <div class="boutonTriBloc">
         <button class="boutonTri" @click="sortByDate2">Trier par date ⇅</button>
       </div>
-      <div class="orangehrm-container" v-if="isSearching">
+      <div v-if="isSearching" class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
           :headers="headers2"
@@ -181,7 +181,7 @@
 
         <!--class="orangehrm-vacancy-list"-->
       </div>
-      <div class="orangehrm-bottom-container" v-if="showPaginator">
+      <div v-if="showPaginator" class="orangehrm-bottom-container">
         <oxd-pagination v-model:current="currentPage" :length="pages" />
       </div>
     </oxd-table-filter>
@@ -200,7 +200,8 @@ import usei18n from '@/core/util/composable/usei18n';
 import useLocale from '@/core/util/composable/useLocale';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
-import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
+// import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
+import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteJobVacancyConfirmationDialog';
 import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
 /*import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
@@ -247,28 +248,6 @@ export default {
     hasName: {
       type: Boolean,
       default: true,
-    },
-  },
-  watch: {
-    'filters.matchingSelected': {
-      handler(newVal) {
-        this.canUpdate = newVal;
-      },
-      immediate: true,
-      deep: true,
-    },
-    'filters.statusJobSelected': {
-      handler(newVal) {
-        this.canUpdate = newVal;
-      },
-      immediate: true,
-      deep: true,
-    },
-    // Surveille items.data pour exécuter le tri une fois les données chargées
-    'items.data': function (newData) {
-      if (newData && newData.length > 0) {
-        this.sortByDate();
-      }
     },
   },
 
@@ -384,18 +363,6 @@ export default {
       sortDefinition,
     };
   },
-  computed: {
-    hasNoMatchings() {
-      return this.matchings.length === 0;
-    },
-  },
-  beforeMount() {
-    if (this.matchingSelected) {
-      if (this.filters === undefined) this.filters = {...defaultFilters};
-      this.filters.matchingSelected = this.matchingSelected;
-      this.filterItems();
-    }
-  },
   data() {
     return {
       isSearching: false,
@@ -481,6 +448,40 @@ export default {
       vacancies: [],
       checkedItems: [],
     };
+  },
+  computed: {
+    hasNoMatchings() {
+      return this.matchings.length === 0;
+    },
+  },
+  watch: {
+    'filters.matchingSelected': {
+      handler(newVal) {
+        this.canUpdate = newVal;
+      },
+      immediate: true,
+      deep: true,
+    },
+    'filters.statusJobSelected': {
+      handler(newVal) {
+        this.canUpdate = newVal;
+      },
+      immediate: true,
+      deep: true,
+    },
+    // Surveille items.data pour exécuter le tri une fois les données chargées
+    'items.data': function (newData) {
+      if (newData && newData.length > 0) {
+        this.sortByDate();
+      }
+    },
+  },
+  beforeMount() {
+    if (this.matchingSelected) {
+      if (this.filters === undefined) this.filters = {...defaultFilters};
+      this.filters.matchingSelected = this.matchingSelected;
+      this.filterItems();
+    }
   },
 
   methods: {
@@ -570,8 +571,11 @@ export default {
     onClickDelete() {
       if (this.filters.matchingSelected) {
         this.$refs.deleteDialog.showDialog().then((confirmation) => {
-          if (confirmation === 'ok') {
-            this.deleteData([this.filters.matchingSelected.id]);
+          if (confirmation.action === 'ok') {
+            this.deleteData(
+              [this.filters.matchingSelected.id],
+              confirmation.reason,
+            );
           }
         });
       }
@@ -581,8 +585,8 @@ export default {
         return this.items?.data[index].id;
       });
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
-        if (confirmation === 'ok') {
-          this.deleteData(ids);
+        if (confirmation.action === 'ok') {
+          this.deleteData(ids, confirmation.reason);
         }
       });
     },
@@ -633,16 +637,22 @@ export default {
         });
     },
 
-    async deleteData(items) {
+    async deleteData(items, reason) {
       if (items instanceof Array) {
         this.isLoading = true;
-        new APIService(
-          window.appGlobal.baseUrl,
-          `${window.appGlobal.theme}/api/v2/recruitment/vacancies`,
-        )
-          .deleteAll({
-            ids: items,
-          })
+        const deletePayload = {
+          ids: items,
+        };
+
+        let url = `${window.appGlobal.theme}/api/v2/recruitment/vacancies`;
+        if (reason) {
+          url += `?reason=${encodeURIComponent(reason)}`;
+        }
+
+        const apiService = new APIService(window.appGlobal.baseUrl, url);
+
+        apiService
+          .deleteAll(deletePayload)
           .then(() => {
             return this.$toast.deleteSuccess();
           })

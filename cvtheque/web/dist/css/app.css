@@ -4108,6 +4108,61 @@
 .orangehrm-paper-container[data-v-0e5505ea] {
   margin-top: 1rem;
 }
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./src/core/components/dialogs/dialog.scss?vue&type=style&index=0&lang=scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-modal-header {
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-modal-footer {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orangehrm-button-margin {
+  margin: 0.25rem;
+}
+.orangehrm-text-center-align {
+  text-align: center;
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/dialogs/DeleteJobVacancyConfirmationDialog.vue?vue&type=style&index=1&id=7bf248e8&scoped=true&lang=css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+.radio-option-item .oxd-input-group[data-v-7bf248e8] {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: flex-end !important;
+  gap: 0 !important;
+}
+.radio-option-item .oxd-input-group input[type='radio'][data-v-7bf248e8] {
+  margin-right: 0.5em !important;
+  margin-left: 0 !important;
+}
+.radio-option-item .oxd-input-group label[data-v-7bf248e8] {
+  margin: 0 !important;
+}
+.radio-option-item .oxd-input-group[data-v-7bf248e8] {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  gap: 0 !important;
+}
+.radio-option-item .oxd-input-group input[type='radio'][data-v-7bf248e8] {
+  margin-right: 0.5em !important;
+  margin-left: 0 !important;
+}
+.oxd-input-group__label-wrapper[data-v-7bf248e8] {
+  margin-top: 0.25rem !important;
+}
+.oxd-label[data-v-7bf248e8] {
+  margin-top: 0.25rem !important;
+}
+
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/labels/TableFilterTitle.vue?vue&type=style&index=0&id=1d175970&lang=scss&scoped=true ***!
   \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
