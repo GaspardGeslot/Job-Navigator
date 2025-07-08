@@ -190,7 +190,7 @@
 </template>
 
 <script>
-import {computed, onMounted, ref} from 'vue';
+import {computed, ref} from 'vue';
 import usePaginate from '@/core/util/composable/usePaginate';
 import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
