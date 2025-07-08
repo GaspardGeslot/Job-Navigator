@@ -1,25 +1,26 @@
 <!--eslint-disable-->
 <template>
-  <div id="accueil">
-    <div class="accueilGauche">
-      <div class="accueilLogo">
-        <div class="jobNavigatorLogo">
-          <img
-            id="logoJobNavigatorHomepage"
-            src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_banner_white.png"
-            alt="logoJobNavigator"
-            @click="navigateToHome"
-            style="cursor: pointer"
-          />
-        </div>
+  <!-- Navbar fixe transparente -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">
         <img
-          id="logoConstructys"
-          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Constructys_Logo.jpg"
-          alt="Logo Constructys"
+          id="logoJobNavigatorHomepage"
+          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_banner_white.png"
+          alt="logoJobNavigator"
+          @click="navigateToHome"
+          style="cursor: pointer"
         />
+        <a href="https://www.vigiebtp-idf.fr/" style="cursor: pointer">
+          <img
+            id="logoConstructys"
+            src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Logo_VigieBtp.svg"
+            alt="Logo Constructys"
+          />
+        </a>
       </div>
     </div>
-  </div>
+  </nav>
   <div id="content">
     <div class="commentGauche">
       <h1>Mentions légales & politique de confidentialité des données</h1>
@@ -611,101 +612,44 @@ h5 {
   cursor: pointer;
 }
 
-#accueil {
-  display: flex;
-  flex-direction: row;
-  height: 22vh;
-  background-color: #1b1f23;
+/* Navbar styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  background-color: rgba(43, 47, 99, 1);
+  padding: 1rem 0;
 }
 
-#accueil h1,
-#accueil a {
-  color: white;
-}
-
-.accueilLogo {
+.navbar-container {
   display: flex;
-  flex-direction: row;
-  height: 20%;
-  gap: 4rem;
-}
-
-.jobNavigatorLogo {
-  display: flex;
-  flex-direction: row;
-  margin: 2rem;
-  gap: 1rem;
+  justify-content: space-between;
   align-items: center;
-  color: #f7e28f;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navbar-logo img {
+  height: 3rem;
+  width: auto;
+  object-fit: contain;
 }
 
 #logoConstructys {
-  border-bottom-left-radius: 20%;
-  border-bottom-right-radius: 20%;
-}
-
-.accueilGauche {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  height: 500px;
-}
-
-.accueilBouton {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  margin: 0rem 4rem;
-  gap: 1rem;
-  height: 100%;
-}
-
-.accueilBouton button {
-  height: 3rem;
-  width: 60%;
-  font-size: large;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-}
-
-.accueilBouton button:hover {
-  background-color: #e54021;
-  color: white;
-}
-
-.accueilDroite {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-}
-
-.accueilNav {
-  display: flex;
-  flex-direction: row;
-  align-self: end;
-  padding-right: 5rem;
-  height: 10rem;
-  align-items: center;
-  font-weight: bold;
-}
-
-.accueilNav a {
-  margin: 1rem;
-  color: inherit;
-  text-decoration: none;
-}
-
-.accueilDroite video {
-  padding: 2rem;
-  background-color: white;
-  border-radius: 3rem;
-  margin-right: 4rem;
-  height: auto;
+  height: 2rem;
 }
 
 #content {
-  padding: 25px 5px;
+  padding: 6rem 5px 25px 5px;
   /*height: 25vh;
   display: flex;
   flex-direction: column;
@@ -721,67 +665,22 @@ h5 {
   justify-content: center;
 }
 
-#logoJobNavigatorHomepage {
-  margin-top: 0.5rem;
-  height: auto;
-  width: 20rem;
-}
-
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
-  #accueil {
-    flex-direction: column;
-    height: 15vh;
+  .navbar-container {
+    padding: 0 1rem;
   }
 
-  .accueilGauche {
-    width: 100%;
+  .navbar-logo {
+    gap: 1rem;
   }
 
-  .accueilLogo {
-    gap: 0;
-    height: 5rem;
-    justify-content: space-evenly;
+  .navbar-logo img {
+    height: 2.5rem;
   }
 
-  .accueilBouton {
-    width: 100%;
-    margin: 0rem;
-    padding: 2rem;
-    align-items: center;
-    text-align: center;
-    height: auto;
-  }
-
-  .jobNavigatorLogo {
-    margin: 2rem 0;
-  }
-
-  #logoConstructys {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
-  }
-
-  .accueilNav {
-    display: none;
-  }
-
-  .accueilDroite {
-    width: 100%;
-  }
-
-  .accueilDroite video {
-    border-radius: 3rem;
-    margin: 2rem;
-    padding: 1rem;
-  }
-
-  #aPropos {
-    height: auto;
-    flex-direction: column-reverse;
+  #content {
+    padding: 5rem 1rem 25px 1rem;
   }
 }
 
@@ -789,10 +688,13 @@ h5 {
   .exit-button {
     display: none;
   }
-  #logoJobNavigatorHomepage {
-    margin-top: 0.75rem;
-    height: auto;
-    width: 10rem;
+
+  .navbar-logo img {
+    height: 2rem;
+  }
+
+  #content {
+    padding: 4rem 0.5rem 25px 0.5rem;
   }
 }
 

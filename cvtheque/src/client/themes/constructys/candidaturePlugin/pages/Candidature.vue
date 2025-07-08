@@ -1,72 +1,4 @@
 <template>
-  <!-- <div class="VA_bg_img blank" :class="{faded: formVisible}">
-    <div id="page-content" class="col remove">
-      <div class="mt space-b-to-center top-row row">
-        <div class="mr space-b row">
-          <img
-            id="olecio-logo"
-            class="mr-2 mt-05 top-row-logo"
-            src="https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/olecio_logo_white.png"
-            style="margin-top: 0.82rem"
-          />
-          <img
-            id="constructys-logo"
-            class="ml-6 mb-05 top-row-logo"
-            src="https://oleciocdn.fra1.cdn.digitaloceanspaces.com/prod/cvtheque/constructys_logo2.png"
-            style="margin-bottom: 0.82rem"
-          />
-        </div>
-        <div>
-          <button class="connexion_button" @click="navigateToLogin">
-            CONNEXION
-          </button>
-        </div>
-      </div>
-      <div class="row title-container">
-        <h1 class="text-white main-title">
-          Avec ou sans CV, trouvez un emploi dans le secteur de la construction.
-        </h1>
-      </div>
-      <div class="row">
-        <button v-show="!formVisible" class="bot_button" @click="showForm">
-          JE POSTULE
-        </button>
-      </div>
-    </div>
-    <div v-if="formVisible" class="formContainer">
-      <formComponent
-        :options="options"
-        class="formComponent"
-        @close-form="hideForm"
-      />
-      
-      <button
-        class="exit-button"
-        style="
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background-color: transparent;
-          border: none;
-        "
-        @click="hideForm"
-      >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4.70711 3.29289C4.31658 2.90237 3.68342 2.90237 3.29289 3.29289C2.90237 3.68342 2.90237 4.31658 3.29289 4.70711L10.5858 12L3.29289 19.2929C2.90237 19.6834 2.90237 20.3166 3.29289 20.7071C3.68342 21.0976 4.31658 21.0976 4.70711 20.7071L12 13.4142L19.2929 20.7071C19.6834 21.0976 20.3166 21.0976 20.7071 20.7071C21.0976 20.3166 21.0976 19.6834 20.7071 19.2929L13.4142 12L20.7071 4.70711C21.0976 4.31658 21.0976 3.68342 20.7071 3.29289C20.3166 2.90237 19.6834 2.90237 19.2929 3.29289L12 10.5858L4.70711 3.29289Z"
-            fill="white"
-          />
-        </svg>
-      </button>
-      
-    </div>
-  </div> -->
   <div id="accueil">
     <div v-if="formVisible" class="formContainer">
       <formComponent
@@ -79,48 +11,60 @@
         @login="navigateToLogin"
       />
     </div>
-    <div class="accueilGauche">
-      <div class="accueilLogo">
-        <div class="jobNavigatorLogo">
+
+    <!-- Navbar fixe transparente -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-logo">
           <img
             id="logoJobNavigatorHomepage"
             src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/job_navigator_banner_white.png"
             alt="logoJobNavigator"
           />
+          <a href="https://www.vigiebtp-idf.fr/" style="cursor: pointer">
+            <img
+              id="logoConstructys"
+              src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Logo_VigieBtp.svg"
+              alt="Logo Constructys"
+            />
+          </a>
         </div>
-        <img
-          id="logoConstructys"
-          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Constructys_Logo.jpg"
-          alt="Logo Constructys"
-        />
-      </div>
-      <div class="accueilBouton">
-        <h1>Simplifions le recrutement</h1>
-        <div class="accueilBoutonLogins">
-          <button @click="navigateToLogin">Espace candidat</button>
-          <button @click="navigateToLoginCompany">Espace entreprise</button>
+        <div class="navbar-nav desktop-nav">
+          <a href="#comment">Comment ça marche ?</a>
+          <a href="#aPropos">A propos</a>
+          <a @click="navigateToCGU" style="cursor: pointer">Mentions légales</a>
         </div>
-        <button @click="showForm">Je postule</button>
       </div>
-    </div>
-    <div class="accueilDroite">
-      <div class="accueilNav">
-        <a href="#comment">Comment ça marche ?</a>
-        <a href="#aPropos">A propos</a>
-        <a @click="navigateToCGU" style="cursor: pointer">Mentions légales</a>
-      </div>
-      <div class="accueilDroiteVideo">
-        <video
-          controls
-          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/constructys_video.mp4"
-        ></video>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <div class="hero-left">
+          <div class="hero-text">
+            <h1>Simplifions le recrutement</h1>
+            <div class="hero-buttons">
+              <button @click="navigateToLogin">Espace candidat</button>
+              <button @click="navigateToLoginCompany">Espace entreprise</button>
+            </div>
+            <button class="cta-button" @click="showForm">Je postule</button>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-video">
+            <video
+              controls
+              src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/constructys_video.mp4"
+            ></video>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div id="comment">
     <div class="commentGauche">
-      <h1>Découvrez Job Navigator : votre passerelle vers l’emploi</h1>
+      <h1>Découvrez Job Navigator : votre passerelle vers l'emploi</h1>
       <p>
         <b>Entreprises partenaires :</b> Publiez vos besoins en recrutement et
         attirez les meilleurs profils au sein de votre structure.
@@ -152,17 +96,17 @@
     <div class="aProposDroite">
       <h1>A propos</h1>
       <p>
-        Afin de soutenir l’emploi régional et de dynamiser la filière BTP en
-        Île-de-France, l’État, les Fédérations et Confédérations
+        Afin de soutenir l'emploi régional et de dynamiser la filière BTP en
+        Île-de-France, l'État, les Fédérations et Confédérations
         professionnelles du Bâtiment et des Travaux Publics, ainsi que
-        l’Opérateur de Compétences de la Construction, Constructys, ont
+        l'Opérateur de Compétences de la Construction, Constructys, ont
         collaboré avec le prestataire Olécio pour développer une CVthèque
         opérationnelle.
       </p>
       <p>
         Cette initiative répond à un enjeu majeur : accompagner les entreprises
         du BTP dans leur recrutement et faciliter la mobilité professionnelle
-        dans un secteur marqué par des tensions en matière de main-d’œuvre.
+        dans un secteur marqué par des tensions en matière de main-d'œuvre.
       </p>
       <p>
         <b>Une solution simple, rapide et efficace</b><br /><br />
@@ -185,7 +129,7 @@
       </p>
       <p>
         <b>
-          Ensemble, contribuons à renforcer l’emploi dans le secteur du BTP en
+          Ensemble, contribuons à renforcer l'emploi dans le secteur du BTP en
           Île-de-France grâce à cette solution numérique dédiée à la mise en
           relation des candidats et des employeurs.
         </b>
@@ -197,13 +141,17 @@
       <p style="font-size: 1rem">
         <i>
           *Critères pris en compte : type de contrat recherché, disponibilité,
-          niveau d’études, expérience professionnelle, métiers visés et permis.
+          niveau d'études, expérience professionnelle, métiers visés et permis.
         </i>
       </p>
     </div>
   </div>
   <div id="footer">
-    <a @click="navigateToCGU" style="cursor: pointer">Mentions légales</a>
+    <div class="mobile-nav">
+      <a href="#comment">Comment ça marche ?</a>
+      <a href="#aPropos">A propos</a>
+      <a @click="navigateToCGU" style="cursor: pointer">Mentions légales</a>
+    </div>
   </div>
 </template>
 
@@ -233,9 +181,6 @@ export default {
   },
   mounted() {
     this.getUTMParameters();
-    // if (window.location.hash === '#apply') {
-    //   this.formVisible = true;
-    // }
     if (window.location.href.includes('#apply')) {
       this.formVisible = true;
     }
@@ -340,6 +285,7 @@ h1 {
 
 .formContainer {
   z-index: 10;
+  margin-top: 5rem;
 }
 
 .exit-button {
@@ -352,114 +298,190 @@ h1 {
 }
 
 #accueil {
-  display: flex;
-  flex-direction: row;
   height: 100vh;
-  background-color: #1b1f23;
+  background-image: url('https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/vigiebtp_home_background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
 }
 
-#accueil h1,
-#accueil a {
-  color: white;
+#accueil::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(43, 47, 99, 0.88);
+  z-index: 1;
 }
 
-.accueilLogo {
+/* Navbar styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  background-color: rgba(43, 47, 99, 1);
+  padding: 1rem 0;
+}
+
+.navbar-container {
   display: flex;
-  flex-direction: row;
-  height: 20%;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navbar-logo img {
+  height: 3rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.navbar-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav a:hover {
+  color: #f18700;
+}
+
+/* Hero section styles */
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
   gap: 4rem;
 }
 
-.jobNavigatorLogo {
+.hero-left {
+  flex: 1;
   display: flex;
-  flex-direction: row;
-  margin: 2rem;
-  gap: 1rem;
   align-items: center;
-  color: #f7e28f;
 }
 
-#logoConstructys {
-  border-bottom-left-radius: 20%;
-  border-bottom-right-radius: 20%;
-}
-
-.accueilGauche {
+.hero-text {
   display: flex;
   flex-direction: column;
-  width: 50%;
-  height: 100%;
-}
-
-.accueilBouton {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  margin: 0rem 4rem;
   gap: 2rem;
-  height: 100%;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.accueilBoutonLogins {
-  box-sizing: border-box;
+.hero-text h1 {
+  color: white;
+  font-size: 4rem;
+  margin: 0;
+}
+
+.hero-buttons {
   display: flex;
-  flex-direction: row;
   gap: 2rem;
   width: 100%;
 }
 
-.accueilBouton button {
+.hero-buttons button {
   height: 3rem;
-  width: 60%;
+  flex: 1;
   font-size: large;
   font-weight: 600;
   cursor: pointer;
   border: none;
   border-radius: 1rem;
+  background-color: white;
+  color: rgba(43, 47, 99, 1);
+  transition: all 0.3s ease;
 }
 
-.accueilBouton button:hover {
-  background-color: #e54021;
+.hero-buttons button:hover {
+  background-color: transparent;
   color: white;
+  border: 2px solid white;
 }
 
-.accueilDroite {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-}
-
-.accueilDroiteVideo {
-  display: flex;
-  flex-direction: column;
+.cta-button {
+  height: 3rem;
   width: 100%;
-  height: 100%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: 0px solid transparent;
+  border-radius: 1rem;
+  background-image: linear-gradient(270deg, #f18700, #d0491a);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background-image: none;
+  background-color: transparent;
+  position: relative;
+  border: none;
+}
+
+.cta-button:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 1rem;
+  border: 2px solid transparent;
+  background: linear-gradient(270deg, #f18700, #d0491a) border-box;
+  -webkit-mask: linear-gradient(#3e298a 0 0) padding-box,
+    linear-gradient(#3e298a 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+.hero-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-.accueilNav {
-  display: flex;
-  flex-direction: row;
-  align-self: end;
-  padding-right: 5rem;
-  height: 4rem;
-  align-items: center;
-  font-weight: bold;
+.hero-video {
+  width: 100%;
+  max-width: 500px;
 }
 
-.accueilNav a {
-  margin: 1rem;
-  color: inherit;
-  text-decoration: none;
-}
-
-.accueilDroite video {
-  padding: 2rem;
-  background-color: white;
-  border-radius: 3rem;
-  margin-right: 4rem;
+.hero-video video {
+  width: 100%;
   height: auto;
+  border-radius: 2rem;
+  background-color: white;
+  padding: 1rem;
 }
 
 #comment {
@@ -508,16 +530,39 @@ h1 {
   font-size: large;
   font-weight: 600;
   cursor: pointer;
-  border: none;
+  border: 0px solid transparent;
   border-radius: 1rem;
-  background-color: #e54021;
+  background-image: linear-gradient(270deg, #f18700, #d0491a);
   color: white;
+  transition: all 0.3s ease;
 }
 
+.commentBouton button:hover {
+  color: black;
+}
 .commentBouton button:hover,
 .aProposBouton button:hover {
-  background-color: white;
-  color: black;
+  background-image: none;
+  background-color: transparent;
+  position: relative;
+  border: none;
+}
+
+.commentBouton button:hover::before,
+.aProposBouton button:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 1rem;
+  border: 2px solid transparent;
+  background: linear-gradient(270deg, #f18700, #d0491a) border-box;
+  -webkit-mask: linear-gradient(#3e298a 0 0) padding-box,
+    linear-gradient(#3e298a 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
 }
 
 #comment img,
@@ -525,10 +570,13 @@ h1 {
   margin: auto;
   width: auto;
   height: 80%;
+  border-radius: 2rem;
+  background-color: white;
+  padding: 1rem;
 }
 
 #aPropos {
-  background-color: #1b1f23;
+  background-color: rgba(43, 47, 99, 0.88);
   color: white;
   display: flex;
   flex-direction: row;
@@ -539,10 +587,14 @@ h1 {
   padding: 0rem;
 }
 
-#logoJobNavigatorHomepage {
+.mobile-nav {
+  display: none;
+}
+
+.navbar-logo img {
   margin-top: 0.5rem;
   height: auto;
-  width: 20rem;
+  width: 10rem;
 }
 
 @media (min-width: 901px) {
@@ -552,81 +604,76 @@ h1 {
 }
 /* Responsivité pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 900px) {
-  #accueil,
-  #comment {
-    flex-direction: column;
+  #accueil {
     height: auto;
+    min-height: 100vh;
   }
 
-  h1 {
-    font-size: 2.5rem;
-    text-align: center;
+  .navbar-container {
+    padding: 0 1rem;
   }
 
-  .accueilGauche {
-    width: 100%;
+  .navbar-logo {
+    gap: 1rem;
   }
 
-  .accueilLogo {
-    gap: 0;
-    height: 5rem;
-    justify-content: space-evenly;
+  .navbar-logo img {
+    height: 2.5rem;
   }
 
-  .accueilBouton {
-    width: 100%;
-    margin: 0rem;
-    padding: 2rem;
-    align-items: center;
-    text-align: center;
-    height: auto;
-  }
-  .accueilBoutonLogin {
-    width: 100%;
-    margin: 0rem;
-    padding: 2rem;
-    align-items: center;
-    text-align: center;
-    height: auto;
-  }
-
-  .accueilBoutonLogins {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-  }
-
-  .jobNavigatorLogo {
-    margin: 2rem 0;
-  }
-
-  #logoConstructys {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
-  }
-
-  .accueilNav {
+  .desktop-nav {
     display: none;
   }
 
-  .accueilDroite {
+  .hero-section {
+    height: auto;
+    min-height: calc(100vh - 5rem);
+  }
+
+  .hero-content {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 5rem 1rem;
+  }
+
+  .hero-text {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
     width: 100%;
+    max-width: 300px;
   }
 
-  .accueilDroite video {
-    border-radius: 3rem;
-    margin: 2rem;
-    padding: 1rem;
+  .hero-buttons button {
+    width: 100%;
+    flex: none;
   }
 
+  .cta-button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .hero-video {
+    max-width: 100%;
+  }
+
+  .hero-video video {
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+  }
+
+  #comment,
   #aPropos {
     height: auto;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 
   .commentGauche,
@@ -640,10 +687,16 @@ h1 {
   .commentBouton,
   .aProposBouton {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1rem;
     width: 100%;
-    justify-content: center;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .commentBouton button,
+  .aProposBouton button {
+    width: 100%;
   }
 
   #comment img,
@@ -653,6 +706,7 @@ h1 {
     align-self: center;
     visibility: collapse;
   }
+
   #footer {
     visibility: visible;
     background-color: white;
@@ -664,16 +718,52 @@ h1 {
     justify-content: center;
     text-align: center;
   }
+
+  /* Ajouter les liens de navigation dans le footer pour mobile */
+  #footer::before {
+    content: '';
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  #footer .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  #footer .mobile-nav a {
+    color: black;
+    text-decoration: none;
+    font-weight: 600;
+  }
 }
 
 @media screen and (max-width: 461px) {
   .exit-button {
     display: none;
   }
-  #logoJobNavigatorHomepage {
-    margin-top: 0.75rem;
-    height: auto;
-    width: 10rem;
+
+  .navbar-logo img {
+    height: 2rem;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-buttons {
+    max-width: 250px;
+  }
+
+  .cta-button {
+    max-width: 250px;
+  }
+
+  .hero-video video {
+    border-radius: 1rem;
+    padding: 0.25rem;
   }
 }
 </style>

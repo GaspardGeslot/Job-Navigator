@@ -306,6 +306,9 @@ class EmployeeContactDetailsAPI extends Endpoint implements CrudEndpoint
             $profileId = $this->updateHedwigeContact($this->getAuthUser()->getUserHedwigeToken(), $employee);
         else $profileId = $this->updateHedwigeCompanyContact($this->getAuthUser()->getUserHedwigeToken(), $employee);
         $employee->setProfileId($profileId);
+        $userRoles = $this->getUserRoleManager()->getUserRolesForAuthUser();
+        $userRoleNames = array_map(fn (UserRole $userRole) => $userRole->getName(), $userRoles);
+        $employee->setOtherId(json_encode($userRoleNames));
         return new EndpointResourceResult(EmployeeContactDetailsModel::class, $employee);
     }
 

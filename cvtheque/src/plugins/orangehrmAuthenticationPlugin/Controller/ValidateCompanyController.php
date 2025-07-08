@@ -146,7 +146,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
                 AuthUser::FLASH_LOGIN_ERROR,
                 [
                     'error' => AuthenticationException::UNEXPECT_ERROR,
-                    'message' => "Une erreur inattendue s'est produite. Veuillez contacter votre conseiller Constructys." . $e->getTraceAsString(),
+                    'message' => "Une erreur inattendue s'est produite. Veuillez contacter votre conseiller Constructys.",
                 ]
             );
             return new RedirectResponse($loginUrl);
