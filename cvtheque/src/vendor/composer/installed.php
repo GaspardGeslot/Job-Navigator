@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'orangehrm/orangehrm',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '55ae53c9438ee06472279c1c88fcaeb067ef6c61',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -326,9 +326,9 @@
             'dev_requirement' => false,
         ),
         'orangehrm/orangehrm' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '55ae53c9438ee06472279c1c88fcaeb067ef6c61',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
