@@ -785,26 +785,37 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     public function delete(): EndpointResult
     {
         $ids = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, CommonParams::PARAMETER_IDS);
-        error_log($message);
+        $reason = $this->getRequestParams()->getStringOrNull(RequestParams::PARAM_TYPE_QUERY, 'reason');
+        
+        // error_log("Suppression des matchings avec raison: " . ($reason ?? 'Aucune raison spécifiée'));
+        
         /*$this->throwRecordNotFoundExceptionIfEmptyIds($ids);
         $this->getVacancyService()->getVacancyDao()->deleteVacancies($ids);*/
-        $this->deleteHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken(), $ids);
+        $this->deleteHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken(), $ids, $reason);
         return new EndpointResourceResult(ArrayModel::class, $ids);
     }
 
-    public function deleteHedwigeMatchings(string $token, array $ids) : void
+    public function deleteHedwigeMatchings(string $token, array $ids, ?string $reason = null) : void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         foreach ($ids as $id) {
             try {
-                $client->request('DELETE', "{$clientBaseUrl}/matching/{$id}", [
+                $url = "{$clientBaseUrl}/matching/{$id}";
+                
+                // Ajouter la raison comme paramètre de requête si elle existe
+                if ($reason) {
+                    $url .= '?reason=' . urlencode($reason);
+                }
+                
+                $client->request('DELETE', $url, [
                     'headers' => [
                         'Authorization' => $token
                     ]
                 ]);
             } catch (\Exceptionon $e) {
+                error_log("Erreur lors de la suppression du matching {$id}: " . $e->getMessage());
             }
         }
     }
@@ -818,6 +829,12 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 CommonParams::PARAMETER_IDS,
                 new Rule(Rules::ARRAY_TYPE)
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    'reason',
+                    new Rule(Rules::STRING_TYPE)
+                )
             ),
             new ParamRule(
                 self::PARAMETER_THEME,
