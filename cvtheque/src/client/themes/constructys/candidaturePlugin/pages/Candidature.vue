@@ -289,12 +289,12 @@ h1 {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: 1002;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 7rem;
+  padding-top: 2rem;
   overflow-y: auto;
 }
 

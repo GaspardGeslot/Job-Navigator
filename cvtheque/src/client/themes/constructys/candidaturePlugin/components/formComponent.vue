@@ -214,7 +214,7 @@ export default {
         scrollContainer.value.style.maxHeight = `${imageHeight}px`;
         scrollContainer.value.style.height = `${imageHeight}px`;
       } else {
-        scrollContainer.value.style.maxHeight = `calc(100vh - 9rem)`;
+        scrollContainer.value.style.maxHeight = `calc(100vh - 4rem)`;
       }
       needsScroll.value = activeFormHeight > imageHeight;
     };
@@ -424,7 +424,7 @@ export default {
 }
 
 .formImg {
-  max-height: calc(100vh - 9rem);
+  max-height: calc(100vh - 4rem);
   width: 100%;
   object-fit: cover;
 }

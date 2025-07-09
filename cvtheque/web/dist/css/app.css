@@ -11439,7 +11439,7 @@ input:checked + .slider[data-v-c2816e0a]:before {
 }
 }
 .formImg[data-v-3395553b] {
-  max-height: calc(100vh - 9rem);
+  max-height: calc(100vh - 4rem);
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -11799,12 +11799,12 @@ h1[data-v-1575c360] {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: 1002;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 7rem;
+  padding-top: 2rem;
   overflow-y: auto;
 }
 .exit-button[data-v-1575c360] {
