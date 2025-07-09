@@ -11438,6 +11438,12 @@ input:checked + .slider[data-v-c2816e0a]:before {
     transform: rotate(360deg);
 }
 }
+.formImg[data-v-3395553b] {
+  max-height: calc(100vh - 9rem);
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
 .formImg[data-v-3395553b],
 .scroll-container[data-v-3395553b] {
   border-radius: 1rem;
@@ -11788,8 +11794,18 @@ h1[data-v-1575c360] {
   display: none;
 }
 .formContainer[data-v-1575c360] {
-  z-index: 10;
-  margin-top: 5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 7rem;
+  overflow-y: auto;
 }
 .exit-button[data-v-1575c360] {
   position: relative;

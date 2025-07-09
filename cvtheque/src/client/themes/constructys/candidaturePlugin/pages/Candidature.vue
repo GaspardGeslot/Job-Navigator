@@ -284,8 +284,18 @@ h1 {
 }
 
 .formContainer {
-  z-index: 10;
-  margin-top: 5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 7rem;
+  overflow-y: auto;
 }
 
 .exit-button {
