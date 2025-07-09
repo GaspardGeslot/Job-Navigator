@@ -93,28 +93,24 @@
       </oxd-text>
       <oxd-grid
         v-if="matching.startBreakDate"
-        :cols="3"
+        :cols="4"
         class="orangehrm-full-width-grid"
       >
         <oxd-grid-item>
           <oxd-input-field
-            v-model="matching.startBreakDate.dayOfWeek"
+            v-model="startBreakDayOfWeek"
             :label="$t('Jour de la semaine')"
             :disabled="!editable"
+            type="select"
+            :options="dayOfWeeks"
           />
         </oxd-grid-item>
         <oxd-grid-item>
           <oxd-input-field
-            v-model="matching.startBreakDate.hour"
+            v-model="startBreakTime"
             :label="$t('Heure')"
             :disabled="!editable"
-          />
-        </oxd-grid-item>
-        <oxd-grid-item>
-          <oxd-input-field
-            v-model="matching.startBreakDate.minutes"
-            :label="$t('Minute')"
-            :disabled="!editable"
+            type="time"
           />
         </oxd-grid-item>
       </oxd-grid>
@@ -124,28 +120,24 @@
       </oxd-text>
       <oxd-grid
         v-if="matching.endBreakDate"
-        :cols="3"
+        :cols="2"
         class="orangehrm-full-width-grid"
       >
         <oxd-grid-item>
           <oxd-input-field
-            v-model="matching.endBreakDate.dayOfWeek"
+            v-model="endBreakDayOfWeek"
             :label="$t('Jour de la semaine')"
             :disabled="!editable"
+            type="select"
+            :options="dayOfWeeks"
           />
         </oxd-grid-item>
         <oxd-grid-item>
           <oxd-input-field
-            v-model="matching.endBreakDate.hour"
+            v-model="endBreakTime"
             :label="$t('Heure')"
             :disabled="!editable"
-          />
-        </oxd-grid-item>
-        <oxd-grid-item>
-          <oxd-input-field
-            v-model="matching.endBreakDate.minutes"
-            :label="$t('Minute')"
-            :disabled="!editable"
+            type="time"
           />
         </oxd-grid-item>
       </oxd-grid>
@@ -742,6 +734,15 @@ export default {
   data() {
     return {
       editable: true,
+      dayOfWeeks: [
+        {id: 1, label: 'Lundi'},
+        {id: 2, label: 'Mardi'},
+        {id: 3, label: 'Mercredi'},
+        {id: 4, label: 'Jeudi'},
+        {id: 5, label: 'Vendredi'},
+        {id: 6, label: 'Samedi'},
+        {id: 7, label: 'Dimanche'},
+      ],
       matching: {
         ...MatchingModel,
         startBreakDate: {
@@ -758,6 +759,131 @@ export default {
     };
   },
   computed: {
+    startBreakTime: {
+      get() {
+        if (
+          this.matching.startBreakDate.hour !== null &&
+          this.matching.startBreakDate.minutes !== null
+        ) {
+          const hour = String(this.matching.startBreakDate.hour).padStart(
+            2,
+            '0',
+          );
+          const minutes = String(this.matching.startBreakDate.minutes).padStart(
+            2,
+            '0',
+          );
+          const timeString = `${hour}:${minutes}`;
+          console.log(
+            'startBreakTime getter:',
+            timeString,
+            'from hour:',
+            this.matching.startBreakDate.hour,
+            'minutes:',
+            this.matching.startBreakDate.minutes,
+          );
+          return timeString;
+        }
+        return '';
+      },
+      set(value) {
+        console.log('startBreakTime setter called with:', value);
+        if (value) {
+          const [hour, minutes] = value.split(':').map(Number);
+          console.log('Setting hour:', hour, 'minutes:', minutes);
+          this.matching.startBreakDate.hour = hour;
+          this.matching.startBreakDate.minutes = minutes;
+        } else {
+          this.matching.startBreakDate.hour = null;
+          this.matching.startBreakDate.minutes = null;
+        }
+      },
+    },
+    startBreakDayOfWeek: {
+      get() {
+        if (this.matching.startBreakDate.dayOfWeek !== null) {
+          if (
+            typeof this.matching.startBreakDate.dayOfWeek === 'object' &&
+            this.matching.startBreakDate.dayOfWeek.id
+          ) {
+            return this.matching.startBreakDate.dayOfWeek;
+          }
+          const dayOption = this.dayOfWeeks.find(
+            (day) => day.id === this.matching.startBreakDate.dayOfWeek,
+          );
+          return dayOption || null;
+        }
+        return null;
+      },
+      set(value) {
+        if (value && value.id) {
+          this.matching.startBreakDate.dayOfWeek = value.id;
+        } else {
+          this.matching.startBreakDate.dayOfWeek = null;
+        }
+      },
+    },
+    endBreakDayOfWeek: {
+      get() {
+        if (this.matching.endBreakDate.dayOfWeek !== null) {
+          if (
+            typeof this.matching.endBreakDate.dayOfWeek === 'object' &&
+            this.matching.endBreakDate.dayOfWeek.id
+          ) {
+            return this.matching.endBreakDate.dayOfWeek;
+          }
+          const dayOption = this.dayOfWeeks.find(
+            (day) => day.id === this.matching.endBreakDate.dayOfWeek,
+          );
+          return dayOption || null;
+        }
+        return null;
+      },
+      set(value) {
+        if (value && value.id) {
+          this.matching.endBreakDate.dayOfWeek = value.id;
+        } else {
+          this.matching.endBreakDate.dayOfWeek = null;
+        }
+      },
+    },
+    endBreakTime: {
+      get() {
+        if (
+          this.matching.endBreakDate.hour !== null &&
+          this.matching.endBreakDate.minutes !== null
+        ) {
+          const hour = String(this.matching.endBreakDate.hour).padStart(2, '0');
+          const minutes = String(this.matching.endBreakDate.minutes).padStart(
+            2,
+            '0',
+          );
+          const timeString = `${hour}:${minutes}`;
+          console.log(
+            'endBreakTime getter:',
+            timeString,
+            'from hour:',
+            this.matching.endBreakDate.hour,
+            'minutes:',
+            this.matching.endBreakDate.minutes,
+          );
+          return timeString;
+        }
+        return '';
+      },
+      set(value) {
+        console.log('endBreakTime setter called with:', value);
+        if (value) {
+          const [hour, minutes] = value.split(':').map(Number);
+          console.log('Setting endBreak hour:', hour, 'minutes:', minutes);
+          this.matching.endBreakDate.hour = hour;
+          this.matching.endBreakDate.minutes = minutes;
+        } else {
+          this.matching.endBreakDate.hour = null;
+          this.matching.endBreakDate.minutes = null;
+        }
+      },
+    },
     isAllSelected() {
       return (field) => {
         let optionsList, selectedList;
@@ -802,6 +928,15 @@ export default {
       this.$emit('cancel');
     },
     onSave() {
+      console.log(
+        'onSave - startBreakDate before transform:',
+        this.matching.startBreakDate,
+      );
+      console.log(
+        'onSave - endBreakDate before transform:',
+        this.matching.endBreakDate,
+      );
+
       this.matching.startBreakDate = transformBreakTimeToIntegers(
         this.matching.startBreakDate,
       );

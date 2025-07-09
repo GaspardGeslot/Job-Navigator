@@ -756,6 +756,8 @@ export default {
       } else {
         matchingData.courses = null;
       }
+      console.log('Data being sent to server:', matchingData);
+      console.log('ID being used for update:', id, 'Type:', typeof id);
       this.http
         .update(id, {...matchingData})
         .then(() => {
@@ -763,6 +765,7 @@ export default {
           this.fetchData();
         })
         .catch((error) => {
+          console.error('Server error:', error.response?.data);
           return this.$toast.unexpectedError(error.response.data.message);
         })
         .finally(() => {

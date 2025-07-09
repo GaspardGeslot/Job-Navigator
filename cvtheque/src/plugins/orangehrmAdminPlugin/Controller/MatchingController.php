@@ -185,6 +185,8 @@ class MatchingController extends AbstractVueController
     public function create(Request $request): Response
     {
         try {
+            error_log('create we are here ');
+            error_log('Contenu de la requête : ' . $request->getContent());
             $matching = json_decode($request->getContent(), true);
             if (
                 isset($matching['courses']) &&
@@ -380,6 +382,7 @@ class MatchingController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $data = json_encode($matching);
         $url = "{$clientBaseUrl}/matching";
+        error_log('data here ' . $data);
         $response = $client->request('POST', $url, [
             'headers' => [
                 'Authorization' => $token,
