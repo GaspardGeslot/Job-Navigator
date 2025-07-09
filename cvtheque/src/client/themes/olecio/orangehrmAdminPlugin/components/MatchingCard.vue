@@ -93,7 +93,7 @@
       </oxd-text>
       <oxd-grid
         v-if="matching.startBreakDate"
-        :cols="3"
+        :cols="4"
         class="orangehrm-full-width-grid"
       >
         <oxd-grid-item>

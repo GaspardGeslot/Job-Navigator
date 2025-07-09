@@ -734,6 +734,7 @@ export default {
           this.fetchData();
         })
         .catch((error) => {
+          console.error('Server error:', error.response?.data);
           return this.$toast.unexpectedError(error.response.data.message);
         })
         .finally(() => {
