@@ -90,6 +90,7 @@ import StudyLevel from './pages/studyLevel/StudyLevel.vue';
 import TrainingMethod from './pages/trainingMethod/TrainingMethod.vue';
 import Sector from './pages/sector/Sector.vue';
 import SaveSector from './pages/sector/SaveSector.vue';
+import TimeSlot from './pages/timeSlot/TimeSlot.vue';
 
 export default {
   'job-title-list': JobTitle,
@@ -167,4 +168,5 @@ export default {
   'status-list': Status,
   'study-level-list': StudyLevel,
   'training-method-list': TrainingMethod,
+  'time-slot-list': TimeSlot,
 };

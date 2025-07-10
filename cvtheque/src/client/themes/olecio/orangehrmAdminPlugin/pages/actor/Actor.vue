@@ -85,6 +85,7 @@
             :training-methods="trainingMethods"
             :sources="sources"
             :actor-current="actor"
+            :time-slots="timeSlots"
             @delete="onClickDelete(actor.id)"
             @save="(updatedActor) => onClickSave(updatedActor, actor.id)"
           />
@@ -96,7 +97,7 @@
   </div>
 </template>
 <script>
-import {ref, reactive, onMounted} from 'vue';
+import {ref, reactive} from 'vue';
 import useToast from '@/core/util/composable/useToast';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {navigate} from '@/core/util/helper/navigation';
@@ -140,6 +141,10 @@ export default {
       default: () => [],
     },
     sources: {
+      type: Array,
+      default: () => [],
+    },
+    timeSlots: {
       type: Array,
       default: () => [],
     },
@@ -192,10 +197,6 @@ export default {
           state.isLoading = false;
         });
     };
-
-    // onMounted(() => {
-    //   fetchData();
-    // });
 
     return {
       http,

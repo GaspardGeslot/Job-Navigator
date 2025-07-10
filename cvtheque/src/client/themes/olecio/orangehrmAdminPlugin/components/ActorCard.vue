@@ -175,6 +175,18 @@
       />
       <br />
       <oxd-divider />
+      <oxd-text class="orangehrm-sub-title" tag="h6">
+        {{ $t('Disponibilités spécifiques') }}
+      </oxd-text>
+      <time-slot-autocomplete
+        :time-slots="actor.timeSlots"
+        :time-slot-options="timeSlots"
+        :disabled="!editable"
+        @delete-time-slot="onClickDeleteTimeSlot"
+        @add-time-slot="addTimeSlot"
+      />
+      <br />
+      <oxd-divider />
       <oxd-form-actions>
         <required-text />
         <oxd-button
@@ -200,6 +212,7 @@ import BackButton from '@/core/components/buttons/BackButton';
 import JobsAutocomplete from '@/core/components/inputs/JobsAutocomplete';
 import AgeAutocomplete from '@/core/components/inputs/AgeAutocomplete';
 import CustomFieldAutocomplete from '@/core/components/inputs/CustomFieldAutocomplete';
+import TimeSlotAutocomplete from '@/core/components/inputs/TimeSlotAutocomplete';
 import {
   required,
   numericOnly,
@@ -235,6 +248,7 @@ export default {
     'jobs-autocomplete': JobsAutocomplete,
     'custom-field-autocomplete': CustomFieldAutocomplete,
     'age-autocomplete': AgeAutocomplete,
+    'time-slot-autocomplete': TimeSlotAutocomplete,
   },
 
   props: {
@@ -267,6 +281,10 @@ export default {
       default: () => [],
     },
     sources: {
+      type: Array,
+      default: () => [],
+    },
+    timeSlots: {
       type: Array,
       default: () => [],
     },
@@ -326,6 +344,12 @@ export default {
         for (const job of this.actor.jobs) {
           if (job.actorJobId) job.actorJobId = parseInt(job.actorJobId);
           if (job.trainingId) job.trainingId = parseInt(job.trainingId);
+        }
+      }
+      if (this.actor.timeSlots) {
+        for (const timeSlot of this.actor.timeSlots) {
+          if (timeSlot.min) timeSlot.min = parseInt(timeSlot.min);
+          if (timeSlot.max) timeSlot.max = parseInt(timeSlot.max);
         }
       }
       this.$emit('save', this.actor);
@@ -392,6 +416,12 @@ export default {
     onClickDelete() {
       this.$emit('delete', this.actor.id);
     },
+    onClickDeleteTimeSlot(timeSlot) {
+      this.actor.timeSlots = this.actor.timeSlots.filter((t) => t !== timeSlot);
+    },
+    addTimeSlot(newTimeSlot) {
+      this.actor.timeSlots.push(newTimeSlot);
+    },
     fetchActor() {
       this.actor.id = this.actorCurrent.id;
       this.actor.name = this.actorCurrent.name;
@@ -401,19 +431,22 @@ export default {
       this.actor.maxAmountPerDay = this.actorCurrent.maxAmountPerDay;
       this.actor.maxAmountPerMonth = this.actorCurrent.maxAmountPerMonth;
       this.actor.ages = this.actorCurrent.ages;
-      this.actor.ages.sort((a, b) => a.min - b.min);
+      if (this.actor.ages) this.actor.ages.sort((a, b) => a.min - b.min);
       this.actor.countries = this.actorCurrent.countries;
       this.actor.needs = this.actorCurrent.needs;
       this.actor.fundings = this.actorCurrent.fundings;
       this.actor.jobs = this.actorCurrent.jobs;
-      for (const job of this.actor.jobs) {
-        job.actorJobId = !job.actorJobId ? '' : job.actorJobId;
-        job.trainingId = !job.trainingId ? '' : job.trainingId;
+      if (this.actor.jobs) {
+        for (const job of this.actor.jobs) {
+          job.actorJobId = !job.actorJobId ? '' : job.actorJobId;
+          job.trainingId = !job.trainingId ? '' : job.trainingId;
+        }
       }
       this.actor.studyLevels = this.actorCurrent.studyLevels;
       this.actor.status = this.actorCurrent.status;
       this.actor.trainingMethods = this.actorCurrent.trainingMethods;
       this.actor.sources = this.actorCurrent.sources;
+      this.actor.timeSlots = this.actorCurrent.timeSlots;
     },
   },
 };

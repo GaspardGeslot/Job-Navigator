@@ -623,6 +623,27 @@ apiv2_admin_course_start_delete:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_time_slot:
+  path: /{theme}/api/v2/admin/time-slot
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_time_slot_add:
+  path: /{theme}/api/v2/admin/time-slot
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_time_slot_delete:
+  path: /{theme}/api/v2/admin/time-slot
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
 apiv2_admin_matching:
   path: /{theme}/api/v2/admin/matching
   controller: OrangeHRM\Admin\Controller\MatchingController::getAll
@@ -1175,6 +1196,13 @@ admin_save_actor:
 admin_course_start:
   path: /{theme}/admin/viewCourseStarts
   controller: OrangeHRM\Admin\Controller\CourseStartController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_time_slot:
+  path: /{theme}/admin/viewTimeSlots
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio

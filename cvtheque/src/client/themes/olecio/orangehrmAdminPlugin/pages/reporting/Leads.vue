@@ -401,6 +401,14 @@ export default {
         key: 'source',
       },
       {
+        label: 'Disponibilité - Email',
+        key: 'timeSlotEmail',
+      },
+      {
+        label: 'Disponibilité identifiée',
+        key: 'timeSlot',
+      },
+      {
         label: 'Complément',
         key: 'complement',
       },
@@ -559,9 +567,9 @@ export default {
       jobsFilter.value = jobs;
     };
 
-    // onMounted(() => {
-    //   fetchData();
-    // });
+    onMounted(() => {
+      fetchData();
+    });
 
     return {
       http,

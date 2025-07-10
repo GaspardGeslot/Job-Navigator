@@ -69,6 +69,12 @@ class ActorController extends AbstractVueController
                 'label' => $label
             ];
         }, $options['sources'], array_keys($options['sources']))));
+        $component->addProp(new Prop('time-slots', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+            return [
+                'id' => $index,
+                'label' => $label
+            ];
+        }, $options['timeSlots'], array_keys($options['timeSlots']))));
 
         $this->setComponent($component);
     }

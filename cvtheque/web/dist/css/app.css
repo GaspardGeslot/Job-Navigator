@@ -13423,6 +13423,27 @@ h5[data-v-c7c92d34] {
 .orangehrm-job-selection-icon[data-v-5db9aa0d] {
   margin-left: 1rem;
 }
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/inputs/TimeSlotAutocomplete.vue?vue&type=style&index=0&id=231e1427&scoped=true&lang=scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-job-selection-criteria[data-v-231e1427] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-job-selection-criteria-selected[data-v-231e1427] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-job-selection-criteria-name[data-v-231e1427] {
+  margin-left: 1rem;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0.675rem 0rem;
+}
+.orangehrm-job-selection-icon[data-v-231e1427] {
+  margin-left: 1rem;
+}
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/components/ActorCard.vue?vue&type=style&index=0&id=1fe1ba47&scoped=true&lang=scss ***!
   \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

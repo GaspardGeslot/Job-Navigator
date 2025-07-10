@@ -9,6 +9,7 @@
         :status="status"
         :training-methods="trainingMethods"
         :sources="sources"
+        :time-slots="timeSlots"
         :actor-current="actor"
         :is-adding="true"
         :is-loading="isLoading"
@@ -53,6 +54,10 @@ export default {
       default: () => [],
     },
     sources: {
+      type: Array,
+      default: () => [],
+    },
+    timeSlots: {
       type: Array,
       default: () => [],
     },
