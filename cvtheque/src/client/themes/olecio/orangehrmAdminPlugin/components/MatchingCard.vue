@@ -93,7 +93,7 @@
       </oxd-text>
       <oxd-grid
         v-if="matching.startBreakDate"
-        :cols="4"
+        :cols="3"
         class="orangehrm-full-width-grid"
       >
         <oxd-grid-item>
@@ -783,13 +783,23 @@ export default {
             '0',
           );
           const timeString = `${hour}:${minutes}`;
+          // console.log(
+          //   'startBreakTime getter:',
+          //   timeString,
+          //   'from hour:',
+          //   this.matching.startBreakDate.hour,
+          //   'minutes:',
+          //   this.matching.startBreakDate.minutes,
+          // );
           return timeString;
         }
         return '';
       },
       set(value) {
+        // console.log('startBreakTime setter called with:', value);
         if (value) {
           const [hour, minutes] = value.split(':').map(Number);
+          // console.log('Setting hour:', hour, 'minutes:', minutes);
           this.matching.startBreakDate.hour = hour;
           this.matching.startBreakDate.minutes = minutes;
         } else {
@@ -858,13 +868,23 @@ export default {
             '0',
           );
           const timeString = `${hour}:${minutes}`;
+          // console.log(
+          //   'endBreakTime getter:',
+          //   timeString,
+          //   'from hour:',
+          //   this.matching.endBreakDate.hour,
+          //   'minutes:',
+          //   this.matching.endBreakDate.minutes,
+          // );
           return timeString;
         }
         return '';
       },
       set(value) {
+        // console.log('endBreakTime setter called with:', value);
         if (value) {
           const [hour, minutes] = value.split(':').map(Number);
+          // console.log('Setting endBreak hour:', hour, 'minutes:', minutes);
           this.matching.endBreakDate.hour = hour;
           this.matching.endBreakDate.minutes = minutes;
         } else {
