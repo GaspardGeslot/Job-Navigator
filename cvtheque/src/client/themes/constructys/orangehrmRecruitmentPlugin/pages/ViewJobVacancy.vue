@@ -200,13 +200,9 @@ import usei18n from '@/core/util/composable/usei18n';
 import useLocale from '@/core/util/composable/useLocale';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
-// import DeleteConfirmationDialog from '@ohrm/components/dialogs/DeleteConfirmationDialog';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteJobVacancyConfirmationDialog';
 import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
-/*import JobtitleDropdown from '@/orangehrmPimPlugin/components/JobtitleDropdown';
-import VacancyDropdown from '../components/VacancyDropdown.vue';
-import HiringManagerDropdown from '../components/HiringManagerDropdown';*/
 
 const defaultFilters = {
   matchingSelected: null,
@@ -227,9 +223,6 @@ export default {
     'delete-confirmation': DeleteConfirmationDialog,
     'table-filter-title': TableFilterTitle,
     'table-filter': TableFilter,
-    /*'jobtitle-dropdown': JobtitleDropdown,
-    'vacancy-dropdown': VacancyDropdown,
-    'hiring-manager-dropdown': HiringManagerDropdown,*/
   },
 
   props: {
@@ -310,22 +303,6 @@ export default {
         };
       });
     };
-    /*const userdataNormalizer = (data) => {
-      return data.map((item) => {
-        return {
-          id: item.id,
-          vacancy: item.name,
-          jobTitle: item.jobTitle?.isDeleted
-            ? item.jobTitle.title + $t('general.deleted')
-            : item.jobTitle?.title,
-
-          hiringManager: item.hiringManager?.id
-            ? $tEmpName(item.hiringManager)
-            : $t('general.deleted'),
-          status: item.status ? $t('general.active') : $t('general.closed'),
-        };
-      });
-    };*/
 
     const http = new APIService(
       window.appGlobal.baseUrl,

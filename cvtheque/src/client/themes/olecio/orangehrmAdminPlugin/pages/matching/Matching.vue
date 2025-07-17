@@ -697,21 +697,15 @@ export default {
       let matchingData = updatedMatching;
       if (
         !updatedMatching.startBreakDate ||
-        !updatedMatching.startBreakDate.dayOfWeek ||
         updatedMatching.startBreakDate.dayOfWeek === null ||
-        !updatedMatching.startBreakDate.hour ||
         updatedMatching.startBreakDate.hour === null ||
-        !updatedMatching.startBreakDate.minutes ||
         updatedMatching.startBreakDate.minutes === null
       )
         matchingData.startBreakDate = null;
       if (
         !updatedMatching.endBreakDate ||
-        !updatedMatching.endBreakDate.dayOfWeek ||
         updatedMatching.endBreakDate.dayOfWeek === null ||
-        !updatedMatching.endBreakDate.hour ||
         updatedMatching.endBreakDate.hour === null ||
-        !updatedMatching.endBreakDate.minutes ||
         updatedMatching.endBreakDate.minutes === null
       )
         matchingData.endBreakDate = null;
@@ -740,7 +734,6 @@ export default {
           this.fetchData();
         })
         .catch((error) => {
-          console.error('Server error:', error.response?.data);
           return this.$toast.unexpectedError(error.response.data.message);
         })
         .finally(() => {

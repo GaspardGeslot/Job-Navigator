@@ -75,6 +75,7 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_JOB_TITLE_ID = 'jobTitleId';
     public const PARAMETER_EMPLOYEE_ID = 'employeeId';
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_REASON = 'reason';
 
     public const PARAMETER_RULE_NAME_MAX_LENGTH = 100;
     public const PARAMETER_RULE_NO_OF_POSITIONS_MAX_LENGTH = 13;
@@ -785,12 +786,8 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     public function delete(): EndpointResult
     {
         $ids = $this->getRequestParams()->getArray(RequestParams::PARAM_TYPE_BODY, CommonParams::PARAMETER_IDS);
-        $reason = $this->getRequestParams()->getStringOrNull(RequestParams::PARAM_TYPE_QUERY, 'reason');
+        $reason = $this->getRequestParams()->getStringOrNull(RequestParams::PARAM_TYPE_QUERY, self::PARAMETER_REASON);
         
-        // error_log("Suppression des matchings avec raison: " . ($reason ?? 'Aucune raison spécifiée'));
-        
-        /*$this->throwRecordNotFoundExceptionIfEmptyIds($ids);
-        $this->getVacancyService()->getVacancyDao()->deleteVacancies($ids);*/
         $this->deleteHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken(), $ids, $reason);
         return new EndpointResourceResult(ArrayModel::class, $ids);
     }
@@ -832,7 +829,7 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
                 new ParamRule(
-                    'reason',
+                    self::PARAMETER_REASON,
                     new Rule(Rules::STRING_TYPE)
                 )
             ),
