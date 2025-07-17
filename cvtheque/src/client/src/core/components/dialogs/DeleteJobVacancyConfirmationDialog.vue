@@ -85,6 +85,7 @@
           :label="$t('general.yes_delete')"
           icon-name="trash"
           display-type="label-danger"
+          :disabled="!reason || (showOtherField && !otherReason)"
           class="orangehrm-button-margin"
           @click="onDelete"
         />

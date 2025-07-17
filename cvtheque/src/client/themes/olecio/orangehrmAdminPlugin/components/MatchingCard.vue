@@ -619,12 +619,21 @@ function transformBreakTimeToIntegers(breakTime) {
     return null;
   }
 
+  const dayOfWeek =
+    breakTime.dayOfWeek !== null ? parseInt(breakTime.dayOfWeek, 10) : null;
+  const hour = breakTime.hour !== null ? parseInt(breakTime.hour, 10) : null;
+  const minutes =
+    breakTime.minutes !== null ? parseInt(breakTime.minutes, 10) : null;
+
+  // Si toutes les valeurs sont null, retourner null
+  if (dayOfWeek === null && hour === null && minutes === null) {
+    return null;
+  }
+
   const transformedBreakTime = {
-    dayOfWeek:
-      breakTime.dayOfWeek !== null ? parseInt(breakTime.dayOfWeek, 10) : null,
-    hour: breakTime.hour !== null ? parseInt(breakTime.hour, 10) : null,
-    minutes:
-      breakTime.minutes !== null ? parseInt(breakTime.minutes, 10) : null,
+    dayOfWeek,
+    hour,
+    minutes,
   };
 
   return transformedBreakTime;
@@ -632,9 +641,9 @@ function transformBreakTimeToIntegers(breakTime) {
 function isValidBreakTime(breakTime) {
   return (
     breakTime &&
-    (breakTime.dayOfWeek === null || Number.isInteger(breakTime.dayOfWeek)) &&
-    (breakTime.hour === null || Number.isInteger(breakTime.hour)) &&
-    (breakTime.minutes === null || Number.isInteger(breakTime.minutes))
+    (breakTime.dayOfWeek === null || !isNaN(parseInt(breakTime.dayOfWeek))) &&
+    (breakTime.hour === null || !isNaN(parseInt(breakTime.hour))) &&
+    (breakTime.minutes === null || !isNaN(parseInt(breakTime.minutes)))
   );
 }
 export default {
@@ -774,23 +783,13 @@ export default {
             '0',
           );
           const timeString = `${hour}:${minutes}`;
-          // console.log(
-          //   'startBreakTime getter:',
-          //   timeString,
-          //   'from hour:',
-          //   this.matching.startBreakDate.hour,
-          //   'minutes:',
-          //   this.matching.startBreakDate.minutes,
-          // );
           return timeString;
         }
         return '';
       },
       set(value) {
-        // console.log('startBreakTime setter called with:', value);
         if (value) {
           const [hour, minutes] = value.split(':').map(Number);
-          // console.log('Setting hour:', hour, 'minutes:', minutes);
           this.matching.startBreakDate.hour = hour;
           this.matching.startBreakDate.minutes = minutes;
         } else {
@@ -859,23 +858,13 @@ export default {
             '0',
           );
           const timeString = `${hour}:${minutes}`;
-          // console.log(
-          //   'endBreakTime getter:',
-          //   timeString,
-          //   'from hour:',
-          //   this.matching.endBreakDate.hour,
-          //   'minutes:',
-          //   this.matching.endBreakDate.minutes,
-          // );
           return timeString;
         }
         return '';
       },
       set(value) {
-        // console.log('endBreakTime setter called with:', value);
         if (value) {
           const [hour, minutes] = value.split(':').map(Number);
-          // console.log('Setting endBreak hour:', hour, 'minutes:', minutes);
           this.matching.endBreakDate.hour = hour;
           this.matching.endBreakDate.minutes = minutes;
         } else {
@@ -898,7 +887,6 @@ export default {
           selectedList = this.matching[field] || [];
         }
 
-        // OPTIMISATION: Vérifications rapides pour éviter les calculs inutiles
         if (optionsList.length === 0) return false;
         if (selectedList.length === 0) return false;
 
@@ -917,7 +905,6 @@ export default {
       handler() {
         this.fetchMatching();
       },
-      // deep: false, // OPTIMISATION: Évite les watchers profonds coûteux
     },
   },
   beforeMount() {
@@ -928,41 +915,40 @@ export default {
       this.$emit('cancel');
     },
     onSave() {
-      // console.log(
-      //   'onSave - startBreakDate before transform:',
-      //   this.matching.startBreakDate,
-      // );
-      // console.log(
-      //   'onSave - endBreakDate before transform:',
-      //   this.matching.endBreakDate,
-      // );
+      const updatedMatching = JSON.parse(JSON.stringify(this.matching));
 
-      this.matching.startBreakDate = transformBreakTimeToIntegers(
+      updatedMatching.startBreakDate = transformBreakTimeToIntegers(
         this.matching.startBreakDate,
       );
-      this.matching.endBreakDate = transformBreakTimeToIntegers(
+      updatedMatching.endBreakDate = transformBreakTimeToIntegers(
         this.matching.endBreakDate,
       );
+
       if (
-        !isValidBreakTime(this.matching.startBreakDate) ||
-        !isValidBreakTime(this.matching.endBreakDate)
+        !isValidBreakTime(updatedMatching.startBreakDate) ||
+        !isValidBreakTime(updatedMatching.endBreakDate)
       ) {
         alert('Les horaires ne sont pas valides.');
         return;
       }
-      if (this.matching.actor) this.matching.actor = this.matching.actor.label;
-      this.matching.price = parseFloat(this.matching.price);
-      this.matching.maxAmountPerDay = parseInt(this.matching.maxAmountPerDay);
-      this.matching.maxAmountPerMonth = parseInt(
-        this.matching.maxAmountPerMonth,
+
+      if (updatedMatching.actor)
+        updatedMatching.actor = updatedMatching.actor.label;
+      updatedMatching.price = parseFloat(updatedMatching.price);
+      updatedMatching.maxAmountPerDay = parseInt(
+        updatedMatching.maxAmountPerDay,
       );
-      if (this.matching.ages) {
-        for (const age of this.matching.ages) {
+      updatedMatching.maxAmountPerMonth = parseInt(
+        updatedMatching.maxAmountPerMonth,
+      );
+
+      if (updatedMatching.ages) {
+        for (const age of updatedMatching.ages) {
           age.min = parseInt(age.min);
           age.max = parseInt(age.max);
         }
       }
-      this.$emit('save', this.matching);
+      this.$emit('save', updatedMatching);
     },
     onClickDeleteJob(job) {
       this.matching.jobs = this.matching.jobs.filter((j) => j !== job);
@@ -1012,14 +998,6 @@ export default {
       this.matching.price = this.matchingCurrent.price;
       this.matching.startDate = this.matchingCurrent.startDate;
       this.matching.endDate = this.matchingCurrent.endDate;
-      // this.matching.startBreakDate =
-      //   this.matchingCurrent.startBreakDate !== null
-      //     ? this.matchingCurrent.startBreakDate
-      //     : {dayOfWeek: '', hour: '', minutes: ''};
-      // this.matching.endBreakDate =
-      //   this.matchingCurrent.endBreakDate !== null
-      //     ? this.matchingCurrent.endBreakDate
-      //     : {dayOfWeek: '', hour: '', minutes: ''};
       this.matching.startBreakDate = isValidBreakTime(
         this.matchingCurrent.startBreakDate,
       )
@@ -1048,7 +1026,6 @@ export default {
       this.matching.ages = this.matchingCurrent.ages;
       this.matching.ages.sort((a, b) => a.min - b.min);
 
-      // OPTIMISATION 1: Map pour les départements (O(1) au lieu de O(n²))
       const departmentMap = new Map();
       this.departmentsOptions.forEach((dept) => {
         departmentMap.set(String(dept.id), dept);
@@ -1065,7 +1042,6 @@ export default {
         }
       }
 
-      // OPTIMISATION 2: Boucle optimisée pour les cours
       this.matching.courses = [];
       if (
         this.matchingCurrent.courses &&
