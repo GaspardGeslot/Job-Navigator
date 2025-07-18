@@ -470,10 +470,6 @@
         "
       >
         <div class="orangehrm-container">
-          <div
-            class="orangehrm-header-container"
-            style="justify-content: flex-end; margin-bottom: 1rem"
-          ></div>
           <matching-card
             :actors="actors"
             :countries="countries"
