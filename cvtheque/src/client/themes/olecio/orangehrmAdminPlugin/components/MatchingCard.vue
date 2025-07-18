@@ -929,11 +929,6 @@ export default {
   beforeMount() {
     if (!this.isAdding || this.isDuplicating) this.fetchMatching();
   },
-  // mounted() {
-  //   console.log('MatchingCard - matchingCurrent:', this.matchingCurrent);
-  //   console.log('MatchingCard - isDuplicating:', this.isDuplicating);
-  //   console.log('MatchingCard - isAdding:', this.isAdding);
-  // },
   methods: {
     onCancel() {
       this.$emit('cancel');
@@ -1014,7 +1009,6 @@ export default {
       this.$emit('delete', this.matching.id);
     },
     fetchMatching() {
-      // console.log('fetchMatching called with:', this.matchingCurrent);
       this.matching.id = this.matchingCurrent.id;
       this.matching.title = this.matchingCurrent.title;
       this.matching.isActive = this.matchingCurrent.isActive;
