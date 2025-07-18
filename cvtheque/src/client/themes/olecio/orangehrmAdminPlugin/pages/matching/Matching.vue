@@ -699,7 +699,9 @@ export default {
       navigate(`/${window.appGlobal.theme}/admin/saveMatching`);
     },
     onClickDuplicate(id) {
-      navigate(`/${window.appGlobal.theme}/admin/saveMatching/${id}`);
+      navigate(
+        `/${window.appGlobal.theme}/admin/saveMatching/${id}?mode=duplicate`,
+      );
     },
     onClickSave(updatedMatching, id) {
       this.state.isLoading = true;

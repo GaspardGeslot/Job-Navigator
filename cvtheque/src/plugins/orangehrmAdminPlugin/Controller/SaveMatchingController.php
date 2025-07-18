@@ -110,8 +110,16 @@ class SaveMatchingController extends AbstractVueController
             ];
         }, array_keys($options['departments']), $options['departments'])));
         
-        $component->addProp(new Prop('matching-current', Prop::TYPE_OBJECT, $matchingData));
-        $component->addProp(new Prop('is-duplicating', Prop::TYPE_BOOLEAN, $matchingData ? true : false));
+        // Ajouter les données du matching si on est en mode duplication
+        $mode = $request->query->get('mode', '');
+        
+        if ($matchingData && $mode === 'duplicate') {
+            $component->addProp(new Prop('matching-current', Prop::TYPE_OBJECT, $matchingData));
+            $component->addProp(new Prop('is-duplicating', Prop::TYPE_BOOLEAN, true));
+        } else {
+            $component->addProp(new Prop('matching-current', Prop::TYPE_OBJECT, null));
+            $component->addProp(new Prop('is-duplicating', Prop::TYPE_BOOLEAN, false));
+        }
 
         $this->setComponent($component);
     }
