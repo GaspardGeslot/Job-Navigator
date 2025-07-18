@@ -7,7 +7,13 @@
     <oxd-text v-if="isAdding" tag="h6" class="orangehrm-main-title">
       {{ $t('recruitment.add_vacancy') }}
     </oxd-text>
-    <oxd-divider v-if="isAdding" />
+    <oxd-text v-else-if="isDuplicating" tag="h6" class="orangehrm-main-title">
+      {{ $t('Dupliquer') }}
+    </oxd-text>
+    <oxd-text v-else tag="h6" class="orangehrm-main-title">
+      {{ $t('general.edit') }}
+    </oxd-text>
+    <oxd-divider v-if="isAdding || isDuplicating" />
 
     <oxd-form :loading="isLoading" @submit-valid="onSave">
       <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -560,7 +566,15 @@
           @click="onCancel"
         />
         <oxd-button
-          v-else
+          v-if="!isAdding && !isDuplicating"
+          :label="$t('Dupliquer')"
+          icon-name="copy"
+          display-type="ghost"
+          @click="$emit('duplicate', matching.id)"
+        />
+        <oxd-button
+          v-if="!isAdding"
+          class="orangehrm-left-space"
           :label="$t('performance.delete')"
           display-type="danger"
           @click="onClickDelete"
@@ -660,7 +674,8 @@ export default {
   props: {
     matchingCurrent: {
       type: Object,
-      required: true,
+      required: false,
+      default: null,
     },
     actors: {
       type: Array,
@@ -714,6 +729,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isDuplicating: {
+      type: Boolean,
+      default: false,
+    },
     isLoading: {
       type: Boolean,
       default: false,
@@ -724,7 +743,7 @@ export default {
     },
   },
 
-  emits: ['cancel', 'delete', 'save'],
+  emits: ['cancel', 'delete', 'save', 'duplicate'],
 
   setup() {
     const rules = {
@@ -795,8 +814,13 @@ export default {
     },
   },
   beforeMount() {
-    if (!this.isAdding) this.fetchMatching();
+    if (!this.isAdding || this.isDuplicating) this.fetchMatching();
   },
+  // mounted() {
+  //   console.log('MatchingCard - matchingCurrent:', this.matchingCurrent);
+  //   console.log('MatchingCard - isDuplicating:', this.isDuplicating);
+  //   console.log('MatchingCard - isAdding:', this.isAdding);
+  // },
   methods: {
     onCancel() {
       this.$emit('cancel');
@@ -869,9 +893,18 @@ export default {
       this.$emit('delete', this.matching.id);
     },
     fetchMatching() {
+      // console.log('fetchMatching called with:', this.matchingCurrent);
       this.matching.id = this.matchingCurrent.id;
       this.matching.title = this.matchingCurrent.title;
       this.matching.isActive = this.matchingCurrent.isActive;
+      if (this.isDuplicating) {
+        if (typeof this.matchingCurrent.actor === 'string') {
+          const actorOption = this.actors.find(
+            (actor) => actor.label === this.matchingCurrent.actor,
+          );
+          this.matching.actor = actorOption || null;
+        }
+      }
       this.matching.maxAmountPerDay = this.matchingCurrent.maxAmountPerDay;
       this.matching.maxAmountPerMonth = this.matchingCurrent.maxAmountPerMonth;
       this.matching.price = this.matchingCurrent.price;

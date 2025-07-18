@@ -22,6 +22,14 @@ class SaveMatchingController extends AbstractVueController
         $component = new Component('save-matching');
 
         $options = $this->getHedwigeOptions($this->getAuthUser()->getUserHedwigeToken());
+        
+        // Récupérer l'ID du matching si présent dans l'URL
+        $matchingId = $request->attributes->get('id');
+        $matchingData = null;
+        
+        if ($matchingId) {
+            $matchingData = $this->getMatchingById($this->getAuthUser()->getUserHedwigeToken(), $matchingId);
+        }
 
         $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($id, $label) {
             return [
@@ -101,6 +109,17 @@ class SaveMatchingController extends AbstractVueController
                 'label' => $id . ' - ' . $label
             ];
         }, array_keys($options['departments']), $options['departments'])));
+        
+        // Ajouter les données du matching si on est en mode duplication
+        $mode = $request->query->get('mode', '');
+        
+        if ($matchingData && $mode === 'duplicate') {
+            $component->addProp(new Prop('matching-current', Prop::TYPE_OBJECT, $matchingData));
+            $component->addProp(new Prop('is-duplicating', Prop::TYPE_BOOLEAN, true));
+        } else {
+            $component->addProp(new Prop('matching-current', Prop::TYPE_OBJECT, null));
+            $component->addProp(new Prop('is-duplicating', Prop::TYPE_BOOLEAN, false));
+        }
 
         $this->setComponent($component);
     }
@@ -112,6 +131,24 @@ class SaveMatchingController extends AbstractVueController
 
         try {
             $url = "{$clientBaseUrl}/matching/options";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    private function getMatchingById(string $token, int $id): ?array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/matching/{$id}";
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,

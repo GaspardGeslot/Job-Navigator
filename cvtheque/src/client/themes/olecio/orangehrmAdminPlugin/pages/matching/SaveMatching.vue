@@ -14,8 +14,9 @@
         :training-methods="trainingMethods"
         :professional-experiences="professionalExperiences"
         :driving-licenses="drivingLicenses"
-        :matching-current="matching"
+        :matching-current="matchingCurrent"
         :is-adding="true"
+        :is-duplicating="isDuplicating"
         :departments-options="departments"
         :is-loading="isLoading"
         @cancel="onClickCancel"
@@ -86,6 +87,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    matchingCurrent: {
+      type: Object,
+      default: null,
+    },
+    isDuplicating: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup() {
@@ -103,6 +112,10 @@ export default {
       isLoading: false,
     };
   },
+  // mounted() {
+  //   console.log('SaveMatching - matchingCurrent:', this.matchingCurrent);
+  //   console.log('SaveMatching - isDuplicating:', this.isDuplicating);
+  // },
   methods: {
     onClickCancel() {
       navigate(`/${window.appGlobal.theme}/admin/matching`);
@@ -146,6 +159,12 @@ export default {
           return map;
         }, {});
       }
+
+      // En mode duplication, on supprime l'ID pour créer un nouveau matching
+      if (this.isDuplicating) {
+        delete matchingData.id;
+      }
+
       this.http
         .create({...matchingData})
         .then(() => {
@@ -153,6 +172,9 @@ export default {
           navigate(`/${window.appGlobal.theme}/admin/matching`);
         })
         .catch((error) => {
+          // console.log('Error:', error);
+          // console.log('Response:', error.response);
+          // console.log('Data:', error.response?.data);
           if (matchingData.startBreakDate === null) {
             matchingData.startBreakDate = {
               dayOfWeek: null,
