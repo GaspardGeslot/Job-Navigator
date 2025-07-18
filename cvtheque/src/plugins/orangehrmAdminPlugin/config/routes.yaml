@@ -1186,6 +1186,14 @@ admin_save_matching:
   requirements:
     theme: constructys|olecio
 
+admin_edit_matching:
+  path: /{theme}/admin/saveMatching/{id}
+  controller: OrangeHRM\Admin\Controller\SaveMatchingController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
 admin_save_actor:
   path: /{theme}/admin/saveActor
   controller: OrangeHRM\Admin\Controller\SaveActorController::handle

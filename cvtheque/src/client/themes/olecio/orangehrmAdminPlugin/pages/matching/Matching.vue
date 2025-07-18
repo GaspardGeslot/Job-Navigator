@@ -470,6 +470,10 @@
         "
       >
         <div class="orangehrm-container">
+          <div
+            class="orangehrm-header-container"
+            style="justify-content: flex-end; margin-bottom: 1rem"
+          ></div>
           <matching-card
             :actors="actors"
             :countries="countries"
@@ -489,6 +493,7 @@
             @save="
               (updatedMatching) => onClickSave(updatedMatching, matching.id)
             "
+            @duplicate="onClickDuplicate"
           />
         </div>
       </table-filter>
@@ -507,7 +512,7 @@ import MatchingCard from '../../components/MatchingCard.vue';
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
 import JobAutocomplete from '@/core/components/inputs/JobAutocomplete.vue';
 import CourseAutocomplete from '@/core/components/inputs/CourseAutocomplete.vue';
-import {OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
+import {OxdSpinner, OxdSwitchInput, OxdButton} from '@ohrm/oxd';
 
 export default {
   components: {
@@ -515,6 +520,7 @@ export default {
     'matching-card': MatchingCard,
     'table-filter': TableFilter,
     'oxd-loading-spinner': OxdSpinner,
+    'oxd-button': OxdButton,
     'job-autocomplete': JobAutocomplete,
     'course-autocomplete': CourseAutocomplete,
     'oxd-switch-input': OxdSwitchInput,
@@ -691,6 +697,11 @@ export default {
   methods: {
     onClickAdd() {
       navigate(`/${window.appGlobal.theme}/admin/saveMatching`);
+    },
+    onClickDuplicate(id) {
+      navigate(
+        `/${window.appGlobal.theme}/admin/saveMatching/${id}?mode=duplicate`,
+      );
     },
     onClickSave(updatedMatching, id) {
       this.state.isLoading = true;
