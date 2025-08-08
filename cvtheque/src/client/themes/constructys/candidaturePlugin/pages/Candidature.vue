@@ -63,87 +63,121 @@
   </div>
 
   <div id="comment">
-    <div class="commentGauche">
-      <h1>Découvrez Job Navigator : votre passerelle vers l'emploi</h1>
-      <p>
-        <b>Entreprises partenaires :</b> Publiez vos besoins en recrutement et
-        attirez les meilleurs profils au sein de votre structure.
-      </p>
-      <p>
-        <b>Candidats :</b> Postulez en ligne, avec ou sans CV, et laissez notre
-        plateforme faire le reste.
-      </p>
-      <p>
-        <b>Job Navigator</b> se charge de connecter les candidats et les
-        employeurs pour des rencontres professionnelles réussies.
-      </p>
-      <div class="commentBouton">
-        <button @click="navigateToLoginCompany">Espace Entreprises</button>
-        <button @click="navigateToLogin">Espace Candidats</button>
+    <h1 class="comment-title">Comment ça marche ?</h1>
+    <div class="comment-cards">
+      <div class="comment-card">
+        <img
+          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/employer_testimonial.jpg"
+          alt="Employeur témoignage"
+          class="testimonial-image"
+        />
+        <div class="card-content">
+          <h3>Entreprises partenaires</h3>
+          <p>
+            Publiez vos besoins en recrutement et attirez les meilleurs profils
+            au sein de votre structure.
+          </p>
+          <button @click="navigateToLoginCompany">Espace Entreprises</button>
+        </div>
+      </div>
+      <div class="comment-card">
+        <img
+          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/candidate_testimonial.jpg"
+          alt="Candidat témoignage"
+          class="testimonial-image"
+        />
+        <div class="card-content">
+          <h3>Candidats</h3>
+          <p>
+            Postulez en ligne, avec ou sans CV, et laissez notre plateforme
+            faire le reste.
+          </p>
+          <button @click="navigateToLogin">Espace Candidats</button>
+        </div>
       </div>
     </div>
-    <img
-      src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/image_puzzle.png"
-      alt="image random"
-    />
   </div>
   <div id="aPropos">
-    <img
-      src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/image_women.png"
-      alt="Image random"
-      style="width: 20%"
-    />
-    <div class="aProposDroite">
-      <h1>A propos</h1>
-      <p>
-        Afin de soutenir l'emploi régional et de dynamiser la filière BTP en
-        Île-de-France, l'État, les Fédérations et Confédérations
-        professionnelles du Bâtiment et des Travaux Publics, ainsi que
-        l'Opérateur de Compétences de la Construction, Constructys, ont
-        collaboré avec le prestataire Olécio pour développer une CVthèque
-        opérationnelle.
-      </p>
-      <p>
-        Cette initiative répond à un enjeu majeur : accompagner les entreprises
-        du BTP dans leur recrutement et faciliter la mobilité professionnelle
-        dans un secteur marqué par des tensions en matière de main-d'œuvre.
-      </p>
-      <p>
-        <b>Une solution simple, rapide et efficace</b><br /><br />
-        La CVthèque offre :<br /><br />
-        &emsp; &#8226;&emsp;Une gestion intuitive des besoins en recrutement des
-        entreprises <br /><br />
-        &emsp; &#8226;&emsp;Un espace dédié au dépôt et à la gestion des
-        candidatures
-      </p>
-      <p><b>Les atouts de la CVthèque</b></p>
-      <p>
-        &emsp; &#8226;&emsp;<b>Un sourcing garanti :</b> un flux de 1 200
-        candidatures qualifiées chaque année, pendant 3 ans <br /><br />
-        &emsp; &#8226;&emsp;<b>Un matching intelligent :</b> un algorithme
-        performant basé sur 6 critères clés* pour rapprocher efficacement les
-        profils des besoins des entreprises<br /><br />
-        &emsp; &#8226;&emsp;<b>Un gain de temps :</b> les candidatures
-        correspondant aux attentes des entreprises sont envoyées automatiquement
-        et immédiatement<br />
-      </p>
-      <p>
-        <b>
-          Ensemble, contribuons à renforcer l'emploi dans le secteur du BTP en
-          Île-de-France grâce à cette solution numérique dédiée à la mise en
-          relation des candidats et des employeurs.
-        </b>
-      </p>
-      <div class="aProposBouton">
-        <button @click="navigateToLoginCompany">Espace Entreprises</button>
-        <button @click="navigateToLogin">Espace Candidats</button>
+    <div class="aPropos-container">
+      <div class="aPropos-image-section">
+        <img
+          src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/image_team.jpg"
+          alt="Image random"
+          class="aPropos-image"
+        />
+        <div class="aPropos-image-buttons">
+          <button @click="navigateToLoginCompany">Espace Entreprises</button>
+          <button @click="navigateToLogin">Espace Candidats</button>
+        </div>
       </div>
-      <p style="font-size: 1rem">
-        <i>
-          *Critères pris en compte : type de contrat recherché, disponibilité,
-          niveau d'études, expérience professionnelle, métiers visés et permis.
-        </i>
-      </p>
+      <div class="aProposDroite">
+        <h1>A propos</h1>
+        <p>
+          Afin de soutenir l'emploi régional et de dynamiser la filière BTP en
+          Île-de-France, l'État, les Fédérations et Confédérations
+          professionnelles du Bâtiment et des Travaux Publics, ainsi que
+          l'Opérateur de Compétences de la Construction, Constructys, ont
+          collaboré avec le prestataire Olécio pour développer une CVthèque
+          opérationnelle.
+        </p>
+        <p>
+          Cette initiative répond à un enjeu majeur : accompagner les
+          entreprises du BTP dans leur recrutement et faciliter la mobilité
+          professionnelle dans un secteur marqué par des tensions en matière de
+          main-d'œuvre.
+        </p>
+        <p>Une solution simple, rapide et efficace</p>
+        <div class="aProposBoxes">
+          <p>
+            <b class="orange-text">La CVthèque offre :</b>
+          </p>
+          <div class="white-box">
+            <p>
+              &#8226;&emsp;Une <b>gestion intuitive</b> des besoins en
+              recrutement des entreprises
+            </p>
+            <p>
+              &#8226;&emsp;Un <b>espace dédié</b> au dépôt et à la gestion des
+              candidatures
+            </p>
+          </div>
+          <p><b class="orange-text">Les atouts de la CVthèque</b></p>
+          <div class="white-box">
+            <p>
+              &#8226;&emsp;<b>Un sourcing garanti :</b> un flux de 1 200
+              candidatures qualifiées chaque année, pendant 3 ans
+            </p>
+            <p>
+              &#8226;&emsp;<b>Un matching intelligent :</b> un algorithme
+              performant basé sur 6 critères clés* pour rapprocher efficacement
+              les profils des besoins des entreprises
+            </p>
+            <p>
+              &#8226;&emsp;<b>Un gain de temps :</b> les candidatures
+              correspondant aux attentes des entreprises sont envoyées
+              automatiquement et immédiatement
+            </p>
+          </div>
+        </div>
+        <p>
+          <b>
+            Ensemble, contribuons à renforcer l'emploi dans le secteur du BTP en
+            Île-de-France grâce à cette solution numérique dédiée à la mise en
+            relation des candidats et des employeurs.
+          </b>
+        </p>
+        <div class="aProposBouton mobile-only">
+          <button @click="navigateToLoginCompany">Espace Entreprises</button>
+          <button @click="navigateToLogin">Espace Candidats</button>
+        </div>
+        <p style="font-size: 1rem">
+          <i>
+            *Critères pris en compte : type de contrat recherché, disponibilité,
+            niveau d'études, expérience professionnelle, métiers visés et
+            permis.
+          </i>
+        </p>
+      </div>
     </div>
   </div>
   <div id="footer">
@@ -265,7 +299,7 @@ h1 {
   font-size: 4rem;
 }
 #aPropos p {
-  font-size: 1.3rem;
+  font-size: 1rem;
   margin-bottom: 1rem;
   line-height: 150%;
 }
@@ -495,37 +529,231 @@ h1 {
 }
 
 #comment {
-  height: 100vh;
+  height: auto;
   background-color: white;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 2rem 4rem 2rem;
+}
+
+.comment-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: rgba(43, 47, 99, 1);
+}
+
+.comment-cards {
+  display: flex;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.comment-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: start;
+  background-color: #f9f9f9;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-content h3 {
+  height: 2rem;
+  font-size: 1.8rem;
+  color: rgba(43, 47, 99, 1);
+  margin-bottom: 0.5rem;
   width: 100%;
 }
 
-.commentGauche {
-  box-sizing: border-box;
-  width: 60%;
+.card-content p {
+  height: 6rem;
+  font-size: 1.1rem;
+  color: rgba(43, 47, 99, 1);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.card-content button {
+  height: 3rem;
+  width: 50%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: 0px solid transparent;
+  border-radius: 1rem;
+  background-image: linear-gradient(270deg, #f18700, #d0491a);
+  color: white;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.card-content button:hover {
+  color: rgba(43, 47, 99, 1);
+}
+.card-content button:hover {
+  background-image: none;
+  background-color: transparent;
+  position: relative;
+  border: none;
+}
+
+.card-content button:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 1rem;
+  border: 2px solid transparent;
+  background: linear-gradient(270deg, #f18700, #d0491a) border-box;
+  -webkit-mask: linear-gradient(#3e298a 0 0) padding-box,
+    linear-gradient(#3e298a 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+#aPropos {
+  background-color: rgba(43, 47, 99, 0.88);
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; /* Align items to the top */
+  padding: 2rem 4rem;
+}
+
+.aPropos-container {
+  display: flex;
+  gap: 3rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.aPropos-image-section {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 4rem;
+  align-items: center; /* Align image to the left */
+  gap: 1rem;
+  margin-top: 8rem;
+}
+
+.aPropos-image {
+  width: 100%;
+  height: auto;
+  background-color: white;
+  box-shadow: 2px 2px 10px black;
+}
+
+.aPropos-image-buttons {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  width: 100%;
   justify-content: center;
+}
+
+.aPropos-image-buttons button {
+  height: 3rem;
+  width: 45%;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  border: 0px solid transparent;
+  border-radius: 1rem;
+  background-image: linear-gradient(270deg, #f18700, #d0491a);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.aPropos-image-buttons button:hover {
+  color: white;
+}
+.aPropos-image-buttons button:hover {
+  background-image: none;
+  background-color: transparent;
+  position: relative;
+  border: none;
+}
+
+.aPropos-image-buttons button:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 1rem;
+  border: 2px solid transparent;
+  background: linear-gradient(270deg, #f18700, #d0491a) border-box;
+  -webkit-mask: linear-gradient(#3e298a 0 0) padding-box,
+    linear-gradient(#3e298a 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
 }
 
 .aProposDroite {
-  box-sizing: border-box;
-  width: 70%;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 4rem;
-  justify-content: center;
+  padding: 0 2rem; /* Adjust padding for right side */
 }
 
-.commentGauche h1,
 .aProposDroite h1 {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  color: white;
+  height: 3rem;
 }
 
-.commentBouton,
+.aProposDroite p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #eee;
+}
+
+.white-box {
+  background-color: rgb(255, 255, 255);
+  padding: 0.5rem 1rem;
+  border-radius: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.white-box p {
+  font-size: 1.1rem;
+  color: rgba(43, 47, 99, 1);
+  margin-bottom: 0.5rem;
+}
+
+.white-box p:last-child {
+  margin-bottom: 0;
+}
+
+.orange-text {
+  color: #f18700 !important;
+}
+
 .aProposBouton {
   display: flex;
   flex-direction: row;
@@ -533,7 +761,6 @@ h1 {
   margin-top: 1rem;
 }
 
-.commentBouton button,
 .aProposBouton button {
   height: 3rem;
   width: 45%;
@@ -547,10 +774,9 @@ h1 {
   transition: all 0.3s ease;
 }
 
-.commentBouton button:hover {
-  color: black;
+.aProposBouton button:hover {
+  color: white;
 }
-.commentBouton button:hover,
 .aProposBouton button:hover {
   background-image: none;
   background-color: transparent;
@@ -558,7 +784,6 @@ h1 {
   border: none;
 }
 
-.commentBouton button:hover::before,
 .aProposBouton button:hover::before {
   content: '';
   position: absolute;
@@ -575,14 +800,8 @@ h1 {
   mask-composite: exclude;
 }
 
-#comment img,
-#aPropos img {
-  margin: auto;
-  width: auto;
-  height: 80%;
-  border-radius: 2rem;
-  background-color: white;
-  padding: 1rem;
+.aProposBoxes {
+  margin-left: 2rem;
 }
 
 #aPropos {
@@ -605,6 +824,10 @@ h1 {
   margin-top: 0.5rem;
   height: auto;
   width: 10rem;
+}
+
+.mobile-only {
+  display: none;
 }
 
 @media (min-width: 901px) {
@@ -686,17 +909,101 @@ h1 {
     flex-direction: column;
   }
 
-  .commentGauche,
-  .aProposDroite {
-    box-sizing: border-box;
-    width: 100%;
-    gap: 2rem;
-    padding: 2rem;
+  #aPropos {
+    padding: 2rem 2rem;
   }
 
-  .commentBouton,
+  .comment-cards {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .comment-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: start;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .testimonial-image {
+    width: 30%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-content {
+    padding: 1rem;
+    width: 70%;
+    align-items: flex-start;
+  }
+
+  .card-content h3 {
+    font-size: 1.5rem;
+    height: auto;
+  }
+
+  .card-content p {
+    font-size: 1rem;
+    height: auto;
+  }
+
+  .card-content button {
+    width: 100%;
+    height: auto;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+  }
+
+  .aPropos-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .aPropos-image-section {
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .aPropos-image {
+    max-width: 300px;
+  }
+
+  .aPropos-image-buttons {
+    display: none;
+  }
+
+  .aProposDroite {
+    padding: 0;
+    width: 100%;
+    text-align: start;
+  }
+
+  .aProposDroite h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .aProposDroite p {
+    font-size: 1.1rem;
+  }
+
+  .aProposBoxes {
+    margin-left: 0rem;
+  }
+
+  .white-box {
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .white-box p {
+    font-size: 1rem;
+  }
+
   .aProposBouton {
-    display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 100%;
@@ -704,17 +1011,18 @@ h1 {
     margin: 0 auto;
   }
 
-  .commentBouton button,
+  .mobile-only {
+    display: flex;
+  }
+
   .aProposBouton button {
     width: 100%;
   }
 
   #comment img,
   #aPropos img {
-    margin: 1rem;
-    width: 40%;
+    width: 100%;
     align-self: center;
-    visibility: collapse;
   }
 
   #footer {
