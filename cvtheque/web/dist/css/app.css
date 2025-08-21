@@ -4196,10 +4196,13 @@
 .boutonTri[data-v-38020a24] {
   border-radius: 2rem;
   height: 2rem;
-  border: 1px solid rgb(190, 190, 190);
+  border: 1px solid #64728c;
   cursor: pointer;
   background-color: white;
-  width: 10rem;
+  width: 15rem;
+  font-family: "Nunito Sans", sans-serif;
+  color: #64728c;
+  font-weight: 700;
 }
 .user-form-header[data-v-38020a24] {
   display: flex;
@@ -4283,7 +4286,7 @@
   display: flex;
   flex-direction: row;
   justify-content: end;
-  padding: 0 2rem 1.5rem 0;
+  padding: 0.5rem 0rem 1rem 0;
 }
 .warning-icon[data-v-38020a24] {
   font-size: 1.5rem;
@@ -4321,10 +4324,13 @@
 .boutonTri[data-v-b6383a38] {
   border-radius: 2rem;
   height: 2rem;
-  border: 1px solid rgb(190, 190, 190);
+  border: 1px solid #64728c;
   cursor: pointer;
   background-color: white;
-  width: 10rem;
+  width: 15rem;
+  font-family: "Nunito Sans", sans-serif;
+  color: #64728c;
+  font-weight: 700;
 }
 .user-form-header[data-v-b6383a38] {
   display: flex;
@@ -4408,7 +4414,7 @@
   display: flex;
   flex-direction: row;
   justify-content: end;
-  padding: 0 2rem 1.5rem 0;
+  padding: 0.5rem 0rem 1rem 0;
 }
 .warning-icon[data-v-b6383a38] {
   font-size: 1.5rem;
@@ -4439,10 +4445,13 @@
 .boutonTri[data-v-889a4cda] {
   border-radius: 2rem;
   height: 2rem;
-  border: 1px solid rgb(190, 190, 190);
+  border: 1px solid #64728c;
   cursor: pointer;
   background-color: white;
-  width: 10rem;
+  width: 15rem;
+  font-family: "Nunito Sans", sans-serif;
+  color: #64728c;
+  font-weight: 700;
 }
 .user-form-header[data-v-889a4cda] {
   display: flex;
@@ -4526,7 +4535,7 @@
   display: flex;
   flex-direction: row;
   justify-content: end;
-  padding: 0 2rem 1.5rem 0;
+  padding: 0.5rem 0rem 1rem 0;
 }
 .warning-icon[data-v-889a4cda] {
   font-size: 1.5rem;
@@ -4576,19 +4585,131 @@
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmRecruitmentPlugin/pages/ViewCandidatesList.vue?vue&type=style&index=0&id=c6d9b604&lang=scss&scoped=true ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=c6d9b604&lang=scss&scoped=true ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
 .boutonTri[data-v-c6d9b604] {
   border-radius: 2rem;
   height: 2rem;
-  border: 1px solid rgb(190, 190, 190);
+  border: 1px solid #64728c;
   cursor: pointer;
   background-color: white;
-  width: 10rem;
-  margin: 1rem 1rem;
+  width: 15rem;
+  font-family: "Nunito Sans", sans-serif;
+  color: #64728c;
+  font-weight: 700;
 }
+.user-form-header[data-v-c6d9b604] {
+  display: flex;
+  padding: 1rem;
+}
+.user-form-header-text[data-v-c6d9b604] {
+  font-size: 0.8rem;
+  margin-right: 1rem;
+}
+.orangehrm-vacancy-list[data-v-c6d9b604] .card-header-slot {
+  border-bottom: 1px solid #e8eaef;
+  margin-bottom: 5px;
+}
+.orangehrm-vacancy-list[data-v-c6d9b604] .--status-grouped-field {
+  display: flex;
+  max-width: 15rem;
+}
+.orangehrm-vacancy-list .label-is-entitlement-situational[data-v-c6d9b604] {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-vacancy-list[data-v-c6d9b604] .card-header-slot .oxd-table-card-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.orangehrm-vacancy-list[data-v-c6d9b604] .card-header-slot .header {
+  margin-right: 5px;
+  font-size: 1rem;
+}
+.orangehrm-vacancy-list[data-v-c6d9b604] .card-header-slot-content.--left {
+  display: flex;
+  align-items: center;
+  flex: 2;
+}
+.orangehrm-vacancy-list[data-v-c6d9b604] .card-body-slot {
+  display: unset;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.2rem;
+}
+.orangerhrm-switch-wrapper[data-v-c6d9b604] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-c6d9b604] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-c6d9b604] {
+    max-width: 100%;
+}
+}
+.orangehrm-grid-item-span-2[data-v-c6d9b604] {
+  grid-column: span 2;
+}
+.orangehrm-text[data-v-c6d9b604] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
+.orangehrm-text-label[data-v-c6d9b604] {
+  flex: 1;
+  padding-right: 0.2rem;
+}
+.orangehrm-attachment-header[data-v-c6d9b604] {
+  justify-content: flex-start;
+}
+.orangehrm-attachment-header__title[data-v-c6d9b604] {
+  margin-right: 1rem;
+}
+.orangehrm-vacancy-links[data-v-c6d9b604] {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #e8eaef;
+}
+.boutonTriBloc[data-v-c6d9b604] {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  padding: 0.5rem 0rem 1rem 0;
+}
+.warning-icon[data-v-c6d9b604] {
+  font-size: 1.5rem;
+  color: var(--oxd-primary-one-color);
+  padding: 1rem;
+}
+@media (max-width: 1000px) {
+.orangehrm-header-container[data-v-c6d9b604] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+}
+.boutonTriBloc[data-v-c6d9b604], .boutonTriBloc2[data-v-c6d9b604] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.boutonTri[data-v-c6d9b604] {
+    margin: 0;
+}
+}
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmRecruitmentPlugin/pages/ViewCandidatesList.vue?vue&type=style&index=1&id=c6d9b604&lang=scss&scoped=true ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
 .orangehrm-pagination-wrapper[data-v-c6d9b604] {
   margin: 1rem 0rem 0rem 1rem;
 }

@@ -16,10 +16,13 @@
 .boutonTri {
   border-radius: 2rem;
   height: 2rem;
-  border: 1px solid rgb(190, 190, 190);
+  border: 1px solid #64728c;
   cursor: pointer;
   background-color: white;
-  width: 10rem;
+  width: 15rem;
+  font-family: 'Nunito Sans',sans-serif;
+  color: #64728c;
+  font-weight: 700;
 }
 
 .user-form-header {
@@ -104,7 +107,7 @@
   display: flex;
   flex-direction: row;
   justify-content: end;
-  padding: 0 2rem 1.5rem 0;
+  padding: 0.5rem 0rem 1rem 0;
 }
 
 .warning-icon {
