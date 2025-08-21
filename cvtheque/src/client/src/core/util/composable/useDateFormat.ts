@@ -33,11 +33,13 @@ export default function useDateFormat() {
   const userDateFormat = dateFormat.label;
   const timeFormat = 'HH:mm';
   const jsTimeFormat = 'hh:mm a';
+  const jsDateTimeFormat = 'dd-MM-yyyy HH:mm';
 
   return {
     timeFormat,
     jsTimeFormat,
     jsDateFormat,
+    jsDateTimeFormat,
     userDateFormat,
   };
 }

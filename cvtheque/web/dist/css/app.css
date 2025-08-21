@@ -4307,6 +4307,13 @@
     margin: 0;
 }
 }
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmRecruitmentPlugin/pages/ViewJobVacancy.vue?vue&type=style&index=1&id=38020a24&lang=scss&scoped=true ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-pagination-wrapper[data-v-38020a24] {
+  margin-top: 1rem;
+}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmRecruitmentPlugin/pages/vacancy.scss?vue&type=style&index=0&id=b6383a38&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -4581,6 +4588,9 @@
   background-color: white;
   width: 10rem;
   margin: 1rem 1rem;
+}
+.orangehrm-pagination-wrapper[data-v-c6d9b604] {
+  margin: 1rem 0rem 0rem 1rem;
 }
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmRecruitmentPlugin/components/RecruitmentStatus.vue?vue&type=style&index=0&id=1aed04f5&lang=scss&scoped=true ***!

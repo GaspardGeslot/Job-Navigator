@@ -51,10 +51,8 @@ apiv2_recruitment_vacancy_attachments:
 
 apiv2_recruitment_candidates:
   path: /{theme}/api/v2/recruitment/candidates
-  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
-  methods: [ GET, POST, DELETE ]
-  defaults:
-    _api: OrangeHRM\Recruitment\Api\CandidateAPI
+  controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::getAll
+  methods: [ GET ]
   requirements:
     theme: constructys|olecio
 

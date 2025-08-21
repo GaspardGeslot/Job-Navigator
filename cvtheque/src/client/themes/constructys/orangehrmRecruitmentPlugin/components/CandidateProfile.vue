@@ -52,19 +52,6 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <!--<oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <vacancy-dropdown
-                v-model="vacancy"
-                :label="$t('recruitment.job_vacancy')"
-                :readonly="!editable"
-                :exclude-interviewers="true"
-                :status="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>-->
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item
@@ -263,6 +250,20 @@
               <oxd-input-field :value="item" :disabled="!editable" />
             </oxd-grid-item>
           </oxd-grid>
+          <div
+            v-if="
+              !profile.drivingLicenses || profile.drivingLicenses.length === 0
+            "
+          >
+            <oxd-text
+              class="orangehrm-input-title"
+              tag="h6"
+              style="font-style: italic"
+            >
+              Aucun permis de conduire renseigné
+            </oxd-text>
+            <br />
+          </div>
         </oxd-form-row>
         <oxd-form-row>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
@@ -324,64 +325,6 @@
             />
           </div>
         </oxd-form-row>
-        <!--<oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item
-              class="orangehrm-save-candidate-page --span-column-2"
-            >
-              <oxd-input-field
-                v-model="profile.keywords"
-                :label="$t('recruitment.keywords')"
-                :placeholder="`${$t(
-                  'recruitment.enter_comma_seperated_words',
-                )}...`"
-                :rules="rules.keywords"
-                :disabled="!editable"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <date-input
-                v-model="profile.dateOfApplication"
-                :label="$t('recruitment.date_of_application')"
-                :rules="rules.applicationDate"
-                :disabled="!editable"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item
-              class="orangehrm-save-candidate-page --span-column-2"
-            >
-              <oxd-input-field
-                v-model="profile.comment"
-                :label="$t('general.notes')"
-                type="textarea"
-                :placeholder="$t('general.type_here')"
-                :disabled="!editable"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item class="orangehrm-candidate-grid-checkbox">
-              <oxd-input-field
-                v-model="profile.consentToKeepData"
-                type="checkbox"
-                :label="$t('recruitment.consent_to_keep_data')"
-                :disabled="!editable"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-divider v-show="editable" />
-
-        <oxd-form-actions v-if="editable">
-          <required-text></required-text>
-          <submit-button :label="$t('general.save')" />
-        </oxd-form-actions>-->
       </oxd-form>
     </div>
 
