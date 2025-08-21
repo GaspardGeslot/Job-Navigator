@@ -39,13 +39,6 @@
             </oxd-text>
           </oxd-input-group>
         </oxd-grid-item>
-        <!--<oxd-grid-item>
-          <oxd-input-group :label="$t('recruitment.hiring_manager')">
-            <oxd-text tag="p">
-              {{ hiringManagerName ? hiringManagerName : 'N/A' }}
-            </oxd-text>
-          </oxd-input-group>
-        </oxd-grid-item>-->
       </oxd-grid>
       <oxd-divider />
       <oxd-grid
@@ -62,58 +55,6 @@
           />
         </oxd-grid-item>
       </oxd-grid>
-      <!--<div class="orangehrm-recruitment">
-        <div class="orangehrm-recruitment-actions">
-          <oxd-button
-            v-if="hasWorkflow(3)"
-            :label="$t('general.reject')"
-            display-type="danger"
-            @click="doWorkflow(3)"
-          />
-          <oxd-button
-            v-if="hasWorkflow(8)"
-            :label="$t('recruitment.offer_declined')"
-            display-type="danger"
-            @click="doWorkflow(8)"
-          />
-          <oxd-button
-            v-if="hasWorkflow(6)"
-            :label="$t('recruitment.mark_interview_failed')"
-            display-type="danger"
-            @click="doWorkflow(6)"
-          />
-          <oxd-button
-            v-if="hasWorkflow(2)"
-            :label="$t('recruitment.shortlist')"
-            display-type="success"
-            @click="doWorkflow(2)"
-          />
-          <oxd-button
-            v-if="hasWorkflow(4)"
-            :label="$t('recruitment.schedule_interview')"
-            display-type="success"
-            @click="doWorkflow(4)"
-          />
-          <oxd-button
-            v-if="hasWorkflow(5)"
-            :label="$t('recruitment.mark_interview_passed')"
-            display-type="success"
-            @click="doWorkflow(5)"
-          />
-          <oxd-button
-            v-if="hasWorkflow(7)"
-            :label="$t('recruitment.offer_job')"
-            display-type="success"
-            @click="doWorkflow(7)"
-          />
-          <oxd-button
-            v-if="hasWorkflow(9)"
-            :label="$t('recruitment.hire')"
-            display-type="success"
-            @click="doWorkflow(9)"
-          />
-        </div>
-      </div>-->
       <oxd-form-actions>
         <oxd-button
           v-if="canUpdate"
@@ -185,34 +126,6 @@ export default {
       ],
       actions: [],
     };
-  },
-  computed: {
-    /*recruitmentStatus() {
-      return (
-        this.statuses.find((item) => item.id === this.candidate.status?.id)
-          ?.label || null
-      );
-    },
-    candidateName() {
-      return `${this.candidate.firstName} ${this.candidate?.middleName || ''} ${
-        this.candidate.lastName
-      }`;
-    },
-    vacancyName() {
-      const {vacancy} = this.candidate;
-      if (!vacancy) return null;
-      return vacancy.status === false
-        ? vacancy.name + ` (${this.$t('general.closed')})`
-        : vacancy.name;
-    },
-    hiringManagerName() {
-      return this.candidate.vacancy?.hiringManager
-        ? this.translateEmpName(this.candidate.vacancy.hiringManager, {
-            includeMiddle: true,
-            excludePastEmpTag: false,
-          })
-        : undefined;
-    },*/
   },
   watch: {
     candidate() {

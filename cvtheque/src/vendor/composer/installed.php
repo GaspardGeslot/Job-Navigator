@@ -1,9 +1,15 @@
 <?php return array(
     'root' => array(
         'name' => 'orangehrm/orangehrm',
+<<<<<<< HEAD
         'pretty_version' => '1.0.0+no-version-set',
         'version' => '1.0.0.0',
         'reference' => null,
+=======
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '2d7f995da121034705aad699db5526ee60a55d36',
+>>>>>>> 64552bc7 (Add company candidates pagination + improve lists)
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),

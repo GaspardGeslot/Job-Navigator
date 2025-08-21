@@ -35,7 +35,6 @@
     :updatable="updatable"
     @update="onCandidsateUpdate"
   ></candidate-profile>
-  <!--<history-table v-if="candidate" :candidate="candidate"></history-table>-->
 </template>
 
 <script>
@@ -43,11 +42,9 @@ import {APIService} from '@/core/util/services/api.service';
 import BackButton from '@/core/components/buttons/BackButton';
 import RecruitmentStatus from '../components/RecruitmentStatus';
 import CandidateProfile from '../components/CandidateProfile';
-//import HistoryTable from '../components/HistoryTable';
 
 export default {
   components: {
-    //'history-table': HistoryTable,
     'candidate-profile': CandidateProfile,
     'recruitment-status': RecruitmentStatus,
     'back-button': BackButton,
@@ -78,12 +75,20 @@ export default {
       type: Array,
       default: () => [],
     },
+    filterParams: {
+      type: Object,
+      required: false,
+      default: () => {
+        return {};
+      },
+    },
   },
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
       `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
     );
+
     return {
       http,
     };

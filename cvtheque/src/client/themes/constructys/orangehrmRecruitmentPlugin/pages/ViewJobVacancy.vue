@@ -32,25 +32,6 @@
                 :options="matchings"
               />
             </oxd-grid-item>
-
-            <!--<oxd-grid-item>
-              <vacancy-dropdown
-                v-model="filters.vacancyId"
-                :label="$t('recruitment.vacancy')"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <hiring-manager-dropdown v-model="filters.hiringManagerId" />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="filters.status"
-                type="select"
-                :label="$t('general.status')"
-                :clear="false"
-                :options="statusOptions"
-              />
-            </oxd-grid-item>-->
           </oxd-grid>
           <oxd-grid
             v-if="canUpdate"
@@ -65,25 +46,6 @@
                 :options="candidatureStatuses"
               />
             </oxd-grid-item>
-
-            <!--<oxd-grid-item>
-              <vacancy-dropdown
-                v-model="filters.vacancyId"
-                :label="$t('recruitment.vacancy')"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <hiring-manager-dropdown v-model="filters.hiringManagerId" />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="filters.status"
-                type="select"
-                :label="$t('general.status')"
-                :clear="false"
-                :options="statusOptions"
-              />
-            </oxd-grid-item>-->
           </oxd-grid>
         </oxd-form-row>
         <oxd-form-actions>
@@ -130,42 +92,47 @@
       </div>
     </div>
     <br />
-    <!--<table-header
-      :selected="checkedItems.length"
-      :loading="isLoading"
-      :total="total"
-      @delete="onClickDeleteSelected"
-    ></table-header>-->
     <oxd-table-filter
       v-if="isSearching"
       :filter-title="$t('Découvrez les candidats qui correspondent')"
     >
-      <div class="boutonTriBloc">
+      <div v-if="items && items.length > 0" class="boutonTriBloc">
         <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
       </div>
       <div class="orangehrm-container">
         <oxd-card-table
           v-model:selected="checkedItems"
           :headers="headers"
-          :items="items?.data"
+          :items="items"
           :selectable="false"
           :clickable="false"
-          :loading="isLoading"
+          :loading="isLoading1"
           row-decorator="oxd-table-decorator-card"
         />
-
-        <!--class="orangehrm-vacancy-list"-->
+      </div>
+      <div
+        v-if="!items || items.length === 0"
+        class="orangehrm-text-center-align"
+      >
+        <br />
+        <oxd-text type="card-body" style="color: #64728c; font-style: italic">
+          Aucun résultat obtenu pour cette recherche
+        </oxd-text>
+      </div>
+      <div v-if="totalPages1 > 1" class="orangehrm-pagination-wrapper">
+        <oxd-pagination
+          v-model:current="currentPage1"
+          :length="totalPages1"
+          @update:current="onPageChange1"
+        />
       </div>
     </oxd-table-filter>
-    <div v-if="showPaginator" class="orangehrm-bottom-container">
-      <oxd-pagination v-model:current="currentPage" :length="pages" />
-    </div>
-    <br v-if="!showPaginator" />
+    <br />
     <oxd-table-filter
       v-if="isSearchingNoStatut"
       :filter-title="$t('Découvrez les autres candidats sur ce métier')"
     >
-      <div class="boutonTriBloc">
+      <div v-if="otherLeads && otherLeads.length > 0" class="boutonTriBloc">
         <button class="boutonTri" @click="sortByDate2">Trier par date ⇅</button>
       </div>
       <div v-if="isSearching" class="orangehrm-container">
@@ -175,14 +142,25 @@
           :items="otherLeads"
           :selectable="false"
           :clickable="false"
-          :loading="isLoading"
+          :loading="isLoading2"
           row-decorator="oxd-table-decorator-card"
         />
-
-        <!--class="orangehrm-vacancy-list"-->
       </div>
-      <div v-if="showPaginator" class="orangehrm-bottom-container">
-        <oxd-pagination v-model:current="currentPage" :length="pages" />
+      <div
+        v-if="!otherLeads || otherLeads.length === 0"
+        class="orangehrm-text-center-align"
+      >
+        <br />
+        <oxd-text type="card-body" style="color: #64728c; font-style: italic">
+          Aucun résultat obtenu pour cette recherche
+        </oxd-text>
+      </div>
+      <div v-if="totalPages2 > 1" class="orangehrm-pagination-wrapper">
+        <oxd-pagination
+          v-model:current="currentPage2"
+          :length="totalPages2"
+          @update:current="onPageChange2"
+        />
       </div>
     </oxd-table-filter>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
@@ -191,18 +169,18 @@
 
 <script>
 import {computed, ref} from 'vue';
-import usePaginate from '@/core/util/composable/usePaginate';
 import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
 import useDateFormat from '@/core/util/composable/useDateFormat';
-import useSort from '@/core/util/composable/useSort';
-import usei18n from '@/core/util/composable/usei18n';
 import useLocale from '@/core/util/composable/useLocale';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
-import useEmployeeNameTranslate from '@/core/util/composable/useEmployeeNameTranslate';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteJobVacancyConfirmationDialog';
 import TableFilterTitle from '@/core/components/labels/TableFilterTitle';
 import TableFilter from '@/core/components/dropdown/TableFilter.vue';
+import {
+  markCandidateAsViewed,
+  getCandidateLastViewed,
+} from '@/core/util/helper/viewed';
 
 const defaultFilters = {
   matchingSelected: null,
@@ -211,11 +189,8 @@ const defaultFilters = {
   jobTitle: null,
   status: null,
   statusJobSelected: null,
-};
-const defaultSortOrder = {
-  'candidate.jobTitle': 'DEFAULT',
-  'candidate.dateOfApplication': 'DESC',
-  'candidateVacancy.status': 'DEFAULT',
+  page: 0,
+  size: 20,
 };
 export default {
   name: 'ViewJobVacancy',
@@ -245,117 +220,228 @@ export default {
   },
 
   setup(props) {
-    const {$t} = usei18n();
     const {locale} = useLocale();
-    const {jsDateFormat, userDateFormat} = useDateFormat();
-    const {$tEmpName} = useEmployeeNameTranslate();
-    const statuses = [
-      {id: 1, label: $t('recruitment.application_initiated')},
-      {id: 2, label: $t('recruitment.shortlisted')},
-      {id: 3, label: $t('leave.rejected')},
-      {id: 4, label: $t('recruitment.interview_scheduled')},
-      {id: 5, label: $t('recruitment.interview_passed')},
-      {id: 6, label: $t('recruitment.interview_failed')},
-      {id: 7, label: $t('recruitment.job_offered')},
-      {id: 8, label: $t('recruitment.offer_declined')},
-      {id: 9, label: $t('recruitment.hired')},
-    ];
-    const filters = ref({...defaultFilters});
-    const {sortDefinition, sortField, sortOrder, onSort} = useSort({
-      sortDefinition: defaultSortOrder,
+    const {jsDateFormat, jsDateTimeFormat} = useDateFormat();
+    const items = ref([]);
+    const otherLeads = ref([]);
+    const totalPages1 = ref(0);
+    const totalPages2 = ref(0);
+    const isLoading1 = ref(false);
+    const isLoading2 = ref(false);
+    const currentPage1 = ref(1);
+    const currentPage2 = ref(1);
+
+    // Filtres initiaux pour la comparaison
+    const initialFilters = {
+      matchingSelected: null,
+      jobTitleId: null,
+      hiringManagerId: null,
+      jobTitle: null,
+      status: null,
+      statusJobSelected: null,
+      page: 0,
+      size: 20,
+    };
+
+    // Filtres réactifs
+    const filters = ref({
+      ...initialFilters,
     });
+
+    // Add sort order states for both collections
+    const isDateAscending = ref(false); // Default to descending (false)
+    const isDateAscending2 = ref(false); // Default to descending (false)
 
     const serializedFilters = computed(() => {
       return {
+        page: currentPage1.value - 1,
+        size: filters.value.size,
         matchingId: filters.value.matchingSelected?.id,
-        vacancyId: filters.value.vacancyId?.id,
         jobTitleId: filters.value.jobTitleId?.id,
-        hiringManagerId: filters.value.hiringManagerId?.id,
         status: filters.value.status?.id,
-        sortField: sortField.value,
-        sortOrder: sortOrder.value,
         model: 'detailed',
         statusJob: filters.value.statusJobSelected?.label,
+        sortDirection: isDateAscending.value ? 'ASC' : 'DESC',
       };
     });
-
-    const candidateDataNormalizer = (data) => {
-      return data.map((item) => {
-        return {
-          id: item.leadId,
-          jobTitle: item.jobTitle,
-          candidate: `${item.firstName} ${item.middleName || ''} ${
-            item.lastName
-          }`,
-          dateOfApplication: formatDate(
-            parseDate(item.dateOfApplication),
-            jsDateFormat,
-            {locale},
-          ),
-          email: item.email,
-          /*status:
-            statuses.find((status) => status.id === item.status?.id)?.label ||
-            '',*/
-          status: item.candidatureStatus,
-          resume: item.hasAttachment,
-          isSelectable: item.deletable,
-          matchingId: item.matchingId,
-        };
-      });
-    };
 
     const http = new APIService(
       window.appGlobal.baseUrl,
       `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
     );
-    const {
-      showPaginator,
-      currentPage,
-      total,
-      pages,
-      pageSize,
-      response,
-      isLoading,
-      execQuery,
-    } = usePaginate(http, {
-      query: serializedFilters,
-      normalizer: candidateDataNormalizer,
-      prefetch: false,
+
+    const execQuery = async () => {
+      isLoading1.value = true;
+      http
+        .getAll({
+          ...serializedFilters.value,
+        })
+        .then(({data: {data, meta}}) => {
+          items.value = data
+            .sort((a, b) => {
+              const dateA = parseDate(a.date);
+              const dateB = parseDate(b.date);
+              return isDateAscending.value ? dateA - dateB : dateB - dateA;
+            })
+            .map((item) => {
+              return {
+                id: item.id,
+                jobTitle: item.job,
+                candidate: `${item.firstName} ${item.lastName}`,
+                dateOfApplication: formatDate(
+                  parseDate(item.date),
+                  jsDateFormat,
+                  {locale},
+                ),
+                email: item.email,
+                status: item.candidatureStatus,
+                matchingId: item.matchingId,
+                lastViewed: formatDate(
+                  getCandidateLastViewed(item.email),
+                  jsDateTimeFormat,
+                  {locale},
+                ),
+              };
+            });
+          totalPages1.value = calculateTotalPages(meta);
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des leads :', error);
+          items.value = [];
+          totalPages1.value = 0;
+        })
+        .finally(() => {
+          isLoading1.value = false;
+        });
+    };
+
+    const getOtherLeads = async () => {
+      isLoading2.value = true;
+      new APIService(
+        window.appGlobal.baseUrl,
+        `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
+      )
+        .getAll({
+          page: currentPage2.value - 1,
+          size: filters.value.size,
+          matchingId: filters.value.matchingSelected?.id,
+          vacancyId: filters.value.vacancyId?.id,
+          jobTitleId: filters.value.jobTitleId?.id,
+          hiringManagerId: filters.value.hiringManagerId?.id,
+          status: filters.value.status?.id,
+          model: 'detailed',
+          statusJob: filters.value.statusJobSelected?.label,
+          otherLeads: 'entreprise',
+          sortDirection: isDateAscending2.value ? 'ASC' : 'DESC',
+        })
+        .then(({data: {data, meta}}) => {
+          otherLeads.value = data
+            .sort((a, b) => {
+              const dateA = parseDate(a.date);
+              const dateB = parseDate(b.date);
+              return isDateAscending2.value ? dateA - dateB : dateB - dateA;
+            })
+            .map((item) => {
+              return {
+                id: item.id,
+                jobTitle: item.jobs.join(', '),
+                candidate: `${item.firstName} ${item.lastName}`,
+                dateOfApplication: formatDate(
+                  parseDate(item.date),
+                  jsDateFormat,
+                  {locale},
+                ),
+                email: item.email,
+                status: item.candidatureStatus,
+                matchingId: item.matchingId,
+                lastViewed: formatDate(
+                  getCandidateLastViewed(item.email),
+                  jsDateTimeFormat,
+                  {locale},
+                ),
+              };
+            });
+          totalPages2.value = calculateTotalPages(meta);
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des leads :', error);
+          otherLeads.value = [];
+          totalPages2.value = 0;
+        })
+        .finally(() => {
+          isLoading2.value = false;
+        });
+    };
+
+    const calculateTotalPages = (meta) => {
+      if (typeof meta?.totalPages === 'number') return meta.totalPages;
+      if (typeof meta?.total === 'number' && meta?.pageSize > 0)
+        return Math.ceil(meta.total / meta.pageSize);
+      return 0;
+    };
+
+    // Computed pour vérifier si les filtres ont changé
+    const canUpdate = computed(() => {
+      return (
+        filters.value.matchingSelected !== initialFilters.matchingSelected ||
+        filters.value.jobTitleId !== initialFilters.jobTitleId ||
+        filters.value.hiringManagerId !== initialFilters.hiringManagerId ||
+        filters.value.jobTitle !== initialFilters.jobTitle ||
+        filters.value.status !== initialFilters.status ||
+        filters.value.statusJobSelected !== initialFilters.statusJobSelected
+      );
     });
-    onSort(execQuery);
+
+    // Gestionnaire de changement de page
+    const onPageChange1 = (page) => {
+      // Mise à jour de la page courante
+      currentPage1.value = page;
+      // Appel direct de l'API avec les nouveaux paramètres
+      execQuery();
+    };
+
+    // Gestionnaire de changement de page
+    const onPageChange2 = (page) => {
+      // Mise à jour de la page courante
+      currentPage2.value = page;
+      // Appel direct de l'API avec les nouveaux paramètres
+      getOtherLeads();
+    };
 
     return {
       http,
       jsDateFormat,
       locale,
-      showPaginator,
-      currentPage,
-      isLoading,
-      total,
-      pages,
-      pageSize,
+      currentPage1,
+      currentPage2,
+      isLoading1,
+      isLoading2,
+      totalPages1,
+      totalPages2,
       execQuery,
-      items: response,
+      items,
+      otherLeads,
       filters,
-      sortDefinition,
+      onPageChange1,
+      onPageChange2,
+      canUpdate,
+      isDateAscending,
+      isDateAscending2,
+      getOtherLeads,
     };
   },
   data() {
     return {
       isSearching: false,
       isSearchingNoStatut: false,
-      canUpdate: false,
       statusJobSelected: null,
-      isDateAscending: true,
-      isDateAscending2: true,
       isNomAscending: false,
       leads: [],
-      otherLeads: [],
       headers: [
         {
           name: 'jobTitle',
           title: this.$t('general.job_title'),
-          style: {flex: 1},
+          style: {flex: 0.5},
         },
         {
           name: 'candidate',
@@ -366,7 +452,7 @@ export default {
         {
           name: 'dateOfApplication',
           title: this.$t('recruitment.date_of_application'),
-          style: {flex: 1},
+          style: {flex: 0.5},
         },
         {
           name: 'email',
@@ -382,16 +468,28 @@ export default {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 0.5},
+          style: {flex: 0.25},
           cellType: 'oxd-table-cell-actions',
-          cellRenderer: this.cellRenderer,
+          cellConfig: {
+            view: {
+              onClick: (item) => this.onClickCandidate(item, true),
+              props: {
+                name: 'eye-fill',
+              },
+            },
+          },
+        },
+        {
+          name: 'lastViewed',
+          title: 'Dernière consultation',
+          style: {flex: 0.5},
         },
       ],
       headers2: [
         {
           name: 'jobTitle',
           title: this.$t('general.job_title'),
-          style: {flex: 1},
+          style: {flex: 0.5},
         },
         {
           name: 'candidate',
@@ -402,7 +500,7 @@ export default {
         {
           name: 'dateOfApplication',
           title: this.$t('recruitment.date_of_application'),
-          style: {flex: 1},
+          style: {flex: 0.5},
         },
         {
           name: 'email',
@@ -413,9 +511,21 @@ export default {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
-          style: {flex: 0.5},
+          style: {flex: 0.25},
           cellType: 'oxd-table-cell-actions',
-          cellRenderer: this.cellRenderer,
+          cellConfig: {
+            view: {
+              onClick: (item) => this.onClickCandidate(item, false),
+              props: {
+                name: 'eye-fill',
+              },
+            },
+          },
+        },
+        {
+          name: 'lastViewed',
+          title: 'Dernière consultation',
+          style: {flex: 0.5},
         },
       ],
       statusOptions: [
@@ -446,12 +556,6 @@ export default {
       immediate: true,
       deep: true,
     },
-    // Surveille items.data pour exécuter le tri une fois les données chargées
-    'items.data': function (newData) {
-      if (newData && newData.length > 0) {
-        this.sortByDate();
-      }
-    },
   },
   beforeMount() {
     if (this.matchingSelected) {
@@ -465,59 +569,16 @@ export default {
     sortByDate() {
       // Change l'ordre de tri
       this.isDateAscending = !this.isDateAscending;
-      // Trie les éléments en fonction de l'ordre défini
-      this.items?.data.sort((a, b) => {
-        const dateA = parseDate(a.dateOfApplication, 'dd-MM-yyyy');
-        const dateB = parseDate(b.dateOfApplication, 'dd-MM-yyyy');
-
-        return this.isDateAscending ? dateA - dateB : dateB - dateA;
-      });
+      this.execQuery();
     },
 
-    sortByDate2() {
+    async sortByDate2() {
       this.isDateAscending2 = !this.isDateAscending2;
-      this.otherLeads.sort((a, b) => {
-        const dateA = parseDate(a.dateOfApplication, 'dd-MM-yyyy');
-        const dateB = parseDate(b.dateOfApplication, 'dd-MM-yyyy');
-
-        return this.isDateAscending2 ? dateA - dateB : dateB - dateA;
-      });
+      await this.getOtherLeads();
     },
-    sortByName() {
-      this.isNomAscending = !this.isNomAscending;
-      this.items.data.sort((a, b) => {
-        return this.isNomAscending
-          ? a.jobTitle.localeCompare(b.jobTitle)
-          : b.jobTitle.localeCompare(a.jobTitle);
-      });
-    },
-    cellRenderer(...[, , , row]) {
-      const cellConfig = {
-        view: {
-          onClick: this.onClickCandidate,
-          props: {
-            name: 'eye-fill',
-          },
-        },
-      };
-      if (row.resume) {
-        cellConfig.download = {
-          onClick: this.onDownload,
-          props: {
-            name: 'download',
-          },
-        };
-      }
-      return {
-        props: {
-          header: {
-            cellConfig,
-          },
-        },
-      };
-    },
-    onClickCandidate(item) {
-      !item.matchingId
+    onClickCandidate(item, isMatching) {
+      if (item.email) markCandidateAsViewed(item.email);
+      !isMatching || !this.filters.matchingSelected?.id
         ? navigate(
             `/${window.appGlobal.theme}/recruitment/viewCandidate/{id}`,
             {id: item.id},
@@ -526,7 +587,7 @@ export default {
             `/${window.appGlobal.theme}/recruitment/viewCandidate/{leadId}/matching/{matchingId}`,
             {
               leadId: item.id,
-              matchingId: item.matchingId,
+              matchingId: this.filters.matchingSelected.id,
             },
           );
     },
@@ -559,59 +620,13 @@ export default {
     },
     onClickDeleteSelected() {
       const ids = this.checkedItems.map((index) => {
-        return this.items?.data[index].id;
+        return this.items[index].id;
       });
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation.action === 'ok') {
           this.deleteData(ids, confirmation.reason);
         }
       });
-    },
-
-    async getOtherLeads() {
-      new APIService(
-        window.appGlobal.baseUrl,
-        `${window.appGlobal.theme}/api/v2/recruitment/candidates`,
-      )
-        .getAll({
-          matchingId: this.filters.matchingSelected?.id,
-          vacancyId: this.filters.vacancyId?.id,
-          jobTitleId: this.filters.jobTitleId?.id,
-          hiringManagerId: this.filters.hiringManagerId?.id,
-          status: this.filters.status?.id,
-          sortField: this.sortField,
-          sortOrder: this.sortOrder,
-          model: 'detailed',
-          statusJob: this.filters.statusJobSelected?.label,
-          otherLeads: 'entreprise',
-        })
-        .then(({data: {data}}) => {
-          this.otherLeads = data.map((item) => {
-            return {
-              id: item.leadId,
-              jobTitle: item.jobTitle,
-              candidate: `${item.firstName} ${item.middleName || ''} ${
-                item.lastName
-              }`,
-              dateOfApplication: formatDate(
-                parseDate(item.dateOfApplication),
-                this.jsDateFormat,
-                {locale: this.locale},
-              ),
-              email: item.email,
-              /*status:
-                statuses.find((status) => status.id === item.status?.id)?.label ||
-                '',*/
-              status: item.candidatureStatus,
-              resume: item.hasAttachment,
-              isSelectable: item.deletable,
-              matchingId: item.matchingId,
-            };
-          });
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la récupération des leads :', error);
-        });
     },
 
     async deleteData(items, reason) {
@@ -644,14 +659,15 @@ export default {
       await this.execQuery();
     },
     async filterItems() {
+      // Réinitialiser la pagination lors de l'application des filtres
+      this.currentPage1 = 1;
+      this.currentPage2 = 1;
       this.isSearching = this.filters.matchingSelected;
       this.isSearchingNoStatut = this.filters.matchingSelected;
       if (this.filters.statusJobSelected != null) {
         this.isSearchingNoStatut = false;
       }
-      this.getOtherLeads();
-      this.sortByDate2();
-      await this.execQuery();
+      await Promise.all([this.getOtherLeads(), this.execQuery()]);
     },
     onClickReset() {
       this.isSearching = false;
@@ -663,3 +679,9 @@ export default {
 </script>
 
 <style src="./vacancy.scss" lang="scss" scoped></style>
+
+<style lang="scss" scoped>
+.orangehrm-pagination-wrapper {
+  margin-top: 1rem;
+}
+</style>

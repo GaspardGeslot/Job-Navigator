@@ -336,7 +336,6 @@ export default {
 
     const pageOptions = computed(() => {
       const totalPages = response.value?.meta?.totalPages || 0;
-      console.log('totalPages here ', totalPages);
       return Array.from({length: totalPages}, (_, i) => ({
         id: i,
         label: (i + 1).toString(),
