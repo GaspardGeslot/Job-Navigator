@@ -95,7 +95,13 @@
     <br />
     <div class="orangehrm-paper-container" style="padding-bottom: 1rem">
       <div v-if="candidates && candidates.length > 0" class="boutonTriBloc">
-        <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
+        <button
+          class="boutonTri"
+          style="margin: 0.5rem 1rem 0rem 0rem"
+          @click="sortByDate"
+        >
+          Trier par date de candidature ⇅
+        </button>
       </div>
       <div class="orangehrm-container">
         <oxd-card-table
@@ -668,17 +674,8 @@ export default {
   },
 };
 </script>
+<style src="./vacancy.scss" lang="scss" scoped></style>
 <style lang="scss" scoped>
-.boutonTri {
-  border-radius: 2rem;
-  height: 2rem;
-  border: 1px solid rgb(190, 190, 190);
-  cursor: pointer;
-  background-color: white;
-  width: 10rem;
-  margin: 1rem 1rem;
-}
-
 .orangehrm-pagination-wrapper {
   margin: 1rem 0rem 0rem 1rem;
 }

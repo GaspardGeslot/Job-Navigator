@@ -97,7 +97,9 @@
       :filter-title="$t('Découvrez les candidats qui correspondent')"
     >
       <div v-if="items && items.length > 0" class="boutonTriBloc">
-        <button class="boutonTri" @click="sortByDate">Trier par date ⇅</button>
+        <button class="boutonTri" @click="sortByDate">
+          Trier par date de candidature ⇅
+        </button>
       </div>
       <div class="orangehrm-container">
         <oxd-card-table
@@ -133,7 +135,9 @@
       :filter-title="$t('Découvrez les autres candidats sur ce métier')"
     >
       <div v-if="otherLeads && otherLeads.length > 0" class="boutonTriBloc">
-        <button class="boutonTri" @click="sortByDate2">Trier par date ⇅</button>
+        <button class="boutonTri" @click="sortByDate2">
+          Trier par date de candidature ⇅
+        </button>
       </div>
       <div v-if="isSearching" class="orangehrm-container">
         <oxd-card-table
@@ -230,6 +234,8 @@ export default {
     const isLoading2 = ref(false);
     const currentPage1 = ref(1);
     const currentPage2 = ref(1);
+    const isSearching = ref(false);
+    const isSearchingNoStatut = ref(false);
 
     // Filtres initiaux pour la comparaison
     const initialFilters = {
@@ -408,6 +414,39 @@ export default {
       getOtherLeads();
     };
 
+    const filterItems = async () => {
+      // Réinitialiser la pagination lors de l'application des filtres
+      currentPage1.value = 1;
+      currentPage2.value = 1;
+      isSearching.value = filters.value.matchingSelected;
+      isSearchingNoStatut.value = filters.value.matchingSelected;
+      if (filters.value.statusJobSelected != null) {
+        isSearchingNoStatut.value = false;
+      }
+      await Promise.all([getOtherLeads(), execQuery()]);
+    };
+
+    if (localStorage.getItem('matchingFilters')) {
+      const filterData = JSON.parse(localStorage.getItem('matchingFilters'));
+      Object.keys(filterData).forEach((filterKey) => {
+        const filter = filterData[filterKey];
+        switch (filterKey) {
+          case 'matchingId':
+            filters.value.matchingSelected = props.matchings.find(
+              (matching) => matching.id === filter,
+            );
+            break;
+          case 'status':
+            filters.value.statusJobSelected = props.candidatureStatuses.find(
+              (status) => status.label === filter,
+            );
+            break;
+        }
+      });
+      filterItems();
+      localStorage.removeItem('matchingFilters');
+    }
+
     return {
       http,
       jsDateFormat,
@@ -428,12 +467,13 @@ export default {
       isDateAscending,
       isDateAscending2,
       getOtherLeads,
+      filterItems,
+      isSearching,
+      isSearchingNoStatut,
     };
   },
   data() {
     return {
-      isSearching: false,
-      isSearchingNoStatut: false,
       statusJobSelected: null,
       isNomAscending: false,
       leads: [],
@@ -578,6 +618,15 @@ export default {
     },
     onClickCandidate(item, isMatching) {
       if (item.email) markCandidateAsViewed(item.email);
+
+      if (this.filters.matchingSelected?.id) {
+        const filterData = {
+          matchingId: this.filters.matchingSelected.id,
+          status: this.filters.statusJobSelected?.label,
+        };
+        localStorage.setItem('matchingFilters', JSON.stringify(filterData));
+      } else localStorage.removeItem('matchingFilters');
+
       !isMatching || !this.filters.matchingSelected?.id
         ? navigate(
             `/${window.appGlobal.theme}/recruitment/viewCandidate/{id}`,
@@ -657,17 +706,6 @@ export default {
     async resetDataTable() {
       this.checkedItems = [];
       await this.execQuery();
-    },
-    async filterItems() {
-      // Réinitialiser la pagination lors de l'application des filtres
-      this.currentPage1 = 1;
-      this.currentPage2 = 1;
-      this.isSearching = this.filters.matchingSelected;
-      this.isSearchingNoStatut = this.filters.matchingSelected;
-      if (this.filters.statusJobSelected != null) {
-        this.isSearchingNoStatut = false;
-      }
-      await Promise.all([this.getOtherLeads(), this.execQuery()]);
     },
     onClickReset() {
       this.isSearching = false;
