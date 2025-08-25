@@ -125,21 +125,15 @@ export default {
       let matchingData = JSON.parse(JSON.stringify(updatedMatching));
       if (
         !updatedMatching.startBreakDate ||
-        !updatedMatching.startBreakDate.dayOfWeek ||
         updatedMatching.startBreakDate.dayOfWeek === null ||
-        !updatedMatching.startBreakDate.hour ||
         updatedMatching.startBreakDate.hour === null ||
-        !updatedMatching.startBreakDate.minutes ||
         updatedMatching.startBreakDate.minutes === null
       )
         matchingData.startBreakDate = null;
       if (
         !updatedMatching.endBreakDate ||
-        !updatedMatching.endBreakDate.dayOfWeek ||
         updatedMatching.endBreakDate.dayOfWeek === null ||
-        !updatedMatching.endBreakDate.hour ||
         updatedMatching.endBreakDate.hour === null ||
-        !updatedMatching.endBreakDate.minutes ||
         updatedMatching.endBreakDate.minutes === null
       )
         matchingData.endBreakDate = null;
@@ -160,7 +154,6 @@ export default {
         }, {});
       }
 
-      // En mode duplication, on supprime l'ID pour créer un nouveau matching
       if (this.isDuplicating) {
         delete matchingData.id;
       }

@@ -654,10 +654,10 @@ function transformBreakTimeToIntegers(breakTime) {
 }
 function isValidBreakTime(breakTime) {
   return (
-    breakTime &&
-    (breakTime.dayOfWeek === null || !isNaN(parseInt(breakTime.dayOfWeek))) &&
-    (breakTime.hour === null || !isNaN(parseInt(breakTime.hour))) &&
-    (breakTime.minutes === null || !isNaN(parseInt(breakTime.minutes)))
+    !breakTime ||
+    ((breakTime.dayOfWeek === null || !isNaN(parseInt(breakTime.dayOfWeek))) &&
+      (breakTime.hour === null || !isNaN(parseInt(breakTime.hour))) &&
+      (breakTime.minutes === null || !isNaN(parseInt(breakTime.minutes))))
   );
 }
 export default {
@@ -1031,17 +1031,17 @@ export default {
       this.matching.price = this.matchingCurrent.price;
       this.matching.startDate = this.matchingCurrent.startDate;
       this.matching.endDate = this.matchingCurrent.endDate;
-      this.matching.startBreakDate = isValidBreakTime(
-        this.matchingCurrent.startBreakDate,
-      )
-        ? this.matchingCurrent.startBreakDate
-        : defaultBreakTime();
+      this.matching.startBreakDate =
+        this.matchingCurrent.startBreakDate &&
+        isValidBreakTime(this.matchingCurrent.startBreakDate)
+          ? this.matchingCurrent.startBreakDate
+          : defaultBreakTime();
 
-      this.matching.endBreakDate = isValidBreakTime(
-        this.matchingCurrent.endBreakDate,
-      )
-        ? this.matchingCurrent.endBreakDate
-        : defaultBreakTime();
+      this.matching.endBreakDate =
+        this.matchingCurrent.endBreakDate &&
+        isValidBreakTime(this.matchingCurrent.endBreakDate)
+          ? this.matchingCurrent.endBreakDate
+          : defaultBreakTime();
       this.matching.countries = this.matchingCurrent.countries;
       this.matching.courseStarts = this.matchingCurrent.courseStarts;
       this.matching.fundings = this.matchingCurrent.fundings;
