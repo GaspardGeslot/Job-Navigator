@@ -14124,6 +14124,118 @@ h5[data-v-c7c92d34] {
   font-weight: 600;
   color: #64728c;
 }
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/pages/source/Source.vue?vue&type=style&index=0&id=1d65baf9&lang=scss&scoped=true ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.modal-overlay[data-v-1d65baf9] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+}
+.modal-container[data-v-1d65baf9] {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  width: 500px;
+  max-width: 90%;
+  z-index: 1001;
+  animation: modalSlideIn-1d65baf9 0.3s ease-out;
+}
+@keyframes modalSlideIn-1d65baf9 {
+from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+}
+to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+}
+.modal-header[data-v-1d65baf9] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--oxd-border-light-color);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+.modal-header h3[data-v-1d65baf9] {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057;
+  font-family: Nunito Sans, sans-serif;
+}
+.modal-header .close-icon[data-v-1d65baf9] {
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #6c757d;
+  transition: color 0.2s ease;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.modal-header .close-icon[data-v-1d65baf9]:hover {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+.modal-body[data-v-1d65baf9] {
+  padding: 2rem;
+  background-color: #ffffff;
+}
+.modal-footer[data-v-1d65baf9] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--oxd-border-light-color);
+  background-color: #f8f9fa;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+[data-v-1d65baf9] .oxd-input-field .oxd-input {
+  border-radius: 0.5rem;
+  border: 2px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+[data-v-1d65baf9] .oxd-input-field .oxd-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+[data-v-1d65baf9] .oxd-input-field .oxd-label {
+  font-weight: 500;
+  color: #495057;
+}
+[data-v-1d65baf9] .oxd-button {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+[data-v-1d65baf9] .oxd-button.oxd-button--secondary {
+  background: linear-gradient(135deg, #a7df73 0%, #76bc21 100%);
+  border: none;
+}
+[data-v-1d65baf9] .oxd-button.oxd-button--secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(118, 188, 33, 0.3);
+}
+[data-v-1d65baf9] .oxd-button.oxd-button--ghost:hover {
+  background-color: rgba(108, 117, 125, 0.1);
+}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmPimPlugin/components/ProfileImageInput.vue?vue&type=style&index=0&id=555cf975&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

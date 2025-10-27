@@ -163,13 +163,138 @@
       <br />
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Métiers') }}
+        {{ $t('Ages') }}
       </oxd-text>
-      <jobs-autocomplete
-        :jobs="matching.jobs"
-        @delete-job="onClickDeleteJob"
-        @add-jobs="addJobs"
+      <age-autocomplete
+        :ages="matching.ages"
+        :disabled="!editable"
+        @delete-age="onClickDeleteAge"
+        @add-age="addAgeRange"
       />
+      <oxd-divider />
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Besoin') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('needs')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('needs')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item
+          v-for="(elem, elemIndex) in needs"
+          :key="`${elemIndex}-${elem}`"
+        >
+          <oxd-input-field
+            v-model="matching.needs"
+            type="checkbox"
+            :label="elem.label"
+            :value="elem.label"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-divider />
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Début de formation') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('courseStarts')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('courseStarts')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item
+          v-for="(elem, elemIndex) in courseStarts"
+          :key="`${elemIndex}-${elem}`"
+        >
+          <oxd-input-field
+            v-model="matching.courseStarts"
+            type="checkbox"
+            :label="elem.label"
+            :value="elem.label"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-divider />
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Expérience professionnelle') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('professionalExperiences')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('professionalExperiences')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item
+          v-for="(elem, elemIndex) in professionalExperiences"
+          :key="`${elemIndex}-${elem}`"
+        >
+          <oxd-input-field
+            v-model="matching.professionalExperiences"
+            type="checkbox"
+            :label="elem.label"
+            :value="elem.label"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-divider />
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Financement') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('fundings')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('fundings')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item
+          v-for="(elem, elemIndex) in fundings"
+          :key="`${elemIndex}-${elem}`"
+        >
+          <oxd-input-field
+            v-model="matching.fundings"
+            type="checkbox"
+            :label="elem.label"
+            :value="elem.label"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t('Formations') }}
@@ -181,15 +306,107 @@
         @add-courses="addCourses"
       />
       <oxd-divider />
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Handicap') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('handicaps')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('handicaps')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item
+          v-for="(elem, elemIndex) in handicaps"
+          :key="`${elemIndex}-${elem}`"
+        >
+          <oxd-input-field
+            v-model="matching.handicaps"
+            type="checkbox"
+            :label="elem.label"
+            :value="elem.label"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
-        {{ $t('Ages') }}
+        {{ $t('Métiers') }}
       </oxd-text>
-      <age-autocomplete
-        :ages="matching.ages"
-        :disabled="!editable"
-        @delete-age="onClickDeleteAge"
-        @add-age="addAgeRange"
+      <jobs-autocomplete
+        :jobs="matching.jobs"
+        @delete-job="onClickDeleteJob"
+        @add-jobs="addJobs"
       />
+      <oxd-divider />
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Modalité de formation') }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('trainingMethods')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('trainingMethods')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item
+          v-for="(elem, elemIndex) in trainingMethods"
+          :key="`${elemIndex}-${elem}`"
+        >
+          <oxd-input-field
+            v-model="matching.trainingMethods"
+            type="checkbox"
+            :label="elem.label"
+            :value="elem.label"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-divider />
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t(`Niveau d'étude`) }}
+          </oxd-text>
+        </oxd-grid-item>
+        <oxd-grid-item class="orangehrm-select-all">
+          <oxd-input-field
+            :model-value="isAllSelected('studyLevels')"
+            type="checkbox"
+            :label="$t('Tout sélectionner')"
+            :disabled="!editable"
+            @input="toggleAll('studyLevels')"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+        <oxd-grid-item
+          v-for="(elem, elemIndex) in studyLevels"
+          :key="`${elemIndex}-${elem}`"
+        >
+          <oxd-input-field
+            v-model="matching.levels"
+            type="checkbox"
+            :label="elem.label"
+            :value="elem.label"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t('Localisation') }}
@@ -241,150 +458,26 @@
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item>
           <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Début de formation') }}
+            {{ $t('Permis de conduire') }}
           </oxd-text>
         </oxd-grid-item>
         <oxd-grid-item class="orangehrm-select-all">
           <oxd-input-field
-            :model-value="isAllSelected('courseStarts')"
+            :model-value="isAllSelected('drivingLicenses')"
             type="checkbox"
             :label="$t('Tout sélectionner')"
             :disabled="!editable"
-            @input="toggleAll('courseStarts')"
+            @input="toggleAll('drivingLicenses')"
           />
         </oxd-grid-item>
       </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
-          v-for="(elem, elemIndex) in courseStarts"
+          v-for="(elem, elemIndex) in drivingLicenses"
           :key="`${elemIndex}-${elem}`"
         >
           <oxd-input-field
-            v-model="matching.courseStarts"
-            type="checkbox"
-            :label="elem.label"
-            :value="elem.label"
-            :disabled="!editable"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-divider />
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Financement') }}
-          </oxd-text>
-        </oxd-grid-item>
-        <oxd-grid-item class="orangehrm-select-all">
-          <oxd-input-field
-            :model-value="isAllSelected('fundings')"
-            type="checkbox"
-            :label="$t('Tout sélectionner')"
-            :disabled="!editable"
-            @input="toggleAll('fundings')"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item
-          v-for="(elem, elemIndex) in fundings"
-          :key="`${elemIndex}-${elem}`"
-        >
-          <oxd-input-field
-            v-model="matching.fundings"
-            type="checkbox"
-            :label="elem.label"
-            :value="elem.label"
-            :disabled="!editable"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-divider />
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Handicap') }}
-          </oxd-text>
-        </oxd-grid-item>
-        <oxd-grid-item class="orangehrm-select-all">
-          <oxd-input-field
-            :model-value="isAllSelected('handicaps')"
-            type="checkbox"
-            :label="$t('Tout sélectionner')"
-            :disabled="!editable"
-            @input="toggleAll('handicaps')"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item
-          v-for="(elem, elemIndex) in handicaps"
-          :key="`${elemIndex}-${elem}`"
-        >
-          <oxd-input-field
-            v-model="matching.handicaps"
-            type="checkbox"
-            :label="elem.label"
-            :value="elem.label"
-            :disabled="!editable"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-divider />
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t(`Niveau d'étude`) }}
-          </oxd-text>
-        </oxd-grid-item>
-        <oxd-grid-item class="orangehrm-select-all">
-          <oxd-input-field
-            :model-value="isAllSelected('studyLevels')"
-            type="checkbox"
-            :label="$t('Tout sélectionner')"
-            :disabled="!editable"
-            @input="toggleAll('studyLevels')"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item
-          v-for="(elem, elemIndex) in studyLevels"
-          :key="`${elemIndex}-${elem}`"
-        >
-          <oxd-input-field
-            v-model="matching.levels"
-            type="checkbox"
-            :label="elem.label"
-            :value="elem.label"
-            :disabled="!editable"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-divider />
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Besoin') }}
-          </oxd-text>
-        </oxd-grid-item>
-        <oxd-grid-item class="orangehrm-select-all">
-          <oxd-input-field
-            :model-value="isAllSelected('needs')"
-            type="checkbox"
-            :label="$t('Tout sélectionner')"
-            :disabled="!editable"
-            @input="toggleAll('needs')"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item
-          v-for="(elem, elemIndex) in needs"
-          :key="`${elemIndex}-${elem}`"
-        >
-          <oxd-input-field
-            v-model="matching.needs"
+            v-model="matching.drivingLicenses"
             type="checkbox"
             :label="elem.label"
             :value="elem.label"
@@ -427,37 +520,6 @@
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item>
           <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Expérience professionnelle') }}
-          </oxd-text>
-        </oxd-grid-item>
-        <oxd-grid-item class="orangehrm-select-all">
-          <oxd-input-field
-            :model-value="isAllSelected('professionalExperiences')"
-            type="checkbox"
-            :label="$t('Tout sélectionner')"
-            :disabled="!editable"
-            @input="toggleAll('professionalExperiences')"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item
-          v-for="(elem, elemIndex) in professionalExperiences"
-          :key="`${elemIndex}-${elem}`"
-        >
-          <oxd-input-field
-            v-model="matching.professionalExperiences"
-            type="checkbox"
-            :label="elem.label"
-            :value="elem.label"
-            :disabled="!editable"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-divider />
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
             {{ $t('Situation actuelle') }}
           </oxd-text>
         </oxd-grid-item>
@@ -489,26 +551,26 @@
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item>
           <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Modalité de formation') }}
+            {{ $t('Source') }}
           </oxd-text>
         </oxd-grid-item>
         <oxd-grid-item class="orangehrm-select-all">
           <oxd-input-field
-            :model-value="isAllSelected('trainingMethods')"
+            :model-value="isAllSelected('sources')"
             type="checkbox"
             :label="$t('Tout sélectionner')"
             :disabled="!editable"
-            @input="toggleAll('trainingMethods')"
+            @input="toggleAll('sources')"
           />
         </oxd-grid-item>
       </oxd-grid>
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
         <oxd-grid-item
-          v-for="(elem, elemIndex) in trainingMethods"
+          v-for="(elem, elemIndex) in sources"
           :key="`${elemIndex}-${elem}`"
         >
           <oxd-input-field
-            v-model="matching.trainingMethods"
+            v-model="matching.sources"
             type="checkbox"
             :label="elem.label"
             :value="elem.label"
@@ -516,38 +578,6 @@
           />
         </oxd-grid-item>
       </oxd-grid>
-      <oxd-divider />
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Permis de conduire') }}
-          </oxd-text>
-        </oxd-grid-item>
-        <oxd-grid-item class="orangehrm-select-all">
-          <oxd-input-field
-            :model-value="isAllSelected('drivingLicenses')"
-            type="checkbox"
-            :label="$t('Tout sélectionner')"
-            :disabled="!editable"
-            @input="toggleAll('drivingLicenses')"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <oxd-grid :cols="4" class="orangehrm-full-width-grid">
-        <oxd-grid-item
-          v-for="(elem, elemIndex) in drivingLicenses"
-          :key="`${elemIndex}-${elem}`"
-        >
-          <oxd-input-field
-            v-model="matching.drivingLicenses"
-            type="checkbox"
-            :label="elem.label"
-            :value="elem.label"
-            :disabled="!editable"
-          />
-        </oxd-grid-item>
-      </oxd-grid>
-      <br />
       <oxd-divider />
       <oxd-form-actions>
         <required-text />
@@ -617,6 +647,7 @@ const MatchingModel = {
   price: 0.0,
   resumeNeeded: false,
   status: [],
+  sources: [],
   trainingMethods: [],
   professionalExperiences: [],
   drivingLicenses: [],
@@ -711,6 +742,10 @@ export default {
       default: () => [],
     },
     status: {
+      type: Array,
+      default: () => [],
+    },
+    sources: {
       type: Array,
       default: () => [],
     },
@@ -1050,6 +1085,7 @@ export default {
       this.matching.needs = this.matchingCurrent.needs;
       this.matching.phones = this.matchingCurrent.phones;
       this.matching.status = this.matchingCurrent.status;
+      this.matching.sources = this.matchingCurrent.sources;
       this.matching.trainingMethods = this.matchingCurrent.trainingMethods;
       this.matching.professionalExperiences =
         this.matchingCurrent.professionalExperiences;

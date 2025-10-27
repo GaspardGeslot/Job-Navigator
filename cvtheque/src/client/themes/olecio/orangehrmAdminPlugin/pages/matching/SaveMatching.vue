@@ -11,6 +11,7 @@
         :needs="needs"
         :phone-numbers="phoneNumbers"
         :status="status"
+        :sources="sources"
         :training-methods="trainingMethods"
         :professional-experiences="professionalExperiences"
         :driving-licenses="drivingLicenses"
@@ -64,6 +65,10 @@ export default {
       default: () => [],
     },
     status: {
+      type: Array,
+      default: () => [],
+    },
+    sources: {
       type: Array,
       default: () => [],
     },

@@ -29,6 +29,7 @@ class MatchingController extends AbstractVueController
     public const FILTER_PHONE_NUMBERS = 'phoneNumbers';
     public const FILTER_PROFESSIONAL_EXPERIENCES = 'professionalExperiences';
     public const FILTER_STATUS = 'status';
+    public const FILTER_SOURCES = 'sources';
     public const FILTER_TRAINING_METHODS = 'trainingMethods';
     public const FILTER_DRIVING_LICENSES = 'drivingLicenses';
 
@@ -101,6 +102,12 @@ class MatchingController extends AbstractVueController
                 'label' => $label
             ];
         }, $options['status'], array_keys($options['status']))));
+        $component->addProp(new Prop('sources', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+            return [
+                'id' => $index,
+                'label' => $label
+            ];
+        }, $options['sources'], array_keys($options['sources']))));
         $component->addProp(new Prop('training-methods', Prop::TYPE_ARRAY, array_map(function($label, $index) {
             return [
                 'id' => $index,
@@ -153,6 +160,7 @@ class MatchingController extends AbstractVueController
         $phoneNumbersFilter = $request->query->get('phoneNumbers');
         $professionalExperiencesFilter = $request->query->get('professionalExperiences');
         $statusFilter = $request->query->get('status');
+        $sourcesFilter = $request->query->get('sources');
         $trainingMethodsFilter = $request->query->get('trainingMethods');
         $drivingLicensesFilter = $request->query->get('drivingLicenses');
         
@@ -173,7 +181,8 @@ class MatchingController extends AbstractVueController
             $professionalExperiencesFilter,
             $statusFilter,
             $trainingMethodsFilter,
-            $drivingLicensesFilter
+            $drivingLicensesFilter,
+            $sourcesFilter
         );
         return new Response(
             json_encode($matchings),
@@ -234,7 +243,7 @@ class MatchingController extends AbstractVueController
         return new Response(json_encode(['message' => 'Matching deleted successfully']), Response::HTTP_OK);
     }
 
-    private function getMatchings(string $token, ?string $titleFilter, ?string $actorFilter, ?string $jobFilter, ?string $courseIdFilter, ?bool $isActiveFilter, ?array $countriesFilter = null, ?array $courseStartsFilter = null, ?array $fundingsFilter = null, ?array $handicapsFilter = null, ?array $studyLevelsFilter = null, ?array $needsFilter = null, ?array $phoneNumbersFilter = null, ?array $professionalExperiencesFilter = null, ?array $statusFilter = null, ?array $trainingMethodsFilter = null, ?array $drivingLicensesFilter = null): array
+    private function getMatchings(string $token, ?string $titleFilter, ?string $actorFilter, ?string $jobFilter, ?string $courseIdFilter, ?bool $isActiveFilter, ?array $countriesFilter = null, ?array $courseStartsFilter = null, ?array $fundingsFilter = null, ?array $handicapsFilter = null, ?array $studyLevelsFilter = null, ?array $needsFilter = null, ?array $phoneNumbersFilter = null, ?array $professionalExperiencesFilter = null, ?array $statusFilter = null, ?array $trainingMethodsFilter = null, ?array $drivingLicensesFilter = null, ?array $sourcesFilter = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -293,27 +302,6 @@ class MatchingController extends AbstractVueController
                     $url .= 'studyLevels=' . urlencode($studyLevel) . '&';
                 }
             }
-            // if ($studyLevelsFilter != null && !empty($studyLevelsFilter)) {
-            //     $url .= 'studyLevels=' . urlencode(implode(',', $studyLevelsFilter)) . '&';
-            // }
-            // if ($needsFilter != null && !empty($needsFilter)) {
-            //     $url .= 'needs=' . urlencode(implode(',', $needsFilter)) . '&';
-            // }
-            // if ($phoneNumbersFilter != null && !empty($phoneNumbersFilter)) {
-            //     $url .= 'phoneNumbers=' . urlencode(implode(',', $phoneNumbersFilter)) . '&';
-            // }
-            // if ($professionalExperiencesFilter != null && !empty($professionalExperiencesFilter)) {
-            //     $url .= 'professionalExperiences=' . urlencode(implode(',', $professionalExperiencesFilter)) . '&';
-            // }
-            // if ($statusFilter != null && !empty($statusFilter)) {
-            //     $url .= 'status=' . urlencode(implode(',', $statusFilter)) . '&';
-            // }
-            // if ($trainingMethodsFilter != null && !empty($trainingMethodsFilter)) {
-            //     $url .= 'trainingMethods=' . urlencode(implode(',', $trainingMethodsFilter)) . '&';
-            // }
-            // if ($drivingLicensesFilter != null && !empty($drivingLicensesFilter)) {
-            //     $url .= 'drivingLicenses=' . urlencode(implode(',', $drivingLicensesFilter)) . '&';
-            // }
             if ($needsFilter != null && !empty($needsFilter)) {
                 foreach ($needsFilter as $need) {
                     $url .= 'needs=' . urlencode($need) . '&';
@@ -342,6 +330,11 @@ class MatchingController extends AbstractVueController
             if ($drivingLicensesFilter != null && !empty($drivingLicensesFilter)) {
                 foreach ($drivingLicensesFilter as $drivingLicense) {
                     $url .= 'drivingLicenses=' . urlencode($drivingLicense) . '&';
+                }
+            }
+            if ($sourcesFilter != null && !empty($sourcesFilter)) {
+                foreach ($sourcesFilter as $source) {
+                    $url .= 'sources=' . urlencode($source) . '&';
                 }
             }
             // error_log("URL de requête : " . urldecode($url));

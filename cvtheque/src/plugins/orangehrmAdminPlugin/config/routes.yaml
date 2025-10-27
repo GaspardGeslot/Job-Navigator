@@ -1509,6 +1509,42 @@ admin_training_method:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_source:
+  path: /{theme}/api/v2/admin/source
+  controller: OrangeHRM\Admin\Controller\SourceController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_source_add:
+  path: /{theme}/api/v2/admin/source
+  controller: OrangeHRM\Admin\Controller\SourceController::add
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_source_update:
+  path: /{theme}/api/v2/admin/source/{title}
+  controller: OrangeHRM\Admin\Controller\SourceController::update
+  methods: [ PUT ]
+  requirements:
+    title: '[^/]+'
+    theme: constructys|olecio
+
+apiv2_admin_source_delete:
+  path: /{theme}/api/v2/admin/source
+  controller: OrangeHRM\Admin\Controller\SourceController::delete
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio
+
+admin_source:
+  path: /{theme}/admin/viewSources
+  controller: OrangeHRM\Admin\Controller\SourceController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
 admin_actor:
   path: /{theme}/admin/viewActor
   controller: OrangeHRM\Admin\Controller\ActorController::handle

@@ -91,6 +91,12 @@ class SaveMatchingController extends AbstractVueController
                 'label' => $label
             ];
         }, $options['status'], array_keys($options['status']))));
+        $component->addProp(new Prop('sources', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+            return [
+                'id' => $index,
+                'label' => $label
+            ];
+        }, $options['sources'], array_keys($options['sources']))));
         $component->addProp(new Prop('training-methods', Prop::TYPE_ARRAY, array_map(function($label, $index) {
             return [
                 'id' => $index,
