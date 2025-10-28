@@ -117,10 +117,6 @@ export default {
       isLoading: false,
     };
   },
-  // mounted() {
-  //   console.log('SaveMatching - matchingCurrent:', this.matchingCurrent);
-  //   console.log('SaveMatching - isDuplicating:', this.isDuplicating);
-  // },
   methods: {
     onClickCancel() {
       navigate(`/${window.appGlobal.theme}/admin/matching`);
@@ -158,7 +154,16 @@ export default {
           return map;
         }, {});
       }
-
+      if (updatedMatching.contact) {
+        matchingData.contact.email =
+          updatedMatching.contact.email === ''
+            ? null
+            : updatedMatching.contact.email;
+        matchingData.contact.name =
+          updatedMatching.contact.name === ''
+            ? null
+            : updatedMatching.contact.name;
+      }
       if (this.isDuplicating) {
         delete matchingData.id;
       }
@@ -170,9 +175,6 @@ export default {
           navigate(`/${window.appGlobal.theme}/admin/matching`);
         })
         .catch((error) => {
-          // console.log('Error:', error);
-          // console.log('Response:', error.response);
-          // console.log('Data:', error.response?.data);
           if (matchingData.startBreakDate === null) {
             matchingData.startBreakDate = {
               dayOfWeek: null,

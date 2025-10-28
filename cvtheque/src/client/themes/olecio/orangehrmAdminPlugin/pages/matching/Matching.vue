@@ -529,7 +529,7 @@
   </div>
 </template>
 <script>
-import {ref, reactive, onMounted} from 'vue';
+import {ref, reactive} from 'vue';
 import useToast from '@/core/util/composable/useToast';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {navigate} from '@/core/util/helper/navigation';
@@ -766,6 +766,16 @@ export default {
         }, {});
       } else {
         matchingData.courses = null;
+      }
+      if (updatedMatching.contact) {
+        matchingData.contact.email =
+          updatedMatching.contact.email === ''
+            ? null
+            : updatedMatching.contact.email;
+        matchingData.contact.name =
+          updatedMatching.contact.name === ''
+            ? null
+            : updatedMatching.contact.name;
       }
       this.http
         .update(id, {...matchingData})
