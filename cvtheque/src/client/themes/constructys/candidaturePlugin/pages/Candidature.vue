@@ -54,7 +54,10 @@
           <div class="hero-video">
             <video
               controls
-              src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/constructys_video.mp4"
+              autoplay
+              muted
+              loop
+              src="https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/home/VigieBTP-V6.mp4"
             ></video>
           </div>
         </div>
