@@ -95,6 +95,36 @@
       </oxd-grid>
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
+        {{ $t(`Informations de contact`) }}
+      </oxd-text>
+      <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+        <oxd-grid-item>
+          <oxd-input-field
+            v-model="matching.contact.email"
+            :label="$t('Email')"
+            :disabled="!editable"
+            :rules="rules.contactEmail"
+          />
+        </oxd-grid-item>
+        <oxd-grid-item>
+          <oxd-input-field
+            v-model="matching.contact.name"
+            :label="$t('Nom')"
+            :disabled="!editable"
+            :rules="rules.contactName"
+          />
+        </oxd-grid-item>
+        <oxd-grid-item>
+          <oxd-input-field
+            v-model="matching.contact.sheetId"
+            :label="$t('ID du tableur de reporting')"
+            :disabled="!editable"
+            :rules="rules.contactSheetId"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <oxd-divider />
+      <oxd-text class="orangehrm-sub-title" tag="h6">
         {{ $t(`Date d'arrêt - Début`) }}
       </oxd-text>
       <oxd-grid
@@ -588,6 +618,7 @@ import {
   numericOnly,
   digitsOnlyWithTwoDecimalPoints,
   shouldNotExceedCharLength,
+  validEmailFormat,
 } from '@/core/util/validation/rules';
 
 const MatchingModel = {
@@ -620,6 +651,11 @@ const MatchingModel = {
   trainingMethods: [],
   professionalExperiences: [],
   drivingLicenses: [],
+  contact: {
+    email: null,
+    name: null,
+    sheetId: null,
+  },
 };
 function defaultBreakTime() {
   return {
@@ -754,6 +790,9 @@ export default {
       maxAmountPerDay: [numericOnly],
       maxAmountPerMonth: [numericOnly],
       postalCode: [numericOnly],
+      contactEmail: [validEmailFormat],
+      contactName: [shouldNotExceedCharLength(50)],
+      contactSheetId: [shouldNotExceedCharLength(150)],
     };
     return {
       rules,
@@ -782,6 +821,11 @@ export default {
           dayOfWeek: null,
           hour: null,
           minutes: null,
+        },
+        contact: {
+          email: null,
+          name: null,
+          sheetId: null,
         },
       },
     };
@@ -972,6 +1016,16 @@ export default {
           age.max = parseInt(age.max);
         }
       }
+      if (
+        (!updatedMatching.contact.email ||
+          updatedMatching.contact.email === '') &&
+        (!updatedMatching.contact.name ||
+          updatedMatching.contact.name === '') &&
+        (!updatedMatching.contact.sheetId ||
+          updatedMatching.contact.sheetId === '')
+      ) {
+        updatedMatching.contact = null;
+      }
       this.$emit('save', updatedMatching);
     },
     onClickDeleteJob(job) {
@@ -1090,6 +1144,15 @@ export default {
 
       this.matching.locationPostalCodes =
         this.matchingCurrent.locationPostalCodes;
+
+      this.matching.contact =
+        this.matchingCurrent.contact != null
+          ? this.matchingCurrent.contact
+          : {
+              email: null,
+              name: null,
+              sheetId: null,
+            };
     },
     toggleAll(field) {
       let optionsList, selectedList;

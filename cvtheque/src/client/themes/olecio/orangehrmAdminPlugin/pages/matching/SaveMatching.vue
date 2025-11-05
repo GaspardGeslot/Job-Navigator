@@ -153,7 +153,20 @@ export default {
           return map;
         }, {});
       }
-
+      if (updatedMatching.contact) {
+        matchingData.contact.email =
+          updatedMatching.contact.email === ''
+            ? null
+            : updatedMatching.contact.email;
+        matchingData.contact.name =
+          updatedMatching.contact.name === ''
+            ? null
+            : updatedMatching.contact.name;
+        matchingData.contact.sheetId =
+          updatedMatching.contact.sheetId === ''
+            ? null
+            : updatedMatching.contact.sheetId;
+      }
       if (this.isDuplicating) {
         delete matchingData.id;
       }
