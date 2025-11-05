@@ -114,6 +114,14 @@
             :rules="rules.contactName"
           />
         </oxd-grid-item>
+        <oxd-grid-item>
+          <oxd-input-field
+            v-model="matching.contact.sheetId"
+            :label="$t('ID du tableur de reporting')"
+            :disabled="!editable"
+            :rules="rules.contactSheetId"
+          />
+        </oxd-grid-item>
       </oxd-grid>
       <oxd-divider />
       <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -677,6 +685,7 @@ const MatchingModel = {
   contact: {
     email: null,
     name: null,
+    sheetId: null,
   },
 };
 function defaultBreakTime() {
@@ -818,6 +827,7 @@ export default {
       postalCode: [numericOnly],
       contactEmail: [validEmailFormat],
       contactName: [shouldNotExceedCharLength(50)],
+      contactSheetId: [shouldNotExceedCharLength(150)],
     };
     return {
       rules,
@@ -850,6 +860,7 @@ export default {
         contact: {
           email: null,
           name: null,
+          sheetId: null,
         },
       },
     };
@@ -1038,7 +1049,10 @@ export default {
       if (
         (!updatedMatching.contact.email ||
           updatedMatching.contact.email === '') &&
-        (!updatedMatching.contact.name || updatedMatching.contact.name === '')
+        (!updatedMatching.contact.name ||
+          updatedMatching.contact.name === '') &&
+        (!updatedMatching.contact.sheetId ||
+          updatedMatching.contact.sheetId === '')
       ) {
         updatedMatching.contact = null;
       }
@@ -1168,6 +1182,7 @@ export default {
           : {
               email: null,
               name: null,
+              sheetId: null,
             };
     },
     toggleAll(field) {

@@ -163,6 +163,10 @@ export default {
           updatedMatching.contact.name === ''
             ? null
             : updatedMatching.contact.name;
+        matchingData.contact.sheetId =
+          updatedMatching.contact.sheetId === ''
+            ? null
+            : updatedMatching.contact.sheetId;
       }
       if (this.isDuplicating) {
         delete matchingData.id;
