@@ -452,6 +452,8 @@
         @delete-location-postal-code="onClickDeleteLocationPostalCode"
         @add-location-postal-code="addLocationPostalCode"
         @toggle-all-departments="toggleAllDepartments"
+        @import-csv="importCsv"
+        @delete-all-location-postal-code="onClickDeleteAllLocationPostalCode"
       />
       <oxd-divider />
       <oxd-grid :cols="4" class="orangehrm-full-width-grid">
@@ -1085,8 +1087,21 @@ export default {
           (l) => l !== locationPostalCode,
         );
     },
+    onClickDeleteAllLocationPostalCode() {
+      this.matching.locationPostalCodes = [];
+    },
     addLocationPostalCode(postalCode) {
       this.matching.locationPostalCodes.push(postalCode);
+    },
+    async importCsv(csv) {
+      const text = await csv.text();
+      const lines = text.split('\n');
+      lines.forEach((line) => {
+        const postalCode = line.trim();
+        if (postalCode) {
+          this.addLocationPostalCode(postalCode);
+        }
+      });
     },
     onClickDeleteCourse(course) {
       this.matching.courses = this.matching.courses.filter((c) => c !== course);

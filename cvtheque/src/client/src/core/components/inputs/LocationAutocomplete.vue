@@ -50,10 +50,23 @@
           :label="$t('Code postal')"
         />
         <oxd-input-group>
+          <oxd-icon-button name="plus" @click="addLocationPostalCode" />
+        </oxd-input-group>
+      </oxd-grid-item>
+      <oxd-grid-item class="orangehrm-job-selection-criteria" style="gap: 1rem">
+        <oxd-input-field
+          type="file"
+          :label="$t('Importer des codes postaux depuis un fichier CSV')"
+          accept=".csv"
+          :disabled="disabled"
+          @change="onFileChange"
+          ref="csvFileInput"
+        />
+        <oxd-input-group>
           <oxd-icon-button
-            style="margin-bottom: 1rem"
-            name="plus"
-            @click="addLocationPostalCode"
+            name="trash-fill"
+            :title="$t('Tout supprimer')"
+            @click="onClickDeleteAllLocationPostalCode()"
           />
         </oxd-input-group>
       </oxd-grid-item>
@@ -107,6 +120,8 @@ export default {
     'add-department',
     'add-location-postal-code',
     'toggle-all-departments',
+    'import-csv',
+    'delete-all-location-postal-code',
   ],
 
   data() {
@@ -123,6 +138,26 @@ export default {
 
     onClickDeleteLocationPostalCode(locationPostalCode) {
       this.$emit('delete-location-postal-code', locationPostalCode);
+    },
+
+    onClickDeleteAllLocationPostalCode() {
+      this.$emit('delete-all-location-postal-code');
+      this.resetFileInput();
+    },
+
+    onFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.$emit('import-csv', file);
+        this.resetFileInput();
+      }
+    },
+
+    resetFileInput() {
+      const inputElement = this.$refs.csvFileInput?.$el?.querySelector('input');
+      if (inputElement) {
+        inputElement.value = '';
+      }
     },
 
     addDepartment() {
