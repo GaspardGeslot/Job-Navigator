@@ -1,20 +1,43 @@
+##########################
+#   Subdomain Routes (sans theme)
+##########################
+
+subdomain_view_candidature:
+  path: /candidature/index
+  controller: Candidature\Controller\CandidatureController::handle
+  methods: [ GET ]
+
+subdomain_postNewLead:
+  path: /candidature/lead
+  controller: Candidature\Controller\CandidatureController::postNewLead
+  methods: [ POST ]
+
+subdomain_createNewAccount:
+  path: /candidature/account
+  controller: Candidature\Controller\CandidatureController::createNewAccount
+  methods: [ POST ]
+
+##########################
+#  Fallback Routes (avec theme)
+##########################
+
 view_candidature:
   path: /{theme}/candidature/index
   controller: Candidature\Controller\CandidatureController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys
+    theme: constructys|olecio|maraudes
 
 postNewLead:
   path: /{theme}/candidature/lead
   controller: Candidature\Controller\CandidatureController::postNewLead
   methods: [ POST ]
   requirements:
-    theme: constructys
+    theme: constructys|olecio|maraudes
 
 createNewAccount:
   path: /{theme}/candidature/account
   controller: Candidature\Controller\CandidatureController::createNewAccount
   methods: [ POST ]
   requirements:
-    theme: constructys
+    theme: constructys|olecio|maraudes

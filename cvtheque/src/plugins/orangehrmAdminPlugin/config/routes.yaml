@@ -1,3 +1,1371 @@
+##########################
+#   Subdomain Routes (sans theme)
+##########################
+
+subdomain_apiv2_admin_job_title:
+  path: /api/v2/admin/job-titles/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\JobTitleAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_job_titles:
+  path: /api/v2/admin/job-titles
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\JobTitleAPI
+  requirements:
+
+subdomain_apiv2_admin_job_specification:
+  path: /api/v2/admin/job-titles/{jobTitleId}/specification
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\JobSpecificationAPI
+    _key: jobTitleId
+  requirements:
+    jobTitleId: '\d+'
+
+subdomain_apiv2_admin_job_category:
+  path: /api/v2/admin/job-categories/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\JobCategoryAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_job_categories:
+  path: /api/v2/admin/job-categories
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\JobCategoryAPI
+  requirements:
+
+subdomain_apiv2_admin_user:
+  path: /api/v2/admin/users/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\UserAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_users:
+  path: /api/v2/admin/users
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\UserAPI
+  requirements:
+
+subdomain_apiv2_admin_subunit:
+  path: /api/v2/admin/subunits/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\SubunitAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_subunits:
+  path: /api/v2/admin/subunits
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\SubunitAPI
+  requirements:
+
+subdomain_apiv2_admin_employment_status:
+  path: /api/v2/admin/employment-statuses/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EmploymentStatusAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_employment_statuses:
+  path: /api/v2/admin/employment-statuses
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EmploymentStatusAPI
+  requirements:
+
+subdomain_apiv2_education:
+  path: /api/v2/admin/educations/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EducationAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_educations:
+  path: /api/v2/admin/educations
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EducationAPI
+  requirements:
+
+subdomain_apiv2_admin_skill:
+  path: /api/v2/admin/skills/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\SkillAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_skills:
+  path: /api/v2/admin/skills
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\SkillAPI
+  requirements:
+
+subdomain_apiv2_license:
+  path: /api/v2/admin/licenses/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\LicenseAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_licenses:
+  path: /api/v2/admin/licenses
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\LicenseAPI
+  requirements:
+
+subdomain_apiv2_admin_language:
+  path: /api/v2/admin/languages/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\LanguageAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_languages:
+  path: /api/v2/admin/languages
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\LanguageAPI
+  requirements:
+
+subdomain_apiv2_admin_membership:
+  path: /api/v2/admin/memberships/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\MembershipAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_memberships:
+  path: /api/v2/admin/memberships
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\MembershipAPI
+  requirements:
+
+subdomain_apiv2_organization:
+  path: /api/v2/admin/organization
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    id: 0
+    _api: OrangeHRM\Admin\Api\OrganizationAPI
+  requirements:
+
+subdomain_apiv2_admin_pay_grade_allowed_currencies:
+  path: /api/v2/admin/pay-grades/{payGradeId}/currencies/allowed
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\PayGradeAllowedCurrencyAPI
+  requirements:
+    payGradeId: '\d+'
+
+subdomain_apiv2_admin_paygrades_currency:
+  path: /api/v2/admin/pay-grades/{payGradeId}/currencies/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\PayGradeCurrencyAPI
+  requirements:
+    payGradeId: '\d+'
+    id: '\d+'
+
+subdomain_apiv2_admin_paygrades_currencies:
+  path: /api/v2/admin/pay-grades/{payGradeId}/currencies
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\PayGradeCurrencyAPI
+  requirements:
+    payGradeId: '\d+'
+
+subdomain_apiv2_admin_nationality:
+  path: /api/v2/admin/nationalities/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\NationalityAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_nationalities:
+  path: /api/v2/admin/nationalities
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\NationalityAPI
+  requirements:
+
+subdomain_apiv2_admin_email_configuration:
+  path: /api/v2/admin/email-configuration
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    id: 0
+    _api: OrangeHRM\Admin\Api\EmailConfigurationAPI
+  requirements:
+
+subdomain_apiv2_admin_work_shift:
+  path: /api/v2/admin/work-shifts/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\WorkShiftAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_work_shifts:
+  path: /api/v2/admin/work-shifts
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\WorkShiftAPI
+  requirements:
+
+subdomain_apiv2_admin_work_shifts_employee:
+  path: /api/v2/admin/work-shifts/employees
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\WorkShiftEmployeeAPI
+  requirements:
+
+subdomain_apiv2_admin_location:
+  path: /api/v2/admin/locations/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\LocationAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_locations:
+  path: /api/v2/admin/locations
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\LocationAPI
+  requirements:
+
+subdomain_apiv2_admin_modules:
+  path: /api/v2/admin/modules
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\ModulesAPI
+  requirements:
+
+subdomain_apiv2_admin_pay_grades:
+  path: /api/v2/admin/pay-grades
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\PayGradeAPI
+  requirements:
+
+subdomain_apiv2_admin_pay_grade:
+  path: /api/v2/admin/pay-grades/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\PayGradeAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_email_subscription:
+  path: /api/v2/admin/email-subscriptions/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EmailSubscriptionAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_email_subscriptions:
+  path: /api/v2/admin/email-subscriptions
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EmailSubscriptionAPI
+  requirements:
+
+subdomain_apiv2_admin_email_subscribers:
+  path: /api/v2/admin/email-subscriptions/{emailSubscriptionId}/subscribers
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EmailSubscriberAPI
+  requirements:
+    emailSubscriptionId: '\d+'
+
+subdomain_apiv2_admin_email_subscriber:
+  path: /api/v2/admin/email-subscriptions/{emailSubscriptionId}/subscribers/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\EmailSubscriberAPI
+  requirements:
+    emailSubscriptionId: '\d+'
+    id: '\d+'
+
+subdomain_apiv2_admin_validate_user_name:
+  path: /api/v2/admin/validation/user-name
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _key: userName
+    _api: OrangeHRM\Admin\Api\ValidationUserNameAPI
+  requirements:
+
+subdomain_apiv2_admin_localization:
+  path: /api/v2/admin/localization
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    id: 0
+    _api: OrangeHRM\Admin\Api\LocalizationAPI
+  requirements:
+
+subdomain_apiv2_admin_i18n_languages:
+  path: /api/v2/admin/i18n/languages
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, DELETE ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\I18NLanguageAPI
+  requirements:
+
+subdomain_apiv2_admin_i18n_translation_import:
+  path: /api/v2/admin/i18n/languages/{languageId}/import
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ POST ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\I18NTranslationImportAPI
+  requirements:
+    languageId: '\d+'
+
+subdomain_apiv2_admin_i18n_language:
+  path: /api/v2/admin/i18n/languages/{id}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\I18NLanguageAPI
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_i18n_language_translations:
+  path: /api/v2/admin/i18n/languages/{languageId}/translations
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\I18NTranslationAPI
+  requirements:
+    languageId: '\d+'
+
+subdomain_apiv2_admin_i18n_language_bulk_translations:
+  path: /api/v2/admin/i18n/languages/{languageId}/translations/bulk
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ PUT ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\I18NTranslationBulkAPI
+  requirements:
+    languageId: '\d+'
+
+subdomain_apiv2_admin_i18n_groups:
+  path: /api/v2/admin/i18n/groups
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\I18NGroupAPI
+  requirements:
+
+subdomain_apiv2_admin_i18n_translation_validation:
+  path: /api/v2/admin/i18n/translation/{langStringId}/validate
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _key: langStringId
+    _api: OrangeHRM\Admin\Api\I18NTranslationValidationAPI
+  requirements:
+    langStringId: '\d+'
+
+subdomain_apiv2_admin_i18n_language_translation_errors:
+  path: /api/v2/admin/i18n/languages/{languageId}/translations/errors
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\Admin\Api\I18NImportErrorAPI
+  requirements:
+    languageId: '\d+'
+
+subdomain_apiv2_admin_candidates:
+  path: /api/v2/admin/candidates
+  controller: OrangeHRM\Admin\Controller\CandidatesController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_companies:
+  path: /api/v2/admin/companies
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_companies_matchings:
+  path: /api/v2/admin/companies/matchings/count
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getCompaniesMatchings
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_companies_matchings_count:
+  path: /api/v2/admin/companies/matchings
+  controller: OrangeHRM\Admin\Controller\CompaniesController::getMatchings
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_course_actor_options:
+  path: /api/v2/admin/actor/options
+  controller: OrangeHRM\Admin\Controller\CourseController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_jobs:
+  path: /api/v2/admin/job
+  controller: OrangeHRM\Admin\Controller\JobController::getJobs
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_job_create:
+  path: /api/v2/admin/job
+  controller: OrangeHRM\Admin\Controller\JobController::create
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_job_update:
+  path: /api/v2/admin/job/{id}
+  controller: OrangeHRM\Admin\Controller\JobController::update
+  methods: [ PUT ]
+  requirements:
+
+subdomain_apiv2_admin_job_delete:
+  path: /api/v2/admin/job/{id}
+  controller: OrangeHRM\Admin\Controller\JobController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_apiv2_admin_of:
+  path: /api/v2/admin/of
+  controller: OrangeHRM\Admin\Controller\OFController::getAllOFs
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_of_create:
+  path: /api/v2/admin/of
+  controller: OrangeHRM\Admin\Controller\OFController::create
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_of_update:
+  path: /api/v2/admin/of/{id}
+  controller: OrangeHRM\Admin\Controller\OFController::update
+  methods: [ PUT ]
+  requirements:
+
+subdomain_apiv2_admin_of_delete:
+  path: /api/v2/admin/of/{id}
+  controller: OrangeHRM\Admin\Controller\OFController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_apiv2_admin_courses:
+  path: /api/v2/admin/course
+  controller: OrangeHRM\Admin\Controller\CourseController::getAllCourses
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_courses_create:
+  path: /api/v2/admin/course
+  controller: OrangeHRM\Admin\Controller\CourseController::create
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_courses_update:
+  path: /api/v2/admin/course/{id}
+  controller: OrangeHRM\Admin\Controller\CourseController::update
+  methods: [ PUT ]
+  requirements:
+
+subdomain_apiv2_admin_courses_delete:
+  path: /api/v2/admin/course/{id}
+  controller: OrangeHRM\Admin\Controller\CourseController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_apiv2_admin_course_start:
+  path: /api/v2/admin/course-start
+  controller: OrangeHRM\Admin\Controller\CourseStartController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_course_start_add:
+  path: /api/v2/admin/course-start
+  controller: OrangeHRM\Admin\Controller\CourseStartController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_course_start_delete:
+  path: /api/v2/admin/course-start
+  controller: OrangeHRM\Admin\Controller\CourseStartController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_apiv2_admin_time_slot:
+  path: /api/v2/admin/time-slot
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_time_slot_add:
+  path: /api/v2/admin/time-slot
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_time_slot_delete:
+  path: /api/v2/admin/time-slot
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_apiv2_admin_matching:
+  path: /api/v2/admin/matching
+  controller: OrangeHRM\Admin\Controller\MatchingController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_matching_delete:
+  path: /api/v2/admin/matching/{id}
+  controller: OrangeHRM\Admin\Controller\MatchingController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_matching_update:
+  path: /api/v2/admin/matching/{id}
+  controller: OrangeHRM\Admin\Controller\MatchingController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_matching_create:
+  path: /api/v2/admin/matching
+  controller: OrangeHRM\Admin\Controller\MatchingController::create
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_actor:
+  path: /api/v2/admin/actor
+  controller: OrangeHRM\Admin\Controller\ActorController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_actor_delete:
+  path: /api/v2/admin/actor/{id}
+  controller: OrangeHRM\Admin\Controller\ActorController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_actor_update:
+  path: /api/v2/admin/actor/{id}
+  controller: OrangeHRM\Admin\Controller\ActorController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_actor_create:
+  path: /api/v2/admin/actor
+  controller: OrangeHRM\Admin\Controller\ActorController::create
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_sectors:
+  path: /api/v2/admin/sector
+  controller: OrangeHRM\Admin\Controller\SectorController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_sector_add:
+  path: /api/v2/admin/sector
+  controller: OrangeHRM\Admin\Controller\SectorController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_sector_update:
+  path: /api/v2/admin/sector/{id}
+  controller: OrangeHRM\Admin\Controller\SectorController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_sector_delete:
+  path: /api/v2/admin/sector/{id}
+  controller: OrangeHRM\Admin\Controller\SectorController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_job_search:
+  path: /api/v2/admin/job/search
+  controller: OrangeHRM\Admin\Controller\JobController::search
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_course_search:
+  path: /api/v2/admin/course/search
+  controller: OrangeHRM\Admin\Controller\CourseController::search
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_leads:
+  path: /api/v2/admin/leads
+  controller: OrangeHRM\Admin\Controller\LeadsController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_leads_reprocess:
+  path: /api/v2/admin/leads/{id}
+  controller: OrangeHRM\Admin\Controller\LeadsController::reprocess
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+subdomain_admin_job_specification_attachment:
+  path: /admin/viewJobSpecification/attachId/{attachId}
+  controller: OrangeHRM\Admin\Controller\File\JobSpecification::handle
+  methods: [ GET ]
+  requirements:
+    attachId: '\d+'
+
+subdomain_admin_language_package_attachment:
+  path: /admin/viewLanguagePackage/languageId/{languageId}
+  controller: OrangeHRM\Admin\Controller\File\LanguagePackage::handle
+  methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+
+subdomain_admin_module:
+  path: /admin/viewAdminModule
+  controller: OrangeHRM\Admin\Controller\AdminModuleController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_view_job_title:
+  path: /admin/viewJobTitleList
+  controller: OrangeHRM\Admin\Controller\JobTitleController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_job_title:
+  path: /admin/saveJobTitle
+  controller: OrangeHRM\Admin\Controller\SaveJobTitleController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_job_title:
+  path: /admin/saveJobTitle/{id}
+  controller: OrangeHRM\Admin\Controller\SaveJobTitleController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_job_category:
+  path: /admin/jobCategory
+  controller: OrangeHRM\Admin\Controller\JobCategoryController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_job_category:
+  path: /admin/saveJobCategory
+  controller: OrangeHRM\Admin\Controller\SaveJobCategoryController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_job_category:
+  path: /admin/saveJobCategory/{id}
+  controller: OrangeHRM\Admin\Controller\SaveJobCategoryController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_employment_status:
+  path: /admin/employmentStatus
+  controller: OrangeHRM\Admin\Controller\EmploymentStatusController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_employment_status:
+  path: /admin/saveEmploymentStatus
+  controller: OrangeHRM\Admin\Controller\SaveEmploymentStatusController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_employment_status:
+  path: /admin/saveEmploymentStatus/{id}
+  controller: OrangeHRM\Admin\Controller\SaveEmploymentStatusController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_system_users:
+  path: /admin/viewSystemUsers
+  controller: OrangeHRM\Admin\Controller\SystemUserController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_system_users:
+  path: /admin/saveSystemUser
+  controller: OrangeHRM\Admin\Controller\SaveSystemUserController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_system_users:
+  path: /admin/saveSystemUser/{id}
+  controller: OrangeHRM\Admin\Controller\SaveSystemUserController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_organization_structure:
+  path: /admin/viewCompanyStructure
+  controller: OrangeHRM\Admin\Controller\OrganizationStructureController::handle
+  requirements:
+
+subdomain_view_education:
+  path: /admin/viewEducation
+  controller: OrangeHRM\Admin\Controller\QualificationEducationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_education:
+  path: /admin/saveEducation
+  controller: OrangeHRM\Admin\Controller\SaveQualificationEducationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_education:
+  path: /admin/saveEducation/{id}
+  controller: OrangeHRM\Admin\Controller\SaveQualificationEducationController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_qualification_skills:
+  path: /admin/viewSkills
+  controller: OrangeHRM\Admin\Controller\QualificationSkillController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_qualification_skills:
+  path: /admin/saveSkills
+  controller: OrangeHRM\Admin\Controller\SaveQualificationSkillController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_qualification_skills:
+  path: /admin/saveSkills/{id}
+  controller: OrangeHRM\Admin\Controller\SaveQualificationSkillController::handle
+  requirements:
+    id: '\d+'
+
+subdomain_view_license:
+  path: /admin/viewLicenses
+  controller: OrangeHRM\Admin\Controller\QualificationLicenseController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_license:
+  path: /admin/saveLicenses
+  controller: OrangeHRM\Admin\Controller\SaveQualificationLicenseController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_license:
+  path: /admin/saveLicenses/{id}
+  controller: OrangeHRM\Admin\Controller\SaveQualificationLicenseController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_qualification_languages:
+  path: /admin/viewLanguages
+  controller: OrangeHRM\Admin\Controller\QualificationLanguageController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_qualification_languages:
+  path: /admin/saveLanguages
+  controller: OrangeHRM\Admin\Controller\SaveQualificationLanguageController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_qualification_languages:
+  path: /admin/saveLanguages/{id}
+  controller: OrangeHRM\Admin\Controller\SaveQualificationLanguageController::handle
+  requirements:
+    id: '\d+'
+
+subdomain_view_qualification_memberships:
+  path: /admin/membership
+  controller: OrangeHRM\Admin\Controller\QualificationMembershipController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_qualification_memberships:
+  path: /admin/saveMemberships
+  controller: OrangeHRM\Admin\Controller\SaveQualificationMembershipController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_qualification_memberships:
+  path: /admin/saveMemberships/{id}
+  controller: OrangeHRM\Admin\Controller\SaveQualificationMembershipController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_organization_general_info:
+  path: /admin/viewOrganizationGeneralInformation
+  controller: OrangeHRM\Admin\Controller\ViewOrganizationGeneralInformationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_view_nationality:
+  path: /admin/nationality
+  controller: OrangeHRM\Admin\Controller\NationalityController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_nationality:
+  path: /admin/saveNationality
+  controller: OrangeHRM\Admin\Controller\SaveNationalityController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_nationality:
+  path: /admin/saveNationality/{id}
+  controller: OrangeHRM\Admin\Controller\SaveNationalityController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_location:
+  path: /admin/viewLocations
+  controller: OrangeHRM\Admin\Controller\ViewLocationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_location:
+  path: /admin/saveLocation
+  controller: OrangeHRM\Admin\Controller\SaveLocationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_location:
+  path: /admin/saveLocation/{id}
+  controller: OrangeHRM\Admin\Controller\SaveLocationController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_email_configuration:
+  path: /admin/listMailConfiguration
+  controller: OrangeHRM\Admin\Controller\ViewEmailConfigurationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_view_pay_grades:
+  path: /admin/viewPayGrades
+  controller: OrangeHRM\Admin\Controller\PayGradeController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_add_pay_grade:
+  path: /admin/payGrade
+  controller: OrangeHRM\Admin\Controller\SavePayGradeController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_pay_grade:
+  path: /admin/payGrade/{id}
+  controller: OrangeHRM\Admin\Controller\SavePayGradeController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_edit_module_configuration:
+  path: /admin/viewModules
+  controller: OrangeHRM\Admin\Controller\SaveModuleConfigurationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_view_work_shift:
+  path: /admin/workShift
+  controller: OrangeHRM\Admin\Controller\WorkShiftController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_work_shift:
+  path: /admin/saveWorkShifts
+  controller: OrangeHRM\Admin\Controller\SaveWorkShiftController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_work_shift:
+  path: /admin/saveWorkShifts/{id}
+  controller: OrangeHRM\Admin\Controller\SaveWorkShiftController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_view_email_subscription:
+  path: /admin/viewEmailNotification
+  controller: OrangeHRM\Admin\Controller\EmailSubscriptionController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_email_subscription:
+  path: /admin/saveSubscriber/{id}
+  controller: OrangeHRM\Admin\Controller\SaveEmailSubscriptionController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_admin_localization:
+  path: /admin/localization
+  controller: OrangeHRM\Admin\Controller\LocalizationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_open_id_provider:
+  path: /admin/openIdProvider
+  controller: OrangeHRM\OpenidAuthentication\Controller\SocialMediaAuthenticationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_language_package:
+  path: /admin/languagePackage
+  controller: OrangeHRM\Admin\Controller\LanguagePackageController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_language_package_import:
+  path: /admin/languageImport/{languageId}
+  controller: OrangeHRM\Admin\Controller\LanguageImportController::handle
+  methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+
+subdomain_admin_language_package_fix_errors:
+  path: /admin/fixLanguageStringErrors/{languageId}
+  controller: OrangeHRM\Admin\Controller\FixLanguageStringErrorsController::handle
+  methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+
+subdomain_admin_language_translation:
+  path: /admin/languageCustomization/{languageId}
+  controller: OrangeHRM\Admin\Controller\LanguageTranslationController::handle
+  methods: [ GET ]
+  requirements:
+    languageId: '\d+'
+
+subdomain_admin_ldap_configuration:
+  path: /admin/ldapConfiguration
+  controller: OrangeHRM\Admin\Controller\LdapConfigurationController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_matching_configuration:
+  path: /admin/matching
+  controller: OrangeHRM\Admin\Controller\MatchingController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_save_matching:
+  path: /admin/saveMatching
+  controller: OrangeHRM\Admin\Controller\SaveMatchingController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_edit_matching:
+  path: /admin/saveMatching/{id}
+  controller: OrangeHRM\Admin\Controller\SaveMatchingController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_admin_save_actor:
+  path: /admin/saveActor
+  controller: OrangeHRM\Admin\Controller\SaveActorController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_course_start:
+  path: /admin/viewCourseStarts
+  controller: OrangeHRM\Admin\Controller\CourseStartController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_time_slot:
+  path: /admin/viewTimeSlots
+  controller: OrangeHRM\Admin\Controller\TimeSlotController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_course_list:
+  path: /admin/viewCourses
+  controller: OrangeHRM\Admin\Controller\CourseController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_of_list:
+  path: /admin/viewOFs
+  controller: OrangeHRM\Admin\Controller\OFController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_job_list:
+  path: /admin/viewJobs
+  controller: OrangeHRM\Admin\Controller\JobController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_candidates:
+  path: /admin/viewCandidates
+  controller: OrangeHRM\Admin\Controller\CandidatesController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_companies:
+  path: /admin/viewCompanies
+  controller: OrangeHRM\Admin\Controller\CompaniesController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_leads:
+  path: /admin/viewLeads
+  controller: OrangeHRM\Admin\Controller\LeadsController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_countries:
+  path: /api/v2/admin/countries
+  controller: OrangeHRM\Admin\Controller\CountryController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_country_add:
+  path: /api/v2/admin/countries
+  controller: OrangeHRM\Admin\Controller\CountryController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_country_delete:
+  path: /api/v2/admin/countries
+  controller: OrangeHRM\Admin\Controller\CountryController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_countries:
+  path: /admin/viewCountries
+  controller: OrangeHRM\Admin\Controller\CountryController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_driving_licenses:
+  path: /api/v2/admin/driving-licenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_driving_license_add:
+  path: /api/v2/admin/driving-licenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_driving_license_delete:
+  path: /api/v2/admin/driving-licenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_driving_licenses:
+  path: /admin/viewDrivingLicenses
+  controller: OrangeHRM\Admin\Controller\DrivingLicenseController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_funding:
+  path: /api/v2/admin/funding
+  controller: OrangeHRM\Admin\Controller\FundingController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_funding_add:
+  path: /api/v2/admin/funding
+  controller: OrangeHRM\Admin\Controller\FundingController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_funding_delete:
+  path: /api/v2/admin/funding
+  controller: OrangeHRM\Admin\Controller\FundingController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_funding:
+  path: /admin/viewFundings
+  controller: OrangeHRM\Admin\Controller\FundingController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_handicap:
+  path: /api/v2/admin/handicap
+  controller: OrangeHRM\Admin\Controller\HandicapController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_handicap_add:
+  path: /api/v2/admin/handicap
+  controller: OrangeHRM\Admin\Controller\HandicapController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_handicap_delete:
+  path: /api/v2/admin/handicap
+  controller: OrangeHRM\Admin\Controller\HandicapController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_handicap:
+  path: /admin/viewHandicaps
+  controller: OrangeHRM\Admin\Controller\HandicapController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_need:
+  path: /api/v2/admin/need
+  controller: OrangeHRM\Admin\Controller\NeedController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_need_add:
+  path: /api/v2/admin/need
+  controller: OrangeHRM\Admin\Controller\NeedController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_need_delete:
+  path: /api/v2/admin/need
+  controller: OrangeHRM\Admin\Controller\NeedController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_need:
+  path: /admin/viewNeeds
+  controller: OrangeHRM\Admin\Controller\NeedController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_phone:
+  path: /api/v2/admin/phone
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_phone_add:
+  path: /api/v2/admin/phone
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_phone_delete:
+  path: /api/v2/admin/phone
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_phone:
+  path: /admin/viewPhones
+  controller: OrangeHRM\Admin\Controller\PhoneNumberController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_status:
+  path: /api/v2/admin/status
+  controller: OrangeHRM\Admin\Controller\StatusController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_status_add:
+  path: /api/v2/admin/status
+  controller: OrangeHRM\Admin\Controller\StatusController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_status_delete:
+  path: /api/v2/admin/status
+  controller: OrangeHRM\Admin\Controller\StatusController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_status:
+  path: /admin/viewStatus
+  controller: OrangeHRM\Admin\Controller\StatusController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_study_level:
+  path: /api/v2/admin/study-level
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_study_level_add:
+  path: /api/v2/admin/study-level
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_study_level_delete:
+  path: /api/v2/admin/study-level
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_study_level:
+  path: /admin/viewStudyLevels
+  controller: OrangeHRM\Admin\Controller\StudyLevelController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_training_method:
+  path: /api/v2/admin/training-method
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_training_method_add:
+  path: /api/v2/admin/training-method
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_training_method_delete:
+  path: /api/v2/admin/training-method
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_training_method:
+  path: /admin/viewTrainingMethods
+  controller: OrangeHRM\Admin\Controller\TrainingMethodController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_source:
+  path: /api/v2/admin/source
+  controller: OrangeHRM\Admin\Controller\SourceController::getAll
+  methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_source_add:
+  path: /api/v2/admin/source
+  controller: OrangeHRM\Admin\Controller\SourceController::add
+  methods: [ POST ]
+  requirements:
+
+subdomain_apiv2_admin_source_update:
+  path: /api/v2/admin/source/{title}
+  controller: OrangeHRM\Admin\Controller\SourceController::update
+  methods: [ PUT ]
+  requirements:
+    title: '[^/]+'
+
+subdomain_apiv2_admin_source_delete:
+  path: /api/v2/admin/source
+  controller: OrangeHRM\Admin\Controller\SourceController::delete
+  methods: [ DELETE ]
+  requirements:
+
+subdomain_admin_source:
+  path: /admin/viewSources
+  controller: OrangeHRM\Admin\Controller\SourceController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_actor:
+  path: /admin/viewActor
+  controller: OrangeHRM\Admin\Controller\ActorController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_admin_sectors:
+  path: /admin/viewSectors
+  controller: OrangeHRM\Admin\Controller\SectorController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_sector:
+  path: /admin/saveSector
+  controller: OrangeHRM\Admin\Controller\SaveSectorController::handle
+  methods: [ GET ]
+  requirements:
+
+##########################
+#  Fallback Routes (avec theme)
+##########################
+
 apiv2_admin_job_title:
   path: /{theme}/api/v2/admin/job-titles/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
@@ -573,7 +1941,7 @@ apiv2_admin_of_delete:
   methods: [ DELETE ]
   requirements:
     theme: constructys|olecio
-    
+
 apiv2_admin_courses:
   path: /{theme}/api/v2/admin/course
   controller: OrangeHRM\Admin\Controller\CourseController::getAllCourses
@@ -763,10 +2131,6 @@ apiv2_admin_leads_reprocess:
     id: '\d+'
     theme: constructys|olecio
 
-##########################
-#        Files
-##########################
-
 admin_job_specification_attachment:
   path: /{theme}/admin/viewJobSpecification/attachId/{attachId}
   controller: OrangeHRM\Admin\Controller\File\JobSpecification::handle
@@ -782,10 +2146,6 @@ admin_language_package_attachment:
   requirements:
     languageId: '\d+'
     theme: constructys|olecio
-
-##########################
-#        Screens
-##########################
 
 admin_module:
   path: /{theme}/admin/viewAdminModule

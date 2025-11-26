@@ -34,21 +34,38 @@ if ($debug) {
     Debug::enable();
 }
 
-$validThemes = ['constructys', 'olecio'];
+$validThemes = ['constructys', 'olecio', 'maraudes'];
 
 $request = Request::createFromGlobals();
 
 $baseUrl = $request->getBaseUrl();
 $pathInfo = $request->getPathInfo();
-$parts = explode('/', trim($pathInfo, '/'));
-$theme = $parts[0] ?? '';
+$host = $request->getHost();
 
-if (!in_array($theme, $validThemes)) {
-    $newPath = "/constructys" . $pathInfo;
-    $redirectUrl = $baseUrl . $newPath;
-    $response = new RedirectResponse($redirectUrl);
-    $response->send();
-    exit();
+// Remove port from host if present (e.g., localhost:8080)
+$hostWithoutPort = preg_replace('/:\d+$/', '', $host);
+
+// Check if we're using a subdomain (PRIORITY)
+$isSubdomain = false;
+foreach ($validThemes as $validTheme) {
+    if (preg_match("/^{$validTheme}\./i", $hostWithoutPort)) {
+        $isSubdomain = true;
+        break;
+    }
+}
+
+// Only add theme to path if NOT using subdomain (fallback mode)
+if (!$isSubdomain) {
+    $parts = explode('/', trim($pathInfo, '/'));
+    $theme = $parts[0] ?? '';
+    
+    if (!in_array($theme, $validThemes)) {
+        $newPath = "/constructys" . $pathInfo;
+        $redirectUrl = $baseUrl . $newPath;
+        $response = new RedirectResponse($redirectUrl);
+        $response->send();
+        exit();
+    }
 }
 
 $kernel = new Framework($env, $debug);

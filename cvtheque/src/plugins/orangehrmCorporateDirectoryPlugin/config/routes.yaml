@@ -1,3 +1,71 @@
+##########################
+#   Subdomain Routes (sans theme)
+##########################
+
+subdomain_apiv2_corporate_directory_employee:
+  path: /api/v2/directory/employees/{empNumber}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI
+    _key: empNumber
+  requirements:
+    empNumber: '\d+'
+
+subdomain_apiv2_corporate_directory_employees:
+  path: /api/v2/directory/employees
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\CorporateDirectory\Api\EmployeeDirectoryAPI
+  requirements:
+
+subdomain_apiv2_corporate_directory_company:
+  path: /api/v2/directory/companies/{companyNumber}
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI
+    _key: companyNumber
+  requirements:
+    companyNumber: '\d+'
+
+subdomain_apiv2_corporate_directory_companies:
+  path: /api/v2/directory/companies
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _api: OrangeHRM\CorporateDirectory\Api\CompanyDirectoryAPI
+  requirements:
+
+subdomain_corporate_directory_module:
+  path: /directory/viewDirectory
+  controller: OrangeHRM\CorporateDirectory\Controller\CorporateDirectoryModuleController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_corporate_view_matched_companies:
+  path: /directory/viewMatchedCompanies
+  controller: OrangeHRM\CorporateDirectory\Controller\ViewMatchedCompaniesController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_corporate_view_all_companies:
+  path: /directory/viewAllCompanies
+  controller: OrangeHRM\CorporateDirectory\Controller\ViewAllCompaniesController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_corporate_picture:
+  path: /directory/viewPhoto/company/{companySiret}
+  controller: OrangeHRM\CorporateDirectory\Controller\File\CompanyPictureController::handle
+  methods: [ GET ]
+  requirements:
+
+##########################
+#  Fallback Routes (avec theme)
+##########################
+
 apiv2_corporate_directory_employee:
   path: /{theme}/api/v2/directory/employees/{empNumber}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
@@ -38,10 +106,6 @@ apiv2_corporate_directory_companies:
   requirements:
     theme: constructys|olecio
 
-##########################
-#        Screens
-##########################
-
 corporate_directory_module:
   path: /{theme}/directory/viewDirectory
   controller: OrangeHRM\CorporateDirectory\Controller\CorporateDirectoryModuleController::handle
@@ -69,3 +133,4 @@ corporate_picture:
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
+

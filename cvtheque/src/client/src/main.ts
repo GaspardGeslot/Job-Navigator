@@ -30,8 +30,53 @@ import './core/plugins/loader/loader.scss';
 // @ts-expect-error: appGlobal is not in window object by default
 const baseUrl = window.appGlobal.baseUrl;
 
-const subspace =
-  window.location.pathname.split(baseUrl)[1].split('/')[1] || 'constructys';
+/**
+ * Détecte le sous-espace (thème) depuis le sous-domaine ou le path (fallback)
+ *
+ * Priorité de détection :
+ * 1. Sous-domaine : constructys.domain.com → 'constructys'
+ * 2. Path (fallback) : /constructys/auth/login → 'constructys'
+ * 3. Default : 'constructys'
+ *
+ * @returns {string} Le nom du thème détecté
+ */
+function detectSubspace(): string {
+  const validThemes = ['constructys', 'olecio', 'maraudes'];
+  // 1. PRIORITÉ : Détection depuis le sous-domaine
+  const hostname = window.location.hostname;
+
+  for (const theme of validThemes) {
+    // Pattern : theme.domain.com ou theme.localhost
+    if (hostname.startsWith(`${theme}.`)) {
+      console.info(`[Theme] Détecté depuis le sous-domaine: ${theme}`);
+      return theme;
+    }
+  }
+
+  // 2. FALLBACK : Détection depuis le path (rétrocompatibilité)
+  try {
+    const pathSegments = window.location.pathname.split(baseUrl);
+    if (pathSegments.length > 1) {
+      const relativePathSegments = pathSegments[1].split('/').filter(Boolean);
+      const firstSegment = relativePathSegments[0];
+
+      if (firstSegment && validThemes.includes(firstSegment)) {
+        console.info(
+          `[Theme] Détecté depuis le path (fallback): ${firstSegment}`,
+        );
+        return firstSegment;
+      }
+    }
+  } catch (e) {
+    console.warn('[Theme] Erreur lors de la détection depuis le path:', e);
+  }
+
+  // 3. DEFAULT
+  console.info('[Theme] Utilisation du thème par défaut: constructys');
+  return 'constructys';
+}
+
+const subspace = detectSubspace();
 
 let pages;
 try {

@@ -1,6 +1,19 @@
+##########################
+#   Subdomain Routes (sans theme)
+##########################
+
+subdomain_core_i18n_messages:
+  path: /core/i18n/messages
+  controller: OrangeHRM\I18N\Controller\I18NMessagesController::handle
+  methods: [ GET ]
+
+##########################
+#  Fallback Routes (avec theme)
+##########################
+
 core_i18n_messages:
   path: /{theme}/core/i18n/messages
   controller: OrangeHRM\I18N\Controller\I18NMessagesController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes

@@ -1,3 +1,101 @@
+##########################
+#   Subdomain Routes (sans theme)
+##########################
+
+subdomain_time_module:
+  path: /time/viewTimeModule
+  controller: OrangeHRM\Time\Controller\TimeModuleController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_view_time_sheet_config:
+  path: /time/defineTimesheetPeriod
+  controller: OrangeHRM\Time\Controller\TimesheetPeriodConfigController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_view_customers:
+  path: /time/viewCustomers
+  controller: OrangeHRM\Time\Controller\CustomerController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_save_customer:
+  path: /time/addCustomer
+  controller: OrangeHRM\Time\Controller\SaveCustomerController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_edit_customer:
+  path: /time/addCustomer/{id}
+  controller: OrangeHRM\Time\Controller\SaveCustomerController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_my_timesheet:
+  path: /time/viewMyTimesheet
+  controller: OrangeHRM\Time\Controller\MyTimesheetController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_edit_timesheet:
+  path: /time/editTimesheet/{id}
+  controller: OrangeHRM\Time\Controller\EditTimesheetController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_view_projects:
+  path: /time/viewProjects
+  controller: OrangeHRM\Time\Controller\ProjectController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_save_project:
+  path: /time/saveProject
+  controller: OrangeHRM\Time\Controller\SaveProjectController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_edit_project:
+  path: /time/saveProject/{id}
+  controller: OrangeHRM\Time\Controller\SaveProjectController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_employee_timesheet:
+  path: /time/viewEmployeeTimesheet
+  controller: OrangeHRM\Time\Controller\EmployeeTimesheetController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_employee_view_timesheet:
+  path: /time/viewTimesheet/employeeId/{id}
+  controller: OrangeHRM\Time\Controller\EmployeeTimesheetController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_employee_report:
+  path: /time/displayEmployeeReportCriteria
+  controller: OrangeHRM\Time\Controller\EmployeeTimeReportController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_project_activity_report:
+  path: /time/displayProjectReportCriteria
+  controller: OrangeHRM\Time\Controller\ProjectActivityReportController::handle
+  methods: [ GET ]
+  requirements:
+
+subdomain_time_activity_details_report:
+  path: /time/displayProjectActivityDetailsReport
+  controller: OrangeHRM\Time\Controller\ActivityDetailsReportController::handle
+  methods: [ GET ]
+  requirements:
+
+##########################
+#  Fallback Routes (avec theme)
+##########################
+
 apiv2_time_project:
   path: /api/v2/time/projects/{id}
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
@@ -196,10 +294,6 @@ apiv2_time_project_admins:
   defaults:
     _api: OrangeHRM\Time\Api\ProjectAdminAPI
 
-##########################
-#        Screens
-##########################
-
 time_module:
   path: /{theme}/time/viewTimeModule
   controller: OrangeHRM\Time\Controller\TimeModuleController::handle
@@ -304,3 +398,4 @@ time_activity_details_report:
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
+

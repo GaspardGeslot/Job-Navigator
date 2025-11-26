@@ -84,6 +84,7 @@
             "OrangeHRM\\Claim\\": "./plugins/orangehrmClaimPlugin",
             "Candidature\\": "./plugins/candidaturePlugin",
             "CGU\\": "./plugins/cguPlugin",
+            "Maraudes\\": "./plugins/maraudesPlugin",
             "OrangeHRM\\Installer\\": "../installer",
             "OrangeHRM\\Entity\\": [
                 "./plugins/orangehrmAdminPlugin/entity",

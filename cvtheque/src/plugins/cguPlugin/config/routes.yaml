@@ -1,6 +1,21 @@
+##########################
+#   Subdomain Routes (sans theme)
+##########################
+
+subdomain_view_cgu:
+  path: /cgu/index
+  controller: CGU\Controller\CGUController::handle
+  methods: [ GET ]
+  requirements:
+
+##########################
+#  Fallback Routes (avec theme)
+##########################
+
 view_cgu:
   path: /{theme}/cgu/index
   controller: CGU\Controller\CGUController::handle
   methods: [ GET ]
   requirements:
     theme: constructys
+
