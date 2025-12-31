@@ -29,17 +29,22 @@ class LeadsController extends AbstractVueController
      */
     public function preRender(Request $request): void
     {
-        $component = new Component('leads-list');
-        
-        $options = $this->getHedwigeActorOptions($this->getAuthUser()->getUserHedwigeToken());
+        if ($request->attributes->has('id')) {
+            $component = new Component('view-lead');
+            $component->addProp(new Prop('lead-id', Prop::TYPE_NUMBER, $request->attributes->getInt('id')));
+        }
+        else {
+            $component = new Component('leads-list');
+            
+            $options = $this->getHedwigeActorOptions($this->getAuthUser()->getUserHedwigeToken());
 
-        $component->addProp(new Prop('actors', Prop::TYPE_ARRAY, array_map(function($label, $index) {
-            return [
-                'id' => $index,
-                'label' => $label
-            ];
-        }, $options, array_keys($options))));
-
+            $component->addProp(new Prop('actors', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $options, array_keys($options))));
+        }
         $this->setComponent($component);
     }
 
@@ -53,13 +58,22 @@ class LeadsController extends AbstractVueController
         $actor = $request->query->get(self::FILTER_ACTOR);
         $jobs = $request->query->get(self::FILTER_JOBS);
         $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
-        if ($courseOnly !== null) {
+        if ($courseOnly !== null)
             $courseOnly = filter_var($courseOnly, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        }
-        // error_log('$courseOnly ' . var_export($courseOnly, true));
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $onlyBillable, $onlyDuplicate, $onlyMatchingNotAvailable, $actor, $jobs, $courseOnly);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $onlyBillable, $onlyDuplicate, $onlyMatchingNotAvailable, $actors, $jobs, $courseOnly);
         return new Response(
             json_encode($leads),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    public function getOne(Request $request): Response
+    {
+        $id = $request->attributes->get('id');
+        $lead = $this->getLead($this->getAuthUser()->getUserHedwigeToken(), $id);
+        return new Response(
+            json_encode($lead),
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
@@ -88,7 +102,77 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, string $onlyBillable, string $onlyDuplicate, string $onlyMatchingNotAvailable, ?string $actor, ?array $jobs, ?bool $courseOnly): array
+
+    public function addTelephoneContact(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $data = json_decode($request->getContent(), true);
+            $this->addHedwigeTelephoneContact($this->getAuthUser()->getUserHedwigeToken(), $id, $data);
+            return new Response(
+                json_encode(['message' => 'Telephone contact added successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            error_log('error adding telephone contact: ' . json_decode($e->getResponse()->getBody()->getContents())->message);
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    public function deleteTelephoneContact(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $date = $request->query->get('date');
+            $this->deleteHedwigeTelephoneContact($this->getAuthUser()->getUserHedwigeToken(), $id, $date);
+            return new Response(
+                json_encode(['message' => 'Telephone contact deleted successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => 'Error deleting telephone contact'
+            ]), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateTelephoneContact(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $data = json_decode($request->getContent(), true);
+            $this->updateHedwigeTelephoneContact($this->getAuthUser()->getUserHedwigeToken(), $id, $data);
+            return new Response(
+                json_encode(['message' => 'Telephone contact updated successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => 'Error updating telephone contact'
+            ]), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getLeads(string $token, string $from, string $to, string $onlyBillable, string $onlyDuplicate, string $onlyMatchingNotAvailable, ?array $actors, ?array $jobs, ?bool $courseOnly): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -112,7 +196,6 @@ class LeadsController extends AbstractVueController
             if ($courseOnly !== null) {
                 $url .= 'courseOnly=' . ($courseOnly ? 'true' : 'false') . '&';
             }
-            // error_log("url " . $url);
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
@@ -122,6 +205,19 @@ class LeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function getLead(string $token, int $id): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/{$id}";
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
+        return json_decode($response->getBody(), true);
     }
 
     public function getHedwigeActorOptions(string $token): array
@@ -153,6 +249,47 @@ class LeadsController extends AbstractVueController
                 'Authorization' => $token,
                 'Content-Type' => 'application/json',
             ]
+        ]);
+    }
+
+    public function addHedwigeTelephoneContact(string $token, int $id, array $data): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/{$id}/telephone-contact";
+        $response = $client->request('POST', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode($data)
+        ]);
+    }
+
+    public function deleteHedwigeTelephoneContact(string $token, int $id, string $date): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/{$id}/telephone-contact?date=" . urlencode($date);
+        $response = $client->request('DELETE', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ]
+        ]);
+    }
+
+    public function updateHedwigeTelephoneContact(string $token, int $id, array $data): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/{$id}/telephone-contact";
+        $response = $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode($data)
         ]);
     }
 }
