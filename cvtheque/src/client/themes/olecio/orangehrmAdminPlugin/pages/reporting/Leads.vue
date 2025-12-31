@@ -142,7 +142,7 @@
         <table class="orangehrm-custom-table">
           <thead>
             <tr>
-              <th class="reload-column"></th>
+              <th class="action-column"></th>
               <th v-for="(header, index) in tableHeaders" :key="index">
                 {{ header.label }}
               </th>
@@ -154,11 +154,16 @@
               :key="index"
               :class="{'highlighted-row': selectedRow === index}"
             >
-              <td class="reload-column">
+              <td class="action-column-values">
                 <oxd-icon-button
                   name="arrow-clockwise"
-                  class="reload-button"
+                  class="action-button"
                   @click.stop="reloadLead(item.id)"
+                />
+                <oxd-icon-button
+                  name="eye-fill"
+                  class="action-button"
+                  @click.stop="viewLead(item.id)"
                 />
               </td>
               <td
@@ -194,6 +199,7 @@
 </template>
 <script>
 import {ref, computed, onMounted, watch} from 'vue';
+import {navigate} from '@/core/util/helper/navigation';
 import usei18n from '@/core/util/composable/usei18n';
 import {
   required,
@@ -610,6 +616,11 @@ export default {
         }
       });
     },
+    viewLead(leadId) {
+      navigate(`/${window.appGlobal.theme}/admin/viewLeads/{id}`, {
+        id: leadId,
+      });
+    },
     reprocessLead(leadId) {
       this.isLoading = true;
       this.http
@@ -721,14 +732,26 @@ export default {
   color: var(--oxd-interface-gray-color);
 }
 
-.reload-column {
-  width: 30px;
-  min-width: 30px;
+.action-column {
+  width: auto;
+  min-width: 60px;
   padding: 0.25rem !important;
   text-align: center !important;
 }
 
-.reload-button {
+.action-column-values {
+  width: auto;
+  min-width: 60px;
+  padding: 0.25rem !important;
+  text-align: center !important;
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-button {
   margin: 0 auto;
 
   &:hover {
