@@ -2123,6 +2123,14 @@ apiv2_admin_leads:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_lead_get_one:
+  path: /{theme}/api/v2/admin/leads/{id}
+  controller: OrangeHRM\Admin\Controller\LeadsController::getOne
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
 apiv2_admin_leads_reprocess:
   path: /{theme}/api/v2/admin/leads/{id}
   controller: OrangeHRM\Admin\Controller\LeadsController::reprocess
@@ -2130,6 +2138,34 @@ apiv2_admin_leads_reprocess:
   requirements:
     id: '\d+'
     theme: constructys|olecio
+
+apiv2_admin_lead_telephone_contact:
+  path: /{theme}/api/v2/admin/leads/{id}/telephone-contact
+  controller: OrangeHRM\Admin\Controller\LeadsController::addTelephoneContact
+  methods: [ POST ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_lead_telephone_contact_delete:
+  path: /{theme}/api/v2/admin/leads/{id}/telephone-contact
+  controller: OrangeHRM\Admin\Controller\LeadsController::deleteTelephoneContact
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+apiv2_admin_lead_telephone_contact_update:
+  path: /{theme}/api/v2/admin/leads/{id}/telephone-contact
+  controller: OrangeHRM\Admin\Controller\LeadsController::updateTelephoneContact
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio
+
+##########################
+#        Files
+##########################
 
 admin_job_specification_attachment:
   path: /{theme}/admin/viewJobSpecification/attachId/{attachId}
@@ -2612,6 +2648,13 @@ admin_companies:
 
 admin_leads:
   path: /{theme}/admin/viewLeads
+  controller: OrangeHRM\Admin\Controller\LeadsController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+admin_lead_view:
+  path: /{theme}/admin/viewLeads/{id}
   controller: OrangeHRM\Admin\Controller\LeadsController::handle
   methods: [ GET ]
   requirements:

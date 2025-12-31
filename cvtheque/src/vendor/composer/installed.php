@@ -2,6 +2,7 @@
     'root' => array(
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+        'reference' => 'a3d2e6f957142a90586c423f115c778652f92c08',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -328,6 +329,7 @@
         'orangehrm/orangehrm' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+            'reference' => 'a3d2e6f957142a90586c423f115c778652f92c08',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
