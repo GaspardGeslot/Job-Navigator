@@ -230,23 +230,81 @@ export default {
   setup() {
     const {$t} = usei18n();
     const jobAutocomplete = ref(null);
-    // const startDateFilter = ref(
-    //   formatDate(
-    //     new Date(new Date().setMonth(new Date().getMonth() - 1)),
-    //     'dd-MM-yyyy',
-    //   ),
-    // );
-    const startDateFilter = ref(
-      formatDate(
-        new Date(new Date().setDate(new Date().getDate() - 2)),
-        'dd-MM-yyyy',
-      ),
-    );
-    const endDateFilter = ref(formatDate(new Date(), 'dd-MM-yyyy'));
-    const statusFilter = ref(null);
-    const actorFilter = ref(null);
-    const jobsFilter = ref([]);
-    const courseOnly = ref(false);
+
+    // Clé pour le localStorage
+    const STORAGE_KEY = 'leadsFilters';
+
+    // Fonction pour charger les filtres depuis localStorage
+    const loadFiltersFromLocalStorage = () => {
+      try {
+        const savedFilters = localStorage.getItem(STORAGE_KEY);
+        if (savedFilters) {
+          const filters = JSON.parse(savedFilters);
+          return {
+            startDateFilter:
+              filters.startDateFilter ||
+              formatDate(
+                new Date(new Date().setDate(new Date().getDate() - 2)),
+                'dd-MM-yyyy',
+              ),
+            endDateFilter:
+              filters.endDateFilter || formatDate(new Date(), 'dd-MM-yyyy'),
+            statusFilter: filters.statusFilter || null,
+            actorsFilter: filters.actorsFilter || [],
+            jobsFilter: filters.jobsFilter || [],
+            courseOnly: filters.courseOnly || false,
+          };
+        }
+      } catch (error) {
+        console.error('Error loading filters from localStorage:', error);
+      }
+      // Valeurs par défaut si rien n'est sauvegardé
+      return {
+        startDateFilter: formatDate(
+          new Date(new Date().setDate(new Date().getDate() - 2)),
+          'dd-MM-yyyy',
+        ),
+        endDateFilter: formatDate(new Date(), 'dd-MM-yyyy'),
+        statusFilter: null,
+        actorsFilter: [],
+        jobsFilter: [],
+        courseOnly: false,
+      };
+    };
+
+    // Fonction pour sauvegarder les filtres dans localStorage
+    const saveFiltersToLocalStorage = (
+      startDate,
+      endDate,
+      status,
+      actors,
+      jobs,
+      course,
+    ) => {
+      try {
+        const filters = {
+          startDateFilter: startDate,
+          endDateFilter: endDate,
+          statusFilter: status,
+          actorsFilter: actors,
+          jobsFilter: jobs,
+          courseOnly: course,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
+      } catch (error) {
+        console.error('Error saving filters to localStorage:', error);
+      }
+    };
+
+    // Charger les filtres depuis localStorage
+    const loadedFilters = loadFiltersFromLocalStorage();
+
+    const startDateFilter = ref(loadedFilters.startDateFilter);
+    const endDateFilter = ref(loadedFilters.endDateFilter);
+    const statusFilter = ref(loadedFilters.statusFilter);
+    const actorsFilter = ref(loadedFilters.actorsFilter);
+    const jobsFilter = ref(loadedFilters.jobsFilter);
+    const courseOnly = ref(loadedFilters.courseOnly);
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
@@ -513,6 +571,15 @@ export default {
 
     const filterItems = () => {
       currentPage.value = 1;
+      // Sauvegarder les filtres avant de filtrer
+      saveFiltersToLocalStorage(
+        startDateFilter.value,
+        endDateFilter.value,
+        statusFilter.value,
+        actorsFilter.value,
+        jobsFilter.value,
+        courseOnly.value,
+      );
       fetchData();
     };
 
@@ -526,6 +593,15 @@ export default {
       actorFilter.value = null;
       jobsFilter.value = [];
       currentPage.value = 1;
+      // Sauvegarder les filtres réinitialisés
+      saveFiltersToLocalStorage(
+        startDateFilter.value,
+        endDateFilter.value,
+        statusFilter.value,
+        actorsFilter.value,
+        jobsFilter.value,
+        courseOnly.value,
+      );
       if (jobAutocomplete.value) {
         jobAutocomplete.value.reset();
       }
@@ -571,9 +647,38 @@ export default {
 
     const updateJobs = (jobs) => {
       jobsFilter.value = jobs;
+      // Sauvegarder les filtres quand les jobs changent
+      saveFiltersToLocalStorage(
+        startDateFilter.value,
+        endDateFilter.value,
+        statusFilter.value,
+        actorsFilter.value,
+        jobsFilter.value,
+        courseOnly.value,
+      );
     };
 
+    // Watch pour sauvegarder automatiquement les changements de filtres
+    watch(
+      [startDateFilter, endDateFilter, statusFilter, actorsFilter, courseOnly],
+      () => {
+        saveFiltersToLocalStorage(
+          startDateFilter.value,
+          endDateFilter.value,
+          statusFilter.value,
+          actorsFilter.value,
+          jobsFilter.value,
+          courseOnly.value,
+        );
+      },
+    );
+
     onMounted(() => {
+      // Restaurer les jobs dans jobAutocomplete si nécessaire
+      if (jobAutocomplete.value && jobsFilter.value.length > 0) {
+        // Le jobAutocomplete devrait se mettre à jour automatiquement via v-model
+        // mais on peut forcer une mise à jour si nécessaire
+      }
       fetchData();
     });
 
@@ -603,6 +708,7 @@ export default {
       exportToExcel,
       updateJobs,
       fetchData,
+      saveFiltersToLocalStorage,
     };
   },
   methods: {
@@ -614,6 +720,15 @@ export default {
       });
     },
     viewLead(leadId) {
+      // Sauvegarder les filtres avant de naviguer
+      this.saveFiltersToLocalStorage(
+        this.startDateFilter,
+        this.endDateFilter,
+        this.statusFilter,
+        this.actorsFilter,
+        this.jobsFilter,
+        this.courseOnly,
+      );
       navigate(`/${window.appGlobal.theme}/admin/viewLeads/{id}`, {
         id: leadId,
       });

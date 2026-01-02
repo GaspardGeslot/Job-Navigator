@@ -79,6 +79,37 @@ class LeadsController extends AbstractVueController
         );
     }
 
+    public function update(Request $request): Response
+    {
+        $id = $request->attributes->get('id');
+        $data = json_decode($request->getContent(), true);
+        $this->updateLead($this->getAuthUser()->getUserHedwigeToken(), $id, $data);
+        return new Response(
+            json_encode(['message' => 'Lead updated successfully']),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+
+    public function deliver(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $this->deliverLead($this->getAuthUser()->getUserHedwigeToken(), $id);
+            return new Response(
+                json_encode(['message' => 'Lead delivered successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
+    }
+    
     public function reprocess(Request $request): Response
     {
         try {
@@ -115,7 +146,6 @@ class LeadsController extends AbstractVueController
                 ['Content-Type' => 'application/json']
             );
         } catch (ClientException $e) {
-            error_log('error adding telephone contact: ' . json_decode($e->getResponse()->getBody()->getContents())->message);
             return new Response(json_encode([
                 'error' => true,
                 'message' => json_decode($e->getResponse()->getBody()->getContents())->message
@@ -236,6 +266,33 @@ class LeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function updateLead(string $token, int $id, array $data): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/{$id}/info";
+        $response = $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode($data)
+        ]);
+    }
+
+
+    public function deliverLead(string $token, int $id): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/{$id}/deliver";
+        $response = $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
     }
 
     public function reprocessLead(string $token, int $id): void

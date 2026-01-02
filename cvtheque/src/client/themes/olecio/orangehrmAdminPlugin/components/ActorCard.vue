@@ -48,6 +48,18 @@
       </oxd-grid>
       <br />
       <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+        <oxd-grid-item class="orangerhrm-switch-wrapper">
+          <oxd-text class="orangehrm-text" tag="p">
+            {{ $t('Nécessite une vérification manuelle avant envoi ?') }}
+          </oxd-text>
+          <oxd-switch-input
+            v-model="actor.manualDelivery"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
+      </oxd-grid>
+      <br />
+      <oxd-grid :cols="3" class="orangehrm-full-width-grid">
         <oxd-grid-item>
           <oxd-input-field
             v-model="actor.maxAmountPerDay"
@@ -225,6 +237,7 @@ const ActorModel = {
   name: null,
   isOf: true,
   isPriority: false,
+  manualDelivery: false,
   documentation: null,
   maxAmountPerDay: 0,
   maxAmountPerMonth: 0,
@@ -427,6 +440,7 @@ export default {
       this.actor.name = this.actorCurrent.name;
       this.actor.isOf = this.actorCurrent.isOf;
       this.actor.isPriority = this.actorCurrent.isPriority;
+      this.actor.manualDelivery = this.actorCurrent.manualDelivery;
       this.actor.documentation = this.actorCurrent.documentation;
       this.actor.maxAmountPerDay = this.actorCurrent.maxAmountPerDay;
       this.actor.maxAmountPerMonth = this.actorCurrent.maxAmountPerMonth;
