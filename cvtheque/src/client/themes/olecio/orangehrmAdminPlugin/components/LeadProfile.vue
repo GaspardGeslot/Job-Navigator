@@ -3,7 +3,9 @@
     <div class="orangehrm-card-container">
       <div class="orangehrm-header-container">
         <oxd-text tag="h6" class="orangehrm-main-title">
-          {{ $t('Profil complet du lead') }}
+          {{
+            $t('Profil complet du lead' + (profile ? ' n°' + profile.id : ''))
+          }}
         </oxd-text>
         <oxd-switch-input
           v-if="!isLoading"
@@ -33,29 +35,40 @@
           </oxd-grid>
         </oxd-form-row>
         <oxd-form-row>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item
+              style="display: flex; align-items: center; gap: 1rem"
+            >
               <oxd-input-field
                 v-model="profile.email"
                 :label="$t('general.email')"
                 :rules="rules.email"
                 :disabled="true"
               />
+              <oxd-icon-button
+                v-if="profile.email"
+                style="height: 1px"
+                display-type="success"
+                name="envelope-fill"
+                @click.stop="openClientEmail"
+              ></oxd-icon-button>
             </oxd-grid-item>
-            <oxd-grid-item>
+            <oxd-grid-item
+              style="display: flex; align-items: center; gap: 1rem"
+            >
               <oxd-input-field
                 v-model="profile.phoneNumber"
                 :label="$t('recruitment.contact_number')"
                 :rules="rules.phoneNumber"
                 :disabled="true"
               />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.civility"
-                :label="$t('Civilité')"
-                :disabled="true"
-              />
+              <oxd-icon-button
+                v-if="profile.phoneNumber"
+                style="height: 1px"
+                display-type="success"
+                name="telephone-fill"
+                @click.stop="openClientTelephone"
+              ></oxd-icon-button>
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
@@ -63,8 +76,8 @@
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="profile.date"
-                :label="$t('Date de réception')"
+                v-model="profile.civility"
+                :label="$t('Civilité')"
                 :disabled="true"
               />
             </oxd-grid-item>
@@ -79,6 +92,17 @@
               <oxd-input-field
                 v-model="profile.age"
                 :label="$t('Âge')"
+                :disabled="true"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.date"
+                :label="$t('Date de réception')"
                 :disabled="true"
               />
             </oxd-grid-item>
@@ -111,7 +135,11 @@
               v-for="(job, jobIndex) in profile.jobs"
               :key="jobIndex"
             >
-              <oxd-input-field :value="job" :disabled="true" />
+              <oxd-input-field
+                :value="job"
+                :disabled="true"
+                :label="$t('Métier n°' + (jobIndex + 1))"
+              />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
@@ -163,7 +191,8 @@
               <oxd-input-field
                 v-model="profile.postalCode"
                 :label="$t('general.zip_postal_code')"
-                :disabled="true"
+                :disabled="!editable"
+                :rules="rules.postalCode"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -200,7 +229,7 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="profile.status"
+                v-model="profile.currentSituation"
                 :label="$t('Situation actuelle')"
                 :disabled="true"
               />
@@ -286,8 +315,6 @@
                 :disabled="true"
               />
             </oxd-grid-item>
-          </oxd-grid>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
                 v-model="profile.utmSource"
@@ -395,6 +422,12 @@
         <oxd-divider></oxd-divider>
         <oxd-form-actions>
           <required-text />
+          <oxd-button
+            v-if="profile.manualDelivery"
+            display-type="ghost"
+            :label="$t('Transmettre au partenaire')"
+            @click="onClickDeliver"
+          />
           <submit-button v-if="editable" />
         </oxd-form-actions>
       </oxd-form>
@@ -402,10 +435,12 @@
 
     <confirmation-dialog
       ref="confirmDialog"
-      :title="$t('general.confirmation_required')"
-      :subtitle="$t('recruitment.candidate_vacancy_change_message')"
+      :title="$t('Confirmation de transmission')"
+      :subtitle="
+        $t('Souhaitez-vous bien transmettre ce lead au partenaire associé ?')
+      "
       :cancel-label="$t('general.no_cancel')"
-      :confirm-label="$t('leave.yes_confirm')"
+      :confirm-label="$t('Oui, Confirmer')"
       confirm-button-type="secondary"
     ></confirmation-dialog>
 
@@ -517,13 +552,13 @@
 
 <script>
 import {
-  validEmailFormat,
   validPhoneNumberFormat,
   shouldNotExceedCharLength,
   required,
   validDateFormat,
   validTimeFormat,
   shouldBeCurrentOrPreviousDate,
+  numericOnly,
 } from '@/core/util/validation/rules';
 import DateInput from '@/core/components/inputs/DateInput';
 import TimeInput from '@/core/components/inputs/TimeInput';
@@ -536,6 +571,7 @@ import {OxdSwitchInput, OxdDialog} from '@ohrm/oxd';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 
 const LeadProfileModel = {
+  id: 0,
   firstName: '',
   lastName: '',
   email: '',
@@ -547,7 +583,7 @@ const LeadProfileModel = {
   sector: '',
   course: '',
   of: '',
-  status: '',
+  currentSituation: '',
   trainingMethod: '',
   handicap: '',
   funding: '',
@@ -572,6 +608,7 @@ const LeadProfileModel = {
   actor: '',
   matchingState: '',
   apiMessage: '',
+  manualDelivery: false,
   telephoneContacts: [],
 };
 
@@ -675,8 +712,7 @@ export default {
       rules: {
         firstName: [shouldNotExceedCharLength(30)],
         lastName: [shouldNotExceedCharLength(30)],
-        email: [validEmailFormat, shouldNotExceedCharLength(50)],
-        phoneNumber: [validPhoneNumberFormat, shouldNotExceedCharLength(25)],
+        postalCode: [shouldNotExceedCharLength(5), numericOnly],
         comment: [shouldNotExceedCharLength(1000)],
         telephoneContactDate: [
           required,
@@ -740,20 +776,34 @@ export default {
       this.http
         .request({
           method: 'PUT',
-          url: `/api/v2/admin/leads/${this.lead.id}`,
+          url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/info`,
           data: {...this.profile},
-        })
-        .then(() => {
-          return this.$toast.updateSuccess();
         })
         .then(() => {
           this.$emit('update');
           this.isLoading = false;
           this.editable = false;
+          return this.$toast.updateSuccess();
+        });
+    },
+    onDeliver() {
+      this.isLoading = true;
+      this.http
+        .request({
+          method: 'PUT',
+          url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/deliver`,
+        })
+        .then(() => {
+          this.$emit('update');
+          return this.$toast.updateSuccess();
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
     fetchLead() {
       this.isLoading = true;
+      this.profile.id = this.lead.id;
       this.profile.firstName = this.lead.firstName;
       this.profile.lastName = this.lead.lastName;
       this.profile.email = this.lead.email;
@@ -770,7 +820,7 @@ export default {
       this.profile.sector = this.lead.sector;
       this.profile.course = this.lead.course;
       this.profile.of = this.lead.of;
-      this.profile.status = this.lead.status;
+      this.profile.currentSituation = this.lead.currentSituation;
       this.profile.trainingMethod = this.lead.trainingMethod;
       this.profile.handicap = this.lead.handicap;
       this.profile.funding = this.lead.funding;
@@ -795,6 +845,7 @@ export default {
       this.profile.actor = this.lead.actor;
       this.profile.matchingState = this.lead.matchingState;
       this.profile.apiMessage = this.lead.apiMessage;
+      this.profile.manualDelivery = this.lead.manualDelivery;
       this.profile.telephoneContacts = this.lead.telephoneContacts
         ? [...this.lead.telephoneContacts].sort((a, b) => {
             // Trier par date (du plus ancien au plus récent)
@@ -866,6 +917,13 @@ export default {
       }
       this.showTelephoneContactModal = true;
     },
+    onClickDeliver() {
+      this.$refs.confirmDialog.showDialog().then((confirmation) => {
+        if (confirmation === 'ok') {
+          this.onDeliver();
+        }
+      });
+    },
     onClickDeleteTelephoneContact(item) {
       this.$refs.deleteTelephoneContactDialog
         .showDialog()
@@ -922,9 +980,6 @@ export default {
             this.onCancelTelephoneContact();
             return this.$toast.saveSuccess();
           })
-          .catch((error) => {
-            return this.$toast.unexpectedError(error?.response?.data?.message);
-          })
           .finally(() => {
             this.isSavingTelephoneContact = false;
           });
@@ -956,6 +1011,12 @@ export default {
       this.canEditComment = false;
       this.editingTelephoneContactDate = null;
       this.telephoneContactForm = {...TelephoneContactModel};
+    },
+    openClientEmail() {
+      window.location.href = 'mailto:' + this.profile.email;
+    },
+    openClientTelephone() {
+      window.location.href = 'tel:' + this.profile.phoneNumber;
     },
   },
 };
