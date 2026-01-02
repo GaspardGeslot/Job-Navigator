@@ -23,6 +23,7 @@ use OrangeHRM\Authentication\Auth\AuthProviderChain;
 use OrangeHRM\Config\Config;
 use OrangeHRM\Core\Subscriber\LoggerSubscriber;
 use OrangeHRM\Framework\Event\EventDispatcher;
+use OrangeHRM\Framework\Event\SubdomainThemeSubscriber;
 use OrangeHRM\Framework\Http\ControllerResolver;
 use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Framework\Http\RequestStack;
@@ -116,6 +117,12 @@ class Framework extends HttpKernel
         $routerListener = new RouterListener($matcher, $requestStack, $context, $logger, null, $this->isDebug());
         /** @var EventDispatcher $dispatcher */
         $dispatcher = ServiceContainer::getContainer()->get(Services::EVENT_DISPATCHER);
+        
+        // Enregistrer le SubdomainThemeSubscriber pour la détection automatique du thème
+        // Il doit s'exécuter AVANT le RouterListener pour injecter le thème dans les attributes
+        $themeSubscriber = new SubdomainThemeSubscriber();
+        $dispatcher->addSubscriber($themeSubscriber);
+        
         $dispatcher->addListener(KernelEvents::REQUEST, [$routerListener, 'onKernelRequest'], 99500);
         $dispatcher->addListener(KernelEvents::FINISH_REQUEST, [$routerListener, 'onKernelFinishRequest']);
         $dispatcher->addListener(KernelEvents::EXCEPTION, [$routerListener, 'onKernelException'], -64);

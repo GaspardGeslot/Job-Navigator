@@ -71,9 +71,9 @@
         />
         <oxd-input-group>
           <oxd-icon-button
-            style="margin-bottom: 1rem"
-            name="plus"
-            @click="addLocationPostalCode"
+            name="trash-fill"
+            :title="$t('Tout supprimer')"
+            @click="onClickDeleteAllLocationPostalCode()"
           />
         </oxd-input-group>
       </oxd-grid-item>
@@ -127,6 +127,8 @@ export default {
     'add-department',
     'add-location-postal-code',
     'toggle-all-departments',
+    'import-csv',
+    'delete-all-location-postal-code',
   ],
 
   data() {

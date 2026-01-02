@@ -330,6 +330,35 @@
             <oxd-grid :cols="4" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-text class="orangehrm-sub-title" tag="h6">
+                  {{ $t('Source') }}
+                </oxd-text>
+              </oxd-grid-item>
+              <oxd-grid-item class="orangehrm-select-all">
+                <oxd-input-field
+                  :model-value="isAllSelected('sources')"
+                  type="checkbox"
+                  :label="$t('Tout sélectionner')"
+                  @input="toggleAll('sources')"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+              <oxd-grid-item
+                v-for="(elem, elemIndex) in sources"
+                :key="`${elemIndex}-${elem}`"
+              >
+                <oxd-input-field
+                  v-model="sourcesFilter"
+                  type="checkbox"
+                  :label="elem.label"
+                  :value="elem.label"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-divider />
+            <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-text class="orangehrm-sub-title" tag="h6">
                   {{ $t('Modalité de formation') }}
                 </oxd-text>
               </oxd-grid-item>
@@ -480,6 +509,7 @@
             :needs="needs"
             :phone-numbers="phoneNumbers"
             :status="status"
+            :sources="sources"
             :training-methods="trainingMethods"
             :professional-experiences="professionalExperiences"
             :driving-licenses="drivingLicenses"
@@ -499,7 +529,7 @@
   </div>
 </template>
 <script>
-import {ref, reactive, onMounted} from 'vue';
+import {ref, reactive} from 'vue';
 import useToast from '@/core/util/composable/useToast';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {navigate} from '@/core/util/helper/navigation';
@@ -554,6 +584,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    sources: {
+      type: Array,
+      default: () => [],
+    },
     trainingMethods: {
       type: Array,
       default: () => [],
@@ -604,6 +638,7 @@ export default {
     const phoneNumbersFilter = ref([]);
     const professionalExperiencesFilter = ref([]);
     const statusFilter = ref([]);
+    const sourcesFilter = ref([]);
     const trainingMethodsFilter = ref([]);
     const drivingLicensesFilter = ref([]);
     const state = reactive({
@@ -633,6 +668,7 @@ export default {
           phoneNumbers: phoneNumbersFilter.value,
           professionalExperiences: professionalExperiencesFilter.value,
           status: statusFilter.value,
+          sources: sourcesFilter.value,
           trainingMethods: trainingMethodsFilter.value,
           drivingLicenses: drivingLicensesFilter.value,
         })
@@ -660,10 +696,6 @@ export default {
         });
     };
 
-    // onMounted(() => {
-    //   fetchData();
-    // });
-
     return {
       http,
       state,
@@ -685,6 +717,7 @@ export default {
       phoneNumbersFilter,
       professionalExperiencesFilter,
       statusFilter,
+      sourcesFilter,
       trainingMethodsFilter,
       drivingLicensesFilter,
       fetchData,

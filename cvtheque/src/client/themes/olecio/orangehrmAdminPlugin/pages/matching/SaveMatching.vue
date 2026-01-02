@@ -11,6 +11,7 @@
         :needs="needs"
         :phone-numbers="phoneNumbers"
         :status="status"
+        :sources="sources"
         :training-methods="trainingMethods"
         :professional-experiences="professionalExperiences"
         :driving-licenses="drivingLicenses"
@@ -67,6 +68,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    sources: {
+      type: Array,
+      default: () => [],
+    },
     trainingMethods: {
       type: Array,
       default: () => [],
@@ -112,10 +117,6 @@ export default {
       isLoading: false,
     };
   },
-  // mounted() {
-  //   console.log('SaveMatching - matchingCurrent:', this.matchingCurrent);
-  //   console.log('SaveMatching - isDuplicating:', this.isDuplicating);
-  // },
   methods: {
     onClickCancel() {
       navigate(`/${window.appGlobal.theme}/admin/matching`);
@@ -178,9 +179,6 @@ export default {
           navigate(`/${window.appGlobal.theme}/admin/matching`);
         })
         .catch((error) => {
-          // console.log('Error:', error);
-          // console.log('Response:', error.response);
-          // console.log('Data:', error.response?.data);
           if (matchingData.startBreakDate === null) {
             matchingData.startBreakDate = {
               dayOfWeek: null,

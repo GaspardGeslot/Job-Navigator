@@ -20,7 +20,7 @@ class LeadsController extends AbstractVueController
     public const FILTER_ONLY_BILLABLE = 'onlyBillable';
     public const FILTER_ONLY_DUPLICATE = 'onlyDuplicate';
     public const FILTER_ONLY_MATCHING_NOT_AVAILABLE = 'onlyMatchingNotAvailable';
-    public const FILTER_ACTOR = 'actor';
+    public const FILTER_ACTORS = 'actors';
     public const FILTER_JOBS = 'jobs';
     public const FILTER_COURSE_ONLY = 'courseOnly';
 
@@ -55,7 +55,7 @@ class LeadsController extends AbstractVueController
         $onlyBillable = $request->query->get(self::FILTER_ONLY_BILLABLE);
         $onlyDuplicate = $request->query->get(self::FILTER_ONLY_DUPLICATE);
         $onlyMatchingNotAvailable = $request->query->get(self::FILTER_ONLY_MATCHING_NOT_AVAILABLE);
-        $actor = $request->query->get(self::FILTER_ACTOR);
+        $actors = $request->query->get(self::FILTER_ACTORS);
         $jobs = $request->query->get(self::FILTER_JOBS);
         $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
         if ($courseOnly !== null)
@@ -219,8 +219,8 @@ class LeadsController extends AbstractVueController
                 $url .= 'onlyDuplicate=' . urlencode($onlyDuplicate) . '&';
             if ($onlyMatchingNotAvailable != null && $onlyMatchingNotAvailable !== '')
                 $url .= 'onlyMatchingNotAvailable=' . urlencode($onlyMatchingNotAvailable) . '&';
-            if ($actor != null && $actor !== '')
-                $url .= 'actor=' . urlencode($actor) . '&';
+            if ($actors != null && $actors !== [])
+                $url .= 'actors=' . urlencode(implode(',', $actors)) . '&';
             if ($jobs != null && $jobs !== [])
                 $url .= 'jobs=' . urlencode(implode(',', $jobs)) . '&';
             if ($courseOnly !== null) {

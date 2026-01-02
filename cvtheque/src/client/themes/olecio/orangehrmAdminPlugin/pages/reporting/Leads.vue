@@ -26,10 +26,11 @@
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="actorFilter"
-                type="select"
+                v-model="actorsFilter"
+                type="multiselect"
                 :label="$t('Acteur')"
                 :options="actors"
+                :multiple="true"
               />
             </oxd-grid-item>
             <oxd-grid-item>
@@ -541,7 +542,9 @@ export default {
           onlyDuplicate: statusFilter.value === statusOptions.duplicate.value,
           onlyMatchingNotAvailable:
             statusFilter.value === statusOptions.matchingNotAvailable.value,
-          actor: actorFilter.value?.label,
+          actors: actorsFilter.value
+            ? actorsFilter.value.map((actor) => actor.label)
+            : [],
           jobs: jobsFilter.value
             ? jobsFilter.value.map((job) => job.label)
             : [],
@@ -590,7 +593,7 @@ export default {
       );
       endDateFilter.value = formatDate(new Date(), 'dd-MM-yyyy');
       statusFilter.value = null;
-      actorFilter.value = null;
+      actorsFilter.value = [];
       jobsFilter.value = [];
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
@@ -688,7 +691,7 @@ export default {
       startDateFilter,
       endDateFilter,
       statusFilter,
-      actorFilter,
+      actorsFilter,
       jobsFilter,
       courseOnly,
       tableData,

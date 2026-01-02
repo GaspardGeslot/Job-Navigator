@@ -113,7 +113,30 @@ class LoginController extends AbstractVueController implements PublicControllerI
     {
         if ($this->getAuthUser()->isAuthenticated()) {
             $homePagePath = $this->getHomePageService()->getHomePagePath();
-            return $this->redirect($request->attributes->get('theme') . "/" . $homePagePath);
+            $theme = $request->attributes->get('theme');
+            
+            // Construire l'URL correctement selon le mode (subdomain ou fallback)
+            $useSubdomain = $request->attributes->get('_use_subdomain', false);
+            
+            if ($useSubdomain) {
+                // Mode subdomain: pas de theme dans l'URL
+                // Mais si la home page contient déjà le theme, il faut le retirer
+                $cleanedPath = $homePagePath;
+                $validThemes = ['constructys', 'olecio', 'maraudes'];
+                foreach ($validThemes as $validTheme) {
+                    if (strpos($homePagePath, $validTheme . '/') === 0) {
+                        $cleanedPath = substr($homePagePath, strlen($validTheme) + 1);
+                        break;
+                    }
+                }
+                return $this->redirect($cleanedPath);
+            } else {
+                // Mode fallback: ajouter le theme s'il n'est pas déjà présent
+                if (strpos($homePagePath, $theme . '/') !== 0) {
+                    $homePagePath = $theme . "/" . $homePagePath;
+                }
+                return $this->redirect($homePagePath);
+            }
         }
         return parent::handle($request);
     }

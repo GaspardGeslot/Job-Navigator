@@ -41,14 +41,31 @@ class ModuleScreenHelper
             $request = self::getCurrentRequest();
             if ($request) {
                 $pathChunks = explode('/', $request->getPathInfo());
-                if (isset($pathChunks[1])) {
-                    $moduleScreen->setTheme($pathChunks[1]);
-                }
-                if (isset($pathChunks[2])) {
-                    $moduleScreen->setModule($pathChunks[2]);
-                }
-                if (isset($pathChunks[3])) {
-                    $moduleScreen->setScreen($pathChunks[3]);
+                
+                // Détecter si on utilise un sous-domaine (le thème est déjà dans les attributes)
+                $themeFromAttributes = $request->attributes->get('theme');
+                $useSubdomain = $request->attributes->get('_use_subdomain', false);
+                
+                if ($useSubdomain && $themeFromAttributes) {
+                    // Mode subdomain: /{module}/{screen}
+                    $moduleScreen->setTheme($themeFromAttributes);
+                    if (isset($pathChunks[1])) {
+                        $moduleScreen->setModule($pathChunks[1]);
+                    }
+                    if (isset($pathChunks[2])) {
+                        $moduleScreen->setScreen($pathChunks[2]);
+                    }
+                } else {
+                    // Mode fallback: /{theme}/{module}/{screen}
+                    if (isset($pathChunks[1])) {
+                        $moduleScreen->setTheme($pathChunks[1]);
+                    }
+                    if (isset($pathChunks[2])) {
+                        $moduleScreen->setModule($pathChunks[2]);
+                    }
+                    if (isset($pathChunks[3])) {
+                        $moduleScreen->setScreen($pathChunks[3]);
+                    }
                 }
             }
             self::$moduleScreen = $moduleScreen;

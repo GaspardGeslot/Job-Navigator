@@ -1,3 +1,61 @@
+##########################
+#   Subdomain Routes (sans theme)
+##########################
+
+subdomain_apiv2_core_data_groups:
+  path: /api/v2/core/data-groups
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: OrangeHRM\Core\Api\Rest\DataGroupAPI
+
+subdomain_apiv2_core_about_organization:
+  path: /api/v2/core/about
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    id: 0
+    _api: OrangeHRM\Core\Api\Rest\AboutOrganizationAPI
+
+subdomain_push_form_session_create:
+  path: /events/push/form-session
+  controller: OrangeHRM\Core\Registration\Controller\PushEventController::createFormSession
+  methods: [ POST ]
+
+subdomain_push_form_session_update:
+  path: /events/push/form-session/{sessionId}
+  controller: OrangeHRM\Core\Registration\Controller\PushEventController::updateFormSession
+  methods: [ PUT ]
+
+subdomain_push_events:
+  path: /events/push
+  controller: OrangeHRM\Core\Registration\Controller\PushEventController::handle
+  methods: [ POST ]
+
+##########################
+#     Subdomain Public APIs
+##########################
+
+subdomain_apiv2_core_public_api_version:
+  path: /api/v2/core/public/version
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericPublicRestController::handle
+  methods: [ GET ]
+  defaults:
+    id: 0
+    _api:  OrangeHRM\Core\PublicApi\VersionAPI
+
+subdomain_apiv2_core_validate_uniqueness:
+  path: /api/v2/core/validation/unique
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    _key: value
+    _api: OrangeHRM\Core\Api\Rest\ValidationUniqueAPI
+
+##########################
+#  Fallback Routes (avec theme)
+##########################
+
 apiv2_core_data_groups:
   path: /{theme}/api/v2/core/data-groups
   controller: OrangeHRM\Core\Controller\Rest\V2\GenericRestController::handle
@@ -5,7 +63,7 @@ apiv2_core_data_groups:
   defaults:
     _api: OrangeHRM\Core\Api\Rest\DataGroupAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes
 
 apiv2_core_about_organization:
   path: /{theme}/api/v2/core/about
@@ -15,31 +73,31 @@ apiv2_core_about_organization:
     id: 0
     _api: OrangeHRM\Core\Api\Rest\AboutOrganizationAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes
 
 push_form_session_create:
   path: /{theme}/events/push/form-session
   controller: OrangeHRM\Core\Registration\Controller\PushEventController::createFormSession
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes
 
 push_form_session_update:
   path: /{theme}/events/push/form-session/{sessionId}
   controller: OrangeHRM\Core\Registration\Controller\PushEventController::updateFormSession
   methods: [ PUT ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes
 
 push_events:
   path: /{theme}/events/push
   controller: OrangeHRM\Core\Registration\Controller\PushEventController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes
 
 ##########################
-#     Public APIs
+#     Public APIs (fallback)
 ##########################
 
 apiv2_core_public_api_version:
@@ -50,7 +108,7 @@ apiv2_core_public_api_version:
     id: 0
     _api:  OrangeHRM\Core\PublicApi\VersionAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes
 
 apiv2_core_validate_uniqueness:
   path: /{theme}/api/v2/core/validation/unique
@@ -60,4 +118,4 @@ apiv2_core_validate_uniqueness:
     _key: value
     _api: OrangeHRM\Core\Api\Rest\ValidationUniqueAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes

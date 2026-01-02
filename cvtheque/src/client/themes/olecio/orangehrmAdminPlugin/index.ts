@@ -92,6 +92,7 @@ import TrainingMethod from './pages/trainingMethod/TrainingMethod.vue';
 import Sector from './pages/sector/Sector.vue';
 import SaveSector from './pages/sector/SaveSector.vue';
 import TimeSlot from './pages/timeSlot/TimeSlot.vue';
+import Source from './pages/source/Source.vue';
 
 export default {
   'job-title-list': JobTitle,
@@ -171,4 +172,5 @@ export default {
   'study-level-list': StudyLevel,
   'training-method-list': TrainingMethod,
   'time-slot-list': TimeSlot,
+  'source-list': Source,
 };
