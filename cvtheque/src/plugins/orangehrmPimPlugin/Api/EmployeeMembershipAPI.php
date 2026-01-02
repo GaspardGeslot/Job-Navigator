@@ -44,6 +44,7 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
     use EmployeeServiceTrait;
 
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_MEMBERSHIP_ID = 'membershipId';
     public const PARAMETER_SUBSCRIPTION_FEE = 'subscriptionFee';
     public const PARAMETER_SUBSCRIPTION_PAID_BY = 'subscriptionPaidBy';
@@ -133,6 +134,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             new ParamRule(
                 CommonParams::PARAMETER_ID,
@@ -270,6 +275,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
             ...$this->getSortingAndPaginationParamsRules(EmployeeMembershipSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
     }
@@ -392,6 +401,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             ...$this->getCommonBodyValidationRules('POST'),
         );
@@ -613,6 +626,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
             // new ParamRule(
             //     CommonParams::PARAMETER_ID,
             //     new Rule(Rules::POSITIVE)
@@ -739,6 +756,10 @@ class EmployeeMembershipAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             new ParamRule(
                 CommonParams::PARAMETER_IDS,

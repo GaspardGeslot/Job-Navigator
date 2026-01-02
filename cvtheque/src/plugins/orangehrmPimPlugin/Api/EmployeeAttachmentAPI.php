@@ -49,6 +49,7 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
     use UserRoleManagerTrait;
 
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_SCREEN = 'screen';
     public const PARAMETER_ATTACHMENT = 'attachment';
     public const PARAMETER_ATTACHMENT_ID = 'attachmentId';
@@ -165,6 +166,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 
@@ -235,6 +240,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),
@@ -433,6 +442,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),
             $this->getAttachmentRule(),
@@ -590,6 +603,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
         return new ParamRuleCollection(
             new ParamRule(CommonParams::PARAMETER_ID, new Rule(Rules::POSITIVE)),
             new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
+            new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
             ),
@@ -644,6 +661,10 @@ class EmployeeAttachmentAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             $this->getEmpNumberRule(),
             $this->getScreenRule(),

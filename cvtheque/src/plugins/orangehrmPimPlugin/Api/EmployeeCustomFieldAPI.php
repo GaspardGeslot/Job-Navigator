@@ -45,6 +45,7 @@ class EmployeeCustomFieldAPI extends Endpoint implements ResourceEndpoint
     use NormalizerServiceTrait;
 
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_SCREEN = 'screen';
     public const META_PARAMETER_FIELDS = 'fields';
 
@@ -203,6 +204,10 @@ class EmployeeCustomFieldAPI extends Endpoint implements ResourceEndpoint
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 
@@ -327,6 +332,10 @@ class EmployeeCustomFieldAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             $this->getEmpNumberRule(),
             ...$this->getCustomFieldsParamsRules()

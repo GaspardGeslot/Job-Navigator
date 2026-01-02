@@ -37,6 +37,7 @@ class WorkWeekAPI extends Endpoint implements ResourceEndpoint
 {
     use WorkWeekServiceTrait;
 
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_THEME = 'theme';
     public const PARAMETER_MONDAY = 'monday';
     public const PARAMETER_TUESDAY = 'tuesday';
@@ -162,7 +163,11 @@ class WorkWeekAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
-            )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 
@@ -243,7 +248,11 @@ class WorkWeekAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
-            )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
         foreach (self::PARAMETER_WORKWEEK as $workWeekKey) {
             $paramRules->addParamValidation(

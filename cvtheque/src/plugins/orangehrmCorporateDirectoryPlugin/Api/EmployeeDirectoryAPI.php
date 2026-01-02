@@ -45,6 +45,7 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
     use UserRoleManagerTrait;
 
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const FILTER_EMP_NUMBER = 'empNumber';
     public const FILTER_NAME_OR_ID = 'nameOrId';
     public const FILTER_JOB_TITLE_ID = 'jobTitleId';
@@ -149,6 +150,10 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             $this->getModelParamRule(),
         );
@@ -356,6 +361,12 @@ class EmployeeDirectoryAPI extends Endpoint implements CrudEndpoint
                 new ParamRule(
                     self::PARAMETER_ALL_COMPANIES,
                     new Rule(Rules::BOOL_VAL)
+                ),
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_USE_SUBDOMAIN,
+                    new Rule(Rules::BOOL_TYPE)
                 ),
             ),
             $this->getModelParamRule(),

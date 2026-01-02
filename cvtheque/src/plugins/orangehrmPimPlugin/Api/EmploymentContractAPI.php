@@ -42,6 +42,7 @@ class EmploymentContractAPI extends Endpoint implements ResourceEndpoint
     use UserRoleManagerTrait;
 
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_START_DATE = 'startDate';
     public const PARAMETER_END_DATE = 'endDate';
     public const PARAMETER_CONTRACT_ATTACHMENT = 'contractAttachment';
@@ -131,6 +132,10 @@ class EmploymentContractAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
         );
     }
@@ -308,6 +313,10 @@ class EmploymentContractAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             new ParamRule(
                 CommonParams::PARAMETER_EMP_NUMBER,

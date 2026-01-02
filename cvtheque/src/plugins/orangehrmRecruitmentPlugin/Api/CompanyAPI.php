@@ -85,6 +85,7 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_RULE_KEYWORDS_MAX_LENGTH = 250;
     public const PARAMETER_RULE_COMMENT_MAX_LENGTH = 250;
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
 
     /**
      * @OA\Get(
@@ -589,6 +590,10 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
                     new Rule(Rules::STRING_TYPE)
                 )
             ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
             ...$this->getSortingAndPaginationParamsRules(CandidateSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
     }
@@ -781,6 +786,12 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
                     new Rule(Rules::STRING_TYPE)
                 )
             ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_USE_SUBDOMAIN,
+                    new Rule(Rules::BOOL_TYPE)
+                )
+            ),
             ...$this->getCommonBodyValidationRules()
         );
     }
@@ -892,7 +903,11 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
-            )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 
@@ -976,7 +991,11 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
-            )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 
@@ -1080,6 +1099,12 @@ class CompanyAPI extends Endpoint implements CrudEndpoint
                 new ParamRule(
                     self::PARAMETER_THEME,
                     new Rule(Rules::STRING_TYPE)
+                )
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_USE_SUBDOMAIN,
+                    new Rule(Rules::BOOL_TYPE)
                 )
             ),
             ...$this->getCommonBodyValidationRules(),

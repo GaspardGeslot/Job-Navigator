@@ -34,6 +34,7 @@ use OrangeHRM\Pim\Service\EmployeePictureService;
 class EmployeePictureAPI extends Endpoint implements ResourceEndpoint
 {
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_EMP_PICTURE = 'empPicture';
 
     public const PARAM_RULE_EMP_PICTURE_FILE_NAME_MAX_LENGTH = 100;
@@ -104,6 +105,10 @@ class EmployeePictureAPI extends Endpoint implements ResourceEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
         );
     }
@@ -191,6 +196,10 @@ class EmployeePictureAPI extends Endpoint implements ResourceEndpoint
                     Rules::BASE_64_ATTACHMENT,
                     [EmpPicture::ALLOWED_IMAGE_TYPES, EmpPicture::ALLOWED_IMAGE_EXTENSIONS, self::PARAM_RULE_EMP_PICTURE_FILE_NAME_MAX_LENGTH]
                 )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
         );
     }

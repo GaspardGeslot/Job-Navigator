@@ -99,6 +99,7 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_DATE_OF_APPLICATION = 'dateOfApplication';
     public const PARAMETER_CONSENT_TO_KEEP_DATA = 'consentToKeepData';
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
 
     public const MODEL_DEFAULT = 'default';
     public const MODEL_CANDIDATE_LIST = 'list';
@@ -658,6 +659,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                     new Rule(Rules::STRING_TYPE)
                 )
             ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_USE_SUBDOMAIN,
+                    new Rule(Rules::BOOL_TYPE)
+                )
+            ),
             $this->getModelClassParamRule(),
             ...$this->getSortingAndPaginationParamsRules(CandidateSearchFilterParams::ALLOWED_SORT_FIELDS)
         );
@@ -851,6 +858,12 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                     new Rule(Rules::STRING_TYPE)
                 )
             ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_USE_SUBDOMAIN,
+                    new Rule(Rules::BOOL_TYPE)
+                )
+            ),
             ...$this->getCommonBodyValidationRules()
         );
     }
@@ -962,6 +975,10 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             )
         );
     }
@@ -1048,6 +1065,10 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             )
         );
     }
@@ -1152,7 +1173,13 @@ class CandidateAPI extends Endpoint implements CrudEndpoint
                 new ParamRule(
                     self::PARAMETER_THEME,
                     new Rule(Rules::STRING_TYPE)
-                )
+                ),
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_USE_SUBDOMAIN,
+                    new Rule(Rules::BOOL_TYPE)
+                ),
             ),
             ...$this->getCommonBodyValidationRules(),
         );

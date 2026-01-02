@@ -60,6 +60,7 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
     public const FILTER_MODEL = 'model';
 
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_FIRST_NAME = 'firstName';
     public const PARAMETER_MIDDLE_NAME = 'middleName';
     public const PARAMETER_LAST_NAME = 'lastName';
@@ -165,6 +166,10 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             $this->getModelParamRule(),
         );
@@ -378,6 +383,12 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
                 new ParamRule(
                     self::PARAMETER_THEME,
                     new Rule(Rules::STRING_TYPE)
+                ),
+            ),
+            $this->getValidationDecorator()->notRequiredParamRule(
+                new ParamRule(
+                    self::PARAMETER_USE_SUBDOMAIN,
+                    new Rule(Rules::BOOL_TYPE)
                 ),
             ),
             $this->getValidationDecorator()->notRequiredParamRule(
@@ -605,6 +616,10 @@ class EmployeeAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             ...$this->getCommonBodyValidationRules($uniqueOption),
         );

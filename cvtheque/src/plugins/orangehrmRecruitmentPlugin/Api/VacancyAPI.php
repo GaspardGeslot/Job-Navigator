@@ -75,6 +75,7 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_JOB_TITLE_ID = 'jobTitleId';
     public const PARAMETER_EMPLOYEE_ID = 'employeeId';
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_REASON = 'reason';
 
     public const PARAMETER_RULE_NAME_MAX_LENGTH = 100;
@@ -164,7 +165,11 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
-            )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 
@@ -341,6 +346,10 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             ...$this->getSortingAndPaginationParamsRules(VacancySearchFilterParams::ALLOWED_SORT_FIELDS)
         );
@@ -549,6 +558,10 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             ...$this->getCommonBodyValidationRules(),
         );
@@ -759,6 +772,10 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
     {
         return new ParamRuleCollection(
             new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
+            new ParamRule(
                 CommonParams::PARAMETER_ID,
                 new Rule(Rules::POSITIVE)
             ),
@@ -836,7 +853,11 @@ class VacancyAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
-            )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 }

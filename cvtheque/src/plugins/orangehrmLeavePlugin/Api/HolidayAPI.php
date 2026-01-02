@@ -42,6 +42,7 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
     use HolidayServiceTrait;
 
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
     public const PARAMETER_NAME = 'name';
     public const PARAMETER_DATE = 'date';
     public const PARAMETER_RECURRING = 'recurring';
@@ -112,6 +113,10 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
         );
     }
@@ -204,6 +209,10 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
             ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
             ...$this->getSortingAndPaginationParamsRules()
         );
     }
@@ -287,6 +296,10 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             $this->getValidationDecorator()->requiredParamRule(
                 new ParamRule(
@@ -402,6 +415,10 @@ class HolidayAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             ),
             new ParamRule(
                 CommonParams::PARAMETER_IDS,

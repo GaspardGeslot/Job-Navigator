@@ -48,6 +48,7 @@ class CandidateStatusAPI extends Endpoint implements CrudEndpoint
     public const PARAMETER_MATCHING_ID = 'matchingId';
     public const PARAMETER_CANDIDATURE_STATUS_ID = 'candidatureStatusId';
     public const PARAMETER_THEME = 'theme';
+    public const PARAMETER_USE_SUBDOMAIN = '_use_subdomain';
 
     /**
      * @OA\Get(
@@ -90,6 +91,10 @@ class CandidateStatusAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
             )
         );
     }
@@ -188,7 +193,11 @@ class CandidateStatusAPI extends Endpoint implements CrudEndpoint
             new ParamRule(
                 self::PARAMETER_THEME,
                 new Rule(Rules::STRING_TYPE)
-            )
+            ),
+            new ParamRule(
+                self::PARAMETER_USE_SUBDOMAIN,
+                new Rule(Rules::BOOL_TYPE)
+            ),
         );
     }
 
