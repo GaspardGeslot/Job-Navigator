@@ -40,8 +40,15 @@ const baseUrl = window.appGlobal.baseUrl;
  *
  * @returns {string} Le nom du thème détecté
  */
-function detectSubspace(): string {
-  const validThemes = ['constructys', 'olecio', 'maraudes'];
+function detectSubspace(): [string, string] {
+  const validThemes = [
+    'constructys',
+    'olecio',
+    'maraudes',
+    'olecio-demo',
+    'constructys-demo',
+    'maraudes-demo',
+  ];
   // 1. PRIORITÉ : Détection depuis le sous-domaine
   const hostname = window.location.hostname;
 
@@ -49,7 +56,7 @@ function detectSubspace(): string {
     // Pattern : theme.domain.com ou theme.localhost
     if (hostname.startsWith(`${theme}.`)) {
       console.info(`[Theme] Détecté depuis le sous-domaine: ${theme}`);
-      return theme;
+      return [theme, theme.replace('-demo', '')];
     }
   }
 
@@ -64,7 +71,7 @@ function detectSubspace(): string {
         console.info(
           `[Theme] Détecté depuis le path (fallback): ${firstSegment}`,
         );
-        return firstSegment;
+        return [firstSegment, firstSegment.replace('-demo', '')];
       }
     }
   } catch (e) {
@@ -73,21 +80,22 @@ function detectSubspace(): string {
 
   // 3. DEFAULT
   console.info('[Theme] Utilisation du thème par défaut: constructys');
-  return 'constructys';
+  return ['constructys', 'constructys'];
 }
 
-const subspace = detectSubspace();
+const [subspace, filesSubspace] = detectSubspace();
 
 let pages;
 try {
+  console.log('filesSubspace : ' + filesSubspace);
   // eslint-disable-next-line
-  pages = require(`../themes/${subspace}/pages`).default;
+  pages = require(`../themes/${filesSubspace}/pages`).default;
 } catch (e) {
   //console.log('e : ' + e);
   // eslint-disable-next-line
   pages = require('../themes/constructys/pages').default;
   console.warn(
-    `Aucun fichier pages.ts trouvé pour le sous-espace : ${subspace}. Chargement des pages par défaut.`,
+    `Aucun fichier pages.ts trouvé pour le sous-espace : ${filesSubspace}. Chargement des pages par défaut.`,
   );
 }
 

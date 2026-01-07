@@ -37,13 +37,12 @@ class RootController extends AbstractController implements PublicControllerInter
         $hostWithoutPort = preg_replace('/:\d+$/', '', $host);
         $isSubdomain = preg_match("/^{$theme}\./i", $hostWithoutPort);
         
-        error_log('[RootController] Theme: ' . $theme . ', Host: ' . $host . ', IsSubdomain: ' . ($isSubdomain ? 'YES' : 'NO'));
-        
         $baseUrl = $request->getSchemeAndHttpHost() . $request->getBaseUrl();
         
         // Détermine la page d'accueil selon le thème
         switch ($theme) {
             case 'constructys':
+            case 'constructys-demo':
                 // Constructys supporte les 2 modes (subdomain + fallback)
                 $redirectUrl = $isSubdomain 
                     ? $baseUrl . '/candidature/index'  // constructys.domain.com → /candidature/index
@@ -51,6 +50,7 @@ class RootController extends AbstractController implements PublicControllerInter
                 break;
                 
             case 'olecio':
+            case 'olecio-demo':
                 // Olecio supporte les 2 modes (subdomain + fallback)
                 $redirectUrl = $isSubdomain 
                     ? $baseUrl . '/auth/admin/login'  // olecio.domain.com → /auth/admin/login
@@ -58,8 +58,9 @@ class RootController extends AbstractController implements PublicControllerInter
                 break;
                 
             case 'maraudes':
+            case 'maraudes-demo':
                 // Maraudes : UNIQUEMENT subdomain (pas de fallback)
-                $redirectUrl = $baseUrl . '/maraudes/index';  // maraudes.domain.com → /maraudes/index
+                $redirectUrl = $baseUrl . '/home/index';  // maraudes.domain.com → /home/index
                 break;
                 
             default:
@@ -68,7 +69,6 @@ class RootController extends AbstractController implements PublicControllerInter
                 break;
         }
         
-        error_log('[RootController] Redirecting to: ' . $redirectUrl);
         return new RedirectResponse($redirectUrl);
     }
 }

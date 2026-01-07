@@ -1,0 +1,138 @@
+<template>
+  <login-layout>
+    <oxd-text class="orangehrm-login-title" tag="h5">
+      {{ $t('auth.login') }}
+    </oxd-text>
+    <div class="orangehrm-login-form">
+      <div class="orangehrm-login-error">
+        <oxd-alert
+          :show="error !== null"
+          :message="error?.message || ''"
+          type="error"
+        ></oxd-alert>
+      </div>
+      <oxd-form
+        ref="loginForm"
+        method="post"
+        :action="submitUrl"
+        @submit-valid="onSubmit"
+      >
+        <input name="_token" :value="token" type="hidden" />
+
+        <oxd-form-row>
+          <oxd-input-field
+            v-model="username"
+            name="username"
+            :label="$t('general.email')"
+            label-icon="person"
+            :placeholder="$t('general.email')"
+            :rules="rules.username"
+            autofocus
+          />
+        </oxd-form-row>
+
+        <oxd-form-row>
+          <oxd-input-field
+            v-model="password"
+            name="password"
+            :label="$t('general.password')"
+            label-icon="key"
+            :placeholder="$t('auth.password')"
+            type="password"
+            :rules="rules.password"
+          />
+        </oxd-form-row>
+
+        <oxd-form-actions class="orangehrm-login-action">
+          <oxd-button
+            class="orangehrm-login-button"
+            display-type="main"
+            :label="$t('auth.login')"
+            type="submit"
+          />
+        </oxd-form-actions>
+        <div class="orangehrm-login-forgot">
+          <oxd-text
+            class="orangehrm-login-forgot-header"
+            @click="navigateUrlForgotPassword"
+          >
+            {{ $t('auth.forgot_password') }} ?
+          </oxd-text>
+        </div>
+      </oxd-form>
+    </div>
+  </login-layout>
+</template>
+
+<script>
+import {urlFor} from '@/core/util/helper/url';
+import {OxdAlert} from '@ohrm/oxd';
+import {required} from '@/core/util/validation/rules';
+import {navigate, reloadPage} from '@/core/util/helper/navigation';
+import LoginLayout from '../components/LoginLayout.vue';
+
+export default {
+  components: {
+    'oxd-alert': OxdAlert,
+    'login-layout': LoginLayout,
+  },
+
+  props: {
+    error: {
+      type: Object,
+      default: () => null,
+    },
+    token: {
+      type: String,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      username: '',
+      password: '',
+      rules: {
+        username: [required],
+        password: [required],
+      },
+      submitted: false,
+    };
+  },
+
+  computed: {
+    submitUrl() {
+      return urlFor(`/${window.appGlobal.theme}/auth/validate/maraudes`);
+    },
+  },
+
+  beforeMount() {
+    setTimeout(() => {
+      reloadPage();
+    }, 1200000); // 20 * 60 * 1000 (20 minutes);
+  },
+
+  methods: {
+    onSubmit() {
+      if (!this.submitted) {
+        this.submitted = true;
+        this.$refs.loginForm.$el.submit();
+      }
+    },
+    navigateUrlForgotPassword() {
+      navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);
+    },
+    navigateUrlCreateAccount() {
+      navigate(`/${window.appGlobal.theme}/auth/createAccount`);
+    },
+    navigateUrlCandidate() {
+      navigate(`/${window.appGlobal.theme}/candidature/index#apply`);
+    },
+    navigateUrlLoginCompany() {
+      navigate(`/${window.appGlobal.theme}/auth/company/login`);
+    },
+  },
+};
+</script>
+
+<style src="./login.scss" lang="scss" scoped></style>

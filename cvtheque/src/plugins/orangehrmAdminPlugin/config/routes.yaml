@@ -1886,6 +1886,16 @@ apiv2_admin_course_actor_options:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_actor_add_administrator:
+  path: /api/v2/admin/actor/{id}/administrator
+  controller: OrangeHRM\Admin\Controller\ActorController::addAdministrator
+  methods: [ POST ]
+
+apiv2_admin_actor_delete_administrator:
+  path: /api/v2/admin/actor/administrator/{id}
+  controller: OrangeHRM\Admin\Controller\ActorController::deleteAdministrator
+  methods: [ DELETE ]
+
 apiv2_admin_jobs:
   path: /{theme}/api/v2/admin/job
   controller: OrangeHRM\Admin\Controller\JobController::getJobs

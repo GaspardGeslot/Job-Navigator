@@ -199,6 +199,31 @@
       />
       <br />
       <oxd-divider />
+      <oxd-form-row v-if="!isAdding">
+        <div class="orangehrm-administrators-header">
+          <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('Administrateurs') }}
+          </oxd-text>
+          <oxd-button
+            icon-name="plus"
+            display-type="secondary"
+            :label="$t('general.add')"
+            @click="onClickAddAdministrator"
+          />
+        </div>
+        <div
+          v-if="formattedAdministrators && formattedAdministrators.length > 0"
+          class="orangehrm-container"
+        >
+          <oxd-card-table
+            :headers="administratorHeaders"
+            :items="formattedAdministrators"
+            row-decorator="oxd-table-decorator-card"
+          />
+        </div>
+      </oxd-form-row>
+      <br />
+      <oxd-divider />
       <oxd-form-actions>
         <required-text />
         <oxd-button
@@ -217,20 +242,103 @@
       </oxd-form-actions>
     </oxd-form>
   </div>
+
+  <!-- Modal pour ajouter un administrateur -->
+  <oxd-dialog
+    v-if="showAdministratorModal"
+    v-model:show="showAdministratorModal"
+    :style="{width: '90%', maxWidth: '600px'}"
+    @update:show="onCancelAdministrator"
+  >
+    <div class="orangehrm-modal-header">
+      <oxd-text type="card-title">
+        {{ $t('Ajouter un administrateur') }}
+      </oxd-text>
+    </div>
+    <oxd-divider />
+    <oxd-form
+      :loading="isSavingAdministrator"
+      @submit-valid="onSaveAdministrator"
+    >
+      <oxd-form-row>
+        <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="administratorForm.email"
+              :label="$t('general.email')"
+              :rules="rules.administratorEmail"
+              required
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+      </oxd-form-row>
+      <oxd-form-row>
+        <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="administratorForm.password"
+              type="password"
+              :label="$t('general.password')"
+              :rules="rules.administratorPassword"
+              required
+            />
+          </oxd-grid-item>
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="administratorForm.confirmPassword"
+              type="password"
+              :label="$t('Confirmer le mot de passe')"
+              :rules="confirmPasswordRules"
+              required
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+      </oxd-form-row>
+      <oxd-divider />
+      <oxd-form-actions class="orangehrm-form-action">
+        <required-text />
+        <oxd-button
+          display-type="ghost"
+          :label="$t('general.cancel')"
+          @click="onCancelAdministrator"
+        />
+        <oxd-button
+          display-type="secondary"
+          :label="$t('general.save')"
+          type="submit"
+        />
+      </oxd-form-actions>
+    </oxd-form>
+  </oxd-dialog>
+
+  <delete-confirmation
+    ref="deleteAdministratorDialog"
+    :title="$t('general.delete')"
+    :subtitle="$t('Êtes-vous sûr de vouloir supprimer cet administrateur ?')"
+  ></delete-confirmation>
 </template>
 <script>
-import {OxdSwitchInput} from '@ohrm/oxd';
+import {OxdSwitchInput, OxdDialog} from '@ohrm/oxd';
 import BackButton from '@/core/components/buttons/BackButton';
 import JobsAutocomplete from '@/core/components/inputs/JobsAutocomplete';
 import AgeAutocomplete from '@/core/components/inputs/AgeAutocomplete';
 import CustomFieldAutocomplete from '@/core/components/inputs/CustomFieldAutocomplete';
 import TimeSlotAutocomplete from '@/core/components/inputs/TimeSlotAutocomplete';
+import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
+import {APIService} from '@/core/util/services/api.service';
 import {
   required,
   numericOnly,
   digitsOnlyWithTwoDecimalPoints,
   shouldNotExceedCharLength,
+  validEmailFormat,
 } from '@/core/util/validation/rules';
+
+const AdministratorModel = {
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
 
 const ActorModel = {
   id: null,
@@ -250,6 +358,7 @@ const ActorModel = {
   status: [],
   trainingMethods: [],
   sources: [],
+  administrators: [],
 };
 
 export default {
@@ -257,11 +366,13 @@ export default {
 
   components: {
     'oxd-switch-input': OxdSwitchInput,
+    'oxd-dialog': OxdDialog,
     'back-button': BackButton,
     'jobs-autocomplete': JobsAutocomplete,
     'custom-field-autocomplete': CustomFieldAutocomplete,
     'age-autocomplete': AgeAutocomplete,
     'time-slot-autocomplete': TimeSlotAutocomplete,
+    'delete-confirmation': DeleteConfirmationDialog,
   },
 
   props: {
@@ -314,6 +425,7 @@ export default {
   emits: ['cancel', 'delete', 'save'],
 
   setup() {
+    const http = new APIService(window.appGlobal.baseUrl, '/');
     const rules = {
       actor: [required],
       title: [shouldNotExceedCharLength(100), required],
@@ -321,8 +433,12 @@ export default {
       maxAmountPerDay: [numericOnly],
       maxAmountPerMonth: [numericOnly],
       postalCode: [numericOnly],
+      administratorEmail: [required, validEmailFormat],
+      administratorPassword: [required, shouldNotExceedCharLength(255)],
+      administratorConfirmPassword: [required],
     };
     return {
+      http,
       rules,
     };
   },
@@ -330,7 +446,61 @@ export default {
     return {
       editable: true,
       actor: {...ActorModel},
+      showAdministratorModal: false,
+      isSavingAdministrator: false,
+      administratorForm: {...AdministratorModel},
+      administratorHeaders: [
+        {
+          name: 'email',
+          title: this.$t('general.email'),
+          style: {flex: 1},
+        },
+        {
+          name: 'actions',
+          slot: 'action',
+          title: this.$t('general.actions'),
+          style: {flex: 1},
+          cellType: 'oxd-table-cell-actions',
+          cellConfig: {
+            delete: {
+              onClick: this.onClickDeleteAdministrator,
+              component: 'oxd-icon-button',
+              props: {
+                name: 'trash',
+              },
+            },
+          },
+        },
+      ],
     };
+  },
+  computed: {
+    formattedAdministrators() {
+      if (
+        !this.actor.administrators ||
+        this.actor.administrators.length === 0
+      ) {
+        return [];
+      }
+      return this.actor.administrators.map((admin) => ({
+        email: admin.email || '',
+        _originalId: admin.id,
+      }));
+    },
+    confirmPasswordRules() {
+      return [
+        ...this.rules.administratorConfirmPassword,
+        (value) => {
+          if (!value) {
+            return this.$t('general.required');
+          }
+          if (value !== this.administratorForm.password) {
+            return this.$t('Les mots de passe ne correspondent pas');
+          }
+          return true;
+        },
+      ];
+    },
   },
   watch: {
     actorCurrent() {
@@ -461,6 +631,66 @@ export default {
       this.actor.trainingMethods = this.actorCurrent.trainingMethods;
       this.actor.sources = this.actorCurrent.sources;
       this.actor.timeSlots = this.actorCurrent.timeSlots;
+      this.actor.administrators = this.actorCurrent.administrators
+        ? [...this.actorCurrent.administrators]
+        : [];
+    },
+    onClickAddAdministrator() {
+      this.administratorForm = {...AdministratorModel};
+      this.showAdministratorModal = true;
+    },
+    onCancelAdministrator() {
+      this.showAdministratorModal = false;
+      this.administratorForm = {...AdministratorModel};
+    },
+    onSaveAdministrator() {
+      this.isSavingAdministrator = true;
+      const administratorData = {
+        email: this.administratorForm.email,
+        password: this.administratorForm.password,
+      };
+
+      this.http
+        .request({
+          method: 'POST',
+          url: `/api/v2/admin/actor/${this.actor.id}/administrator`,
+          data: administratorData,
+        })
+        .then(() => {
+          this.onCancelAdministrator();
+          return this.$toast.saveSuccess();
+        })
+        .catch((error) => {
+          return this.$toast.unexpectedError(error?.response?.data?.message);
+        })
+        .finally(() => {
+          this.isSavingAdministrator = false;
+          this.$emit('update');
+        });
+    },
+    onClickDeleteAdministrator(item) {
+      this.$refs.deleteAdministratorDialog.showDialog().then((confirmation) => {
+        if (confirmation === 'ok') {
+          this.deleteAdministrator(item._originalId);
+        }
+      });
+    },
+    deleteAdministrator(id) {
+      this.http
+        .request({
+          method: 'DELETE',
+          url: `/api/v2/admin/actor/administrator/${id}`,
+        })
+        .then(() => {
+          // Retirer l'administrateur de la liste locale
+          this.actor.administrators = this.actor.administrators.filter(
+            (admin) => admin.id !== id,
+          );
+          return this.$toast.deleteSuccess();
+        })
+        .catch((error) => {
+          return this.$toast.unexpectedError(error?.response?.data?.message);
+        });
     },
   },
 };
@@ -503,5 +733,13 @@ export default {
   font-size: 12px;
   font-weight: 600;
   color: $oxd-interface-gray-darken-1-color;
+}
+
+.orangehrm-administrators-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 </style>

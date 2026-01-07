@@ -16,41 +16,11 @@
  */
 
 import CorePages from '@/core/pages';
-import AdminPages from '../constructys/orangehrmAdminPlugin';
-import PimPages from '../constructys/orangehrmPimPlugin';
-import HelpPages from '../constructys/orangehrmHelpPlugin';
-import TimePages from '../constructys/orangehrmTimePlugin';
-import LeavePages from '../constructys/orangehrmLeavePlugin';
-import OAuthPages from '../constructys/orangehrmCoreOAuthPlugin';
-import AttendancePages from '../constructys/orangehrmAttendancePlugin';
-import MaintenancePages from '../constructys/orangehrmMaintenancePlugin';
-import RecruitmentPages from '../constructys/orangehrmRecruitmentPlugin';
-import PerformancePages from '../constructys/orangehrmPerformancePlugin';
-import CorporateDirectoryPages from '../constructys/orangehrmCorporateDirectoryPlugin';
-import authenticationPages from '../constructys/orangehrmAuthenticationPlugin';
-import dashboardPages from '../constructys/orangehrmDashboardPlugin';
-import buzzPages from '../constructys/orangehrmBuzzPlugin';
-import systemCheckPages from '../constructys/orangehrmSystemCheckPlugin';
-import claimPages from '../constructys/orangehrmClaimPlugin';
-import MaraudesPages from './maraudesPlugin';
+import HomePages from './home';
+import AuthenticationPages from './authentication';
 
 export default {
-  ...AdminPages,
-  ...PimPages,
+  ...AuthenticationPages,
+  ...HomePages,
   ...CorePages,
-  ...HelpPages,
-  ...TimePages,
-  ...OAuthPages,
-  ...LeavePages,
-  ...AttendancePages,
-  ...MaintenancePages,
-  ...RecruitmentPages,
-  ...PerformancePages,
-  ...CorporateDirectoryPages,
-  ...authenticationPages,
-  ...dashboardPages,
-  ...buzzPages,
-  ...systemCheckPages,
-  ...claimPages,
-  ...MaraudesPages,
 };

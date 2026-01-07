@@ -34,7 +34,7 @@ if ($debug) {
     Debug::enable();
 }
 
-$validThemes = ['constructys', 'olecio', 'maraudes'];
+$validThemes = ['constructys', 'olecio', 'maraudes', 'olecio-demo', 'constructys-demo', 'maraudes-demo'];
 
 $request = Request::createFromGlobals();
 

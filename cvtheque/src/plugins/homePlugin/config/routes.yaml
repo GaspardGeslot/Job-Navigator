@@ -1,0 +1,9 @@
+##########################
+#   Routes Maraudes (subdomain uniquement)
+##########################
+
+view_home:
+  path: /home/index
+  controller: Home\Controller\HomeController::handle
+  methods: [ GET ]
+

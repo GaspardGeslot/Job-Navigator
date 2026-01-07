@@ -122,7 +122,7 @@ class LoginController extends AbstractVueController implements PublicControllerI
                 // Mode subdomain: pas de theme dans l'URL
                 // Mais si la home page contient déjà le theme, il faut le retirer
                 $cleanedPath = $homePagePath;
-                $validThemes = ['constructys', 'olecio', 'maraudes'];
+                $validThemes = ['constructys', 'olecio', 'olecio-demo', 'maraudes', 'maraudes-demo'];
                 foreach ($validThemes as $validTheme) {
                     if (strpos($homePagePath, $validTheme . '/') === 0) {
                         $cleanedPath = substr($homePagePath, strlen($validTheme) + 1);

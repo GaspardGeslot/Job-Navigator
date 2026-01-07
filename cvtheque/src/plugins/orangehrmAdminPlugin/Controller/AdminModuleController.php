@@ -42,6 +42,6 @@ class AdminModuleController extends AbstractModuleController
             default:
                 $defaultPath = $this->getHomePageService()->getAdminModuleDefaultPath();
         }
-        return $this->redirect($request->attributes->get('theme') . "/" . $defaultPath);
+        return $this->redirect("/" . $defaultPath);
     }
 }

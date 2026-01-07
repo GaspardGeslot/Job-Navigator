@@ -42,7 +42,8 @@ class ThemeDao extends BaseDao
      */
     public function getThemeByThemeName(string $themeName = ThemeService::DEFAULT_THEME): ?Theme
     {
-        return $this->getRepository(Theme::class)->findOneBy(['name' => $themeName]);
+        $normalizedThemeName = preg_replace('/-demo$/', '', $themeName);
+        return $this->getRepository(Theme::class)->findOneBy(['name' => $normalizedThemeName]);
     }
 
     /**

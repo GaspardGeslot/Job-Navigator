@@ -172,7 +172,6 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
         'M' => 
         array (
             'Monolog\\' => 8,
-            'Maraudes\\' => 9,
         ),
         'L' => 
         array (
@@ -182,6 +181,10 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             'Lcobucci\\JWT\\' => 13,
             'Lcobucci\\Clock\\' => 15,
             'Laravel\\SerializableClosure\\' => 28,
+        ),
+        'H' => 
+        array (
+            'Home\\' => 5,
         ),
         'G' => 
         array (
@@ -679,10 +682,6 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
-        'Maraudes\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/plugins/maraudesPlugin',
-        ),
         'League\\Uri\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/uri/src',
@@ -707,6 +706,10 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
         'Laravel\\SerializableClosure\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
+        ),
+        'Home\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/plugins/homePlugin',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
