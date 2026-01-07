@@ -5,7 +5,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Vous cherchez un emploi dans le BTP et la Construction en Ile-de-France ? Postulez en ligne, avec ou sans CV, et laissez notre plateforme faire le reste.">
-  <title>{% block title %}Emploi dans le BTP (avec ou sans CV) | Job Navigator{% endblock %}</title>
+  {% set themeTitle = 'Emploi dans le BTP (avec ou sans CV) | Job Navigator' %}
+  {% if theme is defined and theme is not empty %}
+    {% if theme == 'olecio' or theme == 'olecio-demo' %}
+      {% set themeTitle = 'Job Navigator | Hedwige' %}
+    {% elseif theme == 'maraudes' or theme == 'maraudes-demo' %}
+      {% set themeTitle = 'Job Navigator | Maraudes' %}
+    {% elseif theme == 'constructys' or theme == 'constructys-demo' %}
+      {% set themeTitle = 'Emploi dans le BTP (avec ou sans CV) | Job Navigator' %}
+    {% endif %}
+  {% endif %}
+  <title>{% block title %}{{ themeTitle }}{% endblock %}</title>
   {% block links %}{% endblock %}
   {% block stylesheets %}{% endblock %}
   <script>

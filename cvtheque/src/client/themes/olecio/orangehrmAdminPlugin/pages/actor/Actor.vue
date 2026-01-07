@@ -88,6 +88,7 @@
             :time-slots="timeSlots"
             @delete="onClickDelete(actor.id)"
             @save="(updatedActor) => onClickSave(updatedActor, actor.id)"
+            @update="onUpdate()"
           />
         </div>
       </table-filter>
@@ -210,6 +211,9 @@ export default {
   methods: {
     onClickAdd() {
       navigate(`/${window.appGlobal.theme}/admin/saveActor`);
+    },
+    onUpdate() {
+      this.fetchData();
     },
     onClickSave(updatedActor, id) {
       this.state.isLoading = true;

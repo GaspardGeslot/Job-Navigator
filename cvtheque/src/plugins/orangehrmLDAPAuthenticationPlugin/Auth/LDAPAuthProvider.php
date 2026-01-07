@@ -65,33 +65,33 @@ class LDAPAuthProvider extends AbstractAuthProvider
     /**
      * @inheritDoc
      */
-    public function authenticate(AuthParamsInterface $authParams): bool
+    public function authenticate(AuthParamsInterface $authParams): array
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface) {
-            return false;
+            return ['token' => null, 'hasToRedefinePassword' => false];
         }
         $credential = $authParams->getCredential();
         $user = $this->getLDAPSyncService()
             ->getLDAPDao()
             ->getNonLocalUserByUserName($credential->getUsername(), false);
         if ($user === null) {
-            return false;
+            return ['token' => null, 'hasToRedefinePassword' => false];
         }
         $ldapAuthProvider = $this->getLDAPSyncService()->filterLDAPAuthProvider($user->getAuthProviders());
         if (!$ldapAuthProvider instanceof UserAuthProvider) {
-            return false;
+            return ['token' => null, 'hasToRedefinePassword' => false];
         }
 
         $ldapCredential = new UserCredential($ldapAuthProvider->getLDAPUserDN(), $credential->getPassword());
         try {
             $this->getLDAPService()->bind($ldapCredential);
-            return $this->getAuthenticationService()->setCredentialsForUser($user);
+            return ['token' => $this->getAuthenticationService()->setCredentialsForUser($user), 'hasToRedefinePassword' => false];
         } catch (AuthenticationException $e) {
             throw $e;
         } catch (Throwable $e) {
             // Ignore logging stack trace to avoid dump bind passwords in the log file
             $this->getLogger()->error($e->getMessage());
-            return false;
+            return ['token' => null, 'hasToRedefinePassword' => false];
         }
     }
 

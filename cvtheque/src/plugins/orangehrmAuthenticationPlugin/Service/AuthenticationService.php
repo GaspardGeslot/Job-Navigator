@@ -69,17 +69,17 @@ class AuthenticationService
     
     /**
      * @param UserCredential $credentials
-     * @return ?string
+     * @return ?array
      * @throws AuthenticationException
      */
-    public function setCredentials(UserCredential $credentials, bool $isCompany, string $theme): ?string
+    public function setCredentials(UserCredential $credentials, bool $isCompany, string $theme): ?array
     {
         $user = $this->getUserService()->getCredentials($credentials, $theme);
         $success = $this->setCredentialsForUser($user);
-        $token = null;
+        $result = null;
         if ($success)
-            $token = $this->setHedwigeCredentials($credentials, $isCompany, $theme);
-        return $token;
+            $result = $this->setHedwigeCredentials($credentials, $isCompany, $theme);
+        return $result;
     }
 
     /**
@@ -97,16 +97,16 @@ class AuthenticationService
         {
             $success = $this->createHedwigeCredentials($credentials, $isCompany, $theme);
             if ($success)
-                $token = $this->setHedwigeCredentials($credentials, $isCompany, $theme);
+                $token = $this->setHedwigeCredentials($credentials, $isCompany, $theme)['token'] ?? null;
         }
         return $token;
     }
 
     /**
      * @param UserCredential $credentials
-     * @return string
+     * @return ?array
      */
-    protected function setHedwigeCredentials(UserCredential $credentials, bool $isCompany, string $theme) : ?string
+    protected function setHedwigeCredentials(UserCredential $credentials, bool $isCompany, string $theme) : ?array
     {
         $clientId = $this->getThemeService()->getClientId($theme);
 
@@ -116,12 +116,18 @@ class AuthenticationService
         try {
             $url = $isCompany ? "{$clientBaseUrl}/company/{$clientId}/login" : "{$clientBaseUrl}/user/{$clientId}/login";
             $response = $client->request('POST', $url, [
-                'json' => [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode([
                     'email' => $credentials->getUsername(),
                     'password' => $credentials->getPassword()
-                ]
+                ])
             ]);
-            return (string) $response->getBody();
+            return [
+                'token' => (string) $response->getBody(),
+                'hasToRedefinePassword' => $response->getStatusCode() === 206
+            ];
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             return null;
         }

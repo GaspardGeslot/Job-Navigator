@@ -40,7 +40,7 @@ class SubdomainThemeSubscriber implements EventSubscriberInterface
     /**
      * Liste des thèmes valides dans l'application
      */
-    private const VALID_THEMES = ['constructys', 'olecio', 'maraudes'];
+    private const VALID_THEMES = ['constructys', 'olecio', 'maraudes', 'olecio-demo', 'constructys-demo', 'maraudes-demo'];
 
     /**
      * Thème par défaut si aucun thème n'est détecté

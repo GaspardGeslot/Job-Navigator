@@ -213,16 +213,24 @@ class VueControllerHelper
         ];
     }
 
-    /**
-     * @return array[]
-     */
     protected function getMenuItems(): array
     {
         try {
-            $theme = $this->getRequest()->attributes && $this->getRequest()->attributes->get('theme') 
-                ? $this->getRequest()->attributes->get('theme') 
+            $request = $this->getRequest();
+            $theme = $request->attributes && $request->attributes->get('theme') 
+                ? $request->attributes->get('theme') 
                 : 'constructys';
-            return $this->getMenuService()->getMenuItems($this->getRequest()->getBaseUrl() . '/' . $theme);
+            
+            // Vérifier si on utilise un sous-domaine
+            $useSubdomain = $request->attributes->get('_use_subdomain', false);
+            
+            // Construire le baseUrl : ajouter le thème seulement si on n'utilise PAS un sous-domaine
+            $baseUrl = $request->getBaseUrl();
+            if (!$useSubdomain) {
+                $baseUrl .= '/' . $theme;
+            }
+            
+            return $this->getMenuService()->getMenuItems($baseUrl);
         } catch (ServiceException $e) {
         }
         return [[], []];

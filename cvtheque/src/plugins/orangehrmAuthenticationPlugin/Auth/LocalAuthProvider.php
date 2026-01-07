@@ -53,13 +53,13 @@ class LocalAuthProvider extends AbstractAuthProvider
      * @throws AuthenticationException
      * @throws PasswordEnforceException
      */
-    public function authenticate(AuthParamsInterface $authParams, bool $isCompany = false): ?string
+    public function authenticate(AuthParamsInterface $authParams, bool $isCompany = false): ?array
     {
         if (!$authParams->getCredential() instanceof UserCredentialInterface) {
-            return false;
+            return ['token' => null, 'hasToRedefinePassword' => false];
         }
-        $token = $this->getAuthenticationService()->setCredentials($authParams->getCredential(), $isCompany, $authParams->getTheme());
-        if (!is_null($token)) {
+        $result = $this->getAuthenticationService()->setCredentials($authParams->getCredential(), $isCompany, $authParams->getTheme());
+        if (!is_null($result) && !is_null($result['token'])) {
             if ($this->getConfigService()->getConfigDao()
                     ->getValue(ConfigService::KEY_ENFORCE_PASSWORD_STRENGTH) === 'on') {
                 $passwordStrengthValidation = new PasswordStrengthValidation();
@@ -82,7 +82,7 @@ class LocalAuthProvider extends AbstractAuthProvider
                 }
             }
         }
-        return $token;
+        return $result;
     }
 
     /**

@@ -41,7 +41,6 @@ class ModuleScreenHelper
             $request = self::getCurrentRequest();
             if ($request) {
                 $pathChunks = explode('/', $request->getPathInfo());
-                
                 // Détecter si on utilise un sous-domaine (le thème est déjà dans les attributes)
                 $themeFromAttributes = $request->attributes->get('theme');
                 $useSubdomain = $request->attributes->get('_use_subdomain', false);

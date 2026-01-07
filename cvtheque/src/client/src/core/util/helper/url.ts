@@ -69,7 +69,14 @@ export const prepare = function (
  * @returns {boolean}
  */
 export const isUsingSubdomain = function (): boolean {
-  const validThemes = ['constructys', 'olecio', 'maraudes'];
+  const validThemes = [
+    'constructys',
+    'olecio',
+    'maraudes',
+    'olecio-demo',
+    'constructys-demo',
+    'maraudes-demo',
+  ];
   const hostname = window.location.hostname;
 
   for (const theme of validThemes) {
@@ -133,7 +140,14 @@ const cleanEndpointForSubdomain = function (endpoint: string): string {
     return endpoint;
   }
 
-  const validThemes = ['constructys', 'olecio', 'maraudes'];
+  const validThemes = [
+    'constructys',
+    'olecio',
+    'maraudes',
+    'olecio-demo',
+    'constructys-demo',
+    'maraudes-demo',
+  ];
 
   // Supprime le theme du début du path si présent
   for (const theme of validThemes) {

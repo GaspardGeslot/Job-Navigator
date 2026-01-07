@@ -37,7 +37,7 @@ subdomain_auth_validate_with_role:
   controller: OrangeHRM\Authentication\Controller\ValidateController::handle
   methods: [ POST ]
   requirements:
-    role: admin|candidate
+    role: admin|candidate|maraudes
 
 subdomain_auth_company_validate:
   path: /auth/company/validate
@@ -121,28 +121,28 @@ root:
   controller: OrangeHRM\Authentication\Controller\RootController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 root_secondary:
   path: /{theme}/
   controller: OrangeHRM\Authentication\Controller\RootController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_login:
   path: /{theme}/auth/login
   controller: OrangeHRM\Authentication\Controller\LoginController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_login_admin:
   path: /{theme}/auth/admin/login
   controller: OrangeHRM\Authentication\Controller\LoginAdminController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_login_company:
   path: /{theme}/auth/company/login
@@ -151,27 +151,39 @@ auth_login_company:
   requirements:
     theme: constructys
 
+auth_redefine_password_theme:
+  path: /{theme}/auth/redefinePassword
+  controller: OrangeHRM\Authentication\Controller\RedefinePasswordController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo|
+
+auth_redefine_password:
+  path: /auth/redefinePassword
+  controller: OrangeHRM\Authentication\Controller\RedefinePasswordController::handle
+  methods: [ GET ]
+
 auth_create_account:
   path: /{theme}/auth/createAccount
   controller: OrangeHRM\Authentication\Controller\CreateAccountController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_validate:
   path: /{theme}/auth/validate
   controller: OrangeHRM\Authentication\Controller\ValidateController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_validate_with_role:
   path: /{theme}/auth/validate/{role}
   controller: OrangeHRM\Authentication\Controller\ValidateController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio|maraudes
-    role: admin|candidate
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+    role: admin|candidate|maraudes
 
 auth_company_validate:
   path: /{theme}/auth/company/validate
@@ -185,67 +197,67 @@ auth_validate_new_account:
   controller: OrangeHRM\Authentication\Controller\ValidateNewAccountController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_logout:
   path: /{theme}/auth/logout
   controller: OrangeHRM\Authentication\Controller\LogoutController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_admin_access_verify:
   path: /{theme}/auth/adminVerify
   controller: OrangeHRM\Authentication\Controller\AdministratorVerifyController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_request_reset_password:
   path: /{theme}/auth/requestResetPassword
   controller: OrangeHRM\Authentication\Controller\RequestResetPasswordController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_reset_password:
   path: /{theme}/auth/resetPassword
   controller: OrangeHRM\Authentication\Controller\ResetPasswordController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_send_password_reset:
   path: /{theme}/auth/sendPasswordReset
   controller: OrangeHRM\Authentication\Controller\RequestPasswordSuccessController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_forgot_password_username:
   path: /{theme}/auth/requestPasswordResetCode
   controller: OrangeHRM\Authentication\Controller\RequestPasswordController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_reset_code:
   path: /{theme}/auth/resetPassword/resetCode/{resetCode}
   controller: OrangeHRM\Authentication\Controller\ResetCodeController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_weak_password_reset:
   path: /{theme}/auth/changeWeakPassword/resetCode/{resetCode}
   controller: OrangeHRM\Authentication\Controller\WeakPasswordResetController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 auth_request_enforce_password:
   path: /{theme}/auth/resetWeakPassword
   controller: OrangeHRM\Authentication\Controller\RequestResetWeakPasswordController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio|maraudes
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo

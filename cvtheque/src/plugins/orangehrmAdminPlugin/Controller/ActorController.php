@@ -10,6 +10,8 @@ use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use OrangeHRM\Framework\Routing\UrlGenerator;
+use OrangeHRM\Framework\Services;
 
 class ActorController extends AbstractVueController
 {
@@ -141,6 +143,35 @@ class ActorController extends AbstractVueController
         return new Response(json_encode(['message' => 'Actor deleted successfully']), Response::HTTP_OK);
     }
 
+    public function addAdministrator(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $administrator = json_decode($request->getContent(), true);
+            $this->addHedwigeAdministrator($this->getAuthUser()->getUserHedwigeToken(), $id, $administrator);
+            return new Response(null, Response::HTTP_OK);
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function deleteAdministrator(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->get('id');
+            $this->deleteHedwigeAdministrator($this->getAuthUser()->getUserHedwigeToken(), $id);
+            return new Response(null, Response::HTTP_OK);
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
     private function getActors(string $token, ?string $nameFilter, ?string $jobFilter): array
     {
         $client = new Client();
@@ -232,5 +263,43 @@ class ActorController extends AbstractVueController
         } catch (\Exception $e) {
             throw new \Exception('Error deleting actor');
         }
+    }
+
+    private function addHedwigeAdministrator(string $token, int $id, array $administrator): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        $data = json_encode($administrator);
+        
+        /** @var UrlGenerator $urlGenerator */
+        $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
+        $loginUrl = $urlGenerator->generate('subdomain_auth_login', [], UrlGenerator::ABSOLUTE_URL);
+
+        $url = "{$clientBaseUrl}/user/other?";
+        $url .= 'actor=' . urlencode($id) . '&';
+        $url .= 'role=ACTOR' . '&';
+        $url .= 'urlPrefix=' . urlencode($loginUrl);
+
+        $response = $client->request('POST', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => $data
+        ]);
+    }
+
+    private function deleteHedwigeAdministrator(string $token, int $id): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        
+        $url = "{$clientBaseUrl}/user/{$id}";
+        $response = $client->request('DELETE', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
     }
 }

@@ -59,15 +59,15 @@ class AuthProviderChain
 
     /**
      * @param AuthParamsInterface $authParams
-     * @return ?string
+     * @return ?array
      */
-    public function authenticate(AuthParamsInterface $authParams): ?string
+    public function authenticate(AuthParamsInterface $authParams): ?array
     {
         array_multisort($this->priorities, SORT_DESC, $this->providers);
         foreach ($this->providers as $authProvider) {
-            $token = $authProvider->authenticate($authParams);
-            if (!is_null($token)) {
-                return $token;
+            $result = $authProvider->authenticate($authParams);
+            if (!is_null($result)) {
+                return $result;
             }
         }
         return null;

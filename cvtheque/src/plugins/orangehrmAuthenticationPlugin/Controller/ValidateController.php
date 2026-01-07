@@ -86,7 +86,20 @@ class ValidateController extends AbstractController implements PublicControllerI
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
         $theme = $request->attributes->get('theme');
         $role = $request->attributes->get('role');
-        $role = $role !== null && $role === 'admin' ? 'Admin' : 'ESS';
+        switch ($role) {
+            case 'admin':
+                $role = 'Admin';
+                break;
+            case 'candidate':
+                $role = 'ESS';
+                break;
+            case 'maraudes':
+                $role = 'Interviewer';
+                break;
+            default:
+                $role = 'ESS';
+                break;
+        }
         $credentials = new UserCredential($username, $password, $role);
 
         /** @var UrlGenerator $urlGenerator */
@@ -104,17 +117,20 @@ class ValidateController extends AbstractController implements PublicControllerI
             }
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
-            $token = $authProviderChain->authenticate(new AuthParams($credentials, null, $theme));
-            $success = !is_null($token);
+            $result = $authProviderChain->authenticate(new AuthParams($credentials, null, $theme));
+            $success = !is_null($result) && !is_null($result['token']);
 
-            if (!$success) {
+            if (!$success)
                 throw AuthenticationException::invalidCredentials();
-            }
+            $this->getAuthUser()->setUserHedwigeToken($result['token']);
             $this->getAuthUser()->setIsAuthenticated($success);
             $this->getAuthUser()->setIsAdmin($role === 'Admin');
             $this->getAuthUser()->setIsCandidate($role !== 'Admin');
-            $this->getAuthUser()->setUserHedwigeToken($token);
             $this->getLoginService()->addLogin($credentials);
+            if ($result['hasToRedefinePassword']) {
+                $redirectUrl = $urlGenerator->generate('auth_redefine_password', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+                return new RedirectResponse($redirectUrl);
+            }
         } catch (AuthenticationException $e) {
             error_log('Info error when authenticating : ' . $e->getTraceAsString());
             $this->getAuthUser()->addFlash(AuthUser::FLASH_LOGIN_ERROR, $e->normalize());
@@ -140,6 +156,6 @@ class ValidateController extends AbstractController implements PublicControllerI
         }
 
         $homePagePath = $this->getHomePageService()->getHomePagePath();
-        return $this->redirect($theme . "/" . $homePagePath);
+        return $this->redirect("/" . $homePagePath);
     }
 }
