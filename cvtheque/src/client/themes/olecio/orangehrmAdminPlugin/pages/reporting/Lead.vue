@@ -1,6 +1,11 @@
 <template>
   <back-button></back-button>
-  <lead-profile v-if="lead" :lead="lead" @update="onLeadUpdate"></lead-profile>
+  <lead-profile
+    v-if="lead"
+    :lead="lead"
+    :statuses="statuses"
+    @update="onLeadUpdate"
+  ></lead-profile>
 </template>
 
 <script>
@@ -16,6 +21,10 @@ export default {
   props: {
     leadId: {
       type: Number,
+      required: true,
+    },
+    statuses: {
+      type: Array,
       required: true,
     },
   },

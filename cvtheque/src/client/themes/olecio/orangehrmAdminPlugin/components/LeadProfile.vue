@@ -81,11 +81,11 @@
                 :disabled="true"
               />
             </oxd-grid-item>
-            <oxd-grid-item v-if="profile.birthDate">
+            <oxd-grid-item>
               <date-input
                 v-model="profile.birthDate"
                 :label="$t('pim.date_of_birth')"
-                :disabled="true"
+                :disabled="!editable"
               />
             </oxd-grid-item>
             <oxd-grid-item v-if="profile.age">
@@ -230,8 +230,10 @@
             <oxd-grid-item>
               <oxd-input-field
                 v-model="profile.currentSituation"
+                type="select"
                 :label="$t('Situation actuelle')"
-                :disabled="true"
+                :disabled="!editable"
+                :options="statuses"
               />
             </oxd-grid-item>
             <oxd-grid-item>
@@ -395,9 +397,43 @@
         <oxd-divider></oxd-divider>
         <oxd-form-row>
           <oxd-text class="orangehrm-sub-title" tag="h6">
+            {{ $t('France Travail') }}
+          </oxd-text>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <date-input
+                v-model="profile.franceTravailRecordDate"
+                :label="$t('Date d\'inscription')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.franceTravailAgency"
+                :label="$t('Agence')"
+                type="select"
+                :options="franceTravailAgencyOptions"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <oxd-divider></oxd-divider>
+        <oxd-form-row>
+          <oxd-text class="orangehrm-sub-title" tag="h6">
             {{ $t('Informations additionnelles') }}
           </oxd-text>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.rqth"
+                :label="$t('RQTH')"
+                type="select"
+                :options="rqthOptions"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
                 v-model="profile.complement"
@@ -610,6 +646,9 @@ const LeadProfileModel = {
   apiMessage: '',
   manualDelivery: false,
   telephoneContacts: [],
+  franceTravailRecordDate: null,
+  franceTravailAgency: null,
+  rqth: null,
 };
 
 const TelephoneContactModel = {
@@ -640,6 +679,10 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    statuses: {
+      type: Array,
+      required: true,
     },
   },
   emits: ['update'],
@@ -727,6 +770,34 @@ export default {
         ],
         telephoneContactComment: [shouldNotExceedCharLength(1000)],
       },
+      franceTravailAgencyOptions: [
+        {id: 0, label: 'PÔLE EMPLOI ANTONY 92160'},
+        {id: 1, label: 'PÔLE EMPLOI ASNIÈRES-SUR-SEINE 92600'},
+        {id: 2, label: 'PÔLE EMPLOI BAGNEUX 92220'},
+        {id: 3, label: 'PÔLE EMPLOI BOIS-COLOMBES 92270'},
+        {id: 4, label: 'PÔLE EMPLOI BOULOGNE-BILLANCOURT 92100'},
+        {id: 5, label: 'PÔLE EMPLOI CLICHY 92110'},
+        {id: 6, label: 'PÔLE EMPLOI COLOMBES 92700'},
+        {id: 7, label: 'PÔLE EMPLOI COURBEVOIE 92400'},
+        {id: 8, label: 'PÔLE EMPLOI GENNEVILLIERS 92230'},
+        {id: 9, label: 'PÔLE EMPLOI ISSY-LES-MOULINEAUX 92130'},
+        {id: 10, label: 'PÔLE EMPLOI LEVALLOIS-PERRET 92300'},
+        {id: 11, label: 'PÔLE EMPLOI MEUDON 92190'},
+        {id: 12, label: 'PÔLE EMPLOI MONTROUGE 92120'},
+        {id: 13, label: 'PÔLE EMPLOI NANTERRE 92000'},
+        {id: 14, label: 'PÔLE EMPLOI PUTEAUX 92800'},
+        {id: 15, label: 'PÔLE EMPLOI RUEIL-MALMAISON 92500'},
+        {id: 16, label: '-'},
+      ],
+      rqthOptions: [
+        {id: 0, label: 'Non, je ne suis pas concerné·e'},
+        {id: 1, label: "Oui, je bénéficie d'une RQTH"},
+        {
+          id: 2,
+          label:
+            "J'envisage d'en faire la demande / Ma demande de RQTH est en cours",
+        },
+      ],
     };
   },
   computed: {
@@ -773,11 +844,41 @@ export default {
   methods: {
     updateLead() {
       this.isLoading = true;
+      const dataToSend = {...this.profile};
+
+      if (
+        dataToSend.franceTravailRecordDate &&
+        dataToSend.franceTravailRecordDate.trim() !== ''
+      ) {
+        const dateObj = parseDate(
+          dataToSend.franceTravailRecordDate,
+          this.userDateFormat,
+        );
+        dataToSend.franceTravailRecordDate = dateObj
+          ? formatDate(dateObj, 'yyyy-MM-dd')
+          : null;
+      } else dataToSend.franceTravailRecordDate = null;
+
+      if (dataToSend.birthDate) {
+        const dateObj = parseDate(dataToSend.birthDate, this.userDateFormat);
+        dataToSend.birthDate = dateObj
+          ? formatDate(dateObj, 'yyyy-MM-dd')
+          : null;
+      } else dataToSend.birthDate = null;
+
+      if (dataToSend.franceTravailAgency)
+        dataToSend.franceTravailAgency = dataToSend.franceTravailAgency?.label;
+
+      if (dataToSend.rqth) dataToSend.rqth = dataToSend.rqth?.label;
+
+      if (dataToSend.currentSituation)
+        dataToSend.currentSituation = dataToSend.currentSituation?.label;
+
       this.http
         .request({
           method: 'PUT',
           url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/info`,
-          data: {...this.profile},
+          data: dataToSend,
         })
         .then(() => {
           this.$emit('update');
@@ -820,7 +921,6 @@ export default {
       this.profile.sector = this.lead.sector;
       this.profile.course = this.lead.course;
       this.profile.of = this.lead.of;
-      this.profile.currentSituation = this.lead.currentSituation;
       this.profile.trainingMethod = this.lead.trainingMethod;
       this.profile.handicap = this.lead.handicap;
       this.profile.funding = this.lead.funding;
@@ -834,7 +934,6 @@ export default {
       this.profile.need = this.lead.need;
       this.profile.studyLevel = this.lead.studyLevel;
       this.profile.courseStart = this.lead.courseStart;
-      this.profile.birthDate = this.lead.birthDate;
       this.profile.age = this.lead.age;
       this.profile.professionalExperience = this.lead.professionalExperience;
       this.profile.mobility = this.lead.mobility;
@@ -855,6 +954,39 @@ export default {
             return dateA.localeCompare(dateB);
           })
         : [];
+
+      if (this.lead.franceTravailRecordDate) {
+        const dateObj = parseDate(
+          this.lead.franceTravailRecordDate,
+          'yyyy-MM-dd',
+        );
+        this.profile.franceTravailRecordDate = dateObj
+          ? formatDate(dateObj, 'yyyy-MM-dd')
+          : null;
+      } else this.profile.franceTravailRecordDate = null;
+
+      if (this.lead.birthDate) {
+        const dateObj = parseDate(this.lead.birthDate, 'yyyy-MM-dd');
+        this.profile.birthDate = dateObj
+          ? formatDate(dateObj, 'yyyy-MM-dd')
+          : null;
+      } else this.profile.birthDate = null;
+
+      if (this.lead.currentSituation)
+        this.profile.currentSituation = this.statuses.find(
+          (option) => option.label === this.lead.currentSituation,
+        );
+
+      if (this.lead.franceTravailAgency)
+        this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
+          (option) => option.label === this.lead.franceTravailAgency,
+        );
+
+      if (this.lead.rqth)
+        this.profile.rqth = this.rqthOptions.find(
+          (option) => option.label === this.lead.rqth,
+        );
+
       this.isLoading = false;
     },
     onClickAddTelephoneContact() {

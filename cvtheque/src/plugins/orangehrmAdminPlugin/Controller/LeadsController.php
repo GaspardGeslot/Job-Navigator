@@ -32,6 +32,15 @@ class LeadsController extends AbstractVueController
         if ($request->attributes->has('id')) {
             $component = new Component('view-lead');
             $component->addProp(new Prop('lead-id', Prop::TYPE_NUMBER, $request->attributes->getInt('id')));
+
+
+            $options = $this->getHedwigeOptions($this->getAuthUser()->getUserHedwigeToken());
+            $component->addProp(new Prop('statuses', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $options, array_keys($options))));
         }
         else {
             $component = new Component('leads-list');
@@ -81,14 +90,21 @@ class LeadsController extends AbstractVueController
 
     public function update(Request $request): Response
     {
-        $id = $request->attributes->get('id');
-        $data = json_decode($request->getContent(), true);
-        $this->updateLead($this->getAuthUser()->getUserHedwigeToken(), $id, $data);
-        return new Response(
-            json_encode(['message' => 'Lead updated successfully']),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
-        );
+        try {
+            $id = $request->attributes->get('id');
+            $data = json_decode($request->getContent(), true);
+            $this->updateLead($this->getAuthUser()->getUserHedwigeToken(), $id, $data);
+            return new Response(
+                json_encode(['message' => 'Lead updated successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
     }
 
 
@@ -250,6 +266,19 @@ class LeadsController extends AbstractVueController
         return json_decode($response->getBody(), true);
     }
 
+    public function getHedwigeOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/client/status";
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
+        return json_decode($response->getBody(), true);
+    }
+
     public function getHedwigeActorOptions(string $token): array
     {
         $client = new Client();
@@ -273,6 +302,7 @@ class LeadsController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/lead/{$id}/info";
+        error_log('data: ' . json_encode($data));
         $response = $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,
