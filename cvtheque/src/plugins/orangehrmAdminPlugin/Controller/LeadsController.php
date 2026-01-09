@@ -17,9 +17,7 @@ class LeadsController extends AbstractVueController
 
     public const FILTER_FROM_DATE = 'from';
     public const FILTER_TO_DATE = 'to';
-    public const FILTER_ONLY_BILLABLE = 'onlyBillable';
-    public const FILTER_ONLY_DUPLICATE = 'onlyDuplicate';
-    public const FILTER_ONLY_MATCHING_NOT_AVAILABLE = 'onlyMatchingNotAvailable';
+    public const FILTER_MATCHING_STATUS = 'matchingStatus';
     public const FILTER_ACTORS = 'actors';
     public const FILTER_JOBS = 'jobs';
     public const FILTER_COURSE_ONLY = 'courseOnly';
@@ -45,14 +43,21 @@ class LeadsController extends AbstractVueController
         else {
             $component = new Component('leads-list');
             
-            $options = $this->getHedwigeActorOptions($this->getAuthUser()->getUserHedwigeToken());
-
+            $actorOptions = $this->getHedwigeActorOptions($this->getAuthUser()->getUserHedwigeToken());
+            $matchingStatusFilterOptions = $this->getHedwigeMatchingStatusFilterOptions($this->getAuthUser()->getUserHedwigeToken());
+            
             $component->addProp(new Prop('actors', Prop::TYPE_ARRAY, array_map(function($label, $index) {
                 return [
                     'id' => $index,
                     'label' => $label
                 ];
-            }, $options, array_keys($options))));
+            }, $actorOptions, array_keys($actorOptions))));
+            $component->addProp(new Prop('matching-status-filters', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($matchingStatusFilterOptions), $matchingStatusFilterOptions)));
         }
         $this->setComponent($component);
     }
@@ -61,15 +66,13 @@ class LeadsController extends AbstractVueController
     {
         $from = $request->query->get(self::FILTER_FROM_DATE);
         $to = $request->query->get(self::FILTER_TO_DATE);
-        $onlyBillable = $request->query->get(self::FILTER_ONLY_BILLABLE);
-        $onlyDuplicate = $request->query->get(self::FILTER_ONLY_DUPLICATE);
-        $onlyMatchingNotAvailable = $request->query->get(self::FILTER_ONLY_MATCHING_NOT_AVAILABLE);
+        $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
         $actors = $request->query->get(self::FILTER_ACTORS);
         $jobs = $request->query->get(self::FILTER_JOBS);
         $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
         if ($courseOnly !== null)
             $courseOnly = filter_var($courseOnly, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $onlyBillable, $onlyDuplicate, $onlyMatchingNotAvailable, $actors, $jobs, $courseOnly);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -218,7 +221,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, string $onlyBillable, string $onlyDuplicate, string $onlyMatchingNotAvailable, ?array $actors, ?array $jobs, ?bool $courseOnly): array
+    public function getLeads(string $token, string $from, string $to, ?string $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -229,12 +232,8 @@ class LeadsController extends AbstractVueController
                 $url .= 'from=' . urlencode($from) . '&';
             if ($to != null && $to !== '')
                 $url .= 'to=' . urlencode($to) . '&';
-            if ($onlyBillable != null && $onlyBillable !== '')
-                $url .= 'onlyBillable=' . urlencode($onlyBillable) . '&';
-            if ($onlyDuplicate != null && $onlyDuplicate !== '')
-                $url .= 'onlyDuplicate=' . urlencode($onlyDuplicate) . '&';
-            if ($onlyMatchingNotAvailable != null && $onlyMatchingNotAvailable !== '')
-                $url .= 'onlyMatchingNotAvailable=' . urlencode($onlyMatchingNotAvailable) . '&';
+            if ($matchingStatus != null && $matchingStatus !== '')
+                $url .= 'matchingStatus=' . urlencode($matchingStatus) . '&';
             if ($actors != null && $actors !== [])
                 $url .= 'actors=' . urlencode(implode(',', $actors)) . '&';
             if ($jobs != null && $jobs !== [])
@@ -295,6 +294,19 @@ class LeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function getHedwigeMatchingStatusFilterOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/matching/status-filters";
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
+        return json_decode($response->getBody(), true);
     }
 
     public function updateLead(string $token, int $id, array $data): void

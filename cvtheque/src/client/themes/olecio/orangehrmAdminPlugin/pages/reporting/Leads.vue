@@ -44,29 +44,13 @@
           </oxd-grid>
         </oxd-form-row>
         <oxd-form-row>
-          <oxd-grid :cols="4" class="orangehrm-full-width-grid">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="statusFilter"
-                type="radio"
-                :option-label="statusOptions.billable.label"
-                :value="statusOptions.billable.value"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="statusFilter"
-                type="radio"
-                :option-label="statusOptions.duplicate.label"
-                :value="statusOptions.duplicate.value"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="statusFilter"
-                type="radio"
-                :option-label="statusOptions.matchingNotAvailable.label"
-                :value="statusOptions.matchingNotAvailable.value"
+                v-model="matchingStatusFilter"
+                type="select"
+                :label="$t('Etat du matching')"
+                :options="matchingStatusFilters"
               />
             </oxd-grid-item>
             <oxd-grid-item
@@ -146,6 +130,7 @@
               <th v-for="(header, index) in tableHeaders" :key="index">
                 {{ header.label }}
               </th>
+              <th class="action-column"></th>
             </tr>
           </thead>
           <tbody>
@@ -178,6 +163,13 @@
                 @click="selectCell(index, headerIndex)"
               >
                 {{ getCellValue(item, header.key) }}
+              </td>
+              <td class="action-column-values">
+                <oxd-icon-button
+                  name="eye-fill"
+                  class="action-button"
+                  @click.stop="viewLead(item.id)"
+                />
               </td>
             </tr>
             <tr v-if="tableData.length === 0">
@@ -227,6 +219,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    matchingStatusFilters: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup() {
     const {$t} = usei18n();
@@ -250,7 +246,7 @@ export default {
               ),
             endDateFilter:
               filters.endDateFilter || formatDate(new Date(), 'dd-MM-yyyy'),
-            statusFilter: filters.statusFilter || null,
+            matchingStatusFilter: filters.matchingStatusFilter || null,
             actorsFilter: filters.actorsFilter || [],
             jobsFilter: filters.jobsFilter || [],
             courseOnly: filters.courseOnly || false,
@@ -266,7 +262,7 @@ export default {
           'dd-MM-yyyy',
         ),
         endDateFilter: formatDate(new Date(), 'dd-MM-yyyy'),
-        statusFilter: null,
+        matchingStatusFilter: null,
         actorsFilter: [],
         jobsFilter: [],
         courseOnly: false,
@@ -277,7 +273,7 @@ export default {
     const saveFiltersToLocalStorage = (
       startDate,
       endDate,
-      status,
+      matchingStatusFilter,
       actors,
       jobs,
       course,
@@ -286,7 +282,7 @@ export default {
         const filters = {
           startDateFilter: startDate,
           endDateFilter: endDate,
-          statusFilter: status,
+          matchingStatusFilter: matchingStatusFilter,
           actorsFilter: actors,
           jobsFilter: jobs,
           courseOnly: course,
@@ -302,7 +298,7 @@ export default {
 
     const startDateFilter = ref(loadedFilters.startDateFilter);
     const endDateFilter = ref(loadedFilters.endDateFilter);
-    const statusFilter = ref(loadedFilters.statusFilter);
+    const matchingStatusFilter = ref(loadedFilters.matchingStatusFilter);
     const actorsFilter = ref(loadedFilters.actorsFilter);
     const jobsFilter = ref(loadedFilters.jobsFilter);
     const courseOnly = ref(loadedFilters.courseOnly);
@@ -478,6 +474,10 @@ export default {
         key: 'complement',
       },
       {
+        label: 'Dernier contact',
+        key: 'lastContact',
+      },
+      {
         label: "Date d'envoi",
         key: 'sentTime',
       },
@@ -498,21 +498,6 @@ export default {
         key: 'otherActors',
       },
     ];
-
-    const statusOptions = {
-      billable: {
-        label: 'Facturable',
-        value: 'billable',
-      },
-      duplicate: {
-        label: 'Doublon',
-        value: 'duplicate',
-      },
-      matchingNotAvailable: {
-        label: 'Matching non disponible',
-        value: 'matchingNotAvailable',
-      },
-    };
 
     const getCellValue = (item, headerKey) => {
       return item[headerKey];
@@ -538,10 +523,9 @@ export default {
                 'yyyy-MM-dd',
               )
             : undefined,
-          onlyBillable: statusFilter.value === statusOptions.billable.value,
-          onlyDuplicate: statusFilter.value === statusOptions.duplicate.value,
-          onlyMatchingNotAvailable:
-            statusFilter.value === statusOptions.matchingNotAvailable.value,
+          matchingStatus: matchingStatusFilter.value
+            ? matchingStatusFilter.value.label
+            : null,
           actors: actorsFilter.value
             ? actorsFilter.value.map((actor) => actor.label)
             : [],
@@ -578,7 +562,7 @@ export default {
       saveFiltersToLocalStorage(
         startDateFilter.value,
         endDateFilter.value,
-        statusFilter.value,
+        matchingStatusFilter.value,
         actorsFilter.value,
         jobsFilter.value,
         courseOnly.value,
@@ -592,7 +576,7 @@ export default {
         'dd-MM-yyyy',
       );
       endDateFilter.value = formatDate(new Date(), 'dd-MM-yyyy');
-      statusFilter.value = null;
+      matchingStatusFilter.value = null;
       actorsFilter.value = [];
       jobsFilter.value = [];
       currentPage.value = 1;
@@ -600,7 +584,7 @@ export default {
       saveFiltersToLocalStorage(
         startDateFilter.value,
         endDateFilter.value,
-        statusFilter.value,
+        matchingStatusFilter.value,
         actorsFilter.value,
         jobsFilter.value,
         courseOnly.value,
@@ -654,7 +638,7 @@ export default {
       saveFiltersToLocalStorage(
         startDateFilter.value,
         endDateFilter.value,
-        statusFilter.value,
+        matchingStatusFilter.value,
         actorsFilter.value,
         jobsFilter.value,
         courseOnly.value,
@@ -663,12 +647,19 @@ export default {
 
     // Watch pour sauvegarder automatiquement les changements de filtres
     watch(
-      [startDateFilter, endDateFilter, statusFilter, actorsFilter, courseOnly],
+      [
+        startDateFilter,
+        endDateFilter,
+        matchingStatusFilter,
+        actorsFilter,
+        jobsFilter,
+        courseOnly,
+      ],
       () => {
         saveFiltersToLocalStorage(
           startDateFilter.value,
           endDateFilter.value,
-          statusFilter.value,
+          matchingStatusFilter.value,
           actorsFilter.value,
           jobsFilter.value,
           courseOnly.value,
@@ -690,7 +681,7 @@ export default {
       jobAutocomplete,
       startDateFilter,
       endDateFilter,
-      statusFilter,
+      matchingStatusFilter,
       actorsFilter,
       jobsFilter,
       courseOnly,
@@ -706,7 +697,6 @@ export default {
       selectCell,
       getCellValue,
       rules,
-      statusOptions,
       isLoading,
       exportToExcel,
       updateJobs,
@@ -727,7 +717,7 @@ export default {
       this.saveFiltersToLocalStorage(
         this.startDateFilter,
         this.endDateFilter,
-        this.statusFilter,
+        this.matchingStatusFilter,
         this.actorsFilter,
         this.jobsFilter,
         this.courseOnly,

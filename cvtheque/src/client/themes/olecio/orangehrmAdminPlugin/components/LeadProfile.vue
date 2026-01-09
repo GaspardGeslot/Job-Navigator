@@ -342,17 +342,23 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <oxd-input-field
-                v-model="profile.sentDate"
-                :label="$t('Date d\'envoi')"
+                v-model="profile.matchingState"
+                :label="$t('Etat d\'envoi')"
                 :disabled="true"
               />
+            </oxd-grid-item>
+            <oxd-grid-item v-if="profile.ko !== null">
+              <oxd-text class="orangehrm-input-title" tag="h6">
+                {{ $t('KO') }}
+              </oxd-text>
+              <oxd-switch-input v-model="profile.ko" :disabled="!editable" />
             </oxd-grid-item>
           </oxd-grid>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="profile.matchingState"
-                :label="$t('Etat d\'envoi')"
+                v-model="profile.sentDate"
+                :label="$t('Date d\'envoi')"
                 :disabled="true"
               />
             </oxd-grid-item>
@@ -459,7 +465,11 @@
         <oxd-form-actions>
           <required-text />
           <oxd-button
-            v-if="profile.manualDelivery"
+            v-if="
+              profile.manualDelivery &&
+              !editable &&
+              (profile.ko == null || profile.ko === false)
+            "
             display-type="ghost"
             :label="$t('Transmettre au partenaire')"
             @click="onClickDeliver"
@@ -649,6 +659,7 @@ const LeadProfileModel = {
   franceTravailRecordDate: null,
   franceTravailAgency: null,
   rqth: null,
+  ko: null,
 };
 
 const TelephoneContactModel = {
@@ -945,6 +956,7 @@ export default {
       this.profile.matchingState = this.lead.matchingState;
       this.profile.apiMessage = this.lead.apiMessage;
       this.profile.manualDelivery = this.lead.manualDelivery;
+      this.profile.ko = this.lead.ko;
       this.profile.telephoneContacts = this.lead.telephoneContacts
         ? [...this.lead.telephoneContacts].sort((a, b) => {
             // Trier par date (du plus ancien au plus récent)
