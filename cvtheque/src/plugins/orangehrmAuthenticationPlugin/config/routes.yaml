@@ -163,6 +163,11 @@ auth_redefine_password:
   controller: OrangeHRM\Authentication\Controller\RedefinePasswordController::handle
   methods: [ GET ]
 
+apiv2_auth_redefine_password:
+  path: /api/v2/auth/redefinePassword
+  controller: OrangeHRM\Authentication\Controller\RedefinePasswordController::redefine
+  methods: [ POST ]
+
 auth_create_account:
   path: /{theme}/auth/createAccount
   controller: OrangeHRM\Authentication\Controller\CreateAccountController::handle

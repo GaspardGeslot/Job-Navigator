@@ -94,7 +94,7 @@ class ValidateController extends AbstractController implements PublicControllerI
                 $role = 'ESS';
                 break;
             case 'maraudes':
-                $role = 'Interviewer';
+                $role = null;
                 break;
             default:
                 $role = 'ESS';
@@ -105,9 +105,9 @@ class ValidateController extends AbstractController implements PublicControllerI
         /** @var UrlGenerator $urlGenerator */
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
         if ($role === 'Admin') {
-            $loginUrl = $urlGenerator->generate('auth_login_admin', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+            $loginUrl = $urlGenerator->generate('subdomain_auth_login_admin', [], UrlGenerator::ABSOLUTE_URL);
         } else {
-            $loginUrl = $urlGenerator->generate('auth_login', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+            $loginUrl = $urlGenerator->generate('subdomain_auth_login', [], UrlGenerator::ABSOLUTE_URL);
         }
 
         try {
@@ -128,7 +128,8 @@ class ValidateController extends AbstractController implements PublicControllerI
             $this->getAuthUser()->setIsCandidate($role !== 'Admin');
             $this->getLoginService()->addLogin($credentials);
             if ($result['hasToRedefinePassword']) {
-                $redirectUrl = $urlGenerator->generate('auth_redefine_password', ['theme' => $theme], UrlGenerator::ABSOLUTE_URL);
+                $this->getAuthUser()->setHasToRedefinedPassword(true);
+                $redirectUrl = $urlGenerator->generate('auth_redefine_password', ['email' => $username], UrlGenerator::ABSOLUTE_URL);
                 return new RedirectResponse($redirectUrl);
             }
         } catch (AuthenticationException $e) {

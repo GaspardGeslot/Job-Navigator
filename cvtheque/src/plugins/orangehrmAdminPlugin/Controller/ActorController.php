@@ -12,11 +12,16 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use OrangeHRM\Framework\Routing\UrlGenerator;
 use OrangeHRM\Framework\Services;
+use OrangeHRM\Authentication\Dto\UserCredential;
+use OrangeHRM\Admin\Traits\Service\UserServiceTrait;
+use OrangeHRM\CorporateBranding\Traits\ThemeServiceTrait;
 
 class ActorController extends AbstractVueController
 {
     use AuthUserTrait;
-
+    use UserServiceTrait;
+    use ThemeServiceTrait;
+    
     public const FILTER_NAME = 'name';
     public const FILTER_JOB = 'job';
 
@@ -77,6 +82,17 @@ class ActorController extends AbstractVueController
                 'label' => $label
             ];
         }, $options['timeSlots'], array_keys($options['timeSlots']))));
+
+        $themes = array_filter(
+            $this->getThemeService()->getThemes(),
+            function($theme) { return $theme->getClientId() === 1; }
+        );
+        $component->addProp(new Prop('themes', Prop::TYPE_ARRAY, array_map(function($theme, $index) {
+            return [
+                'id' => $index,
+                'label' => $theme->getName()
+            ];
+        }, $themes, array_keys($themes))));
 
         $this->setComponent($component);
     }
@@ -149,6 +165,10 @@ class ActorController extends AbstractVueController
             $id = $request->attributes->get('id');
             $administrator = json_decode($request->getContent(), true);
             $this->addHedwigeAdministrator($this->getAuthUser()->getUserHedwigeToken(), $id, $administrator);
+            $credentials = new UserCredential($administrator['email'], $administrator['password'], 'HiringManager');
+            $exists = $this->getUserService()->checkExistsUser($credentials, $administrator['theme']);
+            if (!$exists)
+                $this->getUserService()->createCredentials($credentials, $administrator['theme']);
             return new Response(null, Response::HTTP_OK);
         } catch (ClientException $e) {
             return new Response(json_encode([
@@ -162,7 +182,12 @@ class ActorController extends AbstractVueController
     {
         try {
             $id = $request->attributes->get('id');
+            $administrator = json_decode($request->getContent(), true);
             $this->deleteHedwigeAdministrator($this->getAuthUser()->getUserHedwigeToken(), $id);
+            $credentials = new UserCredential($administrator['email'], null, 'HiringManager');
+            $admin = $this->getUserService()->getUserByCredentialsAndTheme($credentials, $administrator['theme']);
+            if ($admin)
+                $this->getUserService()->deleteSystemUser($admin->getId());
             return new Response(null, Response::HTTP_OK);
         } catch (ClientException $e) {
             return new Response(json_encode([

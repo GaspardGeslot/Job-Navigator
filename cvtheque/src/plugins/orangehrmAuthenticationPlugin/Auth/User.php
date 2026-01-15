@@ -38,6 +38,7 @@ class User
     public const USER_ROLE_NAME = 'user.user_role_name';
     public const USER_EMPLOYEE_NUMBER = 'user.user_employee_number';
     public const USER_HEDWIGE_TOKEN = 'user.hedwige_token';
+    public const HAS_TO_REDEFINED_PASSWORD = 'user.has_to_redefined_password';
     public const OPENID_PROVIDER_ID = 'openid.provider_id';
 
     public const FLASH_LOGIN_ERROR = 'flash.login_error';
@@ -160,6 +161,23 @@ class User
     public function setIsAuthenticated(bool $status = true): void
     {
         $this->setAttribute(self::IS_AUTHENTICATED, $status);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasToRedefinedPassword(): bool
+    {
+        return $this->getAttribute(self::HAS_TO_REDEFINED_PASSWORD, false);
+    }
+
+    /**
+     * @param bool $status
+     * @internal
+     */
+    public function setHasToRedefinedPassword(bool $status = true): void
+    {
+        $this->setAttribute(self::HAS_TO_REDEFINED_PASSWORD, $status);
     }
 
     /**

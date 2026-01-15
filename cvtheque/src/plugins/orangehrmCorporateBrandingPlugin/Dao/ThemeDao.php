@@ -47,6 +47,14 @@ class ThemeDao extends BaseDao
     }
 
     /**
+     * @return Theme[]
+     */
+    public function getThemes(): array
+    {
+        return $this->getRepository(Theme::class)->findAll();
+    }
+
+    /**
      * @param string $themeName
      * @return PartialTheme|null
      */

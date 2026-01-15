@@ -111,7 +111,7 @@ class LoginController extends AbstractVueController implements PublicControllerI
      */
     public function handle(Request $request)
     {
-        if ($this->getAuthUser()->isAuthenticated()) {
+        if ($this->getAuthUser()->isAuthenticated() && !$this->getAuthUser()->hasToRedefinedPassword()) {
             $homePagePath = $this->getHomePageService()->getHomePagePath();
             $theme = $request->attributes->get('theme');
             
