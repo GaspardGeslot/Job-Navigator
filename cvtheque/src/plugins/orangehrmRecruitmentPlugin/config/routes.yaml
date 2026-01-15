@@ -416,6 +416,23 @@ subdomain_recruitment_rss_feed:
   methods: [ GET ]
   requirements:
 
+recruitment_leads:
+  path: /recruitment/viewLeads
+  controller: OrangeHRM\Recruitment\Controller\ActorLeadsController::handle
+  methods: [ GET ]
+
+recruitment_lead_view:
+  path: /recruitment/viewLeads/{id}
+  controller: OrangeHRM\Recruitment\Controller\ActorLeadsController::handle
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+apiv2_recruitment_actor_leads:
+  path: /api/v2/actor/leads
+  controller: OrangeHRM\Recruitment\Controller\ActorLeadsController::getAll
+  methods: [ GET ]
+
 ##########################
 #  Fallback Routes (avec theme)
 ##########################

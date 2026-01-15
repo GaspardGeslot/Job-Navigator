@@ -2189,6 +2189,41 @@ apiv2_admin_lead_telephone_contact_update:
     id: '\d+'
     theme: constructys|olecio
 
+subdomain_apiv2_admin_lead_get_one:
+  path: /api/v2/admin/leads/{id}
+  controller: OrangeHRM\Admin\Controller\LeadsController::getOne
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_leads_update:
+  path: /api/v2/admin/leads/{id}/info
+  controller: OrangeHRM\Admin\Controller\LeadsController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_lead_telephone_contact:
+  path: /api/v2/admin/leads/{id}/telephone-contact
+  controller: OrangeHRM\Admin\Controller\LeadsController::addTelephoneContact
+  methods: [ POST ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_lead_telephone_contact_delete:
+  path: /api/v2/admin/leads/{id}/telephone-contact
+  controller: OrangeHRM\Admin\Controller\LeadsController::deleteTelephoneContact
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_lead_telephone_contact_update:
+  path: /api/v2/admin/leads/{id}/telephone-contact
+  controller: OrangeHRM\Admin\Controller\LeadsController::updateTelephoneContact
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
 ##########################
 #        Files
 ##########################
@@ -2769,6 +2804,16 @@ admin_funding:
   methods: [ GET ]
   requirements:
     theme: constructys|olecio
+
+admin_users:
+  path: /admin/viewUsers
+  controller: OrangeHRM\Admin\Controller\UsersController::handle
+  methods: [ GET ]
+
+admin_custom_columns:
+  path: /admin/viewCustomColumns
+  controller: OrangeHRM\Admin\Controller\CustomColumnsController::handle
+  methods: [ GET ]
 
 apiv2_admin_handicap:
   path: /{theme}/api/v2/admin/handicap

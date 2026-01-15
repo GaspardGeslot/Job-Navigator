@@ -273,4 +273,12 @@ class ThemeService
         $clientId = $theme !== null ? $this->getThemeDao()->getClientIdByThemeName($theme) : getenv('HEDWIGE_CLIENT_ID');
         return $clientId !== null ? $clientId : getenv('HEDWIGE_CLIENT_ID');
     }
+
+    /**
+     * @return array
+     */
+    public function getThemes(): array
+    {
+        return $this->getThemeDao()->getThemes();
+    }
 }

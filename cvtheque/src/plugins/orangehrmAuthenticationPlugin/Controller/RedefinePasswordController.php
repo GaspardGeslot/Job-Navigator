@@ -17,6 +17,10 @@ use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Framework\Routing\UrlGenerator;
 use OrangeHRM\Framework\Services;
 use OrangeHRM\OpenidAuthentication\Traits\Service\SocialMediaAuthenticationServiceTrait;
+use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Client;
+use OrangeHRM\Authentication\Service\ResetPasswordService;
 
 class RedefinePasswordController extends AbstractVueController implements PublicControllerInterface
 {
@@ -42,10 +46,25 @@ class RedefinePasswordController extends AbstractVueController implements Public
         return $this->homePageService;
     }
 
+    protected ?ResetPasswordService $resetPasswordService = null;
+
+    /**
+     * @return ResetPasswordService
+     */
+    public function getResetPasswordService(): ResetPasswordService
+    {
+        if (!$this->resetPasswordService instanceof ResetPasswordService) {
+            $this->resetPasswordService = new ResetPasswordService();
+        }
+        return $this->resetPasswordService;
+    }
 
     public function preRender(Request $request): void
     {
         $component = new Component('auth-redefine-password');
+        $email = $request->query->get('email');
+
+        $component->addProp(new Prop('email', Prop::TYPE_STRING, $email));
 
         $this->setComponent($component);
         $this->setTemplate('no_header.html.twig');
@@ -65,5 +84,43 @@ class RedefinePasswordController extends AbstractVueController implements Public
         }
 
         return parent::handle($request);
+    }
+
+    public function redefine(Request $request)
+    {
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+        $data = json_decode($request->getContent(), true);
+
+        try {
+            $this->redefinePasswordHedwige($token, $data);
+            $this->getResetPasswordService()->redefinePassword($data['email'], $data['newPassword']);
+            $this->getAuthUser()->setHasToRedefinedPassword(false);
+
+            $homePagePath = $this->getHomePageService()->getHomePagePath();
+            return new Response(json_encode([
+                'error' => false,
+                'message' => 'Password redefined successfully',
+                'redirectUrl' => '/' . $homePagePath
+            ]), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_OK);
+        }
+    }
+
+    public function redefinePasswordHedwige(string $token, array $data): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/user/password/redefine";
+        $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode($data)
+        ]);
     }
 }

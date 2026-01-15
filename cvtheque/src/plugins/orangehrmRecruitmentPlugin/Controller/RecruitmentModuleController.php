@@ -21,6 +21,7 @@ namespace OrangeHRM\Recruitment\Controller;
 use Exception;
 use OrangeHRM\Core\Controller\AbstractModuleController;
 use OrangeHRM\Framework\Http\RedirectResponse;
+use OrangeHRM\Framework\Http\Request;
 
 class RecruitmentModuleController extends AbstractModuleController
 {
@@ -28,9 +29,19 @@ class RecruitmentModuleController extends AbstractModuleController
      * @return RedirectResponse
      * @throws Exception
      */
-    public function handle(): RedirectResponse
+    public function handle(Request $request): RedirectResponse
     {
-        $defaultPath = $this->getHomePageService()->getRecruitmentModuleDefaultPath();
-        return $this->redirect($defaultPath);
+        $defaultPath = '';
+        switch ($request->attributes->get('theme')) {
+            case 'maraudes':
+                $defaultPath = 'recruitment/viewLeads';
+                break;
+            case 'constructys':
+                $defaultPath = 'recruitment/viewJobVacancy';
+                break;
+            default:
+                $defaultPath = $this->getHomePageService()->getRecruitmentModuleDefaultPath();
+        }
+        return $this->redirect("/" . $defaultPath);
     }
 }

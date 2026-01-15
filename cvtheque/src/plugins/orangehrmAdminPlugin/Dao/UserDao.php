@@ -115,7 +115,7 @@ class UserDao extends BaseDao
      */
     public function isExistingSystemUser(UserCredential $credentials, int $themeId): ?User
     {
-        $userRole = $this->getUserRole($credentials->getRole());
+        $userRole = $credentials->getRole() != null ? $this->getUserRole($credentials->getRole()) : null;
         $theme = $this->getThemeById($themeId);
         $query = $this->createQueryBuilder(User::class, 'u');
         if ($userRole != null) {
@@ -210,6 +210,21 @@ class UserDao extends BaseDao
             ->where($q->expr()->in('u.id', ':ids'))
             ->setParameter('ids', $deletedIds);
         return $q->getQuery()->execute();
+    }
+
+    /**
+     * Hard Delete a System User by ID
+     * Completely removes the user row from the table
+     * @param int $userId
+     * @return void
+     */
+    public function deleteSystemUser(int $userId): void
+    {
+        $q = $this->createQueryBuilder(User::class, 'u');
+        $q->delete()
+            ->where('u.id = :id')
+            ->setParameter('id', $userId);
+        $q->getQuery()->execute();
     }
 
     /**

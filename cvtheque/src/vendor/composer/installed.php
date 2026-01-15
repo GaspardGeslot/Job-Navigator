@@ -3,7 +3,11 @@
         'name' => 'orangehrm/orangehrm',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+<<<<<<< HEAD
         'reference' => '4d85aee39295799086846e0f56c345914c941ee1',
+=======
+        'reference' => 'd1eaf351963713b9d464f33c28d21d8a5a003d5d',
+>>>>>>> 0306d890 (Finalize custom reporting columns in lead detail)
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),

@@ -2,7 +2,12 @@
   <div class="orangehrm-forgot-password-container">
     <div class="orangehrm-forgot-password-wrapper">
       <div class="orangehrm-card-container">
-        <oxd-form ref="resetForm" method="post" @submit-valid="onSubmit">
+        <oxd-form
+          ref="resetForm"
+          method="post"
+          :loading="isLoading"
+          @submit-valid="onSubmit"
+        >
           <oxd-text tag="h6">
             {{ $t('Redefinir mot de passe') }}
           </oxd-text>
@@ -20,6 +25,13 @@
             ></oxd-alert>
           </div>
           <oxd-form-row>
+            <oxd-input-field
+              :value="email"
+              :label="$t('general.email')"
+              readonly
+              name="email"
+              label-icon="person"
+            />
             <oxd-input-field
               v-model="user.currentPassword"
               :rules="rules.currentPassword"
@@ -81,6 +93,7 @@ import {
   shouldNotExceedCharLength,
 } from '@/core/util/validation/rules';
 import {promiseDebounce, OxdAlert} from '@ohrm/oxd';
+import {navigate} from '@/core/util/helper/navigation';
 import {APIService} from '@/core/util/services/api.service';
 import usePasswordPolicy from '@/core/util/composable/usePasswordPolicy';
 import PasswordStrengthIndicator from '@/core/components/labels/PasswordStrengthIndicator';
@@ -91,6 +104,13 @@ export default {
   components: {
     'password-strength-indicator': PasswordStrengthIndicator,
     'oxd-alert': OxdAlert,
+  },
+
+  props: {
+    email: {
+      type: String,
+      required: true,
+    },
   },
 
   setup() {
@@ -133,19 +153,33 @@ export default {
   methods: {
     onSubmit() {
       this.isLoading = true;
+      const data = {
+        email: this.email,
+        password: this.user.currentPassword,
+        newPassword: this.user.confirmPassword,
+      };
       this.http
         .request({
           method: 'POST',
-          url: `/${window.appGlobal.theme}/api/v2/auth/redefinePassword`,
-          data: this.user,
+          url: `/api/v2/auth/redefinePassword`,
+          data: data,
         })
-        .then(() => {
-          this.isLoading = false;
+        .then((response) => {
+          console.log(response);
+          if (response.data.error === false) {
+            navigate(response.data.redirectUrl);
+          } else {
+            this.error = {
+              message: response.data.message,
+            };
+          }
         })
         .catch(() => {
           this.error = {
             message: this.$t('Identifiants invalides'),
           };
+        })
+        .finally(() => {
           this.isLoading = false;
         });
     },

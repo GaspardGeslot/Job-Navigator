@@ -211,6 +211,15 @@
             @click="onClickAddAdministrator"
           />
         </div>
+        <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              :model-value="actor.environment"
+              :label="$t('Environnement')"
+              :disabled="true"
+            />
+          </oxd-grid-item>
+        </oxd-grid>
         <div
           v-if="formattedAdministrators && formattedAdministrators.length > 0"
           class="orangehrm-container"
@@ -242,6 +251,57 @@
       </oxd-form-actions>
     </oxd-form>
   </div>
+
+  <!-- Modal pour choisir l'environnement -->
+  <oxd-dialog
+    v-if="showEnvironmentModal"
+    v-model:show="showEnvironmentModal"
+    :style="{width: '90%', maxWidth: '600px'}"
+    @update:show="onCancelEnvironment"
+  >
+    <div class="orangehrm-modal-header">
+      <oxd-text type="card-title">
+        {{ $t('Choisir un environnement') }}
+      </oxd-text>
+    </div>
+    <oxd-divider />
+    <oxd-text tag="p" style="margin-bottom: 1rem">
+      {{
+        $t(
+          '⚠️ Il est nécessaire de choisir un environnement avant de créer des comptes administrateurs.',
+        )
+      }}
+    </oxd-text>
+    <oxd-form :loading="isSavingEnvironment" @submit-valid="onSaveEnvironment">
+      <oxd-form-row>
+        <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+          <oxd-grid-item>
+            <oxd-input-field
+              v-model="environmentForm.theme"
+              type="select"
+              :label="$t('Environnement')"
+              :options="themes"
+              required
+            />
+          </oxd-grid-item>
+        </oxd-grid>
+      </oxd-form-row>
+      <oxd-divider />
+      <oxd-form-actions class="orangehrm-form-action">
+        <required-text />
+        <oxd-button
+          display-type="ghost"
+          :label="$t('general.cancel')"
+          @click="onCancelEnvironment"
+        />
+        <oxd-button
+          display-type="secondary"
+          :label="$t('general.save')"
+          type="submit"
+        />
+      </oxd-form-actions>
+    </oxd-form>
+  </oxd-dialog>
 
   <!-- Modal pour ajouter un administrateur -->
   <oxd-dialog
@@ -340,6 +400,10 @@ const AdministratorModel = {
   confirmPassword: '',
 };
 
+const EnvironmentModel = {
+  theme: null,
+};
+
 const ActorModel = {
   id: null,
   name: null,
@@ -359,6 +423,7 @@ const ActorModel = {
   trainingMethods: [],
   sources: [],
   administrators: [],
+  environment: null,
 };
 
 export default {
@@ -420,9 +485,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    themes: {
+      type: Array,
+      default: () => [],
+    },
   },
 
-  emits: ['cancel', 'delete', 'save'],
+  emits: ['cancel', 'delete', 'save', 'update'],
 
   setup() {
     const http = new APIService(window.appGlobal.baseUrl, '/');
@@ -447,8 +516,11 @@ export default {
       editable: true,
       actor: {...ActorModel},
       showAdministratorModal: false,
+      showEnvironmentModal: false,
       isSavingAdministrator: false,
+      isSavingEnvironment: false,
       administratorForm: {...AdministratorModel},
+      environmentForm: {...EnvironmentModel},
       administratorHeaders: [
         {
           name: 'email',
@@ -631,23 +703,70 @@ export default {
       this.actor.trainingMethods = this.actorCurrent.trainingMethods;
       this.actor.sources = this.actorCurrent.sources;
       this.actor.timeSlots = this.actorCurrent.timeSlots;
+      this.actor.environment = this.actorCurrent.environment;
       this.actor.administrators = this.actorCurrent.administrators
         ? [...this.actorCurrent.administrators]
         : [];
     },
     onClickAddAdministrator() {
-      this.administratorForm = {...AdministratorModel};
-      this.showAdministratorModal = true;
+      // Si l'environnement n'est pas défini, ouvrir la modal de sélection d'environnement
+      if (!this.actor.environment) {
+        this.environmentForm = {...EnvironmentModel};
+        this.showEnvironmentModal = true;
+      } else {
+        // Sinon, ouvrir directement la modal de création d'administrateur
+        this.administratorForm = {...AdministratorModel};
+        this.showAdministratorModal = true;
+      }
     },
     onCancelAdministrator() {
       this.showAdministratorModal = false;
       this.administratorForm = {...AdministratorModel};
+    },
+    onCancelEnvironment() {
+      this.showEnvironmentModal = false;
+      this.environmentForm = {...EnvironmentModel};
+    },
+    onSaveEnvironment() {
+      this.isSavingEnvironment = true;
+      const selectedTheme = this.environmentForm.theme;
+      const environmentLabel = selectedTheme?.label || null;
+
+      // Mettre à jour l'acteur avec l'environnement choisi
+      const updatedActor = {
+        ...this.actor,
+        environment: environmentLabel,
+      };
+
+      this.http
+        .request({
+          method: 'PUT',
+          url: `/api/v2/admin/actor/${this.actor.id}`,
+          data: updatedActor,
+        })
+        .then(() => {
+          // Mettre à jour l'environnement localement
+          this.actor.environment = environmentLabel;
+          this.onCancelEnvironment();
+          this.$toast.saveSuccess();
+          // Ouvrir la modal de création d'administrateur
+          this.administratorForm = {...AdministratorModel};
+          this.showAdministratorModal = true;
+          this.$emit('update');
+        })
+        .catch((error) => {
+          return this.$toast.unexpectedError(error?.response?.data?.message);
+        })
+        .finally(() => {
+          this.isSavingEnvironment = false;
+        });
     },
     onSaveAdministrator() {
       this.isSavingAdministrator = true;
       const administratorData = {
         email: this.administratorForm.email,
         password: this.administratorForm.password,
+        theme: this.actor.environment, // Utiliser l'environnement de l'acteur
       };
 
       this.http
@@ -671,20 +790,25 @@ export default {
     onClickDeleteAdministrator(item) {
       this.$refs.deleteAdministratorDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteAdministrator(item._originalId);
+          this.deleteAdministrator(item);
         }
       });
     },
-    deleteAdministrator(id) {
+    deleteAdministrator(item) {
+      const administratorData = {
+        email: item.email,
+        theme: this.actor.environment,
+      };
       this.http
         .request({
           method: 'DELETE',
-          url: `/api/v2/admin/actor/administrator/${id}`,
+          url: `/api/v2/admin/actor/administrator/${item._originalId}`,
+          data: administratorData,
         })
         .then(() => {
           // Retirer l'administrateur de la liste locale
           this.actor.administrators = this.actor.administrators.filter(
-            (admin) => admin.id !== id,
+            (admin) => admin.id !== item._originalId,
           );
           return this.$toast.deleteSuccess();
         })

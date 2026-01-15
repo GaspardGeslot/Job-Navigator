@@ -13869,6 +13869,169 @@ body {
     margin-right: 0.5rem;
 }
 }
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/maraudes/recruitment/pages/Leads.vue?vue&type=style&index=0&id=3e6ad531&lang=scss&scoped=true ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-horizontal-scroll-container[data-v-3e6ad531] {
+  overflow-x: auto;
+  width: 100%;
+}
+.orangehrm-text[data-v-3e6ad531],
+.orangehrm-custom-table th[data-v-3e6ad531],
+.orangehrm-custom-table td[data-v-3e6ad531] {
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #64728c;
+}
+.orangehrm-custom-table[data-v-3e6ad531] {
+  width: 100%;
+  border-collapse: collapse;
+}
+.orangehrm-custom-table th[data-v-3e6ad531],
+.orangehrm-custom-table td[data-v-3e6ad531] {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  border: 1px solid #eaebee;
+  background-color: white;
+  white-space: nowrap;
+  position: relative;
+}
+.orangehrm-custom-table th[data-v-3e6ad531] {
+  font-weight: bold;
+  color: #38455d;
+  font-size: 14px;
+  padding: 0.75rem 1rem;
+  background-color: #f5f6f7;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 2px solid #d8dadf;
+}
+.orangehrm-custom-table tbody tr td[data-v-3e6ad531] {
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.orangehrm-custom-table tbody tr td.selected-cell[data-v-3e6ad531] {
+  background-color: #f5f6f7;
+  box-shadow: inset 0 0 0 1px var(--oxd-primary-one-color);
+}
+.orangehrm-custom-table tbody tr td.selected-row[data-v-3e6ad531] {
+  background-color: #f5f6f7;
+}
+.orangehrm-header-container[data-v-3e6ad531] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+.orangehrm-header-left[data-v-3e6ad531] {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.export-button[data-v-3e6ad531] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12px;
+  height: 32px;
+}
+.export-icon[data-v-3e6ad531] {
+  margin-right: 4px;
+}
+.orangehrm-pagination-wrapper[data-v-3e6ad531] {
+  display: flex;
+  align-items: center;
+}
+.records-count[data-v-3e6ad531] {
+  font-size: 0.9rem;
+  color: var(--oxd-interface-gray-color);
+}
+.action-column[data-v-3e6ad531] {
+  width: auto;
+  min-width: 60px;
+  padding: 0.25rem !important;
+  text-align: center !important;
+}
+.action-column-values[data-v-3e6ad531] {
+  width: auto;
+  min-width: 30px;
+  padding: 0.25rem !important;
+  text-align: center !important;
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  justify-content: center;
+  align-items: center;
+}
+.action-button[data-v-3e6ad531] {
+  margin: 0 auto;
+}
+.action-button[data-v-3e6ad531]:hover {
+  color: var(--oxd-primary-one-color);
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/maraudes/recruitment/components/FullNameInput.vue?vue&type=style&index=0&id=3d4de8e2&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+@media (min-width: 800px) {
+[data-v-3d4de8e2] .--name-grouped-field {
+    display: flex;
+}
+[data-v-3d4de8e2] .orangehrm-firstname {
+    border-bottom-right-radius: unset;
+    border-top-right-radius: unset;
+    text-overflow: ellipsis;
+}
+[data-v-3d4de8e2] .orangehrm-lastname {
+    border-bottom-left-radius: unset;
+    border-top-left-radius: unset;
+    text-overflow: ellipsis;
+}
+[data-v-3d4de8e2] .orangehrm-middlename {
+    border-radius: unset;
+    text-overflow: ellipsis;
+}
+}
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/maraudes/recruitment/components/CustomColumnInput.vue?vue&type=style&index=0&id=f47713d6&scoped=true&lang=scss ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-switch-wrapper[data-v-f47713d6] {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.orangehrm-text[data-v-f47713d6] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+  margin: 0;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/maraudes/recruitment/components/LeadProfile.vue?vue&type=style&index=0&id=edd7ad42&scoped=true&lang=scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-header-container[data-v-edd7ad42] {
+  padding: 0;
+}
+.orangehrm-candidate-grid-checkbox .oxd-input-group[data-v-edd7ad42] {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+.orangehrm-telephone-contacts-header[data-v-edd7ad42] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/pages/orgStructure/SaveOrgUnit.vue?vue&type=style&index=0&id=89f31c9e&scoped=true&lang=css ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

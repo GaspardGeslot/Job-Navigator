@@ -320,6 +320,27 @@ class ResetPasswordService
     }
 
     /**
+     * @param string $email
+     * @param string $password
+     * @return bool
+     */
+    public function redefinePassword(string $email, string $password): void
+    {
+        $this->beginTransaction();
+        try {
+            $user = $this->getUserService()->getUserDao()->getUserByUserName($email);
+            if ($this->validateUser($user) instanceof User) {
+                $user->getDecorator()->setNonHashedPassword($password);
+                $this->getUserService()->saveSystemUser($user);
+                $this->commitTransaction();
+            }
+        } catch (Exception $e) {
+            $this->rollBackTransaction();
+            throw new TransactionException($e);
+        }
+    }
+    
+    /**
      * @param UserCredential $credential
      * @return bool
      */

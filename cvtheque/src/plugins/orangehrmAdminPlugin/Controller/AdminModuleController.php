@@ -39,6 +39,9 @@ class AdminModuleController extends AbstractModuleController
             case 'constructys':
                 $defaultPath = 'admin/viewCandidates';
                 break;
+            case 'maraudes':
+                $defaultPath = 'admin/viewUsers';
+                break;
             default:
                 $defaultPath = $this->getHomePageService()->getAdminModuleDefaultPath();
         }

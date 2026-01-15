@@ -428,4 +428,12 @@ class Theme
     {
         $this->showSocialMediaIcons = $showSocialMediaIcons;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
+    }
 }

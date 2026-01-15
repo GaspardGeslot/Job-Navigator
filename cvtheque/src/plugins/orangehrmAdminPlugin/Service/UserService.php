@@ -125,6 +125,17 @@ class UserService
     }
 
     /**
+     * Hard Delete a System User by ID
+     * Completely removes the user row from the table
+     * @param int $userId
+     * @return void
+     */
+    public function deleteSystemUser(int $userId): void
+    {
+        $this->getUserDao()->deleteSystemUser($userId);
+    }
+
+    /**
      * Get User role with given name
      * @param string $roleName
      * @return UserRole|null
@@ -254,6 +265,19 @@ class UserService
     public function getUserByUsername(string $userName): ?User
     {
         return $this->getUserDao()->isExistingSystemUserByUsername($userName);
+    }
+
+    /**
+     * @param string $userName
+     * @param string $theme
+     * @return User
+     */
+    public function getUserByCredentialsAndTheme(UserCredential $credentials, string $theme): ?User
+    {
+        $themeId = $this->getThemeDao()->getId($theme);
+        if ($themeId === null)
+            return null;
+        return $this->getUserDao()->isExistingSystemUser($credentials, $themeId);
     }
 
     /**

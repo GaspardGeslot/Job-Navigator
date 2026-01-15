@@ -86,6 +86,7 @@
             :sources="sources"
             :actor-current="actor"
             :time-slots="timeSlots"
+            :themes="themes"
             @delete="onClickDelete(actor.id)"
             @save="(updatedActor) => onClickSave(updatedActor, actor.id)"
             @update="onUpdate()"
@@ -146,6 +147,10 @@ export default {
       default: () => [],
     },
     timeSlots: {
+      type: Array,
+      default: () => [],
+    },
+    themes: {
       type: Array,
       default: () => [],
     },

@@ -533,4 +533,15 @@ class Theme extends \OrangeHRM\Entity\Theme implements \Doctrine\ORM\Proxy\Proxy
         parent::setShowSocialMediaIcons($showSocialMediaIcons);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getClientId(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getClientId', []);
+
+        return parent::getClientId();
+    }
+
 }
