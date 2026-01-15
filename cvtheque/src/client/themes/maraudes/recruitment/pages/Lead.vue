@@ -33,8 +33,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    console.log('props : ', props);
+  setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
       `/api/v2/admin/leads`,
