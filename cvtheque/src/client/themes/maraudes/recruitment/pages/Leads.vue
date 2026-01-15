@@ -102,7 +102,7 @@
                 }"
                 @click="selectCell(index, headerIndex)"
               >
-                {{ getCellValue(item, header.key) }}
+                {{ getCellValue(item, header.key, header) }}
               </td>
             </tr>
             <tr v-if="tableData.length === 0">
@@ -453,7 +453,47 @@ export default {
       }
     }
 
-    const getCellValue = (item, headerKey) => {
+    // Ajouter les colonnes personnalisées à la fin
+    if (props.customColumns && Array.isArray(props.customColumns)) {
+      props.customColumns.forEach((customCol) => {
+        tableHeaders.push({
+          label: customCol.title,
+          key: customCol.title,
+          isCustom: true,
+          type: customCol.type,
+          customColumnId: customCol.id,
+        });
+      });
+    }
+
+    const getCellValue = (item, headerKey, headerConfig) => {
+      // Si c'est une colonne personnalisée, chercher dans customColumns
+      if (headerConfig && headerConfig.isCustom) {
+        if (item.customColumns && Array.isArray(item.customColumns)) {
+          const customColumn = item.customColumns.find(
+            (cc) =>
+              cc.title === headerKey || cc.id === headerConfig.customColumnId,
+          );
+          if (
+            customColumn &&
+            customColumn.value !== null &&
+            customColumn.value !== undefined
+          ) {
+            if (headerConfig.type === 'DATE') {
+              return formatDate(
+                parseDate(customColumn.value, 'yyyy-MM-dd'),
+                'dd-MM-yyyy',
+              );
+            } else if (headerConfig.type === 'BOOLEAN') {
+              return customColumn.value === 'true' ? 'Oui' : 'Non';
+            }
+            // Retourner la valeur en String
+            return String(customColumn.value);
+          }
+        }
+        return '';
+      }
+      // Colonne standard
       return item[headerKey];
     };
 
@@ -531,7 +571,7 @@ export default {
         leads.value.map((item) => {
           const row = {};
           tableHeaders.forEach((header) => {
-            row[header.label] = item[header.key];
+            row[header.label] = getCellValue(item, header.key, header);
           });
           return row;
         }),
