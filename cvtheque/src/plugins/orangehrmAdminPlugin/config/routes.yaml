@@ -3019,6 +3019,30 @@ admin_source:
   requirements:
     theme: constructys|olecio
 
+apiv2_admin_users_get:
+  path: /api/v2/admin/user
+  controller: OrangeHRM\Admin\Controller\UsersController::getAll
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio
+
+apiv2_admin_user_add:
+  path: /api/v2/admin/user
+  controller: OrangeHRM\Admin\Controller\UsersController::add
+  methods: [ POST ]
+
+apiv2_admin_user_update:
+  path: /api/v2/admin/user/{id}
+  controller: OrangeHRM\Admin\Controller\UsersController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+apiv2_admin_user_delete:
+  path: /api/v2/admin/user
+  controller: OrangeHRM\Admin\Controller\UsersController::delete
+  methods: [ DELETE ]
+
 admin_actor:
   path: /{theme}/admin/viewActor
   controller: OrangeHRM\Admin\Controller\ActorController::handle

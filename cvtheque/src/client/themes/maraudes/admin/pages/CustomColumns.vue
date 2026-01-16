@@ -31,14 +31,16 @@
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
 
-    <!-- Modal pour ajouter/modifier une source -->
+    <!-- Modal pour ajouter/modifier une colonne personnalisée -->
     <div v-if="isModalOpen" class="modal-overlay" @click="onClickCancel">
       <div class="modal-container" @click.stop>
         <oxd-form :loading="isSaving" @submit-valid="onClickValidate">
           <div class="modal-header">
             <h3>
               {{
-                isEditing ? $t('Modifier la source') : $t('Ajouter une source')
+                isEditing
+                  ? $t('Modifier la colonne personnalisée')
+                  : $t('Ajouter une colonne personnalisée')
               }}
             </h3>
             <span class="close-icon" @click="onClickCancel">&times;</span>
@@ -48,20 +50,51 @@
               <oxd-grid :cols="1">
                 <oxd-grid-item>
                   <oxd-input-field
-                    v-model="sourceName"
-                    :placeholder="$t('Nom de la source')"
-                    :label="$t('Nom')"
+                    v-model="columnTitle"
+                    :placeholder="$t('Titre de la colonne')"
+                    :label="$t('Titre')"
                     required
                     :rules="rules.title"
                   />
                 </oxd-grid-item>
                 <oxd-grid-item>
                   <oxd-input-field
-                    v-model="sourcePrice"
-                    :placeholder="$t('Prix (optionnel)')"
-                    :label="$t('Prix')"
-                    :rules="rules.price"
+                    v-model="columnType"
+                    type="select"
+                    :label="$t('Type')"
+                    :options="typeOptionsFormatted"
+                    required
+                    :rules="rules.type"
                   />
+                </oxd-grid-item>
+                <oxd-grid-item v-if="selectedTypeIsSelect">
+                  <oxd-text class="orangehrm-text" tag="p">
+                    {{ $t('Options (pour type SELECT)') }}
+                  </oxd-text>
+                  <div class="options-list">
+                    <div
+                      v-for="(option, index) in selectOptions"
+                      :key="index"
+                      class="option-item"
+                    >
+                      <oxd-input-field
+                        v-model="selectOptions[index]"
+                        :label="$t('Option ' + (index + 1))"
+                        :rules="rules.option"
+                      />
+                      <oxd-icon-button
+                        name="trash"
+                        display-type="danger"
+                        @click="removeOption(index)"
+                      />
+                    </div>
+                    <oxd-button
+                      :label="$t('Ajouter une option')"
+                      icon-name="plus"
+                      display-type="secondary"
+                      @click="addOption"
+                    />
+                  </div>
                 </oxd-grid-item>
               </oxd-grid>
             </oxd-form-row>
@@ -86,7 +119,7 @@
 </template>
 
 <script>
-import {reactive, toRefs} from 'vue';
+import {reactive, toRefs, computed} from 'vue';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {APIService} from '@/core/util/services/api.service';
 import useSort from '@/core/util/composable/useSort';
@@ -110,16 +143,21 @@ export default {
       type: Array,
       default: () => [],
     },
+    typeOptions: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
   },
 
-  setup() {
+  setup(props) {
     const {noRecordsFound, error, success} = useToast();
     const {sortDefinition, sortOrder, onSort} = useSort({
       sortDefinition: defaultSortOrder,
     });
     const http = new APIService(
       window.appGlobal.baseUrl,
-      `${window.appGlobal.theme}/api/v2/admin/source`,
+      `/api/v2/admin/custom-column`,
     );
     const state = reactive({
       items: [],
@@ -128,27 +166,44 @@ export default {
       isModalOpen: false,
       isEditing: false,
       isSaving: false,
-      sourceName: '',
-      sourcePrice: '',
+      columnTitle: '',
+      columnType: null,
+      selectOptions: [],
       editingItem: null,
     });
 
-    const fetchSourceData = () => {
+    const fetchCustomColumnData = () => {
       state.isLoading = true;
       http
         .getAll()
         .then((response) => {
           state.items = response.data.map((item) => {
+            // Trouver le type correspondant
+            const typeOption = props.typeOptions.find(
+              (type) => type.id === item.typeOrdinal,
+            );
+            const typeLabel = typeOption ? typeOption.label : '';
+
+            // Parser les options si elles existent
+            let optionsDisplay = '';
+            if (item.options && item.options.trim() !== '') {
+              try {
+                const parsedOptions = JSON.parse(item.options);
+                if (Array.isArray(parsedOptions)) {
+                  optionsDisplay = parsedOptions.join('\n');
+                }
+              } catch (e) {
+                console.error('Error parsing options:', e);
+              }
+            }
+
             return {
-              title: item.name,
-              price:
-                item.price !== null
-                  ? parseFloat(item.price).toFixed(2) + ' €'
-                  : item.price === 0
-                  ? '0 €'
-                  : '-',
-              rawPrice: item.price,
-              name: item.name,
+              id: item.id,
+              title: item.title,
+              type: typeLabel,
+              typeOrdinal: item.typeOrdinal,
+              options: optionsDisplay,
+              rawOptions: item.options,
             };
           });
           state.total = response.data.length;
@@ -159,7 +214,7 @@ export default {
         .catch(() => {
           error({
             title: 'Erreur',
-            message: 'Impossible de récupérer les sources',
+            message: 'Impossible de récupérer les colonnes personnalisées',
           });
         })
         .finally(() => {
@@ -168,65 +223,70 @@ export default {
     };
 
     const onClickValidate = () => {
-      if (!state.sourceName || state.sourceName.length < 2) {
+      if (!state.columnTitle || state.columnTitle.length < 2) {
         return error({
           title: 'Erreur de validation',
-          message: 'Le nom doit contenir au moins 2 caractères',
+          message: 'Le titre doit contenir au moins 2 caractères',
         });
       }
 
-      // Validation du prix si fourni
-      let price = null;
-      if (state.sourcePrice && state.sourcePrice.trim() !== '') {
-        const parsedPrice = parseFloat(state.sourcePrice);
-        if (isNaN(parsedPrice) || parsedPrice < 0) {
-          return error({
-            title: 'Erreur de validation',
-            message: 'Le prix doit être un nombre positif valide',
-          });
-        }
-        price = parsedPrice;
+      if (!state.columnType) {
+        return error({
+          title: 'Erreur de validation',
+          message: 'Le type est requis',
+        });
       }
 
-      // Vérifier si le nom existe déjà (sauf si on est en mode édition du même item)
+      // Vérifier si le titre existe déjà (sauf si on est en mode édition du même item)
       const existingItem = state.items.find(
-        (item) => item.name === state.sourceName,
+        (item) => item.title === state.columnTitle,
       );
       if (
         existingItem &&
-        (!state.isEditing || existingItem.name !== state.editingItem?.name)
+        (!state.isEditing || existingItem.id !== state.editingItem?.id)
       ) {
         return error({
           title: 'Conflit',
-          message: 'Cette source existe déjà',
+          message: 'Cette colonne personnalisée existe déjà',
         });
+      }
+
+      // Préparer les options pour le type SELECT
+      let optionsString = null;
+      const selectedTypeOption = props.typeOptions.find(
+        (type) => type.id === state.columnType,
+      );
+      if (selectedTypeOption && selectedTypeOption.type === 'SELECT') {
+        // Filtrer les options vides et créer le JSON string
+        const validOptions = state.selectOptions.filter(
+          (opt) => opt && opt.trim() !== '',
+        );
+        if (validOptions.length > 0) {
+          optionsString = JSON.stringify(validOptions);
+        }
       }
 
       state.isSaving = true;
 
-      const requestPromise = state.isEditing
-        ? http.update(encodeURIComponent(state.editingItem.name), {
-            price: price,
-          })
-        : http.create({name: state.sourceName, price: price});
+      const requestPromise = http.create({
+        title: state.columnTitle,
+        typeOrdinal: state.columnType,
+        options: optionsString,
+      });
 
       requestPromise
         .then(() => {
           success({
             title: 'Succès',
-            message: state.isEditing
-              ? 'Source modifiée avec succès'
-              : 'Source ajoutée avec succès',
+            message: 'Colonne personnalisée ajoutée avec succès',
           });
           resetForm();
-          fetchSourceData();
+          fetchCustomColumnData();
         })
         .catch(() => {
           error({
             title: 'Erreur',
-            message: state.isEditing
-              ? 'Impossible de modifier la source'
-              : "Impossible d'ajouter la source",
+            message: "Impossible d'ajouter la colonne personnalisée",
           });
         })
         .finally(() => {
@@ -235,11 +295,20 @@ export default {
     };
 
     const resetForm = () => {
-      state.sourceName = '';
-      state.sourcePrice = '';
+      state.columnTitle = '';
+      state.columnType = null;
+      state.selectOptions = [];
       state.isModalOpen = false;
       state.isEditing = false;
       state.editingItem = null;
+    };
+
+    const addOption = () => {
+      state.selectOptions.push('');
+    };
+
+    const removeOption = (index) => {
+      state.selectOptions.splice(index, 1);
     };
 
     const sort = () => {
@@ -248,13 +317,34 @@ export default {
       else state.items.sort((a, b) => b.title.localeCompare(a.title));
     };
 
+    // Computed pour vérifier si le type sélectionné est SELECT
+    const selectedTypeIsSelect = computed(() => {
+      if (!state.columnType) return false;
+      const selectedTypeOption = props.typeOptions.find(
+        (type) => type.id === state.columnType,
+      );
+      return selectedTypeOption && selectedTypeOption.type === 'SELECT';
+    });
+
+    // Formater les options pour le select
+    const typeOptionsFormatted = computed(() => {
+      return props.typeOptions.map((type) => ({
+        id: type.id,
+        label: type.label,
+      }));
+    });
+
     onSort(sort);
 
     return {
       http,
       onClickValidate,
-      fetchSourceData,
+      fetchCustomColumnData,
       resetForm,
+      addOption,
+      removeOption,
+      selectedTypeIsSelect,
+      typeOptionsFormatted,
       ...toRefs(state),
       sortDefinition,
     };
@@ -264,20 +354,30 @@ export default {
     return {
       rules: {
         title: [required, shouldNotExceedCharLength(100)],
-        price: [digitsOnlyWithTwoDecimalPoints],
+        type: [required],
+        option: [shouldNotExceedCharLength(100)],
       },
       headers: [
         {
           name: 'title',
-          title: this.$t('Nom'),
+          title: this.$t('Titre'),
           sortField: 'title',
           style: {flex: 1},
         },
         {
-          name: 'price',
-          title: this.$t('Prix'),
-          sortField: 'price',
+          name: 'type',
+          title: this.$t('Type'),
+          sortField: 'type',
           style: {flex: 0.5},
+        },
+        {
+          name: 'options',
+          title: this.$t('Options'),
+          sortField: 'options',
+          style: {flex: 1},
+          cellRenderer: (value) => {
+            return value || '-';
+          },
         },
         {
           name: 'actions',
@@ -286,12 +386,6 @@ export default {
           style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
           cellConfig: {
-            edit: {
-              onClick: this.onClickEdit,
-              props: {
-                name: 'pencil',
-              },
-            },
             delete: {
               onClick: this.onClickDelete,
               props: {
@@ -305,7 +399,7 @@ export default {
     };
   },
   beforeMount() {
-    this.fetchSourceData();
+    this.fetchCustomColumnData();
   },
   methods: {
     onClickCancel() {
@@ -315,13 +409,9 @@ export default {
       this.isModalOpen = true;
       this.isEditing = false;
       this.editingItem = null;
-    },
-    onClickEdit(item) {
-      this.isModalOpen = true;
-      this.isEditing = true;
-      this.editingItem = item;
-      this.sourceName = item.name;
-      this.sourcePrice = item.rawPrice !== null ? item.rawPrice.toString() : '';
+      this.columnTitle = '';
+      this.columnType = null;
+      this.selectOptions = [];
     },
     onClickDelete(item) {
       const isSelectable = this.unselectableIds.findIndex(
@@ -332,16 +422,14 @@ export default {
       }
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems(item.name);
+          this.deleteItems(item.id);
         }
       });
     },
-    deleteItems(name) {
+    deleteItems(id) {
       this.isLoading = true;
       this.http
-        .deleteAll({
-          name: name,
-        })
+        .delete(id)
         .then(() => {
           return this.$toast.deleteSuccess();
         })
@@ -355,7 +443,7 @@ export default {
     },
     async resetDataTable() {
       this.checkedItems = [];
-      await this.fetchSourceData();
+      await this.fetchCustomColumnData();
     },
   },
 };
@@ -489,5 +577,23 @@ export default {
       background-color: rgba(108, 117, 125, 0.1);
     }
   }
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.option-item .oxd-input-field {
+  flex: 1;
 }
 </style>

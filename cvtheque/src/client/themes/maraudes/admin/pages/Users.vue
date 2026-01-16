@@ -31,36 +31,58 @@
     </div>
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
 
-    <!-- Modal pour ajouter/modifier une source -->
+    <!-- Modal pour ajouter/modifier un utilisateur -->
     <div v-if="isModalOpen" class="modal-overlay" @click="onClickCancel">
       <div class="modal-container" @click.stop>
         <oxd-form :loading="isSaving" @submit-valid="onClickValidate">
           <div class="modal-header">
             <h3>
               {{
-                isEditing ? $t('Modifier la source') : $t('Ajouter une source')
+                isEditing
+                  ? $t("Modifier l'utilisateur")
+                  : $t('Ajouter un utilisateur')
               }}
             </h3>
             <span class="close-icon" @click="onClickCancel">&times;</span>
           </div>
           <div class="modal-body">
             <oxd-form-row>
-              <oxd-grid :cols="1">
+              <oxd-grid :cols="2">
                 <oxd-grid-item>
                   <oxd-input-field
-                    v-model="sourceName"
-                    :placeholder="$t('Nom de la source')"
-                    :label="$t('Nom')"
+                    v-model="email"
+                    :label="$t('Email')"
                     required
-                    :rules="rules.title"
+                    :rules="rules.email"
+                    :disabled="isEditing"
+                  />
+                </oxd-grid-item>
+                <oxd-grid-item>
+                  <div class="orangehrm-switch-wrapper">
+                    <oxd-text class="orangehrm-text">
+                      {{ $t('Est un administrateur ?') }}
+                    </oxd-text>
+                    <oxd-switch-input v-model="isAdmin" />
+                  </div>
+                </oxd-grid-item>
+              </oxd-grid>
+              <oxd-grid v-if="!isEditing" :cols="2">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="password"
+                    type="password"
+                    :label="$t('Mot de passe')"
+                    :rules="rules.password"
+                    required
                   />
                 </oxd-grid-item>
                 <oxd-grid-item>
                   <oxd-input-field
-                    v-model="sourcePrice"
-                    :placeholder="$t('Prix (optionnel)')"
-                    :label="$t('Prix')"
-                    :rules="rules.price"
+                    v-model="passwordConfirm"
+                    type="password"
+                    :label="$t('Confirmer le mot de passe')"
+                    :rules="confirmPasswordRules"
+                    required
                   />
                 </oxd-grid-item>
               </oxd-grid>
@@ -94,8 +116,9 @@ import useToast from '@/core/util/composable/useToast';
 import {
   required,
   shouldNotExceedCharLength,
-  digitsOnlyWithTwoDecimalPoints,
+  validEmailFormat,
 } from '@/core/util/validation/rules';
+import {OxdSwitchInput} from '@ohrm/oxd';
 
 const defaultSortOrder = {
   title: 'ASC',
@@ -104,12 +127,7 @@ const defaultSortOrder = {
 export default {
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
-  },
-  props: {
-    unselectableIds: {
-      type: Array,
-      default: () => [],
-    },
+    'oxd-switch-input': OxdSwitchInput,
   },
 
   setup() {
@@ -117,10 +135,7 @@ export default {
     const {sortDefinition, sortOrder, onSort} = useSort({
       sortDefinition: defaultSortOrder,
     });
-    const http = new APIService(
-      window.appGlobal.baseUrl,
-      `${window.appGlobal.theme}/api/v2/admin/source`,
-    );
+    const http = new APIService(window.appGlobal.baseUrl, '/api/v2/admin/user');
     const state = reactive({
       items: [],
       total: 0,
@@ -128,27 +143,26 @@ export default {
       isModalOpen: false,
       isEditing: false,
       isSaving: false,
-      sourceName: '',
-      sourcePrice: '',
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      isAdmin: false,
       editingItem: null,
     });
 
-    const fetchSourceData = () => {
+    const fetchUserData = () => {
       state.isLoading = true;
       http
         .getAll()
         .then((response) => {
           state.items = response.data.map((item) => {
             return {
-              title: item.name,
-              price:
-                item.price !== null
-                  ? parseFloat(item.price).toFixed(2) + ' €'
-                  : item.price === 0
-                  ? '0 €'
-                  : '-',
-              rawPrice: item.price,
-              name: item.name,
+              id: item.id,
+              email: item.email,
+              role: item.role === 'ACTOR' ? 'Administrateur' : 'Agent',
+              isAdmin: item.role === 'ACTOR',
+              isCurrentUser: item.isCurrentUser,
+              matchingId: item.matchingId,
             };
           });
           state.total = response.data.length;
@@ -159,7 +173,7 @@ export default {
         .catch(() => {
           error({
             title: 'Erreur',
-            message: 'Impossible de récupérer les sources',
+            message: 'Impossible de récupérer les utilisateurs',
           });
         })
         .finally(() => {
@@ -168,65 +182,50 @@ export default {
     };
 
     const onClickValidate = () => {
-      if (!state.sourceName || state.sourceName.length < 2) {
-        return error({
-          title: 'Erreur de validation',
-          message: 'Le nom doit contenir au moins 2 caractères',
-        });
-      }
-
-      // Validation du prix si fourni
-      let price = null;
-      if (state.sourcePrice && state.sourcePrice.trim() !== '') {
-        const parsedPrice = parseFloat(state.sourcePrice);
-        if (isNaN(parsedPrice) || parsedPrice < 0) {
-          return error({
-            title: 'Erreur de validation',
-            message: 'Le prix doit être un nombre positif valide',
-          });
-        }
-        price = parsedPrice;
-      }
-
       // Vérifier si le nom existe déjà (sauf si on est en mode édition du même item)
       const existingItem = state.items.find(
-        (item) => item.name === state.sourceName,
+        (item) => item.email === state.email,
       );
       if (
         existingItem &&
-        (!state.isEditing || existingItem.name !== state.editingItem?.name)
+        (!state.isEditing || existingItem.email !== state.editingItem?.email)
       ) {
         return error({
           title: 'Conflit',
-          message: 'Cette source existe déjà',
+          message: 'Cet email existe déjà',
         });
       }
 
       state.isSaving = true;
 
       const requestPromise = state.isEditing
-        ? http.update(encodeURIComponent(state.editingItem.name), {
-            price: price,
+        ? http.update(state.editingItem.id, {
+            email: state.email,
+            isAdmin: state.isAdmin,
           })
-        : http.create({name: state.sourceName, price: price});
+        : http.create({
+            email: state.email,
+            role: state.isAdmin ? 'ACTOR' : 'AGENT',
+            password: state.password,
+          });
 
       requestPromise
         .then(() => {
           success({
             title: 'Succès',
             message: state.isEditing
-              ? 'Source modifiée avec succès'
-              : 'Source ajoutée avec succès',
+              ? 'Utilisateur modifié avec succès'
+              : 'Utilisateur ajouté avec succès',
           });
           resetForm();
-          fetchSourceData();
+          fetchUserData();
         })
         .catch(() => {
           error({
             title: 'Erreur',
             message: state.isEditing
-              ? 'Impossible de modifier la source'
-              : "Impossible d'ajouter la source",
+              ? "Impossible de modifier l'utilisateur"
+              : "Impossible d'ajouter l'utilisateur",
           });
         })
         .finally(() => {
@@ -235,8 +234,10 @@ export default {
     };
 
     const resetForm = () => {
-      state.sourceName = '';
-      state.sourcePrice = '';
+      state.email = '';
+      state.password = '';
+      state.passwordConfirm = '';
+      state.isAdmin = false;
       state.isModalOpen = false;
       state.isEditing = false;
       state.editingItem = null;
@@ -244,8 +245,8 @@ export default {
 
     const sort = () => {
       if (sortOrder.value === 'ASC')
-        state.items.sort((a, b) => a.title.localeCompare(b.title));
-      else state.items.sort((a, b) => b.title.localeCompare(a.title));
+        state.items.sort((a, b) => a.email.localeCompare(b.email));
+      else state.items.sort((a, b) => b.email.localeCompare(a.email));
     };
 
     onSort(sort);
@@ -253,7 +254,7 @@ export default {
     return {
       http,
       onClickValidate,
-      fetchSourceData,
+      fetchUserData,
       resetForm,
       ...toRefs(state),
       sortDefinition,
@@ -263,20 +264,40 @@ export default {
   data() {
     return {
       rules: {
-        title: [required, shouldNotExceedCharLength(100)],
-        price: [digitsOnlyWithTwoDecimalPoints],
+        email: [required, validEmailFormat],
+        password: [required, shouldNotExceedCharLength(100)],
+        passwordConfirm: [required],
       },
-      headers: [
+      checkedItems: [],
+    };
+  },
+  computed: {
+    confirmPasswordRules() {
+      return [
+        ...this.rules.passwordConfirm,
+        (value) => {
+          if (!value) {
+            return this.$t('general.required');
+          }
+          if (value !== this.password) {
+            return this.$t('Les mots de passe ne correspondent pas');
+          }
+          return true;
+        },
+      ];
+    },
+    headers() {
+      const baseHeaders = [
         {
-          name: 'title',
-          title: this.$t('Nom'),
-          sortField: 'title',
+          name: 'email',
+          title: this.$t('Email'),
+          sortField: 'email',
           style: {flex: 1},
         },
         {
-          name: 'price',
-          title: this.$t('Prix'),
-          sortField: 'price',
+          name: 'role',
+          title: this.$t('Rôle'),
+          sortField: 'role',
           style: {flex: 0.5},
         },
         {
@@ -285,29 +306,45 @@ export default {
           title: this.$t('general.actions'),
           style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
-          cellConfig: {
-            edit: {
-              onClick: this.onClickEdit,
-              props: {
-                name: 'pencil',
-              },
-            },
-            delete: {
-              onClick: this.onClickDelete,
-              props: {
-                name: 'trash',
-              },
-            },
-          },
+          cellRenderer: this.cellRenderer,
         },
-      ],
-      checkedItems: [],
-    };
+      ];
+
+      return baseHeaders;
+    },
   },
   beforeMount() {
-    this.fetchSourceData();
+    this.fetchUserData();
   },
   methods: {
+    cellRenderer(...[, , , row]) {
+      const cellConfig = {};
+
+      // Ne pas afficher les actions si c'est l'utilisateur actuel
+      if (!row.isCurrentUser) {
+        cellConfig.edit = {
+          onClick: this.onClickEdit,
+          props: {
+            name: 'pencil',
+          },
+        };
+
+        cellConfig.delete = {
+          onClick: this.onClickDelete,
+          props: {
+            name: 'trash',
+          },
+        };
+      }
+
+      return {
+        props: {
+          header: {
+            cellConfig,
+          },
+        },
+      };
+    },
     onClickCancel() {
       this.resetForm();
     },
@@ -320,27 +357,23 @@ export default {
       this.isModalOpen = true;
       this.isEditing = true;
       this.editingItem = item;
-      this.sourceName = item.name;
-      this.sourcePrice = item.rawPrice !== null ? item.rawPrice.toString() : '';
+      this.email = item.email;
+      this.isAdmin = item.isAdmin;
     },
     onClickDelete(item) {
-      const isSelectable = this.unselectableIds.findIndex(
-        (id) => id == item.id,
-      );
-      if (isSelectable > -1) {
-        return this.$toast.cannotDelete();
-      }
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems(item.name);
+          this.deleteItems(item);
         }
       });
     },
-    deleteItems(name) {
+    deleteItems(item) {
       this.isLoading = true;
       this.http
         .deleteAll({
-          name: name,
+          id: item.id,
+          email: item.email,
+          isAdmin: item.isAdmin,
         })
         .then(() => {
           return this.$toast.deleteSuccess();
@@ -355,7 +388,7 @@ export default {
     },
     async resetDataTable() {
       this.checkedItems = [];
-      await this.fetchSourceData();
+      await this.fetchUserData();
     },
   },
 };
