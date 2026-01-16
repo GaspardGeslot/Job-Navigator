@@ -16,6 +16,7 @@ use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Admin\Traits\Service\UserServiceTrait;
 use OrangeHRM\CorporateBranding\Traits\ThemeServiceTrait;
 
+
 class UsersController extends AbstractVueController
 {
     use AuthUserTrait;
