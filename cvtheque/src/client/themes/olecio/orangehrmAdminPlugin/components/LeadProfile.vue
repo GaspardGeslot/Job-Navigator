@@ -417,8 +417,6 @@
               <oxd-input-field
                 v-model="profile.franceTravailAgency"
                 :label="$t('Agence')"
-                type="select"
-                :options="franceTravailAgencyOptions"
                 :disabled="!editable"
               />
             </oxd-grid-item>
@@ -629,7 +627,7 @@ const LeadProfileModel = {
   sector: '',
   course: '',
   of: '',
-  currentSituation: '',
+  currentSituation: null,
   trainingMethod: '',
   handicap: '',
   funding: '',
@@ -877,13 +875,10 @@ export default {
           : null;
       } else dataToSend.birthDate = null;
 
-      if (dataToSend.franceTravailAgency)
-        dataToSend.franceTravailAgency = dataToSend.franceTravailAgency?.label;
-
       if (dataToSend.rqth) dataToSend.rqth = dataToSend.rqth?.label;
 
       if (dataToSend.currentSituation)
-        dataToSend.currentSituation = dataToSend.currentSituation?.label;
+        dataToSend.currentSituation = this.profile.currentSituation?.label;
 
       this.http
         .request({
@@ -957,6 +952,7 @@ export default {
       this.profile.apiMessage = this.lead.apiMessage;
       this.profile.manualDelivery = this.lead.manualDelivery;
       this.profile.ko = this.lead.ko;
+      this.profile.franceTravailAgency = this.lead.franceTravailAgency;
       this.profile.telephoneContacts = this.lead.telephoneContacts
         ? [...this.lead.telephoneContacts].sort((a, b) => {
             // Trier par date (du plus ancien au plus récent)
@@ -987,11 +983,6 @@ export default {
       if (this.lead.currentSituation)
         this.profile.currentSituation = this.statuses.find(
           (option) => option.label === this.lead.currentSituation,
-        );
-
-      if (this.lead.franceTravailAgency)
-        this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
-          (option) => option.label === this.lead.franceTravailAgency,
         );
 
       if (this.lead.rqth)
