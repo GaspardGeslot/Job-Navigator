@@ -53,12 +53,13 @@ class RequestResetPasswordController extends AbstractController implements Publi
     {
         $token = $request->request->get('_token');
         $theme = $request->attributes->get('theme');
+        $useSubdomain = $request->attributes->get('_use_subdomain', false);
         if (!$this->getCsrfTokenManager()->isValid('request-reset-password', $token)) {
             throw AuthenticationException::invalidCsrfToken();
         }
         $username = $request->request->get('username');
         if (($user = $this->getResetPasswordService()->searchForUserRecord($username)) instanceof User) {
-            $this->getResetPasswordService()->logPasswordResetRequest($user, $theme);
+            $this->getResetPasswordService()->logPasswordResetRequest($user, $useSubdomain ? null : $theme);
         }
         return $this->redirect('auth/sendPasswordReset');
     }

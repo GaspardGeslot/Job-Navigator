@@ -441,6 +441,8 @@ class EmailService
         $clientBaseUrl = getenv('OLECIO_PROXY_URL');
         $url = $clientBaseUrl . '/brevo/email';
 
+        error_log('confirmationUrl: ' . $confirmationUrl);
+
         $destination = [['email' => $email]];
         try {
             $client->request('POST', $url, [

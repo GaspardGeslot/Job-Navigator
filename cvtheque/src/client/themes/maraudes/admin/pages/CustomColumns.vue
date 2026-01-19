@@ -34,14 +34,14 @@
     <!-- Modal pour ajouter/modifier une colonne personnalisée -->
     <div v-if="isModalOpen" class="modal-overlay" @click="onClickCancel">
       <div class="modal-container" @click.stop>
-        <oxd-form :loading="isSaving" @submit-valid="onClickValidate">
+        <oxd-form
+          :loading="isSaving"
+          class="modal-form"
+          @submit-valid="onClickValidate"
+        >
           <div class="modal-header">
             <h3>
-              {{
-                isEditing
-                  ? $t('Modifier la colonne personnalisée')
-                  : $t('Ajouter une colonne personnalisée')
-              }}
+              {{ $t('Ajouter une colonne personnalisée') }}
             </h3>
             <span class="close-icon" @click="onClickCancel">&times;</span>
           </div>
@@ -68,8 +68,8 @@
                   />
                 </oxd-grid-item>
                 <oxd-grid-item v-if="selectedTypeIsSelect">
-                  <oxd-text class="orangehrm-text" tag="p">
-                    {{ $t('Options (pour type SELECT)') }}
+                  <oxd-text class="orangehrm-text">
+                    {{ $t('Options') }}
                   </oxd-text>
                   <div class="options-list">
                     <div
@@ -85,6 +85,7 @@
                       <oxd-icon-button
                         name="trash"
                         display-type="danger"
+                        class="option-delete-button"
                         @click="removeOption(index)"
                       />
                     </div>
@@ -106,7 +107,7 @@
               @click="onClickCancel"
             />
             <oxd-button
-              :label="$t(isEditing ? 'Modifier' : 'Enregistrer')"
+              :label="$t('Enregistrer')"
               display-type="secondary"
               :loading="isSaving"
               type="submit"
@@ -127,7 +128,6 @@ import useToast from '@/core/util/composable/useToast';
 import {
   required,
   shouldNotExceedCharLength,
-  digitsOnlyWithTwoDecimalPoints,
 } from '@/core/util/validation/rules';
 
 const defaultSortOrder = {
@@ -139,10 +139,6 @@ export default {
     'delete-confirmation': DeleteConfirmationDialog,
   },
   props: {
-    unselectableIds: {
-      type: Array,
-      default: () => [],
-    },
     typeOptions: {
       type: Array,
       required: true,
@@ -164,12 +160,10 @@ export default {
       total: 0,
       isLoading: false,
       isModalOpen: false,
-      isEditing: false,
       isSaving: false,
       columnTitle: '',
       columnType: null,
       selectOptions: [],
-      editingItem: null,
     });
 
     const fetchCustomColumnData = () => {
@@ -178,19 +172,13 @@ export default {
         .getAll()
         .then((response) => {
           state.items = response.data.map((item) => {
-            // Trouver le type correspondant
-            const typeOption = props.typeOptions.find(
-              (type) => type.id === item.typeOrdinal,
-            );
-            const typeLabel = typeOption ? typeOption.label : '';
-
             // Parser les options si elles existent
             let optionsDisplay = '';
             if (item.options && item.options.trim() !== '') {
               try {
                 const parsedOptions = JSON.parse(item.options);
                 if (Array.isArray(parsedOptions)) {
-                  optionsDisplay = parsedOptions.join('\n');
+                  optionsDisplay = parsedOptions.join(' | ');
                 }
               } catch (e) {
                 console.error('Error parsing options:', e);
@@ -200,7 +188,7 @@ export default {
             return {
               id: item.id,
               title: item.title,
-              type: typeLabel,
+              type: item.type,
               typeOrdinal: item.typeOrdinal,
               options: optionsDisplay,
               rawOptions: item.options,
@@ -241,10 +229,7 @@ export default {
       const existingItem = state.items.find(
         (item) => item.title === state.columnTitle,
       );
-      if (
-        existingItem &&
-        (!state.isEditing || existingItem.id !== state.editingItem?.id)
-      ) {
+      if (existingItem) {
         return error({
           title: 'Conflit',
           message: 'Cette colonne personnalisée existe déjà',
@@ -254,23 +239,28 @@ export default {
       // Préparer les options pour le type SELECT
       let optionsString = null;
       const selectedTypeOption = props.typeOptions.find(
-        (type) => type.id === state.columnType,
+        (type) => type.id === state.columnType.id,
       );
-      if (selectedTypeOption && selectedTypeOption.type === 'SELECT') {
+      if (selectedTypeOption && selectedTypeOption.label === 'Choix multiple') {
         // Filtrer les options vides et créer le JSON string
         const validOptions = state.selectOptions.filter(
           (opt) => opt && opt.trim() !== '',
         );
-        if (validOptions.length > 0) {
-          optionsString = JSON.stringify(validOptions);
+        // Vérifier qu'il y a au moins une option valide
+        if (validOptions.length === 0) {
+          return error({
+            title: 'Erreur de validation',
+            message: 'Au moins une option est requise',
+          });
         }
+        optionsString = JSON.stringify(validOptions);
       }
 
       state.isSaving = true;
 
       const requestPromise = http.create({
         title: state.columnTitle,
-        typeOrdinal: state.columnType,
+        typeOrdinal: state.columnType.id,
         options: optionsString,
       });
 
@@ -299,8 +289,6 @@ export default {
       state.columnType = null;
       state.selectOptions = [];
       state.isModalOpen = false;
-      state.isEditing = false;
-      state.editingItem = null;
     };
 
     const addOption = () => {
@@ -321,9 +309,11 @@ export default {
     const selectedTypeIsSelect = computed(() => {
       if (!state.columnType) return false;
       const selectedTypeOption = props.typeOptions.find(
-        (type) => type.id === state.columnType,
+        (type) => type.id === state.columnType.id,
       );
-      return selectedTypeOption && selectedTypeOption.type === 'SELECT';
+      return (
+        selectedTypeOption && selectedTypeOption.label === 'Choix multiple'
+      );
     });
 
     // Formater les options pour le select
@@ -407,19 +397,11 @@ export default {
     },
     onClickAdd() {
       this.isModalOpen = true;
-      this.isEditing = false;
-      this.editingItem = null;
       this.columnTitle = '';
       this.columnType = null;
       this.selectOptions = [];
     },
     onClickDelete(item) {
-      const isSelectable = this.unselectableIds.findIndex(
-        (id) => id == item.id,
-      );
-      if (isSelectable > -1) {
-        return this.$toast.cannotDelete();
-      }
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
           this.deleteItems(item.id);
@@ -469,6 +451,7 @@ export default {
   border-radius: 0.75rem;
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
   width: 500px;
+  height: 90vh;
   max-width: 90%;
   z-index: 1001;
   animation: modalSlideIn 0.3s ease-out;
@@ -525,6 +508,9 @@ export default {
 .modal-body {
   padding: 2rem;
   background-color: #ffffff;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .modal-footer {
@@ -535,6 +521,13 @@ export default {
   border-top: 1px solid var(--oxd-border-light-color);
   background-color: #f8f9fa;
   border-radius: 0 0 0.75rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 // Amélioration des champs de formulaire
@@ -588,12 +581,17 @@ export default {
 
 .option-item {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   gap: 0.5rem;
   width: 100%;
 }
 
 .option-item .oxd-input-field {
   flex: 1;
+}
+
+.option-delete-button {
+  flex-shrink: 0;
+  margin-bottom: 1.25rem;
 }
 </style>
