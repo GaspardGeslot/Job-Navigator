@@ -116,7 +116,7 @@ class ValidateCompanyController extends AbstractController implements PublicCont
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
             $result = $authProviderChain->authenticateCompany(new AuthParams($credentials, null, $theme));
-            $token = $result['token'];
+            $token = $result['token']['token'];
             $isExistingUser = $result['isExistingUser'];
             $success = !is_null($token);
 

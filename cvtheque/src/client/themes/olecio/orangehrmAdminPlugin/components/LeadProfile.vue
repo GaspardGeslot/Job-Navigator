@@ -233,7 +233,7 @@
                 type="select"
                 :label="$t('Situation actuelle')"
                 :disabled="!editable"
-                :options="statuses"
+                :options="sortedStatuses"
               />
             </oxd-grid-item>
             <oxd-grid-item>
@@ -810,6 +810,17 @@ export default {
     };
   },
   computed: {
+    sortedStatuses() {
+      if (!this.statuses || !Array.isArray(this.statuses)) {
+        return [];
+      }
+      // Créer une copie du tableau et trier par label (ordre alphabétique)
+      return [...this.statuses].sort((a, b) => {
+        const labelA = (a.label || '').toLowerCase();
+        const labelB = (b.label || '').toLowerCase();
+        return labelA.localeCompare(labelB);
+      });
+    },
     formattedTelephoneContacts() {
       if (
         !this.profile.telephoneContacts ||

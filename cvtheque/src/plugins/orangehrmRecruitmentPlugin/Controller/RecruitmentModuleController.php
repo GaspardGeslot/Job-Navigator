@@ -32,7 +32,8 @@ class RecruitmentModuleController extends AbstractModuleController
     public function handle(Request $request): RedirectResponse
     {
         $defaultPath = '';
-        switch ($request->attributes->get('theme')) {
+        $normalizedTheme = preg_replace('/-demo$/', '', $request->attributes->get('theme'));
+        switch ($normalizedTheme) {
             case 'maraudes':
                 $defaultPath = 'recruitment/viewLeads';
                 break;

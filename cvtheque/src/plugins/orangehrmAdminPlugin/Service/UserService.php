@@ -210,7 +210,6 @@ class UserService
         if ($themeId === null)
             return null;
         $user = $this->getUserDao()->isExistingSystemUser($credentials, $themeId);
-
         if ($user instanceof User) {
             $hash = $user->getUserPassword();
             if ($this->checkPasswordHash($credentials->getPassword(), $hash)) {

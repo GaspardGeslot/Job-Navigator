@@ -755,7 +755,7 @@ apiv2_pim_employee:
     _key: empNumber
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees:
   path: /{theme}/api/v2/pim/employees
@@ -764,7 +764,7 @@ apiv2_pim_employees:
   defaults:
     _api: OrangeHRM\Pim\Api\EmployeeAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_count:
   path: /{theme}/api/v2/pim/employees/count
@@ -773,7 +773,7 @@ apiv2_pim_employees_count:
   defaults:
     _api: OrangeHRM\Pim\Api\EmployeeCountAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employee_picture:
   path: /{theme}/api/v2/pim/employees/{empNumber}/picture
@@ -784,7 +784,7 @@ apiv2_pim_employee_picture:
     _key: empNumber
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employee_custom_fields:
   path: /{theme}/api/v2/pim/employees/{empNumber}/custom-fields
@@ -795,7 +795,7 @@ apiv2_pim_employee_custom_fields:
     _key: empNumber
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_personal_details:
   path: /{theme}/api/v2/pim/employees/{empNumber}/personal-details
@@ -806,7 +806,7 @@ apiv2_pim_employees_personal_details:
     _key: empNumber
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_job_details:
   path: /{theme}/api/v2/pim/employees/{empNumber}/job-details
@@ -817,7 +817,7 @@ apiv2_pim_employees_job_details:
     _key: empNumber
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_job_employment_contract:
   path: /{theme}/api/v2/pim/employees/{empNumber}/employment-contract
@@ -828,7 +828,7 @@ apiv2_pim_employees_job_employment_contract:
     _key: empNumber
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_termination:
   path: /{theme}/api/v2/pim/employees/{empNumber}/terminations/{id}
@@ -838,7 +838,7 @@ apiv2_pim_employees_termination:
     _api: OrangeHRM\Pim\Api\EmployeeTerminationAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_terminations:
   path: /{theme}/api/v2/pim/employees/{empNumber}/terminations
@@ -848,7 +848,7 @@ apiv2_pim_employees_terminations:
     _api: OrangeHRM\Pim\Api\EmployeeTerminationAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employee_contact_details:
   path: /{theme}/api/v2/pim/employee/{empNumber}/contact-details
@@ -859,7 +859,7 @@ apiv2_pim_employee_contact_details:
     _key: empNumber
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_dependent:
   path: /{theme}/api/v2/pim/employees/{empNumber}/dependents/{id}
@@ -869,7 +869,7 @@ apiv2_pim_employees_dependent:
     _api: OrangeHRM\Pim\Api\EmployeeDependentAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_dependents:
   path: /{theme}/api/v2/pim/employees/{empNumber}/dependents
@@ -879,7 +879,7 @@ apiv2_pim_employees_dependents:
     _api: OrangeHRM\Pim\Api\EmployeeDependentAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_salary_component:
   path: /{theme}/api/v2/pim/employees/{empNumber}/salary-components/{id}
@@ -889,7 +889,7 @@ apiv2_pim_employees_salary_component:
     _api: OrangeHRM\Pim\Api\EmployeeSalaryComponentAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_salary_components:
   path: /{theme}/api/v2/pim/employees/{empNumber}/salary-components
@@ -899,7 +899,7 @@ apiv2_pim_employees_salary_components:
     _api: OrangeHRM\Pim\Api\EmployeeSalaryComponentAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_attachment:
   path: /{theme}/api/v2/pim/attachments/{attachmentId}
@@ -909,7 +909,7 @@ apiv2_pim_employees_attachment:
     _api: OrangeHRM\Pim\Api\EmployeeAttachmentAPI
     _key: attachmentId
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_attachments:
   path: /{theme}/api/v2/pim/attachments
@@ -918,7 +918,7 @@ apiv2_pim_employees_attachments:
   defaults:
     _api: OrangeHRM\Pim\Api\EmployeeAttachmentAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employee_emergency_contact:
   path: /{theme}/api/v2/pim/employees/{empNumber}/emergency-contacts/{id}
@@ -928,7 +928,7 @@ apiv2_pim_employee_emergency_contact:
     _api: OrangeHRM\Pim\Api\EmpEmergencyContactAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employee_emergency_contacts:
   path: /{theme}/api/v2/pim/employees/{empNumber}/emergency-contacts
@@ -938,7 +938,7 @@ apiv2_pim_employee_emergency_contacts:
     _api: OrangeHRM\Pim\Api\EmpEmergencyContactAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_skills:
   path: /{theme}/api/v2/pim/employees/{empNumber}/skills
@@ -948,7 +948,7 @@ apiv2_pim_employees_skills:
     _api: OrangeHRM\Pim\Api\EmployeeSkillAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_allowed_skills:
   path: /{theme}/api/v2/pim/employees/{empNumber}/skills/allowed
@@ -958,7 +958,7 @@ apiv2_pim_employees_allowed_skills:
     _api: OrangeHRM\Pim\Api\EmployeeAllowedSkillAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_skill:
   path: /{theme}/api/v2/pim/employees/{empNumber}/skills/{id}
@@ -969,7 +969,7 @@ apiv2_pim_employees_skill:
   requirements:
     empNumber: '\d+'
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_educations:
   path: /{theme}/api/v2/pim/employees/{empNumber}/educations
@@ -979,7 +979,7 @@ apiv2_pim_employees_educations:
     _api: OrangeHRM\Pim\Api\EmployeeEducationAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_education:
   path: /{theme}/api/v2/pim/employees/{empNumber}/educations/{id}
@@ -989,7 +989,7 @@ apiv2_pim_employees_education:
     _api: OrangeHRM\Pim\Api\EmployeeEducationAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_languages:
   path: /{theme}/api/v2/pim/employees/{empNumber}/languages
@@ -999,7 +999,7 @@ apiv2_pim_employees_languages:
     _api: OrangeHRM\Pim\Api\EmployeeLanguageAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_language:
   path: /{theme}/api/v2/pim/employees/{empNumber}/languages/{languageId}/fluencies/{fluencyId}
@@ -1010,7 +1010,7 @@ apiv2_pim_employees_language:
     _api: OrangeHRM\Pim\Api\EmployeeLanguageAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_allowed_languages:
   path: /{theme}/api/v2/pim/employees/{empNumber}/languages/allowed
@@ -1020,7 +1020,7 @@ apiv2_pim_employees_allowed_languages:
     _api: OrangeHRM\Pim\Api\EmployeeAllowedLanguageAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_work_experiences:
   path: /{theme}/api/v2/pim/employees/{empNumber}/work-experiences
@@ -1030,7 +1030,7 @@ apiv2_pim_employees_work_experiences:
     _api: OrangeHRM\Pim\Api\EmployeeWorkExperienceAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_work_experience:
   path: /{theme}/api/v2/pim/employees/{empNumber}/work-experiences/{id}
@@ -1040,7 +1040,7 @@ apiv2_pim_employees_work_experience:
     _api: OrangeHRM\Pim\Api\EmployeeWorkExperienceAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_licenses:
   path: /{theme}/api/v2/pim/employees/{empNumber}/licenses
@@ -1050,7 +1050,7 @@ apiv2_pim_employees_licenses:
     _api: OrangeHRM\Pim\Api\EmployeeLicenseAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_allowed_licenses:
   path: /{theme}/api/v2/pim/employees/{empNumber}/licenses/allowed
@@ -1060,7 +1060,7 @@ apiv2_pim_employees_allowed_licenses:
     _api: OrangeHRM\Pim\Api\EmployeeAllowedLicenseAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_license:
   path: /{theme}/api/v2/pim/employees/{empNumber}/licenses/{id}
@@ -1071,7 +1071,7 @@ apiv2_pim_employees_license:
   requirements:
     empNumber: '\d+'
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_termination_reason:
   path: /{theme}/api/v2/pim/termination-reasons/{id}
@@ -1080,7 +1080,7 @@ apiv2_pim_termination_reason:
   defaults:
     _api: OrangeHRM\Pim\Api\TerminationReasonConfigurationAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_termination_reasons:
   path: /{theme}/api/v2/pim/termination-reasons
@@ -1089,7 +1089,7 @@ apiv2_pim_termination_reasons:
   defaults:
     _api: OrangeHRM\Pim\Api\TerminationReasonConfigurationAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_reporting_method:
   path: /{theme}/api/v2/pim/reporting-methods/{id}
@@ -1098,7 +1098,7 @@ apiv2_pim_reporting_method:
   defaults:
     _api: OrangeHRM\Pim\Api\ReportingMethodConfigurationAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_reporting_methods:
   path: /{theme}/api/v2/pim/reporting-methods
@@ -1107,7 +1107,7 @@ apiv2_pim_reporting_methods:
   defaults:
     _api: OrangeHRM\Pim\Api\ReportingMethodConfigurationAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_custom_fields:
   path: /{theme}/api/v2/pim/custom-fields
@@ -1116,7 +1116,7 @@ apiv2_pim_custom_fields:
   defaults:
     _api: OrangeHRM\Pim\Api\CustomFieldAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_custom_field:
   path: /{theme}/api/v2/pim/custom-fields/{id}
@@ -1126,7 +1126,7 @@ apiv2_pim_custom_field:
     _api: OrangeHRM\Pim\Api\CustomFieldAPI
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_optional_field:
   path: /{theme}/api/v2/pim/optional-field
@@ -1136,7 +1136,7 @@ apiv2_pim_optional_field:
     id: 0
     _api: OrangeHRM\Pim\Api\OptionalFieldAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_immigration:
   path: /{theme}/api/v2/pim/employees/{empNumber}/immigrations/{id}
@@ -1146,7 +1146,7 @@ apiv2_pim_employees_immigration:
     _api: OrangeHRM\Pim\Api\EmployeeImmigrationRecordAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_immigrations:
   path: /{theme}/api/v2/pim/employees/{empNumber}/immigrations
@@ -1156,7 +1156,7 @@ apiv2_pim_employees_immigrations:
     _api: OrangeHRM\Pim\Api\EmployeeImmigrationRecordAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_report_to_supervisors:
   path: /{theme}/api/v2/pim/employees/{empNumber}/supervisors
@@ -1166,7 +1166,7 @@ apiv2_pim_report_to_supervisors:
     _api: OrangeHRM\Pim\Api\EmployeeSupervisorAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_report_to_supervisor:
   path: /{theme}/api/v2/pim/employees/{empNumber}/supervisors/{id}
@@ -1177,7 +1177,7 @@ apiv2_pim_report_to_supervisor:
   requirements:
     empNumber: '\d+'
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_report_to_subordinate:
   path: /{theme}/api/v2/pim/employees/{empNumber}/subordinates/{id}
@@ -1187,7 +1187,7 @@ apiv2_pim_report_to_subordinate:
     _api: OrangeHRM\Pim\Api\EmployeeSubordinateAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_report_to_subordinates:
   path: /{theme}/api/v2/pim/employees/{empNumber}/subordinates
@@ -1197,7 +1197,7 @@ apiv2_pim_report_to_subordinates:
     _api: OrangeHRM\Pim\Api\EmployeeSubordinateAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_report_to_allowed_employees:
   path: /{theme}/api/v2/pim/employees/{empNumber}/report-to/allowed
@@ -1206,7 +1206,7 @@ apiv2_pim_report_to_allowed_employees:
   defaults:
     _api: OrangeHRM\Pim\Api\EmployeeAllowedReportToEmployeeAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_memberships:
   path: /{theme}/api/v2/pim/employees/{empNumber}/memberships
@@ -1216,7 +1216,7 @@ apiv2_pim_employees_memberships:
     _api: OrangeHRM\Pim\Api\EmployeeMembershipAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_membership:
   path: /{theme}/api/v2/pim/employees/{empNumber}/memberships/{id}
@@ -1226,7 +1226,7 @@ apiv2_pim_employees_membership:
     _api: OrangeHRM\Pim\Api\EmployeeMembershipAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_us_tax_exemption:
   path: /{theme}/api/v2/pim/employees/{empNumber}/tax-exemption
@@ -1237,7 +1237,7 @@ apiv2_pim_employees_us_tax_exemption:
     _api: OrangeHRM\Pim\Api\EmpUsTaxExemptionAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_work_shift:
   path: /{theme}/api/v2/pim/employees/{empNumber}/work-shift
@@ -1248,7 +1248,7 @@ apiv2_pim_employees_work_shift:
     _api: OrangeHRM\Pim\Api\EmployeeWorkShiftAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_employees_import:
   path: /{theme}/api/v2/pim/csv-import
@@ -1257,7 +1257,7 @@ apiv2_pim_employees_import:
   defaults:
     _api: OrangeHRM\Pim\Api\EmployeeCSVImportAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_reports:
   path: /{theme}/api/v2/pim/reports
@@ -1267,7 +1267,7 @@ apiv2_pim_reports:
     _api: OrangeHRM\Pim\Api\PimReportAPI
     _key: name
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_reports_data:
   path: /{theme}/api/v2/pim/reports/data
@@ -1276,7 +1276,7 @@ apiv2_pim_reports_data:
   defaults:
     _api: OrangeHRM\Pim\Api\PimReportDataAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_defined_reports:
   path: /{theme}/api/v2/pim/reports/defined
@@ -1285,7 +1285,7 @@ apiv2_pim_defined_reports:
   defaults:
     _api: OrangeHRM\Pim\Api\PimDefinedReportAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_defined_report:
   path: /{theme}/api/v2/pim/reports/defined/{id}
@@ -1294,7 +1294,7 @@ apiv2_pim_defined_report:
   defaults:
     _api: OrangeHRM\Pim\Api\PimDefinedReportAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_update_password:
   path: /{theme}/api/v2/pim/update-password
@@ -1304,7 +1304,7 @@ apiv2_pim_update_password:
     id: 0
     _api: OrangeHRM\Pim\Api\UpdatePasswordAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_validate_employee_email:
   path: /{theme}/api/v2/pim/employees/{empNumber}/contact-details/validation/work-emails
@@ -1315,7 +1315,7 @@ apiv2_pim_validate_employee_email:
     _api: OrangeHRM\Pim\Api\ValidationEmployeeEmailAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_validate_employee_other_email:
   path: /{theme}/api/v2/pim/employees/{empNumber}/contact-details/validation/other-emails
@@ -1326,7 +1326,7 @@ apiv2_pim_validate_employee_other_email:
     _api: OrangeHRM\Pim\Api\ValidationEmployeeOtherEmailAPI
   requirements:
     empNumber: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_pim_my_info:
   path: /{theme}/api/v2/pim/myself
@@ -1336,247 +1336,247 @@ apiv2_pim_my_info:
     id: 0
     _api: OrangeHRM\Pim\Api\MyInfoAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_picture:
   path: /{theme}/pim/viewPhoto/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\File\EmployeePictureController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_attachment:
   path: /{theme}/pim/viewAttachment/attachId/{attachId}
   controller: OrangeHRM\Pim\Controller\File\EmployeeAttachmentController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_csv_import_sample_attachment:
   path: /{theme}/pim/sampleCsvDownload
   controller: OrangeHRM\Pim\Controller\File\EmployeeCsvImportSampleAttachmentController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_module:
   path: /{theme}/pim/viewPimModule
   controller: OrangeHRM\Pim\Controller\PimModuleController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_view_my_details:
   path: /{theme}/pim/viewMyDetails
   controller: OrangeHRM\Pim\Controller\ViewMyDetailsController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_view_employee_list:
   path: /{theme}/pim/viewEmployeeList
   controller: OrangeHRM\Pim\Controller\EmployeeController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_add_employee:
   path: /{theme}/pim/addEmployee
   controller: OrangeHRM\Pim\Controller\SaveEmployeeController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_personal_details:
   path: /{theme}/pim/viewPersonalDetails/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeePersonalDetailController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_contact_details:
   path: /{theme}/pim/contactDetails/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeContactDetailsController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_emergency_contacts:
   path: /{theme}/pim/viewEmergencyContacts/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeEmergencyContactsController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_dependents:
   path: /{theme}/pim/viewDependents/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeDependentsController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_salary:
   path: /{theme}/pim/viewSalaryList/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeSalaryController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_profile_picture:
   path: /{theme}/pim/viewPhotograph/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeProfilePictureController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_job:
   path: /{theme}/pim/viewJobDetails/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeJobController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_qualifications:
   path: /{theme}/pim/viewQualifications/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeQualificationsController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_report_to:
   path: /{theme}/pim/viewReportToDetails/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeReportToController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 view_termination_reason:
   path: /{theme}/pim/viewTerminationReasons
   controller: OrangeHRM\Pim\Controller\TerminationReasonController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 save_termination_reason:
   path: /{theme}/pim/saveTerminationReasons
   controller: OrangeHRM\Pim\Controller\SaveTerminationReasonController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 edit_termination_reason:
   path: /{theme}/pim/saveTerminationReasons/{id}
   controller: OrangeHRM\Pim\Controller\SaveTerminationReasonController::handle
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 view_reporting_method:
   path: /{theme}/pim/viewReportingMethods
   controller: OrangeHRM\Pim\Controller\ReportingMethodController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 save_reporting_method:
   path: /{theme}/pim/saveReportingMethod
   controller: OrangeHRM\Pim\Controller\SaveReportingMethodController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 edit_reporting_method:
   path: /{theme}/pim/saveReportingMethod/{id}
   controller: OrangeHRM\Pim\Controller\SaveReportingMethodController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 view_custom_fields:
   path: /{theme}/pim/listCustomFields
   controller: OrangeHRM\Pim\Controller\CustomFieldController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 save_custom_fields:
   path: /{theme}/pim/saveCustomFields
   controller: OrangeHRM\Pim\Controller\SaveCustomFieldController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 edit_custom_fields:
   path: /{theme}/pim/saveCustomFields/{id}
   controller: OrangeHRM\Pim\Controller\SaveCustomFieldController::handle
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 view_optional_field:
   path: /{theme}/pim/configurePim
   controller: OrangeHRM\Pim\Controller\OptionalFieldController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_immigration:
   path: /{theme}/pim/viewImmigration/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeImmigrationController::handle
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_membership:
   path: /{theme}/pim/viewMemberships/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeMembershipController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_tax_exemption:
   path: /{theme}/pim/viewUsTaxExemptions/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmpUsTaxExemptionController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_employee_csv_import:
   path: /{theme}/pim/pimCsvImport
   controller: OrangeHRM\Pim\Controller\EmployeeCsvImportController::handlpath:e
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_view_employee_reports:
   path: /{theme}/pim/viewDefinedPredefinedReports
   controller: OrangeHRM\Pim\Controller\EmployeeReportController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_save_employee_reports:
   path: /{theme}/pim/definePredefinedReport
   controller: OrangeHRM\Pim\Controller\SaveEmployeeReportController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_edit_employee_reports:
   path: /{theme}/pim/definePredefinedReport/{id}
   controller: OrangeHRM\Pim\Controller\SaveEmployeeReportController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 pim_display_employee_report:
   path: /{theme}/pim/displayPredefinedReport/{id}
   controller: OrangeHRM\Pim\Controller\EmployeeReportController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 update_password:
   path: /{theme}/pim/updatePassword
   controller: OrangeHRM\Pim\Controller\UpdatePasswordController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 

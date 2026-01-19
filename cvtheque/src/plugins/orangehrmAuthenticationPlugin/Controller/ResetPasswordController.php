@@ -62,6 +62,6 @@ class ResetPasswordController extends AbstractController implements PublicContro
         $this->getResetPasswordService()->saveResetPassword($credentials, $theme);
         $session = $this->getContainer()->get(Services::SESSION);
         $session->invalidate();
-        return $this->redirect("auth/login");
+        return $this->redirect($theme != null && $theme == "olecio" ? "/auth/admin/login" : "/auth/login");
     }
 }

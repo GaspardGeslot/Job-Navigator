@@ -99,11 +99,12 @@ class ThemeDao extends BaseDao
             'login_banner' => 'loginBanner',
         ];
         $field = $map[$imageKey];
+        $normalizedThemeName = preg_replace('/-demo$/', '', $themeName);
         $select = 'NEW ' . ThemeImage::class . "(t.$field, t.{$field}Filename, t.{$field}FileType, t.{$field}FileSize)";
         $q = $this->createQueryBuilder(Theme::class, 't')
             ->select($select);
         $q->andWhere('t.name = :themeName')
-            ->setParameter('themeName', $themeName);
+            ->setParameter('themeName', $normalizedThemeName);
 
         $result = $q->getQuery()->getOneOrNullResult();
         if ($result instanceof ThemeImage && !$result->isEmpty()) {
@@ -114,21 +115,32 @@ class ThemeDao extends BaseDao
 
     public function getClientIdByThemeName(string $theme): ?int
     {
+        $normalizedThemeName = preg_replace('/-demo$/', '', $theme);
         $q = $this->createQueryBuilder(Theme::class, 't')
             ->select('t.clientId')
             ->where('t.name = :themeName')
-            ->setParameter('themeName', $theme);
+            ->setParameter('themeName', $normalizedThemeName);
 
         $result = $q->getQuery()->getOneOrNullResult();
+        if ($result === null) {
+            $q = $this->createQueryBuilder(Theme::class, 't')
+                ->select('t.clientId')
+                ->where('t.name = :themeName')
+                ->setParameter('themeName', ThemeService::DEFAULT_THEME);
+
+            $result = $q->getQuery()->getOneOrNullResult();
+        }
+
         return $result ? $result['clientId'] : null;
     }
 
     public function getId(string $theme): ?int
     {
+        $normalizedThemeName = preg_replace('/-demo$/', '', $theme);
         $q = $this->createQueryBuilder(Theme::class, 't')
             ->select('t.id')
             ->where('t.name = :themeName')
-            ->setParameter('themeName', $theme);
+            ->setParameter('themeName', $normalizedThemeName);
 
         $result = $q->getQuery()->getOneOrNullResult();
         if ($result === null) {

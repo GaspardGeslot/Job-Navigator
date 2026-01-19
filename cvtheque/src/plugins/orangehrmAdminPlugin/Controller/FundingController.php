@@ -25,19 +25,14 @@ class FundingController extends AbstractVueController
 
     public function getAll()
     {
-        error_log('Début de getAll()');
         $token = $this->getAuthUser()->getUserHedwigeToken();
-        error_log('Token récupéré: ' . $token);
-        
         $fundings = $this->getFundings($token);
-        error_log('Financements récupérés: ' . json_encode($fundings));
         
         $response = new Response(
             json_encode($fundings),
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
-        error_log('Réponse envoyée: ' . $response->getContent());
         return $response;
     }
 
@@ -65,14 +60,11 @@ class FundingController extends AbstractVueController
 
     private function getFundings(string $token): array
     {
-        error_log('Début de getFundings()');
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        error_log('URL de base: ' . $clientBaseUrl);
         
         try {
             $url = "{$clientBaseUrl}/funding";
-            error_log('URL complète: ' . $url);
             
             $response = $client->request('GET', $url, [
                 'headers' => [
@@ -80,14 +72,9 @@ class FundingController extends AbstractVueController
                 ],
             ]);
             
-            error_log('Statut de la réponse: ' . $response->getStatusCode());
-            error_log('Corps de la réponse brute: ' . $response->getBody());
-            
             $data = json_decode($response->getBody(), true);
-            error_log('Données décodées: ' . json_encode($data));
             
             if (!is_array($data)) {
-                error_log('Les données ne sont pas un tableau');
                 return [];
             }
             
@@ -95,12 +82,9 @@ class FundingController extends AbstractVueController
                 return ['name' => $funding];
             }, $data);
             
-            error_log('Données transformées: ' . json_encode($transformedData));
             return $transformedData;
             
         } catch (\Exception $e) {
-            error_log('Erreur lors de la récupération des financements: ' . $e->getMessage());
-            error_log('Stack trace: ' . $e->getTraceAsString());
             return [];
         }
     }
