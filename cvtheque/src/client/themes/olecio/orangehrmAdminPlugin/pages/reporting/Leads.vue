@@ -5,7 +5,7 @@
         <oxd-form-row>
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
-              <oxd-input-field
+              <date-input
                 v-model="startDateFilter"
                 :label="$t('Date de début')"
                 :rules="rules.fromDate"
@@ -13,7 +13,7 @@
               />
             </oxd-grid-item>
             <oxd-grid-item>
-              <oxd-input-field
+              <date-input
                 v-model="endDateFilter"
                 :label="$t('general.end_date')"
                 :rules="rules.toDate"
@@ -195,7 +195,7 @@ import {navigate} from '@/core/util/helper/navigation';
 import usei18n from '@/core/util/composable/usei18n';
 import {
   required,
-  validDateFormatFrench,
+  validDateFormat,
   startDateShouldBeBeforeEndDate,
   endDateShouldBeAfterStartDate,
 } from '@/core/util/validation/rules';
@@ -206,6 +206,7 @@ import {APIService} from '@/core/util/services/api.service';
 import {OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog.vue';
+import DateInput from '@/core/components/inputs/DateInput';
 
 export default {
   components: {
@@ -213,6 +214,7 @@ export default {
     'job-autocomplete': JobAutocomplete,
     'confirmation-dialog': ConfirmationDialog,
     'oxd-switch-input': OxdSwitchInput,
+    'date-input': DateInput,
   },
   props: {
     actors: {
@@ -228,6 +230,8 @@ export default {
     const {$t} = usei18n();
     const jobAutocomplete = ref(null);
 
+    const userDateFormat = 'yyyy-MM-dd';
+
     // Clé pour le localStorage
     const STORAGE_KEY = 'leadsFilters';
 
@@ -237,15 +241,36 @@ export default {
         const savedFilters = localStorage.getItem(STORAGE_KEY);
         if (savedFilters) {
           const filters = JSON.parse(savedFilters);
+
+          // Convertir les dates sauvegardées du format API (yyyy-MM-dd) vers le format utilisateur
+          const defaultStartDate = new Date();
+          defaultStartDate.setDate(defaultStartDate.getDate() - 2);
+          const defaultEndDate = new Date();
+
+          const convertDateFromStorage = (dateValue) => {
+            if (!dateValue) return null;
+            if (
+              dateValue.includes('-') &&
+              dateValue.length === 10 &&
+              dateValue.match(/^\d{4}-\d{2}-\d{2}$/)
+            ) {
+              // Format API (yyyy-MM-dd), convertir vers format utilisateur
+              return formatDate(
+                parseDate(dateValue, 'yyyy-MM-dd'),
+                userDateFormat,
+              );
+            }
+            // Déjà au format utilisateur
+            return dateValue;
+          };
+
           return {
             startDateFilter:
-              filters.startDateFilter ||
-              formatDate(
-                new Date(new Date().setDate(new Date().getDate() - 2)),
-                'dd-MM-yyyy',
-              ),
+              convertDateFromStorage(filters.startDateFilter) ||
+              formatDate(defaultStartDate, userDateFormat),
             endDateFilter:
-              filters.endDateFilter || formatDate(new Date(), 'dd-MM-yyyy'),
+              convertDateFromStorage(filters.endDateFilter) ||
+              formatDate(defaultEndDate, userDateFormat),
             matchingStatusFilter: filters.matchingStatusFilter || null,
             actorsFilter: filters.actorsFilter || [],
             jobsFilter: filters.jobsFilter || [],
@@ -256,12 +281,13 @@ export default {
         console.error('Error loading filters from localStorage:', error);
       }
       // Valeurs par défaut si rien n'est sauvegardé
+      const defaultStartDate = new Date();
+      defaultStartDate.setDate(defaultStartDate.getDate() - 2);
+      const defaultEndDate = new Date();
+      // Valeurs par défaut si rien n'est sauvegardé
       return {
-        startDateFilter: formatDate(
-          new Date(new Date().setDate(new Date().getDate() - 2)),
-          'dd-MM-yyyy',
-        ),
-        endDateFilter: formatDate(new Date(), 'dd-MM-yyyy'),
+        startDateFilter: formatDate(defaultStartDate, userDateFormat),
+        endDateFilter: formatDate(defaultEndDate, userDateFormat),
         matchingStatusFilter: null,
         actorsFilter: [],
         jobsFilter: [],
@@ -279,9 +305,16 @@ export default {
       course,
     ) => {
       try {
+        // Convertir du format utilisateur vers le format API pour le stockage
+        const startDateApi = startDate
+          ? formatDate(parseDate(startDate, userDateFormat), 'yyyy-MM-dd')
+          : null;
+        const endDateApi = endDate
+          ? formatDate(parseDate(endDate, userDateFormat), 'yyyy-MM-dd')
+          : null;
         const filters = {
-          startDateFilter: startDate,
-          endDateFilter: endDate,
+          startDateFilter: startDateApi,
+          endDateFilter: endDateApi,
           matchingStatusFilter: matchingStatusFilter,
           actorsFilter: actors,
           jobsFilter: jobs,
@@ -296,8 +329,19 @@ export default {
     // Charger les filtres depuis localStorage
     const loadedFilters = loadFiltersFromLocalStorage();
 
-    const startDateFilter = ref(loadedFilters.startDateFilter);
-    const endDateFilter = ref(loadedFilters.endDateFilter);
+    // S'assurer que les dates sont initialisées avec des valeurs par défaut si elles sont null/undefined
+    const defaultStartDate = new Date();
+    defaultStartDate.setDate(defaultStartDate.getDate() - 2);
+    const defaultEndDate = new Date();
+
+    const startDateFilter = ref(
+      loadedFilters?.startDateFilter ||
+        formatDate(defaultStartDate, userDateFormat),
+    );
+    const endDateFilter = ref(
+      loadedFilters?.endDateFilter ||
+        formatDate(defaultEndDate, userDateFormat),
+    );
     const matchingStatusFilter = ref(loadedFilters.matchingStatusFilter);
     const actorsFilter = ref(loadedFilters.actorsFilter);
     const jobsFilter = ref(loadedFilters.jobsFilter);
@@ -314,20 +358,20 @@ export default {
     const rules = {
       fromDate: [
         required,
-        validDateFormatFrench('dd-MM-yyyy'),
+        validDateFormat(userDateFormat),
         startDateShouldBeBeforeEndDate(
           () => endDateFilter.value,
           $t('general.from_date_should_be_before_to_date'),
-          {allowSameDate: true, dateFormat: 'dd-MM-yyyy'},
+          {allowSameDate: true, dateFormat: userDateFormat},
         ),
       ],
       toDate: [
         required,
-        validDateFormatFrench('dd-MM-yyyy'),
+        validDateFormat(userDateFormat),
         endDateShouldBeAfterStartDate(
           () => startDateFilter.value,
           $t('general.to_date_should_be_after_from_date'),
-          {allowSameDate: true, dateFormat: 'dd-MM-yyyy'},
+          {allowSameDate: true, dateFormat: userDateFormat},
         ),
       ],
     };
@@ -513,13 +557,13 @@ export default {
         .getAll({
           from: startDateFilter.value
             ? formatDate(
-                parseDate(startDateFilter.value, 'dd-MM-yyyy'),
+                parseDate(startDateFilter.value, userDateFormat),
                 'yyyy-MM-dd',
               )
             : undefined,
           to: endDateFilter.value
             ? formatDate(
-                parseDate(endDateFilter.value, 'dd-MM-yyyy'),
+                parseDate(endDateFilter.value, userDateFormat),
                 'yyyy-MM-dd',
               )
             : undefined,
@@ -571,11 +615,11 @@ export default {
     };
 
     const onClickReset = () => {
-      startDateFilter.value = formatDate(
-        new Date(new Date().setDate(new Date().getDate() - 2)),
-        'dd-MM-yyyy',
-      );
-      endDateFilter.value = formatDate(new Date(), 'dd-MM-yyyy');
+      const defaultStartDate = new Date();
+      defaultStartDate.setDate(defaultStartDate.getDate() - 2);
+      const defaultEndDate = new Date();
+      startDateFilter.value = formatDate(defaultStartDate, userDateFormat);
+      endDateFilter.value = formatDate(defaultEndDate, userDateFormat);
       matchingStatusFilter.value = null;
       actorsFilter.value = [];
       jobsFilter.value = [];

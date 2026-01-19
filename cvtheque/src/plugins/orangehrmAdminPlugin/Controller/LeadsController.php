@@ -314,7 +314,6 @@ class LeadsController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/lead/{$id}/info";
-        error_log('data: ' . json_encode($data));
         $response = $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,

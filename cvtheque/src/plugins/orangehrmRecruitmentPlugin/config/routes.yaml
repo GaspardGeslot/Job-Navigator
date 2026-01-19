@@ -446,7 +446,7 @@ apiv2_recruitment_vacancy:
     _key: id
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_vacancies:
   path: /{theme}/api/v2/recruitment/vacancies
@@ -455,7 +455,7 @@ apiv2_recruitment_vacancies:
   defaults:
     _api: OrangeHRM\Recruitment\Api\VacancyAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_vacancies_attachments:
   path: /{theme}/api/v2/recruitment/vacancies/{vacancyId}/attachments
@@ -466,7 +466,7 @@ apiv2_recruitment_vacancies_attachments:
     _key: vacancyId
   requirements:
     vacancyId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_vacancies_attachment:
   path: /{theme}/api/v2/recruitment/vacancies/{vacancyId}/attachments/{attachmentId}
@@ -477,7 +477,7 @@ apiv2_recruitment_vacancies_attachment:
   requirements:
     vacancyId: '\d+'
     attachmentId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_vacancy_attachments:
   path: /{theme}/api/v2/recruitment/vacancy/attachments
@@ -486,14 +486,14 @@ apiv2_recruitment_vacancy_attachments:
   defaults:
     _api: OrangeHRM\Recruitment\Api\VacancyAttachmentAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates:
   path: /{theme}/api/v2/recruitment/candidates
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::getAll
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidate:
   path: /{theme}/api/v2/recruitment/candidates/{id}
@@ -504,7 +504,7 @@ apiv2_recruitment_candidate:
     _key: id
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_company:
   path: /{theme}/api/v2/recruitment/companies/{id}
@@ -515,7 +515,7 @@ apiv2_recruitment_company:
     _key: id
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidate_attachment:
   path: /{theme}/api/v2/recruitment/candidate/{candidateId}/attachment
@@ -526,7 +526,7 @@ apiv2_recruitment_candidate_attachment:
     _key: candidateId
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidate_attachments:
   path: /{theme}/api/v2/recruitment/candidate/attachments
@@ -535,7 +535,7 @@ apiv2_recruitment_candidate_attachments:
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateAttachmentAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidate_status:
   path: /{theme}/api/v2/recruitment/candidates/statuses
@@ -544,7 +544,7 @@ apiv2_recruitment_candidate_status:
   defaults:
     _api: OrangeHRM\Recruitment\Api\CandidateStatusAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidature_status:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/matching/{matchingId}/status/{candidatureStatusId}
@@ -556,7 +556,7 @@ apiv2_recruitment_candidature_status:
     candidateId: '\d+'
     matchingId: '\d+'
     candidatureStatusId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_hiring_managers:
   path: /{theme}/api/v2/recruitment/hiring-managers
@@ -565,7 +565,7 @@ apiv2_recruitment_hiring_managers:
   defaults:
     _api: OrangeHRM\Recruitment\Api\HiringManagerAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_allowed_actions:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/actions/allowed
@@ -575,7 +575,7 @@ apiv2_recruitment_candidates_allowed_actions:
     _api: OrangeHRM\Recruitment\Api\CandidateAllowedActionAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_reject:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/reject
@@ -585,7 +585,7 @@ apiv2_recruitment_candidates_reject:
     _api: OrangeHRM\Recruitment\Api\CandidateRejectionAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_shortlist:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/shortlist
@@ -595,7 +595,7 @@ apiv2_recruitment_candidates_shortlist:
     _api: OrangeHRM\Recruitment\Api\CandidateShortlistingAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_schedule_interview:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/shedule-interview
@@ -605,7 +605,7 @@ apiv2_recruitment_candidates_schedule_interview:
     _api: OrangeHRM\Recruitment\Api\CandidateInterviewSchedulingAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_interviews:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}
@@ -617,7 +617,7 @@ apiv2_recruitment_candidates_interviews:
   requirements:
     candidateId: '\d+'
     interviewId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_interviews_attachment:
   path: /{theme}/api/v2/recruitment/interviews/{interviewId}/attachments/{attachmentId}
@@ -629,7 +629,7 @@ apiv2_recruitment_interviews_attachment:
   requirements:
     interviewId: '\d+'
     attachmentId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_interview_attachments:
   path: /{theme}/api/v2/recruitment/interviews/{interviewId}/attachments
@@ -639,7 +639,7 @@ apiv2_recruitment_interview_attachments:
     _api: OrangeHRM\Recruitment\Api\InterviewAttachmentAPI
   requirements:
     interviewId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_mark_interview_passed:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}/pass
@@ -650,7 +650,7 @@ apiv2_recruitment_candidates_mark_interview_passed:
   requirements:
     candidateId: '\d+'
     interviewId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_mark_interview_failed:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/interviews/{interviewId}/fail
@@ -661,7 +661,7 @@ apiv2_recruitment_candidates_mark_interview_failed:
   requirements:
     candidateId: '\d+'
     interviewId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_offer_job:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/job/offer
@@ -671,7 +671,7 @@ apiv2_recruitment_candidates_offer_job:
     _api: OrangeHRM\Recruitment\Api\CandidateJobOfferingAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_offer_decline:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/job/decline
@@ -681,7 +681,7 @@ apiv2_recruitment_candidates_offer_decline:
     _api: OrangeHRM\Recruitment\Api\CandidateOfferDecliningAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_hire:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/hire
@@ -691,7 +691,7 @@ apiv2_recruitment_candidates_hire:
     _api: OrangeHRM\Recruitment\Api\CandidateHiringAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidates_history:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/history
@@ -701,7 +701,7 @@ apiv2_recruitment_candidates_history:
     _api: OrangeHRM\Recruitment\Api\CandidateHistoryAPI
   requirements:
     candidateId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_candidate_history:
   path: /{theme}/api/v2/recruitment/candidates/{candidateId}/history/{historyId}
@@ -713,7 +713,7 @@ apiv2_recruitment_candidate_history:
   requirements:
     candidateId: '\d+'
     historyId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_interviewers:
   path: /{theme}/api/v2/recruitment/interviewers
@@ -722,14 +722,14 @@ apiv2_recruitment_interviewers:
   defaults:
     _api: OrangeHRM\Recruitment\Api\EmployeeListAPI
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_public_vacancies:
   path: /{theme}/api/v2/recruitment/public/vacancies
   controller: OrangeHRM\Recruitment\Controller\PublicController\VacancyListRestController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_recruitment_public_vacancy:
   path: /{theme}/api/v2/recruitment/public/vacancies/{id}
@@ -737,7 +737,7 @@ apiv2_recruitment_public_vacancy:
   methods: [ GET ]
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_vacancy_attachment:
   path: /{theme}/recruitment/viewVacancyAttachment/attachId/{attachId}
@@ -745,7 +745,7 @@ recruitment_vacancy_attachment:
   methods: [ GET ]
   requirements:
     attachId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_candidate_attachment:
   path: /{theme}/recruitment/viewCandidateAttachment/candidateId/{attachmentId}
@@ -754,7 +754,7 @@ recruitment_candidate_attachment:
   requirements:
     candidateId: '\d+'
     attachmentId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_interview_attachment:
   path: /{theme}/recruitment/viewInterviewAttachment/interview/{interviewId}/attachment/{attachmentId}
@@ -763,35 +763,35 @@ recruitment_interview_attachment:
   requirements:
     interviewId: '\d+'
     attachmentId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_module:
   path: /{theme}/recruitment/viewRecruitmentModule
   controller: OrangeHRM\Recruitment\Controller\RecruitmentModuleController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_job_vacancy:
   path: /{theme}/recruitment/viewJobVacancy
   controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_job_vacancy_by_id:
   path: /{theme}/recruitment/viewJobVacancy/{id}
   controller: OrangeHRM\Recruitment\Controller\ViewJobVacancyController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_add_job_vacancy:
   path: /{theme}/recruitment/addJobVacancy
   controller: OrangeHRM\Recruitment\Controller\AddJobVacancyController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_edit_job_vacancy:
   path: /{theme}/recruitment/addJobVacancy/{id}
@@ -799,21 +799,21 @@ recruitment_edit_job_vacancy:
   methods: [ GET ]
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_candidates:
   path: /{theme}/recruitment/viewCandidates
   controller: OrangeHRM\Recruitment\Controller\ViewCandidateController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_save_candidates:
   path: /{theme}/recruitment/addCandidate
   controller: OrangeHRM\Recruitment\Controller\SaveCandidateController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_candidate_profile:
   path: /{theme}/recruitment/viewCandidate/{id}
@@ -821,7 +821,7 @@ recruitment_view_candidate_profile:
   methods: [ GET ]
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_candidate_profile_by_matching:
   path: /{theme}/recruitment/viewCandidate/{leadId}/matching/{matchingId}
@@ -830,7 +830,7 @@ recruitment_view_candidate_profile_by_matching:
   requirements:
     leadId: '\d+'
     matchingId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_company_profile:
   path: /{theme}/recruitment/viewCompany/{id}
@@ -838,7 +838,7 @@ recruitment_view_company_profile:
   methods: [ GET ]
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_company_profile_by_matching:
   path: /{theme}/recruitment/viewCompany/{companyId}/matching/{matchingId}
@@ -847,14 +847,14 @@ recruitment_view_company_profile_by_matching:
   requirements:
     companyId: '\d+'
     matchingId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_candidate_action:
   path: /{theme}/recruitment/changeCandidateVacancyStatus
   controller: OrangeHRM\Recruitment\Controller\CandidateActionController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_action_history:
   path: /{theme}/recruitment/candidateHistory/{candidateId}/{historyId}
@@ -863,7 +863,7 @@ recruitment_view_action_history:
   requirements:
     candidateId: '\d+'
     historyId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_interview_attachments:
   path: /{theme}/recruitment/interviewAttachments/{interviewId}
@@ -871,14 +871,14 @@ recruitment_view_interview_attachments:
   methods: [ GET ]
   requirements:
     interviewId: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_view_vacancy_list:
   path: /{theme}/recruitmentApply/jobs.html
   controller: OrangeHRM\Recruitment\Controller\PublicController\VacancyListViewController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_apply_job_vacancy:
   path: /{theme}/recruitmentApply/applyVacancy/id/{id}
@@ -886,19 +886,19 @@ recruitment_apply_job_vacancy:
   methods: [ GET ]
   requirements:
     id: '\d+'
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_public_applicants:
   path: /{theme}/recruitment/public/applicants
   controller: OrangeHRM\Recruitment\Controller\PublicController\ApplicantController::handle
   methods: [ POST ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 recruitment_rss_feed:
   path: /{theme}/recruitmentApply/jobs.rss
   controller: OrangeHRM\Recruitment\Controller\PublicController\VacancyListRSSController::handle
   methods: [ GET ]
   requirements:
-    theme: constructys|olecio
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
