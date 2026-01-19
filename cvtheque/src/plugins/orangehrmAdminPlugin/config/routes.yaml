@@ -3043,6 +3043,23 @@ apiv2_admin_user_delete:
   controller: OrangeHRM\Admin\Controller\UsersController::delete
   methods: [ DELETE ]
 
+apiv2_admin_custom_columns_get:
+  path: /api/v2/admin/custom-column
+  controller: OrangeHRM\Admin\Controller\CustomColumnsController::getAll
+  methods: [ GET ]
+
+apiv2_admin_custom_columns_add:
+  path: /api/v2/admin/custom-column
+  controller: OrangeHRM\Admin\Controller\CustomColumnsController::add
+  methods: [ POST ]
+
+apiv2_admin_custom_columns_delete:
+  path: /api/v2/admin/custom-column/{id}
+  controller: OrangeHRM\Admin\Controller\CustomColumnsController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+
 admin_actor:
   path: /{theme}/admin/viewActor
   controller: OrangeHRM\Admin\Controller\ActorController::handle

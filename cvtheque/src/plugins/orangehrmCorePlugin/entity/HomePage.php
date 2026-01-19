@@ -57,6 +57,13 @@ class HomePage
     private int $priority;
 
     /**
+     * @var Theme|null
+     * @ORM\ManyToOne(targetEntity="OrangeHRM\Entity\Theme", inversedBy="homePages")
+     * @ORM\JoinColumn(name="theme_id", referencedColumnName="theme_id")
+     */
+    private ?Theme $theme = null;
+
+    /**
      * @var UserRole
      *
      * @ORM\ManyToOne(targetEntity="OrangeHRM\Entity\UserRole")
@@ -131,6 +138,22 @@ class HomePage
     public function setPriority(int $priority): void
     {
         $this->priority = $priority;
+    }
+
+    /**
+     * @return Theme
+     */
+    public function getTheme(): Theme
+    {
+        return $this->theme;
+    }
+
+    /**
+     * @param Theme $theme
+     */
+    public function setTheme(Theme $theme): void
+    {
+        $this->theme = $theme;
     }
 
     /**

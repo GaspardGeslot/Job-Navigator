@@ -39,6 +39,7 @@ use OrangeHRM\Framework\Routing\UrlGenerator;
 use OrangeHRM\Framework\Services;
 use OrangeHRM\ORM\Exception\TransactionException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use OrangeHRM\CorporateBranding\Dao\ThemeDao;
 
 class ResetPasswordService
 {
@@ -52,6 +53,22 @@ class ResetPasswordService
     protected ?ResetPasswordDao $resetPasswordDao = null;
     protected ?EmailService $emailService = null;
 
+    /**
+     * @var ThemeDao|null
+     */
+    private ?ThemeDao $themeDao = null;
+
+    /**
+     * @return ThemeDao
+     */
+    public function getThemeDao(): ThemeDao
+    {
+        if (!$this->themeDao instanceof ThemeDao) {
+            $this->themeDao = new ThemeDao();
+        }
+        return $this->themeDao;
+    }
+    
     /**
      * @return EmailService
      */
@@ -229,15 +246,21 @@ class ResetPasswordService
      * @param string $identifier
      * @return array|false|string|string[]
      */
-    public function generateResetLink(string $resetCode, string $theme)
+    public function generateResetLink(string $resetCode, ?string $theme)
     {
         $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
-        return $urlGenerator->generate(
-            'auth_reset_code',
-            ['resetCode' => $resetCode,
-                'theme' => $theme],
-            UrlGenerator::ABSOLUTE_URL
-        );
+        return $theme != null
+            ? $urlGenerator->generate(
+                'auth_reset_code',
+                ['resetCode' => $resetCode,
+                        'theme' => $theme],
+                    UrlGenerator::ABSOLUTE_URL
+                )
+            : $urlGenerator->generate(
+                'subdomain_auth_reset_code',
+                ['resetCode' => $resetCode],
+                    UrlGenerator::ABSOLUTE_URL
+                );
     }
 
     /**
@@ -299,7 +322,7 @@ class ResetPasswordService
      * @param User $user
      * @return bool
      */
-    public function logPasswordResetRequest(User $user, string $theme): bool
+    public function logPasswordResetRequest(User $user, ?string $theme): bool
     {
         $identifier = $user->getUserName();
         $resetCode = $this->generatePasswordResetCode($identifier);
@@ -344,15 +367,19 @@ class ResetPasswordService
      * @param UserCredential $credential
      * @return bool
      */
-    public function saveResetPassword(UserCredential $credential): bool
+    public function saveResetPassword(UserCredential $credential, string $theme): bool
     {
         $this->beginTransaction();
         try {
             $success = false;
-            $user = $this->getUserService()->getUserDao()->getUserByUserName($credential->getUsername());
+            $themeId = $this->getThemeDao()->getId($theme);
+            $clientId = $this->getThemeDao()->getClientIdByThemeName($theme);
+            if ($themeId === null || $clientId === null)
+                return false;
+            $user = $this->getUserService()->getUserDao()->isExistingSystemUser($credential, $themeId);
             if ($this->validateUser($user) instanceof User) {
                 $user->getDecorator()->setNonHashedPassword($credential->getPassword());
-                $success = $this->resetHedwigePassword($credential);
+                $success = $this->resetHedwigePassword($credential, $clientId);
                 if ($success)
                     $this->getUserService()->saveSystemUser($user);
                 /*$success = $this->getResetPasswordDao()
@@ -362,26 +389,32 @@ class ResetPasswordService
             }
             return false;
         } catch (Exception $e) {
+            error_log('error: ' . $e->getMessage());
             $this->rollBackTransaction();
             throw new TransactionException($e);
         }
     }
 
-    protected function resetHedwigePassword(UserCredential $credential): bool
+    protected function resetHedwigePassword(UserCredential $credential, int $clientId): bool
     {
         $client = new Client();
         $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
+
+        $data = [
+            'email' => $credential->getUsername(),
+            'password' => $credential->getPassword()
+        ];
+        $data = json_encode($data);
+
         try {
-            $client->request('PUT', "{$clientBaseUrl}/user/password", [
+            $client->request('PUT', "{$clientBaseUrl}/user/{$clientId}/password", [
                 'headers' => [
                     'Authorization' => $clientToken,
+                    'Content-Type' => 'application/json',
                 ],
-                'json' => [
-                    'email' => $credential->getUsername(),
-                    'password' => $credential->getPassword()
-                ]
+                'body' => $data
             ]);
             return true;
         } catch (\Exceptionon $e) {

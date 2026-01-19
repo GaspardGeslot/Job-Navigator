@@ -67,10 +67,10 @@ class HomePage extends \OrangeHRM\Entity\HomePage implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'action', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'enableClass', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'priority', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'userRole'];
+            return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'action', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'enableClass', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'priority', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'theme', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'userRole'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'action', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'enableClass', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'priority', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'userRole'];
+        return ['__isInitialized__', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'id', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'action', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'enableClass', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'priority', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'theme', '' . "\0" . 'OrangeHRM\\Entity\\HomePage' . "\0" . 'userRole'];
     }
 
     /**
@@ -267,6 +267,28 @@ class HomePage extends \OrangeHRM\Entity\HomePage implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPriority', [$priority]);
 
         parent::setPriority($priority);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTheme(): \OrangeHRM\Entity\Theme
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTheme', []);
+
+        return parent::getTheme();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTheme(\OrangeHRM\Entity\Theme $theme): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTheme', [$theme]);
+
+        parent::setTheme($theme);
     }
 
     /**

@@ -35,6 +35,14 @@ class HomePageService
     /**
      * @return string|null
      */
+    public function getHomePagePathByTheme(string $theme): ?string
+    {
+        return $this->getUserRoleManager()->getHomePageByTheme($theme);
+    }
+
+    /**
+     * @return string|null
+     */
     public function getTimeModuleDefaultPath(): ?string
     {
         return $this->getModuleDefaultPage('time');

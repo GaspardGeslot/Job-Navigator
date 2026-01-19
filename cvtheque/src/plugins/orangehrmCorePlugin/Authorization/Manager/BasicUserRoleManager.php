@@ -42,6 +42,7 @@ use OrangeHRM\Pim\Traits\Service\EmployeeServiceTrait;
 use OrangeHRM\Recruitment\Traits\Service\CandidateServiceTrait;
 use OrangeHRM\Recruitment\Traits\Service\VacancyServiceTrait;
 use OrangeHRM\Time\Traits\Service\ProjectServiceTrait;
+use OrangeHRM\CorporateBranding\Dao\ThemeDao;
 
 class BasicUserRoleManager extends AbstractUserRoleManager
 {
@@ -875,6 +876,40 @@ class BasicUserRoleManager extends AbstractUserRoleManager
             $userRoleIds[] = $role->getId();
         }
         $defaultPages = $this->getHomePageDao()->getHomePagesInPriorityOrder($userRoleIds);
+
+        foreach ($defaultPages as $defaultPage) {
+            $enabled = true;
+            $enableClass = $defaultPage->getEnableClass();
+            $fallbackNamespace = 'OrangeHRM\\Core\\HomePage\\';
+
+            if (!empty($enableClass) && $this->getClassHelper()->classExists($enableClass, $fallbackNamespace)) {
+                $enableClass = $this->getClassHelper()->getClass($enableClass, $fallbackNamespace);
+                $enableClassInstance = new $enableClass();
+                if ($enableClassInstance instanceof HomePageEnablerInterface) {
+                    $enabled = $enableClassInstance->isEnabled($this->getUser());
+                }
+            }
+            if ($enabled) {
+                $action = $defaultPage->getAction();
+                break;
+            }
+        }
+
+        return $action;
+    }
+
+    public function getHomePageByTheme(string $theme): ?string
+    {
+        $action = null;
+
+        $userRoleIds = [];
+        foreach ($this->userRoles as $role) {
+            $userRoleIds[] = $role->getId();
+        }
+        $themeId = $this->getThemeDao()->getId($theme);
+        $defaultPages = $themeId != null
+            ? $this->getHomePageDao()->getHomePagesInPriorityOrderByTheme($themeId, $userRoleIds) 
+            : $this->getHomePageDao()->getHomePagesInPriorityOrder($userRoleIds);
 
         foreach ($defaultPages as $defaultPage) {
             $enabled = true;

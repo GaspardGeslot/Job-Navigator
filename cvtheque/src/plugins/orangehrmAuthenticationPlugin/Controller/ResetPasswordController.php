@@ -52,14 +52,14 @@ class ResetPasswordController extends AbstractController implements PublicContro
     public function handle(Request $request): RedirectResponse
     {
         $token = $request->request->get('_token');
-
+        $theme = $request->attributes->get('theme');
         if (!$this->getCsrfTokenManager()->isValid('reset-password', $token)) {
             throw AuthenticationException::invalidCsrfToken();
         }
         $username = $request->request->get('username');
         $password = $request->request->get('password');
         $credentials = new UserCredential($username, $password);
-        $this->getResetPasswordService()->saveResetPassword($credentials);
+        $this->getResetPasswordService()->saveResetPassword($credentials, $theme);
         $session = $this->getContainer()->get(Services::SESSION);
         $session->invalidate();
         return $this->redirect("auth/login");

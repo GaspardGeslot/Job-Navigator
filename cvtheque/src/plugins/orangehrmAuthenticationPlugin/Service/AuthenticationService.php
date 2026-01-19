@@ -148,10 +148,13 @@ class AuthenticationService
         try {
             $url = $isCompany ? "{$clientBaseUrl}/company/{$clientId}" : "{$clientBaseUrl}/user/{$clientId}";
             $client->request('POST', $url, [
-                'json' => [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode([
                     'email' => $credentials->getUsername(),
                     'password' => $credentials->getPassword()
-                ]
+                ])
             ]);
             return true;
         } catch (\Exceptionon $e) {
