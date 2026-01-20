@@ -55,7 +55,6 @@ function detectSubspace(): [string, string] {
   for (const theme of validThemes) {
     // Pattern : theme.domain.com ou theme.localhost
     if (hostname.startsWith(`${theme}.`)) {
-      console.info(`[Theme] Détecté depuis le sous-domaine: ${theme}`);
       return [theme, theme.replace('-demo', '')];
     }
   }
@@ -68,9 +67,6 @@ function detectSubspace(): [string, string] {
       const firstSegment = relativePathSegments[0];
 
       if (firstSegment && validThemes.includes(firstSegment)) {
-        console.info(
-          `[Theme] Détecté depuis le path (fallback): ${firstSegment}`,
-        );
         return [firstSegment, firstSegment.replace('-demo', '')];
       }
     }
@@ -79,7 +75,6 @@ function detectSubspace(): [string, string] {
   }
 
   // 3. DEFAULT
-  console.info('[Theme] Utilisation du thème par défaut: constructys');
   return ['constructys', 'constructys'];
 }
 
@@ -87,11 +82,9 @@ const [subspace, filesSubspace] = detectSubspace();
 
 let pages;
 try {
-  console.log('filesSubspace : ' + filesSubspace);
   // eslint-disable-next-line
   pages = require(`../themes/${filesSubspace}/pages`).default;
 } catch (e) {
-  //console.log('e : ' + e);
   // eslint-disable-next-line
   pages = require('../themes/constructys/pages').default;
   console.warn(

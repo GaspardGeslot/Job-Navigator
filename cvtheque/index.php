@@ -26,6 +26,24 @@ include_once('./src/config/log_settings.php');
 if (!Config::isInstalled()) {
     header('Location: ./installer/index.php');
 } else {
-    //header("Location: ./web/index.php/candidature/index");
-    header("Location: ./web/index.php/constructys/candidature/index");
+    // Détection du sous-domaine
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    $subdomain = '';
+    
+    // Extraire le sous-domaine si présent (format: subdomain.domain.com)
+    $parts = explode('.', $host);
+    if (count($parts) >= 3 || (count($parts) === 2 && $parts[1] === 'localhost')) {
+        $subdomain = $parts[0];
+    }
+
+    // Déterminer la redirection selon le sous-domaine
+    $location = './web/index.php/constructys/candidature/index'; // Par défaut (pas de sous-domaine)
+    
+    if ($subdomain === 'olecio' || $subdomain === 'olecio-demo') {
+        $location = './web/index.php/auth/admin/login';
+    } elseif ($subdomain === 'maraudes' || $subdomain === 'maraudes-demo') {
+        $location = './web/index.php/home/index';
+    }
+    
+    header("Location: $location");
 }
