@@ -417,6 +417,8 @@
               <oxd-input-field
                 v-model="profile.franceTravailAgency"
                 :label="$t('Agence')"
+                type="select"
+                :options="franceTravailAgencyOptions"
                 :disabled="!editable"
               />
             </oxd-grid-item>
@@ -780,23 +782,24 @@ export default {
         telephoneContactComment: [shouldNotExceedCharLength(1000)],
       },
       franceTravailAgencyOptions: [
-        {id: 0, label: 'PÔLE EMPLOI ANTONY 92160'},
-        {id: 1, label: 'PÔLE EMPLOI ASNIÈRES-SUR-SEINE 92600'},
-        {id: 2, label: 'PÔLE EMPLOI BAGNEUX 92220'},
-        {id: 3, label: 'PÔLE EMPLOI BOIS-COLOMBES 92270'},
-        {id: 4, label: 'PÔLE EMPLOI BOULOGNE-BILLANCOURT 92100'},
-        {id: 5, label: 'PÔLE EMPLOI CLICHY 92110'},
-        {id: 6, label: 'PÔLE EMPLOI COLOMBES 92700'},
-        {id: 7, label: 'PÔLE EMPLOI COURBEVOIE 92400'},
-        {id: 8, label: 'PÔLE EMPLOI GENNEVILLIERS 92230'},
-        {id: 9, label: 'PÔLE EMPLOI ISSY-LES-MOULINEAUX 92130'},
-        {id: 10, label: 'PÔLE EMPLOI LEVALLOIS-PERRET 92300'},
-        {id: 11, label: 'PÔLE EMPLOI MEUDON 92190'},
-        {id: 12, label: 'PÔLE EMPLOI MONTROUGE 92120'},
-        {id: 13, label: 'PÔLE EMPLOI NANTERRE 92000'},
-        {id: 14, label: 'PÔLE EMPLOI PUTEAUX 92800'},
-        {id: 15, label: 'PÔLE EMPLOI RUEIL-MALMAISON 92500'},
-        {id: 16, label: '-'},
+        {id: 0, label: 'FRANCE TRAVAIL ANTONY 92160'},
+        {id: 1, label: 'FRANCE TRAVAIL ASNIÈRES-SUR-SEINE 92600'},
+        {id: 2, label: 'FRANCE TRAVAIL BAGNEUX 92220'},
+        {id: 3, label: 'FRANCE TRAVAIL BOIS-COLOMBES 92270'},
+        {id: 4, label: 'FRANCE TRAVAIL BOULOGNE-BILLANCOURT 92100'},
+        {id: 5, label: 'FRANCE TRAVAIL CLICHY 92110'},
+        {id: 6, label: 'FRANCE TRAVAIL COLOMBES 92700'},
+        {id: 7, label: 'FRANCE TRAVAIL COURBEVOIE 92400'},
+        {id: 8, label: 'FRANCE TRAVAIL GENNEVILLIERS 92230'},
+        {id: 9, label: 'FRANCE TRAVAIL ISSY-LES-MOULINEAUX 92130'},
+        {id: 10, label: 'FRANCE TRAVAIL LEVALLOIS-PERRET 92300'},
+        {id: 11, label: 'FRANCE TRAVAIL MEUDON 92190'},
+        {id: 12, label: 'FRANCE TRAVAIL MONTROUGE 92120'},
+        {id: 13, label: 'FRANCE TRAVAIL NANTERRE 92000'},
+        {id: 14, label: 'FRANCE TRAVAIL PUTEAUX 92800'},
+        {id: 15, label: 'FRANCE TRAVAIL RUEIL-MALMAISON 92500'},
+        {id: 16, label: 'PARIS'},
+        {id: 17, label: '-'},
       ],
       rqthOptions: [
         {id: 0, label: 'Non, je ne suis pas concerné·e'},
@@ -891,6 +894,9 @@ export default {
       if (dataToSend.currentSituation)
         dataToSend.currentSituation = this.profile.currentSituation?.label;
 
+      if (dataToSend.franceTravailAgency)
+        dataToSend.franceTravailAgency = dataToSend.franceTravailAgency?.label;
+
       this.http
         .request({
           method: 'PUT',
@@ -963,7 +969,6 @@ export default {
       this.profile.apiMessage = this.lead.apiMessage;
       this.profile.manualDelivery = this.lead.manualDelivery;
       this.profile.ko = this.lead.ko;
-      this.profile.franceTravailAgency = this.lead.franceTravailAgency;
       this.profile.telephoneContacts = this.lead.telephoneContacts
         ? [...this.lead.telephoneContacts].sort((a, b) => {
             // Trier par date (du plus ancien au plus récent)
@@ -994,6 +999,11 @@ export default {
       if (this.lead.currentSituation)
         this.profile.currentSituation = this.statuses.find(
           (option) => option.label === this.lead.currentSituation,
+        );
+
+      if (this.lead.franceTravailAgency)
+        this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
+          (option) => option.label === this.lead.franceTravailAgency,
         );
 
       if (this.lead.rqth)
