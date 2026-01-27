@@ -29,7 +29,7 @@
           <p>
             Olecio met en place des maraudes numériques pour repérer, engager et
             orienter les jeunes et les adultes éloignés de l'emploi vers les
-            pertenaires qui pourront le mieux répondre à leur besoin
+            partenaires qui pourront le mieux répondre à leur besoin
             d'accompagnement.
           </p>
           <div class="actions">
