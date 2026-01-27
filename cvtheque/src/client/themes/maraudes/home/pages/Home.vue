@@ -23,12 +23,14 @@
       <div class="hero__content">
         <div class="hero__text">
           <h1>
-            Facilitons la (ré)insertion des NEETs avec les maraudes numériques
+            Facilitons la (ré)insertion des personnes éloignées de l'emploi avec
+            les maraudes numériques
           </h1>
           <p>
-            Olecio accompagne les équipes de maraude pour repérer, engager et
-            orienter les jeunes et adultes éloignés de l’emploi vers les bons
-            partenaires régionaux.
+            Olecio met en place des maraudes numériques pour repérer, engager et
+            orienter les jeunes et les adultes éloignés de l'emploi vers les
+            pertenaires qui pourront le mieux répondre à leur besoin
+            d'accompagnement.
           </p>
           <div class="actions">
             <button class="btn-primary" @click="navigateToLogin">
