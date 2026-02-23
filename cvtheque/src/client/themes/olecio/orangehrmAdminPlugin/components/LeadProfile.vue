@@ -1103,10 +1103,15 @@ export default {
       );
 
       const resolveTypeForSelect = (typeFromApi) => {
-        if (typeFromApi == null) return null;
-        if (typeof typeFromApi === 'object' && typeFromApi.value !== undefined)
-          return typeFromApi.value;
-        return String(typeFromApi);
+        // if (typeFromApi == null) return null;
+
+        // const ordinal = Number(typeFromApi);
+        // if (!Number.isInteger(ordinal)) return null;
+
+        // return this.contactLogTypes.find(
+        //   (option) => option.id === ordinal
+        // ) || null;
+        //Ajouter un champ pour remplacer le select de Type, comme ça je peux avoir le slider "a contacté avec succès"
       };
 
       if (originalContact && dateTime) {
