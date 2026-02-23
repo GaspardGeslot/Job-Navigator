@@ -39,6 +39,14 @@ class LeadsController extends AbstractVueController
                     'label' => $label
                 ];
             }, $options, array_keys($options))));
+
+            $contactLogOptions = $this->getHedwigeContactOptions($this->getAuthUser()->getUserHedwigeToken());
+            $component->addProp(new Prop('contact-log-types', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($contactLogOptions), $contactLogOptions)));
         }
         else {
             $component = new Component('leads-list');
@@ -354,7 +362,7 @@ class LeadsController extends AbstractVueController
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        $url = "{$clientBaseUrl}/lead/{$id}/telephone-contact";
+        $url = "{$clientBaseUrl}/lead/{$id}/contact-log";
         $response = $client->request('POST', $url, [
             'headers' => [
                 'Authorization' => $token,
@@ -368,7 +376,7 @@ class LeadsController extends AbstractVueController
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        $url = "{$clientBaseUrl}/lead/{$id}/telephone-contact?date=" . urlencode($date);
+        $url = "{$clientBaseUrl}/lead/{$id}/contact-log?date=" . urlencode($date);
         $response = $client->request('DELETE', $url, [
             'headers' => [
                 'Authorization' => $token,
@@ -381,7 +389,7 @@ class LeadsController extends AbstractVueController
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        $url = "{$clientBaseUrl}/lead/{$id}/telephone-contact";
+        $url = "{$clientBaseUrl}/lead/{$id}/contact-log";
         $response = $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,
@@ -389,5 +397,23 @@ class LeadsController extends AbstractVueController
             ],
             'body' => json_encode($data)
         ]);
+    }
+
+    public function getHedwigeContactOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/client/contact-logs";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (ClientException $e) {
+            return [];
+        }
     }
 }

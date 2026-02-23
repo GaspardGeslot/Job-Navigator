@@ -2172,7 +2172,7 @@ apiv2_admin_leads_deliver:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_admin_lead_telephone_contact:
-  path: /{theme}/api/v2/admin/leads/{id}/telephone-contact
+  path: /{theme}/api/v2/admin/leads/{id}/contact-log
   controller: OrangeHRM\Admin\Controller\LeadsController::addTelephoneContact
   methods: [ POST ]
   requirements:
@@ -2180,7 +2180,7 @@ apiv2_admin_lead_telephone_contact:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_admin_lead_telephone_contact_delete:
-  path: /{theme}/api/v2/admin/leads/{id}/telephone-contact
+  path: /{theme}/api/v2/admin/leads/{id}/contact-log
   controller: OrangeHRM\Admin\Controller\LeadsController::deleteTelephoneContact
   methods: [ DELETE ]
   requirements:
@@ -2188,7 +2188,7 @@ apiv2_admin_lead_telephone_contact_delete:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
 apiv2_admin_lead_telephone_contact_update:
-  path: /{theme}/api/v2/admin/leads/{id}/telephone-contact
+  path: /{theme}/api/v2/admin/leads/{id}/contact-log
   controller: OrangeHRM\Admin\Controller\LeadsController::updateTelephoneContact
   methods: [ PUT ]
   requirements:
@@ -2210,21 +2210,21 @@ subdomain_apiv2_admin_leads_update:
     id: '\d+'
 
 subdomain_apiv2_admin_lead_telephone_contact:
-  path: /api/v2/admin/leads/{id}/telephone-contact
+  path: /api/v2/admin/leads/{id}/contact-log
   controller: OrangeHRM\Admin\Controller\LeadsController::addTelephoneContact
   methods: [ POST ]
   requirements:
     id: '\d+'
 
 subdomain_apiv2_admin_lead_telephone_contact_delete:
-  path: /api/v2/admin/leads/{id}/telephone-contact
+  path: /api/v2/admin/leads/{id}/contact-log
   controller: OrangeHRM\Admin\Controller\LeadsController::deleteTelephoneContact
   methods: [ DELETE ]
   requirements:
     id: '\d+'
 
 subdomain_apiv2_admin_lead_telephone_contact_update:
-  path: /api/v2/admin/leads/{id}/telephone-contact
+  path: /api/v2/admin/leads/{id}/contact-log
   controller: OrangeHRM\Admin\Controller\LeadsController::updateTelephoneContact
   methods: [ PUT ]
   requirements:

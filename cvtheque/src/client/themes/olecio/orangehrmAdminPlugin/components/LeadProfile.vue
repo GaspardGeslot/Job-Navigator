@@ -398,6 +398,11 @@
               row-decorator="oxd-table-decorator-card"
             />
           </div>
+          <div v-else class="orangehrm-telephone-contacts-empty">
+            <oxd-text>
+              {{ $t("ℹ️ Aucune prise de contact n'a encore été renseignée.") }}
+            </oxd-text>
+          </div>
         </oxd-form-row>
 
         <oxd-divider></oxd-divider>
@@ -546,20 +551,42 @@
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
-                v-model="telephoneContactForm.phoneNumber"
-                :label="$t('recruitment.contact_number')"
-                :rules="rules.telephoneContactPhoneNumber"
+                v-model="telephoneContactForm.type"
+                :label="$t('Type de prise de contact')"
+                type="select"
+                :options="contactLogTypes"
+                option-value="id"
+                option-label="label"
                 :disabled="isEditingTelephoneContact"
                 required
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <oxd-grid-item v-if="contactLogTypeOrdinal !== null">
               <oxd-text class="orangehrm-input-title" tag="h6">
-                {{ $t('Appel abouti avec succès') }}
+                {{
+                  isContactLogTypeTelephone
+                    ? $t('Contact abouti avec succès')
+                    : $t('A répondu')
+                }}
               </oxd-text>
               <oxd-switch-input
                 v-model="telephoneContactForm.successful"
                 :disabled="isEditingTelephoneContact"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item v-if="isContactLogTypePhone">
+              <oxd-input-field
+                v-model="telephoneContactForm.phoneNumber"
+                :label="$t('recruitment.contact_number')"
+                :rules="
+                  isContactLogTypePhone ? rules.telephoneContactPhoneNumber : []
+                "
+                :disabled="isEditingTelephoneContact"
+                required
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -668,6 +695,7 @@ const TelephoneContactModel = {
   phoneNumber: '',
   successful: false,
   comment: '',
+  type: null,
 };
 
 export default {
@@ -694,6 +722,10 @@ export default {
     statuses: {
       type: Array,
       required: true,
+    },
+    contactLogTypes: {
+      type: Array,
+      default: () => [],
     },
   },
   emits: ['update'],
@@ -726,13 +758,18 @@ export default {
           style: {flex: 1},
         },
         {
+          name: 'type',
+          title: this.$t('Type'),
+          style: {flex: 1},
+        },
+        {
           name: 'phoneNumber',
-          title: this.$t('recruitment.contact_number'),
+          title: this.$t('Moyen de contact'),
           style: {flex: 1},
         },
         {
           name: 'successful',
-          title: this.$t('Réussi'),
+          title: this.$t('Réussi/Répondu'),
           style: {flex: 1},
         },
         {
@@ -813,6 +850,20 @@ export default {
     };
   },
   computed: {
+    contactLogTypeOrdinal() {
+      const t = this.telephoneContactForm.type;
+      if (t == null) return null;
+      if (typeof t === 'object') return t.value ?? t.id ?? null;
+      const n = Number(t);
+      return Number.isInteger(n) ? n : null;
+    },
+    isContactLogTypePhone() {
+      const o = this.contactLogTypeOrdinal;
+      return o !== null && o !== 1;
+    },
+    isContactLogTypeTelephone() {
+      return this.contactLogTypeOrdinal !== 1;
+    },
     sortedStatuses() {
       if (!this.statuses || !Array.isArray(this.statuses)) {
         return [];
@@ -846,6 +897,7 @@ export default {
         }
         return {
           date: formattedDate,
+          type: contact.type || '',
           phoneNumber: contact.phoneNumber || '',
           successful: contact.successful
             ? this.$t('general.yes')
@@ -1023,6 +1075,7 @@ export default {
         phoneNumber: this.profile.phoneNumber || '',
         successful: false,
         comment: '',
+        type: null,
       };
       this.showTelephoneContactModal = true;
     },
@@ -1049,6 +1102,13 @@ export default {
         (c) => c.date === item._originalDate,
       );
 
+      const resolveTypeForSelect = (typeFromApi) => {
+        if (typeFromApi == null) return null;
+        if (typeof typeFromApi === 'object' && typeFromApi.value !== undefined)
+          return typeFromApi.value;
+        return String(typeFromApi);
+      };
+
       if (originalContact && dateTime) {
         // Extraire la date (yyyy-MM-dd) et l'heure (HH:mm) séparément
         const dateStr = formatDate(dateTime, 'yyyy-MM-dd');
@@ -1060,6 +1120,7 @@ export default {
           phoneNumber: originalContact.phoneNumber || '',
           successful: originalContact.successful || false,
           comment: originalContact.comment || '',
+          type: resolveTypeForSelect(originalContact.type),
         };
       } else if (originalContact) {
         // Fallback si le parsing échoue
@@ -1069,6 +1130,7 @@ export default {
           phoneNumber: originalContact.phoneNumber || '',
           successful: originalContact.successful || false,
           comment: originalContact.comment || '',
+          type: resolveTypeForSelect(originalContact.type),
         };
       }
       this.showTelephoneContactModal = true;
@@ -1097,11 +1159,29 @@ export default {
       );
       const formattedDateTime = formatDate(dateTime, 'yyyy-MM-dd HH:mm:ss');
 
+      const typeValue = this.telephoneContactForm.type;
+      let typeForPayload = null;
+      if (typeValue != null) {
+        if (typeof typeValue === 'object') {
+          typeForPayload = typeValue.value ?? typeValue.id ?? null;
+        } else {
+          typeForPayload = typeValue;
+        }
+      }
+      const typeAsString =
+        typeForPayload != null ? String(typeForPayload) : null;
+
+      const isEmailType = typeForPayload === 1;
+      const contactValue = isEmailType
+        ? this.profile.email || ''
+        : this.telephoneContactForm.phoneNumber;
+
       const contactData = {
         date: formattedDateTime,
-        phoneNumber: this.telephoneContactForm.phoneNumber,
+        phoneNumber: contactValue,
         successful: this.telephoneContactForm.successful,
         comment: this.telephoneContactForm.comment,
+        type: typeAsString,
       };
 
       if (this.isEditingTelephoneContact) {
@@ -1109,7 +1189,7 @@ export default {
         this.http
           .request({
             method: 'PUT',
-            url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/telephone-contact`,
+            url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/contact-log`,
             data: contactData,
           })
           .then(() => {
@@ -1128,7 +1208,7 @@ export default {
         this.http
           .request({
             method: 'POST',
-            url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/telephone-contact`,
+            url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/contact-log`,
             data: contactData,
           })
           .then(() => {
@@ -1148,7 +1228,7 @@ export default {
           method: 'DELETE',
           url: `${window.appGlobal.theme}/api/v2/admin/leads/${
             this.lead.id
-          }/telephone-contact?date=${encodeURIComponent(date)}`,
+          }/contact-log?date=${encodeURIComponent(date)}`,
         })
         .then(() => {
           this.$emit('update');
@@ -1194,5 +1274,25 @@ export default {
   align-items: center;
   width: 100%;
   margin-bottom: 1rem;
+}
+.orangehrm-telephone-contacts-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--oxd-background-tint-color);
+  border-radius: 0.5rem;
+  border: 1px dashed var(--oxd-interface-gray-lighten-52-color);
+  text-align: center;
+}
+.orangehrm-telephone-contacts-empty-icon {
+  flex-shrink: 0;
+  font-size: 1.5rem;
+  color: var(--oxd-interface-gray-darken-1-color);
+}
+.orangehrm-telephone-contacts-empty-text {
+  color: var(--oxd-interface-gray-darken-1-color);
+  margin: 0;
 }
 </style>

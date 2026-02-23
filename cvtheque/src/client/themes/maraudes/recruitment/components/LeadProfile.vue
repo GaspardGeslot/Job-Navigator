@@ -1020,7 +1020,7 @@ export default {
         this.http
           .request({
             method: 'PUT',
-            url: `/api/v2/admin/leads/${this.lead.id}/telephone-contact`,
+            url: `/api/v2/admin/leads/${this.lead.id}/contact-log`,
             data: contactData,
           })
           .then(() => {
@@ -1039,7 +1039,7 @@ export default {
         this.http
           .request({
             method: 'POST',
-            url: `/api/v2/admin/leads/${this.lead.id}/telephone-contact`,
+            url: `/api/v2/admin/leads/${this.lead.id}/contact-log`,
             data: contactData,
           })
           .then(() => {
@@ -1059,7 +1059,7 @@ export default {
           method: 'DELETE',
           url: `/api/v2/admin/leads/${
             this.lead.id
-          }/telephone-contact?date=${encodeURIComponent(date)}`,
+          }/contact-log?date=${encodeURIComponent(date)}`,
         })
         .then(() => {
           this.$emit('update');
