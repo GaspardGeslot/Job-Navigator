@@ -23,19 +23,31 @@ class ActorLeadsController extends AbstractVueController
      */
     public function preRender(Request $request): void
     {
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+
         if ($request->attributes->has('id')) {
             $component = new Component('view-lead');
             $component->addProp(new Prop('lead-id', Prop::TYPE_NUMBER, $request->attributes->getInt('id')));
-        }
-        else {
+
+            // Types de prise de contact pour la pop-up commune
+            $contactLogOptions = $this->getHedwigeContactOptions($token);
+            $component->addProp(new Prop('contact-log-types', Prop::TYPE_ARRAY, array_map(function ($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label,
+                ];
+            }, array_keys($contactLogOptions), $contactLogOptions)));
+        } else {
             $component = new Component('leads-list');
         }
-        
-        $reportingColumns = $this->getReportingColumns($this->getAuthUser()->getUserHedwigeToken());
 
-        $component->addProp(new Prop('default-columns', Prop::TYPE_OBJECT, $reportingColumns["defaultColumns"]));
-        $component->addProp(new Prop('custom-columns', Prop::TYPE_ARRAY, $reportingColumns["customColumns"]));
-        
+        $reportingColumns = $this->getReportingColumns($token);
+
+        if (!empty($reportingColumns)) {
+            $component->addProp(new Prop('default-columns', Prop::TYPE_OBJECT, $reportingColumns["defaultColumns"]));
+            $component->addProp(new Prop('custom-columns', Prop::TYPE_ARRAY, $reportingColumns["customColumns"]));
+        }
+
         $this->setComponent($component);
     }
 
@@ -45,6 +57,24 @@ class ActorLeadsController extends AbstractVueController
             $client = new Client();
             $clientBaseUrl = getenv('HEDWIGE_URL');
             $url = "{$clientBaseUrl}/reporting-columns/default";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (ClientException $e) {
+            return [];
+        }
+    }
+
+    public function getHedwigeContactOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/client/contact-logs";
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,

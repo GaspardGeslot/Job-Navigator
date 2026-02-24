@@ -5,6 +5,7 @@
     :lead="lead"
     :default-columns="defaultColumns"
     :custom-columns="customColumns"
+    :contact-log-types="contactLogTypes"
     @update="onLeadUpdate"
   ></lead-profile>
 </template>
@@ -31,6 +32,10 @@ export default {
     customColumns: {
       type: Array,
       required: true,
+    },
+    contactLogTypes: {
+      type: Array,
+      default: () => [],
     },
   },
   setup() {

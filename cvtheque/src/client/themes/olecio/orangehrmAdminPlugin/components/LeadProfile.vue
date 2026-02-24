@@ -503,123 +503,19 @@
       "
     ></delete-confirmation>
 
-    <!-- Modal pour ajouter/éditer une prise de contact -->
-    <oxd-dialog
-      v-if="showTelephoneContactModal"
-      v-model:show="showTelephoneContactModal"
-      :style="{width: '90%', maxWidth: '600px'}"
-      @update:show="onCancelTelephoneContact"
-    >
-      <div class="orangehrm-modal-header">
-        <oxd-text type="card-title">
-          {{
-            isEditingTelephoneContact
-              ? $t('Modifier la prise de contact')
-              : $t('Ajouter une prise de contact')
-          }}
-        </oxd-text>
-      </div>
-      <oxd-divider />
-      <oxd-form
-        :loading="isSavingTelephoneContact"
-        @submit-valid="onSaveTelephoneContact"
-      >
-        <oxd-form-row>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <date-input
-                v-model="telephoneContactForm.date"
-                :label="$t('general.date')"
-                :rules="rules.telephoneContactDate"
-                :disabled="isEditingTelephoneContact"
-                required
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <time-input
-                v-model="telephoneContactForm.time"
-                :label="$t('Heure')"
-                :rules="rules.telephoneContactTime"
-                :disabled="isEditingTelephoneContact"
-                :step="1"
-                required
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-form-row>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="telephoneContactForm.type"
-                :label="$t('Type de prise de contact')"
-                type="select"
-                :options="contactLogTypes"
-                option-value="id"
-                option-label="label"
-                :disabled="isEditingTelephoneContact"
-                required
-              />
-            </oxd-grid-item>
-            <oxd-grid-item v-if="contactLogTypeOrdinal !== null">
-              <oxd-text class="orangehrm-input-title" tag="h6">
-                {{
-                  isContactLogTypeTelephone
-                    ? $t('Contact abouti avec succès')
-                    : $t('A répondu')
-                }}
-              </oxd-text>
-              <oxd-switch-input
-                v-model="telephoneContactForm.successful"
-                :disabled="isEditingTelephoneContact"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-form-row>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-            <oxd-grid-item v-if="isContactLogTypePhone">
-              <oxd-input-field
-                v-model="telephoneContactForm.phoneNumber"
-                :label="$t('recruitment.contact_number')"
-                :rules="
-                  isContactLogTypePhone ? rules.telephoneContactPhoneNumber : []
-                "
-                :disabled="isEditingTelephoneContact"
-                required
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-form-row>
-          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="telephoneContactForm.comment"
-                type="textarea"
-                :label="$t('Commentaire')"
-                :rules="rules.telephoneContactComment"
-                :disabled="isEditingTelephoneContact && !canEditComment"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
-        <oxd-divider />
-        <oxd-form-actions class="orangehrm-form-action">
-          <required-text />
-          <oxd-button
-            display-type="ghost"
-            :label="$t('general.cancel')"
-            @click="onCancelTelephoneContact"
-          />
-          <oxd-button
-            display-type="secondary"
-            :label="$t('general.save')"
-            type="submit"
-          />
-        </oxd-form-actions>
-      </oxd-form>
-    </oxd-dialog>
+    <contact-log-dialog
+      v-model="showTelephoneContactModal"
+      :initial-form="contactLogInitialForm"
+      :contact-log-types="contactLogTypes"
+      :default-phone-number="profile.phoneNumber"
+      :default-email="profile.email"
+      :is-editing="isEditingTelephoneContact"
+      :user-date-format="userDateFormat"
+      :loading="isSavingTelephoneContact"
+      :can-edit-comment="canEditComment"
+      @save="onSaveContactLog"
+      @update:model-value="onCancelTelephoneContact"
+    />
   </div>
 </template>
 
@@ -640,7 +536,8 @@ import FullNameInput from '../../orangehrmPimPlugin/components/FullNameInput';
 import useDateFormat from '@/core/util/composable/useDateFormat';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
-import {OxdSwitchInput, OxdDialog} from '@ohrm/oxd';
+import ContactLogDialog from '@/core/components/dialogs/ContactLogDialog';
+import {OxdSwitchInput} from '@ohrm/oxd';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 
 const LeadProfileModel = {
@@ -704,10 +601,10 @@ export default {
     DateInput,
     TimeInput,
     'oxd-switch-input': OxdSwitchInput,
-    'oxd-dialog': OxdDialog,
     'full-name-input': FullNameInput,
     'confirmation-dialog': ConfirmationDialog,
     'delete-confirmation': DeleteConfirmationDialog,
+    'contact-log-dialog': ContactLogDialog,
   },
   props: {
     lead: {
@@ -750,6 +647,7 @@ export default {
       isSavingTelephoneContact: false,
       canEditComment: false,
       editingTelephoneContactDate: null,
+      contactLogInitialForm: null,
       telephoneContactForm: {...TelephoneContactModel},
       telephoneContactHeaders: [
         {
@@ -1068,15 +966,7 @@ export default {
     onClickAddTelephoneContact() {
       this.isEditingTelephoneContact = false;
       this.canEditComment = false;
-      const now = new Date();
-      this.telephoneContactForm = {
-        date: formatDate(now, this.userDateFormat),
-        time: formatDate(now, 'HH:mm'),
-        phoneNumber: this.profile.phoneNumber || '',
-        successful: false,
-        comment: '',
-        type: null,
-      };
+      this.contactLogInitialForm = null;
       this.showTelephoneContactModal = true;
     },
     onClickEditTelephoneContact(item) {
@@ -1084,7 +974,6 @@ export default {
       this.canEditComment = true;
       this.editingTelephoneContactDate = item._originalDate;
 
-      // Nettoyer la date pour retirer les millisecondes si présentes
       let cleanDate = item._originalDate || '';
       if (cleanDate && cleanDate.includes('.')) {
         cleanDate = cleanDate.split('.')[0];
@@ -1093,7 +982,6 @@ export default {
         cleanDate = cleanDate.substring(0, 19);
       }
 
-      // Parser la date au format yyyy-MM-dd HH:mm:ss
       const dateTime = cleanDate
         ? parseDate(cleanDate, 'yyyy-MM-dd HH:mm:ss')
         : null;
@@ -1103,23 +991,18 @@ export default {
       );
 
       const resolveTypeForSelect = (typeFromApi) => {
-        // if (typeFromApi == null) return null;
-
-        // const ordinal = Number(typeFromApi);
-        // if (!Number.isInteger(ordinal)) return null;
-
-        // return this.contactLogTypes.find(
-        //   (option) => option.id === ordinal
-        // ) || null;
-        //Ajouter un champ pour remplacer le select de Type, comme ça je peux avoir le slider "a contacté avec succès"
+        if (typeFromApi == null) return null;
+        const ordinal = Number(typeFromApi);
+        if (!Number.isInteger(ordinal)) return null;
+        return this.contactLogTypes.find(
+          (option) => option.id === ordinal || option.id === String(ordinal),
+        ) || null;
       };
 
       if (originalContact && dateTime) {
-        // Extraire la date (yyyy-MM-dd) et l'heure (HH:mm) séparément
         const dateStr = formatDate(dateTime, 'yyyy-MM-dd');
         const timeStr = formatDate(dateTime, 'HH:mm');
-
-        this.telephoneContactForm = {
+        this.contactLogInitialForm = {
           date: dateStr,
           time: timeStr,
           phoneNumber: originalContact.phoneNumber || '',
@@ -1128,8 +1011,7 @@ export default {
           type: resolveTypeForSelect(originalContact.type),
         };
       } else if (originalContact) {
-        // Fallback si le parsing échoue
-        this.telephoneContactForm = {
+        this.contactLogInitialForm = {
           date: cleanDate.substring(0, 10) || '',
           time: cleanDate.substring(11, 16) || '',
           phoneNumber: originalContact.phoneNumber || '',
@@ -1137,6 +1019,8 @@ export default {
           comment: originalContact.comment || '',
           type: resolveTypeForSelect(originalContact.type),
         };
+      } else {
+        this.contactLogInitialForm = null;
       }
       this.showTelephoneContactModal = true;
     },
@@ -1156,15 +1040,15 @@ export default {
           }
         });
     },
-    onSaveTelephoneContact() {
+    onSaveContactLog(form) {
       this.isSavingTelephoneContact = true;
       const dateTime = parseDate(
-        `${this.telephoneContactForm.date} ${this.telephoneContactForm.time}`,
+        `${form.date} ${form.time}`,
         `${this.userDateFormat} HH:mm`,
       );
       const formattedDateTime = formatDate(dateTime, 'yyyy-MM-dd HH:mm:ss');
 
-      const typeValue = this.telephoneContactForm.type;
+      const typeValue = form.type;
       let typeForPayload = null;
       if (typeValue != null) {
         if (typeof typeValue === 'object') {
@@ -1179,18 +1063,17 @@ export default {
       const isEmailType = typeForPayload === 1;
       const contactValue = isEmailType
         ? this.profile.email || ''
-        : this.telephoneContactForm.phoneNumber;
+        : (form.phoneNumber || '');
 
       const contactData = {
         date: formattedDateTime,
         phoneNumber: contactValue,
-        successful: this.telephoneContactForm.successful,
-        comment: this.telephoneContactForm.comment,
+        successful: form.successful,
+        comment: form.comment || '',
         type: typeAsString,
       };
 
       if (this.isEditingTelephoneContact) {
-        // Mise à jour du commentaire uniquement
         this.http
           .request({
             method: 'PUT',
@@ -1209,7 +1092,6 @@ export default {
             this.isSavingTelephoneContact = false;
           });
       } else {
-        // Ajout d'une nouvelle prise de contact
         this.http
           .request({
             method: 'POST',
@@ -1251,6 +1133,7 @@ export default {
       this.isEditingTelephoneContact = false;
       this.canEditComment = false;
       this.editingTelephoneContactDate = null;
+      this.contactLogInitialForm = null;
       this.telephoneContactForm = {...TelephoneContactModel};
     },
     openClientEmail() {
