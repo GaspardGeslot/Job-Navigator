@@ -53,6 +53,7 @@
                     :label="$t('Nom')"
                     required
                     :rules="rules.title"
+                    :disabled="isEditing"
                   />
                 </oxd-grid-item>
                 <oxd-grid-item>
