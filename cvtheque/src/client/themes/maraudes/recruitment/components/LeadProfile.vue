@@ -406,6 +406,11 @@
               row-decorator="oxd-table-decorator-card"
             />
           </div>
+          <div v-else class="orangehrm-telephone-contacts-empty">
+            <oxd-text>
+              {{ $t("ℹ️ Aucune prise de contact n'a encore été renseignée.") }}
+            </oxd-text>
+          </div>
         </oxd-form-row>
 
         <div v-if="defaultColumns.complement || defaultColumns.comment">
@@ -519,7 +524,6 @@ import {
   numericOnly,
 } from '@/core/util/validation/rules';
 import DateInput from '@/core/components/inputs/DateInput';
-import TimeInput from '@/core/components/inputs/TimeInput';
 import {APIService} from '@/core/util/services/api.service';
 import FullNameInput from './FullNameInput.vue';
 import CustomColumnInput from './CustomColumnInput.vue';
@@ -585,7 +589,6 @@ export default {
   name: 'LeadProfile',
   components: {
     DateInput,
-    TimeInput,
     'oxd-switch-input': OxdSwitchInput,
     'full-name-input': FullNameInput,
     'custom-column-input': CustomColumnInput,
@@ -664,11 +667,25 @@ export default {
     telephoneContactHeaders() {
       const base = [
         {name: 'date', title: this.$t('general.date'), style: {flex: 1}},
-        {name: 'type', title: this.$t('Type'), style: {flex: 1}},
-        {name: 'phoneNumber', title: this.$t('Moyen de contact'), style: {flex: 1}},
-        {name: 'successful', title: this.$t('Réussi/Répondu'), style: {flex: 1}},
+        {
+          name: 'phoneNumber',
+          title: this.$t('recruitment.contact_number'),
+          style: {flex: 1},
+        },
+        {
+          name: 'successful',
+          title: this.$t('Réussi'),
+          style: {flex: 1},
+        },
         {name: 'comment', title: this.$t('Commentaire'), style: {flex: 2}},
       ];
+      if (this.contactLogTypes && this.contactLogTypes.length > 0) {
+        base.splice(2, 0, {
+          name: 'type',
+          title: this.$t('Type'),
+          style: {flex: 1},
+        });
+      }
       base.push({
         name: 'actions',
         slot: 'action',
@@ -863,12 +880,20 @@ export default {
       );
 
       const resolveTypeForSelect = (typeFromApi) => {
-        if (typeFromApi == null || !this.contactLogTypes?.length) return null;
-        const ordinal = Number(typeFromApi);
-        if (!Number.isInteger(ordinal)) return null;
-        return this.contactLogTypes.find(
-          (option) => option.id === ordinal || option.id === String(ordinal),
-        ) || null;
+        if (
+          typeFromApi == null ||
+          typeFromApi === '' ||
+          !this.contactLogTypes?.length
+        )
+          return null;
+        const str = String(typeFromApi).trim();
+        const option = this.contactLogTypes.find(
+          (opt) =>
+            opt.label &&
+            String(opt.label).trim().toLowerCase() === str.toLowerCase(),
+        );
+        if (option) return {id: option.id, label: option.label};
+        return {id: typeFromApi, label: str || String(typeFromApi)};
       };
 
       if (originalContact && dateTime) {
@@ -922,21 +947,22 @@ export default {
 
       let typeAsString = null;
       if (form.type != null && this.contactLogTypes?.length > 0) {
-        const typeValue = typeof form.type === 'object'
-          ? (form.type.value ?? form.type.id)
-          : form.type;
+        const typeValue =
+          typeof form.type === 'object'
+            ? form.type.value ?? form.type.id
+            : form.type;
         typeAsString = typeValue != null ? String(typeValue) : null;
       }
 
       const isEmailType = typeAsString === '1';
       const contactValue = isEmailType
-        ? (this.profile.email || '')
-        : (form.phoneNumber || '');
+        ? this.profile.email || ''
+        : form.phoneNumber || '';
 
       const contactData = {
         date: formattedDateTime,
         phoneNumber: contactValue,
-        successful: form.successful,
+        successful: form.successful === true,
         comment: form.comment || '',
       };
       if (typeAsString != null) {
@@ -1053,5 +1079,16 @@ export default {
   align-items: center;
   width: 100%;
   margin-bottom: 1rem;
+}
+.orangehrm-telephone-contacts-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--oxd-background-tint-color);
+  border-radius: 0.5rem;
+  border: 1px dashed var(--oxd-interface-gray-lighten-52-color);
+  text-align: center;
 }
 </style>

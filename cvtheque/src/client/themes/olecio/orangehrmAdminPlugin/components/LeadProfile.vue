@@ -530,7 +530,6 @@ import {
   numericOnly,
 } from '@/core/util/validation/rules';
 import DateInput from '@/core/components/inputs/DateInput';
-import TimeInput from '@/core/components/inputs/TimeInput';
 import {APIService} from '@/core/util/services/api.service';
 import FullNameInput from '../../orangehrmPimPlugin/components/FullNameInput';
 import useDateFormat from '@/core/util/composable/useDateFormat';
@@ -599,7 +598,6 @@ export default {
   name: 'LeadProfile',
   components: {
     DateInput,
-    TimeInput,
     'oxd-switch-input': OxdSwitchInput,
     'full-name-input': FullNameInput,
     'confirmation-dialog': ConfirmationDialog,
@@ -991,12 +989,20 @@ export default {
       );
 
       const resolveTypeForSelect = (typeFromApi) => {
-        if (typeFromApi == null) return null;
-        const ordinal = Number(typeFromApi);
-        if (!Number.isInteger(ordinal)) return null;
-        return this.contactLogTypes.find(
-          (option) => option.id === ordinal || option.id === String(ordinal),
-        ) || null;
+        if (
+          typeFromApi == null ||
+          typeFromApi === '' ||
+          !this.contactLogTypes?.length
+        )
+          return null;
+        const str = String(typeFromApi).trim();
+        const option = this.contactLogTypes.find(
+          (opt) =>
+            opt.label &&
+            String(opt.label).trim().toLowerCase() === str.toLowerCase(),
+        );
+        if (option) return {id: option.id, label: option.label};
+        return {id: typeFromApi, label: str || String(typeFromApi)};
       };
 
       if (originalContact && dateTime) {
@@ -1063,12 +1069,12 @@ export default {
       const isEmailType = typeForPayload === 1;
       const contactValue = isEmailType
         ? this.profile.email || ''
-        : (form.phoneNumber || '');
+        : form.phoneNumber || '';
 
       const contactData = {
         date: formattedDateTime,
         phoneNumber: contactValue,
-        successful: form.successful,
+        successful: form.successful === true,
         comment: form.comment || '',
         type: typeAsString,
       };

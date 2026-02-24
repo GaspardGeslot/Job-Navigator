@@ -15,10 +15,7 @@
       </oxd-text>
     </div>
     <oxd-divider />
-    <oxd-form
-      :loading="loading"
-      @submit-valid="onSubmit"
-    >
+    <oxd-form :loading="loading" @submit-valid="onSubmit">
       <oxd-form-row>
         <oxd-grid :cols="2" class="orangehrm-full-width-grid">
           <oxd-grid-item>
@@ -66,7 +63,7 @@
             </oxd-text>
             <oxd-switch-input
               v-model="form.successful"
-              :disabled="isEditing"
+              :disabled="isEditing && contactLogTypeOrdinal !== 1"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -77,7 +74,9 @@
             <oxd-input-field
               v-model="form.phoneNumber"
               :label="$t('recruitment.contact_number')"
-              :rules="isContactLogTypePhone ? rules.telephoneContactPhoneNumber : []"
+              :rules="
+                isContactLogTypePhone ? rules.telephoneContactPhoneNumber : []
+              "
               :disabled="isEditing"
               required
             />
@@ -99,10 +98,7 @@
             <oxd-text class="orangehrm-input-title" tag="h6">
               {{ $t('Appel abouti avec succès') }}
             </oxd-text>
-            <oxd-switch-input
-              v-model="form.successful"
-              :disabled="isEditing"
-            />
+            <oxd-switch-input v-model="form.successful" :disabled="isEditing" />
           </oxd-grid-item>
         </oxd-grid>
       </oxd-form-row>

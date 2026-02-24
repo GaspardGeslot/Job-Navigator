@@ -14366,6 +14366,17 @@ body {
   width: 100%;
   margin-bottom: 1rem;
 }
+.orangehrm-telephone-contacts-empty[data-v-edd7ad42] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--oxd-background-tint-color);
+  border-radius: 0.5rem;
+  border: 1px dashed var(--oxd-interface-gray-lighten-52-color);
+  text-align: center;
+}
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/maraudes/admin/pages/Users.vue?vue&type=style&index=0&id=02175dd5&lang=scss&scoped=true ***!
   \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
