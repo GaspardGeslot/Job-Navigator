@@ -348,6 +348,7 @@ export default {
     const courseOnly = ref(loadedFilters.courseOnly);
     const tableData = ref([]);
     const leads = ref([]);
+    const defaultColumns = ref(null);
     const isLoading = ref(false);
     const {noRecordsFound} = useToast();
     const totalRecords = ref(0);
@@ -380,7 +381,7 @@ export default {
       `${window.appGlobal.theme}/api/v2/admin/leads`,
     );
 
-    const tableHeaders = [
+    const ALL_TABLE_HEADERS = [
       {
         label: 'ID',
         key: 'id',
@@ -543,6 +544,71 @@ export default {
       },
     ];
 
+    const tableHeaders = ref([...ALL_TABLE_HEADERS]);
+
+    const ALWAYS_VISIBLE_KEYS = [
+      'id',
+      'receivedAt',
+      'firstName',
+      'lastName',
+      'email',
+      'phoneNumberEmail',
+      'sentTime',
+      'actor',
+      'matchingState',
+      'matchingStatus',
+      'otherActors',
+    ];
+
+    const CONDITIONAL_COLUMNS = {
+      civility: (cols) => !!cols.civility,
+      address: (cols) => !!cols.address,
+      locationPostalCodeEmail: (cols) => !!cols.postalCode,
+      zipCode: (cols) => !!cols.postalCode,
+      city: (cols) => !!cols.city,
+      country: (cols) => !!cols.country,
+      birthDate: (cols) => !!cols.birthDate,
+      age: (cols) => !!cols.age,
+      resume: (cols) => !!cols.resume,
+      isNEET: (cols) => !!cols.neet,
+      jobs: (cols) => !!cols.job,
+      sector: (cols) => !!cols.sector,
+      course: (cols) => !!cols.course,
+      of: (cols) => !!cols.course,
+      status: (cols) => !!cols.status,
+      studyLevel: (cols) => !!cols.studyLevel,
+      trainingMethod: (cols) => !!cols.trainingMethod,
+      need: (cols) => !!cols.need,
+      handicap: (cols) => !!cols.handicap,
+      courseStart: (cols) => !!cols.courseStart,
+      funding: (cols) => !!cols.funding,
+      utmCampaign: (cols) => !!cols.utmCampaign,
+      utmGroup: (cols) => !!cols.utmGroup,
+      utmSource: (cols) => !!cols.utmSource,
+      source: (cols) => !!cols.source,
+      timeSlotEmail: (cols) => !!cols.timeSlot,
+      timeSlot: (cols) => !!cols.timeSlot,
+      complement: (cols) => !!cols.complement,
+      lastContact: () => true,
+    };
+
+    const updateTableHeadersForDefaultColumns = (cols) => {
+      if (!cols) {
+        tableHeaders.value = [...ALL_TABLE_HEADERS];
+        return;
+      }
+      tableHeaders.value = ALL_TABLE_HEADERS.filter((col) => {
+        if (ALWAYS_VISIBLE_KEYS.includes(col.key)) {
+          return true;
+        }
+        const condition = CONDITIONAL_COLUMNS[col.key];
+        if (!condition) {
+          return true;
+        }
+        return !!condition(cols);
+      });
+    };
+
     const getCellValue = (item, headerKey) => {
       return item[headerKey];
     };
@@ -594,6 +660,31 @@ export default {
             : [];
           totalRecords.value = leads.value ? leads.value.length : 0;
           if (totalRecords.value === 0) noRecordsFound();
+
+          const selectedActors = actorsFilter.value || [];
+          if (selectedActors.length === 1) {
+            const actorLabel = selectedActors[0]?.label;
+            if (actorLabel) {
+              return http
+                .request({
+                  method: 'GET',
+                  url: `/api/v2/actor/reporting-columns/default?actor=${encodeURIComponent(
+                    actorLabel,
+                  )}`,
+                })
+                .then(({data}) => {
+                  defaultColumns.value = data?.defaultColumns || null;
+                  updateTableHeadersForDefaultColumns(defaultColumns.value);
+                })
+                .catch(() => {
+                  defaultColumns.value = null;
+                  updateTableHeadersForDefaultColumns(null);
+                });
+            }
+          }
+          defaultColumns.value = null;
+          updateTableHeadersForDefaultColumns(null);
+          return null;
         })
         .finally(() => {
           isLoading.value = false;
@@ -649,14 +740,14 @@ export default {
       const worksheet = XLSX.utils.json_to_sheet(
         leads.value.map((item) => {
           const row = {};
-          tableHeaders.forEach((header) => {
+          tableHeaders.value.forEach((header) => {
             row[header.label] = item[header.key];
           });
           return row;
         }),
       );
 
-      const columnWidths = tableHeaders.map(() => ({wch: 15}));
+      const columnWidths = tableHeaders.value.map(() => ({wch: 15}));
       worksheet['!cols'] = columnWidths;
 
       // Create a workbook
