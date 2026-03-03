@@ -5,6 +5,7 @@
     :lead="lead"
     :statuses="statuses"
     :contact-log-types="contactLogTypes"
+    :default-columns="reportingColumns ? reportingColumns.defaultColumns : null"
     @update="onLeadUpdate"
   ></lead-profile>
 </template>
@@ -45,6 +46,7 @@ export default {
   data() {
     return {
       lead: null,
+      reportingColumns: null,
     };
   },
   beforeMount() {
@@ -54,6 +56,20 @@ export default {
     onLeadUpdate() {
       this.http.get(this.leadId).then(({data}) => {
         this.lead = data;
+        if (this.lead && this.lead.actor) {
+          this.http
+            .request({
+              method: 'GET',
+              url: `/api/v2/actor/reporting-columns/default?actor=${encodeURIComponent(
+                this.lead.actor,
+              )}`,
+            })
+            .then(({data: reportingColumns}) => {
+              this.reportingColumns = reportingColumns;
+            });
+        } else {
+          this.reportingColumns = null;
+        }
       });
     },
   },

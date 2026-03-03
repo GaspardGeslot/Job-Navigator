@@ -433,6 +433,11 @@ apiv2_recruitment_actor_leads:
   controller: OrangeHRM\Recruitment\Controller\ActorLeadsController::getAll
   methods: [ GET ]
 
+apiv2_recruitment_actor_reporting_columns_default:
+  path: /api/v2/actor/reporting-columns/default
+  controller: OrangeHRM\Recruitment\Controller\ActorLeadsController::getReportingColumnsDefault
+  methods: [ GET ]
+
 ##########################
 #  Fallback Routes (avec theme)
 ##########################

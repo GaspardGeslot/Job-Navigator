@@ -51,12 +51,15 @@ class ActorLeadsController extends AbstractVueController
         $this->setComponent($component);
     }
 
-    public function getReportingColumns(string $token): array
+    public function getReportingColumns(string $token, ?string $actor = null): array
     {
         try {
             $client = new Client();
             $clientBaseUrl = getenv('HEDWIGE_URL');
             $url = "{$clientBaseUrl}/reporting-columns/default";
+            if ($actor !== null && $actor !== '') {
+                $url .= '?actor=' . urlencode($actor);
+            }
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
@@ -66,6 +69,20 @@ class ActorLeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function getReportingColumnsDefault(Request $request): Response
+    {
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+        $actor = $request->query->get('actor');
+
+        $columns = $this->getReportingColumns($token, $actor);
+
+        return new Response(
+            json_encode($columns),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
     }
 
     public function getHedwigeContactOptions(string $token): array

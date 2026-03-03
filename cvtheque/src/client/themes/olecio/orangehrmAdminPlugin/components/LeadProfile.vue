@@ -7,12 +7,20 @@
             $t('Profil complet du lead' + (profile ? ' n°' + profile.id : ''))
           }}
         </oxd-text>
-        <oxd-switch-input
-          v-if="!isLoading"
-          v-model="editable"
-          :option-label="$t('general.edit')"
-          label-position="left"
-        />
+        <div style="display: flex; flex-direction: row; gap: 1rem">
+          <oxd-switch-input
+            v-if="!isLoading && profile.actor"
+            v-model="simplifiedVersion"
+            :option-label="$t('Version complète/simplifiée')"
+            label-position="left"
+          />
+          <oxd-switch-input
+            v-if="!isLoading"
+            v-model="editable"
+            :option-label="$t('general.edit')"
+            label-position="left"
+          />
+        </div>
       </div>
 
       <oxd-divider v-show="!isLoading" />
@@ -72,23 +80,23 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row>
+        <oxd-form-row v-if="hasAnyColumns('gender', 'birthDate', 'age')">
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isColumnVisible('gender')">
               <oxd-input-field
                 v-model="profile.civility"
                 :label="$t('Civilité')"
                 :disabled="true"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isColumnVisible('birthDate')">
               <date-input
                 v-model="profile.birthDate"
                 :label="$t('pim.date_of_birth')"
                 :disabled="!editable"
               />
             </oxd-grid-item>
-            <oxd-grid-item v-if="profile.age">
+            <oxd-grid-item v-if="isColumnVisible('age') && profile.age">
               <oxd-input-field
                 v-model="profile.age"
                 :label="$t('Âge')"
@@ -109,223 +117,269 @@
           </oxd-grid>
         </oxd-form-row>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
-          <oxd-text
-            v-if="profile.jobs.length > 1"
-            class="orangehrm-sub-title"
-            tag="h6"
-          >
-            {{ $t('pim.job_details') }}
-          </oxd-text>
-          <oxd-text v-else class="orangehrm-sub-title" tag="h6">
-            {{ $t('general.job_title') }}
-          </oxd-text>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.sector"
-                :label="$t('Secteur')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item
-              v-for="(job, jobIndex) in profile.jobs"
-              :key="jobIndex"
+        <div v-if="hasAnyColumns('job', 'sector')">
+          <oxd-divider></oxd-divider>
+          <oxd-form-row>
+            <oxd-text
+              v-if="profile.jobs.length > 1"
+              class="orangehrm-sub-title"
+              tag="h6"
             >
-              <oxd-input-field
-                :value="job"
-                :disabled="true"
-                :label="$t('Métier n°' + (jobIndex + 1))"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+              {{ $t('pim.job_details') }}
+            </oxd-text>
+            <oxd-text v-else class="orangehrm-sub-title" tag="h6">
+              {{ $t('general.job_title') }}
+            </oxd-text>
+            <oxd-grid
+              v-if="isColumnVisible('sector')"
+              :cols="3"
+              class="orangehrm-full-width-grid"
+            >
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="profile.sector"
+                  :label="$t('Secteur')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-grid
+              v-if="isColumnVisible('job')"
+              :cols="3"
+              class="orangehrm-full-width-grid"
+            >
+              <oxd-grid-item
+                v-for="(job, jobIndex) in profile.jobs"
+                :key="jobIndex"
+              >
+                <oxd-input-field
+                  :value="job"
+                  :disabled="true"
+                  :label="$t('Métier n°' + (jobIndex + 1))"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </div>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Formation') }}
-          </oxd-text>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.course"
-                :label="$t('Formation')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.of"
-                :label="$t('OF')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+        <div v-if="isColumnVisible('course')">
+          <oxd-divider></oxd-divider>
+          <oxd-form-row>
+            <oxd-text class="orangehrm-sub-title" tag="h6">
+              {{ $t('Formation') }}
+            </oxd-text>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="profile.course"
+                  :label="$t('Formation')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="profile.of"
+                  :label="$t('OF')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </div>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('pim.contact_details') }}
-          </oxd-text>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.address"
-                :label="$t('pim.street1')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.city"
-                :label="$t('general.city')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.postalCode"
-                :label="$t('general.zip_postal_code')"
-                :disabled="!editable"
-                :rules="rules.postalCode"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.country"
-                :label="$t('Pays')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.mobility"
-                :label="$t('general.mobility')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+        <div
+          v-if="
+            hasAnyColumns(
+              'address',
+              'city',
+              'postalCode',
+              'country',
+              'mobility',
+            )
+          "
+        >
+          <oxd-divider></oxd-divider>
+          <oxd-form-row>
+            <oxd-text class="orangehrm-sub-title" tag="h6">
+              {{ $t('pim.contact_details') }}
+            </oxd-text>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item v-if="isColumnVisible('address')">
+                <oxd-input-field
+                  v-model="profile.address"
+                  :label="$t('pim.street1')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('city')">
+                <oxd-input-field
+                  v-model="profile.city"
+                  :label="$t('general.city')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('postalCode')">
+                <oxd-input-field
+                  v-model="profile.postalCode"
+                  :label="$t('general.zip_postal_code')"
+                  :disabled="!editable"
+                  :rules="rules.postalCode"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item v-if="isColumnVisible('country')">
+                <oxd-input-field
+                  v-model="profile.country"
+                  :label="$t('Pays')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('mobility')">
+                <oxd-input-field
+                  v-model="profile.mobility"
+                  :label="$t('general.mobility')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </div>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('general.candidat_details') }}
-          </oxd-text>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.need"
-                :label="$t('Besoin')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.currentSituation"
-                type="select"
-                :label="$t('Situation actuelle')"
-                :disabled="!editable"
-                :options="sortedStatuses"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.studyLevel"
-                :label="$t('general.study_level')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.courseStart"
-                :label="$t('Début de formation')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.trainingMethod"
-                :label="$t('Modalité de formation')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.handicap"
-                :label="$t('Handicap')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.funding"
-                :label="$t('Financement')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.timeSlot"
-                :label="$t('Disponibilité')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.professionalExperience"
-                :label="$t('Expérience professionnelle')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+        <div
+          v-if="
+            hasAnyColumns(
+              'need',
+              'status',
+              'studyLevel',
+              'courseStart',
+              'trainingMethod',
+              'handicap',
+              'funding',
+              'timeSlot',
+              'professionalExperience',
+            )
+          "
+        >
+          <oxd-divider></oxd-divider>
+          <oxd-form-row>
+            <oxd-text class="orangehrm-sub-title" tag="h6">
+              {{ $t('general.candidat_details') }}
+            </oxd-text>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item v-if="isColumnVisible('need')">
+                <oxd-input-field
+                  v-model="profile.need"
+                  :label="$t('Besoin')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('status')">
+                <oxd-input-field
+                  v-model="profile.currentSituation"
+                  type="select"
+                  :label="$t('Situation actuelle')"
+                  :disabled="!editable"
+                  :options="sortedStatuses"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('studyLevel')">
+                <oxd-input-field
+                  v-model="profile.studyLevel"
+                  :label="$t('general.study_level')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('courseStart')">
+                <oxd-input-field
+                  v-model="profile.courseStart"
+                  :label="$t('Début de formation')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('trainingMethod')">
+                <oxd-input-field
+                  v-model="profile.trainingMethod"
+                  :label="$t('Modalité de formation')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('handicap')">
+                <oxd-input-field
+                  v-model="profile.handicap"
+                  :label="$t('Handicap')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('funding')">
+                <oxd-input-field
+                  v-model="profile.funding"
+                  :label="$t('Financement')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('timeSlot')">
+                <oxd-input-field
+                  v-model="profile.timeSlot"
+                  :label="$t('Disponibilité')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('professionalExperience')">
+                <oxd-input-field
+                  v-model="profile.professionalExperience"
+                  :label="$t('Expérience professionnelle')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </div>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Source et marketing') }}
-          </oxd-text>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.source"
-                :label="$t('Source')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.utmCampaign"
-                :label="$t('Campagne UTM')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.utmGroup"
-                :label="$t('Groupe UTM')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item>
-              <oxd-input-field
-                v-model="profile.utmSource"
-                :label="$t('Source UTM')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+        <div v-if="hasAnyColumns('source', 'utms')">
+          <oxd-divider></oxd-divider>
+          <oxd-form-row>
+            <oxd-text class="orangehrm-sub-title" tag="h6">
+              {{ $t('Source et marketing') }}
+            </oxd-text>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item v-if="isColumnVisible('source')">
+                <oxd-input-field
+                  v-model="profile.source"
+                  :label="$t('Source')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-grid
+              v-if="isColumnVisible('utms')"
+              :cols="3"
+              class="orangehrm-full-width-grid"
+            >
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="profile.utmCampaign"
+                  :label="$t('Campagne UTM')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="profile.utmGroup"
+                  :label="$t('Groupe UTM')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="profile.utmSource"
+                  :label="$t('Source UTM')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </div>
 
         <oxd-divider></oxd-divider>
         <oxd-form-row>
@@ -406,19 +460,21 @@
         </oxd-form-row>
 
         <oxd-divider></oxd-divider>
-        <oxd-form-row>
+        <oxd-form-row
+          v-if="hasAnyColumns('franceTravailRecordDate', 'franceTravailAgency')"
+        >
           <oxd-text class="orangehrm-sub-title" tag="h6">
             {{ $t('France Travail') }}
           </oxd-text>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isColumnVisible('franceTravailRecordDate')">
               <date-input
                 v-model="profile.franceTravailRecordDate"
                 :label="$t('Date d\'inscription')"
                 :disabled="!editable"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isColumnVisible('franceTravailAgency')">
               <oxd-input-field
                 v-model="profile.franceTravailAgency"
                 :label="$t('Agence')"
@@ -431,12 +487,12 @@
         </oxd-form-row>
 
         <oxd-divider></oxd-divider>
-        <oxd-form-row>
+        <oxd-form-row v-if="hasAnyColumns('rqth', 'complement', 'comment')">
           <oxd-text class="orangehrm-sub-title" tag="h6">
             {{ $t('Informations additionnelles') }}
           </oxd-text>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isColumnVisible('rqth')">
               <oxd-input-field
                 v-model="profile.rqth"
                 :label="$t('RQTH')"
@@ -445,7 +501,7 @@
                 :disabled="!editable"
               />
             </oxd-grid-item>
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isColumnVisible('complement')">
               <oxd-input-field
                 v-model="profile.complement"
                 :label="$t('Complément')"
@@ -454,7 +510,7 @@
             </oxd-grid-item>
           </oxd-grid>
           <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-            <oxd-grid-item>
+            <oxd-grid-item v-if="isColumnVisible('comment')">
               <oxd-input-field
                 v-model="profile.comment"
                 :label="$t('Commentaire')"
@@ -622,6 +678,11 @@ export default {
       type: Array,
       default: () => [],
     },
+    defaultColumns: {
+      type: Object,
+      required: false,
+      default: null,
+    },
   },
   emits: ['update'],
   setup() {
@@ -638,6 +699,7 @@ export default {
   data() {
     return {
       editable: false,
+      simplifiedVersion: true,
       isLoading: false,
       profile: {...LeadProfileModel},
       showTelephoneContactModal: false,
@@ -1147,6 +1209,31 @@ export default {
     },
     openClientTelephone() {
       window.location.href = 'tel:' + this.profile.phoneNumber;
+    },
+    isColumnVisible(column) {
+      if (!this.simplifiedVersion) {
+        return true;
+      }
+      if (!this.defaultColumns) {
+        return true;
+      }
+      const value = this.defaultColumns[column];
+      if (value === undefined) {
+        return true;
+      }
+      return !!value;
+    },
+    hasAnyColumns(...columns) {
+      if (!this.simplifiedVersion) {
+        return true;
+      }
+      if (!this.defaultColumns) {
+        return true;
+      }
+      return columns.some((col) => {
+        const value = this.defaultColumns[col];
+        return value === undefined ? true : !!value;
+      });
     },
   },
 };
