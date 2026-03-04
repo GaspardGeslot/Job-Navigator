@@ -620,7 +620,7 @@ export default {
       timeSlotEmail: (cols) => !!cols.timeSlot,
       timeSlot: (cols) => !!cols.timeSlot,
       complement: (cols) => !!cols.complement,
-      lastContact: () => true,
+      lastContact: (cols) => !!cols.lastContact,
     };
 
     const updateTableHeadersForDefaultColumns = (cols) => {
