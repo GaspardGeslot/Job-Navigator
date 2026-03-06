@@ -28,6 +28,13 @@ class UsersController extends AbstractVueController
     public function preRender(Request $request): void
     {
         $component = new Component('users-list');
+        $matchings = $this->getHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken());
+        $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $label
+            ];
+        }, array_keys($matchings), $matchings)));
         $this->setComponent($component);
     }
 
@@ -57,11 +64,20 @@ class UsersController extends AbstractVueController
             $email = $data['email'];
             $password = $data['password'];
             $role = $data['role'];
-            $this->addUser($email, $password, $role, $this->getAuthUser()->getUserHedwigeToken());
+            // matchingId est optionnel et ne doit être pris en compte que pour les AGENT
+            $matchingId = array_key_exists('matchingId', $data) ? $data['matchingId'] : null;
+            if ($role === 'ACTOR') {
+                $matchingId = null;
+            }
+
+            $this->addUser($email, $password, $role, $this->getAuthUser()->getUserHedwigeToken(), $matchingId);
+
             $credentials = new UserCredential($email, $password, $role === 'ACTOR' ? 'HiringManager' : 'Interviewer');
             $exists = $this->getUserService()->checkExistsUser($credentials, $theme);
-            if (!$exists)
+            if (!$exists) {
                 $this->getUserService()->createCredentials($credentials, $theme);
+            }
+
             return new Response(null, Response::HTTP_OK);
         } catch (\ClientException $e) {
             return new Response(json_encode([
@@ -77,7 +93,16 @@ class UsersController extends AbstractVueController
             $theme = $request->attributes->get('theme');
             $id = $request->attributes->get('id');
             $data = json_decode($request->getContent(), true);
-            $this->updateUser($id, $data['isAdmin'] === true ? 'ACTOR' : 'AGENT', $this->getAuthUser()->getUserHedwigeToken());
+
+            $role = $data['isAdmin'] === true ? 'ACTOR' : 'AGENT';
+            // matchingId est optionnel et ignoré pour les administrateurs
+            $matchingId = array_key_exists('matchingId', $data) ? $data['matchingId'] : null;
+            if ($role === 'ACTOR') {
+                $matchingId = null;
+            }
+
+            $this->updateUser($id, $role, $this->getAuthUser()->getUserHedwigeToken(), $matchingId);
+
             $credentials = new UserCredential($data['email'], null, null);
             $user = $this->getUserService()->getUserByCredentialsAndTheme($credentials, $theme);
             if ($user) {
@@ -129,7 +154,7 @@ class UsersController extends AbstractVueController
         return json_decode($response->getBody(), true) ?? [];
     }
 
-    private function addUser(string $email, string $password, string $role, string $token): void
+    private function addUser(string $email, string $password, string $role, string $token, ?int $matchingId = null): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -140,6 +165,9 @@ class UsersController extends AbstractVueController
 
         $url = "{$clientBaseUrl}/user/other?";
         $url .= 'role=' . urlencode($role) . '&';
+        if ($matchingId !== null) {
+            $url .= 'matching=' . urlencode($matchingId) . '&';
+        }
         $url .= 'urlPrefix=' . urlencode($loginUrl);
 
         $response = $client->request('POST', $url, [
@@ -154,11 +182,14 @@ class UsersController extends AbstractVueController
         ]);
     }
 
-    private function updateUser(int $id, string $role, string $token): void
+    private function updateUser(int $id, string $role, string $token, ?int $matchingId = null): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/user/{$id}/agent?role=" . urlencode($role);
+        if ($matchingId !== null) {
+            $url .= '&matching=' . urlencode($matchingId);
+        }
         $response = $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,
@@ -176,5 +207,27 @@ class UsersController extends AbstractVueController
                 'Authorization' => $token,
             ]
         ]);
+    }
+
+    private function getHedwigeMatchings(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/actor/matching";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ],
+            ]);
+
+            $body = (string) $response->getBody();
+            $decoded = json_decode($body, true) ?? [];
+            return is_array($decoded) ? $decoded : [];
+        } catch (\Exception $e) {
+            error_log('[UsersController] getHedwigeMatchings error: ' . $e->getMessage());
+            return [];
+        }
     }
 }

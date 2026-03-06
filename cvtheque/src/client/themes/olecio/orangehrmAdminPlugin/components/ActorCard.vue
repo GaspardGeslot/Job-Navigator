@@ -45,6 +45,15 @@
           </oxd-text>
           <oxd-switch-input v-model="actor.isPriority" :disabled="!editable" />
         </oxd-grid-item>
+        <oxd-grid-item class="orangerhrm-switch-wrapper">
+          <oxd-text class="orangehrm-text" tag="p">
+            {{ $t('Est spécifique ?') }}
+          </oxd-text>
+          <oxd-switch-input
+            v-model="actor.allowMatchingSpecific"
+            :disabled="!editable"
+          />
+        </oxd-grid-item>
       </oxd-grid>
       <br />
       <oxd-grid :cols="3" class="orangehrm-full-width-grid">
@@ -409,6 +418,7 @@ const ActorModel = {
   name: null,
   isOf: true,
   isPriority: false,
+  allowMatchingSpecific: false,
   manualDelivery: false,
   documentation: null,
   maxAmountPerDay: 0,
@@ -682,6 +692,8 @@ export default {
       this.actor.name = this.actorCurrent.name;
       this.actor.isOf = this.actorCurrent.isOf;
       this.actor.isPriority = this.actorCurrent.isPriority;
+      this.actor.allowMatchingSpecific =
+        this.actorCurrent.allowMatchingSpecific;
       this.actor.manualDelivery = this.actorCurrent.manualDelivery;
       this.actor.documentation = this.actorCurrent.documentation;
       this.actor.maxAmountPerDay = this.actorCurrent.maxAmountPerDay;

@@ -66,6 +66,22 @@
                   </div>
                 </oxd-grid-item>
               </oxd-grid>
+              <oxd-grid
+                v-if="!isAdmin && matchings && matchings.length"
+                :cols="2"
+              >
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="matchingSelected"
+                    type="select"
+                    :label="$t('recruitment.need_title')"
+                    :options="[
+                      {id: null, label: 'Sans sélection'},
+                      ...matchings,
+                    ]"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
               <oxd-grid v-if="!isEditing" :cols="2">
                 <oxd-grid-item>
                   <oxd-input-field
@@ -108,7 +124,7 @@
 </template>
 
 <script>
-import {reactive, toRefs} from 'vue';
+import {reactive, toRefs, watch} from 'vue';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {APIService} from '@/core/util/services/api.service';
 import useSort from '@/core/util/composable/useSort';
@@ -130,7 +146,15 @@ export default {
     'oxd-switch-input': OxdSwitchInput,
   },
 
-  setup() {
+  props: {
+    matchings: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+  },
+
+  setup(props) {
     const {noRecordsFound, error, success} = useToast();
     const {sortDefinition, sortOrder, onSort} = useSort({
       sortDefinition: defaultSortOrder,
@@ -148,6 +172,7 @@ export default {
       passwordConfirm: '',
       isAdmin: false,
       editingItem: null,
+      matchingSelected: null,
     });
 
     const fetchUserData = () => {
@@ -156,13 +181,24 @@ export default {
         .getAll()
         .then((response) => {
           state.items = response.data.map((item) => {
+            const rawMatchingId =
+              item.matchingId ??
+              (item.matching && (item.matching.id ?? item.matching));
+
+            const matching = Array.isArray(props.matchings)
+              ? props.matchings.find(
+                  (match) => String(match.id) === String(rawMatchingId),
+                )
+              : null;
+
             return {
               id: item.id,
               email: item.email,
               role: item.role === 'ACTOR' ? 'Administrateur' : 'Agent',
               isAdmin: item.role === 'ACTOR',
               isCurrentUser: item.isCurrentUser,
-              matchingId: item.matchingId,
+              matchingId: rawMatchingId,
+              matchingLabel: matching ? matching.label : '',
             };
           });
           state.total = response.data.length;
@@ -198,15 +234,24 @@ export default {
 
       state.isSaving = true;
 
+      // Si l'utilisateur est administrateur, on ne doit jamais envoyer de matchingId
+      const selectedMatchingId = state.isAdmin
+        ? null
+        : state.matchingSelected && state.matchingSelected.id
+        ? state.matchingSelected.id
+        : null;
+
       const requestPromise = state.isEditing
         ? http.update(state.editingItem.id, {
             email: state.email,
             isAdmin: state.isAdmin,
+            matchingId: selectedMatchingId,
           })
         : http.create({
             email: state.email,
             role: state.isAdmin ? 'ACTOR' : 'AGENT',
             password: state.password,
+            matchingId: selectedMatchingId,
           });
 
       requestPromise
@@ -238,6 +283,7 @@ export default {
       state.password = '';
       state.passwordConfirm = '';
       state.isAdmin = false;
+      state.matchingSelected = null;
       state.isModalOpen = false;
       state.isEditing = false;
       state.editingItem = null;
@@ -248,6 +294,16 @@ export default {
         state.items.sort((a, b) => a.email.localeCompare(b.email));
       else state.items.sort((a, b) => b.email.localeCompare(a.email));
     };
+
+    // Si on passe un utilisateur en administrateur, on efface systématiquement le matching sélectionné
+    watch(
+      () => state.isAdmin,
+      (isAdmin) => {
+        if (isAdmin) {
+          state.matchingSelected = null;
+        }
+      },
+    );
 
     onSort(sort);
 
@@ -301,6 +357,12 @@ export default {
           style: {flex: 0.5},
         },
         {
+          name: 'matchingLabel',
+          title: this.$t('Matching'),
+          sortField: 'matchingLabel',
+          style: {flex: 0.75},
+        },
+        {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
@@ -352,6 +414,7 @@ export default {
       this.isModalOpen = true;
       this.isEditing = false;
       this.editingItem = null;
+      this.matchingSelected = null;
     },
     onClickEdit(item) {
       this.isModalOpen = true;
@@ -359,6 +422,11 @@ export default {
       this.editingItem = item;
       this.email = item.email;
       this.isAdmin = item.isAdmin;
+      this.matchingSelected =
+        this.matchings &&
+        this.matchings.find(
+          (matching) => String(matching.id) === String(item.matchingId),
+        );
     },
     onClickDelete(item) {
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
