@@ -29,10 +29,14 @@ class LeadsController extends AbstractVueController
     {
         if ($request->attributes->has('id')) {
             $component = new Component('view-lead');
-            $component->addProp(new Prop('lead-id', Prop::TYPE_NUMBER, $request->attributes->getInt('id')));
+            $leadId = $request->attributes->getInt('id');
+            $component->addProp(new Prop('lead-id', Prop::TYPE_NUMBER, $leadId));
 
+            $token = $this->getAuthUser()->getUserHedwigeToken();
+            $lead = $this->getLead($token, $leadId);
+            $actor = $lead['actor'] ?? null;
 
-            $options = $this->getHedwigeOptions($this->getAuthUser()->getUserHedwigeToken());
+            $options = $this->getHedwigeOptions($token, $actor);
             $component->addProp(new Prop('statuses', Prop::TYPE_ARRAY, array_map(function($label, $index) {
                 return [
                     'id' => $index,
@@ -273,16 +277,25 @@ class LeadsController extends AbstractVueController
         return json_decode($response->getBody(), true);
     }
 
-    public function getHedwigeOptions(string $token): array
+    public function getHedwigeOptions(string $token, ?string $actor = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/client/status";
-        $response = $client->request('GET', $url, [
+
+        $options = [
             'headers' => [
                 'Authorization' => $token,
-            ]
-        ]);
+            ],
+        ];
+
+        if ($actor !== null && trim($actor) !== '') {
+            $options['query'] = [
+                'actor' => $actor,
+            ];
+        }
+
+        $response = $client->request('GET', $url, $options);
         return json_decode($response->getBody(), true);
     }
 
