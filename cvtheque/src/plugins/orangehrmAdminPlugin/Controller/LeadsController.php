@@ -37,13 +37,21 @@ class LeadsController extends AbstractVueController
             $lead = $this->getLead($token, $leadId);
             $actor = $lead['actor'] ?? null;
 
-            $options = $this->getHedwigeOptions($token, $actor);
-            $component->addProp(new Prop('statuses', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+            $allOptions = $this->getHedwigeOptions($token);
+            $component->addProp(new Prop('all-statuses', Prop::TYPE_ARRAY, array_map(function($label, $index) {
                 return [
                     'id' => $index,
                     'label' => $label
                 ];
-            }, $options, array_keys($options))));
+            }, $allOptions, array_keys($allOptions))));
+            
+            $actorOptions = $this->getHedwigeOptions($token, $actor);
+            $component->addProp(new Prop('actor-statuses', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $actorOptions, array_keys($actorOptions))));
 
             $contactLogOptions = $this->getHedwigeContactOptions($this->getAuthUser()->getUserHedwigeToken());
             $component->addProp(new Prop('contact-log-types', Prop::TYPE_ARRAY, array_map(function($id, $label) {
@@ -52,6 +60,11 @@ class LeadsController extends AbstractVueController
                     'label' => $label
                 ];
             }, array_keys($contactLogOptions), $contactLogOptions)));
+
+            $reportingColumns = $this->getReportingColumns($token, $actor);
+
+            if (!empty($reportingColumns))
+                $component->addProp(new Prop('default-columns', Prop::TYPE_OBJECT, $reportingColumns["defaultColumns"]));
         }
         else {
             $component = new Component('leads-list');
@@ -236,6 +249,26 @@ class LeadsController extends AbstractVueController
                 'error' => true,
                 'message' => 'Error updating telephone contact'
             ]), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getReportingColumns(string $token, ?string $actor = null): array
+    {
+        try {
+            $client = new Client();
+            $clientBaseUrl = getenv('HEDWIGE_URL');
+            $url = "{$clientBaseUrl}/reporting-columns/default";
+            if ($actor !== null && $actor !== '') {
+                $url .= '?actor=' . urlencode($actor);
+            }
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (ClientException $e) {
+            return [];
         }
     }
 

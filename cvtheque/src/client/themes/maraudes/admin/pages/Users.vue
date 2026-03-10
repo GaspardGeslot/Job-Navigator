@@ -74,11 +74,8 @@
                   <oxd-input-field
                     v-model="matchingSelected"
                     type="select"
-                    :label="$t('recruitment.need_title')"
-                    :options="[
-                      {id: null, label: 'Sans sélection'},
-                      ...matchings,
-                    ]"
+                    :label="$t('Périmètre')"
+                    :options="[{id: null, label: 'Tout'}, ...matchings]"
                   />
                 </oxd-grid-item>
               </oxd-grid>
@@ -358,7 +355,7 @@ export default {
         },
         {
           name: 'matchingLabel',
-          title: this.$t('Matching'),
+          title: this.$t('Périmètre'),
           sortField: 'matchingLabel',
           style: {flex: 0.75},
         },

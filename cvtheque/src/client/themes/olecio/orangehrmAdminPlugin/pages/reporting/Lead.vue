@@ -3,9 +3,10 @@
   <lead-profile
     v-if="lead"
     :lead="lead"
-    :statuses="statuses"
+    :all-statuses="allStatuses"
+    :actor-statuses="actorStatuses"
     :contact-log-types="contactLogTypes"
-    :default-columns="reportingColumns ? reportingColumns.defaultColumns : null"
+    :default-columns="defaultColumns"
     @update="onLeadUpdate"
   ></lead-profile>
 </template>
@@ -25,13 +26,22 @@ export default {
       type: Number,
       required: true,
     },
-    statuses: {
+    allStatuses: {
+      type: Array,
+      required: true,
+    },
+    actorStatuses: {
       type: Array,
       required: true,
     },
     contactLogTypes: {
       type: Array,
       default: () => [],
+    },
+    defaultColumns: {
+      type: Object,
+      required: false,
+      default: null,
     },
   },
   setup() {
@@ -46,7 +56,6 @@ export default {
   data() {
     return {
       lead: null,
-      reportingColumns: null,
     };
   },
   beforeMount() {
@@ -56,20 +65,6 @@ export default {
     onLeadUpdate() {
       this.http.get(this.leadId).then(({data}) => {
         this.lead = data;
-        if (this.lead && this.lead.actor) {
-          this.http
-            .request({
-              method: 'GET',
-              url: `/api/v2/actor/reporting-columns/default?actor=${encodeURIComponent(
-                this.lead.actor,
-              )}`,
-            })
-            .then(({data: reportingColumns}) => {
-              this.reportingColumns = reportingColumns;
-            });
-        } else {
-          this.reportingColumns = null;
-        }
       });
     },
   },

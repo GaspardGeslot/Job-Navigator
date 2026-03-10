@@ -452,75 +452,93 @@
               row-decorator="oxd-table-decorator-card"
             />
           </div>
-          <div v-else class="orangehrm-telephone-contacts-empty">
-            <oxd-text>
-              {{ $t("ℹ️ Aucune prise de contact n'a encore été renseignée.") }}
+          <div
+            v-else
+            class="orangehrm-corporate-directory-nocontent"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              padding: 1rem 0;
+            "
+          >
+            <img
+              :src="noContentPic"
+              alt="No Content"
+              style="max-width: 60px; margin: 0 0 0.85rem 0"
+            />
+            <oxd-text tag="p">
+              Aucune prise de contact n'a encore été renseignée.
             </oxd-text>
           </div>
         </oxd-form-row>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row
+        <div
           v-if="hasAnyColumns('franceTravailRecordDate', 'franceTravailAgency')"
         >
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('France Travail') }}
-          </oxd-text>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item v-if="isColumnVisible('franceTravailRecordDate')">
-              <date-input
-                v-model="profile.franceTravailRecordDate"
-                :label="$t('Date d\'inscription')"
-                :disabled="!editable"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item v-if="isColumnVisible('franceTravailAgency')">
-              <oxd-input-field
-                v-model="profile.franceTravailAgency"
-                :label="$t('Agence')"
-                type="select"
-                :options="franceTravailAgencyOptions"
-                :disabled="!editable"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+          <oxd-divider></oxd-divider>
+          <oxd-form-row>
+            <oxd-text class="orangehrm-sub-title" tag="h6">
+              {{ $t('France Travail') }}
+            </oxd-text>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item v-if="isColumnVisible('franceTravailRecordDate')">
+                <date-input
+                  v-model="profile.franceTravailRecordDate"
+                  :label="$t('Date d\'inscription')"
+                  :disabled="!editable"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('franceTravailAgency')">
+                <oxd-input-field
+                  v-model="profile.franceTravailAgency"
+                  :label="$t('Agence')"
+                  type="select"
+                  :options="franceTravailAgencyOptions"
+                  :disabled="!editable"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </div>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row v-if="hasAnyColumns('rqth', 'complement', 'comment')">
-          <oxd-text class="orangehrm-sub-title" tag="h6">
-            {{ $t('Informations additionnelles') }}
-          </oxd-text>
-          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
-            <oxd-grid-item v-if="isColumnVisible('rqth')">
-              <oxd-input-field
-                v-model="profile.rqth"
-                :label="$t('RQTH')"
-                type="select"
-                :options="rqthOptions"
-                :disabled="!editable"
-              />
-            </oxd-grid-item>
-            <oxd-grid-item v-if="isColumnVisible('complement')">
-              <oxd-input-field
-                v-model="profile.complement"
-                :label="$t('Complément')"
-                :disabled="true"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-            <oxd-grid-item v-if="isColumnVisible('comment')">
-              <oxd-input-field
-                v-model="profile.comment"
-                :label="$t('Commentaire')"
-                type="textarea"
-                :disabled="!editable"
-                :rules="rules.comment"
-              />
-            </oxd-grid-item>
-          </oxd-grid>
-        </oxd-form-row>
+        <div v-if="hasAnyColumns('rqth', 'complement', 'comment')">
+          <oxd-divider></oxd-divider>
+          <oxd-form-row v-if="hasAnyColumns('rqth', 'complement', 'comment')">
+            <oxd-text class="orangehrm-sub-title" tag="h6">
+              {{ $t('Informations additionnelles') }}
+            </oxd-text>
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item v-if="isColumnVisible('rqth')">
+                <oxd-input-field
+                  v-model="profile.rqth"
+                  :label="$t('RQTH')"
+                  type="select"
+                  :options="rqthOptions"
+                  :disabled="!editable"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-if="isColumnVisible('complement')">
+                <oxd-input-field
+                  v-model="profile.complement"
+                  :label="$t('Complément')"
+                  :disabled="true"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+              <oxd-grid-item v-if="isColumnVisible('comment')">
+                <oxd-input-field
+                  v-model="profile.comment"
+                  :label="$t('Commentaire')"
+                  type="textarea"
+                  :disabled="!editable"
+                  :rules="rules.comment"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </div>
 
         <oxd-divider></oxd-divider>
         <oxd-form-actions>
@@ -670,7 +688,11 @@ export default {
       required: false,
       default: true,
     },
-    statuses: {
+    allStatuses: {
+      type: Array,
+      required: true,
+    },
+    actorStatuses: {
       type: Array,
       required: true,
     },
@@ -687,11 +709,13 @@ export default {
   emits: ['update'],
   setup() {
     const http = new APIService(window.appGlobal.baseUrl, '/');
+    const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
     const {jsDateFormat} = useDateFormat();
     const userDateFormat = 'yyyy-MM-dd';
 
     return {
       http,
+      noContentPic,
       userDateFormat,
       jsDateFormat,
     };
@@ -823,11 +847,18 @@ export default {
       return this.contactLogTypeOrdinal !== 1;
     },
     sortedStatuses() {
-      if (!this.statuses || !Array.isArray(this.statuses)) {
+      if (
+        (!this.simplifiedVersion &&
+          (!this.allStatuses || !Array.isArray(this.allStatuses))) ||
+        (this.simplifiedVersion &&
+          (!this.actorStatuses || !Array.isArray(this.actorStatuses)))
+      ) {
         return [];
       }
       // Créer une copie du tableau et trier par label (ordre alphabétique)
-      return [...this.statuses].sort((a, b) => {
+      return [
+        ...(this.simplifiedVersion ? this.actorStatuses : this.allStatuses),
+      ].sort((a, b) => {
         const labelA = (a.label || '').toLowerCase();
         const labelB = (b.label || '').toLowerCase();
         return labelA.localeCompare(labelB);
@@ -1007,9 +1038,9 @@ export default {
       } else this.profile.birthDate = null;
 
       if (this.lead.currentSituation)
-        this.profile.currentSituation = this.statuses.find(
-          (option) => option.label === this.lead.currentSituation,
-        );
+        this.profile.currentSituation = (
+          this.simplifiedVersion ? this.actorStatuses : this.allStatuses
+        ).find((option) => option.label === this.lead.currentSituation);
 
       if (this.lead.franceTravailAgency)
         this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
@@ -1120,13 +1151,11 @@ export default {
       let typeForPayload = null;
       if (typeValue != null) {
         if (typeof typeValue === 'object') {
-          typeForPayload = typeValue.value ?? typeValue.id ?? null;
+          typeForPayload = typeValue.id ?? null;
         } else {
           typeForPayload = typeValue;
         }
       }
-      const typeAsString =
-        typeForPayload != null ? String(typeForPayload) : null;
 
       const isEmailType = typeForPayload === 1;
       const contactValue = isEmailType
@@ -1138,7 +1167,7 @@ export default {
         phoneNumber: contactValue,
         successful: form.successful === true,
         comment: form.comment || '',
-        type: typeAsString,
+        typeOrdinal: typeForPayload,
       };
 
       if (this.isEditingTelephoneContact) {
