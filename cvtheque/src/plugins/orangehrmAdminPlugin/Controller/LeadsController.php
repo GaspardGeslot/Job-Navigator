@@ -21,6 +21,7 @@ class LeadsController extends AbstractVueController
     public const FILTER_ACTORS = 'actors';
     public const FILTER_JOBS = 'jobs';
     public const FILTER_COURSE_ONLY = 'courseOnly';
+    public const FILTER_HIDE_TESTS = 'hideTests';
 
     /**
      * @inheritDoc
@@ -78,9 +79,14 @@ class LeadsController extends AbstractVueController
         $actors = $request->query->get(self::FILTER_ACTORS);
         $jobs = $request->query->get(self::FILTER_JOBS);
         $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
-        if ($courseOnly !== null)
+        $hideTests = $request->query->get(self::FILTER_HIDE_TESTS);
+        if ($courseOnly !== null) {
             $courseOnly = filter_var($courseOnly, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly);
+        }
+        if ($hideTests !== null) {
+            $hideTests = filter_var($hideTests, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        }
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideTests);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -229,7 +235,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, ?string $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly): array
+    public function getLeads(string $token, string $from, string $to, ?string $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideTests): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -248,6 +254,9 @@ class LeadsController extends AbstractVueController
                 $url .= 'jobs=' . urlencode(implode(',', $jobs)) . '&';
             if ($courseOnly !== null) {
                 $url .= 'courseOnly=' . ($courseOnly ? 'true' : 'false') . '&';
+            }
+            if ($hideTests !== null) {
+                $url .= 'hideTests=' . ($hideTests ? 'true' : 'false') . '&';
             }
             $response = $client->request('GET', $url, [
                 'headers' => [

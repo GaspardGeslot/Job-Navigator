@@ -53,27 +53,50 @@
                 :options="matchingStatusFilters"
               />
             </oxd-grid-item>
-            <oxd-grid-item
-              class="orangehrm-switch-wrapper"
-              style="display: flex; flex-direction: row; margin-top: 0.5rem"
-            >
-              <oxd-switch-input
-                v-model="courseOnly"
-                :label="$t(`Uniquement avec formation`)"
-              />
-              <oxd-text
-                class="oxd-label"
-                :style="{
-                  fontFamily: 'Nunito Sans, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: '600',
-                  color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
-                  marginBottom: '0.5rem',
-                }"
+            <oxd-grid :cols="2" class="orangehrm-full-width-grid"
+              ><oxd-grid-item
+                class="orangehrm-switch-wrapper"
+                style="display: flex; flex-direction: row; margin-top: 0.5rem"
               >
-                Uniquement avec formation
-              </oxd-text>
-            </oxd-grid-item>
+                <oxd-switch-input
+                  v-model="courseOnly"
+                  :label="$t(`Uniquement avec formation`)"
+                />
+                <oxd-text
+                  class="oxd-label"
+                  :style="{
+                    fontFamily: 'Nunito Sans, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                    marginBottom: '0.5rem',
+                  }"
+                >
+                  Uniquement avec formation
+                </oxd-text>
+              </oxd-grid-item>
+              <oxd-grid-item
+                class="orangehrm-switch-wrapper"
+                style="display: flex; flex-direction: row; margin-top: 0.5rem"
+              >
+                <oxd-switch-input
+                  v-model="hideTests"
+                  :label="$t(`Masquer les tests`)"
+                />
+                <oxd-text
+                  class="oxd-label"
+                  :style="{
+                    fontFamily: 'Nunito Sans, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                    marginBottom: '0.5rem',
+                  }"
+                >
+                  Masquer les tests
+                </oxd-text>
+              </oxd-grid-item>
+            </oxd-grid>
           </oxd-grid>
         </oxd-form-row>
         <oxd-divider />
@@ -275,6 +298,10 @@ export default {
             actorsFilter: filters.actorsFilter || [],
             jobsFilter: filters.jobsFilter || [],
             courseOnly: filters.courseOnly || false,
+            hideTests:
+              typeof filters.hideTests === 'boolean'
+                ? filters.hideTests
+                : false,
           };
         }
       } catch (error) {
@@ -292,6 +319,7 @@ export default {
         actorsFilter: [],
         jobsFilter: [],
         courseOnly: false,
+        hideTests: false,
       };
     };
 
@@ -303,6 +331,7 @@ export default {
       actors,
       jobs,
       course,
+      hide,
     ) => {
       try {
         // Convertir du format utilisateur vers le format API pour le stockage
@@ -319,6 +348,7 @@ export default {
           actorsFilter: actors,
           jobsFilter: jobs,
           courseOnly: course,
+          hideTests: hide,
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
       } catch (error) {
@@ -346,6 +376,7 @@ export default {
     const actorsFilter = ref(loadedFilters.actorsFilter);
     const jobsFilter = ref(loadedFilters.jobsFilter);
     const courseOnly = ref(loadedFilters.courseOnly);
+    const hideTests = ref(loadedFilters.hideTests);
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
@@ -577,6 +608,7 @@ export default {
             ? jobsFilter.value.map((job) => job.label)
             : [],
           courseOnly: courseOnly.value,
+          hideTests: hideTests.value,
         })
         .then((response) => {
           leads.value = response.data;
@@ -610,6 +642,7 @@ export default {
         actorsFilter.value,
         jobsFilter.value,
         courseOnly.value,
+        hideTests.value,
       );
       fetchData();
     };
@@ -632,6 +665,7 @@ export default {
         actorsFilter.value,
         jobsFilter.value,
         courseOnly.value,
+        hideTests.value,
       );
       if (jobAutocomplete.value) {
         jobAutocomplete.value.reset();
@@ -686,6 +720,7 @@ export default {
         actorsFilter.value,
         jobsFilter.value,
         courseOnly.value,
+        hideTests.value,
       );
     };
 
@@ -698,6 +733,7 @@ export default {
         actorsFilter,
         jobsFilter,
         courseOnly,
+        hideTests,
       ],
       () => {
         saveFiltersToLocalStorage(
@@ -707,6 +743,7 @@ export default {
           actorsFilter.value,
           jobsFilter.value,
           courseOnly.value,
+          hideTests.value,
         );
       },
     );
@@ -729,6 +766,7 @@ export default {
       actorsFilter,
       jobsFilter,
       courseOnly,
+      hideTests,
       tableData,
       tableHeaders,
       totalRecords,
@@ -765,6 +803,7 @@ export default {
         this.actorsFilter,
         this.jobsFilter,
         this.courseOnly,
+        this.hideTests,
       );
       navigate(`/${window.appGlobal.theme}/admin/viewLeads/{id}`, {
         id: leadId,
