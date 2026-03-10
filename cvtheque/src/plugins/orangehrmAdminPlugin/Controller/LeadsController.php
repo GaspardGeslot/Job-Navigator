@@ -347,7 +347,7 @@ class LeadsController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $url = "{$clientBaseUrl}/actor/options";
+            $url = "{$clientBaseUrl}/actor/options?active=true";
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
