@@ -406,9 +406,23 @@
               row-decorator="oxd-table-decorator-card"
             />
           </div>
-          <div v-else class="orangehrm-telephone-contacts-empty">
-            <oxd-text>
-              {{ $t("ℹ️ Aucune prise de contact n'a encore été renseignée.") }}
+          <div
+            v-else
+            class="orangehrm-corporate-directory-nocontent"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              padding: 1rem 0;
+            "
+          >
+            <img
+              :src="noContentPic"
+              alt="No Content"
+              style="max-width: 60px; margin: 0 0 0.85rem 0"
+            />
+            <oxd-text tag="p">
+              Aucune prise de contact n'a encore été renseignée.
             </oxd-text>
           </div>
         </oxd-form-row>
@@ -622,11 +636,13 @@ export default {
   emits: ['update'],
   setup() {
     const http = new APIService(window.appGlobal.baseUrl, '/');
+    const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
     const {jsDateFormat} = useDateFormat();
     const userDateFormat = 'yyyy-MM-dd';
 
     return {
       http,
+      noContentPic,
       userDateFormat,
       jsDateFormat,
     };
@@ -945,16 +961,12 @@ export default {
       );
       const formattedDateTime = formatDate(dateTime, 'yyyy-MM-dd HH:mm:ss');
 
-      let typeAsString = null;
+      let type = null;
       if (form.type != null && this.contactLogTypes?.length > 0) {
-        const typeValue =
-          typeof form.type === 'object'
-            ? form.type.value ?? form.type.id
-            : form.type;
-        typeAsString = typeValue != null ? String(typeValue) : null;
+        type = typeof form.type === 'object' ? form.type.id : form.type;
       }
 
-      const isEmailType = typeAsString === '1';
+      const isEmailType = type === 1;
       const contactValue = isEmailType
         ? this.profile.email || ''
         : form.phoneNumber || '';
@@ -964,10 +976,8 @@ export default {
         phoneNumber: contactValue,
         successful: form.successful === true,
         comment: form.comment || '',
+        typeOrdinal: type,
       };
-      if (typeAsString != null) {
-        contactData.type = typeAsString;
-      }
 
       if (this.isEditingTelephoneContact) {
         this.http

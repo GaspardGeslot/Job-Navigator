@@ -47,7 +47,7 @@
         </oxd-grid-item>
         <oxd-grid-item class="orangerhrm-switch-wrapper">
           <oxd-text class="orangehrm-text" tag="p">
-            {{ $t('Est spécifique ?') }}
+            {{ $t('Autorise les comptes spécifiques aux matchings ?') }}
           </oxd-text>
           <oxd-switch-input
             v-model="actor.allowMatchingSpecific"
