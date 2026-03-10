@@ -439,6 +439,15 @@
               @click="onClickAddTelephoneContact"
             />
           </div>
+          <div>
+            <oxd-grid-item v-if="isColumnVisible('callBackDate')">
+              <date-input
+                v-model="profile.callBackDate"
+                :label="$t('Relancer à partir de')"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </div>
           <div
             v-if="
               formattedTelephoneContacts &&
@@ -635,6 +644,7 @@ const LeadProfileModel = {
   apiMessage: '',
   manualDelivery: false,
   telephoneContacts: [],
+  callBackDate: null,
   franceTravailRecordDate: null,
   franceTravailAgency: null,
   rqth: null,
@@ -899,6 +909,13 @@ export default {
           : null;
       } else dataToSend.birthDate = null;
 
+      if (dataToSend.callBackDate) {
+        const dateObj = parseDate(dataToSend.callBackDate, this.userDateFormat);
+        dataToSend.callBackDate = dateObj
+          ? formatDate(dateObj, 'yyyy-MM-dd')
+          : null;
+      } else dataToSend.callBackDate = null;
+
       if (dataToSend.rqth) dataToSend.rqth = dataToSend.rqth?.label;
 
       if (dataToSend.currentSituation)
@@ -998,6 +1015,13 @@ export default {
           ? formatDate(dateObj, 'yyyy-MM-dd')
           : null;
       } else this.profile.franceTravailRecordDate = null;
+
+      if (this.lead.callBackDate) {
+        const dateObj = parseDate(this.lead.callBackDate, 'yyyy-MM-dd');
+        this.profile.callBackDate = dateObj
+          ? formatDate(dateObj, 'yyyy-MM-dd')
+          : null;
+      } else this.profile.callBackDate = null;
 
       if (this.lead.birthDate) {
         const dateObj = parseDate(this.lead.birthDate, 'yyyy-MM-dd');
