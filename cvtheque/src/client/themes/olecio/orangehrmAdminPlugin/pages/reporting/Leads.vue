@@ -523,6 +523,10 @@ export default {
         key: 'lastContact',
       },
       {
+        label: 'Relancer à partir de',
+        key: 'callBackDate',
+      },
+      {
         label: "Date d'envoi",
         key: 'sentTime',
       },
@@ -590,6 +594,7 @@ export default {
       timeSlot: (cols) => !!cols.timeSlot,
       complement: (cols) => !!cols.complement,
       lastContact: (cols) => !!cols.lastContact,
+      callBackDate: (cols) => !!cols.callBackDate,
     };
 
     const updateTableHeadersForDefaultColumns = (cols) => {
