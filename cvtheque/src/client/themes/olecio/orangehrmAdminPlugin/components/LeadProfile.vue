@@ -426,52 +426,63 @@
           </oxd-grid>
         </oxd-form-row>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
+        <oxd-form-row
+          v-if="
+            isColumnVisible('callBackDate') || isColumnVisible('contactLogs')
+          "
+        >
+          <oxd-divider></oxd-divider>
           <div class="orangehrm-telephone-contacts-header">
             <oxd-text class="orangehrm-sub-title" tag="h6">
               {{ $t('Prises de contact') }}
             </oxd-text>
             <oxd-button
+              v-if="isColumnVisible('contactLogs')"
               icon-name="plus"
               display-type="secondary"
               :label="$t('general.add')"
               @click="onClickAddTelephoneContact"
             />
           </div>
-          <div>
-            <oxd-grid-item v-if="isColumnVisible('callBackDate')">
-              <date-input
-                v-model="profile.callBackDate"
-                :label="$t('Relancer à partir de')"
-                :disabled="!editable"
+          <div v-if="isColumnVisible('callBackDate')">
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <date-input
+                  v-model="profile.callBackDate"
+                  :label="$t('Relancer à partir de')"
+                  :disabled="!editable"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </div>
+          <div v-if="isColumnVisible('contactLogs')">
+            <div
+              v-if="
+                formattedTelephoneContacts &&
+                formattedTelephoneContacts.length > 0
+              "
+              class="orangehrm-container"
+            >
+              <oxd-card-table
+                :headers="telephoneContactHeaders"
+                :items="formattedTelephoneContacts"
+                row-decorator="oxd-table-decorator-card"
               />
-            </oxd-grid-item>
-          </div>
-          <div
-            v-if="
-              formattedTelephoneContacts &&
-              formattedTelephoneContacts.length > 0
-            "
-            class="orangehrm-container"
-          >
-            <oxd-card-table
-              :headers="telephoneContactHeaders"
-              :items="formattedTelephoneContacts"
-              row-decorator="oxd-table-decorator-card"
-            />
-          </div>
-          <div v-else class="orangehrm-telephone-contacts-empty">
-            <oxd-text>
-              {{ $t("ℹ️ Aucune prise de contact n'a encore été renseignée.") }}
-            </oxd-text>
+            </div>
+            <div v-else class="orangehrm-telephone-contacts-empty">
+              <oxd-text>
+                {{
+                  $t("ℹ️ Aucune prise de contact n'a encore été renseignée.")
+                }}
+              </oxd-text>
+            </div>
           </div>
         </oxd-form-row>
 
-        <oxd-divider></oxd-divider>
         <oxd-form-row
           v-if="hasAnyColumns('franceTravailRecordDate', 'franceTravailAgency')"
         >
+          <oxd-divider></oxd-divider>
           <oxd-text class="orangehrm-sub-title" tag="h6">
             {{ $t('France Travail') }}
           </oxd-text>
@@ -495,8 +506,8 @@
           </oxd-grid>
         </oxd-form-row>
 
-        <oxd-divider></oxd-divider>
         <oxd-form-row v-if="hasAnyColumns('rqth', 'complement', 'comment')">
+          <oxd-divider></oxd-divider>
           <oxd-text class="orangehrm-sub-title" tag="h6">
             {{ $t('Informations additionnelles') }}
           </oxd-text>
