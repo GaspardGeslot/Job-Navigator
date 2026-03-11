@@ -380,31 +380,32 @@
           </oxd-form-row>
         </div>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
+        <oxd-form-row
+          v-if="defaultColumns.callBackDate || defaultColumns.contactLogs"
+        >
+          <oxd-divider></oxd-divider>
           <div class="orangehrm-telephone-contacts-header">
             <oxd-text class="orangehrm-sub-title" tag="h6">
               {{ $t('Prises de contact') }}
             </oxd-text>
             <oxd-button
+              v-if="defaultColumns.contactLogs"
               icon-name="plus"
               display-type="secondary"
               :label="$t('general.add')"
               @click="onClickAddTelephoneContact"
             />
           </div>
-          <div
-            v-if="
-              formattedTelephoneContacts &&
-              formattedTelephoneContacts.length > 0
-            "
-            class="orangehrm-container"
-          >
-            <oxd-card-table
-              :headers="telephoneContactHeaders"
-              :items="formattedTelephoneContacts"
-              row-decorator="oxd-table-decorator-card"
-            />
+          <div v-if="defaultColumns.callBackDate">
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <date-input
+                  v-model="profile.callBackDate"
+                  :label="$t('Relancer à partir de')"
+                  :disabled="!editable"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
           </div>
           <div
             v-else
@@ -589,6 +590,7 @@ const LeadProfileModel = {
   manualDelivery: false,
   telephoneContacts: [],
   customColumns: [],
+  callBackDate: null,
 };
 
 const TelephoneContactModel = {
@@ -772,6 +774,15 @@ export default {
       // Préparer les données pour l'API
       const dataToSend = {...this.profile};
 
+      if (dataToSend.callBackDate) {
+        const dateObj = parseDate(dataToSend.callBackDate, this.userDateFormat);
+        dataToSend.callBackDate = dateObj
+          ? formatDate(dateObj, 'yyyy-MM-dd')
+          : null;
+      } else {
+        dataToSend.callBackDate = null;
+      }
+
       // Convertir les customColumns pour l'API : garder la structure mais avec les valeurs mises à jour
       if (dataToSend.customColumns && Array.isArray(dataToSend.customColumns)) {
         dataToSend.customColumns = dataToSend.customColumns.map((cc) => ({
@@ -866,6 +877,7 @@ export default {
           })
         : [];
       this.profile.customColumns = this.lead.customColumns || [];
+      this.profile.callBackDate = this.lead.callBackDate || null;
       this.isLoading = false;
     },
     onClickAddTelephoneContact() {

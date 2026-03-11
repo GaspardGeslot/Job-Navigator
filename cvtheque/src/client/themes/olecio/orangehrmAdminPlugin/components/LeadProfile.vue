@@ -426,59 +426,68 @@
           </oxd-grid>
         </oxd-form-row>
 
-        <oxd-divider></oxd-divider>
-        <oxd-form-row>
+        <oxd-form-row
+          v-if="
+            isColumnVisible('callBackDate') || isColumnVisible('contactLogs')
+          "
+        >
+          <oxd-divider></oxd-divider>
           <div class="orangehrm-telephone-contacts-header">
             <oxd-text class="orangehrm-sub-title" tag="h6">
               {{ $t('Prises de contact') }}
             </oxd-text>
             <oxd-button
+              v-if="isColumnVisible('contactLogs')"
               icon-name="plus"
               display-type="secondary"
               :label="$t('general.add')"
               @click="onClickAddTelephoneContact"
             />
           </div>
-          <div>
-            <oxd-grid-item v-if="isColumnVisible('callBackDate')">
-              <date-input
-                v-model="profile.callBackDate"
-                :label="$t('Relancer à partir de')"
-                :disabled="!editable"
+          <div v-if="isColumnVisible('callBackDate')">
+            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <date-input
+                  v-model="profile.callBackDate"
+                  :label="$t('Relancer à partir de')"
+                  :disabled="!editable"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </div>
+          <div v-if="isColumnVisible('contactLogs')">
+            <div
+              v-if="
+                formattedTelephoneContacts &&
+                formattedTelephoneContacts.length > 0
+              "
+              class="orangehrm-container"
+            >
+              <oxd-card-table
+                :headers="telephoneContactHeaders"
+                :items="formattedTelephoneContacts"
+                row-decorator="oxd-table-decorator-card"
               />
-            </oxd-grid-item>
-          </div>
-          <div
-            v-if="
-              formattedTelephoneContacts &&
-              formattedTelephoneContacts.length > 0
-            "
-            class="orangehrm-container"
-          >
-            <oxd-card-table
-              :headers="telephoneContactHeaders"
-              :items="formattedTelephoneContacts"
-              row-decorator="oxd-table-decorator-card"
-            />
-          </div>
-          <div
-            v-else
-            class="orangehrm-corporate-directory-nocontent"
-            style="
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              padding: 1rem 0;
-            "
-          >
-            <img
-              :src="noContentPic"
-              alt="No Content"
-              style="max-width: 60px; margin: 0 0 0.85rem 0"
-            />
-            <oxd-text tag="p">
-              Aucune prise de contact n'a encore été renseignée.
-            </oxd-text>
+            </div>
+            <div
+              v-else
+              class="orangehrm-corporate-directory-nocontent"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+              "
+            >
+              <img
+                :src="noContentPic"
+                alt="No Content"
+                style="max-width: 60px; margin: 0 0 0.85rem 0"
+              />
+              <oxd-text tag="p">
+                Aucune prise de contact n'a encore été renseignée.
+              </oxd-text>
+            </div>
           </div>
         </oxd-form-row>
 
