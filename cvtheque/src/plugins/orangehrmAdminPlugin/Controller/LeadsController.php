@@ -19,6 +19,7 @@ class LeadsController extends AbstractVueController
     public const FILTER_TO_DATE = 'to';
     public const FILTER_MATCHING_STATUS = 'matchingStatus';
     public const FILTER_ACTORS = 'actors';
+    public const FILTER_DEPARTMENT_CODES = 'departmentCodes';
     public const FILTER_JOBS = 'jobs';
     public const FILTER_COURSE_ONLY = 'courseOnly';
     public const FILTER_HIDE_TESTS = 'hideTests';
@@ -71,7 +72,8 @@ class LeadsController extends AbstractVueController
             
             $actorOptions = $this->getHedwigeActorOptions($this->getAuthUser()->getUserHedwigeToken());
             $matchingStatusFilterOptions = $this->getHedwigeMatchingStatusFilterOptions($this->getAuthUser()->getUserHedwigeToken());
-            
+            $departmentCodeOptions = $this->getHedwigeDepartmentCodeOptions($this->getAuthUser()->getUserHedwigeToken());	
+
             $component->addProp(new Prop('actors', Prop::TYPE_ARRAY, array_map(function($label, $index) {
                 return [
                     'id' => $index,
@@ -84,6 +86,15 @@ class LeadsController extends AbstractVueController
                     'label' => $label
                 ];
             }, array_keys($matchingStatusFilterOptions), $matchingStatusFilterOptions)));
+            // Sort departmentCodeOptions by code before mapping
+            $sortedDepartmentCodeOptions = $departmentCodeOptions;
+            ksort($sortedDepartmentCodeOptions);
+            $component->addProp(new Prop('department-codes', Prop::TYPE_ARRAY, array_map(function($code, $label) {
+                return [
+                    'id' => $code,
+                    'label' => $code . ' - ' . $label
+                ];
+            }, array_keys($sortedDepartmentCodeOptions), $sortedDepartmentCodeOptions)));
         }
         $this->setComponent($component);
     }
@@ -94,6 +105,7 @@ class LeadsController extends AbstractVueController
         $to = $request->query->get(self::FILTER_TO_DATE);
         $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
         $actors = $request->query->get(self::FILTER_ACTORS);
+        $departmentCodes = $request->query->get(self::FILTER_DEPARTMENT_CODES);
         $jobs = $request->query->get(self::FILTER_JOBS);
         $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
         $hideTests = $request->query->get(self::FILTER_HIDE_TESTS);
@@ -103,7 +115,7 @@ class LeadsController extends AbstractVueController
         if ($hideTests !== null) {
             $hideTests = filter_var($hideTests, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideTests);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideTests, $departmentCodes);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -272,7 +284,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, ?string $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideTests): array
+    public function getLeads(string $token, string $from, string $to, ?string $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideTests, ?array $departmentCodes): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -295,6 +307,8 @@ class LeadsController extends AbstractVueController
             if ($hideTests !== null) {
                 $url .= 'hideTests=' . ($hideTests ? 'true' : 'false') . '&';
             }
+            if ($departmentCodes != null && $departmentCodes !== [])
+                $url .= 'departmentCodes=' . urlencode(implode(',', $departmentCodes)) . '&';
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'Authorization' => $token,
@@ -364,6 +378,19 @@ class LeadsController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/matching/status-filters";
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
+        return json_decode($response->getBody(), true);
+    }
+
+    public function getHedwigeDepartmentCodeOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/client/department";
         $response = $client->request('GET', $url, [
             'headers' => [
                 'Authorization' => $token,

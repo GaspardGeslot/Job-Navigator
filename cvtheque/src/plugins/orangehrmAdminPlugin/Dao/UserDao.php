@@ -387,6 +387,25 @@ class UserDao extends BaseDao
     }
 
     /**
+     * @param string $username
+     * @param int $themeId
+     * @return User|null
+     */
+    public function getUserByUserNameAndTheme(string $username, int $themeId): ?User
+    {
+        $theme = $this->getThemeById($themeId);
+        $query = $this->createQueryBuilder(User::class, 'u');
+        $query->andWhere('u.userName = :username')
+            ->setParameter('username', $username);
+        $query->andWhere($query->expr()->isNotNull('u.userPassword'));
+        if ($theme != null) {
+            $query->andWhere('u.theme = :theme')
+                ->setParameter('theme', $theme);
+        }
+        return $query->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * @return User|null
      */
     public function getDefaultAdminUser(): ?User

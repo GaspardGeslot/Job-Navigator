@@ -4,17 +4,21 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Vous cherchez un emploi dans le BTP et la Construction en Ile-de-France ? Postulez en ligne, avec ou sans CV, et laissez notre plateforme faire le reste.">
   {% set themeTitle = 'Emploi dans le BTP (avec ou sans CV) | Job Navigator' %}
+  {% set themeDescription = 'Vous cherchez un emploi dans le BTP et la Construction en Ile-de-France ? Postulez en ligne, avec ou sans CV, et laissez notre plateforme faire le reste.' %}
   {% if theme is defined and theme is not empty %}
     {% if theme == 'olecio' or theme == 'olecio-demo' %}
       {% set themeTitle = 'Job Navigator | Hedwige' %}
+      {% set themeDescription = 'Plateforme Hedwige : trouvez un emploi ou recrutez dans toute la France, simplement et rapidement.' %}
     {% elseif theme == 'maraudes' or theme == 'maraudes-demo' %}
       {% set themeTitle = 'Job Navigator | Maraudes' %}
+      {% set themeDescription = 'Accédez à l’emploi social et solidaire avec Maraudes, la plateforme dédiée à la rencontre entre candidats et associations.' %}
     {% elseif theme == 'constructys' or theme == 'constructys-demo' %}
       {% set themeTitle = 'Emploi dans le BTP (avec ou sans CV) | Job Navigator' %}
+      {% set themeDescription = 'Vous cherchez un emploi dans le BTP et la Construction en Ile-de-France ? Postulez en ligne, avec ou sans CV, et laissez notre plateforme faire le reste.' %}
     {% endif %}
   {% endif %}
+  <meta name="description" content="{{ themeDescription }}">
   <title>{% block title %}{{ themeTitle }}{% endblock %}</title>
   {% block links %}{% endblock %}
   {% block stylesheets %}{% endblock %}

@@ -345,13 +345,15 @@ class ResetPasswordService
     /**
      * @param string $email
      * @param string $password
+     * @param string $theme
      * @return bool
      */
-    public function redefinePassword(string $email, string $password): void
+    public function redefinePassword(string $email, string $password, string $theme): void
     {
         $this->beginTransaction();
         try {
-            $user = $this->getUserService()->getUserDao()->getUserByUserName($email);
+            $themeId = $this->getThemeDao()->getId($theme);
+            $user = $this->getUserService()->getUserDao()->getUserByUserNameAndTheme($email, $themeId);
             if ($this->validateUser($user) instanceof User) {
                 $user->getDecorator()->setNonHashedPassword($password);
                 $this->getUserService()->saveSystemUser($user);

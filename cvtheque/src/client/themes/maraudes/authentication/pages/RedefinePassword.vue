@@ -165,21 +165,19 @@ export default {
           data: data,
         })
         .then((response) => {
-          console.log(response);
           if (response.data.error === false) {
             navigate(response.data.redirectUrl);
           } else {
             this.error = {
               message: response.data.message,
             };
+            this.isLoading = false;
           }
         })
         .catch(() => {
           this.error = {
             message: this.$t('Identifiants invalides'),
           };
-        })
-        .finally(() => {
           this.isLoading = false;
         });
     },

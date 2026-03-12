@@ -88,12 +88,13 @@ class RedefinePasswordController extends AbstractVueController implements Public
 
     public function redefine(Request $request)
     {
+        $theme = $request->attributes->get('theme');
         $token = $this->getAuthUser()->getUserHedwigeToken();
         $data = json_decode($request->getContent(), true);
 
         try {
             $this->redefinePasswordHedwige($token, $data);
-            $this->getResetPasswordService()->redefinePassword($data['email'], $data['newPassword']);
+            $this->getResetPasswordService()->redefinePassword($data['email'], $data['newPassword'], $theme);
             $this->getAuthUser()->setHasToRedefinedPassword(false);
 
             $homePagePath = $this->getHomePageService()->getHomePagePath();

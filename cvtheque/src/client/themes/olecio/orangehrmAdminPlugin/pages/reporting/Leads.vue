@@ -47,6 +47,40 @@
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
+                v-model="departmentCodesFilter"
+                type="multiselect"
+                :label="$t('Département')"
+                :options="departmentCodeOptions"
+                :multiple="true"
+              />
+            </oxd-grid-item>
+            <oxd-grid-item
+              class="orangehrm-switch-wrapper"
+              style="display: flex; flex-direction: row; margin-top: 0.5rem"
+            >
+              <oxd-switch-input
+                v-model="courseOnly"
+                :label="$t(`Uniquement avec formation`)"
+              />
+              <oxd-text
+                class="oxd-label"
+                :style="{
+                  fontFamily: 'Nunito Sans, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                  marginBottom: '0.5rem',
+                }"
+              >
+                Uniquement avec formation
+              </oxd-text>
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
                 v-model="matchingStatusFilter"
                 type="select"
                 :label="$t('Etat du matching')"
@@ -55,27 +89,6 @@
             </oxd-grid-item>
             <oxd-grid :cols="2" class="orangehrm-full-width-grid"
               ><oxd-grid-item
-                class="orangehrm-switch-wrapper"
-                style="display: flex; flex-direction: row; margin-top: 0.5rem"
-              >
-                <oxd-switch-input
-                  v-model="courseOnly"
-                  :label="$t(`Uniquement avec formation`)"
-                />
-                <oxd-text
-                  class="oxd-label"
-                  :style="{
-                    fontFamily: 'Nunito Sans, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: '600',
-                    color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
-                    marginBottom: '0.5rem',
-                  }"
-                >
-                  Uniquement avec formation
-                </oxd-text>
-              </oxd-grid-item>
-              <oxd-grid-item
                 class="orangehrm-switch-wrapper"
                 style="display: flex; flex-direction: row; margin-top: 0.5rem"
               >
@@ -248,8 +261,12 @@ export default {
       type: Array,
       default: () => [],
     },
+    departmentCodes: {
+      type: Array,
+      default: () => [],
+    },
   },
-  setup() {
+  setup(props) {
     const {$t} = usei18n();
     const jobAutocomplete = ref(null);
 
@@ -296,6 +313,7 @@ export default {
               formatDate(defaultEndDate, userDateFormat),
             matchingStatusFilter: filters.matchingStatusFilter || null,
             actorsFilter: filters.actorsFilter || [],
+            departmentCodesFilter: filters.departmentCodesFilter || [],
             jobsFilter: filters.jobsFilter || [],
             courseOnly: filters.courseOnly || false,
             hideTests:
@@ -317,6 +335,7 @@ export default {
         endDateFilter: formatDate(defaultEndDate, userDateFormat),
         matchingStatusFilter: null,
         actorsFilter: [],
+        departmentCodesFilter: [],
         jobsFilter: [],
         courseOnly: false,
         hideTests: false,
@@ -329,6 +348,7 @@ export default {
       endDate,
       matchingStatusFilter,
       actors,
+      departmentCodes,
       jobs,
       course,
       hide,
@@ -346,6 +366,7 @@ export default {
           endDateFilter: endDateApi,
           matchingStatusFilter: matchingStatusFilter,
           actorsFilter: actors,
+          departmentCodesFilter: departmentCodes,
           jobsFilter: jobs,
           courseOnly: course,
           hideTests: hide,
@@ -374,6 +395,7 @@ export default {
     );
     const matchingStatusFilter = ref(loadedFilters.matchingStatusFilter);
     const actorsFilter = ref(loadedFilters.actorsFilter);
+    const departmentCodesFilter = ref(loadedFilters.departmentCodesFilter);
     const jobsFilter = ref(loadedFilters.jobsFilter);
     const courseOnly = ref(loadedFilters.courseOnly);
     const hideTests = ref(loadedFilters.hideTests);
@@ -387,6 +409,14 @@ export default {
     const currentPage = ref(1);
     const selectedCell = ref({row: null, col: null});
     const selectedRow = ref(null);
+    const departmentCodeOptions = computed(() =>
+      (props.departmentCodes || []).map((departmentCode, index) => ({
+        id: index,
+        label: departmentCode.label,
+        code: departmentCode.id,
+      })),
+    );
+
     const rules = {
       fromDate: [
         required,
@@ -650,77 +680,86 @@ export default {
 
     const fetchData = async () => {
       isLoading.value = true;
-      http
-        .getAll({
-          from: startDateFilter.value
-            ? formatDate(
-                parseDate(startDateFilter.value, userDateFormat),
-                'yyyy-MM-dd',
-              )
-            : undefined,
-          to: endDateFilter.value
-            ? formatDate(
-                parseDate(endDateFilter.value, userDateFormat),
-                'yyyy-MM-dd',
-              )
-            : undefined,
-          matchingStatus: matchingStatusFilter.value
-            ? matchingStatusFilter.value.label
-            : null,
-          actors: actorsFilter.value
-            ? actorsFilter.value.map((actor) => actor.label)
-            : [],
-          jobs: jobsFilter.value
-            ? jobsFilter.value.map((job) => job.label)
-            : [],
-          courseOnly: courseOnly.value,
-          hideTests: hideTests.value,
-        })
-        .then((response) => {
-          leads.value = response.data;
-          if (leads.value && leads.value.length > 0)
-            leads.value.sort((a, b) => {
-              return new Date(b.receivedAt) - new Date(a.receivedAt);
-            });
-          tableData.value = leads.value
-            ? leads.value.length > itemsPerPage
-              ? leads.value.slice(
-                  (currentPage.value - 1) * itemsPerPage,
-                  currentPage.value * itemsPerPage,
-                )
-              : leads.value
-            : [];
-          totalRecords.value = leads.value ? leads.value.length : 0;
-          if (totalRecords.value === 0) noRecordsFound();
 
-          const selectedActors = actorsFilter.value || [];
-          if (selectedActors.length === 1) {
-            const actorLabel = selectedActors[0]?.label;
-            if (actorLabel) {
-              return http
-                .request({
-                  method: 'GET',
-                  url: `/api/v2/actor/reporting-columns/default?actor=${encodeURIComponent(
-                    actorLabel,
-                  )}`,
-                })
-                .then(({data}) => {
-                  defaultColumns.value = data?.defaultColumns || null;
-                  updateTableHeadersForDefaultColumns(defaultColumns.value);
-                })
-                .catch(() => {
-                  defaultColumns.value = null;
-                  updateTableHeadersForDefaultColumns(null);
-                });
-            }
+      const params = {
+        from: startDateFilter.value
+          ? formatDate(
+              parseDate(startDateFilter.value, userDateFormat),
+              'yyyy-MM-dd',
+            )
+          : undefined,
+        to: endDateFilter.value
+          ? formatDate(
+              parseDate(endDateFilter.value, userDateFormat),
+              'yyyy-MM-dd',
+            )
+          : undefined,
+        matchingStatus: matchingStatusFilter.value
+          ? matchingStatusFilter.value.label
+          : null,
+        actors: actorsFilter.value
+          ? actorsFilter.value.map((actor) => actor.label)
+          : [],
+        departmentCodes: departmentCodesFilter.value
+          ? departmentCodesFilter.value.map(
+              (departmentCode) => departmentCode.code,
+            )
+          : [],
+        jobs: jobsFilter.value ? jobsFilter.value.map((job) => job.label) : [],
+        courseOnly: courseOnly.value,
+        hideTests: hideTests.value,
+      };
+
+      const leadsPromise = http.getAll(params).then((response) => {
+        leads.value = response.data;
+        if (leads.value && leads.value.length > 0)
+          leads.value.sort((a, b) => {
+            return new Date(b.receivedAt) - new Date(a.receivedAt);
+          });
+        tableData.value = leads.value
+          ? leads.value.length > itemsPerPage
+            ? leads.value.slice(
+                (currentPage.value - 1) * itemsPerPage,
+                currentPage.value * itemsPerPage,
+              )
+            : leads.value
+          : [];
+        totalRecords.value = leads.value ? leads.value.length : 0;
+        if (totalRecords.value === 0) noRecordsFound();
+      });
+
+      const reportingColumnsPromise = (() => {
+        const selectedActors = actorsFilter.value || [];
+        if (selectedActors.length === 1) {
+          const actorLabel = selectedActors[0]?.label;
+          if (actorLabel) {
+            return http
+              .request({
+                method: 'GET',
+                url: `/api/v2/actor/reporting-columns/default?actor=${encodeURIComponent(
+                  actorLabel,
+                )}`,
+              })
+              .then(({data}) => {
+                defaultColumns.value = data?.defaultColumns || null;
+                updateTableHeadersForDefaultColumns(defaultColumns.value);
+              })
+              .catch(() => {
+                defaultColumns.value = null;
+                updateTableHeadersForDefaultColumns(null);
+              });
           }
-          defaultColumns.value = null;
-          updateTableHeadersForDefaultColumns(null);
-          return null;
-        })
-        .finally(() => {
+        }
+        defaultColumns.value = null;
+        updateTableHeadersForDefaultColumns(null);
+        return Promise.resolve();
+      })();
+
+      return Promise.all([leadsPromise, reportingColumnsPromise]).finally(
+        () => {
           isLoading.value = false;
-        });
+        },
+      );
     };
 
     const filterItems = () => {
@@ -731,6 +770,7 @@ export default {
         endDateFilter.value,
         matchingStatusFilter.value,
         actorsFilter.value,
+        departmentCodesFilter.value,
         jobsFilter.value,
         courseOnly.value,
         hideTests.value,
@@ -746,6 +786,7 @@ export default {
       endDateFilter.value = formatDate(defaultEndDate, userDateFormat);
       matchingStatusFilter.value = null;
       actorsFilter.value = [];
+      departmentCodesFilter.value = [];
       jobsFilter.value = [];
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
@@ -754,6 +795,7 @@ export default {
         endDateFilter.value,
         matchingStatusFilter.value,
         actorsFilter.value,
+        departmentCodesFilter.value,
         jobsFilter.value,
         courseOnly.value,
         hideTests.value,
@@ -809,6 +851,7 @@ export default {
         endDateFilter.value,
         matchingStatusFilter.value,
         actorsFilter.value,
+        departmentCodesFilter.value,
         jobsFilter.value,
         courseOnly.value,
         hideTests.value,
@@ -822,6 +865,7 @@ export default {
         endDateFilter,
         matchingStatusFilter,
         actorsFilter,
+        departmentCodesFilter,
         jobsFilter,
         courseOnly,
         hideTests,
@@ -832,6 +876,7 @@ export default {
           endDateFilter.value,
           matchingStatusFilter.value,
           actorsFilter.value,
+          departmentCodesFilter.value,
           jobsFilter.value,
           courseOnly.value,
           hideTests.value,
@@ -855,6 +900,7 @@ export default {
       endDateFilter,
       matchingStatusFilter,
       actorsFilter,
+      departmentCodesFilter,
       jobsFilter,
       courseOnly,
       hideTests,
@@ -870,6 +916,7 @@ export default {
       selectCell,
       getCellValue,
       rules,
+      departmentCodeOptions,
       isLoading,
       exportToExcel,
       updateJobs,
@@ -892,6 +939,7 @@ export default {
         this.endDateFilter,
         this.matchingStatusFilter,
         this.actorsFilter,
+        this.departmentCodesFilter,
         this.jobsFilter,
         this.courseOnly,
         this.hideTests,
