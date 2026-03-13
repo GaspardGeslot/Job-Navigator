@@ -622,7 +622,7 @@ export default {
     ];
 
     const CONDITIONAL_COLUMNS = {
-      civility: (cols) => !!cols.civility,
+      civility: (cols) => !!cols.gender,
       address: (cols) => !!cols.address,
       locationPostalCodeEmail: (cols) => !!cols.postalCode,
       zipCode: (cols) => !!cols.postalCode,
@@ -631,7 +631,7 @@ export default {
       birthDate: (cols) => !!cols.birthDate,
       age: (cols) => !!cols.age,
       resume: (cols) => !!cols.resume,
-      isNEET: (cols) => !!cols.neet,
+      isNEET: (cols) => !!cols.isNeet,
       jobs: (cols) => !!cols.job,
       sector: (cols) => !!cols.sector,
       course: (cols) => !!cols.course,
@@ -643,9 +643,9 @@ export default {
       handicap: (cols) => !!cols.handicap,
       courseStart: (cols) => !!cols.courseStart,
       funding: (cols) => !!cols.funding,
-      utmCampaign: (cols) => !!cols.utmCampaign,
-      utmGroup: (cols) => !!cols.utmGroup,
-      utmSource: (cols) => !!cols.utmSource,
+      utmCampaign: (cols) => !!cols.utms,
+      utmGroup: (cols) => !!cols.utms,
+      utmSource: (cols) => !!cols.utms,
       source: (cols) => !!cols.source,
       timeSlotEmail: (cols) => !!cols.timeSlot,
       timeSlot: (cols) => !!cols.timeSlot,

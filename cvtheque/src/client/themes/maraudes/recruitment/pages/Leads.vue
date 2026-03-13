@@ -401,7 +401,7 @@ export default {
         key: 'funding',
         condition: (cols) => !!cols.funding,
       },
-      {
+      /*{
         utms: [
           {
             label: 'Campagne UTM',
@@ -420,7 +420,7 @@ export default {
           },
         ],
         condition: (cols) => !!cols.utms,
-      },
+      },*/
       {
         label: 'Source',
         key: 'source',
