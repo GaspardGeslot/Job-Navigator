@@ -6,6 +6,9 @@
           <oxd-grid :cols="2" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <date-input
+                v-if="
+                  actorsFilter.length === 0 || matchingStatusFilter === null
+                "
                 v-model="startDateFilter"
                 :label="$t('Date de début')"
                 :rules="rules.fromDate"
@@ -14,6 +17,9 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <date-input
+                v-if="
+                  actorsFilter.length === 0 || matchingStatusFilter === null
+                "
                 v-model="endDateFilter"
                 :label="$t('general.end_date')"
                 :rules="rules.toDate"
