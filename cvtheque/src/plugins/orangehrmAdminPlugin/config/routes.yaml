@@ -3059,6 +3059,13 @@ apiv2_admin_custom_columns_add:
   controller: OrangeHRM\Admin\Controller\CustomColumnsController::add
   methods: [ POST ]
 
+apiv2_admin_custom_columns_update:
+  path: /api/v2/admin/custom-column/{id}
+  controller: OrangeHRM\Admin\Controller\CustomColumnsController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
 apiv2_admin_custom_columns_delete:
   path: /api/v2/admin/custom-column/{id}
   controller: OrangeHRM\Admin\Controller\CustomColumnsController::delete

@@ -107,7 +107,8 @@ class ActorLeadsController extends AbstractVueController
     {
         $from = $request->query->get(self::FILTER_FROM_DATE);
         $to = $request->query->get(self::FILTER_TO_DATE);
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to);
+        $customFilters = $request->query->all('customFilter');
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -115,22 +116,89 @@ class ActorLeadsController extends AbstractVueController
         );
     }
 
-    public function getLeads(string $token, string $from, string $to): array
+    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = []): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
-            $url = "{$clientBaseUrl}/actor/leads?";
-            if ($from != null && $from !== '')
-                $url .= 'from=' . urlencode($from) . '&';
-            if ($to != null && $to !== '')
-                $url .= 'to=' . urlencode($to) . '&';
-            $response = $client->request('GET', $url, [
-                'headers' => [
-                    'Authorization' => $token,
-                ]
+            $queryParams = [];
+
+            if ($from !== null && $from !== '') {
+                $queryParams['from'] = $from;
+            }
+            if ($to !== null && $to !== '') {
+                $queryParams['to'] = $to;
+            }
+
+            // Construire la liste de CustomFilterDto
+            $customFilterDtos = [];
+            foreach ($customFilters as $columnId => $value) {
+                $dto = ['reportingCustomColumnId' => (int) $columnId];
+
+                if (is_array($value)) {
+                    // Plage de dates
+                    if (
+                        array_key_exists('from', $value) ||
+                        array_key_exists('to', $value)
+                    ) {
+                        if (!empty($value['from'])) {
+                            $dto['from'] = $value['from'];
+                        }
+                        if (!empty($value['to'])) {
+                            $dto['to'] = $value['to'];
+                        }
+                    } elseif (array_key_exists('id', $value)) {
+                        // select simple OXD renvoie parfois un objet {id, label, ...}
+                        $rawId = $value['id'];
+                        if ($rawId === true || $rawId === 'true') {
+                            $dto['activate'] = true;
+                        } elseif ($rawId === false || $rawId === 'false') {
+                            $dto['activate'] = false;
+                        }
+                    } elseif (array_is_list($value)) {
+                        // Multi-select : peut arriver soit en liste de scalaires ['1','2'],
+                        // soit en liste d'objets [{id:'1',...},{id:'2',...}]
+                        if (!empty($value) && is_array($value[0]) && array_key_exists('id', $value[0])) {
+                            $dto['options'] = array_map(
+                                fn($v) => $v['id'],
+                                $value
+                            );
+                        } else {
+                            // liste scalaire
+                            $dto['options'] = $value;
+                        }
+                    }
+                } elseif (
+                    $value === true ||
+                    $value === false ||
+                    $value === 'true' ||
+                    $value === 'false'
+                ) {
+                    // Booléen (peut arriver en bool ou en string)
+                    $dto['activate'] = $value === true || $value === 'true';
+                } elseif ($value !== null && $value !== '') {
+                    // Texte libre ou multiselect
+                    if (str_contains($value, ',')) {
+                        $dto['options'] = explode(',', $value);
+                    } else {
+                        $dto['searchValue'] = $value;
+                    }
+                }
+
+                if (count($dto) > 1) {
+                    $customFilterDtos[] = $dto;
+                }
+            }
+
+
+
+            $response = $client->request('POST', "{$clientBaseUrl}/actor/leads", [
+                'headers' => ['Authorization' => $token],
+                'query'   => $queryParams,
+                'json'    => $customFilterDtos,
             ]);
+
             return json_decode($response->getBody(), true);
         } catch (ClientException $e) {
             return [];
