@@ -107,7 +107,8 @@ class ActorLeadsController extends AbstractVueController
     {
         $from = $request->query->get(self::FILTER_FROM_DATE);
         $to = $request->query->get(self::FILTER_TO_DATE);
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to);
+        $customFilters = $request->query->all('customFilter');
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -115,7 +116,7 @@ class ActorLeadsController extends AbstractVueController
         );
     }
 
-    public function getLeads(string $token, string $from, string $to): array
+    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = []): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -197,6 +198,7 @@ class ActorLeadsController extends AbstractVueController
                 'query'   => $queryParams,
                 'json'    => $customFilterDtos,
             ]);
+
             return json_decode($response->getBody(), true);
         } catch (ClientException $e) {
             return [];

@@ -143,7 +143,10 @@
           </span>
         </div>
         <div class="orangehrm-pagination-wrapper">
-          <oxd-pagination v-model:current="currentPage" :length="totalPages" />
+          <oxd-pagination
+            v-model:current="currentPage"
+            :length="paginationLength"
+          />
         </div>
       </div>
       <div class="orangehrm-horizontal-scroll-container">
@@ -193,7 +196,7 @@
   </div>
 </template>
 <script>
-import {ref, computed, onMounted, watch} from 'vue';
+import {ref, computed, onMounted, watch, reactive} from 'vue';
 import {navigate} from '@/core/util/helper/navigation';
 import usei18n from '@/core/util/composable/usei18n';
 import {
@@ -227,6 +230,30 @@ export default {
   setup(props) {
     const {$t} = usei18n();
     const userDateFormat = 'yyyy-MM-dd';
+
+    // Filtres dynamiques pour les colonnes personnalisées avec hasFilter: true
+    const customColumnFilters = reactive({});
+
+    // PHP peut retourner 1 au lieu de true pour les booléens
+    const filterableColumns = computed(() =>
+      (props.customColumns || []).filter((col) => !!col.hasFilter),
+    );
+
+    // Initialiser les clés dès que filterableColumns change
+    watch(
+      filterableColumns,
+      (cols) => {
+        cols.forEach((col) => {
+          if (!(col.id in customColumnFilters)) {
+            if (col.type === 'SELECT') customColumnFilters[col.id] = [];
+            else if (col.type === 'DATE')
+              customColumnFilters[col.id] = {from: null, to: null};
+            else customColumnFilters[col.id] = null;
+          }
+        });
+      },
+      {immediate: true},
+    );
 
     // Clé pour le localStorage
     const STORAGE_KEY = 'leadsFilters';
@@ -579,39 +606,88 @@ export default {
       return Math.ceil(totalRecords.value / itemsPerPage);
     });
 
+    const paginationLength = computed(() => Math.max(1, totalPages.value || 1));
+
+    // OXD pagination n'accepte pas current < 1 ou current > length
+    watch([totalRecords, currentPage], () => {
+      const length = paginationLength.value;
+      if (currentPage.value < 1) currentPage.value = 1;
+      if (currentPage.value > length) currentPage.value = length;
+    });
+
     const fetchData = async () => {
       isLoading.value = true;
+      // Construire les params des filtres de colonnes personnalisées
+      const customFiltersParams = {};
+      Object.entries(customColumnFilters).forEach(([id, value]) => {
+        if (
+          value &&
+          typeof value === 'object' &&
+          !Array.isArray(value) &&
+          filterableColumns.value.find((c) => String(c.id) === String(id))
+            ?.type === 'BOOLEAN' &&
+          'id' in value
+        ) {
+          customFiltersParams[`customFilter[${id}]`] = value.id;
+          return;
+        }
+
+        if (value === null || value === undefined || value === '') return;
+        if (Array.isArray(value)) {
+          // multiselect : tableau d'objets {id, label}
+          if (value.length === 0) return;
+          customFiltersParams[`customFilter[${id}]`] = value.map((v) => v.id);
+        } else if (
+          typeof value === 'object' &&
+          ('from' in value || 'to' in value)
+        ) {
+          // plage de dates
+          if (value.from)
+            customFiltersParams[`customFilter[${id}][from]`] = value.from;
+          if (value.to)
+            customFiltersParams[`customFilter[${id}][to]`] = value.to;
+        } else {
+          customFiltersParams[`customFilter[${id}]`] = value;
+        }
+      });
+
       // Convertir du format utilisateur vers le format API (yyyy-MM-dd)
+      const params = {
+        from: startDateFilter.value
+          ? formatDate(
+              parseDate(startDateFilter.value, userDateFormat),
+              'yyyy-MM-dd',
+            )
+          : undefined,
+        to: endDateFilter.value
+          ? formatDate(
+              parseDate(endDateFilter.value, userDateFormat),
+              'yyyy-MM-dd',
+            )
+          : undefined,
+        ...customFiltersParams,
+      };
+
       http
-        .getAll({
-          from: startDateFilter.value
-            ? formatDate(
-                parseDate(startDateFilter.value, userDateFormat),
-                'yyyy-MM-dd',
-              )
-            : undefined,
-          to: endDateFilter.value
-            ? formatDate(
-                parseDate(endDateFilter.value, userDateFormat),
-                'yyyy-MM-dd',
-              )
-            : undefined,
-        })
+        .getAll(params)
         .then((response) => {
-          leads.value = response.data;
-          if (leads.value && leads.value.length > 0)
+          leads.value = Array.isArray(response.data) ? response.data : [];
+
+          if (leads.value.length > 0) {
             leads.value.sort((a, b) => {
               return new Date(b.receivedAt) - new Date(a.receivedAt);
             });
-          tableData.value = leads.value
-            ? leads.value.length > itemsPerPage
+          }
+
+          tableData.value =
+            leads.value.length > itemsPerPage
               ? leads.value.slice(
                   (currentPage.value - 1) * itemsPerPage,
                   currentPage.value * itemsPerPage,
                 )
-              : leads.value
-            : [];
-          totalRecords.value = leads.value ? leads.value.length : 0;
+              : leads.value;
+
+          totalRecords.value = leads.value.length;
           if (totalRecords.value === 0) noRecordsFound();
         })
         .finally(() => {
@@ -632,6 +708,13 @@ export default {
       const defaultEndDate = new Date();
       startDateFilter.value = formatDate(defaultStartDate, userDateFormat);
       endDateFilter.value = formatDate(defaultEndDate, userDateFormat);
+      // Réinitialiser les filtres des colonnes personnalisées
+      filterableColumns.value.forEach((col) => {
+        if (col.type === 'SELECT') customColumnFilters[col.id] = [];
+        else if (col.type === 'DATE')
+          customColumnFilters[col.id] = {from: null, to: null};
+        else customColumnFilters[col.id] = null;
+      });
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
       saveFiltersToLocalStorage(startDateFilter.value, endDateFilter.value);
@@ -693,6 +776,7 @@ export default {
       totalRecords,
       currentPage,
       totalPages,
+      paginationLength,
       selectedCell,
       selectedRow,
       filterItems,
@@ -705,14 +789,11 @@ export default {
       fetchData,
       saveFiltersToLocalStorage,
       userDateFormat,
-<<<<<<< HEAD
-=======
       customColumnFilters,
       filterableColumns,
       validDateFormat,
       startDateShouldBeBeforeEndDate,
       endDateShouldBeAfterStartDate,
->>>>>>> cd64c6de (Optimize before merge)
     };
   },
   methods: {
