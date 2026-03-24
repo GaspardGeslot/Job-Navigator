@@ -95,6 +95,29 @@ class CustomColumnsController extends AbstractVueController
         }
     }
 
+    public function update(Request $request)
+    {
+        try {
+            $id = (int) $request->attributes->get('id');
+            $data = json_decode($request->getContent(), true) ?? [];
+            $hasFilter = array_key_exists('hasFilter', $data) ? (bool) $data['hasFilter'] : null;
+
+            $this->updateCustomColumnHasFilter($id, $hasFilter, $this->getAuthUser()->getUserHedwigeToken());
+
+            return new Response(
+                null,
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (\ClientException $e) {
+            return new Response(
+                json_encode(['error' => json_decode($e->getResponse()->getBody()->getContents())->message]),
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
     private function getHedwigeTypeOptions(string $token): array
     {
         $client = new Client();
@@ -149,6 +172,26 @@ class CustomColumnsController extends AbstractVueController
             'headers' => [
                 'Authorization' => $token,
             ],
+        ]);
+    }
+
+    private function updateCustomColumnHasFilter(int $id, ?bool $hasFilter, string $token): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        $query = [];
+        if ($hasFilter !== null) {
+            $query['hasFilter'] = $hasFilter ? 'true' : 'false';
+        }
+
+        $url = "{$clientBaseUrl}/reporting-columns/{$id}";
+
+        $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+            'query' => $query,
         ]);
     }
 }

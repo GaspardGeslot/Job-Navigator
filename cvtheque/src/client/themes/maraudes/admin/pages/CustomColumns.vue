@@ -41,7 +41,11 @@
         >
           <div class="modal-header">
             <h3>
-              {{ $t('Ajouter une colonne personnalisée') }}
+              {{
+                isEditing
+                  ? $t('Modifier une colonne personnalisée')
+                  : $t('Ajouter une colonne personnalisée')
+              }}
             </h3>
             <span class="close-icon" @click="onClickCancel">&times;</span>
           </div>
@@ -55,6 +59,7 @@
                     :label="$t('Titre')"
                     required
                     :rules="rules.title"
+                    :disabled="isEditing"
                   />
                 </oxd-grid-item>
                 <oxd-grid-item>
@@ -65,7 +70,16 @@
                     :options="typeOptionsFormatted"
                     required
                     :rules="rules.type"
+                    :disabled="isEditing"
                   />
+                </oxd-grid-item>
+                <oxd-grid-item v-if="!selectedTypeIsNumber">
+                  <div class="orangehrm-switch-wrapper">
+                    <oxd-text class="oxd-label">
+                      {{ $t('Afficher dans les filtres ?') }}
+                    </oxd-text>
+                    <oxd-switch-input v-model="hasFilter" />
+                  </div>
                 </oxd-grid-item>
                 <oxd-grid-item v-if="selectedTypeIsSelect">
                   <oxd-text class="orangehrm-text">
@@ -81,11 +95,13 @@
                         v-model="selectOptions[index]"
                         :label="$t('Option ' + (index + 1))"
                         :rules="rules.option"
+                        :disabled="isEditing"
                       />
                       <oxd-icon-button
                         name="trash"
                         display-type="danger"
                         class="option-delete-button"
+                        :disabled="isEditing"
                         @click="removeOption(index)"
                       />
                     </div>
@@ -93,6 +109,7 @@
                       :label="$t('Ajouter une option')"
                       icon-name="plus"
                       display-type="secondary"
+                      :disabled="isEditing"
                       @click="addOption"
                     />
                   </div>
@@ -129,6 +146,7 @@ import {
   required,
   shouldNotExceedCharLength,
 } from '@/core/util/validation/rules';
+import {OxdSwitchInput} from '@ohrm/oxd';
 
 const defaultSortOrder = {
   title: 'ASC',
@@ -137,6 +155,7 @@ const defaultSortOrder = {
 export default {
   components: {
     'delete-confirmation': DeleteConfirmationDialog,
+    'oxd-switch-input': OxdSwitchInput,
   },
   props: {
     typeOptions: {
@@ -160,10 +179,13 @@ export default {
       total: 0,
       isLoading: false,
       isModalOpen: false,
+      isEditing: false,
       isSaving: false,
       columnTitle: '',
       columnType: null,
       selectOptions: [],
+      hasFilter: false,
+      editingItem: null,
     });
 
     const fetchCustomColumnData = () => {
@@ -185,6 +207,23 @@ export default {
               }
             }
 
+            // Déterminer si la colonne est de type "Nombre"
+            const numberType = props.typeOptions
+              ? props.typeOptions.find((type) => type.label === 'Nombre')
+              : null;
+            const isNumberType =
+              numberType && String(numberType.id) === String(item.typeOrdinal);
+
+            // Valeur affichée pour la colonne "Filtre"
+            let filterDisplay = '';
+            if (
+              !isNumberType &&
+              item.hasFilter !== null &&
+              typeof item.hasFilter !== 'undefined'
+            ) {
+              filterDisplay = item.hasFilter ? 'oui' : 'non';
+            }
+
             return {
               id: item.id,
               title: item.title,
@@ -192,6 +231,8 @@ export default {
               typeOrdinal: item.typeOrdinal,
               options: optionsDisplay,
               rawOptions: item.options,
+              hasFilter: item.hasFilter ?? false,
+              filter: filterDisplay,
             };
           });
           state.total = response.data.length;
@@ -229,7 +270,10 @@ export default {
       const existingItem = state.items.find(
         (item) => item.title === state.columnTitle,
       );
-      if (existingItem) {
+      if (
+        existingItem &&
+        (!state.isEditing || existingItem.id !== state.editingItem?.id)
+      ) {
         return error({
           title: 'Conflit',
           message: 'Cette colonne personnalisée existe déjà',
@@ -258,17 +302,30 @@ export default {
 
       state.isSaving = true;
 
-      const requestPromise = http.create({
-        title: state.columnTitle,
-        typeOrdinal: state.columnType.id,
-        options: optionsString,
-      });
+      let requestPromise;
+
+      if (state.isEditing && state.editingItem) {
+        // En mode édition, on ne met à jour que le booléen hasFilter
+        requestPromise = http.update(state.editingItem.id, {
+          hasFilter: state.hasFilter,
+        });
+      } else {
+        const payload = {
+          title: state.columnTitle,
+          typeOrdinal: state.columnType.id,
+          options: optionsString,
+          hasFilter: state.hasFilter,
+        };
+        requestPromise = http.create(payload);
+      }
 
       requestPromise
         .then(() => {
           success({
             title: 'Succès',
-            message: 'Colonne personnalisée ajoutée avec succès',
+            message: state.isEditing
+              ? 'Colonne personnalisée mise à jour avec succès'
+              : 'Colonne personnalisée ajoutée avec succès',
           });
           resetForm();
           fetchCustomColumnData();
@@ -288,7 +345,10 @@ export default {
       state.columnTitle = '';
       state.columnType = null;
       state.selectOptions = [];
+      state.hasFilter = false;
       state.isModalOpen = false;
+      state.isEditing = false;
+      state.editingItem = null;
     };
 
     const addOption = () => {
@@ -316,6 +376,14 @@ export default {
       );
     });
 
+    const selectedTypeIsNumber = computed(() => {
+      if (!state.columnType) return false;
+      const selectedTypeOption = props.typeOptions.find(
+        (type) => type.id === state.columnType.id,
+      );
+      return selectedTypeOption && selectedTypeOption.label === 'Nombre';
+    });
+
     // Formater les options pour le select
     const typeOptionsFormatted = computed(() => {
       return props.typeOptions.map((type) => ({
@@ -334,6 +402,7 @@ export default {
       addOption,
       removeOption,
       selectedTypeIsSelect,
+      selectedTypeIsNumber,
       typeOptionsFormatted,
       ...toRefs(state),
       sortDefinition,
@@ -370,19 +439,21 @@ export default {
           },
         },
         {
+          name: 'filter',
+          title: this.$t('Filtre'),
+          sortField: 'filter',
+          style: {flex: 0.5},
+          cellRenderer: (value) => {
+            return value || '';
+          },
+        },
+        {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
           style: {flex: 0.5},
           cellType: 'oxd-table-cell-actions',
-          cellConfig: {
-            delete: {
-              onClick: this.onClickDelete,
-              props: {
-                name: 'trash',
-              },
-            },
-          },
+          cellRenderer: this.cellRenderer,
         },
       ],
       checkedItems: [],
@@ -392,14 +463,69 @@ export default {
     this.fetchCustomColumnData();
   },
   methods: {
+    cellRenderer(...[, , , row]) {
+      const cellConfig = {};
+
+      // On veut l'ordre: delete puis edit visuellement
+      cellConfig.delete = {
+        onClick: this.onClickDelete,
+        props: {
+          name: 'trash',
+        },
+      };
+
+      // Pas de bouton d'édition pour les colonnes de type "Nombre"
+      if (row.type !== 'Nombre') {
+        cellConfig.edit = {
+          onClick: this.onClickEdit,
+          props: {
+            name: 'pencil',
+          },
+        };
+      }
+
+      return {
+        props: {
+          header: {
+            cellConfig,
+          },
+        },
+      };
+    },
     onClickCancel() {
       this.resetForm();
     },
     onClickAdd() {
       this.isModalOpen = true;
+      this.isEditing = false;
+      this.editingItem = null;
       this.columnTitle = '';
       this.columnType = null;
       this.selectOptions = [];
+      this.hasFilter = false;
+    },
+    onClickEdit(item) {
+      this.isModalOpen = true;
+      this.isEditing = true;
+      this.editingItem = item;
+      this.columnTitle = item.title;
+      this.columnType = {
+        id: item.typeOrdinal,
+        label: item.type,
+      };
+
+      if (item.rawOptions && item.rawOptions.trim() !== '') {
+        try {
+          const parsed = JSON.parse(item.rawOptions);
+          this.selectOptions = Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          this.selectOptions = [];
+        }
+      } else {
+        this.selectOptions = [];
+      }
+
+      this.hasFilter = item.hasFilter ?? false;
     },
     onClickDelete(item) {
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
