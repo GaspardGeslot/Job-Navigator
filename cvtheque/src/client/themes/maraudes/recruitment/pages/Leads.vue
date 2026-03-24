@@ -7,7 +7,7 @@
             <oxd-grid-item>
               <date-input
                 v-model="startDateFilter"
-                :label="$t('Date de début')"
+                :label="$t('Date de réception (début)')"
                 :rules="rules.fromDate"
                 required
               />
@@ -15,13 +15,91 @@
             <oxd-grid-item>
               <date-input
                 v-model="endDateFilter"
-                :label="$t('general.end_date')"
+                :label="$t('Date de réception (fin)')"
                 :rules="rules.toDate"
                 required
               />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
+        <!-- Standard filter rows for STRING, SELECT, BOOLEAN types -->
+        <oxd-form-row
+          v-if="filterableColumns.some((col) => col.type !== 'DATE')"
+        >
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <template v-for="col in filterableColumns" :key="col.id">
+              <oxd-grid-item v-if="col.type === 'STRING'">
+                <oxd-input-field
+                  v-model="customColumnFilters[col.id]"
+                  :label="col.title"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-else-if="col.type === 'SELECT'">
+                <oxd-input-field
+                  v-model="customColumnFilters[col.id]"
+                  type="multiselect"
+                  :multiple="true"
+                  :label="col.title"
+                  :options="
+                    col.options
+                      ? (typeof col.options === 'string'
+                          ? JSON.parse(col.options)
+                          : col.options
+                        ).map((o) => ({id: o, label: o}))
+                      : []
+                  "
+                />
+              </oxd-grid-item>
+              <oxd-grid-item v-else-if="col.type === 'BOOLEAN'">
+                <oxd-input-field
+                  v-model="customColumnFilters[col.id]"
+                  type="select"
+                  :label="col.title"
+                  :options="[
+                    {id: true, label: $t('Oui')},
+                    {id: false, label: $t('Non')},
+                  ]"
+                />
+              </oxd-grid-item>
+            </template>
+          </oxd-grid>
+        </oxd-form-row>
+
+        <!-- Dedicated form-rows for each DATE type filter -->
+        <template v-for="col in filterableColumns" :key="col.id + '_dateRow'">
+          <oxd-form-row v-if="col.type === 'DATE'">
+            <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <date-input
+                  v-model="customColumnFilters[col.id].from"
+                  :label="`${col.title} (début)`"
+                  :rules="[
+                    validDateFormat(userDateFormat),
+                    startDateShouldBeBeforeEndDate(
+                      () => customColumnFilters[col.id].to,
+                      $t('general.from_date_should_be_before_to_date'),
+                      {allowSameDate: true, dateFormat: userDateFormat},
+                    ),
+                  ]"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <date-input
+                  v-model="customColumnFilters[col.id].to"
+                  :label="`${col.title} (fin)`"
+                  :rules="[
+                    validDateFormat(userDateFormat),
+                    endDateShouldBeAfterStartDate(
+                      () => customColumnFilters[col.id].from,
+                      $t('general.to_date_should_be_after_from_date'),
+                      {allowSameDate: true, dateFormat: userDateFormat},
+                    ),
+                  ]"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </template>
         <oxd-divider />
         <oxd-form-actions>
           <oxd-button
@@ -627,6 +705,14 @@ export default {
       fetchData,
       saveFiltersToLocalStorage,
       userDateFormat,
+<<<<<<< HEAD
+=======
+      customColumnFilters,
+      filterableColumns,
+      validDateFormat,
+      startDateShouldBeBeforeEndDate,
+      endDateShouldBeAfterStartDate,
+>>>>>>> cd64c6de (Optimize before merge)
     };
   },
   methods: {

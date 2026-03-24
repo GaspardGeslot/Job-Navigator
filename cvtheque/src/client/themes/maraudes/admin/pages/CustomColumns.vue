@@ -185,6 +185,23 @@ export default {
               }
             }
 
+            // Déterminer si la colonne est de type "Nombre"
+            const numberType = props.typeOptions
+              ? props.typeOptions.find((type) => type.label === 'Nombre')
+              : null;
+            const isNumberType =
+              numberType && String(numberType.id) === String(item.typeOrdinal);
+
+            // Valeur affichée pour la colonne "Filtre"
+            let filterDisplay = '';
+            if (
+              !isNumberType &&
+              item.hasFilter !== null &&
+              typeof item.hasFilter !== 'undefined'
+            ) {
+              filterDisplay = item.hasFilter ? 'Oui' : 'Non';
+            }
+
             return {
               id: item.id,
               title: item.title,
