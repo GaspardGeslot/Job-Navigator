@@ -221,7 +221,7 @@ export default {
               item.hasFilter !== null &&
               typeof item.hasFilter !== 'undefined'
             ) {
-              filterDisplay = item.hasFilter ? 'oui' : 'non';
+              filterDisplay = item.hasFilter ? 'Oui' : 'Non';
             }
 
             return {

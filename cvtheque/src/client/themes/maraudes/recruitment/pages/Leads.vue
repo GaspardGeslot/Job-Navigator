@@ -7,7 +7,7 @@
             <oxd-grid-item>
               <date-input
                 v-model="startDateFilter"
-                :label="$t('Date de début')"
+                :label="$t('Date de réception (début)')"
                 :rules="rules.fromDate"
                 required
               />
@@ -15,14 +15,17 @@
             <oxd-grid-item>
               <date-input
                 v-model="endDateFilter"
-                :label="$t('general.end_date')"
+                :label="$t('Date de réception (fin)')"
                 :rules="rules.toDate"
                 required
               />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row v-if="filterableColumns.length > 0">
+        <!-- Standard filter rows for STRING, SELECT, BOOLEAN types -->
+        <oxd-form-row
+          v-if="filterableColumns.some((col) => col.type !== 'DATE')"
+        >
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <template v-for="col in filterableColumns" :key="col.id">
               <oxd-grid-item v-if="col.type === 'STRING'">
@@ -53,29 +56,50 @@
                   type="select"
                   :label="col.title"
                   :options="[
-                    {id: null, label: $t('-- Tous --')},
                     {id: true, label: $t('Oui')},
                     {id: false, label: $t('Non')},
                   ]"
                 />
               </oxd-grid-item>
-              <template v-else-if="col.type === 'DATE'">
-                <oxd-grid-item>
-                  <date-input
-                    v-model="customColumnFilters[col.id].from"
-                    :label="`${col.title} (début)`"
-                  />
-                </oxd-grid-item>
-                <oxd-grid-item>
-                  <date-input
-                    v-model="customColumnFilters[col.id].to"
-                    :label="`${col.title} (fin)`"
-                  />
-                </oxd-grid-item>
-              </template>
             </template>
           </oxd-grid>
         </oxd-form-row>
+
+        <!-- Dedicated form-rows for each DATE type filter -->
+        <template v-for="col in filterableColumns" :key="col.id + '_dateRow'">
+          <oxd-form-row v-if="col.type === 'DATE'">
+            <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+              <oxd-grid-item>
+                <date-input
+                  v-model="customColumnFilters[col.id].from"
+                  :label="`${col.title} (début)`"
+                  :rules="[
+                    validDateFormat(userDateFormat),
+                    startDateShouldBeBeforeEndDate(
+                      () => customColumnFilters[col.id].to,
+                      $t('general.from_date_should_be_before_to_date'),
+                      {allowSameDate: true, dateFormat: userDateFormat},
+                    ),
+                  ]"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <date-input
+                  v-model="customColumnFilters[col.id].to"
+                  :label="`${col.title} (fin)`"
+                  :rules="[
+                    validDateFormat(userDateFormat),
+                    endDateShouldBeAfterStartDate(
+                      () => customColumnFilters[col.id].from,
+                      $t('general.to_date_should_be_after_from_date'),
+                      {allowSameDate: true, dateFormat: userDateFormat},
+                    ),
+                  ]"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+          </oxd-form-row>
+        </template>
         <oxd-divider />
         <oxd-form-actions>
           <oxd-button
@@ -534,6 +558,19 @@ export default {
       }
     }
 
+    // Ajouter les colonnes personnalisées à la fin
+    if (props.customColumns && Array.isArray(props.customColumns)) {
+      props.customColumns.forEach((customCol) => {
+        tableHeaders.push({
+          label: customCol.title,
+          key: customCol.title,
+          isCustom: true,
+          type: customCol.type,
+          customColumnId: customCol.id,
+        });
+      });
+    }
+
     const getCellValue = (item, headerKey, headerConfig) => {
       // Si c'est une colonne personnalisée, chercher dans customColumns
       if (headerConfig && headerConfig.isCustom) {
@@ -754,6 +791,9 @@ export default {
       userDateFormat,
       customColumnFilters,
       filterableColumns,
+      validDateFormat,
+      startDateShouldBeBeforeEndDate,
+      endDateShouldBeAfterStartDate,
     };
   },
   methods: {

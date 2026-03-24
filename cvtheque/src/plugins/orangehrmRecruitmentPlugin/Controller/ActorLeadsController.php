@@ -193,8 +193,8 @@ class ActorLeadsController extends AbstractVueController
 
 
 
-            $response = $client->request('POST', "{$clientBaseUrl}/actor/leads", [
-                'headers' => ['Authorization' => $token],
+            $response = $client->request('GET', "{$clientBaseUrl}/actor/leads", [
+                'headers' => ['Authorization' => $token, 'Content-Type' => 'application/json'],
                 'query'   => $queryParams,
                 'json'    => $customFilterDtos,
             ]);
