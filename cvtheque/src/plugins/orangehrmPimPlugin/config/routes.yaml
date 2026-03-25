@@ -583,6 +583,12 @@ subdomain_pim_employee_personal_details:
   methods: [ GET ]
   requirements:
 
+subdomain_pim_employee_candidature_and_account:
+  path: /pim/viewCandidatureAndAccount/empNumber/{empNumber}
+  controller: OrangeHRM\Pim\Controller\EmployeeCandidatureAndAccountController::handle
+  methods: [ GET ]
+  requirements:
+
 subdomain_pim_employee_contact_details:
   path: /pim/contactDetails/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeeContactDetailsController::handle
@@ -1390,6 +1396,13 @@ pim_add_employee:
 pim_employee_personal_details:
   path: /{theme}/pim/viewPersonalDetails/empNumber/{empNumber}
   controller: OrangeHRM\Pim\Controller\EmployeePersonalDetailController::handle
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+pim_employee_candidature_and_account:
+  path: /{theme}/pim/viewCandidatureAndAccount/empNumber/{empNumber}
+  controller: OrangeHRM\Pim\Controller\EmployeeCandidatureAndAccountController::handle
   methods: [ GET ]
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo

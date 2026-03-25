@@ -108,7 +108,12 @@ class PIMLeftMenuService
             'module' => 'pim',
             'data_groups' => ['membership', 'membership_attachment', 'membership_custom_fields'],
             'label' => 'Memberships'
-        ]
+        ],
+        'viewCandidatureAndAccount' => [
+            'module' => 'pim',
+            'data_groups' => ['personal_information'],
+            'label' => 'Candidature/Compte'
+        ],
     ];
 
     private array $availableActionsCompany = [

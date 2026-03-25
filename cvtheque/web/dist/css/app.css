@@ -1814,6 +1814,116 @@
   flex-wrap: nowrap;
 }
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=718b943d&lang=scss&scoped=true ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-employee-container[data-v-718b943d] {
+  display: flex;
+}
+@media (min-width: 0px) {
+.orangehrm-employee-container[data-v-718b943d] {
+    flex-direction: column;
+}
+}
+@media (min-width: 800px) {
+.orangehrm-employee-container[data-v-718b943d] {
+    flex-direction: row;
+}
+}
+.orangehrm-employee-container .orangehrm-employee-image[data-v-718b943d] {
+  flex: 1 1 25%;
+  padding: 1rem;
+  text-align: center;
+}
+.orangehrm-employee-container .orangehrm-employee-form[data-v-718b943d] {
+  flex: 1 1 75%;
+}
+.user-form-header[data-v-718b943d] {
+  display: flex;
+  padding: 1rem 0;
+}
+.user-form-header-text[data-v-718b943d] {
+  font-size: 0.8rem;
+  margin-right: 1rem;
+}
+[data-v-718b943d] .--status-grouped-field {
+  display: flex;
+}
+[data-v-718b943d] .--gender-grouped-field {
+  display: flex;
+}
+.orangehrm-employee-list[data-v-718b943d] .card-header-slot {
+  border-bottom: 1px solid #e8eaef;
+  margin-bottom: 5px;
+}
+.orangehrm-employee-list[data-v-718b943d] .card-header-slot .oxd-table-card-cell {
+  display: flex;
+}
+.orangehrm-employee-list[data-v-718b943d] .card-header-slot .header {
+  margin-right: 5px;
+  font-size: 1rem;
+}
+.orangehrm-employee-list[data-v-718b943d] .card-header-slot-content.--left {
+  display: flex;
+  align-items: center;
+}
+.orangehrm-employee-list[data-v-718b943d] .card-body-slot {
+  display: unset;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.2rem;
+}
+.orangehrm-employee-picture[data-v-718b943d] {
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 8rem;
+}
+.orangehrm-employee-picture[data-v-718b943d] .oxd-file-div {
+  width: 12rem !important;
+  height: 12rem !important;
+}
+.orangehrm-employee-picture[data-v-718b943d] .employee-image {
+  height: 12rem;
+}
+[data-v-718b943d] .--termination-button {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.orangehrm-terminate-date[data-v-718b943d] {
+  cursor: pointer;
+  color: var(--oxd-primary-one-color);
+  text-decoration: underline;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+.orangerhrm-switch-wrapper[data-v-718b943d] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+@media (min-width: 600px) {
+.orangerhrm-switch-wrapper[data-v-718b943d] {
+    max-width: 50%;
+}
+}
+@media (min-width: 800px) {
+.orangerhrm-switch-wrapper[data-v-718b943d] {
+    max-width: 100%;
+}
+}
+.orangehrm-text[data-v-718b943d] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64728c;
+}
+.top-form-actions[data-v-718b943d] {
+  margin-top: 0.5rem;
+  justify-content: flex-start;
+  display: flex;
+  flex-wrap: nowrap;
+}
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/constructys/orangehrmPimPlugin/pages/employee/employee.scss?vue&type=style&index=0&id=27ae47a4&lang=scss&scoped=true ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* Import OXD Globals */
