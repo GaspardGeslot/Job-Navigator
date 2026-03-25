@@ -47,7 +47,7 @@
         <div class="orangehrm-edit-employee-content">
           <slot></slot>
           <profile-custom-fields
-            v-if="screen !== 'default'"
+            v-if="screen !== 'default' && screen !== 'candidate-and-account'"
             :employee-id="employeeId"
             :screen="screen"
           ></profile-custom-fields>

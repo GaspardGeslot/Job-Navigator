@@ -18,6 +18,7 @@
 import SaveEmployee from './pages/employee/SaveEmployee.vue';
 import Employee from './pages/employee/Employee.vue';
 import EmployeePersonalDetails from './pages/employee/EmployeePersonalDetails.vue';
+import EmployeeCandidateAndAccount from './pages/employee/EmployeeCandidateAndAccount.vue';
 import EmployeeContactDetails from './pages/employee/EmployeeContactDetails.vue';
 import EmployeeEmergencyContacts from './pages/employee/EmployeeEmergencyContacts.vue';
 import EmployeeDependents from './pages/employee/EmployeeDependents.vue';
@@ -50,6 +51,7 @@ export default {
   'employee-save': SaveEmployee,
   'employee-list': Employee,
   'employee-personal-details': EmployeePersonalDetails,
+  'employee-candidate-and-account': EmployeeCandidateAndAccount,
   'employee-contact-details': EmployeeContactDetails,
   'employee-emergency-contacts': EmployeeEmergencyContacts,
   'employee-dependents': EmployeeDependents,
