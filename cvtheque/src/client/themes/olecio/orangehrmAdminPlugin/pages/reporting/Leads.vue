@@ -3,12 +3,17 @@
     <oxd-table-filter :filter-title="$t('Filtres')">
       <oxd-form @submit-valid="filterItems">
         <oxd-form-row>
-          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+          <oxd-grid
+            v-if="
+              actorsFilter.length === 0 ||
+              matchingStatusFilter === null ||
+              matchingStatusFilter.label !== 'A relancer'
+            "
+            :cols="2"
+            class="orangehrm-full-width-grid"
+          >
             <oxd-grid-item>
               <date-input
-                v-if="
-                  actorsFilter.length === 0 || matchingStatusFilter === null
-                "
                 v-model="startDateFilter"
                 :label="$t('Date de début')"
                 :rules="rules.fromDate"
@@ -17,9 +22,6 @@
             </oxd-grid-item>
             <oxd-grid-item>
               <date-input
-                v-if="
-                  actorsFilter.length === 0 || matchingStatusFilter === null
-                "
                 v-model="endDateFilter"
                 :label="$t('general.end_date')"
                 :rules="rules.toDate"
