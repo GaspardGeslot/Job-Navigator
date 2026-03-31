@@ -50,6 +50,7 @@
               option-value="id"
               option-label="label"
               :disabled="isEditing"
+              :rules="rules.telephoneContactType"
               required
             />
           </oxd-grid-item>
@@ -244,6 +245,7 @@ export default {
           shouldNotExceedCharLength(25),
         ],
         telephoneContactComment: [shouldNotExceedCharLength(1000)],
+        telephoneContactType: [required],
       };
     },
   },

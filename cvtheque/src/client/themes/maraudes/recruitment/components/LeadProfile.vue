@@ -407,24 +407,39 @@
               </oxd-grid-item>
             </oxd-grid>
           </div>
-          <div
-            v-else
-            class="orangehrm-corporate-directory-nocontent"
-            style="
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              padding: 1rem 0;
-            "
-          >
-            <img
-              :src="noContentPic"
-              alt="No Content"
-              style="max-width: 60px; margin: 0 0 0.85rem 0"
-            />
-            <oxd-text tag="p">
-              Aucune prise de contact n'a encore été renseignée.
-            </oxd-text>
+          <div v-if="defaultColumns.contactLogs">
+            <div
+              v-if="
+                formattedTelephoneContacts &&
+                formattedTelephoneContacts.length > 0
+              "
+              class="orangehrm-container"
+            >
+              <oxd-card-table
+                :headers="telephoneContactHeaders"
+                :items="formattedTelephoneContacts"
+                row-decorator="oxd-table-decorator-card"
+              />
+            </div>
+            <div
+              v-else
+              class="orangehrm-corporate-directory-nocontent"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+              "
+            >
+              <img
+                :src="noContentPic"
+                alt="No Content"
+                style="max-width: 60px; margin: 0 0 0.85rem 0"
+              />
+              <oxd-text tag="p">
+                Aucune prise de contact n'a encore été renseignée.
+              </oxd-text>
+            </div>
           </div>
         </oxd-form-row>
 
@@ -636,7 +651,8 @@ export default {
     },
   },
   emits: ['update'],
-  setup() {
+  setup(props) {
+    console.log('Default columns : ' + JSON.stringify(props.defaultColumns));
     const http = new APIService(window.appGlobal.baseUrl, '/');
     const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
     const {jsDateFormat} = useDateFormat();
