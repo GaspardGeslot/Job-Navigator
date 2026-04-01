@@ -3094,3 +3094,24 @@ save_sector:
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_user_application_status_get:
+  path: /{theme}/api/v2/user/application-status
+  controller: OrangeHRM\Admin\Controller\UsersController::getAllApplicationStatus
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+apiv2_user_application_status_update:
+  path: /{theme}/api/v2/user/application-status
+  controller: OrangeHRM\Admin\Controller\UsersController::updateApplicationStatus
+  methods: [ PUT ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+apiv2_user_delete:
+  path: /{theme}/api/v2/user
+  controller: OrangeHRM\Admin\Controller\UsersController::deleteCurrentUser
+  methods: [ DELETE ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+

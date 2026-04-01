@@ -230,4 +230,110 @@ class UsersController extends AbstractVueController
             return [];
         }
     }
+
+    private function getApplicationStatus(string $token): bool
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/user/application-status";
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
+        $decoded = json_decode($response->getBody(), true);
+        if (is_bool($decoded)) {
+            return $decoded;
+        }
+        return (bool)($decoded['data'] ?? false);
+    }
+
+    public function getAllApplicationStatus()
+    {
+        try {
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+            $applicationStatus = $this->getApplicationStatus($token);
+            return new Response(
+                json_encode([
+                    'data' => [
+                        'isSearching' => $applicationStatus,
+                    ],
+                ]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (\ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function updateApplicationStatus(Request $request)
+    {
+        try {
+            $token = $this->getAuthUser()->getUserHedwigeToken();
+            $data = json_decode($request->getContent(), true) ?? [];
+            $reason = array_key_exists('reason', $data) ? $data['reason'] : null;
+            $this->saveApplicationStatus($token, $reason);
+
+            return new Response(
+                null,
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (\ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    private function saveApplicationStatus(string $token, ?string $reason): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/user/application-status";
+        if (!is_null($reason)) {
+            $url .= '?reason=' . urlencode($reason);
+        }
+
+        $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
+    }
+
+    public function deleteCurrentUser()
+    {
+        try {
+            $token = $this->getAuthUser()->getUserHedwigeToken();
+            $currentSystemUserId = $this->getAuthUser()->getUserId();
+            $this->deleteCurrentHedwigeUser($token);
+            if (!is_null($currentSystemUserId)) {
+                $this->getUserService()->deleteSystemUser($currentSystemUserId);
+            }
+            return new Response(null, Response::HTTP_OK);
+        } catch (\ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    private function deleteCurrentHedwigeUser(string $token): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/user";
+        $client->request('DELETE', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
+    }
 }
