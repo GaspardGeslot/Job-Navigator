@@ -2821,6 +2821,11 @@ admin_custom_columns:
   controller: OrangeHRM\Admin\Controller\CustomColumnsController::handle
   methods: [ GET ]
 
+admin_api_access:
+  path: /admin/viewAPIAccess
+  controller: OrangeHRM\Admin\Controller\APIAccessController::handle
+  methods: [ GET ]
+
 apiv2_admin_handicap:
   path: /{theme}/api/v2/admin/handicap
   controller: OrangeHRM\Admin\Controller\HandicapController::getAll
@@ -3048,6 +3053,30 @@ apiv2_admin_user_delete:
   path: /api/v2/admin/user
   controller: OrangeHRM\Admin\Controller\UsersController::delete
   methods: [ DELETE ]
+
+apiv2_admin_api_access_get:
+  path: /api/v2/admin/api-access
+  controller: OrangeHRM\Admin\Controller\APIAccessController::getAll
+  methods: [ GET ]
+
+apiv2_admin_api_access_update:
+  path: /api/v2/admin/api-access/{id}
+  controller: OrangeHRM\Admin\Controller\APIAccessController::update
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+apiv2_admin_api_access_create:
+  path: /api/v2/admin/api-access
+  controller: OrangeHRM\Admin\Controller\APIAccessController::create
+  methods: [ POST ]
+
+apiv2_admin_api_access_delete:
+  path: /api/v2/admin/api-access/{id}
+  controller: OrangeHRM\Admin\Controller\APIAccessController::delete
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
 
 apiv2_admin_custom_columns_get:
   path: /api/v2/admin/custom-column
