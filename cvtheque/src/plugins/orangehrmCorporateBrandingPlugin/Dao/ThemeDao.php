@@ -27,6 +27,14 @@ use OrangeHRM\Entity\Theme;
 class ThemeDao extends BaseDao
 {
     /**
+     * Cache processus (FPM worker) : évite des requêtes répétées pour le même thème
+     * (ex. getMenuItems + getBreadcrumb dans une même requête).
+     *
+     * @var array<string, int|null>
+     */
+    private static array $getIdCache = [];
+
+    /**
      * @param Theme $theme
      * @return Theme
      */
@@ -137,6 +145,10 @@ class ThemeDao extends BaseDao
     public function getId(string $theme): ?int
     {
         $normalizedThemeName = preg_replace('/-demo$/', '', $theme);
+        if (array_key_exists($normalizedThemeName, self::$getIdCache)) {
+            return self::$getIdCache[$normalizedThemeName];
+        }
+
         $q = $this->createQueryBuilder(Theme::class, 't')
             ->select('t.id')
             ->where('t.name = :themeName')
@@ -151,6 +163,9 @@ class ThemeDao extends BaseDao
 
             $result = $q->getQuery()->getOneOrNullResult();
         }
-        return $result ? $result['id'] : null;
+        $id = $result ? $result['id'] : null;
+        self::$getIdCache[$normalizedThemeName] = $id;
+
+        return $id;
     }
 }
