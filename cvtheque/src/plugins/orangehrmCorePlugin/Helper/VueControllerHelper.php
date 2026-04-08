@@ -129,7 +129,7 @@ class VueControllerHelper
      */
     public function getContextParams(): array
     {
-        $cacheKey = $this->buildSessionContextCacheKey();
+        /*$cacheKey = $this->buildSessionContextCacheKey();
         $cachedContext = $this->getAuthUser()->getAttribute($cacheKey);
         if (!is_array($cachedContext)) {
             error_log('[VueControllerHelper] context cache MISS — full build, key=' . $cacheKey);
@@ -141,23 +141,53 @@ class VueControllerHelper
 
         error_log('[VueControllerHelper] context cache HIT — session read + dynamic merge, key=' . $cacheKey);
         $this->context->add(array_merge($cachedContext, $this->buildDynamicContextParams($cachedContext)));
+        return $this->context->all();*/
+        list($sidePanelMenuItems, $topMenuItems) = $this->getMenuItems();
+        list($contextTitle, $contextIcon) = $this->getContextItems();
+        list($clientLogoUrl, $clientBannerUrl, $themeVariables) = $this->getThemeData();
+
+        $this->context->add(
+            [
+                self::COMPONENT_NAME => $this->getComponent()->getName(),
+                self::COMPONENT_PROPS => $this->getComponent()->getProps(),
+                self::PUBLIC_PATH => $this->getRequest()->getBasePath(),
+                self::BASE_URL => $this->getRequest()->getBaseUrl(),
+                self::THEME => $this->getRequest()->attributes->get('theme'),
+                self::ASSETS_VERSION => $this->getAssetsVersion(),
+                self::USER => $this->getUserObject(),
+                self::SIDE_PANEL_MENU_ITEMS => $sidePanelMenuItems,
+                self::TOP_MENU_ITEMS => $topMenuItems,
+                self::CONTEXT_TITLE => $contextTitle,
+                self::CONTEXT_ICON => $contextIcon,
+                self::COPYRIGHT_YEAR => date('Y'),
+                self::PRODUCT_VERSION => Config::PRODUCT_VERSION,
+                self::PRODUCT_NAME => Config::PRODUCT_NAME,
+                self::BREADCRUMB => $this->getBreadcrumb(),
+                self::DATE_FORMAT => $this->getLocalizationService()->getCurrentDateFormat(),
+                self::CLIENT_LOGO_URL => $clientLogoUrl,
+                self::CLIENT_BANNER_URL => $clientBannerUrl,
+                self::THEME_VARIABLES => $themeVariables,
+                self::HELP_URL => $this->getHelpUrl(),
+                self::SHOW_UPGRADE => false//$this->getAuthUser()->getUserRoleId() === 1
+            ]
+        );
         return $this->context->all();
     }
 
     /**
      * @return string
      */
-    private function buildSessionContextCacheKey(): string
+    /*private function buildSessionContextCacheKey(): string
     {
         $theme = $this->getRequest()->attributes->get('theme', 'default');
         $userId = $this->getUserId() ?? 0;
         return self::SESSION_CONTEXT_CACHE_KEY_PREFIX . '.' . $userId . '.' . $theme;
-    }
+    }*/
 
     /**
      * @return array
      */
-    private function buildFullContextParams(): array
+    /*private function buildFullContextParams(): array
     {
         list($sidePanelMenuItems, $topMenuItems) = $this->getMenuItems();
         list($contextTitle, $contextIcon) = $this->getContextItems();
@@ -186,13 +216,13 @@ class VueControllerHelper
             self::HELP_URL => $this->getHelpUrl(),
             self::SHOW_UPGRADE => false//$this->getAuthUser()->getUserRoleId() === 1
         ];
-    }
+    }*/
 
     /**
      * @param array $cachedContext Contexte issu de la session (premier rendu complet)
      * @return array
      */
-    private function buildDynamicContextParams(array $cachedContext): array
+    /*private function buildDynamicContextParams(array $cachedContext): array
     {
         list($sidePanelMenuItems, $topMenuItems) = $this->getMenuItemsOrRefreshFromCached($cachedContext);
         list($contextTitle, $contextIcon) = $this->getContextItems();
@@ -210,7 +240,7 @@ class VueControllerHelper
             self::BREADCRUMB => $this->getBreadcrumb(),
             self::HELP_URL => $this->getHelpUrl(),
         ];
-    }
+    }*/
 
     /**
      * Reprend les menus du cache session et ne recalcule que les drapeaux `active`
@@ -220,7 +250,7 @@ class VueControllerHelper
      * @param array $cachedContext
      * @return array{0: array, 1: array}
      */
-    private function getMenuItemsOrRefreshFromCached(array $cachedContext): array
+    /*private function getMenuItemsOrRefreshFromCached(array $cachedContext): array
     {
         $side = $cachedContext[self::SIDE_PANEL_MENU_ITEMS] ?? null;
         $top = $cachedContext[self::TOP_MENU_ITEMS] ?? null;
@@ -254,7 +284,7 @@ class VueControllerHelper
 
         error_log('[VueControllerHelper] menus: refresh active depuis cache (sans getMenuItems complet)');
         return $this->refreshNormalizedMenusActiveFromCache($side, $top, $baseUrl);
-    }
+    }*/
 
     /**
      * @param array $sidePanelMenuItems
@@ -262,7 +292,7 @@ class VueControllerHelper
      * @param string $baseUrl Même base que pour MenuService::getMenuItems()
      * @return array{0: array, 1: array}
      */
-    private function refreshNormalizedMenusActiveFromCache(array $sidePanelMenuItems, array $topMenuItems, string $baseUrl): array
+    /*private function refreshNormalizedMenusActiveFromCache(array $sidePanelMenuItems, array $topMenuItems, string $baseUrl): array
     {
         $module = (string) $this->getCurrentModuleAndScreen()->getOverriddenModule();
         $screen = (string) $this->getCurrentModuleAndScreen()->getOverriddenScreen();
@@ -281,13 +311,13 @@ class VueControllerHelper
         $this->applyTopMenuActiveRecursive($topCopy, $baseUrl, $module, $screen);
 
         return [$sideCopy, $topCopy];
-    }
+    }*/
 
     /**
      * @param array<int, array<string, mixed>> $items
      * @return array<int, array<string, mixed>>
      */
-    private function deepCopyMenuItems(array $items): array
+    /*private function deepCopyMenuItems(array $items): array
     {
         $out = [];
         foreach ($items as $item) {
@@ -298,12 +328,12 @@ class VueControllerHelper
             $out[] = $row;
         }
         return $out;
-    }
+    }*/
 
     /**
      * @return array{module: string, screen: string}|null
      */
-    private function parseModuleScreenFromMenuUrl(string $itemUrl, string $baseUrl): ?array
+    /*private function parseModuleScreenFromMenuUrl(string $itemUrl, string $baseUrl): ?array
     {
         if ($itemUrl === '#' || $itemUrl === '') {
             return null;
@@ -330,12 +360,12 @@ class VueControllerHelper
         }
 
         return null;
-    }
+    }*/
 
     /**
      * @param array<int, array<string, mixed>> $items
      */
-    private function applyTopMenuActiveRecursive(array &$items, string $baseUrl, string $module, string $screen): void
+    /*private function applyTopMenuActiveRecursive(array &$items, string $baseUrl, string $module, string $screen): void
     {
         foreach ($items as &$item) {
             unset($item['active']);
@@ -354,7 +384,7 @@ class VueControllerHelper
             }
         }
         unset($item);
-    }
+    }*/
 
     /**
      * @return string

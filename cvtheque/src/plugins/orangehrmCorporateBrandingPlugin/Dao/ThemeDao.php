@@ -32,7 +32,7 @@ class ThemeDao extends BaseDao
      *
      * @var array<string, int|null>
      */
-    private static array $getIdCache = [];
+    /*private static array $getIdCache = [];*/
 
     /**
      * @param Theme $theme
@@ -145,9 +145,9 @@ class ThemeDao extends BaseDao
     public function getId(string $theme): ?int
     {
         $normalizedThemeName = preg_replace('/-demo$/', '', $theme);
-        if (array_key_exists($normalizedThemeName, self::$getIdCache)) {
+        /*if (array_key_exists($normalizedThemeName, self::$getIdCache)) {
             return self::$getIdCache[$normalizedThemeName];
-        }
+        }*/
 
         $q = $this->createQueryBuilder(Theme::class, 't')
             ->select('t.id')
@@ -164,7 +164,7 @@ class ThemeDao extends BaseDao
             $result = $q->getQuery()->getOneOrNullResult();
         }
         $id = $result ? $result['id'] : null;
-        self::$getIdCache[$normalizedThemeName] = $id;
+        //self::$getIdCache[$normalizedThemeName] = $id;
 
         return $id;
     }

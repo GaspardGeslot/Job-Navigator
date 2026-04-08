@@ -30,7 +30,7 @@
       >
         <i class="oxd-icon bi-lock-fill no-access-lock-icon"></i>
         <oxd-text tag="p">
-          Le contrat actuel ne rend pas disponible les accès API externes.
+          Votre contrat actuel ne rend pas disponible les accès API externes.
           Veuillez contacter Olecio pour plus de détails
         </oxd-text>
       </div>
@@ -87,6 +87,7 @@
                     v-model="newApiTitle"
                     :label="$t('Nom de la clé API')"
                     required
+                    :rules="rules.title"
                   />
                 </oxd-grid-item>
                 <oxd-grid-item>
@@ -97,8 +98,8 @@
                     <div class="source-help">
                       <button type="button" class="source-help-icon">?</button>
                       <span class="source-help-tooltip">
-                        Champ facultatif : cette valeur sert a preremplir le
-                        champ source des leads.
+                        Champ facultatif : cette valeur permettra de préremplir
+                        le champs <b>source</b> des leads.
                       </span>
                     </div>
                   </div>
@@ -110,7 +111,7 @@
           <div v-else class="modal-body">
             <oxd-text class="orangehrm-text">
               La clé API a été générée avec succès. Pour des raisons de
-              sécurité, elle ne sera plus jamais affichée. Copier la clé et
+              sécurité, elle ne sera plus jamais affichée. Copiez la clé et
               conservez-la dans un endroit sécurisé.
             </oxd-text>
             <div class="token-row">
@@ -152,7 +153,7 @@
       <div class="modal-container" @click.stop>
         <oxd-form @submit-valid="onConfirmEdit">
           <div class="modal-header">
-            <h3>Modifier le statut de cet acces</h3>
+            <h3>Modifier l'état de cette clé</h3>
           </div>
           <div class="modal-body">
             <div class="orangehrm-switch-wrapper">
@@ -220,6 +221,7 @@ import {APIService} from '@/core/util/services/api.service';
 import {OxdSwitchInput} from '@ohrm/oxd';
 import useToast from '@/core/util/composable/useToast';
 import useSort from '@/core/util/composable/useSort';
+import {required} from '@/core/util/validation/rules';
 
 const props = defineProps({
   apiAccessLimit: {
@@ -307,7 +309,7 @@ const items = computed(() =>
   apiAccesses.value.map((item) => ({
     ...item,
     maskedKey: `********${item.lastCharacters ?? ''}`,
-    status: item.isActive === true ? 'actif' : 'inactif',
+    status: item.isActive === true ? 'Actif' : 'Inactif',
     createdAt: formatDate(item.insertedAt),
   })),
 );
@@ -438,7 +440,7 @@ const copyCreatedToken = async () => {
     await navigator.clipboard.writeText(createdToken.value);
     success({
       title: 'Copié',
-      message: 'Le token a été copié dans le presse-papiers.',
+      message: 'La clé a été copiée dans le presse-papiers.',
     });
   } catch (e) {
     error({
@@ -517,6 +519,11 @@ const cellRenderer = () => {
 onMounted(() => {
   fetchApiAccesses();
 });
+
+const rules = {
+  title: [required],
+};
+
 onSort(sort);
 </script>
 
@@ -694,5 +701,24 @@ onSort(sort);
 .source-help:focus-within .source-help-tooltip {
   opacity: 1;
   visibility: visible;
+}
+
+@media (max-width: 768px) {
+  .source-label-row {
+    position: relative;
+  }
+
+  .source-help {
+    position: static;
+  }
+
+  .source-help-tooltip {
+    top: auto;
+    bottom: calc(100% + 0.35rem);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    max-width: min(90vw, 320px);
+  }
 }
 </style>

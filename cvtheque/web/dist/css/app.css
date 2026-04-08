@@ -14918,6 +14918,22 @@ to {
   opacity: 1;
   visibility: visible;
 }
+@media (max-width: 768px) {
+.source-label-row[data-v-45c1ce6b] {
+    position: relative;
+}
+.source-help[data-v-45c1ce6b] {
+    position: static;
+}
+.source-help-tooltip[data-v-45c1ce6b] {
+    top: auto;
+    bottom: calc(100% + 0.35rem);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    max-width: min(90vw, 320px);
+}
+}
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAdminPlugin/pages/orgStructure/SaveOrgUnit.vue?vue&type=style&index=0&id=89f31c9e&scoped=true&lang=css ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
