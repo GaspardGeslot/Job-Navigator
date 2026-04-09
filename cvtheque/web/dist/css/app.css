@@ -14837,6 +14837,9 @@ to {
   background: linear-gradient(135deg, #a7df73 0%, #76bc21 100%);
   border: none;
 }
+.orangehrm-header-container[data-v-45c1ce6b] {
+  padding-bottom: 0 !important;
+}
 .orangehrm-switch-wrapper[data-v-45c1ce6b] {
   display: flex;
   flex-direction: row;
@@ -14862,6 +14865,66 @@ to {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+.api-access-guide[data-v-45c1ce6b] {
+  margin: 0.75rem 0 1rem;
+  padding: 0.9rem 1rem;
+  background: #f4f7ff;
+}
+.api-access-guide-description[data-v-45c1ce6b] {
+  margin-bottom: 0.75rem;
+  color: #334155;
+}
+.api-access-doc-card[data-v-45c1ce6b] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  padding: 0.7rem 0.8rem;
+  background: #fff;
+  border: 1px solid #dce5ff;
+  border-radius: 0.5rem;
+}
+.api-access-doc-card-text[data-v-45c1ce6b] {
+  min-width: 0;
+}
+.api-access-doc-card-title[data-v-45c1ce6b] {
+  margin: 0 0 0.2rem 0;
+  font-weight: 700;
+  color: #1e293b;
+}
+.api-access-doc-card-subtitle[data-v-45c1ce6b] {
+  margin: 0;
+  color: #475569;
+  font-size: 0.82rem;
+}
+.api-access-guide-steps[data-v-45c1ce6b] {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+.api-access-guide-step[data-v-45c1ce6b] {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: #1f2937;
+  line-height: 1.35;
+}
+.api-access-step-index[data-v-45c1ce6b] {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: #3f63c9;
 }
 .no-access-lock-icon[data-v-45c1ce6b] {
   font-size: 2.25rem;
@@ -14919,6 +14982,23 @@ to {
   visibility: visible;
 }
 @media (max-width: 768px) {
+.orangehrm-header-container[data-v-45c1ce6b] {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.api-access-header-actions[data-v-45c1ce6b] {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+}
+.api-access-guide[data-v-45c1ce6b] {
+    padding: 0.8rem;
+}
+.api-access-doc-card[data-v-45c1ce6b] {
+    flex-direction: column;
+    align-items: flex-start;
+}
 .source-label-row[data-v-45c1ce6b] {
     position: relative;
 }

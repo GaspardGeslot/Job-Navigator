@@ -2,7 +2,9 @@
   <div class="orangehrm-background-container">
     <div class="orangehrm-paper-container">
       <div class="orangehrm-header-container">
-        <h4 class="orangehrm-main-title">{{ $t('Accès API') }}</h4>
+        <oxd-text tag="h6" class="orangehrm-main-title">{{
+          $t('Accès API')
+        }}</oxd-text>
         <div class="api-access-header-actions">
           <oxd-button
             v-if="showCreateButton"
@@ -15,6 +17,63 @@
             :label="$t('Réinitialiser le tri')"
             display-type="ghost"
             @click="resetSort"
+          />
+        </div>
+      </div>
+      <div v-if="apiAccessLimit" class="api-access-guide">
+        <oxd-text tag="p" class="api-access-guide-description">
+          Cet espace vous permet de générer des clés API pour que vos
+          prestataires puissent envoyer automatiquement des contacts dans Job
+          Navigator. Chaque clé est un identifiant unique à transmettre avec la
+          documentation API pour connecter leur service.
+        </oxd-text>
+        <ol class="api-access-guide-steps">
+          <li class="api-access-guide-step">
+            <span class="api-access-step-index">1</span>
+            <div>
+              <b>Générez une clé API</b> en renseignant un titre unique et, si
+              nécessaire, une source (optionnelle). Cette source préremplit la
+              colonne <b>source</b> des contacts reçus.
+            </div>
+          </li>
+          <li class="api-access-guide-step">
+            <span class="api-access-step-index">2</span>
+            <div>
+              <b>Copiez <u>immédiatement</u> la clé générée</b> : elle ne sera
+              plus affichée ensuite. Conservez-la dans un emplacement sécurisé.
+            </div>
+          </li>
+          <li class="api-access-guide-step">
+            <span class="api-access-step-index">3</span>
+            <div>
+              <b>Transmettez la clé et la documentation API</b> au prestataire
+              pour lui permettre d'envoyer automatiquement des contacts.
+            </div>
+          </li>
+          <li class="api-access-guide-step">
+            <span class="api-access-step-index">4</span>
+            <div>
+              <b>Optionnel :</b> désactivez une clé pour la conserver dans votre
+              historique tout en bloquant l'envoi de nouveaux contacts.
+            </div>
+          </li>
+        </ol>
+        <div class="api-access-doc-card">
+          <div class="api-access-doc-card-text">
+            <oxd-text tag="p" class="api-access-doc-card-title">
+              Documentation API
+            </oxd-text>
+            <oxd-text tag="p" class="api-access-doc-card-subtitle">
+              Ouvrez le guide PDF pour la partager rapidement à votre
+              prestataire.
+            </oxd-text>
+          </div>
+          <oxd-button
+            :label="$t('Ouvrir la documentation')"
+            display-type="secondary"
+            icon-name="download"
+            type="button"
+            @click="openApiDocumentation"
           />
         </div>
       </div>
@@ -258,6 +317,8 @@ const newApiTitle = ref('');
 const newApiSource = ref('');
 const createdToken = ref('');
 const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
+const apiDocumentationUrl =
+  'https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/assets/Documentation_API_Job_Navigator_Leads.pdf';
 
 const formatDate = (value) => {
   if (!value) return '';
@@ -450,6 +511,10 @@ const copyCreatedToken = async () => {
   }
 };
 
+const openApiDocumentation = () => {
+  window.open(apiDocumentationUrl, '_blank', 'noopener,noreferrer');
+};
+
 const onClickEdit = (access) => {
   selectedAccess.value = access;
   editedIsActive.value = access.isActive === true;
@@ -611,6 +676,10 @@ onSort(sort);
   }
 }
 
+.orangehrm-header-container {
+  padding-bottom: 0 !important;
+}
+
 .orangehrm-switch-wrapper {
   display: flex;
   flex-direction: row;
@@ -640,6 +709,75 @@ onSort(sort);
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.api-access-guide {
+  margin: 0.75rem 0 1rem;
+  padding: 0.9rem 1rem;
+  background: #f4f7ff;
+}
+
+.api-access-guide-description {
+  margin-bottom: 0.75rem;
+  color: #334155;
+}
+
+.api-access-doc-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  padding: 0.7rem 0.8rem;
+  background: #fff;
+  border: 1px solid #dce5ff;
+  border-radius: 0.5rem;
+}
+
+.api-access-doc-card-text {
+  min-width: 0;
+}
+
+.api-access-doc-card-title {
+  margin: 0 0 0.2rem 0;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.api-access-doc-card-subtitle {
+  margin: 0;
+  color: #475569;
+  font-size: 0.82rem;
+}
+
+.api-access-guide-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.api-access-guide-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: #1f2937;
+  line-height: 1.35;
+}
+
+.api-access-step-index {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: #3f63c9;
 }
 
 .no-access-lock-icon {
@@ -704,6 +842,27 @@ onSort(sort);
 }
 
 @media (max-width: 768px) {
+  .orangehrm-header-container {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .api-access-header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .api-access-guide {
+    padding: 0.8rem;
+  }
+
+  .api-access-doc-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .source-label-row {
     position: relative;
   }
