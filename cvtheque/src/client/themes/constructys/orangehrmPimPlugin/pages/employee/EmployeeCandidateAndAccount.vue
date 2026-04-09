@@ -164,6 +164,7 @@
 import {OxdDialog} from '@ohrm/oxd';
 import EditEmployeeLayout from '../../components/EditEmployeeLayout';
 import {APIService} from '@/core/util/services/api.service';
+import {navigate} from '@/core/util/helper/navigation';
 
 const STOP_SEARCH_REASON_OPTIONS = [
   {
@@ -333,14 +334,7 @@ export default {
           method: 'DELETE',
         });
         await this.$toast.deleteSuccess();
-        const appBaseUrl = `${window.location.origin}/cvtheque/web/index.php`;
-        const logoutUrl = `${appBaseUrl}/${window.appGlobal.theme}/auth/logout`;
-        const homeUrl = `${appBaseUrl}/${window.appGlobal.theme}/candidature/index`;
-        await fetch(logoutUrl, {
-          method: 'GET',
-          credentials: 'include',
-        });
-        window.location.href = homeUrl;
+        navigate('/auth/logout');
       } finally {
         this.isDeletingAccount = false;
       }
