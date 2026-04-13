@@ -264,6 +264,50 @@ class LeadsController extends AbstractVueController
         }
     }
 
+    public function getGlobalOptions(Request $request): Response
+    {
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+
+        $allOptions = $this->getHedwigeOptions($token);
+        $contactLogOptions = $this->getHedwigeContactOptions($token);
+
+        return new Response(
+            json_encode([
+                'allStatuses' => array_map(function ($label, $index) {
+                    return ['id' => $index, 'label' => $label];
+                }, $allOptions, array_keys($allOptions)),
+                'contactLogTypes' => array_map(function ($id, $label) {
+                    return ['id' => $id, 'label' => $label];
+                }, array_keys($contactLogOptions), $contactLogOptions),
+            ]),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    public function getLeadOptions(Request $request): Response
+    {
+        $id = $request->attributes->getInt('id');
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+
+        $lead = $this->getLead($token, $id);
+        $actor = $lead['actor'] ?? null;
+
+        $actorOptions = $this->getHedwigeOptions($token, $actor);
+        $reportingColumns = $this->getReportingColumns($token, $actor);
+
+        return new Response(
+            json_encode([
+                'actorStatuses' => array_map(function ($label, $index) {
+                    return ['id' => $index, 'label' => $label];
+                }, $actorOptions, array_keys($actorOptions)),
+                'defaultColumns' => !empty($reportingColumns) ? ($reportingColumns['defaultColumns'] ?? null) : null,
+            ]),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
     public function getReportingColumns(string $token, ?string $actor = null): array
     {
         try {

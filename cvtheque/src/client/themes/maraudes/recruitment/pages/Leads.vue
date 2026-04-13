@@ -193,6 +193,15 @@
         </table>
       </div>
     </div>
+    <view-lead
+      v-if="selectedLeadId"
+      :lead-id="selectedLeadId"
+      :default-columns="reportingDefaultColumns"
+      :custom-columns="customColumns"
+      :contact-log-types="contactLogTypes"
+      @close="selectedLeadId = null"
+      @open-full-page="openLeadInFullPage"
+    />
   </div>
 </template>
 <script>
@@ -211,11 +220,13 @@ import {APIService} from '@/core/util/services/api.service';
 import {OxdSpinner} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import DateInput from '@/core/components/inputs/DateInput';
+import ViewLead from '../components/ViewLead.vue';
 
 export default {
   components: {
     'oxd-loading-spinner': OxdSpinner,
     'date-input': DateInput,
+    'view-lead': ViewLead,
   },
   props: {
     defaultColumns: {
@@ -354,6 +365,8 @@ export default {
     const currentPage = ref(1);
     const selectedCell = ref({row: null, col: null});
     const selectedRow = ref(null);
+    const selectedLeadId = ref(null);
+    const contactLogTypes = ref([]);
     const rules = {
       fromDate: [
         required,
@@ -379,7 +392,7 @@ export default {
       `/api/v2/actor/leads`,
     );
 
-    const defaultColumns = ref(props.defaultColumns);
+    const reportingDefaultColumns = ref(props.defaultColumns);
 
     const COLUMN_CONFIG = [
       {
@@ -547,10 +560,13 @@ export default {
     const tableHeaders = [];
     for (const col of COLUMN_CONFIG) {
       if (col.utms) {
-        if (col.condition(defaultColumns.value)) {
+        if (col.condition(reportingDefaultColumns.value)) {
           tableHeaders.push(...col.utms);
         }
-      } else if (!col.condition || col.condition(defaultColumns.value)) {
+      } else if (
+        !col.condition ||
+        col.condition(reportingDefaultColumns.value)
+      ) {
         tableHeaders.push({
           label: col.label,
           key: col.key,
@@ -765,10 +781,20 @@ export default {
 
     onMounted(() => {
       fetchData();
+      http
+        .request({
+          method: 'GET',
+          url: '/api/v2/admin/leads/global-options',
+        })
+        .then(({data}) => {
+          contactLogTypes.value = data.contactLogTypes || [];
+        });
     });
 
     return {
       http,
+      reportingDefaultColumns,
+      contactLogTypes,
       startDateFilter,
       endDateFilter,
       tableData,
@@ -779,6 +805,7 @@ export default {
       paginationLength,
       selectedCell,
       selectedRow,
+      selectedLeadId,
       filterItems,
       onClickReset,
       selectCell,
@@ -805,7 +832,13 @@ export default {
       });
     },
     viewLead(leadId) {
-      // Sauvegarder les filtres avant de naviguer
+      this.selectedLeadId = leadId;
+    },
+    openLeadInFullPage() {
+      const leadId = this.selectedLeadId;
+      if (leadId == null) {
+        return;
+      }
       this.saveFiltersToLocalStorage(this.startDateFilter, this.endDateFilter);
       navigate(`/recruitment/viewLeads/{id}`, {
         id: leadId,
