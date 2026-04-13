@@ -231,11 +231,18 @@
       :cancel-label="$t('Annuler')"
       :confirm-button-type="'secondary'"
     />
+    <view-lead
+      v-if="selectedLeadId"
+      :lead-id="selectedLeadId"
+      :all-statuses="allStatuses"
+      :contact-log-types="contactLogTypes"
+      @close="selectedLeadId = null"
+      @open-full-page="openLeadInFullPage"
+    />
   </div>
 </template>
 <script>
 import {ref, computed, onMounted, watch} from 'vue';
-import {navigate} from '@/core/util/helper/navigation';
 import usei18n from '@/core/util/composable/usei18n';
 import {
   required,
@@ -244,6 +251,7 @@ import {
   endDateShouldBeAfterStartDate,
 } from '@/core/util/validation/rules';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
+import {navigate} from '@/core/util/helper/navigation';
 import useToast from '@/core/util/composable/useToast';
 import JobAutocomplete from '@/core/components/inputs/JobAutocomplete.vue';
 import {APIService} from '@/core/util/services/api.service';
@@ -251,6 +259,7 @@ import {OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog.vue';
 import DateInput from '@/core/components/inputs/DateInput';
+import ViewLead from '../../components/ViewLead.vue';
 
 export default {
   components: {
@@ -259,6 +268,7 @@ export default {
     'confirmation-dialog': ConfirmationDialog,
     'oxd-switch-input': OxdSwitchInput,
     'date-input': DateInput,
+    'view-lead': ViewLead,
   },
   props: {
     actors: {
@@ -417,6 +427,9 @@ export default {
     const currentPage = ref(1);
     const selectedCell = ref({row: null, col: null});
     const selectedRow = ref(null);
+    const selectedLeadId = ref(null);
+    const allStatuses = ref([]);
+    const contactLogTypes = ref([]);
     const departmentCodeOptions = computed(() =>
       (props.departmentCodes || []).map((departmentCode, index) => ({
         id: index,
@@ -904,6 +917,15 @@ export default {
         // mais on peut forcer une mise à jour si nécessaire
       }
       fetchData();
+      http
+        .request({
+          method: 'GET',
+          url: `/${window.appGlobal.theme}/api/v2/admin/leads/global-options`,
+        })
+        .then(({data}) => {
+          allStatuses.value = data.allStatuses || [];
+          contactLogTypes.value = data.contactLogTypes || [];
+        });
     });
 
     return {
@@ -924,6 +946,9 @@ export default {
       totalPages,
       selectedCell,
       selectedRow,
+      selectedLeadId,
+      allStatuses,
+      contactLogTypes,
       filterItems,
       onClickReset,
       selectCell,
@@ -946,7 +971,13 @@ export default {
       });
     },
     viewLead(leadId) {
-      // Sauvegarder les filtres avant de naviguer
+      this.selectedLeadId = leadId;
+    },
+    openLeadInFullPage() {
+      const leadId = this.selectedLeadId;
+      if (leadId == null) {
+        return;
+      }
       this.saveFiltersToLocalStorage(
         this.startDateFilter,
         this.endDateFilter,

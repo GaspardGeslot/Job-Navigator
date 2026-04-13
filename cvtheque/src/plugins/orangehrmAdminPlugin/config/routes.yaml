@@ -2147,6 +2147,21 @@ apiv2_admin_lead_get_one:
     id: '\d+'
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_leads_global_options:
+  path: /{theme}/api/v2/admin/leads/global-options
+  controller: OrangeHRM\Admin\Controller\LeadsController::getGlobalOptions
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+apiv2_admin_lead_options:
+  path: /{theme}/api/v2/admin/leads/{id}/options
+  controller: OrangeHRM\Admin\Controller\LeadsController::getLeadOptions
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
 apiv2_admin_leads_reprocess:
   path: /{theme}/api/v2/admin/leads/{id}
   controller: OrangeHRM\Admin\Controller\LeadsController::reprocess
@@ -2198,6 +2213,18 @@ apiv2_admin_lead_telephone_contact_update:
 subdomain_apiv2_admin_lead_get_one:
   path: /api/v2/admin/leads/{id}
   controller: OrangeHRM\Admin\Controller\LeadsController::getOne
+  methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_leads_global_options:
+  path: /api/v2/admin/leads/global-options
+  controller: OrangeHRM\Admin\Controller\LeadsController::getGlobalOptions
+  methods: [ GET ]
+
+subdomain_apiv2_admin_lead_options:
+  path: /api/v2/admin/leads/{id}/options
+  controller: OrangeHRM\Admin\Controller\LeadsController::getLeadOptions
   methods: [ GET ]
   requirements:
     id: '\d+'

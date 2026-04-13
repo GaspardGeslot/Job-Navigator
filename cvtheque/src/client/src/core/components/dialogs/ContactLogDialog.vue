@@ -1,137 +1,142 @@
 <template>
-  <oxd-dialog
-    v-if="modelValue"
-    :show="modelValue"
-    :style="{width: '90%', maxWidth: '600px'}"
-    @update:show="onClose"
-  >
-    <div class="orangehrm-modal-header">
-      <oxd-text type="card-title">
-        {{
-          isEditing
-            ? $t('Modifier la prise de contact')
-            : $t('Ajouter une prise de contact')
-        }}
-      </oxd-text>
-    </div>
-    <oxd-divider />
-    <oxd-form :loading="loading" @submit-valid="onSubmit">
-      <oxd-form-row>
-        <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <date-input
-              v-model="form.date"
-              :label="$t('general.date')"
-              :rules="rules.telephoneContactDate"
-              :disabled="isEditing"
-              required
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <time-input
-              v-model="form.time"
-              :label="$t('Heure')"
-              :rules="rules.telephoneContactTime"
-              :disabled="isEditing"
-              :step="1"
-              required
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-      </oxd-form-row>
-      <oxd-form-row v-if="hasContactLogTypes">
-        <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="form.type"
-              :label="$t('Type de prise de contact')"
-              type="select"
-              :options="contactLogTypes"
-              option-value="id"
-              option-label="label"
-              :disabled="isEditing"
-              :rules="rules.telephoneContactType"
-              required
-            />
-          </oxd-grid-item>
-          <oxd-grid-item v-if="contactLogTypeOrdinal !== null">
-            <oxd-text class="orangehrm-input-title" tag="h6">
-              {{
-                isContactLogTypeTelephone
-                  ? $t('Contact abouti avec succès')
-                  : $t('A répondu')
-              }}
-            </oxd-text>
-            <oxd-switch-input
-              v-model="form.successful"
-              :disabled="isEditing && contactLogTypeOrdinal !== 1"
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-      </oxd-form-row>
-      <oxd-form-row v-if="hasContactLogTypes && isContactLogTypePhone">
-        <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="form.phoneNumber"
-              :label="$t('recruitment.contact_number')"
-              :rules="
-                isContactLogTypePhone ? rules.telephoneContactPhoneNumber : []
-              "
-              :disabled="isEditing"
-              required
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-      </oxd-form-row>
-      <oxd-form-row v-if="!hasContactLogTypes">
-        <oxd-grid :cols="2" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="form.phoneNumber"
-              :label="$t('recruitment.contact_number')"
-              :rules="rules.telephoneContactPhoneNumber"
-              :disabled="isEditing"
-              required
-            />
-          </oxd-grid-item>
-          <oxd-grid-item>
-            <oxd-text class="orangehrm-input-title" tag="h6">
-              {{ $t('Appel abouti avec succès') }}
-            </oxd-text>
-            <oxd-switch-input v-model="form.successful" :disabled="isEditing" />
-          </oxd-grid-item>
-        </oxd-grid>
-      </oxd-form-row>
-      <oxd-form-row>
-        <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="form.comment"
-              type="textarea"
-              :label="$t('Commentaire')"
-              :rules="rules.telephoneContactComment"
-              :disabled="isEditing && !canEditComment"
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-      </oxd-form-row>
+  <teleport to="#app">
+    <oxd-dialog
+      v-if="modelValue"
+      :show="modelValue"
+      :style="{width: '90%', maxWidth: '600px'}"
+      @update:show="onClose"
+    >
+      <div class="orangehrm-modal-header">
+        <oxd-text type="card-title">
+          {{
+            isEditing
+              ? $t('Modifier la prise de contact')
+              : $t('Ajouter une prise de contact')
+          }}
+        </oxd-text>
+      </div>
       <oxd-divider />
-      <oxd-form-actions class="orangehrm-form-action">
-        <required-text />
-        <oxd-button
-          display-type="ghost"
-          :label="$t('general.cancel')"
-          @click="onClose"
-        />
-        <oxd-button
-          display-type="secondary"
-          :label="$t('general.save')"
-          type="submit"
-        />
-      </oxd-form-actions>
-    </oxd-form>
-  </oxd-dialog>
+      <oxd-form :loading="loading" @submit-valid="onSubmit">
+        <oxd-form-row>
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <date-input
+                v-model="form.date"
+                :label="$t('general.date')"
+                :rules="rules.telephoneContactDate"
+                :disabled="isEditing"
+                required
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <time-input
+                v-model="form.time"
+                :label="$t('Heure')"
+                :rules="rules.telephoneContactTime"
+                :disabled="isEditing"
+                :step="1"
+                required
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row v-if="hasContactLogTypes">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="form.type"
+                :label="$t('Type de prise de contact')"
+                type="select"
+                :options="contactLogTypes"
+                option-value="id"
+                option-label="label"
+                :disabled="isEditing"
+                :rules="rules.telephoneContactType"
+                required
+              />
+            </oxd-grid-item>
+            <oxd-grid-item v-if="contactLogTypeOrdinal !== null">
+              <oxd-text class="orangehrm-input-title" tag="h6">
+                {{
+                  isContactLogTypeTelephone
+                    ? $t('Contact abouti avec succès')
+                    : $t('A répondu')
+                }}
+              </oxd-text>
+              <oxd-switch-input
+                v-model="form.successful"
+                :disabled="isEditing && contactLogTypeOrdinal !== 1"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row v-if="hasContactLogTypes && isContactLogTypePhone">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="form.phoneNumber"
+                :label="$t('recruitment.contact_number')"
+                :rules="
+                  isContactLogTypePhone ? rules.telephoneContactPhoneNumber : []
+                "
+                :disabled="isEditing"
+                required
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row v-if="!hasContactLogTypes">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="form.phoneNumber"
+                :label="$t('recruitment.contact_number')"
+                :rules="rules.telephoneContactPhoneNumber"
+                :disabled="isEditing"
+                required
+              />
+            </oxd-grid-item>
+            <oxd-grid-item>
+              <oxd-text class="orangehrm-input-title" tag="h6">
+                {{ $t('Appel abouti avec succès') }}
+              </oxd-text>
+              <oxd-switch-input
+                v-model="form.successful"
+                :disabled="isEditing"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-form-row>
+          <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="form.comment"
+                type="textarea"
+                :label="$t('Commentaire')"
+                :rules="rules.telephoneContactComment"
+                :disabled="isEditing && !canEditComment"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+        <oxd-divider />
+        <oxd-form-actions class="orangehrm-form-action">
+          <required-text />
+          <oxd-button
+            display-type="ghost"
+            :label="$t('general.cancel')"
+            @click="onClose"
+          />
+          <oxd-button
+            display-type="secondary"
+            :label="$t('general.save')"
+            type="submit"
+          />
+        </oxd-form-actions>
+      </oxd-form>
+    </oxd-dialog>
+  </teleport>
 </template>
 
 <script>
