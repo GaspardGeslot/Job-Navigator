@@ -31,9 +31,14 @@
           <li class="api-access-guide-step">
             <span class="api-access-step-index">1</span>
             <div>
-              <b>Générez une clé API</b> en renseignant un titre unique et, si
-              nécessaire, une source (optionnelle). Cette source préremplit la
-              colonne <b>source</b> des contacts reçus.
+              <template v-if="showSourceFields">
+                <b>Générez une clé API</b> en renseignant un titre unique et, si
+                nécessaire, une source (optionnelle). Cette source préremplit la
+                colonne <b>source</b> des contacts reçus.
+              </template>
+              <template v-else>
+                <b>Générez une clé API</b> en renseignant un titre unique.
+              </template>
             </div>
           </li>
           <li class="api-access-guide-step">
@@ -149,7 +154,7 @@
                     :rules="rules.title"
                   />
                 </oxd-grid-item>
-                <oxd-grid-item>
+                <oxd-grid-item v-if="showSourceFields">
                   <div class="source-label-row">
                     <oxd-text class="oxd-label">
                       {{ $t('Source (optionnel)') }}
@@ -219,6 +224,14 @@
               <oxd-text class="oxd-label">Actif</oxd-text>
               <OxdSwitchInput v-model="editedIsActive" />
             </div>
+            <oxd-input-field
+              v-if="showSourceFields"
+              v-model="editedSource"
+              :label="$t('Source (optionnel)')"
+              :placeholder="$t('Source (optionnel)')"
+              class="edit-source-field"
+              style="margin-top: 2rem"
+            />
           </div>
           <div class="modal-footer">
             <oxd-button
@@ -287,6 +300,10 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  reportingColumnsDefault: {
+    type: Object,
+    default: () => ({defaultColumns: {}, customColumns: []}),
+  },
 });
 const {error, success} = useToast();
 const defaultSortOrder = {
@@ -310,6 +327,7 @@ const isEditModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const isCreateModalOpen = ref(false);
 const editedIsActive = ref(false);
+const editedSource = ref('');
 const isSavingEdit = ref(false);
 const isDeleting = ref(false);
 const isCreating = ref(false);
@@ -339,11 +357,15 @@ const headers = computed(() => [
     sortField: 'title',
     style: {flex: 1},
   },
-  {
-    name: 'source',
-    title: 'Source',
-    style: {flex: 1},
-  },
+  ...(props.reportingColumnsDefault?.defaultColumns?.source === false
+    ? []
+    : [
+        {
+          name: 'source',
+          title: 'Source',
+          style: {flex: 1},
+        },
+      ]),
   {
     name: 'status',
     title: 'Statut',
@@ -373,6 +395,9 @@ const items = computed(() =>
     status: item.isActive === true ? 'Actif' : 'Inactif',
     createdAt: formatDate(item.insertedAt),
   })),
+);
+const showSourceFields = computed(
+  () => props.reportingColumnsDefault?.defaultColumns?.source !== false,
 );
 const apiAccessLimitValue = computed(() => {
   return props.apiAccessLimit;
@@ -405,6 +430,7 @@ const closeModals = (force = false) => {
   selectedAccess.value = null;
   newApiTitle.value = '';
   newApiSource.value = '';
+  editedSource.value = '';
   createdToken.value = '';
 };
 
@@ -518,6 +544,7 @@ const openApiDocumentation = () => {
 const onClickEdit = (access) => {
   selectedAccess.value = access;
   editedIsActive.value = access.isActive === true;
+  editedSource.value = access.source ?? '';
   isEditModalOpen.value = true;
 };
 
@@ -532,7 +559,12 @@ const onConfirmEdit = () => {
   const targetId = selectedAccess.value.id;
 
   http
-    .update(targetId, {isActive: editedIsActive.value})
+    .update(targetId, {
+      isActive: editedIsActive.value,
+      source: showSourceFields.value
+        ? editedSource.value?.trim() || null
+        : null,
+    })
     .then(() => {
       fetchApiAccesses();
       closeModals(true);
@@ -686,6 +718,10 @@ onSort(sort);
   align-items: center;
   justify-content: space-between;
   margin-top: 0.5rem;
+}
+
+.edit-source-field {
+  margin-bottom: 1.25rem;
 }
 
 :deep(.oxd-switch-input) {
