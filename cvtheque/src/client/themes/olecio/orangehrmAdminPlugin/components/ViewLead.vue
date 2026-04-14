@@ -24,6 +24,7 @@
       </div>
       <lead-profile
         v-else-if="lead"
+        class="view-lead-profile"
         :lead="lead"
         :all-statuses="allStatuses"
         :actor-statuses="actorStatuses"
@@ -148,6 +149,14 @@ export default {
   flex-direction: column;
   transform: translateX(100%);
   transition: transform 0.3s ease;
+}
+
+.view-lead-profile {
+  padding: 0rem !important;
+}
+
+.view-lead-profile :deep(.orangehrm-card-container) {
+  border-radius: 0rem !important;
 }
 
 .view-lead-panel.active {

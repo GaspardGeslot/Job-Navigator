@@ -24,6 +24,7 @@
       </div>
       <lead-profile
         v-else-if="lead"
+        class="view-lead-profile"
         :lead="lead"
         :default-columns="resolvedDefaultColumns"
         :custom-columns="resolvedCustomColumns"
@@ -188,5 +189,13 @@ export default {
   justify-content: center;
   align-items: center;
   flex: 1;
+}
+
+.view-lead-profile {
+  padding: 0rem !important;
+}
+
+.view-lead-profile :deep(.orangehrm-card-container) {
+  border-radius: 0rem !important;
 }
 </style>

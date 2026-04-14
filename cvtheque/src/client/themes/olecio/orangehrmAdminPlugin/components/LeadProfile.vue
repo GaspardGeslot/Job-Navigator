@@ -208,7 +208,8 @@
                 <oxd-input-field
                   v-model="profile.address"
                   :label="$t('pim.street1')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :rules="rules.address"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="isColumnVisible('city')">
@@ -806,6 +807,7 @@ export default {
         lastName: [shouldNotExceedCharLength(30)],
         postalCode: [shouldNotExceedCharLength(5), numericOnly],
         comment: [shouldNotExceedCharLength(1000)],
+        address: [shouldNotExceedCharLength(200)],
         telephoneContactDate: [
           required,
           validDateFormat(this.userDateFormat),
