@@ -27,10 +27,13 @@ class APIAccessController extends AbstractVueController
     public function preRender(Request $request): void
     {
         $component = new Component('api-access');
-        $plan = $this->getActorPlan($this->getAuthUser()->getUserHedwigeToken());
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+        $plan = $this->getActorPlan($token);
         $apiAccessLimit = isset($plan['apiAccessLimit']) ? (int) $plan['apiAccessLimit'] : 0;
+        $reportingColumns = $this->getDefaultReportingColumns($token);
 
         $component->addProp(new Prop('api-access-limit', Prop::TYPE_NUMBER, $apiAccessLimit));
+        $component->addProp(new Prop('reporting-columns-default', Prop::TYPE_OBJECT, $reportingColumns));
 
         $this->setComponent($component);
     }
@@ -47,6 +50,25 @@ class APIAccessController extends AbstractVueController
                     'Authorization' => $token,
                 ],
             ]);
+            return json_decode($response->getBody(), true) ?? [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    private function getDefaultReportingColumns(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/reporting-columns/default";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ],
+            ]);
+
             return json_decode($response->getBody(), true) ?? [];
         } catch (\Exception $e) {
             return [];
@@ -83,6 +105,12 @@ class APIAccessController extends AbstractVueController
             $data = json_decode($request->getContent(), true) ?? [];
             $rawIsActive = $data['isActive'] ?? $request->query->get('isActive');
             $isActive = filter_var($rawIsActive, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $source = array_key_exists('source', $data)
+                ? trim((string) $data['source'])
+                : null;
+            if ($source === '') {
+                $source = null;
+            }
 
             if (!is_bool($isActive)) {
                 return new Response(
@@ -95,6 +123,7 @@ class APIAccessController extends AbstractVueController
             $this->updateActorApiAccess(
                 $id,
                 $isActive,
+                $source,
                 $this->getAuthUser()->getUserHedwigeToken()
             );
 
@@ -193,7 +222,7 @@ class APIAccessController extends AbstractVueController
         return json_decode($response->getBody(), true) ?? [];
     }
 
-    private function updateActorApiAccess(int $id, bool $isActive, string $token): void
+    private function updateActorApiAccess(int $id, bool $isActive, ?string $source, string $token): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -205,6 +234,7 @@ class APIAccessController extends AbstractVueController
             ],
             'query' => [
                 'isActive' => $isActive ? 'true' : 'false',
+                'source' => $source ?? '',
             ],
         ]);
     }

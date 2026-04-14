@@ -81,6 +81,32 @@
                     <oxd-switch-input v-model="hasFilter" />
                   </div>
                 </oxd-grid-item>
+                <oxd-grid-item>
+                  <div class="orangehrm-switch-wrapper">
+                    <div class="external-set-label-row">
+                      <oxd-text class="oxd-label">
+                        {{ $t('Autoriser paramètre externe') }}
+                      </oxd-text>
+                      <div class="external-set-help">
+                        <button
+                          type="button"
+                          class="external-set-help-icon"
+                          aria-label="Aide paramètre externe"
+                        >
+                          ?
+                        </button>
+                        <span class="external-set-help-tooltip">
+                          {{
+                            $t(
+                              'determine si le champs est définissable par les accès API externes',
+                            )
+                          }}
+                        </span>
+                      </div>
+                    </div>
+                    <oxd-switch-input v-model="allowExternalSet" />
+                  </div>
+                </oxd-grid-item>
                 <oxd-grid-item v-if="selectedTypeIsSelect">
                   <oxd-text class="orangehrm-text">
                     {{ $t('Options') }}
@@ -163,6 +189,10 @@ export default {
       required: true,
       default: () => [],
     },
+    apiAccessLimit: {
+      type: Number,
+      default: 0,
+    },
   },
 
   setup(props) {
@@ -185,6 +215,7 @@ export default {
       columnType: null,
       selectOptions: [],
       hasFilter: false,
+      allowExternalSet: false,
       editingItem: null,
     });
 
@@ -224,6 +255,11 @@ export default {
               filterDisplay = item.hasFilter ? 'Oui' : 'Non';
             }
 
+            const allowExternalSet =
+              typeof item.allowExternalSet === 'boolean'
+                ? item.allowExternalSet
+                : false;
+
             return {
               id: item.id,
               title: item.title,
@@ -233,6 +269,8 @@ export default {
               rawOptions: item.options,
               hasFilter: item.hasFilter ?? false,
               filter: filterDisplay,
+              allowExternalSet,
+              externalSet: allowExternalSet ? 'Oui' : 'Non',
             };
           });
           state.total = response.data.length;
@@ -305,9 +343,9 @@ export default {
       let requestPromise;
 
       if (state.isEditing && state.editingItem) {
-        // En mode édition, on ne met à jour que le booléen hasFilter
         requestPromise = http.update(state.editingItem.id, {
           hasFilter: state.hasFilter,
+          allowExternalSet: state.allowExternalSet,
         });
       } else {
         const payload = {
@@ -315,6 +353,7 @@ export default {
           typeOrdinal: state.columnType.id,
           options: optionsString,
           hasFilter: state.hasFilter,
+          allowExternalSet: state.allowExternalSet,
         };
         requestPromise = http.create(payload);
       }
@@ -346,6 +385,7 @@ export default {
       state.columnType = null;
       state.selectOptions = [];
       state.hasFilter = false;
+      state.allowExternalSet = false;
       state.isModalOpen = false;
       state.isEditing = false;
       state.editingItem = null;
@@ -448,6 +488,15 @@ export default {
           },
         },
         {
+          name: 'externalSet',
+          title: this.$t('Autoriser paramètre externe'),
+          sortField: 'externalSet',
+          style: {flex: 0.5},
+          cellRenderer: (value) => {
+            return value || '';
+          },
+        },
+        {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
@@ -503,6 +552,7 @@ export default {
       this.columnType = null;
       this.selectOptions = [];
       this.hasFilter = false;
+      this.allowExternalSet = false;
     },
     onClickEdit(item) {
       this.isModalOpen = true;
@@ -526,6 +576,7 @@ export default {
       }
 
       this.hasFilter = item.hasFilter ?? false;
+      this.allowExternalSet = item.allowExternalSet ?? false;
     },
     onClickDelete(item) {
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
@@ -719,5 +770,78 @@ export default {
 .option-delete-button {
   flex-shrink: 0;
   margin-bottom: 1.25rem;
+}
+
+.external-set-label-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.external-set-help {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.external-set-help-icon {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #e9ecef;
+  color: #495057;
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.external-set-help-tooltip {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 0.35rem);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(80vw, 320px);
+  background: #1f2d3d;
+  color: #fff;
+  border-radius: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 3;
+}
+
+.external-set-help:hover .external-set-help-tooltip,
+.external-set-help:focus-within .external-set-help-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 768px) {
+  .external-set-label-row {
+    position: relative;
+  }
+
+  .external-set-help {
+    position: static;
+  }
+
+  .external-set-help-tooltip {
+    top: auto;
+    bottom: calc(100% + 0.35rem);
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: min(90vw, 320px);
+  }
 }
 </style>
