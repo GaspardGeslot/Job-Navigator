@@ -409,6 +409,19 @@
               <oxd-switch-input v-model="profile.ko" :disabled="!editable" />
             </oxd-grid-item>
           </oxd-grid>
+          <oxd-grid
+            v-if="profile.matching"
+            :cols="3"
+            class="orangehrm-full-width-grid"
+          >
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.matching"
+                :label="$t('Matching')"
+                :disabled="true"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
@@ -1034,6 +1047,7 @@ export default {
       this.profile.complement = this.lead.complement;
       this.profile.sentDate = this.lead.sentDate;
       this.profile.actor = this.lead.actor;
+      this.profile.matching = this.lead.matching;
       this.profile.matchingState = this.lead.matchingState;
       this.profile.apiMessage = this.lead.apiMessage;
       this.profile.manualDelivery = this.lead.manualDelivery;
