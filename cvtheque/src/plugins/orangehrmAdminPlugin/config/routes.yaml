@@ -497,6 +497,12 @@ subdomain_apiv2_admin_of:
   methods: [ GET ]
   requirements:
 
+subdomain_apiv2_admin_of_email:
+  path: /api/v2/admin/of/email
+  controller: OrangeHRM\Admin\Controller\OFController::getEmailFromOF
+  methods: [ GET ]
+  requirements:
+
 subdomain_apiv2_admin_of_create:
   path: /api/v2/admin/of
   controller: OrangeHRM\Admin\Controller\OFController::create
@@ -1933,6 +1939,13 @@ apiv2_admin_job_delete:
 apiv2_admin_of:
   path: /{theme}/api/v2/admin/of
   controller: OrangeHRM\Admin\Controller\OFController::getAllOFs
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+apiv2_admin_of_email:
+  path: /{theme}/api/v2/admin/of/email
+  controller: OrangeHRM\Admin\Controller\OFController::getEmailByName
   methods: [ GET ]
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo

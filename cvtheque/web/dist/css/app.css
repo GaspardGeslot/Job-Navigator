@@ -103,268 +103,6 @@
   align-self: center;
   margin-left: unset;
 }
-/*!*******************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/styles/global.scss ***!
-  \*******************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.orangehrm-header-container,
-.orangehrm-dialog-header-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
-}
-.orangehrm-header-container .oxd-button,
-.orangehrm-dialog-header-container .oxd-button {
-  white-space: nowrap;
-}
-
-.orangehrm-header-container {
-  padding: 25px;
-}
-
-.orangehrm-left-header-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  gap: 10px;
-  align-items: center;
-  padding: 25px;
-}
-.orangehrm-left-header-container .oxd-button {
-  white-space: nowrap;
-}
-@media screen and (max-width: 768px) {
-  .orangehrm-left-header-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-.orangehrm-dialog-header-container {
-  padding: 1.2rem;
-}
-
-.orangehrm-main-title {
-  font-size: 16px !important;
-  font-weight: 700 !important;
-}
-
-.orangehrm-sub-title {
-  padding: 0.25rem 0 !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
-}
-
-.orangehrm-input-title {
-  padding: 0.25rem 0 !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-}
-
-.orangehrm-left-space {
-  margin-left: 10px;
-}
-
-.orangehrm-right-space {
-  margin-right: 10px;
-}
-
-.orangehrm-card-container {
-  background-color: #ffffff;
-  border-radius: 1.2rem;
-  padding: 25px;
-}
-@media screen and (max-width: 400px) {
-  .orangehrm-card-container .oxd-form-actions {
-    gap: 5px 0;
-    flex-wrap: wrap;
-  }
-}
-
-.orangehrm-container {
-  background-color: #e8eaef;
-  /*border-radius: 1.2rem;*/
-  padding: 0.5rem;
-}
-.orangehrm-container .oxd-table-header-cell .oxd-checkbox-input {
-  border: 1px solid #929baa;
-}
-.orangehrm-container .oxd-table-card .card-header-slot-content .data {
-  font-size: 1rem;
-}
-
-.orangehrm-paper-container {
-  background-color: #ffffff;
-  border-radius: 1.2rem;
-}
-
-.orangehrm-horizontal-padding {
-  padding-left: 25px;
-  padding-right: 25px;
-}
-
-.orangehrm-dialog-horizontal-padding {
-  padding-left: 1.2rem;
-  padding-right: 1.2rem;
-}
-
-.orangehrm-vertical-padding {
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
-
-.orangehrm-dialog-vertical-padding {
-  padding-top: 1.2rem;
-  padding-bottom: 1.2rem;
-}
-
-.orangehrm-top-padding {
-  padding-top: 25px;
-}
-
-.orangehrm-horizontal-margin {
-  margin-left: 25px;
-  margin-right: 25px;
-}
-
-.orangehrm-dialog-horizontal-margin {
-  margin-left: 1.2rem;
-  margin-right: 1.2rem;
-}
-
-.orangehrm-bottom-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  padding: 25px;
-}
-
-.orangehrm-background-container {
-  padding: 1.5rem 0;
-  flex: 1;
-}
-
-.orangehrm-input-hint {
-  font-size: 0.75rem;
-  margin-top: -10px;
-  padding-bottom: 1rem;
-}
-
-.orangehrm-clear-margins {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.orangehrm-copyright-wrapper {
-  margin: 0.5rem 0;
-}
-
-.orangehrm-copyright {
-  font-size: 0.8rem;
-  text-align: center;
-}
-.orangehrm-copyright a {
-  color: #38455d;
-}
-
-.orangehrm-form-action {
-  gap: 5px;
-  flex-wrap: wrap !important;
-}
-
-.orangehrm-dialog-modal {
-  width: 90%;
-  max-width: 600px;
-}
-
-.orangehrm-dialog-popup {
-  max-width: 450px;
-}
-
-.orangehrm-input-field-bottom-space {
-  margin-bottom: 1rem;
-}
-
-.oxd-tab-bar {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-/*!*****************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/plugins/toaster/toaster.scss ***!
-  \*****************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.oxd-toast-container {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  z-index: 1200 !important;
-  left: 12px;
-}
-@media (min-width: 0px) {
-  .oxd-toast-container {
-    min-width: 290px;
-  }
-}
-@media (min-width: 800px) {
-  .oxd-toast-container {
-    min-width: 400px;
-  }
-}
-.oxd-toast-container--bottom {
-  bottom: 1rem;
-}
-.oxd-toast-container--top {
-  top: 1rem;
-}
-
-.oxd-toast-container--toast {
-  margin-bottom: 0.4rem;
-}
-
-@keyframes fadeInLeft {
-  0% {
-    transform: translateX(-50px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-@keyframes fadeOutLeft {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50px);
-    opacity: 0;
-  }
-}
-.oxd-toast-list-enter-active {
-  animation: fadeInLeft 0.5s cubic-bezier(0.82, 0.085, 0.395, 0.895);
-}
-
-.oxd-toast-list-leave-active {
-  animation: fadeOutLeft 0.5s cubic-bezier(0.82, 0.085, 0.395, 0.895);
-}
-/*!***************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/plugins/loader/loader.scss ***!
-  \***************************************************************************************************************************************************************************************************************************************************/
-/* Import OXD Globals */
-.orangehrm-loader {
-  z-index: 1100 !important;
-}
-.orangehrm-loader-fade-enter-active, .orangehrm-loader-fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-.orangehrm-loader-fade-enter-from, .orangehrm-loader-fade-leave-to {
-  opacity: 0;
-}
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/pages/ModuleUnderDevelopment.vue?vue&type=style&index=0&id=36c36f81&lang=scss&scoped=true ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -4210,6 +3948,28 @@
 }
 .orangehrm-text-center-align[data-v-383233ba] {
   text-align: center;
+}
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/core/components/dialogs/ConfirmationDialog.vue?vue&type=style&index=1&id=383233ba&lang=scss&scoped=true ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-confirmation-dialog-input-wrapper[data-v-383233ba] {
+  box-sizing: border-box;
+  margin: 1rem auto 0;
+  width: 100%;
+}
+.orangehrm-confirmation-dialog-input[data-v-383233ba] {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d6dde5;
+  border-radius: 0.65rem;
+  font-size: 0.95rem;
+  outline: none;
+}
+.orangehrm-confirmation-dialog-input[data-v-383233ba]:focus {
+  border-color: #64728c;
 }
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/orangehrmMaintenancePlugin/components/MaintenanceNote.vue?vue&type=style&index=0&id=7da94b15&lang=scss&scoped=true ***!
@@ -10774,7 +10534,7 @@ input, select, option {
   padding-right: 3rem;
   overflow: visible;
 }
-.formBlock > *[data-v-c2f22a12] {
+.formBlock[data-v-c2f22a12] > * {
   flex: 1;
 }
 .formTitle[data-v-c2f22a12] {
@@ -10829,7 +10589,7 @@ p[data-v-c2f22a12] {
   line-height: 1rem;
   padding-left: 0.5rem;
 }
-.AcceptanceofTerms-container > *[data-v-c2f22a12] {
+.AcceptanceofTerms-container[data-v-c2f22a12] > * {
   flex: 1;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -10932,7 +10692,7 @@ p[data-v-c2f22a12] {
   display: flex;
   flex-direction: column;
 }
-.formBlock1 > *[data-v-c2f22a12] {
+.formBlock1[data-v-c2f22a12] > * {
   flex: 1;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
@@ -11475,7 +11235,7 @@ input[data-v-c2f22a12], select[data-v-c2f22a12], option[data-v-c2f22a12] {
   display: flex;
   flex-direction: column;
 }
-.formBlock6 > *[data-v-c2816e0a]:not(.submit-block) {
+.formBlock6[data-v-c2816e0a] > *:not(.submit-block) {
   flex: 1;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
@@ -11549,7 +11309,7 @@ input:checked + .slider[data-v-c2816e0a]:before {
 .slider.round[data-v-c2816e0a]:before {
   border-radius: 50%;
 }
-.passwordFields > *[data-v-c2816e0a] {
+.passwordFields[data-v-c2816e0a] > * {
   flex: 1;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
@@ -12085,7 +11845,7 @@ input:checked + .slider[data-v-c2816e0a]:before {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/candidaturePlugin/pages/Candidature.vue?vue&type=style&index=1&id=1575c360&scoped=true&lang=css ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
-*[data-v-1575c360] {
+[data-v-1575c360] {
   font-family: 'DM Sans', sans-serif;
 }
 h1[data-v-1575c360] {
@@ -13039,7 +12799,7 @@ h1[data-v-1575c360] {
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/constructys/cguPlugin/pages/CGU.vue?vue&type=style&index=1&id=c7c92d34&scoped=true&lang=css ***!
   \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
-*[data-v-c7c92d34] {
+[data-v-c7c92d34] {
   font-family: 'DM Sans', sans-serif;
 }
 h1[data-v-c7c92d34],
@@ -24647,3 +24407,265 @@ span[data-v-0c4352a3] {
   margin-left: auto;
 }
 
+/*!*******************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/styles/global.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-header-container,
+.orangehrm-dialog-header-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.orangehrm-header-container .oxd-button,
+.orangehrm-dialog-header-container .oxd-button {
+  white-space: nowrap;
+}
+
+.orangehrm-header-container {
+  padding: 25px;
+}
+
+.orangehrm-left-header-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: center;
+  padding: 25px;
+}
+.orangehrm-left-header-container .oxd-button {
+  white-space: nowrap;
+}
+@media screen and (max-width: 768px) {
+  .orangehrm-left-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.orangehrm-dialog-header-container {
+  padding: 1.2rem;
+}
+
+.orangehrm-main-title {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.orangehrm-sub-title {
+  padding: 0.25rem 0 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.orangehrm-input-title {
+  padding: 0.25rem 0 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.orangehrm-left-space {
+  margin-left: 10px;
+}
+
+.orangehrm-right-space {
+  margin-right: 10px;
+}
+
+.orangehrm-card-container {
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  padding: 25px;
+}
+@media screen and (max-width: 400px) {
+  .orangehrm-card-container .oxd-form-actions {
+    gap: 5px 0;
+    flex-wrap: wrap;
+  }
+}
+
+.orangehrm-container {
+  background-color: #e8eaef;
+  /*border-radius: 1.2rem;*/
+  padding: 0.5rem;
+}
+.orangehrm-container .oxd-table-header-cell .oxd-checkbox-input {
+  border: 1px solid #929baa;
+}
+.orangehrm-container .oxd-table-card .card-header-slot-content .data {
+  font-size: 1rem;
+}
+
+.orangehrm-paper-container {
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+}
+
+.orangehrm-horizontal-padding {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.orangehrm-dialog-horizontal-padding {
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+
+.orangehrm-vertical-padding {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.orangehrm-dialog-vertical-padding {
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+}
+
+.orangehrm-top-padding {
+  padding-top: 25px;
+}
+
+.orangehrm-horizontal-margin {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.orangehrm-dialog-horizontal-margin {
+  margin-left: 1.2rem;
+  margin-right: 1.2rem;
+}
+
+.orangehrm-bottom-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  padding: 25px;
+}
+
+.orangehrm-background-container {
+  padding: 1.5rem 0;
+  flex: 1;
+}
+
+.orangehrm-input-hint {
+  font-size: 0.75rem;
+  margin-top: -10px;
+  padding-bottom: 1rem;
+}
+
+.orangehrm-clear-margins {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.orangehrm-copyright-wrapper {
+  margin: 0.5rem 0;
+}
+
+.orangehrm-copyright {
+  font-size: 0.8rem;
+  text-align: center;
+}
+.orangehrm-copyright a {
+  color: #38455d;
+}
+
+.orangehrm-form-action {
+  gap: 5px;
+  flex-wrap: wrap !important;
+}
+
+.orangehrm-dialog-modal {
+  width: 90%;
+  max-width: 600px;
+}
+
+.orangehrm-dialog-popup {
+  max-width: 450px;
+}
+
+.orangehrm-input-field-bottom-space {
+  margin-bottom: 1rem;
+}
+
+.oxd-tab-bar {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/plugins/toaster/toaster.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.oxd-toast-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  z-index: 1200 !important;
+  left: 12px;
+}
+@media (min-width: 0px) {
+  .oxd-toast-container {
+    min-width: 290px;
+  }
+}
+@media (min-width: 800px) {
+  .oxd-toast-container {
+    min-width: 400px;
+  }
+}
+.oxd-toast-container--bottom {
+  bottom: 1rem;
+}
+.oxd-toast-container--top {
+  top: 1rem;
+}
+
+.oxd-toast-container--toast {
+  margin-bottom: 0.4rem;
+}
+
+@keyframes fadeInLeft {
+  0% {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes fadeOutLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+}
+.oxd-toast-list-enter-active {
+  animation: fadeInLeft 0.5s cubic-bezier(0.82, 0.085, 0.395, 0.895);
+}
+
+.oxd-toast-list-leave-active {
+  animation: fadeOutLeft 0.5s cubic-bezier(0.82, 0.085, 0.395, 0.895);
+}
+/*!***************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/plugins/loader/loader.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.orangehrm-loader {
+  z-index: 1100 !important;
+}
+.orangehrm-loader-fade-enter-active, .orangehrm-loader-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.orangehrm-loader-fade-enter-from, .orangehrm-loader-fade-leave-to {
+  opacity: 0;
+}

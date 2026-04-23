@@ -577,9 +577,10 @@
           <required-text />
           <oxd-button
             v-if="
-              profile.manualDelivery &&
-              !editable &&
-              (profile.ko == null || profile.ko === false)
+              (profile.manualDelivery &&
+                !editable &&
+                (profile.ko == null || profile.ko === false)) ||
+              (!profile.actor && profile.of)
             "
             display-type="ghost"
             :label="$t('Transmettre au partenaire')"
@@ -592,6 +593,7 @@
 
     <confirmation-dialog
       ref="confirmDialog"
+      v-if="!profile.of"
       :title="$t('Confirmation de transmission')"
       :subtitle="
         $t('Souhaitez-vous bien transmettre ce lead au partenaire associé ?')
@@ -599,6 +601,19 @@
       :cancel-label="$t('general.no_cancel')"
       :confirm-label="$t('Oui, Confirmer')"
       confirm-button-type="secondary"
+    ></confirmation-dialog>
+
+    <confirmation-dialog
+      ref="confirmDialog"
+      v-if="profile.of"
+      :title="$t('Confirmation de transmission')"
+      :subtitle="deliverConfirmationSubtitle"
+      :cancel-label="$t('general.no_cancel')"
+      :confirm-label="$t('Oui, Confirmer')"
+      confirm-button-type="secondary"
+      :show-email-input="true"
+      :email-o-f="deliveryEmail"
+      @update:email-o-f="deliveryEmail = $event"
     ></confirmation-dialog>
 
     <delete-confirmation
@@ -763,6 +778,8 @@ export default {
       isEditingTelephoneContact: false,
       isSavingTelephoneContact: false,
       canEditComment: false,
+      ofEmail: null,
+      deliveryEmail: '',
       editingTelephoneContactDate: null,
       contactLogInitialForm: null,
       telephoneContactForm: {...TelephoneContactModel},
@@ -866,6 +883,17 @@ export default {
     };
   },
   computed: {
+    deliverConfirmationSubtitle() {
+      if (!this.profile.of) {
+        return this.$t(
+          'Souhaitez-vous bien transmettre ce lead au partenaire associé ?',
+        );
+      }
+      if (this.ofEmail) {
+        return `Vous pouvez mettre à jour l'email associé à l'OF`;
+      }
+      return this.$t("Aucun email associé n'a été trouvé pour cet OF.");
+    },
     contactLogTypeOrdinal() {
       const t = this.telephoneContactForm.type;
       if (t == null) return null;
@@ -994,10 +1022,16 @@ export default {
     },
     onDeliver() {
       this.isLoading = true;
+      const ofEmail = this.deliveryEmail?.trim();
+      const deliverUrl = ofEmail
+        ? `${window.appGlobal.theme}/api/v2/admin/leads/${
+            this.lead.id
+          }/deliver?ofEmail=${encodeURIComponent(ofEmail)}`
+        : `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/deliver`;
       this.http
         .request({
           method: 'PUT',
-          url: `${window.appGlobal.theme}/api/v2/admin/leads/${this.lead.id}/deliver`,
+          url: deliverUrl,
         })
         .then(() => {
           this.$emit('update');
@@ -1172,7 +1206,30 @@ export default {
       }
       this.showTelephoneContactModal = true;
     },
-    onClickDeliver() {
+    async fetchOfEmail() {
+      if (!this.profile.of) {
+        this.ofEmail = null;
+        this.deliveryEmail = '';
+        return;
+      }
+      try {
+        const response = await this.http.request({
+          method: 'GET',
+          url: `${window.appGlobal.theme}/api/v2/admin/of/email?name=${encodeURIComponent(
+            this.profile.of,
+          )}`,
+        });
+        this.ofEmail = response?.data?.email ?? null;
+        this.deliveryEmail = this.ofEmail ?? '';
+      } catch (error) {
+        this.ofEmail = null;
+        this.deliveryEmail = '';
+      }
+    },
+    async onClickDeliver() {
+      if (this.profile.of) {
+        await this.fetchOfEmail();
+      }
       this.$refs.confirmDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
           this.onDeliver();

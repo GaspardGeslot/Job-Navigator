@@ -158,7 +158,8 @@ class LeadsController extends AbstractVueController
     {
         try {
             $id = $request->attributes->get('id');
-            $this->deliverLead($this->getAuthUser()->getUserHedwigeToken(), $id);
+            $ofEmail = $request->query->get('ofEmail');
+            $this->deliverLead($this->getAuthUser()->getUserHedwigeToken(), $id, $ofEmail);
             return new Response(
                 json_encode(['message' => 'Lead delivered successfully']),
                 Response::HTTP_OK,
@@ -458,11 +459,14 @@ class LeadsController extends AbstractVueController
     }
 
 
-    public function deliverLead(string $token, int $id): void
+    public function deliverLead(string $token, int $id, ?string $ofEmail = null): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/lead/{$id}/deliver";
+        if ($ofEmail !== null && trim($ofEmail) !== '') {
+            $url .= '?ofEmail=' . urlencode($ofEmail);
+        }
         $response = $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,

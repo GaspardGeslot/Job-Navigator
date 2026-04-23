@@ -32,6 +32,13 @@
           {{ subtitle }}
         </oxd-text>
       </div>
+      <div v-if="showEmailInput" class="orangehrm-confirmation-dialog-input-wrapper">
+        <input
+          v-model="emailOFModel"
+          type="text"
+          class="orangehrm-confirmation-dialog-input"
+        />
+      </div>
       <div class="orangehrm-modal-footer">
         <oxd-button
           :label="cancelLabel"
@@ -95,13 +102,34 @@ export default {
       required: false,
       default: 'cancel',
     },
+    showEmailInput: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    emailOF: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
+  emits: ['update:emailOF'],
   data() {
     return {
       show: false,
       reject: null,
       resolve: null,
     };
+  },
+  computed: {
+    emailOFModel: {
+      get() {
+        return this.emailOF ?? '';
+      },
+      set(value) {
+        this.$emit('update:emailOF', value);
+      },
+    },
   },
   methods: {
     showDialog() {
@@ -128,3 +156,25 @@ export default {
 </script>
 
 <style src="./dialog.scss" lang="scss" scoped></style>
+<style lang="scss" scoped>
+.orangehrm-confirmation-dialog-input-wrapper {
+  box-sizing: border-box;
+  margin: 1rem auto 0;
+  width: 100%;
+}
+
+.orangehrm-confirmation-dialog-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d6dde5;
+  border-radius: 0.65rem;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.orangehrm-confirmation-dialog-input:focus {
+  border-color: #64728c;
+}
+</style>

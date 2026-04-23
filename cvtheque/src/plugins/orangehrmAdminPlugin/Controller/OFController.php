@@ -46,6 +46,61 @@ class OFController extends AbstractVueController
         );
     }
 
+    public function getEmailByName(Request $request)
+    {
+        $name = $request->query->get('name');
+
+        if (!$name) {
+            return new Response(
+                json_encode(['email' => null]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        if (!$clientBaseUrl) {
+            return new Response(
+                json_encode(['email' => null]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        try {
+            $url = "{$clientBaseUrl}/of/email";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => "Bearer " . $this->getAuthUser()->getUserHedwigeToken(),
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'text/plain',
+                ],
+                'query' => [
+                    'name' => $name,
+                ],
+            ]);
+
+            $email = trim((string)$response->getBody());
+            if ($email === '' || strtolower($email) === 'null') {
+                $email = null;
+            }
+
+            return new Response(
+                json_encode(['email' => $email]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (\Exception $e) {
+            return new Response(
+                json_encode(['email' => null]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
     private function getOFs(string $token, array $params = []): array
     {
         $client = new Client();
