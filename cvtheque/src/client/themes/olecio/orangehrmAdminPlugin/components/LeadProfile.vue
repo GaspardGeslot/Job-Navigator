@@ -577,10 +577,9 @@
           <required-text />
           <oxd-button
             v-if="
-              (profile.manualDelivery &&
-                !editable &&
-                (profile.ko == null || profile.ko === false)) ||
-              (!profile.actor && profile.of)
+              !editable &&
+              (profile.ko == null || profile.ko === false) &&
+              (profile.manualDelivery || (!profile.actor && profile.of))
             "
             display-type="ghost"
             :label="$t('Transmettre au partenaire')"
@@ -592,8 +591,8 @@
     </div>
 
     <confirmation-dialog
+      v-if="profile.manualDelivery && profile.actor"
       ref="confirmDialog"
-      v-if="!profile.of"
       :title="$t('Confirmation de transmission')"
       :subtitle="
         $t('Souhaitez-vous bien transmettre ce lead au partenaire associé ?')
@@ -604,8 +603,8 @@
     ></confirmation-dialog>
 
     <confirmation-dialog
+      v-else
       ref="confirmDialog"
-      v-if="profile.of"
       :title="$t('Confirmation de transmission')"
       :subtitle="deliverConfirmationSubtitle"
       :cancel-label="$t('general.no_cancel')"
@@ -1215,9 +1214,9 @@ export default {
       try {
         const response = await this.http.request({
           method: 'GET',
-          url: `${window.appGlobal.theme}/api/v2/admin/of/email?name=${encodeURIComponent(
-            this.profile.of,
-          )}`,
+          url: `${
+            window.appGlobal.theme
+          }/api/v2/admin/of/email?name=${encodeURIComponent(this.profile.of)}`,
         });
         this.ofEmail = response?.data?.email ?? null;
         this.deliveryEmail = this.ofEmail ?? '';

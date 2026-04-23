@@ -115,7 +115,7 @@ class OFController extends AbstractVueController
         }
 
         try {
-            $url = "{$clientBaseUrl}/OF";
+            $url = "{$clientBaseUrl}/of";
             
             $queryParams = $params;
             
@@ -188,7 +188,7 @@ class OFController extends AbstractVueController
         try {
             $data = json_decode($request->getContent(), true);
 
-            $url = "{$clientBaseUrl}/OF";
+            $url = "{$clientBaseUrl}/of";
             
             $body = [
                     'name' => $data['name'] ?? null,
@@ -233,7 +233,7 @@ class OFController extends AbstractVueController
         }
 
         try {
-            $url = "{$clientBaseUrl}/OF/{$id}";
+            $url = "{$clientBaseUrl}/of/{$id}";
             
             $response = $client->request('DELETE', $url, [
                 'headers' => [
@@ -289,7 +289,7 @@ class OFController extends AbstractVueController
             ];
 
 
-            $url = "{$clientBaseUrl}/OF/{$id}";
+            $url = "{$clientBaseUrl}/of/{$id}";
             
             $response = $client->request('PUT', $url, [
                 'headers' => [

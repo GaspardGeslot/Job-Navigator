@@ -32,7 +32,10 @@
           {{ subtitle }}
         </oxd-text>
       </div>
-      <div v-if="showEmailInput" class="orangehrm-confirmation-dialog-input-wrapper">
+      <div
+        v-if="showEmailInput"
+        class="orangehrm-confirmation-dialog-input-wrapper"
+      >
         <input
           v-model="emailOFModel"
           type="text"
