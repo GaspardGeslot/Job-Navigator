@@ -7,6 +7,7 @@
     :actor-statuses="actorStatuses"
     :contact-log-types="contactLogTypes"
     :default-columns="defaultColumns"
+    :study-levels="studyLevels"
     @update="onLeadUpdate"
   ></lead-profile>
 </template>
@@ -42,6 +43,11 @@ export default {
       type: Object,
       required: false,
       default: null,
+    },
+    studyLevels: {
+      type: Array,
+      required: false,
+      default: () => [],
     },
   },
   setup() {

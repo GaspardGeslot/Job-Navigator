@@ -54,6 +54,14 @@ class LeadsController extends AbstractVueController
                 ];
             }, $actorOptions, array_keys($actorOptions))));
 
+            $studyLevelsOptions = $this->getHedwigeStudyLevels($token, $actor);
+            $component->addProp(new Prop('study-levels', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $studyLevelsOptions, array_keys($studyLevelsOptions))));
+
             $contactLogOptions = $this->getHedwigeContactOptions($this->getAuthUser()->getUserHedwigeToken());
             $component->addProp(new Prop('contact-log-types', Prop::TYPE_ARRAY, array_map(function($id, $label) {
                 return [
@@ -295,6 +303,7 @@ class LeadsController extends AbstractVueController
         $actor = $lead['actor'] ?? null;
 
         $actorOptions = $this->getHedwigeOptions($token, $actor);
+        $studyLevelsOptions = $this->getHedwigeStudyLevels($token, $actor);
         $reportingColumns = $this->getReportingColumns($token, $actor);
 
         return new Response(
@@ -302,6 +311,9 @@ class LeadsController extends AbstractVueController
                 'actorStatuses' => array_map(function ($label, $index) {
                     return ['id' => $index, 'label' => $label];
                 }, $actorOptions, array_keys($actorOptions)),
+                'studyLevels' => array_map(function ($label, $index) {
+                    return ['id' => $index, 'label' => $label];
+                }, $studyLevelsOptions, array_keys($studyLevelsOptions)),
                 'defaultColumns' => !empty($reportingColumns) ? ($reportingColumns['defaultColumns'] ?? null) : null,
             ]),
             Response::HTTP_OK,
@@ -383,6 +395,28 @@ class LeadsController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/client/status";
+
+        $options = [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ];
+
+        if ($actor !== null && trim($actor) !== '') {
+            $options['query'] = [
+                'actor' => $actor,
+            ];
+        }
+
+        $response = $client->request('GET', $url, $options);
+        return json_decode($response->getBody(), true);
+    }
+
+    public function getHedwigeStudyLevels(string $token, ?string $actor = null): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/client/study-level";
 
         $options = [
             'headers' => [

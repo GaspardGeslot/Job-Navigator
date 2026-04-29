@@ -86,7 +86,8 @@
               <oxd-input-field
                 v-model="profile.civility"
                 :label="$t('Civilité')"
-                :disabled="true"
+                :disabled="!editable"
+                :rules="rules.civility"
               />
             </oxd-grid-item>
             <oxd-grid-item v-if="isColumnVisible('birthDate')">
@@ -287,8 +288,10 @@
               <oxd-grid-item v-if="isColumnVisible('studyLevel')">
                 <oxd-input-field
                   v-model="profile.studyLevel"
+                  type="select"
                   :label="$t('general.study_level')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :options="sortedStudyLevels"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="isColumnVisible('courseStart')">
@@ -666,7 +669,7 @@ const LeadProfileModel = {
   email: '',
   phoneNumber: '',
   date: '',
-  civility: '',
+  civility: null,
   comment: '',
   jobs: [],
   sector: '',
@@ -684,7 +687,7 @@ const LeadProfileModel = {
   country: '',
   postalCode: '',
   need: '',
-  studyLevel: '',
+  studyLevel: null,
   courseStart: '',
   birthDate: null,
   age: '',
@@ -751,6 +754,11 @@ export default {
       type: Object,
       required: false,
       default: null,
+    },
+    studyLevels: {
+      type: Array,
+      required: false,
+      default: () => [],
     },
   },
   emits: ['update'],
@@ -834,6 +842,7 @@ export default {
       rules: {
         firstName: [shouldNotExceedCharLength(30)],
         lastName: [shouldNotExceedCharLength(30)],
+        civility: [shouldNotExceedCharLength(20)],
         postalCode: [shouldNotExceedCharLength(5), numericOnly],
         comment: [shouldNotExceedCharLength(1000)],
         address: [shouldNotExceedCharLength(200)],
@@ -925,6 +934,13 @@ export default {
         return labelA.localeCompare(labelB);
       });
     },
+    sortedStudyLevels() {
+      return (this.studyLevels || []).slice().sort((a, b) => {
+        const labelA = (a?.label || a?.name || '').toLowerCase();
+        const labelB = (b?.label || b?.name || '').toLowerCase();
+        return labelA.localeCompare(labelB);
+      });
+    },
     formattedTelephoneContacts() {
       if (
         !this.profile.telephoneContacts ||
@@ -1003,6 +1019,12 @@ export default {
       if (dataToSend.currentSituation)
         dataToSend.currentSituation = this.profile.currentSituation?.label;
 
+      if (dataToSend.civility) {
+        const trimmed = dataToSend.civility.trim();
+        dataToSend.civility = trimmed === '' ? null : trimmed;
+      }
+      if (dataToSend.studyLevel)
+        dataToSend.studyLevel = this.profile.studyLevel?.label;
       if (dataToSend.franceTravailAgency)
         dataToSend.franceTravailAgency = dataToSend.franceTravailAgency?.label;
 
@@ -1070,7 +1092,6 @@ export default {
       this.profile.country = this.lead.country;
       this.profile.postalCode = this.lead.postalCode;
       this.profile.need = this.lead.need;
-      this.profile.studyLevel = this.lead.studyLevel;
       this.profile.courseStart = this.lead.courseStart;
       this.profile.age = this.lead.age;
       this.profile.professionalExperience = this.lead.professionalExperience;
@@ -1123,6 +1144,11 @@ export default {
         this.profile.currentSituation = (
           this.simplifiedVersion ? this.actorStatuses : this.allStatuses
         ).find((option) => option.label === this.lead.currentSituation);
+
+      if (this.lead.studyLevel)
+        this.profile.studyLevel = this.sortedStudyLevels.find(
+          (option) => option.label === this.lead.studyLevel,
+        );
 
       if (this.lead.franceTravailAgency)
         this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
