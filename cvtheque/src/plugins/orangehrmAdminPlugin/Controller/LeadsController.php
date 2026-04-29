@@ -315,6 +315,7 @@ class LeadsController extends AbstractVueController
         $actor = $lead['actor'] ?? null;
 
         $actorOptions = $this->getHedwigeOptions($token, $actor);
+        $studyLevelsOptions = $this->getHedwigeStudyLevels($token, $actor);
         $reportingColumns = $this->getReportingColumns($token, $actor);
 
         return new Response(
@@ -406,6 +407,28 @@ class LeadsController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/client/status";
+
+        $options = [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ];
+
+        if ($actor !== null && trim($actor) !== '') {
+            $options['query'] = [
+                'actor' => $actor,
+            ];
+        }
+
+        $response = $client->request('GET', $url, $options);
+        return json_decode($response->getBody(), true);
+    }
+
+    public function getHedwigeStudyLevels(string $token, ?string $actor = null): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/client/study-level";
 
         $options = [
             'headers' => [
