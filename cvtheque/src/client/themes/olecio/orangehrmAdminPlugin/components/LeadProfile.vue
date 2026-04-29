@@ -938,7 +938,6 @@ export default {
       });
     },
     sortedStudyLevels() {
-      console.log('actorStudyLevels : ' + this.actorStudyLevels);
       if (
         (!this.simplifiedVersion &&
           (!this.allStudyLevels || !Array.isArray(this.allStudyLevels))) ||
