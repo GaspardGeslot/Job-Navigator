@@ -17,6 +17,7 @@ class ActorLeadsController extends AbstractVueController
 
     public const FILTER_FROM_DATE = 'from';
     public const FILTER_TO_DATE = 'to';
+    public const FILTER_MATCHING_STATUSES = 'matchingStatuses';
 
     /**
      * @inheritDoc
@@ -39,6 +40,13 @@ class ActorLeadsController extends AbstractVueController
             }, array_keys($contactLogOptions), $contactLogOptions)));
         } else {
             $component = new Component('leads-list');
+            $matchingStatusFilterOptions = $this->getHedwigeMatchingStatusFilterOptions($token, true);
+            $component->addProp(new Prop('matching-status-filters', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($matchingStatusFilterOptions), $matchingStatusFilterOptions)));
         }
 
         $reportingColumns = $this->getReportingColumns($token);
@@ -107,8 +115,14 @@ class ActorLeadsController extends AbstractVueController
     {
         $from = $request->query->get(self::FILTER_FROM_DATE);
         $to = $request->query->get(self::FILTER_TO_DATE);
+        $matchingStatuses = $request->query->get(self::FILTER_MATCHING_STATUSES);
+        if (is_string($matchingStatuses) && trim($matchingStatuses) !== '') {
+            $matchingStatuses = array_values(array_filter(explode(',', $matchingStatuses)));
+        } elseif (!is_array($matchingStatuses)) {
+            $matchingStatuses = null;
+        }
         $customFilters = $request->query->all('customFilter');
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters, $matchingStatuses);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -116,7 +130,7 @@ class ActorLeadsController extends AbstractVueController
         );
     }
 
-    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = []): array
+    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = [], ?array $matchingStatuses = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -129,6 +143,9 @@ class ActorLeadsController extends AbstractVueController
             }
             if ($to !== null && $to !== '') {
                 $queryParams['to'] = $to;
+            }
+            if ($matchingStatuses !== null && $matchingStatuses !== []) {
+                $queryParams['matchingStatuses'] = implode(',', $matchingStatuses);
             }
 
             // Construire la liste de CustomFilterDto
@@ -203,5 +220,21 @@ class ActorLeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function getHedwigeMatchingStatusFilterOptions(string $token, ?bool $onlyContactRelated = null): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/matching/status-filters";
+        if ($onlyContactRelated !== null) {
+            $url .= '?onlyContactRelated=' . ($onlyContactRelated ? 'true' : 'false');
+        }
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
+        return json_decode($response->getBody(), true);
     }
 }

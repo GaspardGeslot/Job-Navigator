@@ -17,7 +17,7 @@ class LeadsController extends AbstractVueController
 
     public const FILTER_FROM_DATE = 'from';
     public const FILTER_TO_DATE = 'to';
-    public const FILTER_MATCHING_STATUS = 'matchingStatus';
+    public const FILTER_MATCHING_STATUS = 'matchingStatuses';
     public const FILTER_ACTORS = 'actors';
     public const FILTER_DEPARTMENT_CODES = 'departmentCodes';
     public const FILTER_JOBS = 'jobs';
@@ -329,7 +329,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, ?string $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideTests, ?array $departmentCodes): array
+    public function getLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideTests, ?array $departmentCodes): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -340,8 +340,8 @@ class LeadsController extends AbstractVueController
                 $url .= 'from=' . urlencode($from) . '&';
             if ($to != null && $to !== '')
                 $url .= 'to=' . urlencode($to) . '&';
-            if ($matchingStatus != null && $matchingStatus !== '')
-                $url .= 'matchingStatus=' . urlencode($matchingStatus) . '&';
+            if ($matchingStatus != null && $matchingStatus !== [])
+                $url .= 'matchingStatuses=' . urlencode(implode(',', $matchingStatus)) . '&';
             if ($actors != null && $actors !== [])
                 $url .= 'actors=' . urlencode(implode(',', $actors)) . '&';
             if ($jobs != null && $jobs !== [])

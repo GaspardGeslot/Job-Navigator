@@ -22,6 +22,19 @@
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
+        <oxd-form-row v-if="showContactStatusFilter">
+          <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="contactStatusFilter"
+                type="multiselect"
+                :multiple="true"
+                :label="$t('Etat de contact')"
+                :options="contactStatusOptions"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
         <!-- Standard filter rows for STRING, SELECT, BOOLEAN types -->
         <oxd-form-row
           v-if="filterableColumns.some((col) => col.type !== 'DATE')"
@@ -237,6 +250,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    matchingStatusFilters: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup(props) {
     const {$t} = usei18n();
@@ -356,6 +373,8 @@ export default {
       loadedFilters?.endDateFilter ||
         formatDate(defaultEndDate, userDateFormat),
     );
+    const contactStatusOptions = computed(() => props.matchingStatusFilters);
+    const contactStatusFilter = ref([]);
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
@@ -623,6 +642,10 @@ export default {
     });
 
     const paginationLength = computed(() => Math.max(1, totalPages.value || 1));
+    const showContactStatusFilter = computed(() => {
+      const cols = reportingDefaultColumns.value || {};
+      return !!cols.callBackDate || !!cols.contactLogs;
+    });
 
     // OXD pagination n'accepte pas current < 1 ou current > length
     watch([totalRecords, currentPage], () => {
@@ -681,6 +704,10 @@ export default {
               'yyyy-MM-dd',
             )
           : undefined,
+        matchingStatuses:
+          contactStatusFilter.value.length > 0
+            ? contactStatusFilter.value.map((status) => status.label).join(',')
+            : undefined,
         ...customFiltersParams,
       };
 
@@ -731,6 +758,7 @@ export default {
           customColumnFilters[col.id] = {from: null, to: null};
         else customColumnFilters[col.id] = null;
       });
+      contactStatusFilter.value = [];
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
       saveFiltersToLocalStorage(startDateFilter.value, endDateFilter.value);
@@ -794,6 +822,9 @@ export default {
     return {
       http,
       reportingDefaultColumns,
+      contactStatusOptions,
+      showContactStatusFilter,
+      contactStatusFilter,
       contactLogTypes,
       startDateFilter,
       endDateFilter,

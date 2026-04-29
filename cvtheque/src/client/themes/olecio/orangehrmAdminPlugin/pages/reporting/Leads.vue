@@ -4,11 +4,7 @@
       <oxd-form @submit-valid="filterItems">
         <oxd-form-row>
           <oxd-grid
-            v-if="
-              actorsFilter.length === 0 ||
-              matchingStatusFilter === null ||
-              matchingStatusFilter.label !== 'A relancer'
-            "
+            v-if="actorsFilter.length === 0 || !isARelancerSelected"
             :cols="2"
             class="orangehrm-full-width-grid"
           >
@@ -90,9 +86,10 @@
             <oxd-grid-item>
               <oxd-input-field
                 v-model="matchingStatusFilter"
-                type="select"
+                type="multiselect"
                 :label="$t('Etat du matching')"
                 :options="matchingStatusFilters"
+                :multiple="true"
               />
             </oxd-grid-item>
             <oxd-grid :cols="2" class="orangehrm-full-width-grid"
@@ -329,7 +326,7 @@ export default {
             endDateFilter:
               convertDateFromStorage(filters.endDateFilter) ||
               formatDate(defaultEndDate, userDateFormat),
-            matchingStatusFilter: filters.matchingStatusFilter || null,
+            matchingStatusFilter: filters.matchingStatusFilter || [],
             actorsFilter: filters.actorsFilter || [],
             departmentCodesFilter: filters.departmentCodesFilter || [],
             jobsFilter: filters.jobsFilter || [],
@@ -351,7 +348,7 @@ export default {
       return {
         startDateFilter: formatDate(defaultStartDate, userDateFormat),
         endDateFilter: formatDate(defaultEndDate, userDateFormat),
-        matchingStatusFilter: null,
+        matchingStatusFilter: [],
         actorsFilter: [],
         departmentCodesFilter: [],
         jobsFilter: [],
@@ -704,6 +701,13 @@ export default {
       return Math.ceil(totalRecords.value / itemsPerPage);
     });
 
+    const isARelancerSelected = computed(() => {
+      const selectedMatchingStatuses = matchingStatusFilter.value || [];
+      return selectedMatchingStatuses.some(
+        (status) => status?.label === 'A relancer',
+      );
+    });
+
     const fetchData = async () => {
       isLoading.value = true;
 
@@ -720,9 +724,9 @@ export default {
               'yyyy-MM-dd',
             )
           : undefined,
-        matchingStatus: matchingStatusFilter.value
-          ? matchingStatusFilter.value.label
-          : null,
+        matchingStatuses: matchingStatusFilter.value
+          ? matchingStatusFilter.value.map((status) => status.label)
+          : [],
         actors: actorsFilter.value
           ? actorsFilter.value.map((actor) => actor.label)
           : [],
@@ -810,10 +814,12 @@ export default {
       const defaultEndDate = new Date();
       startDateFilter.value = formatDate(defaultStartDate, userDateFormat);
       endDateFilter.value = formatDate(defaultEndDate, userDateFormat);
-      matchingStatusFilter.value = null;
+      matchingStatusFilter.value = [];
       actorsFilter.value = [];
       departmentCodesFilter.value = [];
       jobsFilter.value = [];
+      courseOnly.value = false;
+      hideTests.value = false;
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
       saveFiltersToLocalStorage(
@@ -934,6 +940,7 @@ export default {
       startDateFilter,
       endDateFilter,
       matchingStatusFilter,
+      isARelancerSelected,
       actorsFilter,
       departmentCodesFilter,
       jobsFilter,
