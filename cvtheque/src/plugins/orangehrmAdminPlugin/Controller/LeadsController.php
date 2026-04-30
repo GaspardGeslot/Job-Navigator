@@ -54,6 +54,22 @@ class LeadsController extends AbstractVueController
                 ];
             }, $actorOptions, array_keys($actorOptions))));
 
+            $allStudyLevelsOptions = $this->getHedwigeStudyLevels($token);
+            $component->addProp(new Prop('all-study-levels', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $allStudyLevelsOptions, array_keys($allStudyLevelsOptions))));
+
+            $actorStudyLevelsOptions = $this->getHedwigeStudyLevels($token, $actor);
+            $component->addProp(new Prop('actor-study-levels', Prop::TYPE_ARRAY, array_map(function($label, $index) {
+                return [
+                    'id' => $index,
+                    'label' => $label
+                ];
+            }, $actorStudyLevelsOptions, array_keys($actorStudyLevelsOptions))));
+
             $contactLogOptions = $this->getHedwigeContactOptions($this->getAuthUser()->getUserHedwigeToken());
             $component->addProp(new Prop('contact-log-types', Prop::TYPE_ARRAY, array_map(function($id, $label) {
                 return [
@@ -270,6 +286,7 @@ class LeadsController extends AbstractVueController
         $token = $this->getAuthUser()->getUserHedwigeToken();
 
         $allOptions = $this->getHedwigeOptions($token);
+        $allStudyLevelsOptions = $this->getHedwigeStudyLevels($token);
         $contactLogOptions = $this->getHedwigeContactOptions($token);
 
         return new Response(
@@ -277,6 +294,9 @@ class LeadsController extends AbstractVueController
                 'allStatuses' => array_map(function ($label, $index) {
                     return ['id' => $index, 'label' => $label];
                 }, $allOptions, array_keys($allOptions)),
+                'allStudyLevels' => array_map(function ($label, $index) {
+                    return ['id' => $index, 'label' => $label];
+                }, $allStudyLevelsOptions, array_keys($allStudyLevelsOptions)),
                 'contactLogTypes' => array_map(function ($id, $label) {
                     return ['id' => $id, 'label' => $label];
                 }, array_keys($contactLogOptions), $contactLogOptions),
@@ -302,6 +322,9 @@ class LeadsController extends AbstractVueController
                 'actorStatuses' => array_map(function ($label, $index) {
                     return ['id' => $index, 'label' => $label];
                 }, $actorOptions, array_keys($actorOptions)),
+                'actorStudyLevels' => array_map(function ($label, $index) {
+                    return ['id' => $index, 'label' => $label];
+                }, $studyLevelsOptions, array_keys($studyLevelsOptions)),
                 'defaultColumns' => !empty($reportingColumns) ? ($reportingColumns['defaultColumns'] ?? null) : null,
             ]),
             Response::HTTP_OK,

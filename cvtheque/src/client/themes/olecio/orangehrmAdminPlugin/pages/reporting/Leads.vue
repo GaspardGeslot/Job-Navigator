@@ -232,6 +232,7 @@
       v-if="selectedLeadId"
       :lead-id="selectedLeadId"
       :all-statuses="allStatuses"
+      :all-study-levels="allStudyLevels"
       :contact-log-types="contactLogTypes"
       @close="selectedLeadId = null"
       @open-full-page="openLeadInFullPage"
@@ -426,6 +427,7 @@ export default {
     const selectedRow = ref(null);
     const selectedLeadId = ref(null);
     const allStatuses = ref([]);
+    const allStudyLevels = ref([]);
     const contactLogTypes = ref([]);
     const departmentCodeOptions = computed(() =>
       (props.departmentCodes || []).map((departmentCode, index) => ({
@@ -930,6 +932,7 @@ export default {
         })
         .then(({data}) => {
           allStatuses.value = data.allStatuses || [];
+          allStudyLevels.value = data.allStudyLevels || [];
           contactLogTypes.value = data.contactLogTypes || [];
         });
     });
@@ -955,6 +958,7 @@ export default {
       selectedRow,
       selectedLeadId,
       allStatuses,
+      allStudyLevels,
       contactLogTypes,
       filterItems,
       onClickReset,

@@ -30,6 +30,8 @@
         :actor-statuses="actorStatuses"
         :contact-log-types="contactLogTypes"
         :default-columns="defaultColumns"
+        :all-study-levels="allStudyLevels"
+        :actor-study-levels="actorStudyLevels"
         @update="onLeadUpdate"
       />
     </div>
@@ -57,6 +59,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    allStudyLevels: {
+      type: Array,
+      default: () => [],
+    },
     contactLogTypes: {
       type: Array,
       default: () => [],
@@ -74,6 +80,7 @@ export default {
     return {
       lead: null,
       actorStatuses: [],
+      actorStudyLevels: [],
       defaultColumns: null,
       isLoading: false,
       isVisible: false,
@@ -114,6 +121,7 @@ export default {
         .then(([{data: lead}, {data: options}]) => {
           this.lead = lead;
           this.actorStatuses = options.actorStatuses || [];
+          this.actorStudyLevels = options.actorStudyLevels || [];
           this.defaultColumns = options.defaultColumns || null;
         })
         .finally(() => {

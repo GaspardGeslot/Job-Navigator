@@ -752,6 +752,14 @@ export default {
       required: false,
       default: null,
     },
+    allStudyLevels: {
+      type: Array,
+      required: true,
+    },
+    actorStudyLevels: {
+      type: Array,
+      required: true,
+    },
   },
   emits: ['update'],
   setup() {
@@ -919,6 +927,27 @@ export default {
       // Créer une copie du tableau et trier par label (ordre alphabétique)
       return [
         ...(this.simplifiedVersion ? this.actorStatuses : this.allStatuses),
+      ].sort((a, b) => {
+        const labelA = (a.label || '').toLowerCase();
+        const labelB = (b.label || '').toLowerCase();
+        return labelA.localeCompare(labelB);
+      });
+    },
+    sortedStudyLevels() {
+      console.log('actorStudyLevels : ' + this.actorStudyLevels);
+      if (
+        (!this.simplifiedVersion &&
+          (!this.allStudyLevels || !Array.isArray(this.allStudyLevels))) ||
+        (this.simplifiedVersion &&
+          (!this.actorStudyLevels || !Array.isArray(this.actorStudyLevels)))
+      ) {
+        return [];
+      }
+      // Créer une copie du tableau et trier par label (ordre alphabétique)
+      return [
+        ...(this.simplifiedVersion
+          ? this.actorStudyLevels
+          : this.allStudyLevels),
       ].sort((a, b) => {
         const labelA = (a.label || '').toLowerCase();
         const labelB = (b.label || '').toLowerCase();
@@ -1123,6 +1152,11 @@ export default {
         this.profile.currentSituation = (
           this.simplifiedVersion ? this.actorStatuses : this.allStatuses
         ).find((option) => option.label === this.lead.currentSituation);
+
+      if (this.lead.studyLevel)
+        this.profile.studyLevel = (
+          this.simplifiedVersion ? this.actorStudyLevels : this.allStudyLevels
+        ).find((option) => option.label === this.lead.studyLevel);
 
       if (this.lead.franceTravailAgency)
         this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
