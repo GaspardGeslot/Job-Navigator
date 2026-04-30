@@ -651,8 +651,7 @@ export default {
     },
   },
   emits: ['update'],
-  setup(props) {
-    console.log('Default columns : ' + JSON.stringify(props.defaultColumns));
+  setup() {
     const http = new APIService(window.appGlobal.baseUrl, '/');
     const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
     const {jsDateFormat} = useDateFormat();

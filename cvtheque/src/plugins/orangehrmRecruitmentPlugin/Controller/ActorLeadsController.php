@@ -17,7 +17,7 @@ class ActorLeadsController extends AbstractVueController
 
     public const FILTER_FROM_DATE = 'from';
     public const FILTER_TO_DATE = 'to';
-    public const FILTER_MATCHING_STATUSES = 'matchingStatuses';
+    public const FILTER_MATCHING_STATUS = 'matchingStatus';
 
     /**
      * @inheritDoc
@@ -115,14 +115,9 @@ class ActorLeadsController extends AbstractVueController
     {
         $from = $request->query->get(self::FILTER_FROM_DATE);
         $to = $request->query->get(self::FILTER_TO_DATE);
-        $matchingStatuses = $request->query->get(self::FILTER_MATCHING_STATUSES);
-        if (is_string($matchingStatuses) && trim($matchingStatuses) !== '') {
-            $matchingStatuses = array_values(array_filter(explode(',', $matchingStatuses)));
-        } elseif (!is_array($matchingStatuses)) {
-            $matchingStatuses = null;
-        }
+        $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
         $customFilters = $request->query->all('customFilter');
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters, $matchingStatuses);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters, $matchingStatus);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -130,7 +125,7 @@ class ActorLeadsController extends AbstractVueController
         );
     }
 
-    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = [], ?array $matchingStatuses = null): array
+    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = [], ?string $matchingStatus): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -144,8 +139,8 @@ class ActorLeadsController extends AbstractVueController
             if ($to !== null && $to !== '') {
                 $queryParams['to'] = $to;
             }
-            if ($matchingStatuses !== null && $matchingStatuses !== []) {
-                $queryParams['matchingStatuses'] = implode(',', $matchingStatuses);
+            if ($matchingStatus !== null && $matchingStatus !== '') {
+                $queryParams['matchingStatus'] = $matchingStatus;
             }
 
             // Construire la liste de CustomFilterDto
