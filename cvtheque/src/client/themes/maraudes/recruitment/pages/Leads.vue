@@ -27,8 +27,7 @@
             <oxd-grid-item>
               <oxd-input-field
                 v-model="contactStatusFilter"
-                type="multiselect"
-                :multiple="true"
+                type="select"
                 :label="$t('Etat de contact')"
                 :options="contactStatusOptions"
               />
@@ -374,7 +373,7 @@ export default {
         formatDate(defaultEndDate, userDateFormat),
     );
     const contactStatusOptions = computed(() => props.matchingStatusFilters);
-    const contactStatusFilter = ref([]);
+    const contactStatusFilter = ref(null);
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
@@ -704,10 +703,9 @@ export default {
               'yyyy-MM-dd',
             )
           : undefined,
-        matchingStatuses:
-          contactStatusFilter.value.length > 0
-            ? contactStatusFilter.value.map((status) => status.label).join(',')
-            : undefined,
+        matchingStatus: contactStatusFilter.value
+          ? contactStatusFilter.value.label
+          : null,
         ...customFiltersParams,
       };
 
@@ -758,7 +756,7 @@ export default {
           customColumnFilters[col.id] = {from: null, to: null};
         else customColumnFilters[col.id] = null;
       });
-      contactStatusFilter.value = [];
+      contactStatusFilter.value = null;
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
       saveFiltersToLocalStorage(startDateFilter.value, endDateFilter.value);
