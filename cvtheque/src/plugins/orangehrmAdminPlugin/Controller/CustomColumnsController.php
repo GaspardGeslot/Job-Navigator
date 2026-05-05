@@ -36,7 +36,29 @@ class CustomColumnsController extends AbstractVueController
             ];
         }, array_keys($typeOptions), $typeOptions)));
 
+        $plan = $this->getActorPlan($this->getAuthUser()->getUserHedwigeToken());
+        $apiAccessLimit = isset($plan['apiAccessLimit']) ? (int) $plan['apiAccessLimit'] : 0;
+        $component->addProp(new Prop('api-access-limit', Prop::TYPE_NUMBER, $apiAccessLimit));
+
         $this->setComponent($component);
+    }
+
+    private function getActorPlan(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/actor/plan";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ],
+            ]);
+            return json_decode($response->getBody(), true) ?? [];
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     public function getAll()
@@ -101,8 +123,9 @@ class CustomColumnsController extends AbstractVueController
             $id = (int) $request->attributes->get('id');
             $data = json_decode($request->getContent(), true) ?? [];
             $hasFilter = array_key_exists('hasFilter', $data) ? (bool) $data['hasFilter'] : null;
+            $allowExternalSet = array_key_exists('allowExternalSet', $data) ? (bool) $data['allowExternalSet'] : null;
 
-            $this->updateCustomColumnHasFilter($id, $hasFilter, $this->getAuthUser()->getUserHedwigeToken());
+            $this->updateCustomColumn($id, $hasFilter, $allowExternalSet, $this->getAuthUser()->getUserHedwigeToken());
 
             return new Response(
                 null,
@@ -175,7 +198,7 @@ class CustomColumnsController extends AbstractVueController
         ]);
     }
 
-    private function updateCustomColumnHasFilter(int $id, ?bool $hasFilter, string $token): void
+    private function updateCustomColumn(int $id, ?bool $hasFilter, ?bool $allowExternalSet, string $token): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -183,6 +206,9 @@ class CustomColumnsController extends AbstractVueController
         $query = [];
         if ($hasFilter !== null) {
             $query['hasFilter'] = $hasFilter ? 'true' : 'false';
+        }
+        if ($allowExternalSet !== null) {
+            $query['allowExternalSet'] = $allowExternalSet ? 'true' : 'false';
         }
 
         $url = "{$clientBaseUrl}/reporting-columns/{$id}";
