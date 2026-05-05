@@ -178,6 +178,32 @@ class APIAccessController extends AbstractVueController
         }
     }
 
+    public function documentation(): Response
+    {
+        try {
+            $pdfResponse = $this->getActorApiDocumentation(
+                $this->getAuthUser()->getUserHedwigeToken()
+            );
+
+            return new Response(
+                $pdfResponse['content'],
+                Response::HTTP_OK,
+                [
+                    'Content-Type' => $pdfResponse['contentType'],
+                    'Content-Disposition' => 'inline; filename="api-documentation.pdf"',
+                ]
+            );
+        } catch (ClientException $e) {
+            return new Response(
+                json_encode([
+                    'error' => json_decode($e->getResponse()->getBody()->getContents())->message ?? null,
+                ]),
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
     private function getActorApiAccesses(string $token): array
     {
         $client = new Client();
@@ -193,7 +219,27 @@ class APIAccessController extends AbstractVueController
         return json_decode($response->getBody(), true) ?? [];
     }
 
-    private function updateActorApiAccess(int $id, bool $isActive, string $token): void
+    private function getActorApiDocumentation(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/actor/api/documentation";
+
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
+
+        $contentType = $response->getHeaderLine('Content-Type') ?: 'application/pdf';
+
+        return [
+            'content' => (string) $response->getBody(),
+            'contentType' => $contentType,
+        ];
+    }
+
+    private function updateActorApiAccess(int $id, bool $isActive, ?string $source, string $token): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');

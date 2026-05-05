@@ -3118,6 +3118,11 @@ apiv2_admin_api_access_delete:
   requirements:
     id: '\d+'
 
+apiv2_admin_api_access_documentation:
+  path: /api/v2/admin/api-access/documentation
+  controller: OrangeHRM\Admin\Controller\APIAccessController::documentation
+  methods: [ GET ]
+
 apiv2_admin_custom_columns_get:
   path: /api/v2/admin/custom-column
   controller: OrangeHRM\Admin\Controller\CustomColumnsController::getAll

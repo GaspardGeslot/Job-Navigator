@@ -317,8 +317,8 @@ const newApiTitle = ref('');
 const newApiSource = ref('');
 const createdToken = ref('');
 const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
-const apiDocumentationUrl =
-  'https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/assets/Documentation_API_Job_Navigator_Leads.pdf';
+// const apiDocumentationUrl = 'https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/assets/Documentation_API_Job_Navigator_Leads.pdf';
+const apiDocumentationUrl = '/api/v2/admin/api-access/documentation';
 
 const formatDate = (value) => {
   if (!value) return '';
@@ -512,7 +512,21 @@ const copyCreatedToken = async () => {
 };
 
 const openApiDocumentation = () => {
-  window.open(apiDocumentationUrl, '_blank', 'noopener,noreferrer');
+  // Ancienne version (lien direct CDN) :
+  // window.open(apiDocumentationUrl, '_blank', 'noopener,noreferrer');
+  http
+    .request({
+      method: 'GET',
+      url: apiDocumentationUrl,
+      responseType: 'blob',
+    })
+    .then(({data, headers}) => {
+      const contentType = headers?.['content-type'] || 'application/pdf';
+      const blob = new Blob([data], {type: contentType});
+      const objectUrl = URL.createObjectURL(blob);
+      window.open(objectUrl, '_blank', 'noopener,noreferrer');
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+    });
 };
 
 const onClickEdit = (access) => {
