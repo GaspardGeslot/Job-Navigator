@@ -85,7 +85,7 @@
                   <div class="orangehrm-switch-wrapper">
                     <div class="external-set-label-row">
                       <oxd-text class="oxd-label">
-                        {{ $t('Autoriser paramètre externe') }}
+                        {{ $t('Peut être défini par une API externe') }}
                       </oxd-text>
                       <div class="external-set-help">
                         <button
@@ -489,7 +489,7 @@ export default {
         },
         {
           name: 'externalSet',
-          title: this.$t('Autoriser paramètre externe'),
+          title: this.$t('Peut être défini par une API externe'),
           sortField: 'externalSet',
           style: {flex: 0.5},
           cellRenderer: (value) => {
