@@ -15035,6 +15035,33 @@ to {
   border: 1px solid #dce5ff;
   border-radius: 0.5rem;
 }
+.api-access-doc-card-loading[data-v-45c1ce6b] {
+  width: 100%;
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.api-access-doc-card-spinner[data-v-45c1ce6b] {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  border-top-color: #3f63c9;
+  animation: docCardSpin-45c1ce6b 0.8s linear infinite;
+}
+.api-access-doc-card-loading-text[data-v-45c1ce6b] {
+  margin: 0;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+@keyframes docCardSpin-45c1ce6b {
+to {
+    transform: rotate(360deg);
+}
+}
 .api-access-doc-card-text[data-v-45c1ce6b] {
   min-width: 0;
 }

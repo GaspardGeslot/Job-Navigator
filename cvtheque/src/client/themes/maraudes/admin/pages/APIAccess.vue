@@ -64,22 +64,33 @@
           </li>
         </ol>
         <div class="api-access-doc-card">
-          <div class="api-access-doc-card-text">
-            <oxd-text tag="p" class="api-access-doc-card-title">
-              Documentation API
-            </oxd-text>
-            <oxd-text tag="p" class="api-access-doc-card-subtitle">
-              Ouvrez le guide PDF pour la partager rapidement à votre
-              prestataire.
+          <div
+            v-if="isDocumentationLoading"
+            class="api-access-doc-card-loading"
+          >
+            <span class="api-access-doc-card-spinner" aria-hidden="true"></span>
+            <oxd-text tag="p" class="api-access-doc-card-loading-text">
+              Ouverture de la documentation en cours...
             </oxd-text>
           </div>
-          <oxd-button
-            :label="$t('Ouvrir la documentation')"
-            display-type="secondary"
-            icon-name="download"
-            type="button"
-            @click="openApiDocumentation"
-          />
+          <template v-else>
+            <div class="api-access-doc-card-text">
+              <oxd-text tag="p" class="api-access-doc-card-title">
+                Documentation API
+              </oxd-text>
+              <oxd-text tag="p" class="api-access-doc-card-subtitle">
+                Ouvrez le guide PDF pour la partager rapidement à votre
+                prestataire.
+              </oxd-text>
+            </div>
+            <oxd-button
+              :label="$t('Ouvrir la documentation')"
+              display-type="secondary"
+              icon-name="download"
+              type="button"
+              @click="openApiDocumentation"
+            />
+          </template>
         </div>
       </div>
       <div
@@ -220,18 +231,26 @@
             <h3>Modifier l'état de cette clé</h3>
           </div>
           <div class="modal-body">
-            <div class="orangehrm-switch-wrapper">
-              <oxd-text class="oxd-label">Actif</oxd-text>
-              <OxdSwitchInput v-model="editedIsActive" />
-            </div>
-            <oxd-input-field
-              v-if="showSourceFields"
-              v-model="editedSource"
-              :label="$t('Source (optionnel)')"
-              :placeholder="$t('Source (optionnel)')"
-              class="edit-source-field"
-              style="margin-top: 2rem"
-            />
+            <oxd-form-row>
+              <oxd-grid :cols="1">
+                <div class="orangehrm-switch-wrapper">
+                  <oxd-text class="oxd-label">Actif</oxd-text>
+                  <OxdSwitchInput v-model="editedIsActive" />
+                </div>
+              </oxd-grid>
+            </oxd-form-row>
+            <br />
+            <oxd-form-row>
+              <oxd-grid :cols="1">
+                <oxd-input-field
+                  v-if="showSourceFields"
+                  v-model="editedSource"
+                  :label="$t('Source (optionnel)')"
+                  :placeholder="$t('Source (optionnel)')"
+                  class="edit-source-field"
+                />
+              </oxd-grid>
+            </oxd-form-row>
           </div>
           <div class="modal-footer">
             <oxd-button
@@ -331,6 +350,7 @@ const editedSource = ref('');
 const isSavingEdit = ref(false);
 const isDeleting = ref(false);
 const isCreating = ref(false);
+const isDocumentationLoading = ref(false);
 const newApiTitle = ref('');
 const newApiSource = ref('');
 const createdToken = ref('');
@@ -538,6 +558,8 @@ const copyCreatedToken = async () => {
 };
 
 const openApiDocumentation = () => {
+  if (isDocumentationLoading.value) return;
+  isDocumentationLoading.value = true;
   // Ancienne version (lien direct CDN) :
   // window.open(apiDocumentationUrl, '_blank', 'noopener,noreferrer');
   http
@@ -552,6 +574,15 @@ const openApiDocumentation = () => {
       const objectUrl = URL.createObjectURL(blob);
       window.open(objectUrl, '_blank', 'noopener,noreferrer');
       setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+    })
+    .catch(() => {
+      error({
+        title: 'Erreur',
+        message: "Impossible d'ouvrir la documentation API.",
+      });
+    })
+    .finally(() => {
+      isDocumentationLoading.value = false;
     });
 };
 
@@ -782,6 +813,37 @@ onSort(sort);
   background: #fff;
   border: 1px solid #dce5ff;
   border-radius: 0.5rem;
+}
+
+.api-access-doc-card-loading {
+  width: 100%;
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.api-access-doc-card-spinner {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  border-top-color: #3f63c9;
+  animation: docCardSpin 0.8s linear infinite;
+}
+
+.api-access-doc-card-loading-text {
+  margin: 0;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+@keyframes docCardSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .api-access-doc-card-text {
