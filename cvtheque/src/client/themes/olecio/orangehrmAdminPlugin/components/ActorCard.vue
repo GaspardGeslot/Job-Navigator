@@ -79,6 +79,14 @@
         </oxd-grid-item>
         <oxd-grid-item>
           <oxd-input-field
+            v-model="actor.maxAmountPerWeek"
+            :label="$t('Quantité maximale par semaine')"
+            :disabled="!editable"
+            :rules="rules.maxAmountPerWeek"
+          />
+        </oxd-grid-item>
+        <oxd-grid-item>
+          <oxd-input-field
             v-model="actor.maxAmountPerMonth"
             :label="$t('Quantité maximale par mois')"
             :disabled="!editable"
@@ -223,9 +231,11 @@
         <oxd-grid :cols="3" class="orangehrm-full-width-grid">
           <oxd-grid-item>
             <oxd-input-field
-              :model-value="actor.environment"
+              v-model="environmentSelected"
+              type="select"
               :label="$t('Environnement')"
-              :disabled="true"
+              :disabled="!editable"
+              :options="environments"
             />
           </oxd-grid-item>
         </oxd-grid>
@@ -260,57 +270,6 @@
       </oxd-form-actions>
     </oxd-form>
   </div>
-
-  <!-- Modal pour choisir l'environnement -->
-  <oxd-dialog
-    v-if="showEnvironmentModal"
-    v-model:show="showEnvironmentModal"
-    :style="{width: '90%', maxWidth: '600px'}"
-    @update:show="onCancelEnvironment"
-  >
-    <div class="orangehrm-modal-header">
-      <oxd-text type="card-title">
-        {{ $t('Choisir un environnement') }}
-      </oxd-text>
-    </div>
-    <oxd-divider />
-    <oxd-text tag="p" style="margin-bottom: 1rem">
-      {{
-        $t(
-          '⚠️ Il est nécessaire de choisir un environnement avant de créer des comptes administrateurs.',
-        )
-      }}
-    </oxd-text>
-    <oxd-form :loading="isSavingEnvironment" @submit-valid="onSaveEnvironment">
-      <oxd-form-row>
-        <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-          <oxd-grid-item>
-            <oxd-input-field
-              v-model="environmentForm.theme"
-              type="select"
-              :label="$t('Environnement')"
-              :options="themes"
-              required
-            />
-          </oxd-grid-item>
-        </oxd-grid>
-      </oxd-form-row>
-      <oxd-divider />
-      <oxd-form-actions class="orangehrm-form-action">
-        <required-text />
-        <oxd-button
-          display-type="ghost"
-          :label="$t('general.cancel')"
-          @click="onCancelEnvironment"
-        />
-        <oxd-button
-          display-type="secondary"
-          :label="$t('general.save')"
-          type="submit"
-        />
-      </oxd-form-actions>
-    </oxd-form>
-  </oxd-dialog>
 
   <!-- Modal pour ajouter un administrateur -->
   <oxd-dialog
@@ -409,10 +368,6 @@ const AdministratorModel = {
   confirmPassword: '',
 };
 
-const EnvironmentModel = {
-  theme: null,
-};
-
 const ActorModel = {
   id: null,
   name: null,
@@ -422,6 +377,7 @@ const ActorModel = {
   manualDelivery: false,
   documentation: null,
   maxAmountPerDay: 0,
+  maxAmountPerWeek: 0,
   maxAmountPerMonth: 0,
   ages: [],
   countries: [],
@@ -495,7 +451,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    themes: {
+    environments: {
       type: Array,
       default: () => [],
     },
@@ -510,6 +466,7 @@ export default {
       title: [shouldNotExceedCharLength(100), required],
       price: [digitsOnlyWithTwoDecimalPoints],
       maxAmountPerDay: [numericOnly],
+      maxAmountPerWeek: [numericOnly],
       maxAmountPerMonth: [numericOnly],
       postalCode: [numericOnly],
       administratorEmail: [required, validEmailFormat],
@@ -525,12 +482,11 @@ export default {
     return {
       editable: true,
       actor: {...ActorModel},
+      savedEnvironment: null,
+      environmentSelected: null,
       showAdministratorModal: false,
-      showEnvironmentModal: false,
       isSavingAdministrator: false,
-      isSavingEnvironment: false,
       administratorForm: {...AdministratorModel},
-      environmentForm: {...EnvironmentModel},
       administratorHeaders: [
         {
           name: 'email',
@@ -583,10 +539,19 @@ export default {
         },
       ];
     },
+    hasUnsavedEnvironmentChange() {
+      const selectedLabel = this.environmentSelected?.label || null;
+      return selectedLabel !== this.savedEnvironment;
+    },
   },
   watch: {
     actorCurrent() {
       this.fetchActor();
+    },
+    environments() {
+      this.environmentSelected = this.resolveEnvironmentOption(
+        this.environmentSelected?.label ?? this.savedEnvironment,
+      );
     },
   },
   beforeMount() {
@@ -597,7 +562,9 @@ export default {
       this.$emit('cancel');
     },
     onSave() {
+      this.actor.environment = this.environmentSelected?.label || null;
       this.actor.maxAmountPerDay = parseInt(this.actor.maxAmountPerDay);
+      this.actor.maxAmountPerWeek = parseInt(this.actor.maxAmountPerWeek);
       this.actor.maxAmountPerMonth = parseInt(this.actor.maxAmountPerMonth);
       if (this.actor.ages) {
         for (const age of this.actor.ages) {
@@ -687,6 +654,19 @@ export default {
     addTimeSlot(newTimeSlot) {
       this.actor.timeSlots.push(newTimeSlot);
     },
+    resolveEnvironmentOption(environmentLabel) {
+      if (!environmentLabel) {
+        return null;
+      }
+      return (
+        this.environments.find(
+          (environment) => environment.label === environmentLabel,
+        ) || {
+          id: environmentLabel,
+          label: environmentLabel,
+        }
+      );
+    },
     fetchActor() {
       this.actor.id = this.actorCurrent.id;
       this.actor.name = this.actorCurrent.name;
@@ -697,6 +677,7 @@ export default {
       this.actor.manualDelivery = this.actorCurrent.manualDelivery;
       this.actor.documentation = this.actorCurrent.documentation;
       this.actor.maxAmountPerDay = this.actorCurrent.maxAmountPerDay;
+      this.actor.maxAmountPerWeek = this.actorCurrent.maxAmountPerWeek;
       this.actor.maxAmountPerMonth = this.actorCurrent.maxAmountPerMonth;
       this.actor.ages = this.actorCurrent.ages;
       if (this.actor.ages) this.actor.ages.sort((a, b) => a.min - b.min);
@@ -715,70 +696,43 @@ export default {
       this.actor.trainingMethods = this.actorCurrent.trainingMethods;
       this.actor.sources = this.actorCurrent.sources;
       this.actor.timeSlots = this.actorCurrent.timeSlots;
-      this.actor.environment = this.actorCurrent.environment;
+      this.savedEnvironment = this.actorCurrent.environment || null;
+      this.actor.environment = this.savedEnvironment;
+      this.environmentSelected = this.resolveEnvironmentOption(
+        this.savedEnvironment,
+      );
       this.actor.administrators = this.actorCurrent.administrators
         ? [...this.actorCurrent.administrators]
         : [];
     },
     onClickAddAdministrator() {
-      // Si l'environnement n'est pas défini, ouvrir la modal de sélection d'environnement
-      if (!this.actor.environment) {
-        this.environmentForm = {...EnvironmentModel};
-        this.showEnvironmentModal = true;
-      } else {
-        // Sinon, ouvrir directement la modal de création d'administrateur
-        this.administratorForm = {...AdministratorModel};
-        this.showAdministratorModal = true;
+      if (!this.savedEnvironment) {
+        return this.$toast.unexpectedError(
+          this.$t(
+            'Veuillez sélectionner un environnement et enregistrer l’acteur avant d’ajouter un administrateur.',
+          ),
+        );
       }
+      if (this.hasUnsavedEnvironmentChange) {
+        return this.$toast.unexpectedError(
+          this.$t(
+            'Veuillez enregistrer l’acteur pour appliquer le nouvel environnement avant d’ajouter un administrateur.',
+          ),
+        );
+      }
+      this.administratorForm = {...AdministratorModel};
+      this.showAdministratorModal = true;
     },
     onCancelAdministrator() {
       this.showAdministratorModal = false;
       this.administratorForm = {...AdministratorModel};
-    },
-    onCancelEnvironment() {
-      this.showEnvironmentModal = false;
-      this.environmentForm = {...EnvironmentModel};
-    },
-    onSaveEnvironment() {
-      this.isSavingEnvironment = true;
-      const selectedTheme = this.environmentForm.theme;
-      const environmentLabel = selectedTheme?.label || null;
-
-      // Mettre à jour l'acteur avec l'environnement choisi
-      const updatedActor = {
-        ...this.actor,
-        environment: environmentLabel,
-      };
-
-      this.http
-        .request({
-          method: 'PUT',
-          url: `/api/v2/admin/actor/${this.actor.id}`,
-          data: updatedActor,
-        })
-        .then(() => {
-          // Mettre à jour l'environnement localement
-          this.actor.environment = environmentLabel;
-          this.onCancelEnvironment();
-          this.$toast.saveSuccess();
-          // Ouvrir la modal de création d'administrateur
-          this.administratorForm = {...AdministratorModel};
-          this.showAdministratorModal = true;
-          this.$emit('update');
-        })
-        .catch((error) => {
-          return this.$toast.unexpectedError(error?.response?.data?.message);
-        })
-        .finally(() => {
-          this.isSavingEnvironment = false;
-        });
     },
     onSaveAdministrator() {
       this.isSavingAdministrator = true;
       const administratorData = {
         email: this.administratorForm.email,
         password: this.administratorForm.password,
-        theme: this.actor.environment, // Utiliser l'environnement de l'acteur
+        theme: this.savedEnvironment,
       };
 
       this.http
@@ -809,7 +763,7 @@ export default {
     deleteAdministrator(item) {
       const administratorData = {
         email: item.email,
-        theme: this.actor.environment,
+        theme: this.savedEnvironment,
       };
       this.http
         .request({

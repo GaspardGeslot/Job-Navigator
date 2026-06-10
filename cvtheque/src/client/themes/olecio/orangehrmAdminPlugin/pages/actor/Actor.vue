@@ -86,7 +86,7 @@
             :sources="sources"
             :actor-current="actor"
             :time-slots="timeSlots"
-            :themes="themes"
+            :environments="environments"
             @delete="onClickDelete(actor.id)"
             @save="(updatedActor) => onClickSave(updatedActor, actor.id)"
             @update="onUpdate()"
@@ -150,10 +150,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    themes: {
-      type: Array,
-      default: () => [],
-    },
   },
 
   setup() {
@@ -161,6 +157,11 @@ export default {
       window.appGlobal.baseUrl,
       `${window.appGlobal.theme}/api/v2/admin/actor`,
     );
+    const environmentHttp = new APIService(
+      window.appGlobal.baseUrl,
+      `${window.appGlobal.theme}/api/v2/admin/environment`,
+    );
+    const environments = ref([]);
     const {noRecordsFound} = useToast();
     const nameFilter = ref(null);
     const jobFilter = ref(null);
@@ -172,6 +173,17 @@ export default {
       actors: [],
       isLoading: false,
     });
+
+    const fetchEnvironments = () => {
+      environmentHttp
+        .getAll()
+        .then((response) => {
+          environments.value = response.data;
+        })
+        .catch(() => {
+          environments.value = [];
+        });
+    };
 
     const fetchData = () => {
       state.isLoading = true;
@@ -207,11 +219,16 @@ export default {
     return {
       http,
       state,
+      environments,
       nameFilter,
       jobFilter,
       noContentPic,
       fetchData,
+      fetchEnvironments,
     };
+  },
+  beforeMount() {
+    this.fetchEnvironments();
   },
   methods: {
     onClickAdd() {
