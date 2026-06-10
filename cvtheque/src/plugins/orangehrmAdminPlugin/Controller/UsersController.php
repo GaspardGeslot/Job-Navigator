@@ -69,8 +69,9 @@ class UsersController extends AbstractVueController
             if ($role === 'ACTOR') {
                 $matchingId = null;
             }
+            $notify = filter_var($data['notify'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-            $this->addUser($email, $password, $role, $this->getAuthUser()->getUserHedwigeToken(), $matchingId);
+            $this->addUser($email, $password, $role, $this->getAuthUser()->getUserHedwigeToken(), $matchingId, $notify);
 
             $credentials = new UserCredential($email, $password, $role === 'ACTOR' ? 'HiringManager' : 'Interviewer');
             $exists = $this->getUserService()->checkExistsUser($credentials, $theme);
@@ -100,8 +101,9 @@ class UsersController extends AbstractVueController
             if ($role === 'ACTOR') {
                 $matchingId = null;
             }
+            $notify = filter_var($data['notify'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-            $this->updateUser($id, $role, $this->getAuthUser()->getUserHedwigeToken(), $matchingId);
+            $this->updateUser($id, $role, $this->getAuthUser()->getUserHedwigeToken(), $matchingId, $notify);
 
             $credentials = new UserCredential($data['email'], null, null);
             $user = $this->getUserService()->getUserByCredentialsAndTheme($credentials, $theme);
@@ -154,7 +156,7 @@ class UsersController extends AbstractVueController
         return json_decode($response->getBody(), true) ?? [];
     }
 
-    private function addUser(string $email, string $password, string $role, string $token, ?int $matchingId = null): void
+    private function addUser(string $email, string $password, string $role, string $token, ?int $matchingId = null, bool $notify = false): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -168,7 +170,8 @@ class UsersController extends AbstractVueController
         if ($matchingId !== null) {
             $url .= 'matching=' . urlencode($matchingId) . '&';
         }
-        $url .= 'urlPrefix=' . urlencode($loginUrl);
+        $url .= 'urlPrefix=' . urlencode($loginUrl) . '&';
+        $url .= 'notify=' . ($notify ? 'true' : 'false');
 
         $response = $client->request('POST', $url, [
             'headers' => [
@@ -182,7 +185,7 @@ class UsersController extends AbstractVueController
         ]);
     }
 
-    private function updateUser(int $id, string $role, string $token, ?int $matchingId = null): void
+    private function updateUser(int $id, string $role, string $token, ?int $matchingId = null, bool $notify = false): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -190,6 +193,7 @@ class UsersController extends AbstractVueController
         if ($matchingId !== null) {
             $url .= '&matching=' . urlencode($matchingId);
         }
+        $url .= '&notify=' . ($notify ? 'true' : 'false');
         $response = $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,
