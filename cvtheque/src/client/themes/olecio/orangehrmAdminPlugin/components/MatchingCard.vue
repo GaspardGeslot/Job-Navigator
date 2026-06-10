@@ -62,6 +62,14 @@
         </oxd-grid-item>
         <oxd-grid-item>
           <oxd-input-field
+            v-model="matching.maxAmountPerWeek"
+            :label="$t('Quantité maximale par semaine')"
+            :disabled="!editable"
+            :rules="rules.maxAmountPerWeek"
+          />
+        </oxd-grid-item>
+        <oxd-grid-item>
+          <oxd-input-field
             v-model="matching.maxAmountPerMonth"
             :label="$t('Quantité maximale par mois')"
             :disabled="!editable"
@@ -675,6 +683,7 @@ const MatchingModel = {
   levels: [],
   locationPostalCodes: [],
   maxAmountPerDay: 0,
+  maxAmountPerWeek: 0,
   maxAmountPerMonth: 0,
   phones: [],
   price: 0.0,
@@ -825,6 +834,7 @@ export default {
       title: [shouldNotExceedCharLength(100)],
       price: [required, digitsOnlyWithTwoDecimalPoints],
       maxAmountPerDay: [numericOnly],
+      maxAmountPerWeek: [numericOnly],
       maxAmountPerMonth: [numericOnly],
       postalCode: [numericOnly],
       contactEmail: [validEmailFormat],
@@ -1038,6 +1048,9 @@ export default {
       updatedMatching.maxAmountPerDay = parseInt(
         updatedMatching.maxAmountPerDay,
       );
+      updatedMatching.maxAmountPerWeek = parseInt(
+        updatedMatching.maxAmountPerWeek,
+      );
       updatedMatching.maxAmountPerMonth = parseInt(
         updatedMatching.maxAmountPerMonth,
       );
@@ -1126,6 +1139,7 @@ export default {
         }
       }
       this.matching.maxAmountPerDay = this.matchingCurrent.maxAmountPerDay;
+      this.matching.maxAmountPerWeek = this.matchingCurrent.maxAmountPerWeek;
       this.matching.maxAmountPerMonth = this.matchingCurrent.maxAmountPerMonth;
       this.matching.price = this.matchingCurrent.price;
       this.matching.startDate = this.matchingCurrent.startDate;

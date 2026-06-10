@@ -2088,6 +2088,19 @@ apiv2_admin_actor_create:
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_environment:
+  path: /{theme}/api/v2/admin/environment
+  controller: OrangeHRM\Admin\Controller\ActorController::getEnvironments
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+subdomain_apiv2_admin_environment:
+  path: /api/v2/admin/environment
+  controller: OrangeHRM\Admin\Controller\ActorController::getEnvironments
+  methods: [ GET ]
+  requirements:
+
 apiv2_admin_sectors:
   path: /{theme}/api/v2/admin/sector
   controller: OrangeHRM\Admin\Controller\SectorController::getAll

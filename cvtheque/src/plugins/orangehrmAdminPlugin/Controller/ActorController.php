@@ -14,13 +14,11 @@ use OrangeHRM\Framework\Routing\UrlGenerator;
 use OrangeHRM\Framework\Services;
 use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Admin\Traits\Service\UserServiceTrait;
-use OrangeHRM\CorporateBranding\Traits\ThemeServiceTrait;
 
 class ActorController extends AbstractVueController
 {
     use AuthUserTrait;
     use UserServiceTrait;
-    use ThemeServiceTrait;
     
     public const FILTER_NAME = 'name';
     public const FILTER_JOB = 'job';
@@ -83,18 +81,21 @@ class ActorController extends AbstractVueController
             ];
         }, $options['timeSlots'], array_keys($options['timeSlots']))));
 
-        $themes = array_filter(
-            $this->getThemeService()->getThemes(),
-            function($theme) { return $theme->getClientId() === 1; }
-        );
-        $component->addProp(new Prop('themes', Prop::TYPE_ARRAY, array_map(function($theme, $index) {
-            return [
-                'id' => $index,
-                'label' => $theme->getName()
-            ];
-        }, $themes, array_keys($themes))));
-
         $this->setComponent($component);
+    }
+
+    public function getEnvironments(): Response
+    {
+        error_log('getEnvironments');
+        $environmentTitles = $this->getHedwigeEnvironmentTitles(
+            $this->getAuthUser()->getUserHedwigeToken()
+        );
+
+        return new Response(
+            json_encode($this->mapEnvironmentTitlesForProp($environmentTitles)),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
     }
     
     public function getAll(Request $request): Response
@@ -326,5 +327,35 @@ class ActorController extends AbstractVueController
                 'Authorization' => $token,
             ]
         ]);
+    }
+
+    private function getHedwigeEnvironmentTitles(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/actor/environment";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ],
+            ]);
+            $decoded = json_decode($response->getBody(), true) ?? [];
+
+            return is_array($decoded) ? $decoded : [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    private function mapEnvironmentTitlesForProp(array $titles): array
+    {
+        return array_map(function ($title) {
+            return [
+                'id' => $title,
+                'label' => $title,
+            ];
+        }, $titles);
     }
 }

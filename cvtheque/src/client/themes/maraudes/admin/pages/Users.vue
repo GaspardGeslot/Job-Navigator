@@ -66,17 +66,22 @@
                   </div>
                 </oxd-grid-item>
               </oxd-grid>
-              <oxd-grid
-                v-if="!isAdmin && matchings && matchings.length"
-                :cols="2"
-              >
-                <oxd-grid-item>
+              <oxd-grid :cols="2">
+                <oxd-grid-item v-if="!isAdmin && matchings && matchings.length">
                   <oxd-input-field
                     v-model="matchingSelected"
                     type="select"
                     :label="$t('Périmètre')"
                     :options="[{id: null, label: 'Tout'}, ...matchings]"
                   />
+                </oxd-grid-item>
+                <oxd-grid-item>
+                  <div class="orangehrm-switch-wrapper">
+                    <oxd-text class="orangehrm-text">
+                      {{ $t('Recevoir les notifications par mail ?') }}
+                    </oxd-text>
+                    <oxd-switch-input v-model="notify" />
+                  </div>
                 </oxd-grid-item>
               </oxd-grid>
               <oxd-grid v-if="!isEditing" :cols="2">
@@ -168,6 +173,7 @@ export default {
       password: '',
       passwordConfirm: '',
       isAdmin: false,
+      notify: false,
       editingItem: null,
       matchingSelected: null,
     });
@@ -196,6 +202,7 @@ export default {
               isCurrentUser: item.isCurrentUser,
               matchingId: rawMatchingId,
               matchingLabel: matching ? matching.label : '',
+              notify: Boolean(item.notify),
             };
           });
           state.total = response.data.length;
@@ -243,12 +250,14 @@ export default {
             email: state.email,
             isAdmin: state.isAdmin,
             matchingId: selectedMatchingId,
+            notify: state.notify,
           })
         : http.create({
             email: state.email,
             role: state.isAdmin ? 'ACTOR' : 'AGENT',
             password: state.password,
             matchingId: selectedMatchingId,
+            notify: state.notify,
           });
 
       requestPromise
@@ -280,6 +289,7 @@ export default {
       state.password = '';
       state.passwordConfirm = '';
       state.isAdmin = false;
+      state.notify = false;
       state.matchingSelected = null;
       state.isModalOpen = false;
       state.isEditing = false;
@@ -412,6 +422,7 @@ export default {
       this.isEditing = false;
       this.editingItem = null;
       this.matchingSelected = null;
+      this.notify = false;
     },
     onClickEdit(item) {
       this.isModalOpen = true;
@@ -419,6 +430,7 @@ export default {
       this.editingItem = item;
       this.email = item.email;
       this.isAdmin = item.isAdmin;
+      this.notify = item.notify;
       this.matchingSelected =
         this.matchings &&
         this.matchings.find(
