@@ -805,7 +805,33 @@ export default {
       saveFiltersToLocalStorage(startDateFilter.value, endDateFilter.value);
     });
 
+    const updateUrlLeadId = (leadId) => {
+      const url = new URL(window.location.href);
+      if (leadId != null) {
+        url.searchParams.set('id', String(leadId));
+      } else {
+        url.searchParams.delete('id');
+      }
+      window.history.replaceState({}, '', url.toString());
+    };
+
+    const openLeadFromUrl = () => {
+      const leadIdParam = new URLSearchParams(window.location.search).get('id');
+      if (!leadIdParam) {
+        return;
+      }
+      const parsedId = parseInt(leadIdParam, 10);
+      if (!isNaN(parsedId) && parsedId > 0) {
+        selectedLeadId.value = parsedId;
+      }
+    };
+
+    watch(selectedLeadId, (leadId) => {
+      updateUrlLeadId(leadId);
+    });
+
     onMounted(() => {
+      openLeadFromUrl();
       fetchData();
       http
         .request({

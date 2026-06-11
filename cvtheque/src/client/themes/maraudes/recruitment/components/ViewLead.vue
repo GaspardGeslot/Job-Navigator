@@ -115,18 +115,27 @@ export default {
     onLeadUpdate() {
       this.isLoading = true;
       this.actorDefaultColumns = null;
-      Promise.all([
-        this.http.get(this.leadId),
-        this.http.request({
-          method: 'GET',
-          url: `/api/v2/admin/leads/${this.leadId}/options`,
-        }),
-      ])
-        .then(([{data: lead}, {data: options}]) => {
-          this.lead = lead;
-          if (options.defaultColumns != null) {
-            this.actorDefaultColumns = options.defaultColumns;
+      this.http
+        .get(this.leadId)
+        .then(({data: lead}) => {
+          if (!lead?.id) {
+            this.handleClose();
+            return;
           }
+          this.lead = lead;
+          return this.http
+            .request({
+              method: 'GET',
+              url: `/api/v2/admin/leads/${this.leadId}/options`,
+            })
+            .then(({data: options}) => {
+              if (options.defaultColumns != null) {
+                this.actorDefaultColumns = options.defaultColumns;
+              }
+            });
+        })
+        .catch(() => {
+          this.handleClose();
         })
         .finally(() => {
           this.isLoading = false;
