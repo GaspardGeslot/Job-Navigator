@@ -111,18 +111,27 @@ export default {
     },
     onLeadUpdate() {
       this.isLoading = true;
-      Promise.all([
-        this.http.get(this.leadId),
-        this.http.request({
-          method: 'GET',
-          url: `/${window.appGlobal.theme}/api/v2/admin/leads/${this.leadId}/options`,
-        }),
-      ])
-        .then(([{data: lead}, {data: options}]) => {
+      this.http
+        .get(this.leadId)
+        .then(({data: lead}) => {
+          if (!lead?.id) {
+            this.handleClose();
+            return;
+          }
           this.lead = lead;
-          this.actorStatuses = options.actorStatuses || [];
-          this.actorStudyLevels = options.actorStudyLevels || [];
-          this.defaultColumns = options.defaultColumns || null;
+          return this.http
+            .request({
+              method: 'GET',
+              url: `/${window.appGlobal.theme}/api/v2/admin/leads/${this.leadId}/options`,
+            })
+            .then(({data: options}) => {
+              this.actorStatuses = options.actorStatuses || [];
+              this.actorStudyLevels = options.actorStudyLevels || [];
+              this.defaultColumns = options.defaultColumns || null;
+            });
+        })
+        .catch(() => {
+          this.handleClose();
         })
         .finally(() => {
           this.isLoading = false;
