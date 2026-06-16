@@ -57,14 +57,6 @@
                     :disabled="isEditing"
                   />
                 </oxd-grid-item>
-                <oxd-grid-item>
-                  <div class="orangehrm-switch-wrapper">
-                    <oxd-text class="orangehrm-text">
-                      {{ $t('Est un administrateur ?') }}
-                    </oxd-text>
-                    <oxd-switch-input v-model="isAdmin" />
-                  </div>
-                </oxd-grid-item>
               </oxd-grid>
               <oxd-grid :cols="2">
                 <oxd-grid-item v-if="!isAdmin && matchings && matchings.length">
@@ -75,10 +67,23 @@
                     :options="[{id: null, label: 'Tout'}, ...matchings]"
                   />
                 </oxd-grid-item>
+              </oxd-grid>
+              <oxd-grid :cols="2">
                 <oxd-grid-item>
                   <div class="orangehrm-switch-wrapper">
                     <oxd-text class="orangehrm-text">
-                      {{ $t('Recevoir les notifications par mail ?') }}
+                      {{ $t('Est un administrateur ?') }}
+                    </oxd-text>
+                    <oxd-switch-input
+                      v-model="isAdmin"
+                      :disabled="isEditing && isCurrentUser"
+                    />
+                  </div>
+                </oxd-grid-item>
+                <oxd-grid-item>
+                  <div class="orangehrm-switch-wrapper">
+                    <oxd-text class="orangehrm-text">
+                      {{ $t('Notification de nouveau contact par mail ?') }}
                     </oxd-text>
                     <oxd-switch-input v-model="notify" />
                   </div>
@@ -174,6 +179,7 @@ export default {
       passwordConfirm: '',
       isAdmin: false,
       notify: false,
+      isCurrentUser: false,
       editingItem: null,
       matchingSelected: null,
     });
@@ -203,6 +209,7 @@ export default {
               matchingId: rawMatchingId,
               matchingLabel: matching ? matching.label : '',
               notify: Boolean(item.notify),
+              notifyLabel: item.notify ? 'Oui' : 'Non',
             };
           });
           state.total = response.data.length;
@@ -290,6 +297,7 @@ export default {
       state.passwordConfirm = '';
       state.isAdmin = false;
       state.notify = false;
+      state.isCurrentUser = false;
       state.matchingSelected = null;
       state.isModalOpen = false;
       state.isEditing = false;
@@ -370,6 +378,11 @@ export default {
           style: {flex: 0.75},
         },
         {
+          name: 'notifyLabel',
+          title: this.$t('Notification'),
+          style: {flex: 0.25},
+        },
+        {
           name: 'actions',
           slot: 'action',
           title: this.$t('general.actions'),
@@ -390,14 +403,15 @@ export default {
       const cellConfig = {};
 
       // Ne pas afficher les actions si c'est l'utilisateur actuel
-      if (!row.isCurrentUser) {
-        cellConfig.edit = {
-          onClick: this.onClickEdit,
-          props: {
-            name: 'pencil',
-          },
-        };
 
+      cellConfig.edit = {
+        onClick: this.onClickEdit,
+        props: {
+          name: 'pencil',
+        },
+      };
+
+      if (!row.isCurrentUser) {
         cellConfig.delete = {
           onClick: this.onClickDelete,
           props: {
@@ -431,6 +445,7 @@ export default {
       this.email = item.email;
       this.isAdmin = item.isAdmin;
       this.notify = item.notify;
+      this.isCurrentUser = item.isCurrentUser;
       this.matchingSelected =
         this.matchings &&
         this.matchings.find(
