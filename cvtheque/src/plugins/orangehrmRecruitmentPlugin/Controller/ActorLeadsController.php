@@ -54,6 +54,9 @@ class ActorLeadsController extends AbstractVueController
         if (!empty($reportingColumns)) {
             $component->addProp(new Prop('default-columns', Prop::TYPE_OBJECT, $reportingColumns["defaultColumns"]));
             $component->addProp(new Prop('custom-columns', Prop::TYPE_ARRAY, $reportingColumns["customColumns"]));
+            if (isset($reportingColumns["showOtherMatchings"])) {
+                $component->addProp(new Prop('other-matchings', Prop::TYPE_BOOLEAN, (bool) $reportingColumns["showOtherMatchings"]));
+            }
         }
 
         $this->setComponent($component);

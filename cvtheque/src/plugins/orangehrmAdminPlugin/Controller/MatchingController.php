@@ -415,4 +415,72 @@ class MatchingController extends AbstractVueController
             throw new \Exception('Error deleting matching');
         }
     }
+
+    public function getMatchingInfos(Request $request): Response
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/matching/info", [
+                'headers' => ['Authorization' => $this->getAuthUser()->getUserHedwigeToken()],
+            ]);
+            return new Response($response->getBody(), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        } catch (ClientException $e) {
+            return new Response($e->getResponse()->getBody(), $e->getResponse()->getStatusCode(), ['Content-Type' => 'application/json']);
+        }
+    }
+
+    public function createMatchingInfo(Request $request): Response
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        try {
+            $response = $client->request('POST', "{$clientBaseUrl}/matching/info", [
+                'headers' => [
+                    'Authorization' => $this->getAuthUser()->getUserHedwigeToken(),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => $request->getContent(),
+            ]);
+            return new Response($response->getBody(), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        } catch (ClientException $e) {
+            return new Response($e->getResponse()->getBody(), $e->getResponse()->getStatusCode(), ['Content-Type' => 'application/json']);
+        }
+    }
+
+    public function updateMatchingInfo(Request $request): Response
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $id = $request->attributes->get('id');
+        $data = json_decode($request->getContent(), true) ?? [];
+        $data['id'] = (int) $id;
+        try {
+            $response = $client->request('PUT', "{$clientBaseUrl}/matching/info", [
+                'headers' => [
+                    'Authorization' => $this->getAuthUser()->getUserHedwigeToken(),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($data),
+            ]);
+            return new Response($response->getBody(), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        } catch (ClientException $e) {
+            return new Response($e->getResponse()->getBody(), $e->getResponse()->getStatusCode(), ['Content-Type' => 'application/json']);
+        }
+    }
+
+    public function deleteMatchingInfo(Request $request): Response
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $id = $request->attributes->get('id');
+        try {
+            $response = $client->request('DELETE', "{$clientBaseUrl}/matching/info/{$id}", [
+                'headers' => ['Authorization' => $this->getAuthUser()->getUserHedwigeToken()],
+            ]);
+            return new Response(null, Response::HTTP_OK);
+        } catch (ClientException $e) {
+            return new Response($e->getResponse()->getBody(), $e->getResponse()->getStatusCode(), ['Content-Type' => 'application/json']);
+        }
+    }
 }

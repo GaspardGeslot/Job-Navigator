@@ -1,5 +1,6 @@
 <template>
   <div class="orangehrm-background-container">
+    <!-- Section Utilisateurs -->
     <div class="orangehrm-paper-container">
       <div class="orangehrm-left-header-container">
         <oxd-button
@@ -29,9 +30,37 @@
         />
       </div>
     </div>
+
+    <!-- Section Périmètres -->
+    <div class="orangehrm-paper-container perimeter-section">
+      <div class="orangehrm-left-header-container">
+        <oxd-text tag="h6" class="orangehrm-main-title">Périmètres</oxd-text>
+        <oxd-button
+          :label="$t('general.add')"
+          icon-name="plus"
+          display-type="secondary"
+          @click="onClickAddMatching"
+        />
+      </div>
+      <oxd-text tag="p" class="perimeter-description">
+        Un périmètre permet de définir un sous-ensemble d'utilisateurs qui ne
+        voient que les contacts du périmètre qui leur est associé.
+      </oxd-text>
+      <div class="orangehrm-container">
+        <oxd-card-table
+          :headers="matchingHeaders"
+          :items="matchingItems"
+          :selectable="false"
+          :clickable="false"
+          :loading="isMatchingLoading"
+          row-decorator="oxd-table-decorator-card"
+        />
+      </div>
+    </div>
+
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
 
-    <!-- Modal pour ajouter/modifier un utilisateur -->
+    <!-- Modal utilisateur -->
     <div v-if="isModalOpen" class="modal-overlay" @click="onClickCancel">
       <div class="modal-container" @click.stop>
         <oxd-form :loading="isSaving" @submit-valid="onClickValidate">
@@ -122,6 +151,67 @@
         </oxd-form>
       </div>
     </div>
+
+    <!-- Modal périmètre -->
+    <div
+      v-if="isMatchingModalOpen"
+      class="modal-overlay"
+      @click="onClickCancelMatching"
+    >
+      <div class="modal-container" @click.stop>
+        <oxd-form
+          :loading="isMatchingSaving"
+          @submit-valid="onClickValidateMatching"
+        >
+          <div class="modal-header">
+            <h3>
+              {{
+                isMatchingEditing
+                  ? $t('Modifier le périmètre')
+                  : $t('Ajouter un périmètre')
+              }}
+            </h3>
+            <span class="close-icon" @click="onClickCancelMatching"
+              >&times;</span
+            >
+          </div>
+          <div class="modal-body">
+            <oxd-form-row>
+              <oxd-grid :cols="1">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="matchingTitle"
+                    :label="$t('Titre')"
+                    required
+                    :rules="rules.matchingTitle"
+                  />
+                </oxd-grid-item>
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="matchingDescription"
+                    :label="$t('Description')"
+                    :rules="rules.matchingDescription"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+          </div>
+          <div class="modal-footer">
+            <oxd-button
+              :label="$t('Annuler')"
+              display-type="ghost"
+              @click="onClickCancelMatching"
+            />
+            <oxd-button
+              :label="$t(isMatchingEditing ? 'Modifier' : 'Enregistrer')"
+              display-type="secondary"
+              :loading="isMatchingSaving"
+              type="submit"
+            />
+          </div>
+        </oxd-form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -162,6 +252,10 @@ export default {
       sortDefinition: defaultSortOrder,
     });
     const http = new APIService(window.appGlobal.baseUrl, '/api/v2/admin/user');
+    const httpMatchings = new APIService(
+      window.appGlobal.baseUrl,
+      '/api/v2/admin/matching/info',
+    );
     const state = reactive({
       items: [],
       total: 0,
@@ -176,6 +270,15 @@ export default {
       notify: false,
       editingItem: null,
       matchingSelected: null,
+      // Périmètres
+      matchingItems: [],
+      isMatchingLoading: false,
+      isMatchingModalOpen: false,
+      isMatchingEditing: false,
+      isMatchingSaving: false,
+      matchingTitle: '',
+      matchingDescription: '',
+      editingMatchingItem: null,
     });
 
     const fetchUserData = () => {
@@ -314,11 +417,83 @@ export default {
 
     onSort(sort);
 
+    const fetchMatchingData = () => {
+      state.isMatchingLoading = true;
+      httpMatchings
+        .getAll()
+        .then((response) => {
+          state.matchingItems = (response.data || []).map((item) => ({
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            onlyScope: item.onlyScope ?? item.only_scope ?? false,
+          }));
+        })
+        .catch(() => {
+          error({
+            title: 'Erreur',
+            message: 'Impossible de récupérer les périmètres',
+          });
+        })
+        .finally(() => {
+          state.isMatchingLoading = false;
+        });
+    };
+
+    const resetMatchingForm = () => {
+      state.matchingTitle = '';
+      state.matchingDescription = '';
+      state.isMatchingModalOpen = false;
+      state.isMatchingEditing = false;
+      state.isMatchingSaving = false;
+      state.editingMatchingItem = null;
+    };
+
+    const onClickValidateMatching = () => {
+      state.isMatchingSaving = true;
+      const requestPromise = state.isMatchingEditing
+        ? httpMatchings.update(state.editingMatchingItem.id, {
+            title: state.matchingTitle,
+            description: state.matchingDescription,
+          })
+        : httpMatchings.create({
+            title: state.matchingTitle,
+            description: state.matchingDescription,
+          });
+
+      requestPromise
+        .then(() => {
+          success({
+            title: 'Succès',
+            message: state.isMatchingEditing
+              ? 'Périmètre modifié avec succès'
+              : 'Périmètre ajouté avec succès',
+          });
+          resetMatchingForm();
+          fetchMatchingData();
+        })
+        .catch(() => {
+          error({
+            title: 'Erreur',
+            message: state.isMatchingEditing
+              ? 'Impossible de modifier le périmètre'
+              : "Impossible d'ajouter le périmètre",
+          });
+        })
+        .finally(() => {
+          state.isMatchingSaving = false;
+        });
+    };
+
     return {
       http,
+      httpMatchings,
       onClickValidate,
       fetchUserData,
+      fetchMatchingData,
       resetForm,
+      resetMatchingForm,
+      onClickValidateMatching,
       ...toRefs(state),
       sortDefinition,
     };
@@ -330,6 +505,8 @@ export default {
         email: [required, validEmailFormat],
         password: [required, shouldNotExceedCharLength(100)],
         passwordConfirm: [required],
+        matchingTitle: [required, shouldNotExceedCharLength(255)],
+        matchingDescription: [shouldNotExceedCharLength(500)],
       },
       checkedItems: [],
     };
@@ -381,11 +558,85 @@ export default {
 
       return baseHeaders;
     },
+    matchingHeaders() {
+      return [
+        {
+          name: 'title',
+          title: this.$t('Titre'),
+          style: {flex: 1},
+        },
+        {
+          name: 'description',
+          title: this.$t('Description'),
+          style: {flex: 2},
+        },
+        {
+          name: 'actions',
+          slot: 'action',
+          title: this.$t('general.actions'),
+          style: {flex: 0.5},
+          cellType: 'oxd-table-cell-actions',
+          cellRenderer: this.matchingCellRenderer,
+        },
+      ];
+    },
   },
   beforeMount() {
     this.fetchUserData();
+    this.fetchMatchingData();
   },
   methods: {
+    matchingCellRenderer(...[, , , row]) {
+      const cellConfig = {};
+
+      if (row.onlyScope) {
+        cellConfig.edit = {
+          onClick: this.onClickEditMatching,
+          props: {name: 'pencil'},
+        };
+        cellConfig.delete = {
+          onClick: this.onClickDeleteMatching,
+          props: {name: 'trash'},
+        };
+      }
+
+      return {props: {header: {cellConfig}}};
+    },
+    onClickAddMatching() {
+      this.isMatchingModalOpen = true;
+      this.isMatchingEditing = false;
+      this.editingMatchingItem = null;
+      this.matchingTitle = '';
+      this.matchingDescription = '';
+    },
+    onClickEditMatching(item) {
+      this.isMatchingModalOpen = true;
+      this.isMatchingEditing = true;
+      this.editingMatchingItem = item;
+      this.matchingTitle = item.title;
+      this.matchingDescription = item.description || '';
+    },
+    onClickDeleteMatching(item) {
+      this.$refs.deleteDialog.showDialog().then((confirmation) => {
+        if (confirmation === 'ok') {
+          this.isMatchingLoading = true;
+          this.httpMatchings
+            .delete(item.id)
+            .then(() => {
+              return this.$toast.deleteSuccess();
+            })
+            .then(() => {
+              this.fetchMatchingData();
+            })
+            .catch(() => {
+              this.isMatchingLoading = false;
+            });
+        }
+      });
+    },
+    onClickCancelMatching() {
+      this.resetMatchingForm();
+    },
     cellRenderer(...[, , , row]) {
       const cellConfig = {};
 
@@ -557,6 +808,16 @@ export default {
   border-top: 1px solid var(--oxd-border-light-color);
   background-color: #f8f9fa;
   border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.perimeter-section {
+  margin-top: 1.5rem;
+}
+
+.perimeter-description {
+  margin: 0 0 1rem 1rem;
+  color: #6c757d;
+  font-size: 0.9rem;
 }
 
 // Amélioration des champs de formulaire
