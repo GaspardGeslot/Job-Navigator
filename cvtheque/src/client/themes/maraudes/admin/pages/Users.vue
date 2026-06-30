@@ -797,28 +797,6 @@ export default {
         },
       ];
     },
-    matchingHeaders() {
-      return [
-        {
-          name: 'title',
-          title: this.$t('Titre'),
-          style: {flex: 1},
-        },
-        {
-          name: 'description',
-          title: this.$t('Description'),
-          style: {flex: 2},
-        },
-        {
-          name: 'actions',
-          slot: 'action',
-          title: this.$t('general.actions'),
-          style: {flex: 0.5},
-          cellType: 'oxd-table-cell-actions',
-          cellRenderer: this.matchingCellRenderer,
-        },
-      ];
-    },
   },
   beforeMount() {
     this.fetchUserData();
