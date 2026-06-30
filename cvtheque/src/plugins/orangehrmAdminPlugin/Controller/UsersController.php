@@ -124,6 +124,38 @@ class UsersController extends AbstractVueController
         }
     }
 
+    public function updateAgentMatching(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->getInt('id');
+            $data = json_decode($request->getContent(), true) ?? [];
+            $matchingId = array_key_exists('matchingId', $data) ? $data['matchingId'] : null;
+
+            if ($matchingId !== null && $matchingId !== '') {
+                $matchingId = (int) $matchingId;
+            } else {
+                $matchingId = null;
+            }
+
+            $this->updateAgentMatchingHedwige(
+                $this->getAuthUser()->getUserHedwigeToken(),
+                $id,
+                $matchingId
+            );
+
+            return new Response(
+                json_encode(['message' => 'Agent matching updated successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+        }
+    }
+
     public function delete(Request $request)
     {
         try {
@@ -195,6 +227,22 @@ class UsersController extends AbstractVueController
         }
         $url .= '&notify=' . ($notify ? 'true' : 'false');
         $response = $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
+    }
+
+    private function updateAgentMatchingHedwige(string $token, int $userId, ?int $matchingId): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/user/{$userId}/matching";
+        if ($matchingId !== null) {
+            $url .= '?matching=' . urlencode($matchingId);
+        }
+
+        $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,
             ],
