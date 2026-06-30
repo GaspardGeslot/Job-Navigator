@@ -10,7 +10,10 @@
           @click="onClickAdd"
         />
       </div>
-      <div class="orangehrm-container">
+      <div
+        class="orangehrm-container users-table-container"
+        :class="{'--cell-editing': editingMatchingCell}"
+      >
         <oxd-card-table
           v-model:selected="checkedItems"
           v-model:order="sortDefinition"
@@ -216,7 +219,16 @@
 </template>
 
 <script>
-import {reactive, toRefs, watch} from 'vue';
+import {
+  reactive,
+  toRefs,
+  watch,
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  getCurrentInstance,
+} from 'vue';
 import DeleteConfirmationDialog from '@/core/components/dialogs/DeleteConfirmationDialog';
 import {APIService} from '@/core/util/services/api.service';
 import useSort from '@/core/util/composable/useSort';
@@ -226,7 +238,90 @@ import {
   shouldNotExceedCharLength,
   validEmailFormat,
 } from '@/core/util/validation/rules';
-import {OxdSwitchInput} from '@ohrm/oxd';
+import {OxdSwitchInput, useInjectTableProps} from '@ohrm/oxd';
+
+const EMPTY_MATCHING_OPTION = {id: null, label: 'Tout'};
+
+const MatchingLabelCell = {
+  name: 'MatchingLabelCell',
+  props: {
+    header: {
+      type: Object,
+      required: true,
+    },
+    item: {
+      type: Object,
+      required: true,
+    },
+    displayLabel: {
+      type: String,
+      default: '',
+    },
+    isEditing: {
+      type: Boolean,
+      default: false,
+    },
+    options: {
+      type: Array,
+      default: () => [],
+    },
+    isCurrentOption: {
+      type: Function,
+      required: true,
+    },
+    onCellClick: {
+      type: Function,
+      default: () => undefined,
+    },
+    onSelectOption: {
+      type: Function,
+      default: () => undefined,
+    },
+  },
+  setup() {
+    const {screenState} = useInjectTableProps();
+
+    return {
+      screenState,
+    };
+  },
+  computed: {
+    showHeader() {
+      return !(
+        this.screenState.screenType === 'lg' ||
+        this.screenState.screenType === 'xl'
+      );
+    },
+  },
+  template: `
+    <div
+      class="oxd-table-card-cell matching-label-cell"
+      :class="{'matching-label-cell--editing': isEditing}"
+      @click.stop="onCellClick"
+    >
+      <div v-show="showHeader" class="header">{{ header.title }}</div>
+      <div class="data">
+        <div v-if="isEditing" class="inline-cell-editor" @click.stop>
+          <ul class="inline-cell-editor__options">
+            <li
+              v-for="option in options"
+              :key="'matching-' + (option.id ?? 'all')"
+              :class="{
+                'inline-cell-editor__option': true,
+                'inline-cell-editor__option--active': isCurrentOption(option),
+                'inline-cell-editor__option--empty': option.id === null,
+              }"
+              @click.stop="onSelectOption(option)"
+            >
+              {{ option.id === null ? '—' : option.label }}
+            </li>
+          </ul>
+        </div>
+        <template v-else>{{ displayLabel }}</template>
+      </div>
+    </div>
+  `,
+};
 
 const defaultSortOrder = {
   title: 'ASC',
@@ -247,7 +342,9 @@ export default {
   },
 
   setup(props) {
-    const {noRecordsFound, error, success} = useToast();
+    const instance = getCurrentInstance();
+    const {noRecordsFound, error, success, updateSuccess} = useToast();
+    const editingMatchingCell = ref(null);
     const {sortDefinition, sortOrder, onSort} = useSort({
       sortDefinition: defaultSortOrder,
     });
@@ -303,8 +400,16 @@ export default {
               role: item.role === 'ACTOR' ? 'Administrateur' : 'Agent',
               isAdmin: item.role === 'ACTOR',
               isCurrentUser: item.isCurrentUser,
-              matchingId: rawMatchingId,
-              matchingLabel: matching ? matching.label : '',
+              matchingId: rawMatchingId ?? null,
+              matchingLabel:
+                item.role !== 'ACTOR' &&
+                (rawMatchingId === null ||
+                  rawMatchingId === undefined ||
+                  rawMatchingId === '')
+                  ? EMPTY_MATCHING_OPTION.label
+                  : matching
+                  ? matching.label
+                  : '',
               notify: Boolean(item.notify),
             };
           });
@@ -417,6 +522,111 @@ export default {
 
     onSort(sort);
 
+    const matchingSelectOptions = computed(() => [
+      EMPTY_MATCHING_OPTION,
+      ...(props.matchings || []),
+    ]);
+
+    const isAgentUser = (item) => item?.role === 'Agent';
+
+    const getMatchingDisplayLabel = (item) => {
+      if (!isAgentUser(item)) {
+        return '';
+      }
+      if (
+        item.matchingId === null ||
+        item.matchingId === undefined ||
+        item.matchingId === ''
+      ) {
+        return EMPTY_MATCHING_OPTION.label;
+      }
+      return item.matchingLabel || '';
+    };
+
+    const isEditingMatchingCell = (rowIndex) =>
+      editingMatchingCell.value?.row === rowIndex;
+
+    const isCurrentMatchingOption = (item, option) => {
+      const currentId = item.matchingId ?? null;
+      if (option.id === null) {
+        return (
+          currentId === null || currentId === undefined || currentId === ''
+        );
+      }
+      return String(currentId) === String(option.id);
+    };
+
+    const applyMatchingValue = (item, matchingId, matchingLabel) => {
+      item.matchingId = matchingId;
+      item.matchingLabel = matchingLabel;
+    };
+
+    const closeMatchingEditor = () => {
+      editingMatchingCell.value = null;
+    };
+
+    const persistAgentMatchingEdit = (item, matchingId, matchingLabel) => {
+      const previousMatchingId = item.matchingId ?? null;
+      const previousMatchingLabel = item.matchingLabel ?? '';
+      applyMatchingValue(item, matchingId, matchingLabel);
+
+      return http
+        .request({
+          method: 'PUT',
+          url: `/api/v2/admin/user/${item.id}/matching`,
+          data: {matchingId},
+        })
+        .then(() => {
+          updateSuccess();
+        })
+        .catch((requestError) => {
+          applyMatchingValue(item, previousMatchingId, previousMatchingLabel);
+          instance?.proxy?.$toast?.unexpectedError(
+            requestError?.response?.data?.message,
+          );
+        });
+    };
+
+    const onMatchingCellClick = (rowIndex, item) => {
+      if (item.role !== 'Agent') {
+        closeMatchingEditor();
+        return;
+      }
+      editingMatchingCell.value = {row: rowIndex, userId: item.id};
+    };
+
+    const onSelectMatchingOption = (item, option) => {
+      if (item.role !== 'Agent') {
+        return;
+      }
+      if (isCurrentMatchingOption(item, option)) {
+        return;
+      }
+      const matchingId = option.id === null ? null : option.id;
+      const matchingLabel =
+        option.id === null ? EMPTY_MATCHING_OPTION.label : option.label;
+      persistAgentMatchingEdit(item, matchingId, matchingLabel);
+      closeMatchingEditor();
+    };
+
+    const onDocumentClick = (event) => {
+      if (!editingMatchingCell.value) {
+        return;
+      }
+      if (event.target.closest('.inline-cell-editor')) {
+        return;
+      }
+      closeMatchingEditor();
+    };
+
+    onMounted(() => {
+      document.addEventListener('click', onDocumentClick);
+    });
+
+    onBeforeUnmount(() => {
+      document.removeEventListener('click', onDocumentClick);
+    });
+
     const fetchMatchingData = () => {
       state.isMatchingLoading = true;
       httpMatchings
@@ -494,6 +704,14 @@ export default {
       resetForm,
       resetMatchingForm,
       onClickValidateMatching,
+      editingMatchingCell,
+      matchingSelectOptions,
+      isAgentUser,
+      getMatchingDisplayLabel,
+      isEditingMatchingCell,
+      isCurrentMatchingOption,
+      onMatchingCellClick,
+      onSelectMatchingOption,
       ...toRefs(state),
       sortDefinition,
     };
@@ -526,38 +744,6 @@ export default {
         },
       ];
     },
-    headers() {
-      const baseHeaders = [
-        {
-          name: 'email',
-          title: this.$t('Email'),
-          sortField: 'email',
-          style: {flex: 1},
-        },
-        {
-          name: 'role',
-          title: this.$t('Rôle'),
-          sortField: 'role',
-          style: {flex: 0.5},
-        },
-        {
-          name: 'matchingLabel',
-          title: this.$t('Périmètre'),
-          sortField: 'matchingLabel',
-          style: {flex: 0.75},
-        },
-        {
-          name: 'actions',
-          slot: 'action',
-          title: this.$t('general.actions'),
-          style: {flex: 0.5},
-          cellType: 'oxd-table-cell-actions',
-          cellRenderer: this.cellRenderer,
-        },
-      ];
-
-      return baseHeaders;
-    },
     matchingHeaders() {
       return [
         {
@@ -580,12 +766,92 @@ export default {
         },
       ];
     },
+    headers() {
+      return [
+        {
+          name: 'email',
+          title: this.$t('Email'),
+          sortField: 'email',
+          style: {flex: 1},
+        },
+        {
+          name: 'role',
+          title: this.$t('Rôle'),
+          sortField: 'role',
+          style: {flex: 0.5},
+        },
+        {
+          name: 'matchingLabel',
+          title: this.$t('Périmètre'),
+          sortField: 'matchingLabel',
+          style: {flex: 0.75},
+          cellRenderer: this.matchingLabelCellRenderer,
+        },
+        {
+          name: 'actions',
+          slot: 'action',
+          title: this.$t('general.actions'),
+          style: {flex: 0.5},
+          cellType: 'oxd-table-cell-actions',
+          cellRenderer: this.cellRenderer,
+        },
+      ];
+    },
   },
   beforeMount() {
     this.fetchUserData();
     this.fetchMatchingData();
   },
   methods: {
+    matchingLabelCellRenderer(...[, , , row]) {
+      const item = this.items.find((user) => user.id === row.id);
+      if (!item || item.role !== 'Agent') {
+        return;
+      }
+
+      const rowIndex = this.items.indexOf(item);
+
+      return {
+        component: MatchingLabelCell,
+        props: {
+          item,
+          displayLabel: this.getMatchingDisplayLabel(item),
+          isEditing: this.isEditingMatchingCell(rowIndex),
+          options: this.matchingSelectOptions,
+          isCurrentOption: (option) =>
+            this.isCurrentMatchingOption(item, option),
+          onCellClick: () => this.onMatchingCellClick(rowIndex, item),
+          onSelectOption: (option) => this.onSelectMatchingOption(item, option),
+        },
+      };
+    },
+    cellRenderer(...[, , , row]) {
+      const cellConfig = {};
+
+      if (!row.isCurrentUser) {
+        cellConfig.edit = {
+          onClick: this.onClickEdit,
+          props: {
+            name: 'pencil',
+          },
+        };
+
+        cellConfig.delete = {
+          onClick: this.onClickDelete,
+          props: {
+            name: 'trash',
+          },
+        };
+      }
+
+      return {
+        props: {
+          header: {
+            cellConfig,
+          },
+        },
+      };
+    },
     matchingCellRenderer(...[, , , row]) {
       const cellConfig = {};
 
@@ -636,34 +902,6 @@ export default {
     },
     onClickCancelMatching() {
       this.resetMatchingForm();
-    },
-    cellRenderer(...[, , , row]) {
-      const cellConfig = {};
-
-      // Ne pas afficher les actions si c'est l'utilisateur actuel
-      if (!row.isCurrentUser) {
-        cellConfig.edit = {
-          onClick: this.onClickEdit,
-          props: {
-            name: 'pencil',
-          },
-        };
-
-        cellConfig.delete = {
-          onClick: this.onClickDelete,
-          props: {
-            name: 'trash',
-          },
-        };
-      }
-
-      return {
-        props: {
-          header: {
-            cellConfig,
-          },
-        },
-      };
     },
     onClickCancel() {
       this.resetForm();
@@ -818,6 +1056,64 @@ export default {
   margin: 0 0 1rem 1rem;
   color: #6c757d;
   font-size: 0.9rem;
+}
+
+.users-table-container {
+  &.--cell-editing :deep(.oxd-table-card) {
+    overflow: visible;
+  }
+
+  :deep(.matching-label-cell--editing .data) {
+    position: relative;
+    overflow: visible;
+  }
+
+  :deep(.inline-cell-editor) {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 30;
+    min-width: 100%;
+    max-height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid #d8dadf;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  :deep(.inline-cell-editor__options) {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0;
+  }
+
+  :deep(.inline-cell-editor__option) {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #f5f6f7;
+    }
+  }
+
+  :deep(.inline-cell-editor__option--active) {
+    background-color: #eef2ff;
+    color: var(--oxd-primary-one-color);
+    font-weight: 600;
+    cursor: default;
+
+    &:hover {
+      background-color: #eef2ff;
+    }
+  }
+
+  :deep(.inline-cell-editor__option--empty) {
+    color: #9aa5b8;
+    font-style: italic;
+  }
 }
 
 // Amélioration des champs de formulaire
