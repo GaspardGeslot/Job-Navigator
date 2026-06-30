@@ -239,7 +239,7 @@ class UsersController extends AbstractVueController
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $url = "{$clientBaseUrl}/user/{$userId}/matching";
         if ($matchingId !== null) {
-            $url .= '?matching=' . urlencode($matchingId);
+            $url .= '?matchingId=' . urlencode($matchingId);
         }
 
         $client->request('PUT', $url, [
