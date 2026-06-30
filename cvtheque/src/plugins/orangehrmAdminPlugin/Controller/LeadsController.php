@@ -194,6 +194,47 @@ class LeadsController extends AbstractVueController
         }
     }
 
+    public function updateCustomColumnByLeadId(Request $request): Response
+    {
+        try {
+            $id = $request->attributes->getInt('id');
+            $data = json_decode($request->getContent(), true) ?? [];
+
+            if (!isset($data['id'])) {
+                return new Response(json_encode([
+                    'error' => true,
+                    'message' => 'Custom column id is required',
+                ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+            }
+
+            $customColumnId = (int) $data['id'];
+            $value = array_key_exists('value', $data) ? $data['value'] : null;
+            if ($value !== null && $value !== '') {
+                $value = (string) $value;
+            } else {
+                $value = null;
+            }
+
+            $this->updateLeadCustomColumn(
+                $this->getAuthUser()->getUserHedwigeToken(),
+                $id,
+                $customColumnId,
+                $value
+            );
+
+            return new Response(
+                json_encode(['message' => 'Lead custom column updated successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message
+            ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+        }
+    }
+
 
     public function deliver(Request $request): Response
     {
@@ -584,6 +625,23 @@ class LeadsController extends AbstractVueController
             ],
             'body' => json_encode([
                 'apiField' => $apiField,
+                'value' => $value,
+            ]),
+        ]);
+    }
+
+    public function updateLeadCustomColumn(string $token, int $leadId, int $customColumnId, $value): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/{$leadId}/custom-column";
+        $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode([
+                'id' => $customColumnId,
                 'value' => $value,
             ]),
         ]);

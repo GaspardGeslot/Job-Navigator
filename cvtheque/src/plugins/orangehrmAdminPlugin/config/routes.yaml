@@ -2212,6 +2212,14 @@ apiv2_admin_lead_update_column:
     id: '\d+'
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_lead_update_custom_column:
+  path: /{theme}/api/v2/admin/lead/{id}/custom-column
+  controller: OrangeHRM\Admin\Controller\LeadsController::updateCustomColumnByLeadId
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
 apiv2_admin_leads_deliver:
   path: /{theme}/api/v2/admin/leads/{id}/deliver
   controller: OrangeHRM\Admin\Controller\LeadsController::deliver
@@ -2273,6 +2281,13 @@ subdomain_apiv2_admin_leads_update:
 subdomain_apiv2_admin_lead_update_column:
   path: /api/v2/admin/lead/{id}
   controller: OrangeHRM\Admin\Controller\LeadsController::updateColumnByLeadId
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_lead_update_custom_column:
+  path: /api/v2/admin/lead/{id}/custom-column
+  controller: OrangeHRM\Admin\Controller\LeadsController::updateCustomColumnByLeadId
   methods: [ PUT ]
   requirements:
     id: '\d+'
