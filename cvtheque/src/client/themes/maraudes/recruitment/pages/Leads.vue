@@ -161,13 +161,30 @@
           />
         </div>
       </div>
-      <div class="orangehrm-horizontal-scroll-container">
+      <div
+        class="orangehrm-horizontal-scroll-container"
+        :class="{'--cell-editing': editingCell}"
+      >
         <table class="orangehrm-custom-table">
           <thead>
             <tr>
               <th class="action-column"></th>
-              <th v-for="(header, index) in tableHeaders" :key="index">
-                {{ header.label }}
+              <th
+                v-for="(header, index) in tableHeaders"
+                :key="index"
+                :class="{
+                  'editable-column-header': isEditableColumn(header),
+                }"
+              >
+                <span class="column-header">
+                  <span class="column-header__label">{{ header.label }}</span>
+                  <oxd-icon
+                    v-if="isEditableColumn(header)"
+                    name="pencil-fill"
+                    class="column-header__edit-icon"
+                    title="Modifiable — cliquez sur une cellule"
+                  />
+                </span>
               </th>
             </tr>
           </thead>
@@ -192,10 +209,57 @@
                     selectedCell.row === index &&
                     selectedCell.col === headerIndex,
                   'selected-row': selectedCell.row === index,
+                  'editable-cell': isEditableColumn(header),
+                  'editing-cell': isEditingCell(index, headerIndex),
+                  'editing-cell--date':
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header) === 'date',
+                  'editing-cell--select':
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header) === 'select',
                 }"
-                @click="selectCell(index, headerIndex)"
+                @click.stop="onCellClick(index, headerIndex, item, header)"
               >
-                {{ getCellValue(item, header.key, header) }}
+                <div
+                  v-if="isEditingCell(index, headerIndex)"
+                  class="inline-cell-editor"
+                  :class="{
+                    'inline-cell-editor--date':
+                      getEditableFieldType(header) === 'date',
+                  }"
+                  @click.stop
+                >
+                  <input
+                    v-if="getEditableFieldType(header) === 'date'"
+                    type="date"
+                    class="inline-cell-editor__date-input"
+                    :value="editingDateValue"
+                    @click.stop
+                    @change="onEditableDateChange(item, header, $event)"
+                    @blur="onEditableDateBlur"
+                  />
+                  <ul v-else class="inline-cell-editor__options">
+                    <li
+                      v-for="option in getEditableOptions(header)"
+                      :key="`${header.customColumnId}-${option.id ?? 'empty'}`"
+                      :class="{
+                        'inline-cell-editor__option': true,
+                        'inline-cell-editor__option--active': isCurrentOption(
+                          item,
+                          header,
+                          option,
+                        ),
+                        'inline-cell-editor__option--empty': option.id === null,
+                      }"
+                      @click.stop="onSelectEditableOption(item, header, option)"
+                    >
+                      {{ option.id === null ? '—' : option.label }}
+                    </li>
+                  </ul>
+                </div>
+                <template v-else>
+                  {{ getCellValue(item, header.key, header) }}
+                </template>
               </td>
             </tr>
             <tr v-if="tableData.length === 0">
@@ -217,7 +281,15 @@
   </div>
 </template>
 <script>
-import {ref, computed, onMounted, watch, reactive} from 'vue';
+import {
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  reactive,
+  getCurrentInstance,
+} from 'vue';
 import {navigate} from '@/core/util/helper/navigation';
 import usei18n from '@/core/util/composable/usei18n';
 import {
@@ -229,13 +301,31 @@ import {
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 import useToast from '@/core/util/composable/useToast';
 import {APIService} from '@/core/util/services/api.service';
-import {OxdSpinner} from '@ohrm/oxd';
+import {OxdIcon, OxdSpinner} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import DateInput from '@/core/components/inputs/DateInput';
 import ViewLead from '../components/ViewLead.vue';
 
+const EMPTY_SELECT_OPTION = {id: null, label: ''};
+
+const parseCustomColumnOptions = (options) => {
+  if (!options) {
+    return [];
+  }
+  try {
+    const parsed = typeof options === 'string' ? JSON.parse(options) : options;
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed.map((option) => ({id: option, label: option}));
+  } catch {
+    return [];
+  }
+};
+
 export default {
   components: {
+    'oxd-icon': OxdIcon,
     'oxd-loading-spinner': OxdSpinner,
     'date-input': DateInput,
     'view-lead': ViewLead,
@@ -256,6 +346,7 @@ export default {
   },
   setup(props) {
     const {$t} = usei18n();
+    const instance = getCurrentInstance();
     const userDateFormat = 'yyyy-MM-dd';
 
     // Filtres dynamiques pour les colonnes personnalisées avec hasFilter: true
@@ -377,13 +468,15 @@ export default {
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
-    const {noRecordsFound} = useToast();
+    const {noRecordsFound, updateSuccess} = useToast();
     const totalRecords = ref(0);
     const itemsPerPage = 50;
     const currentPage = ref(1);
     const selectedCell = ref({row: null, col: null});
     const selectedRow = ref(null);
     const selectedLeadId = ref(null);
+    const editingCell = ref(null);
+    const editingDateValue = ref('');
     const contactLogTypes = ref([]);
     const rules = {
       fromDate: [
@@ -601,6 +694,7 @@ export default {
           isCustom: true,
           type: customCol.type,
           customColumnId: customCol.id,
+          customColumnOptions: customCol.options,
         });
       });
     }
@@ -634,6 +728,197 @@ export default {
       }
       // Colonne standard
       return item[headerKey];
+    };
+
+    const getRawCustomColumnValue = (item, headerConfig) => {
+      if (!headerConfig?.isCustom || !item.customColumns) {
+        return null;
+      }
+      const customColumn = item.customColumns.find(
+        (cc) => cc.id === headerConfig.customColumnId,
+      );
+      if (
+        !customColumn ||
+        customColumn.value === null ||
+        customColumn.value === undefined ||
+        customColumn.value === ''
+      ) {
+        return null;
+      }
+      return String(customColumn.value);
+    };
+
+    const isEditableColumn = (header) =>
+      header?.isCustom && (header.type === 'SELECT' || header.type === 'DATE');
+
+    const getEditableFieldType = (header) => {
+      if (header?.type === 'DATE') {
+        return 'date';
+      }
+      if (header?.type === 'SELECT') {
+        return 'select';
+      }
+      return null;
+    };
+
+    const toNativeDateInputValue = (value) => {
+      if (!value) {
+        return '';
+      }
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return value;
+      }
+      const dateObj = parseDate(value, userDateFormat);
+      return dateObj ? formatDate(dateObj, 'yyyy-MM-dd') : '';
+    };
+
+    const isEditingCell = (rowIndex, colIndex) =>
+      editingCell.value?.row === rowIndex &&
+      editingCell.value?.col === colIndex;
+
+    const sortOptionsByLabel = (options) =>
+      [...options].sort((a, b) =>
+        (a.label || '').localeCompare(b.label || '', 'fr', {
+          sensitivity: 'base',
+        }),
+      );
+
+    const getEditableOptions = (header) => {
+      if (getEditableFieldType(header) !== 'select') {
+        return [];
+      }
+      return [
+        EMPTY_SELECT_OPTION,
+        ...sortOptionsByLabel(
+          parseCustomColumnOptions(header.customColumnOptions),
+        ),
+      ];
+    };
+
+    const isCurrentOption = (item, header, option) => {
+      const current = getRawCustomColumnValue(item, header);
+      if (option.id === null) {
+        return current === null;
+      }
+      return current === option.label;
+    };
+
+    const applyCustomColumnValue = (item, header, value) => {
+      if (!item.customColumns) {
+        item.customColumns = [];
+      }
+      const customColumn = item.customColumns.find(
+        (cc) => cc.id === header.customColumnId,
+      );
+      if (customColumn) {
+        customColumn.value = value;
+        return;
+      }
+      item.customColumns.push({
+        id: header.customColumnId,
+        title: header.key,
+        value,
+      });
+    };
+
+    const closeCellEditor = () => {
+      editingCell.value = null;
+      editingDateValue.value = '';
+    };
+
+    const serializeCustomColumnValue = (value) =>
+      value === null || value === undefined || value === ''
+        ? null
+        : String(value);
+
+    const persistInlineCustomColumnEdit = (item, header, value) => {
+      const previousValue = getRawCustomColumnValue(item, header);
+      const normalizedValue = serializeCustomColumnValue(value);
+      applyCustomColumnValue(item, header, normalizedValue);
+
+      return http
+        .request({
+          method: 'PUT',
+          url: `/api/v2/admin/lead/${item.id}/custom-column`,
+          data: {
+            id: header.customColumnId,
+            value: normalizedValue,
+          },
+        })
+        .then(() => {
+          updateSuccess();
+        })
+        .catch((error) => {
+          applyCustomColumnValue(item, header, previousValue);
+          instance?.proxy?.$toast?.unexpectedError(
+            error?.response?.data?.message,
+          );
+        });
+    };
+
+    const onCellClick = (rowIndex, colIndex, item, header) => {
+      selectCell(rowIndex, colIndex);
+      if (isEditableColumn(header)) {
+        editingCell.value = {
+          row: rowIndex,
+          col: colIndex,
+          leadId: item.id,
+          header,
+        };
+        editingDateValue.value =
+          getEditableFieldType(header) === 'date'
+            ? toNativeDateInputValue(getRawCustomColumnValue(item, header))
+            : '';
+        return;
+      }
+      closeCellEditor();
+    };
+
+    const onEditableDateChange = (item, header, event) => {
+      const apiValue = event.target.value ?? '';
+      const currentApiValue = toNativeDateInputValue(
+        getRawCustomColumnValue(item, header),
+      );
+      if (apiValue === currentApiValue) {
+        closeCellEditor();
+        return;
+      }
+      persistInlineCustomColumnEdit(item, header, apiValue || null);
+      closeCellEditor();
+    };
+
+    const onSelectEditableOption = (item, header, option) => {
+      if (isCurrentOption(item, header, option)) {
+        return;
+      }
+      const value = option.id === null ? null : String(option.label);
+      persistInlineCustomColumnEdit(item, header, value);
+      closeCellEditor();
+    };
+
+    const onDocumentClick = (event) => {
+      if (!editingCell.value) {
+        return;
+      }
+      if (event.target.closest('.inline-cell-editor')) {
+        return;
+      }
+      closeCellEditor();
+    };
+
+    const onEditableDateBlur = () => {
+      const editingSnapshot = editingCell.value ? {...editingCell.value} : null;
+      window.setTimeout(() => {
+        if (
+          !editingSnapshot ||
+          editingCell.value?.row !== editingSnapshot.row ||
+          editingCell.value?.col !== editingSnapshot.col ||
+          getEditableFieldType(editingSnapshot.header) !== 'date'
+        ) {
+          return;
+        }
+        closeCellEditor();
+      }, 150);
     };
 
     const totalPages = computed(() => {
@@ -831,6 +1116,7 @@ export default {
     });
 
     onMounted(() => {
+      document.addEventListener('click', onDocumentClick);
       openLeadFromUrl();
       fetchData();
       http
@@ -841,6 +1127,10 @@ export default {
         .then(({data}) => {
           contactLogTypes.value = data.contactLogTypes || [];
         });
+    });
+
+    onBeforeUnmount(() => {
+      document.removeEventListener('click', onDocumentClick);
     });
 
     return {
@@ -861,9 +1151,20 @@ export default {
       selectedCell,
       selectedRow,
       selectedLeadId,
+      editingCell,
+      editingDateValue,
       filterItems,
       onClickReset,
       selectCell,
+      onCellClick,
+      isEditableColumn,
+      getEditableFieldType,
+      isEditingCell,
+      getEditableOptions,
+      onEditableDateChange,
+      onEditableDateBlur,
+      isCurrentOption,
+      onSelectEditableOption,
       getCellValue,
       rules,
       isLoading,
@@ -921,6 +1222,10 @@ export default {
 .orangehrm-horizontal-scroll-container {
   overflow-x: auto;
   width: 100%;
+
+  &.--cell-editing {
+    overflow-y: visible;
+  }
 }
 
 .orangehrm-text,
@@ -958,6 +1263,28 @@ export default {
     border-bottom: 2px solid #d8dadf;
   }
 
+  .column-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 100%;
+  }
+
+  .column-header__label {
+    min-width: 0;
+  }
+
+  .column-header__edit-icon {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--oxd-primary-one-color);
+    opacity: 0.85;
+  }
+
+  th.editable-column-header {
+    background-color: #eef2ff;
+  }
+
   tbody tr {
     td {
       background-color: white;
@@ -971,7 +1298,118 @@ export default {
       &.selected-row {
         background-color: #f5f6f7;
       }
+      &.editable-cell {
+        cursor: pointer;
+      }
+      &.editing-cell {
+        padding: 0;
+        z-index: 10;
+
+        &--select {
+          vertical-align: top;
+          overflow: visible;
+        }
+
+        &--date {
+          vertical-align: middle;
+          overflow: hidden;
+        }
+      }
     }
+
+    &:has(.editing-cell) {
+      position: relative;
+      z-index: 10;
+    }
+  }
+}
+
+.inline-cell-editor {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 30;
+  min-width: 100%;
+  max-height: 100px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #d8dadf;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  &--date {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    overflow: hidden;
+    padding: 0.25rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+    border-radius: 0;
+    border: none;
+    background-color: #ffffff;
+  }
+}
+
+.inline-cell-editor__date-input {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d8dadf;
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 12px;
+  color: #64728c;
+  background-color: #ffffff;
+
+  &:focus {
+    outline: none;
+    border-color: var(--oxd-primary-one-color);
+    box-shadow: inset 0 0 0 1px var(--oxd-primary-one-color);
+  }
+}
+
+.inline-cell-editor__options {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+}
+
+.inline-cell-editor__option {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #f5f6f7;
+  }
+
+  &--active {
+    background-color: #eef2ff;
+    color: var(--oxd-primary-one-color);
+    font-weight: 600;
+    cursor: default;
+
+    &:hover {
+      background-color: #eef2ff;
+    }
+  }
+
+  &--empty {
+    color: #9aa5b8;
+    font-style: italic;
   }
 }
 
