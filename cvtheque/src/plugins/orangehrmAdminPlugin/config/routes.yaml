@@ -3102,6 +3102,13 @@ apiv2_admin_user_update:
   requirements:
     id: '\d+'
 
+apiv2_admin_user_update_matching:
+  path: /api/v2/admin/user/{id}/matching
+  controller: OrangeHRM\Admin\Controller\UsersController::updateAgentMatching
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
 apiv2_admin_user_delete:
   path: /api/v2/admin/user
   controller: OrangeHRM\Admin\Controller\UsersController::delete
