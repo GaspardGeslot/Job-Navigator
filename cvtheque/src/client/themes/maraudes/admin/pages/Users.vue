@@ -1,5 +1,6 @@
 <template>
   <div class="orangehrm-background-container">
+    <!-- Section Utilisateurs -->
     <div class="orangehrm-paper-container">
       <div class="orangehrm-left-header-container">
         <oxd-button
@@ -32,9 +33,37 @@
         />
       </div>
     </div>
+
+    <!-- Section Périmètres -->
+    <div class="orangehrm-paper-container perimeter-section">
+      <div class="orangehrm-left-header-container">
+        <oxd-text tag="h6" class="orangehrm-main-title">Périmètres</oxd-text>
+        <oxd-button
+          :label="$t('general.add')"
+          icon-name="plus"
+          display-type="secondary"
+          @click="onClickAddMatching"
+        />
+      </div>
+      <oxd-text tag="p" class="perimeter-description">
+        Un périmètre permet de définir un sous-ensemble d'utilisateurs qui ne
+        voient que les contacts du périmètre qui leur est associé.
+      </oxd-text>
+      <div class="orangehrm-container">
+        <oxd-card-table
+          :headers="matchingHeaders"
+          :items="matchingItems"
+          :selectable="false"
+          :clickable="false"
+          :loading="isMatchingLoading"
+          row-decorator="oxd-table-decorator-card"
+        />
+      </div>
+    </div>
+
     <delete-confirmation ref="deleteDialog"></delete-confirmation>
 
-    <!-- Modal pour ajouter/modifier un utilisateur -->
+    <!-- Modal utilisateur -->
     <div v-if="isModalOpen" class="modal-overlay" @click="onClickCancel">
       <div class="modal-container" @click.stop>
         <oxd-form :loading="isSaving" @submit-valid="onClickValidate">
@@ -124,6 +153,67 @@
               :label="$t(isEditing ? 'Modifier' : 'Enregistrer')"
               display-type="secondary"
               :loading="isSaving"
+              type="submit"
+            />
+          </div>
+        </oxd-form>
+      </div>
+    </div>
+
+    <!-- Modal périmètre -->
+    <div
+      v-if="isMatchingModalOpen"
+      class="modal-overlay"
+      @click="onClickCancelMatching"
+    >
+      <div class="modal-container" @click.stop>
+        <oxd-form
+          :loading="isMatchingSaving"
+          @submit-valid="onClickValidateMatching"
+        >
+          <div class="modal-header">
+            <h3>
+              {{
+                isMatchingEditing
+                  ? $t('Modifier le périmètre')
+                  : $t('Ajouter un périmètre')
+              }}
+            </h3>
+            <span class="close-icon" @click="onClickCancelMatching"
+              >&times;</span
+            >
+          </div>
+          <div class="modal-body">
+            <oxd-form-row>
+              <oxd-grid :cols="1">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="matchingTitle"
+                    :label="$t('Titre')"
+                    required
+                    :rules="rules.matchingTitle"
+                  />
+                </oxd-grid-item>
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="matchingDescription"
+                    :label="$t('Description')"
+                    :rules="rules.matchingDescription"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+          </div>
+          <div class="modal-footer">
+            <oxd-button
+              :label="$t('Annuler')"
+              display-type="ghost"
+              @click="onClickCancelMatching"
+            />
+            <oxd-button
+              :label="$t(isMatchingEditing ? 'Modifier' : 'Enregistrer')"
+              display-type="secondary"
+              :loading="isMatchingSaving"
               type="submit"
             />
           </div>
@@ -264,6 +354,10 @@ export default {
       sortDefinition: defaultSortOrder,
     });
     const http = new APIService(window.appGlobal.baseUrl, '/api/v2/admin/user');
+    const httpMatchings = new APIService(
+      window.appGlobal.baseUrl,
+      '/api/v2/admin/matching/info',
+    );
     const state = reactive({
       items: [],
       total: 0,
@@ -279,6 +373,15 @@ export default {
       isCurrentUser: false,
       editingItem: null,
       matchingSelected: null,
+      // Périmètres
+      matchingItems: [],
+      isMatchingLoading: false,
+      isMatchingModalOpen: false,
+      isMatchingEditing: false,
+      isMatchingSaving: false,
+      matchingTitle: '',
+      matchingDescription: '',
+      editingMatchingItem: null,
     });
 
     const fetchUserData = () => {
@@ -602,8 +705,10 @@ export default {
 
     return {
       http,
+      httpMatchings,
       onClickValidate,
       fetchUserData,
+      fetchMatchingData,
       resetForm,
       resetMatchingForm,
       onClickValidateMatching,
@@ -626,6 +731,8 @@ export default {
         email: [required, validEmailFormat],
         password: [required, shouldNotExceedCharLength(100)],
         passwordConfirm: [required],
+        matchingTitle: [required, shouldNotExceedCharLength(255)],
+        matchingDescription: [shouldNotExceedCharLength(500)],
       },
       checkedItems: [],
     };
@@ -701,6 +808,7 @@ export default {
   },
   beforeMount() {
     this.fetchUserData();
+    this.fetchMatchingData();
   },
   methods: {
     matchingLabelCellRenderer(...[, , , row]) {

@@ -86,8 +86,9 @@
               <oxd-input-field
                 v-model="profile.civility"
                 :label="$t('Civilité')"
+                type="select"
+                :options="civilityOptions"
                 :disabled="!editable"
-                :rules="rules.civility"
               />
             </oxd-grid-item>
             <oxd-grid-item v-if="isColumnVisible('birthDate')">
@@ -272,8 +273,10 @@
               <oxd-grid-item v-if="isColumnVisible('need')">
                 <oxd-input-field
                   v-model="profile.need"
+                  type="select"
                   :label="$t('Besoin')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :options="sortedSelectOptions('needs')"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="isColumnVisible('status')">
@@ -297,29 +300,37 @@
               <oxd-grid-item v-if="isColumnVisible('courseStart')">
                 <oxd-input-field
                   v-model="profile.courseStart"
+                  type="select"
                   :label="$t('Début de formation')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :options="sortedSelectOptions('courseStarts')"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="isColumnVisible('trainingMethod')">
                 <oxd-input-field
                   v-model="profile.trainingMethod"
+                  type="select"
                   :label="$t('Modalité de formation')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :options="sortedSelectOptions('trainingMethods')"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="isColumnVisible('handicap')">
                 <oxd-input-field
                   v-model="profile.handicap"
+                  type="select"
                   :label="$t('Handicap')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :options="sortedSelectOptions('handicaps')"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="isColumnVisible('funding')">
                 <oxd-input-field
                   v-model="profile.funding"
+                  type="select"
                   :label="$t('Financement')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :options="sortedSelectOptions('fundings')"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="isColumnVisible('timeSlot')">
@@ -332,8 +343,10 @@
               <oxd-grid-item v-if="isColumnVisible('professionalExperience')">
                 <oxd-input-field
                   v-model="profile.professionalExperience"
+                  type="select"
                   :label="$t('Expérience professionnelle')"
-                  :disabled="true"
+                  :disabled="!editable"
+                  :options="sortedSelectOptions('professionalExperiences')"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -662,6 +675,20 @@ import ContactLogDialog from '@/core/components/dialogs/ContactLogDialog';
 import {OxdSwitchInput} from '@ohrm/oxd';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 
+const CIVILITY_OPTIONS = [
+  {id: 'Monsieur', label: 'Monsieur'},
+  {id: 'Madame', label: 'Madame'},
+];
+
+const LEAD_SELECT_FIELD_OPTIONS = {
+  need: 'needs',
+  courseStart: 'courseStarts',
+  trainingMethod: 'trainingMethods',
+  handicap: 'handicaps',
+  funding: 'fundings',
+  professionalExperience: 'professionalExperiences',
+};
+
 const LeadProfileModel = {
   id: 0,
   firstName: '',
@@ -676,9 +703,9 @@ const LeadProfileModel = {
   course: '',
   of: '',
   currentSituation: null,
-  trainingMethod: '',
-  handicap: '',
-  funding: '',
+  trainingMethod: null,
+  handicap: null,
+  funding: null,
   utmCampaign: '',
   utmGroup: '',
   utmSource: '',
@@ -686,12 +713,12 @@ const LeadProfileModel = {
   city: '',
   country: '',
   postalCode: '',
-  need: '',
+  need: null,
   studyLevel: null,
-  courseStart: '',
+  courseStart: null,
   birthDate: null,
   age: '',
-  professionalExperience: '',
+  professionalExperience: null,
   mobility: '',
   source: '',
   timeSlot: '',
@@ -763,6 +790,22 @@ export default {
       type: Array,
       required: true,
     },
+    leadSelectOptions: {
+      type: Object,
+      default: () => ({
+        needs: [],
+        courseStarts: [],
+        studyLevels: [],
+        countries: [],
+        fundings: [],
+        handicaps: [],
+        status: [],
+        trainingMethods: [],
+        sources: [],
+        timeSlots: [],
+        professionalExperiences: [],
+      }),
+    },
   },
   emits: ['update'],
   setup() {
@@ -781,6 +824,7 @@ export default {
   data() {
     return {
       editable: false,
+      civilityOptions: CIVILITY_OPTIONS,
       simplifiedVersion: true,
       isLoading: false,
       profile: {...LeadProfileModel},
@@ -845,7 +889,6 @@ export default {
       rules: {
         firstName: [shouldNotExceedCharLength(30)],
         lastName: [shouldNotExceedCharLength(30)],
-        civility: [shouldNotExceedCharLength(20)],
         postalCode: [shouldNotExceedCharLength(5), numericOnly],
         comment: [shouldNotExceedCharLength(1000)],
         address: [shouldNotExceedCharLength(200)],
@@ -994,6 +1037,12 @@ export default {
     lead() {
       this.fetchLead();
     },
+    leadSelectOptions: {
+      handler() {
+        this.bindLeadSelectFieldValues();
+      },
+      deep: true,
+    },
   },
   beforeMount() {
     this.fetchLead();
@@ -1036,13 +1085,26 @@ export default {
         dataToSend.currentSituation = this.profile.currentSituation?.label;
 
       if (dataToSend.civility) {
-        const trimmed = dataToSend.civility.trim();
-        dataToSend.civility = trimmed === '' ? null : trimmed;
+        dataToSend.civility =
+          typeof dataToSend.civility === 'object'
+            ? dataToSend.civility.label
+            : dataToSend.civility;
+      } else {
+        dataToSend.civility = null;
       }
       if (dataToSend.studyLevel)
         dataToSend.studyLevel = this.profile.studyLevel?.label;
       if (dataToSend.franceTravailAgency)
         dataToSend.franceTravailAgency = dataToSend.franceTravailAgency?.label;
+
+      Object.keys(LEAD_SELECT_FIELD_OPTIONS).forEach((field) => {
+        const value = this.profile[field];
+        if (value && typeof value === 'object') {
+          dataToSend[field] = value.label;
+        } else if (!value) {
+          dataToSend[field] = null;
+        }
+      });
 
       this.http
         .request({
@@ -1086,7 +1148,10 @@ export default {
       this.profile.email = this.lead.email;
       this.profile.phoneNumber = this.lead.phoneNumber;
       this.profile.date = this.lead.date;
-      this.profile.civility = this.lead.civility;
+      this.profile.civility =
+        CIVILITY_OPTIONS.find(
+          (option) => option.label === this.lead.civility,
+        ) ?? null;
       this.profile.comment = this.lead.comment;
       this.profile.jobs =
         this.lead.jobs && this.lead.jobs.length > 0
@@ -1097,9 +1162,6 @@ export default {
       this.profile.sector = this.lead.sector;
       this.profile.course = this.lead.course;
       this.profile.of = this.lead.of;
-      this.profile.trainingMethod = this.lead.trainingMethod;
-      this.profile.handicap = this.lead.handicap;
-      this.profile.funding = this.lead.funding;
       this.profile.utmCampaign = this.lead.utmCampaign;
       this.profile.utmGroup = this.lead.utmGroup;
       this.profile.utmSource = this.lead.utmSource;
@@ -1107,10 +1169,7 @@ export default {
       this.profile.city = this.lead.city;
       this.profile.country = this.lead.country;
       this.profile.postalCode = this.lead.postalCode;
-      this.profile.need = this.lead.need;
-      this.profile.courseStart = this.lead.courseStart;
       this.profile.age = this.lead.age;
-      this.profile.professionalExperience = this.lead.professionalExperience;
       this.profile.mobility = this.lead.mobility;
       this.profile.source = this.lead.source;
       this.profile.timeSlot = this.lead.timeSlot;
@@ -1166,6 +1225,8 @@ export default {
           this.simplifiedVersion ? this.actorStudyLevels : this.allStudyLevels
         ).find((option) => option.label === this.lead.studyLevel);
 
+      this.bindLeadSelectFieldValues();
+
       if (this.lead.franceTravailAgency)
         this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
           (option) => option.label === this.lead.franceTravailAgency,
@@ -1177,6 +1238,26 @@ export default {
         );
 
       this.isLoading = false;
+    },
+    sortedSelectOptions(optionsKey) {
+      const options = this.leadSelectOptions[optionsKey] || [];
+      return [...options].sort((a, b) =>
+        (a.label || '').localeCompare(b.label || '', 'fr', {
+          sensitivity: 'base',
+        }),
+      );
+    },
+    bindLeadSelectFieldValues() {
+      Object.entries(LEAD_SELECT_FIELD_OPTIONS).forEach(
+        ([field, optionsKey]) => {
+          const value = this.lead?.[field];
+          this.profile[field] = value
+            ? (this.leadSelectOptions[optionsKey] || []).find(
+                (option) => option.label === value,
+              ) ?? null
+            : null;
+        },
+      );
     },
     onClickAddTelephoneContact() {
       this.isEditingTelephoneContact = false;

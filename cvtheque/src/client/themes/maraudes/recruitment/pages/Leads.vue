@@ -343,6 +343,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    otherMatchings: {
+      type: Boolean,
+      default: null,
+    },
   },
   setup(props) {
     const {$t} = usei18n();
@@ -664,6 +668,11 @@ export default {
         label: 'Complément',
         key: 'complement',
         condition: (cols) => !!cols.complement,
+      },
+      {
+        label: 'Périmètre',
+        key: 'otherActors',
+        condition: () => props.otherMatchings === true,
       },
     ];
 

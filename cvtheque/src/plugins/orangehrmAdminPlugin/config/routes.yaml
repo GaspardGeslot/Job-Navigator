@@ -3239,3 +3239,29 @@ apiv2_user_delete:
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_matching_info_get:
+  path: /api/v2/admin/matching/info
+  controller: OrangeHRM\Admin\Controller\MatchingController::getMatchingInfos
+  methods: [ GET ]
+
+
+apiv2_admin_matching_info_post:
+  path: /api/v2/admin/matching/info
+  controller: OrangeHRM\Admin\Controller\MatchingController::createMatchingInfo
+  methods: [ POST ]
+
+
+apiv2_admin_matching_info_put:
+  path: /api/v2/admin/matching/info/{id}
+  controller: OrangeHRM\Admin\Controller\MatchingController::updateMatchingInfo
+  methods: [ PUT ]
+  requirements:
+    id: '\d+'
+
+
+apiv2_admin_matching_info_delete:
+  path: /api/v2/admin/matching/info/{id}
+  controller: OrangeHRM\Admin\Controller\MatchingController::deleteMatchingInfo
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'

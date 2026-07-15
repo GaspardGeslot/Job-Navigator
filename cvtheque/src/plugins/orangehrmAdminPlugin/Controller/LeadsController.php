@@ -351,25 +351,68 @@ class LeadsController extends AbstractVueController
     {
         $token = $this->getAuthUser()->getUserHedwigeToken();
 
-        $allOptions = $this->getHedwigeOptions($token);
-        $allStudyLevelsOptions = $this->getHedwigeStudyLevels($token);
+        $leadOptions = $this->getLeadsOptions($token);
         $contactLogOptions = $this->getHedwigeContactOptions($token);
 
+        $options = [
+            'needs' => $this->mapSelectOptions($leadOptions['needs'] ?? []),
+            'courseStarts' => $this->mapSelectOptions($leadOptions['courseStarts'] ?? []),
+            'studyLevels' => $this->mapSelectOptions($leadOptions['studyLevels'] ?? []),
+            'countries' => $this->mapSelectOptions($leadOptions['countries'] ?? []),
+            'fundings' => $this->mapSelectOptions($leadOptions['fundings'] ?? []),
+            'handicaps' => $this->mapSelectOptions($leadOptions['handicaps'] ?? []),
+            'status' => $this->mapSelectOptions($leadOptions['status'] ?? []),
+            'trainingMethods' => $this->mapSelectOptions($leadOptions['trainingMethods'] ?? []),
+            'sources' => $this->mapSelectOptions($leadOptions['sources'] ?? []),
+            'timeSlots' => $this->mapSelectOptions($leadOptions['timeSlots'] ?? []),
+            'professionalExperiences' => $this->mapSelectOptions($leadOptions['professionalExperiences'] ?? []),
+        ];
+
         return new Response(
-            json_encode([
-                'allStatuses' => array_map(function ($label, $index) {
-                    return ['id' => $index, 'label' => $label];
-                }, $allOptions, array_keys($allOptions)),
-                'allStudyLevels' => array_map(function ($label, $index) {
-                    return ['id' => $index, 'label' => $label];
-                }, $allStudyLevelsOptions, array_keys($allStudyLevelsOptions)),
+            json_encode(array_merge($options, [
                 'contactLogTypes' => array_map(function ($id, $label) {
                     return ['id' => $id, 'label' => $label];
                 }, array_keys($contactLogOptions), $contactLogOptions),
-            ]),
+            ])),
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
+    }
+
+    private function mapSelectOptions($values): array
+    {
+        if (!is_array($values)) {
+            return [];
+        }
+
+        $labels = array_values(array_unique(array_filter(
+            $values,
+            fn($value) => is_string($value) && $value !== ''
+        )));
+        natcasesort($labels);
+
+        return array_values(array_map(
+            fn($label) => ['id' => $label, 'label' => $label],
+            $labels
+        ));
+    }
+
+    public function getLeadsOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/client/leads/options", [
+                'headers' => [
+                    'Authorization' => $token,
+                ],
+            ]);
+
+            return json_decode($response->getBody(), true) ?? [];
+        } catch (ClientException $e) {
+            return [];
+        }
     }
 
     public function getLeadOptions(Request $request): Response

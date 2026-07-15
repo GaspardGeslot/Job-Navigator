@@ -32,6 +32,7 @@
         :default-columns="defaultColumns"
         :all-study-levels="allStudyLevels"
         :actor-study-levels="actorStudyLevels"
+        :lead-select-options="leadSelectOptions"
         @update="onLeadUpdate"
       />
     </div>
@@ -66,6 +67,10 @@ export default {
     contactLogTypes: {
       type: Array,
       default: () => [],
+    },
+    leadSelectOptions: {
+      type: Object,
+      default: () => ({}),
     },
   },
   emits: ['close', 'open-full-page'],

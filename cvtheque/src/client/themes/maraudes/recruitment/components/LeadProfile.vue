@@ -77,7 +77,7 @@
         <oxd-form-row>
           <oxd-grid
             v-if="
-              defaultColumns.civility ||
+              defaultColumns.gender ||
               defaultColumns.birthDate ||
               defaultColumns.age
             "
@@ -86,10 +86,12 @@
           >
             <oxd-grid-item>
               <oxd-input-field
-                v-if="defaultColumns.civility"
+                v-if="defaultColumns.gender"
                 v-model="profile.civility"
                 :label="$t('Civilité')"
-                :disabled="true"
+                type="select"
+                :options="civilityOptions"
+                :disabled="!editable"
               />
             </oxd-grid-item>
             <oxd-grid-item v-if="defaultColumns.birthDate && profile.birthDate">
@@ -564,6 +566,11 @@ import ContactLogDialog from '@/core/components/dialogs/ContactLogDialog';
 import {OxdSwitchInput} from '@ohrm/oxd';
 import {formatDate, parseDate} from '@/core/util/helper/datefns';
 
+const CIVILITY_OPTIONS = [
+  {id: 'Monsieur', label: 'Monsieur'},
+  {id: 'Madame', label: 'Madame'},
+];
+
 const LeadProfileModel = {
   id: 0,
   firstName: '',
@@ -571,7 +578,7 @@ const LeadProfileModel = {
   email: '',
   phoneNumber: '',
   date: '',
-  civility: '',
+  civility: null,
   comment: '',
   jobs: [],
   sector: '',
@@ -667,6 +674,7 @@ export default {
   data() {
     return {
       editable: false,
+      civilityOptions: CIVILITY_OPTIONS,
       isLoading: false,
       profile: {...LeadProfileModel},
       showTelephoneContactModal: false,
@@ -798,6 +806,15 @@ export default {
         dataToSend.callBackDate = null;
       }
 
+      if (dataToSend.civility) {
+        dataToSend.civility =
+          typeof dataToSend.civility === 'object'
+            ? dataToSend.civility.label
+            : dataToSend.civility;
+      } else {
+        dataToSend.civility = null;
+      }
+
       // Convertir les customColumns pour l'API : garder la structure mais avec les valeurs mises à jour
       if (dataToSend.customColumns && Array.isArray(dataToSend.customColumns)) {
         dataToSend.customColumns = dataToSend.customColumns.map((cc) => ({
@@ -845,7 +862,10 @@ export default {
       this.profile.email = this.lead.email;
       this.profile.phoneNumber = this.lead.phoneNumber;
       this.profile.date = this.lead.date;
-      this.profile.civility = this.lead.civility;
+      this.profile.civility =
+        CIVILITY_OPTIONS.find(
+          (option) => option.label === this.lead.civility,
+        ) ?? null;
       this.profile.comment = this.lead.comment;
       this.profile.jobs =
         this.lead.jobs && this.lead.jobs.length > 0

@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="orangehrm-background-container">
     <oxd-table-filter :filter-title="$t('Filtres')">
@@ -163,13 +164,30 @@
           <oxd-pagination v-model:current="currentPage" :length="totalPages" />
         </div>
       </div>
-      <div class="orangehrm-horizontal-scroll-container">
+      <div
+        class="orangehrm-horizontal-scroll-container"
+        :class="{'--cell-editing': editingCell}"
+      >
         <table class="orangehrm-custom-table">
           <thead>
             <tr>
               <th class="action-column"></th>
-              <th v-for="(header, index) in tableHeaders" :key="index">
-                {{ header.label }}
+              <th
+                v-for="(header, index) in tableHeaders"
+                :key="index"
+                :class="{
+                  'editable-column-header': isEditableColumn(header.key),
+                }"
+              >
+                <span class="column-header">
+                  <span class="column-header__label">{{ header.label }}</span>
+                  <oxd-icon
+                    v-if="isEditableColumn(header.key)"
+                    name="pencil-fill"
+                    class="column-header__edit-icon"
+                    title="Modifiable — cliquez sur une cellule"
+                  />
+                </span>
               </th>
               <th class="action-column"></th>
             </tr>
@@ -200,10 +218,59 @@
                     selectedCell.row === index &&
                     selectedCell.col === headerIndex,
                   'selected-row': selectedCell.row === index,
+                  'editable-cell': isEditableColumn(header.key),
+                  'editing-cell': isEditingCell(index, headerIndex),
+                  'editing-cell--date':
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header.key) === 'date',
+                  'editing-cell--select':
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header.key) === 'select',
                 }"
-                @click="selectCell(index, headerIndex)"
+                @click.stop="onCellClick(index, headerIndex, item, header)"
               >
-                {{ getCellValue(item, header.key) }}
+                <div
+                  v-if="isEditingCell(index, headerIndex)"
+                  class="inline-cell-editor"
+                  :class="{
+                    'inline-cell-editor--date':
+                      getEditableFieldType(header.key) === 'date',
+                  }"
+                  @click.stop
+                >
+                  <input
+                    v-if="getEditableFieldType(header.key) === 'date'"
+                    type="date"
+                    class="inline-cell-editor__date-input"
+                    :value="editingDateValue"
+                    @click.stop
+                    @change="onEditableDateChange(item, header.key, $event)"
+                    @blur="onEditableDateBlur"
+                  />
+                  <ul v-else class="inline-cell-editor__options">
+                    <li
+                      v-for="option in getEditableOptions(header.key)"
+                      :key="`${header.key}-${option.id ?? 'empty'}`"
+                      :class="{
+                        'inline-cell-editor__option': true,
+                        'inline-cell-editor__option--active': isCurrentOption(
+                          item,
+                          header.key,
+                          option,
+                        ),
+                        'inline-cell-editor__option--empty': option.id === null,
+                      }"
+                      @click.stop="
+                        onSelectEditableOption(item, header.key, option)
+                      "
+                    >
+                      {{ option.id === null ? '—' : option.label }}
+                    </li>
+                  </ul>
+                </div>
+                <template v-else>
+                  {{ getCellValue(item, header.key) }}
+                </template>
               </td>
               <td class="action-column-values">
                 <oxd-icon-button
@@ -231,8 +298,9 @@
     <view-lead
       v-if="selectedLeadId"
       :lead-id="selectedLeadId"
-      :all-statuses="allStatuses"
-      :all-study-levels="allStudyLevels"
+      :all-statuses="leadSelectOptions.status"
+      :all-study-levels="leadSelectOptions.studyLevels"
+      :lead-select-options="leadSelectOptions"
       :contact-log-types="contactLogTypes"
       @close="selectedLeadId = null"
       @open-full-page="openLeadInFullPage"
@@ -240,7 +308,14 @@
   </div>
 </template>
 <script>
-import {ref, computed, onMounted, watch} from 'vue';
+import {
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  getCurrentInstance,
+} from 'vue';
 import usei18n from '@/core/util/composable/usei18n';
 import {
   required,
@@ -253,14 +328,79 @@ import {navigate} from '@/core/util/helper/navigation';
 import useToast from '@/core/util/composable/useToast';
 import JobAutocomplete from '@/core/components/inputs/JobAutocomplete.vue';
 import {APIService} from '@/core/util/services/api.service';
-import {OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
+import {OxdIcon, OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog.vue';
 import DateInput from '@/core/components/inputs/DateInput';
 import ViewLead from '../../components/ViewLead.vue';
 
+const CIVILITY_OPTIONS = [
+  {id: 'Monsieur', label: 'Monsieur'},
+  {id: 'Madame', label: 'Madame'},
+];
+
+const EMPTY_SELECT_OPTION = {id: null, label: ''};
+
+const EDITABLE_FIELDS = {
+  civility: {
+    apiField: 'civility',
+    type: 'select',
+    getOptions: () => CIVILITY_OPTIONS,
+  },
+  country: {
+    apiField: 'country',
+    type: 'select',
+    optionsKey: 'countries',
+  },
+  studyLevel: {
+    apiField: 'study_level',
+    type: 'select',
+    optionsKey: 'studyLevels',
+  },
+  status: {
+    apiField: 'status',
+    type: 'select',
+    optionsKey: 'status',
+  },
+  trainingMethod: {
+    apiField: 'training_method',
+    type: 'select',
+    optionsKey: 'trainingMethods',
+  },
+  need: {
+    apiField: 'need',
+    type: 'select',
+    optionsKey: 'needs',
+  },
+  handicap: {
+    apiField: 'handicap',
+    type: 'select',
+    optionsKey: 'handicaps',
+  },
+  courseStart: {
+    apiField: 'course_start',
+    type: 'select',
+    optionsKey: 'courseStarts',
+  },
+  funding: {
+    apiField: 'funding',
+    type: 'select',
+    optionsKey: 'fundings',
+  },
+  source: {
+    apiField: 'source',
+    type: 'select',
+    optionsKey: 'sources',
+  },
+  birthDate: {
+    apiField: 'birth_date',
+    type: 'date',
+  },
+};
+
 export default {
   components: {
+    'oxd-icon': OxdIcon,
     'oxd-loading-spinner': OxdSpinner,
     'job-autocomplete': JobAutocomplete,
     'confirmation-dialog': ConfirmationDialog,
@@ -284,6 +424,7 @@ export default {
   },
   setup(props) {
     const {$t} = usei18n();
+    const instance = getCurrentInstance();
     const jobAutocomplete = ref(null);
 
     const userDateFormat = 'yyyy-MM-dd';
@@ -419,15 +560,28 @@ export default {
     const leads = ref([]);
     const defaultColumns = ref(null);
     const isLoading = ref(false);
-    const {noRecordsFound} = useToast();
+    const {noRecordsFound, updateSuccess} = useToast();
     const totalRecords = ref(0);
     const itemsPerPage = 50;
     const currentPage = ref(1);
     const selectedCell = ref({row: null, col: null});
     const selectedRow = ref(null);
     const selectedLeadId = ref(null);
-    const allStatuses = ref([]);
-    const allStudyLevels = ref([]);
+    const editingCell = ref(null);
+    const editingDateValue = ref('');
+    const leadSelectOptions = ref({
+      needs: [],
+      courseStarts: [],
+      studyLevels: [],
+      countries: [],
+      fundings: [],
+      handicaps: [],
+      status: [],
+      trainingMethods: [],
+      sources: [],
+      timeSlots: [],
+      professionalExperiences: [],
+    });
     const contactLogTypes = ref([]);
     const departmentCodeOptions = computed(() =>
       (props.departmentCodes || []).map((departmentCode, index) => ({
@@ -696,7 +850,184 @@ export default {
     };
 
     const getCellValue = (item, headerKey) => {
+      if (headerKey === 'status') {
+        return item.status ?? item.currentSituation ?? '';
+      }
       return item[headerKey];
+    };
+
+    const isEditableColumn = (headerKey) =>
+      Object.prototype.hasOwnProperty.call(EDITABLE_FIELDS, headerKey);
+
+    const getEditableFieldType = (headerKey) =>
+      EDITABLE_FIELDS[headerKey]?.type ?? null;
+
+    const toNativeDateInputValue = (value) => {
+      if (!value) {
+        return '';
+      }
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return value;
+      }
+      const dateObj = parseDate(value, userDateFormat);
+      return dateObj ? formatDate(dateObj, 'yyyy-MM-dd') : '';
+    };
+
+    const isEditingCell = (rowIndex, colIndex) =>
+      editingCell.value?.row === rowIndex &&
+      editingCell.value?.col === colIndex;
+
+    const sortOptionsByLabel = (options) =>
+      [...options].sort((a, b) =>
+        (a.label || '').localeCompare(b.label || '', 'fr', {
+          sensitivity: 'base',
+        }),
+      );
+
+    const isEmptyCellValue = (value) =>
+      value === null || value === undefined || value === '';
+
+    const getEditableOptions = (headerKey) => {
+      const config = EDITABLE_FIELDS[headerKey];
+      if (!config || config.type !== 'select') {
+        return [];
+      }
+
+      let options = [];
+      if (config.getOptions) {
+        options = config.getOptions();
+      } else if (config.optionsKey) {
+        options = sortOptionsByLabel(
+          leadSelectOptions.value[config.optionsKey] || [],
+        );
+      }
+
+      return [EMPTY_SELECT_OPTION, ...options];
+    };
+
+    const isCurrentOption = (item, headerKey, option) => {
+      const current = getCellValue(item, headerKey);
+      if (option.id === null) {
+        return isEmptyCellValue(current);
+      }
+      return current === option.label;
+    };
+
+    const applyEditableFieldValue = (item, headerKey, value) => {
+      if (headerKey === 'status') {
+        item.status = value;
+        if (Object.prototype.hasOwnProperty.call(item, 'currentSituation')) {
+          item.currentSituation = value;
+        }
+        return;
+      }
+      item[headerKey] = value;
+    };
+
+    const closeCellEditor = () => {
+      editingCell.value = null;
+      editingDateValue.value = '';
+    };
+
+    const getPreviousEditableValue = (item, headerKey) => {
+      if (headerKey === 'status') {
+        return item.status ?? item.currentSituation ?? null;
+      }
+      return item[headerKey] ?? null;
+    };
+
+    const persistInlineFieldEdit = (item, headerKey, value) => {
+      const config = EDITABLE_FIELDS[headerKey];
+      if (!config || typeof value !== 'string') {
+        return Promise.resolve();
+      }
+
+      const previousValue = getPreviousEditableValue(item, headerKey);
+      applyEditableFieldValue(item, headerKey, value);
+
+      return http
+        .request({
+          method: 'PUT',
+          url: `/${window.appGlobal.theme}/api/v2/admin/lead/${item.id}`,
+          data: {
+            apiField: config.apiField,
+            value,
+          },
+        })
+        .then(() => {
+          updateSuccess();
+        })
+        .catch((error) => {
+          applyEditableFieldValue(item, headerKey, previousValue);
+          instance?.proxy?.$toast?.unexpectedError(
+            error?.response?.data?.message,
+          );
+        });
+    };
+
+    const onCellClick = (rowIndex, colIndex, item, header) => {
+      selectCell(rowIndex, colIndex);
+      if (isEditableColumn(header.key)) {
+        editingCell.value = {
+          row: rowIndex,
+          col: colIndex,
+          leadId: item.id,
+          fieldKey: header.key,
+        };
+        editingDateValue.value =
+          getEditableFieldType(header.key) === 'date'
+            ? toNativeDateInputValue(getCellValue(item, header.key))
+            : '';
+        return;
+      }
+      closeCellEditor();
+    };
+
+    const onEditableDateChange = (item, headerKey, event) => {
+      const apiValue = event.target.value ?? '';
+      const currentApiValue = toNativeDateInputValue(
+        getCellValue(item, headerKey),
+      );
+      if (apiValue === currentApiValue) {
+        closeCellEditor();
+        return;
+      }
+      persistInlineFieldEdit(item, headerKey, apiValue);
+      closeCellEditor();
+    };
+
+    const onSelectEditableOption = (item, headerKey, option) => {
+      if (isCurrentOption(item, headerKey, option)) {
+        return;
+      }
+      const value = option.id === null ? '' : String(option.label);
+      persistInlineFieldEdit(item, headerKey, value);
+      closeCellEditor();
+    };
+
+    const onDocumentClick = (event) => {
+      if (!editingCell.value) {
+        return;
+      }
+      if (event.target.closest('.inline-cell-editor')) {
+        return;
+      }
+      closeCellEditor();
+    };
+
+    const onEditableDateBlur = () => {
+      const editingSnapshot = editingCell.value ? {...editingCell.value} : null;
+      window.setTimeout(() => {
+        if (
+          !editingSnapshot ||
+          editingCell.value?.row !== editingSnapshot.row ||
+          editingCell.value?.col !== editingSnapshot.col ||
+          getEditableFieldType(editingSnapshot.fieldKey) !== 'date'
+        ) {
+          return;
+        }
+        closeCellEditor();
+      }, 150);
     };
 
     const totalPages = computed(() => {
@@ -851,7 +1182,7 @@ export default {
         leads.value.map((item) => {
           const row = {};
           tableHeaders.value.forEach((header) => {
-            row[header.label] = item[header.key];
+            row[header.label] = getCellValue(item, header.key);
           });
           return row;
         }),
@@ -870,6 +1201,7 @@ export default {
     };
 
     watch(currentPage, (newPage, oldPage) => {
+      closeCellEditor();
       if (newPage !== oldPage)
         tableData.value = leads.value.slice(
           (newPage - 1) * itemsPerPage,
@@ -944,6 +1276,7 @@ export default {
     });
 
     onMounted(() => {
+      document.addEventListener('click', onDocumentClick);
       openLeadFromUrl();
       // Restaurer les jobs dans jobAutocomplete si nécessaire
       if (jobAutocomplete.value && jobsFilter.value.length > 0) {
@@ -957,10 +1290,25 @@ export default {
           url: `/${window.appGlobal.theme}/api/v2/admin/leads/global-options`,
         })
         .then(({data}) => {
-          allStatuses.value = data.allStatuses || [];
-          allStudyLevels.value = data.allStudyLevels || [];
+          leadSelectOptions.value = {
+            needs: data.needs || [],
+            courseStarts: data.courseStarts || [],
+            studyLevels: data.studyLevels || [],
+            countries: data.countries || [],
+            fundings: data.fundings || [],
+            handicaps: data.handicaps || [],
+            status: data.status || [],
+            trainingMethods: data.trainingMethods || [],
+            sources: data.sources || [],
+            timeSlots: data.timeSlots || [],
+            professionalExperiences: data.professionalExperiences || [],
+          };
           contactLogTypes.value = data.contactLogTypes || [];
         });
+    });
+
+    onBeforeUnmount(() => {
+      document.removeEventListener('click', onDocumentClick);
     });
 
     return {
@@ -983,12 +1331,22 @@ export default {
       selectedCell,
       selectedRow,
       selectedLeadId,
-      allStatuses,
-      allStudyLevels,
+      editingCell,
+      editingDateValue,
+      leadSelectOptions,
       contactLogTypes,
       filterItems,
       onClickReset,
       selectCell,
+      onCellClick,
+      isEditableColumn,
+      getEditableFieldType,
+      isEditingCell,
+      getEditableOptions,
+      onEditableDateChange,
+      onEditableDateBlur,
+      isCurrentOption,
+      onSelectEditableOption,
       getCellValue,
       rules,
       departmentCodeOptions,
@@ -1051,6 +1409,10 @@ export default {
 .orangehrm-horizontal-scroll-container {
   overflow-x: auto;
   width: 100%;
+
+  &.--cell-editing {
+    overflow-y: visible;
+  }
 }
 
 .orangehrm-text,
@@ -1088,6 +1450,28 @@ export default {
     border-bottom: 2px solid #d8dadf;
   }
 
+  .column-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 100%;
+  }
+
+  .column-header__label {
+    min-width: 0;
+  }
+
+  .column-header__edit-icon {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--oxd-primary-one-color);
+    opacity: 0.85;
+  }
+
+  th.editable-column-header {
+    background-color: #eef2ff;
+  }
+
   tbody tr {
     td {
       background-color: white;
@@ -1101,7 +1485,118 @@ export default {
       &.selected-row {
         background-color: #f5f6f7;
       }
+      &.editable-cell {
+        cursor: pointer;
+      }
+      &.editing-cell {
+        padding: 0;
+        z-index: 10;
+
+        &--select {
+          vertical-align: top;
+          overflow: visible;
+        }
+
+        &--date {
+          vertical-align: middle;
+          overflow: hidden;
+        }
+      }
     }
+
+    &:has(.editing-cell) {
+      position: relative;
+      z-index: 10;
+    }
+  }
+}
+
+.inline-cell-editor {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 30;
+  min-width: 100%;
+  max-height: 100px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #d8dadf;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  &--date {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    overflow: hidden;
+    padding: 0.25rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+    border-radius: 0;
+    border: none;
+    background-color: #ffffff;
+  }
+}
+
+.inline-cell-editor__date-input {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d8dadf;
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 12px;
+  color: #64728c;
+  background-color: #ffffff;
+
+  &:focus {
+    outline: none;
+    border-color: var(--oxd-primary-one-color);
+    box-shadow: inset 0 0 0 1px var(--oxd-primary-one-color);
+  }
+}
+
+.inline-cell-editor__options {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+}
+
+.inline-cell-editor__option {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #f5f6f7;
+  }
+
+  &--active {
+    background-color: #eef2ff;
+    color: var(--oxd-primary-one-color);
+    font-weight: 600;
+    cursor: default;
+
+    &:hover {
+      background-color: #eef2ff;
+    }
+  }
+
+  &--empty {
+    color: #9aa5b8;
+    font-style: italic;
   }
 }
 
