@@ -3,6 +3,9 @@
     <!-- Section Utilisateurs -->
     <div class="orangehrm-paper-container">
       <div class="orangehrm-left-header-container">
+        <oxd-text v-if="specificMatching" tag="h6" class="orangehrm-main-title">
+          Utilisateurs
+        </oxd-text>
         <oxd-button
           :label="$t('general.add')"
           icon-name="plus"
@@ -35,7 +38,10 @@
     </div>
 
     <!-- Section Périmètres -->
-    <div class="orangehrm-paper-container perimeter-section">
+    <div
+      v-if="specificMatching"
+      class="orangehrm-paper-container perimeter-section"
+    >
       <div class="orangehrm-left-header-container">
         <oxd-text tag="h6" class="orangehrm-main-title">Périmètres</oxd-text>
         <oxd-button
@@ -91,7 +97,14 @@
                 </oxd-grid-item>
               </oxd-grid>
               <oxd-grid :cols="2">
-                <oxd-grid-item v-if="!isAdmin && matchings && matchings.length">
+                <oxd-grid-item
+                  v-if="
+                    !isAdmin &&
+                    matchings &&
+                    matchings.length &&
+                    specificMatching
+                  "
+                >
                   <oxd-input-field
                     v-model="matchingSelected"
                     type="select"
@@ -343,6 +356,11 @@ export default {
       type: Array,
       required: true,
       default: () => [],
+    },
+    specificMatching: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
   },
 
@@ -637,7 +655,7 @@ export default {
 
     const fetchMatchingData = () => {
       state.isMatchingLoading = true;
-      this.httpMatchings
+      httpMatchings
         .getAll()
         .then((response) => {
           state.matchingItems = (response.data || []).map((item) => ({
@@ -670,11 +688,11 @@ export default {
     const onClickValidateMatching = () => {
       state.isMatchingSaving = true;
       const requestPromise = state.isMatchingEditing
-        ? this.httpMatchings.update(state.editingMatchingItem.id, {
+        ? httpMatchings.update(state.editingMatchingItem.id, {
             title: state.matchingTitle,
             description: state.matchingDescription,
           })
-        : this.httpMatchings.create({
+        : httpMatchings.create({
             title: state.matchingTitle,
             description: state.matchingDescription,
           });
@@ -788,13 +806,17 @@ export default {
           sortField: 'role',
           style: {flex: 0.5},
         },
-        {
-          name: 'matchingLabel',
-          title: this.$t('Périmètre'),
-          sortField: 'matchingLabel',
-          style: {flex: 0.75},
-          cellRenderer: this.matchingLabelCellRenderer,
-        },
+        ...(this.specificMatching
+          ? [
+              {
+                name: 'matchingLabel',
+                title: this.$t('Périmètre'),
+                sortField: 'matchingLabel',
+                style: {flex: 0.75},
+                cellRenderer: this.matchingLabelCellRenderer,
+              },
+            ]
+          : []),
         {
           name: 'actions',
           slot: 'action',
@@ -808,7 +830,7 @@ export default {
   },
   beforeMount() {
     this.fetchUserData();
-    this.fetchMatchingData();
+    if (this.specificMatching) this.fetchMatchingData();
   },
   methods: {
     matchingLabelCellRenderer(...[, , , row]) {

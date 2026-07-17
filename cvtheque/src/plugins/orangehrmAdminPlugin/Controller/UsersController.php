@@ -28,13 +28,20 @@ class UsersController extends AbstractVueController
     public function preRender(Request $request): void
     {
         $component = new Component('users-list');
-        $matchings = $this->getHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken());
-        $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, array_map(function($id, $label) {
-            return [
-                'id' => $id,
-                'label' => $label
-            ];
-        }, array_keys($matchings), $matchings)));
+        try {
+            $matchings = $this->getHedwigeMatchings($this->getAuthUser()->getUserHedwigeToken());
+            $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, array_map(function($id, $label) {
+                return [
+                    'id' => $id,
+                    'label' => $label
+                ];
+            }, array_keys($matchings), $matchings)));
+            $component->addProp(new Prop('specific-matching', Prop::TYPE_BOOLEAN, true));
+        } catch (\Exception $e) {
+            $component->addProp(new Prop('matchings', Prop::TYPE_ARRAY, []));
+            $component->addProp(new Prop('specific-matching', Prop::TYPE_BOOLEAN, false));
+        }
+
         $this->setComponent($component);
     }
 
@@ -266,21 +273,17 @@ class UsersController extends AbstractVueController
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
-        try {
-            $url = "{$clientBaseUrl}/actor/matching";
-            $response = $client->request('GET', $url, [
-                'headers' => [
-                    'Authorization' => $token,
-                ],
-            ]);
+        $url = "{$clientBaseUrl}/actor/matching";
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
 
-            $body = (string) $response->getBody();
-            $decoded = json_decode($body, true) ?? [];
-            return is_array($decoded) ? $decoded : [];
-        } catch (\Exception $e) {
-            error_log('[UsersController] getHedwigeMatchings error: ' . $e->getMessage());
-            return [];
-        }
+        $body = (string) $response->getBody();
+        $decoded = json_decode($body, true) ?? [];
+        return is_array($decoded) ? $decoded : [];
+        
     }
 
     private function getApplicationStatus(string $token): bool

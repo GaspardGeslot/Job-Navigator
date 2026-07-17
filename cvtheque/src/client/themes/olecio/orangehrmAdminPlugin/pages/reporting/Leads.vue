@@ -230,43 +230,82 @@
                 @click.stop="onCellClick(index, headerIndex, item, header)"
               >
                 <div
-                  v-if="isEditingCell(index, headerIndex)"
-                  class="inline-cell-editor"
-                  :class="{
-                    'inline-cell-editor--date':
-                      getEditableFieldType(header.key) === 'date',
-                  }"
+                  v-if="
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header.key) === 'date'
+                  "
+                  class="inline-cell-editor inline-cell-editor--date"
                   @click.stop
                 >
                   <input
-                    v-if="getEditableFieldType(header.key) === 'date'"
                     type="date"
                     class="inline-cell-editor__date-input"
                     :value="editingDateValue"
                     @click.stop
-                    @change="onEditableDateChange(item, header.key, $event)"
-                    @blur="onEditableDateBlur"
+                    @input="onEditableDateInput"
+                    @change="onEditableDateInput"
+                    @keydown.enter.prevent="commitDateEditIfNeeded"
+                    @keydown.escape.prevent="closeCellEditor"
                   />
-                  <ul v-else class="inline-cell-editor__options">
-                    <li
-                      v-for="option in getEditableOptions(header.key)"
-                      :key="`${header.key}-${option.id ?? 'empty'}`"
-                      :class="{
-                        'inline-cell-editor__option': true,
-                        'inline-cell-editor__option--active': isCurrentOption(
-                          item,
-                          header.key,
-                          option,
-                        ),
-                        'inline-cell-editor__option--empty': option.id === null,
-                      }"
-                      @click.stop="
-                        onSelectEditableOption(item, header.key, option)
-                      "
+                </div>
+                <template
+                  v-else-if="
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header.key) === 'select'
+                  "
+                >
+                  <div class="editable-cell-content">
+                    <span class="editable-cell-content__value">{{
+                      getCellValue(item, header.key)
+                    }}</span>
+                    <oxd-icon
+                      name="caret-down-fill"
+                      class="editable-cell-content__icon"
+                    />
+                  </div>
+                  <teleport to="#app">
+                    <ul
+                      class="inline-cell-editor inline-cell-editor--select-dropdown"
+                      :style="selectEditorStyle"
+                      @click.stop
                     >
-                      {{ option.id === null ? '—' : option.label }}
-                    </li>
-                  </ul>
+                      <li
+                        v-for="option in getEditableOptions(header.key)"
+                        :key="`${header.key}-${option.id ?? 'empty'}`"
+                        :class="{
+                          'inline-cell-editor__option': true,
+                          'inline-cell-editor__option--active': isCurrentOption(
+                            item,
+                            header.key,
+                            option,
+                          ),
+                          'inline-cell-editor__option--empty':
+                            option.id === null,
+                        }"
+                        @click.stop="
+                          onSelectEditableOption(item, header.key, option)
+                        "
+                      >
+                        {{ option.id === null ? '—' : option.label }}
+                      </li>
+                    </ul>
+                  </teleport>
+                </template>
+                <div
+                  v-else-if="isEditableColumn(header.key)"
+                  class="editable-cell-content"
+                >
+                  <span class="editable-cell-content__value">{{
+                    getCellValue(item, header.key)
+                  }}</span>
+                  <oxd-icon
+                    :name="
+                      getEditableFieldType(header.key) === 'date'
+                        ? 'calendar3'
+                        : 'caret-down-fill'
+                    "
+                    class="editable-cell-content__icon"
+                  />
                 </div>
                 <template v-else>
                   {{ getCellValue(item, header.key) }}
@@ -311,6 +350,7 @@
 import {
   ref,
   computed,
+  nextTick,
   onMounted,
   onBeforeUnmount,
   watch,
@@ -569,6 +609,7 @@ export default {
     const selectedLeadId = ref(null);
     const editingCell = ref(null);
     const editingDateValue = ref('');
+    const selectEditorStyle = ref({});
     const leadSelectOptions = ref({
       needs: [],
       courseStarts: [],
@@ -927,6 +968,77 @@ export default {
     const closeCellEditor = () => {
       editingCell.value = null;
       editingDateValue.value = '';
+      selectEditorStyle.value = {};
+    };
+
+    const commitDateEditIfNeeded = () => {
+      if (
+        !editingCell.value ||
+        getEditableFieldType(editingCell.value.fieldKey) !== 'date'
+      ) {
+        return;
+      }
+
+      const {leadId, fieldKey} = editingCell.value;
+      const item = tableData.value.find((row) => row.id === leadId);
+      if (!item) {
+        closeCellEditor();
+        return;
+      }
+
+      const apiValue = editingDateValue.value ?? '';
+      const currentApiValue = toNativeDateInputValue(
+        getCellValue(item, fieldKey),
+      );
+      if (apiValue !== currentApiValue) {
+        persistInlineFieldEdit(item, fieldKey, apiValue);
+      }
+      closeCellEditor();
+    };
+
+    const updateSelectEditorPosition = () => {
+      if (
+        !editingCell.value ||
+        getEditableFieldType(editingCell.value.fieldKey) !== 'select'
+      ) {
+        return;
+      }
+
+      const cell = document.querySelector('.editing-cell--select');
+      if (!cell) {
+        return;
+      }
+
+      const rect = cell.getBoundingClientRect();
+      const preferredMaxHeight = 240;
+      const spaceBelow = window.innerHeight - rect.bottom - 8;
+      const spaceAbove = rect.top - 8;
+      const openUpward =
+        spaceBelow < Math.min(preferredMaxHeight, 140) &&
+        spaceAbove > spaceBelow;
+      const maxHeight = Math.max(
+        120,
+        Math.min(preferredMaxHeight, openUpward ? spaceAbove : spaceBelow),
+      );
+
+      selectEditorStyle.value = {
+        position: 'fixed',
+        top: openUpward ? 'auto' : `${rect.bottom}px`,
+        bottom: openUpward ? `${window.innerHeight - rect.top}px` : 'auto',
+        left: `${rect.left}px`,
+        minWidth: `${Math.max(rect.width, 140)}px`,
+        maxHeight: `${maxHeight}px`,
+        zIndex: 2000,
+      };
+    };
+
+    const onSelectEditorReposition = () => {
+      if (
+        editingCell.value &&
+        getEditableFieldType(editingCell.value.fieldKey) === 'select'
+      ) {
+        updateSelectEditorPosition();
+      }
     };
 
     const getPreviousEditableValue = (item, headerKey) => {
@@ -966,6 +1078,15 @@ export default {
     };
 
     const onCellClick = (rowIndex, colIndex, item, header) => {
+      if (
+        editingCell.value &&
+        getEditableFieldType(editingCell.value.fieldKey) === 'date' &&
+        (editingCell.value.row !== rowIndex ||
+          editingCell.value.col !== colIndex)
+      ) {
+        commitDateEditIfNeeded();
+      }
+
       selectCell(rowIndex, colIndex);
       if (isEditableColumn(header.key)) {
         editingCell.value = {
@@ -978,22 +1099,34 @@ export default {
           getEditableFieldType(header.key) === 'date'
             ? toNativeDateInputValue(getCellValue(item, header.key))
             : '';
+        if (getEditableFieldType(header.key) === 'select') {
+          nextTick(() => {
+            updateSelectEditorPosition();
+          });
+        } else if (getEditableFieldType(header.key) === 'date') {
+          nextTick(() => {
+            const input = document.querySelector(
+              '.inline-cell-editor__date-input',
+            );
+            if (input) {
+              input.focus();
+              if (typeof input.showPicker === 'function') {
+                try {
+                  input.showPicker();
+                } catch (e) {
+                  // showPicker may throw if not triggered by a user gesture
+                }
+              }
+            }
+          });
+        }
         return;
       }
       closeCellEditor();
     };
 
-    const onEditableDateChange = (item, headerKey, event) => {
-      const apiValue = event.target.value ?? '';
-      const currentApiValue = toNativeDateInputValue(
-        getCellValue(item, headerKey),
-      );
-      if (apiValue === currentApiValue) {
-        closeCellEditor();
-        return;
-      }
-      persistInlineFieldEdit(item, headerKey, apiValue);
-      closeCellEditor();
+    const onEditableDateInput = (event) => {
+      editingDateValue.value = event.target.value ?? '';
     };
 
     const onSelectEditableOption = (item, headerKey, option) => {
@@ -1012,22 +1145,14 @@ export default {
       if (event.target.closest('.inline-cell-editor')) {
         return;
       }
+      if (getEditableFieldType(editingCell.value.fieldKey) === 'date') {
+        // Ne pas fermer pendant l'interaction avec le date picker natif
+        // (scroll d'années, etc.) : le blur/focus hors input est normal.
+        // On ne commit que sur un vrai clic hors éditeur.
+        commitDateEditIfNeeded();
+        return;
+      }
       closeCellEditor();
-    };
-
-    const onEditableDateBlur = () => {
-      const editingSnapshot = editingCell.value ? {...editingCell.value} : null;
-      window.setTimeout(() => {
-        if (
-          !editingSnapshot ||
-          editingCell.value?.row !== editingSnapshot.row ||
-          editingCell.value?.col !== editingSnapshot.col ||
-          getEditableFieldType(editingSnapshot.fieldKey) !== 'date'
-        ) {
-          return;
-        }
-        closeCellEditor();
-      }, 150);
     };
 
     const totalPages = computed(() => {
@@ -1277,6 +1402,8 @@ export default {
 
     onMounted(() => {
       document.addEventListener('click', onDocumentClick);
+      window.addEventListener('resize', onSelectEditorReposition);
+      window.addEventListener('scroll', onSelectEditorReposition, true);
       openLeadFromUrl();
       // Restaurer les jobs dans jobAutocomplete si nécessaire
       if (jobAutocomplete.value && jobsFilter.value.length > 0) {
@@ -1309,6 +1436,8 @@ export default {
 
     onBeforeUnmount(() => {
       document.removeEventListener('click', onDocumentClick);
+      window.removeEventListener('resize', onSelectEditorReposition);
+      window.removeEventListener('scroll', onSelectEditorReposition, true);
     });
 
     return {
@@ -1333,6 +1462,7 @@ export default {
       selectedLeadId,
       editingCell,
       editingDateValue,
+      selectEditorStyle,
       leadSelectOptions,
       contactLogTypes,
       filterItems,
@@ -1343,8 +1473,9 @@ export default {
       getEditableFieldType,
       isEditingCell,
       getEditableOptions,
-      onEditableDateChange,
-      onEditableDateBlur,
+      onEditableDateInput,
+      commitDateEditIfNeeded,
+      closeCellEditor,
       isCurrentOption,
       onSelectEditableOption,
       getCellValue,
@@ -1489,15 +1620,15 @@ export default {
         cursor: pointer;
       }
       &.editing-cell {
-        padding: 0;
         z-index: 10;
 
         &--select {
-          vertical-align: top;
+          vertical-align: middle;
           overflow: visible;
         }
 
         &--date {
+          padding: 0;
           vertical-align: middle;
           overflow: hidden;
         }
@@ -1511,15 +1642,25 @@ export default {
   }
 }
 
+.editable-cell-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 100%;
+
+  &__value {
+    min-width: 0;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--oxd-primary-one-color);
+    opacity: 0.75;
+  }
+}
+
 .inline-cell-editor {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 30;
-  min-width: 100%;
-  max-height: 100px;
-  overflow-x: hidden;
-  overflow-y: auto;
   background-color: #ffffff;
   border: 1px solid #d8dadf;
   border-radius: 4px;
@@ -1543,6 +1684,15 @@ export default {
     border-radius: 0;
     border: none;
     background-color: #ffffff;
+  }
+
+  &--select-dropdown {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 }
 
@@ -1568,16 +1718,13 @@ export default {
   }
 }
 
-.inline-cell-editor__options {
-  list-style: none;
-  margin: 0;
-  padding: 0.25rem 0;
-}
-
 .inline-cell-editor__option {
   padding: 0.5rem 1rem;
   cursor: pointer;
   white-space: nowrap;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 12px;
+  color: #64728c;
 
   &:hover {
     background-color: #f5f6f7;
