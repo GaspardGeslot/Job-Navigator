@@ -81,7 +81,7 @@
                     <oxd-switch-input v-model="hasFilter" />
                   </div>
                 </oxd-grid-item>
-                <oxd-grid-item>
+                <oxd-grid-item style="margin-top: 1rem">
                   <div class="orangehrm-switch-wrapper">
                     <div class="external-set-label-row">
                       <oxd-text class="oxd-label">
@@ -98,7 +98,7 @@
                         <span class="external-set-help-tooltip">
                           {{
                             $t(
-                              'determine si le champs est définissable par les accès API externes',
+                              'Détermine si le champs est définissable par les accès API externes',
                             )
                           }}
                         </span>
@@ -107,7 +107,11 @@
                     <oxd-switch-input v-model="allowExternalSet" />
                   </div>
                 </oxd-grid-item>
-                <oxd-grid-item v-if="selectedTypeIsSelect">
+                <oxd-divider />
+                <oxd-grid-item
+                  v-if="selectedTypeIsSelect"
+                  style="margin-top: 1rem"
+                >
                   <oxd-text class="orangehrm-text">
                     {{ $t('Options') }}
                   </oxd-text>
