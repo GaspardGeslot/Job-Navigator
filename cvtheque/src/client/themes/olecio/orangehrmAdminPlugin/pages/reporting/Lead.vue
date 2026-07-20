@@ -9,6 +9,7 @@
     :default-columns="defaultColumns"
     :all-study-levels="allStudyLevels"
     :actor-study-levels="actorStudyLevels"
+    :lead-select-options="leadSelectOptions"
     @update="onLeadUpdate"
   ></lead-profile>
 </template>
@@ -67,12 +68,48 @@ export default {
     return {
       lead: null,
       reportingColumns: null,
+      leadSelectOptions: {
+        needs: [],
+        courseStarts: [],
+        studyLevels: [],
+        countries: [],
+        fundings: [],
+        handicaps: [],
+        status: [],
+        trainingMethods: [],
+        sources: [],
+        timeSlots: [],
+        professionalExperiences: [],
+      },
     };
   },
   beforeMount() {
+    this.loadLeadSelectOptions();
     this.onLeadUpdate();
   },
   methods: {
+    loadLeadSelectOptions() {
+      this.http
+        .request({
+          method: 'GET',
+          url: `/${window.appGlobal.theme}/api/v2/admin/leads/global-options`,
+        })
+        .then(({data}) => {
+          this.leadSelectOptions = {
+            needs: data.needs || [],
+            courseStarts: data.courseStarts || [],
+            studyLevels: data.studyLevels || [],
+            countries: data.countries || [],
+            fundings: data.fundings || [],
+            handicaps: data.handicaps || [],
+            status: data.status || [],
+            trainingMethods: data.trainingMethods || [],
+            sources: data.sources || [],
+            timeSlots: data.timeSlots || [],
+            professionalExperiences: data.professionalExperiences || [],
+          };
+        });
+    },
     onLeadUpdate() {
       this.http.get(this.leadId).then(({data}) => {
         this.lead = data;

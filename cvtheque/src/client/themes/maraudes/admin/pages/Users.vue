@@ -95,14 +95,6 @@
                     :disabled="isEditing"
                   />
                 </oxd-grid-item>
-                <oxd-grid-item>
-                  <div class="orangehrm-switch-wrapper">
-                    <oxd-text class="orangehrm-text">
-                      {{ $t('Est un administrateur ?') }}
-                    </oxd-text>
-                    <oxd-switch-input v-model="isAdmin" />
-                  </div>
-                </oxd-grid-item>
               </oxd-grid>
               <oxd-grid :cols="2">
                 <oxd-grid-item
@@ -120,10 +112,23 @@
                     :options="[{id: null, label: 'Tout'}, ...matchings]"
                   />
                 </oxd-grid-item>
+              </oxd-grid>
+              <oxd-grid :cols="2">
                 <oxd-grid-item>
                   <div class="orangehrm-switch-wrapper">
                     <oxd-text class="orangehrm-text">
-                      {{ $t('Recevoir les notifications par mail ?') }}
+                      {{ $t('Est un administrateur ?') }}
+                    </oxd-text>
+                    <oxd-switch-input
+                      v-model="isAdmin"
+                      :disabled="isEditing && isCurrentUser"
+                    />
+                  </div>
+                </oxd-grid-item>
+                <oxd-grid-item>
+                  <div class="orangehrm-switch-wrapper">
+                    <oxd-text class="orangehrm-text">
+                      {{ $t('Notification de nouveau contact par mail ?') }}
                     </oxd-text>
                     <oxd-switch-input v-model="notify" />
                   </div>
@@ -383,6 +388,7 @@ export default {
       passwordConfirm: '',
       isAdmin: false,
       notify: false,
+      isCurrentUser: false,
       editingItem: null,
       matchingSelected: null,
       // Périmètres
@@ -429,6 +435,7 @@ export default {
                   ? matching.label
                   : '',
               notify: Boolean(item.notify),
+              notifyLabel: item.notify ? 'Oui' : 'Non',
             };
           });
           state.total = response.data.length;
@@ -516,6 +523,7 @@ export default {
       state.passwordConfirm = '';
       state.isAdmin = false;
       state.notify = false;
+      state.isCurrentUser = false;
       state.matchingSelected = null;
       state.isModalOpen = false;
       state.isEditing = false;
@@ -942,6 +950,7 @@ export default {
       this.email = item.email;
       this.isAdmin = item.isAdmin;
       this.notify = item.notify;
+      this.isCurrentUser = item.isCurrentUser;
       this.matchingSelected =
         this.matchings &&
         this.matchings.find(

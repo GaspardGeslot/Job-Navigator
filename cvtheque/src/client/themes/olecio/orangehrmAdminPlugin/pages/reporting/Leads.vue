@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="orangehrm-background-container">
     <oxd-table-filter :filter-title="$t('Filtres')">
@@ -163,13 +164,30 @@
           <oxd-pagination v-model:current="currentPage" :length="totalPages" />
         </div>
       </div>
-      <div class="orangehrm-horizontal-scroll-container">
+      <div
+        class="orangehrm-horizontal-scroll-container"
+        :class="{'--cell-editing': editingCell}"
+      >
         <table class="orangehrm-custom-table">
           <thead>
             <tr>
               <th class="action-column"></th>
-              <th v-for="(header, index) in tableHeaders" :key="index">
-                {{ header.label }}
+              <th
+                v-for="(header, index) in tableHeaders"
+                :key="index"
+                :class="{
+                  'editable-column-header': isEditableColumn(header.key),
+                }"
+              >
+                <span class="column-header">
+                  <span class="column-header__label">{{ header.label }}</span>
+                  <oxd-icon
+                    v-if="isEditableColumn(header.key)"
+                    name="pencil-fill"
+                    class="column-header__edit-icon"
+                    title="Modifiable — cliquez sur une cellule"
+                  />
+                </span>
               </th>
               <th class="action-column"></th>
             </tr>
@@ -200,8 +218,16 @@
                     selectedCell.row === index &&
                     selectedCell.col === headerIndex,
                   'selected-row': selectedCell.row === index,
+                  'editable-cell': isEditableColumn(header.key),
+                  'editing-cell': isEditingCell(index, headerIndex),
+                  'editing-cell--date':
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header.key) === 'date',
+                  'editing-cell--select':
+                    isEditingCell(index, headerIndex) &&
+                    getEditableFieldType(header.key) === 'select',
                 }"
-                @click="selectCell(index, headerIndex)"
+                @click.stop="onCellClick(index, headerIndex, item, header)"
               >
                 <div
                   v-if="
@@ -311,8 +337,9 @@
     <view-lead
       v-if="selectedLeadId"
       :lead-id="selectedLeadId"
-      :all-statuses="allStatuses"
-      :all-study-levels="allStudyLevels"
+      :all-statuses="leadSelectOptions.status"
+      :all-study-levels="leadSelectOptions.studyLevels"
+      :lead-select-options="leadSelectOptions"
       :contact-log-types="contactLogTypes"
       @close="selectedLeadId = null"
       @open-full-page="openLeadInFullPage"
@@ -341,14 +368,79 @@ import {navigate} from '@/core/util/helper/navigation';
 import useToast from '@/core/util/composable/useToast';
 import JobAutocomplete from '@/core/components/inputs/JobAutocomplete.vue';
 import {APIService} from '@/core/util/services/api.service';
-import {OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
+import {OxdIcon, OxdSpinner, OxdSwitchInput} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog.vue';
 import DateInput from '@/core/components/inputs/DateInput';
 import ViewLead from '../../components/ViewLead.vue';
 
+const CIVILITY_OPTIONS = [
+  {id: 'Monsieur', label: 'Monsieur'},
+  {id: 'Madame', label: 'Madame'},
+];
+
+const EMPTY_SELECT_OPTION = {id: null, label: ''};
+
+const EDITABLE_FIELDS = {
+  civility: {
+    apiField: 'civility',
+    type: 'select',
+    getOptions: () => CIVILITY_OPTIONS,
+  },
+  country: {
+    apiField: 'country',
+    type: 'select',
+    optionsKey: 'countries',
+  },
+  studyLevel: {
+    apiField: 'study_level',
+    type: 'select',
+    optionsKey: 'studyLevels',
+  },
+  status: {
+    apiField: 'status',
+    type: 'select',
+    optionsKey: 'status',
+  },
+  trainingMethod: {
+    apiField: 'training_method',
+    type: 'select',
+    optionsKey: 'trainingMethods',
+  },
+  need: {
+    apiField: 'need',
+    type: 'select',
+    optionsKey: 'needs',
+  },
+  handicap: {
+    apiField: 'handicap',
+    type: 'select',
+    optionsKey: 'handicaps',
+  },
+  courseStart: {
+    apiField: 'course_start',
+    type: 'select',
+    optionsKey: 'courseStarts',
+  },
+  funding: {
+    apiField: 'funding',
+    type: 'select',
+    optionsKey: 'fundings',
+  },
+  source: {
+    apiField: 'source',
+    type: 'select',
+    optionsKey: 'sources',
+  },
+  birthDate: {
+    apiField: 'birth_date',
+    type: 'date',
+  },
+};
+
 export default {
   components: {
+    'oxd-icon': OxdIcon,
     'oxd-loading-spinner': OxdSpinner,
     'job-autocomplete': JobAutocomplete,
     'confirmation-dialog': ConfirmationDialog,
@@ -372,6 +464,7 @@ export default {
   },
   setup(props) {
     const {$t} = usei18n();
+    const instance = getCurrentInstance();
     const jobAutocomplete = ref(null);
 
     const userDateFormat = 'yyyy-MM-dd';
@@ -507,7 +600,7 @@ export default {
     const leads = ref([]);
     const defaultColumns = ref(null);
     const isLoading = ref(false);
-    const {noRecordsFound} = useToast();
+    const {noRecordsFound, updateSuccess} = useToast();
     const totalRecords = ref(0);
     const itemsPerPage = 50;
     const currentPage = ref(1);
@@ -798,6 +891,9 @@ export default {
     };
 
     const getCellValue = (item, headerKey) => {
+      if (headerKey === 'status') {
+        return item.status ?? item.currentSituation ?? '';
+      }
       return item[headerKey];
     };
 
@@ -1211,7 +1307,7 @@ export default {
         leads.value.map((item) => {
           const row = {};
           tableHeaders.value.forEach((header) => {
-            row[header.label] = item[header.key];
+            row[header.label] = getCellValue(item, header.key);
           });
           return row;
         }),
@@ -1230,6 +1326,7 @@ export default {
     };
 
     watch(currentPage, (newPage, oldPage) => {
+      closeCellEditor();
       if (newPage !== oldPage)
         tableData.value = leads.value.slice(
           (newPage - 1) * itemsPerPage,
@@ -1320,8 +1417,19 @@ export default {
           url: `/${window.appGlobal.theme}/api/v2/admin/leads/global-options`,
         })
         .then(({data}) => {
-          allStatuses.value = data.allStatuses || [];
-          allStudyLevels.value = data.allStudyLevels || [];
+          leadSelectOptions.value = {
+            needs: data.needs || [],
+            courseStarts: data.courseStarts || [],
+            studyLevels: data.studyLevels || [],
+            countries: data.countries || [],
+            fundings: data.fundings || [],
+            handicaps: data.handicaps || [],
+            status: data.status || [],
+            trainingMethods: data.trainingMethods || [],
+            sources: data.sources || [],
+            timeSlots: data.timeSlots || [],
+            professionalExperiences: data.professionalExperiences || [],
+          };
           contactLogTypes.value = data.contactLogTypes || [];
         });
     });
@@ -1432,6 +1540,10 @@ export default {
 .orangehrm-horizontal-scroll-container {
   overflow-x: auto;
   width: 100%;
+
+  &.--cell-editing {
+    overflow-y: visible;
+  }
 }
 
 .orangehrm-text,
@@ -1467,6 +1579,28 @@ export default {
     top: 0;
     z-index: 1;
     border-bottom: 2px solid #d8dadf;
+  }
+
+  .column-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 100%;
+  }
+
+  .column-header__label {
+    min-width: 0;
+  }
+
+  .column-header__edit-icon {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--oxd-primary-one-color);
+    opacity: 0.85;
+  }
+
+  th.editable-column-header {
+    background-color: #eef2ff;
   }
 
   tbody tr {
