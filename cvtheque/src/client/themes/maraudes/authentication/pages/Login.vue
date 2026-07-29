@@ -86,11 +86,15 @@ export default {
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
     return {
-      username: '',
+      username: this.email || '',
       password: '',
       rules: {
         username: [required],

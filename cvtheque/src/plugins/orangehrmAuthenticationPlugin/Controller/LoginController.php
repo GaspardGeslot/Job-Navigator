@@ -32,6 +32,8 @@ use OrangeHRM\CorporateBranding\Traits\ThemeServiceTrait;
 use OrangeHRM\Entity\OpenIdProvider;
 use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\OpenidAuthentication\Traits\Service\SocialMediaAuthenticationServiceTrait;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class LoginController extends AbstractVueController implements PublicControllerInterface
 {
@@ -102,13 +104,28 @@ class LoginController extends AbstractVueController implements PublicControllerI
         }, $providersArray);
 
         $component->addProp(new Prop('authenticators', Prop::TYPE_ARRAY, $providers));
+
+        $email = $request->query->get('email');
+        if ($email !== null && $email !== '')
+            $component->addProp(new Prop('email', Prop::TYPE_STRING, $this->decryptEmail($email)));
+
         $this->setComponent($component);
         $this->setTemplate('no_header.html.twig');
     }
 
-    /**
-     * @inheritDoc
-     */
+    public function decryptEmail(string $email): string
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('POST', "{$clientBaseUrl}/user/decrypt?value={$email}");
+            return $response->getBody() ?? '';
+        } catch (ClientException $e) {
+            return '';
+        }
+    }
+
     public function handle(Request $request)
     {
         if ($this->getAuthUser()->isAuthenticated() && !$this->getAuthUser()->hasToRedefinedPassword()) {

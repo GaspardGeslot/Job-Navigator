@@ -337,44 +337,17 @@
           </oxd-form-row>
         </div>
 
-        <div v-if="defaultColumns.source || defaultColumns.utms">
+        <div v-if="defaultColumns.source">
           <oxd-divider></oxd-divider>
           <oxd-form-row>
             <oxd-text class="orangehrm-sub-title" tag="h6">
-              {{ $t('Source et marketing') }}
+              {{ $t('Source') }}
             </oxd-text>
             <oxd-grid :cols="3" class="orangehrm-full-width-grid">
               <oxd-grid-item v-if="defaultColumns.source">
                 <oxd-input-field
                   v-model="profile.source"
                   :label="$t('Source')"
-                  :disabled="true"
-                />
-              </oxd-grid-item>
-            </oxd-grid>
-            <oxd-grid
-              v-if="defaultColumns.utms"
-              :cols="3"
-              class="orangehrm-full-width-grid"
-            >
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="profile.utmCampaign"
-                  :label="$t('Campagne UTM')"
-                  :disabled="true"
-                />
-              </oxd-grid-item>
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="profile.utmGroup"
-                  :label="$t('Groupe UTM')"
-                  :disabled="true"
-                />
-              </oxd-grid-item>
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="profile.utmSource"
-                  :label="$t('Source UTM')"
                   :disabled="true"
                 />
               </oxd-grid-item>
@@ -588,9 +561,6 @@ const LeadProfileModel = {
   trainingMethod: '',
   handicap: '',
   funding: '',
-  utmCampaign: '',
-  utmGroup: '',
-  utmSource: '',
   address: '',
   city: '',
   country: '',
@@ -880,9 +850,6 @@ export default {
       this.profile.trainingMethod = this.lead.trainingMethod;
       this.profile.handicap = this.lead.handicap;
       this.profile.funding = this.lead.funding;
-      this.profile.utmCampaign = this.lead.utmCampaign;
-      this.profile.utmGroup = this.lead.utmGroup;
-      this.profile.utmSource = this.lead.utmSource;
       this.profile.address = this.lead.address;
       this.profile.city = this.lead.city;
       this.profile.country = this.lead.country;
