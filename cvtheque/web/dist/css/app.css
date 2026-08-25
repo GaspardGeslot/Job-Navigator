@@ -103,6 +103,12 @@
   align-self: center;
   margin-left: unset;
 }
+.oxd-layout .oxd-brand {
+  justify-content: center;
+}
+.oxd-layout .oxd-brand-banner img {
+  width: auto;
+}
 /*!*******************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-24.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-24.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-24.use[3]!./src/core/styles/global.scss ***!
   \*******************************************************************************************************************************************************************************************************************************************/

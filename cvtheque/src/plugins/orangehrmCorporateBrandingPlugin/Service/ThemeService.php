@@ -241,7 +241,7 @@ class ThemeService
     {
         $assetsVersion = Config::get(Config::VUE_BUILD_TIMESTAMP);
         $theme = $this->getThemeDao()->getThemeByThemeName($theme);
-        return $theme !== null ? $theme->getClientBannerFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/Constructys_banner_streched.png";
+        return $theme !== null ? $theme->getClientBannerFilename() : "https://jobnavigator-cdn.fra1.cdn.digitaloceanspaces.com/prod/logo/constructys_branding.png";
         /*if ($this->getImageETag('client_banner') !== null) {
             return $request->getBaseUrl() . "/admin/theme/image/clientBanner?v=$assetsVersion";
         }

@@ -131,4 +131,12 @@ export default {
     margin-left: unset;
   }
 }
+
+.oxd-layout .oxd-brand {
+  justify-content: center;
+}
+
+.oxd-layout .oxd-brand-banner img {
+  width: auto;
+}
 </style>
