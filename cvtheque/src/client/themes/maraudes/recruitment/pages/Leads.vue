@@ -318,8 +318,10 @@
       :default-columns="reportingDefaultColumns"
       :custom-columns="customColumns"
       :contact-log-types="contactLogTypes"
+      :scope-options="scopeOptions"
       @close="selectedLeadId = null"
       @open-full-page="openLeadInFullPage"
+      @update="onViewLeadUpdate"
     />
   </div>
 </template>
@@ -390,6 +392,10 @@ export default {
     otherMatchings: {
       type: Boolean,
       default: null,
+    },
+    scopeOptions: {
+      type: Array,
+      default: () => [],
     },
   },
   setup(props) {
@@ -782,6 +788,79 @@ export default {
       }
       // Colonne standard
       return item[headerKey];
+    };
+
+    const asLabel = (value) =>
+      value && typeof value === 'object' ? value.label ?? null : value;
+
+    const mapProfileToTableRow = (profile, existingLead) => {
+      const row = {
+        civility: asLabel(profile.civility),
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: profile.email,
+        phoneNumberEmail: profile.phoneNumber,
+        address: profile.address,
+        locationPostalCodeEmail: profile.postalCode,
+        city: profile.city,
+        country: asLabel(profile.country),
+        birthDate: profile.birthDate,
+        age: profile.age,
+        jobs: Array.isArray(profile.jobs)
+          ? profile.jobs.filter(Boolean).join(' - ')
+          : profile.jobs,
+        sector: profile.sector,
+        course: profile.course,
+        of: profile.of,
+        status: asLabel(profile.currentSituation) ?? profile.status,
+        studyLevel: asLabel(profile.studyLevel),
+        trainingMethod: asLabel(profile.trainingMethod),
+        need: asLabel(profile.need),
+        handicap: asLabel(profile.handicap),
+        courseStart: asLabel(profile.courseStart),
+        funding: asLabel(profile.funding),
+        source: asLabel(profile.source),
+        timeSlot: asLabel(profile.timeSlot),
+        complement: profile.complement,
+        callBackDate: profile.callBackDate,
+      };
+
+      if (Array.isArray(profile.customColumns)) {
+        const existingCustomColumns = existingLead?.customColumns || [];
+        row.customColumns = existingCustomColumns.map((column) => {
+          const updated = profile.customColumns.find(
+            (item) => Number(item.id) === Number(column.id),
+          );
+          return updated ? {...column, value: updated.value} : column;
+        });
+      }
+
+      return row;
+    };
+
+    const refreshTablePage = () => {
+      const source = leads.value || [];
+      const start = (currentPage.value - 1) * itemsPerPage;
+      tableData.value = source.slice(start, start + itemsPerPage);
+    };
+
+    const onViewLeadUpdate = (updatedLead) => {
+      if (updatedLead?.id == null || !Array.isArray(leads.value)) {
+        return;
+      }
+      const leadId = Number(updatedLead.id);
+      const index = leads.value.findIndex((item) => Number(item.id) === leadId);
+      if (index === -1) {
+        return;
+      }
+      const existingLead = leads.value[index];
+      const nextLeads = [...leads.value];
+      nextLeads[index] = {
+        ...existingLead,
+        ...mapProfileToTableRow(updatedLead, existingLead),
+      };
+      leads.value = nextLeads;
+      refreshTablePage();
     };
 
     const getRawCustomColumnValue = (item, headerConfig) => {
@@ -1312,6 +1391,7 @@ export default {
       exportToExcel,
       fetchData,
       saveFiltersToLocalStorage,
+      onViewLeadUpdate,
       userDateFormat,
       customColumnFilters,
       filterableColumns,
