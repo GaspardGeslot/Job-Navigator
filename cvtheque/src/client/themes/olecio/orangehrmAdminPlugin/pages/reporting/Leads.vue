@@ -343,6 +343,7 @@
       :contact-log-types="contactLogTypes"
       @close="selectedLeadId = null"
       @open-full-page="openLeadInFullPage"
+      @update="onViewLeadUpdate"
     />
   </div>
 </template>
@@ -895,6 +896,67 @@ export default {
         return item.status ?? item.currentSituation ?? '';
       }
       return item[headerKey];
+    };
+
+    const asLabel = (value) =>
+      value && typeof value === 'object' ? value.label ?? null : value;
+
+    const mapProfileToTableRow = (profile) => ({
+      civility: asLabel(profile.civility),
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      phoneNumberEmail: profile.phoneNumber,
+      address: profile.address,
+      locationPostalCodeEmail: profile.postalCode,
+      city: profile.city,
+      country: asLabel(profile.country),
+      birthDate: profile.birthDate,
+      age: profile.age,
+      jobs: Array.isArray(profile.jobs)
+        ? profile.jobs.filter(Boolean).join(' - ')
+        : profile.jobs,
+      sector: profile.sector,
+      course: profile.course,
+      of: profile.of,
+      status: asLabel(profile.currentSituation),
+      studyLevel: asLabel(profile.studyLevel),
+      trainingMethod: asLabel(profile.trainingMethod),
+      need: asLabel(profile.need),
+      handicap: asLabel(profile.handicap),
+      courseStart: asLabel(profile.courseStart),
+      funding: asLabel(profile.funding),
+      utmCampaign: profile.utmCampaign,
+      utmGroup: profile.utmGroup,
+      utmSource: profile.utmSource,
+      source: asLabel(profile.source),
+      timeSlot: asLabel(profile.timeSlot),
+      complement: profile.complement,
+      callBackDate: profile.callBackDate,
+    });
+
+    const refreshTablePage = () => {
+      const source = leads.value || [];
+      const start = (currentPage.value - 1) * itemsPerPage;
+      tableData.value = source.slice(start, start + itemsPerPage);
+    };
+
+    const onViewLeadUpdate = (updatedLead) => {
+      if (updatedLead?.id == null || !Array.isArray(leads.value)) {
+        return;
+      }
+      const leadId = Number(updatedLead.id);
+      const index = leads.value.findIndex((item) => Number(item.id) === leadId);
+      if (index === -1) {
+        return;
+      }
+      const nextLeads = [...leads.value];
+      nextLeads[index] = {
+        ...leads.value[index],
+        ...mapProfileToTableRow(updatedLead),
+      };
+      leads.value = nextLeads;
+      refreshTablePage();
     };
 
     const isEditableColumn = (headerKey) =>
@@ -1486,6 +1548,7 @@ export default {
       updateJobs,
       fetchData,
       saveFiltersToLocalStorage,
+      onViewLeadUpdate,
     };
   },
   methods: {

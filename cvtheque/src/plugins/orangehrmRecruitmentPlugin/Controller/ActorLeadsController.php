@@ -26,6 +26,8 @@ class ActorLeadsController extends AbstractVueController
     {
         $token = $this->getAuthUser()->getUserHedwigeToken();
 
+        $scopeOptions = $this->getHedwigeMatchingOptions($token);
+
         if ($request->attributes->has('id')) {
             $component = new Component('view-lead');
             $component->addProp(new Prop('lead-id', Prop::TYPE_NUMBER, $request->attributes->getInt('id')));
@@ -48,6 +50,8 @@ class ActorLeadsController extends AbstractVueController
                 ];
             }, array_keys($matchingStatusFilterOptions), $matchingStatusFilterOptions)));
         }
+
+        $component->addProp(new Prop('scope-options', Prop::TYPE_ARRAY, $scopeOptions));
 
         $reportingColumns = $this->getReportingColumns($token);
 
@@ -112,6 +116,31 @@ class ActorLeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function getHedwigeMatchingOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/matching/info", [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            $matchings = json_decode($response->getBody(), true) ?? [];
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        return array_map(function ($matching) {
+            return [
+                'id' => $matching['id'],
+                'label' => $matching['title'],
+                'onlyScope' => (bool) ($matching['onlyScope'] ?? false),
+            ];
+        }, $matchings);
     }
 
     public function getAll(Request $request): Response

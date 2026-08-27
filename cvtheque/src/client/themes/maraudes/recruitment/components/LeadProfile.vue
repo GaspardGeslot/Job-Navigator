@@ -418,6 +418,71 @@
           </div>
         </oxd-form-row>
 
+        <oxd-form-row v-if="scopeOptions.length > 0">
+          <oxd-divider></oxd-divider>
+          <div class="orangehrm-telephone-contacts-header">
+            <oxd-text class="orangehrm-sub-title" tag="h6">
+              {{ $t('Périmètres') }}
+            </oxd-text>
+            <oxd-button
+              v-if="canAddScope"
+              icon-name="plus"
+              display-type="secondary"
+              :label="$t('general.add')"
+              @click="onClickAddScope"
+            />
+          </div>
+          <div v-if="isAddingScope" class="orangehrm-lead-scope-add">
+            <oxd-input-field
+              v-model="scopeToAdd"
+              type="select"
+              :label="$t('Périmètre')"
+              :options="availableScopeOptions"
+            />
+            <div class="orangehrm-lead-scope-add-actions">
+              <oxd-button
+                :label="$t('general.cancel')"
+                display-type="ghost"
+                @click="onCancelAddScope"
+              />
+              <oxd-button
+                :label="$t('general.add')"
+                display-type="secondary"
+                :disabled="!scopeToAdd"
+                :loading="isSavingScope"
+                @click="onConfirmAddScope"
+              />
+            </div>
+          </div>
+          <div v-if="leadScopes.length > 0" class="orangehrm-lead-scopes">
+            <div
+              v-for="scope in leadScopes"
+              :key="scope.id"
+              class="orangehrm-lead-scope"
+            >
+              <oxd-text tag="p">{{ scope.title }}</oxd-text>
+              <oxd-icon-button
+                v-if="editable"
+                name="trash"
+                :class="{
+                  'orangehrm-lead-scope-remove--locked': !scope.onlyScope,
+                }"
+                :title="
+                  scope.onlyScope
+                    ? $t('general.delete')
+                    : 'Matching issu du moteur de matching, il ne peut pas être retiré'
+                "
+                @click="onClickRemoveScope(scope)"
+              />
+            </div>
+          </div>
+          <div v-else class="orangehrm-telephone-contacts-empty">
+            <oxd-text tag="p">
+              Aucun périmètre n'est associé à ce lead.
+            </oxd-text>
+          </div>
+        </oxd-form-row>
+
         <div v-if="defaultColumns.complement || defaultColumns.comment">
           <oxd-divider></oxd-divider>
           <oxd-form-row>
@@ -500,6 +565,12 @@
       :subtitle="
         $t('Êtes-vous sûr de vouloir supprimer cette prise de contact ?')
       "
+    ></delete-confirmation>
+
+    <delete-confirmation
+      ref="deleteScopeDialog"
+      :title="$t('general.delete')"
+      :subtitle="$t('Êtes-vous sûr de vouloir retirer ce périmètre ?')"
     ></delete-confirmation>
 
     <contact-log-dialog
@@ -626,6 +697,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    scopeOptions: {
+      type: Array,
+      default: () => [],
+    },
   },
   emits: ['update'],
   setup() {
@@ -654,6 +729,10 @@ export default {
       editingTelephoneContactDate: null,
       contactLogInitialForm: null,
       telephoneContactForm: {...TelephoneContactModel},
+      leadScopes: [],
+      isAddingScope: false,
+      isSavingScope: false,
+      scopeToAdd: null,
       rules: {
         firstName: [shouldNotExceedCharLength(30)],
         lastName: [shouldNotExceedCharLength(30)],
@@ -751,6 +830,21 @@ export default {
         return row;
       });
     },
+    availableScopeOptions() {
+      const assignedIds = new Set(
+        this.leadScopes.map((scope) => String(scope.id)),
+      );
+      return this.scopeOptions.filter(
+        (option) => !assignedIds.has(String(option.id)),
+      );
+    },
+    canAddScope() {
+      return (
+        this.editable &&
+        !this.isAddingScope &&
+        this.availableScopeOptions.length > 0
+      );
+    },
   },
   watch: {
     lead() {
@@ -803,7 +897,10 @@ export default {
           data: dataToSend,
         })
         .then(() => {
-          this.$emit('update');
+          this.$emit('update', {
+            id: this.lead.id,
+            ...dataToSend,
+          });
           this.isLoading = false;
           this.editable = false;
           return this.$toast.updateSuccess();
@@ -880,7 +977,70 @@ export default {
         : [];
       this.profile.customColumns = this.lead.customColumns || [];
       this.profile.callBackDate = this.lead.callBackDate || null;
+      this.leadScopes = Array.isArray(this.lead.matchingShorts)
+        ? this.lead.matchingShorts.map((matching) => ({
+            id: matching.id,
+            title: matching.title,
+            onlyScope: matching.onlyScope ?? false,
+          }))
+        : [];
       this.isLoading = false;
+    },
+    onClickAddScope() {
+      this.scopeToAdd = null;
+      this.isAddingScope = true;
+    },
+    onCancelAddScope() {
+      this.isAddingScope = false;
+      this.scopeToAdd = null;
+    },
+    onConfirmAddScope() {
+      if (!this.scopeToAdd) return;
+      const scope = this.scopeToAdd;
+      this.isSavingScope = true;
+      this.http
+        .request({
+          method: 'POST',
+          url: `/api/v2/admin/leads/${this.lead.id}/matching`,
+          params: {matchingId: scope.id},
+        })
+        .then(() => {
+          this.leadScopes.push({
+            id: scope.id,
+            title: scope.label,
+            onlyScope: scope.onlyScope ?? true,
+          });
+          this.onCancelAddScope();
+          this.$emit('update');
+          return this.$toast.saveSuccess();
+        })
+        .finally(() => {
+          this.isSavingScope = false;
+        });
+    },
+    onClickRemoveScope(scope) {
+      if (!scope.onlyScope) return;
+      this.$refs.deleteScopeDialog.showDialog().then((confirmation) => {
+        if (confirmation === 'ok') {
+          this.isLoading = true;
+          this.http
+            .request({
+              method: 'DELETE',
+              url: `/api/v2/admin/leads/${this.lead.id}/matching`,
+              params: {matchingId: scope.id},
+            })
+            .then(() => {
+              this.leadScopes = this.leadScopes.filter(
+                (item) => String(item.id) !== String(scope.id),
+              );
+              this.$emit('update');
+              return this.$toast.deleteSuccess();
+            })
+            .finally(() => {
+              this.isLoading = false;
+            });
+        }
+      });
     },
     onClickAddTelephoneContact() {
       this.isEditingTelephoneContact = false;
@@ -1114,5 +1274,39 @@ export default {
   border-radius: 0.5rem;
   border: 1px dashed var(--oxd-interface-gray-lighten-52-color);
   text-align: center;
+}
+.orangehrm-lead-scope-add {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+
+  .oxd-input-group {
+    max-width: 24rem;
+  }
+}
+.orangehrm-lead-scope-add-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.orangehrm-lead-scopes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+.orangehrm-lead-scope {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--oxd-background-tint-color);
+  border-radius: 0.5rem;
+}
+.orangehrm-lead-scope-remove--locked {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 </style>

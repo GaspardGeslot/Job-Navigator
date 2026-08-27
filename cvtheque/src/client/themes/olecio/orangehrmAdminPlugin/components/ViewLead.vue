@@ -73,7 +73,7 @@ export default {
       default: () => ({}),
     },
   },
-  emits: ['close', 'open-full-page'],
+  emits: ['close', 'open-full-page', 'update'],
   setup() {
     const http = new APIService(
       window.appGlobal.baseUrl,
@@ -95,7 +95,7 @@ export default {
     leadId: {
       immediate: true,
       handler() {
-        this.onLeadUpdate();
+        this.loadLead();
       },
     },
   },
@@ -114,14 +114,14 @@ export default {
       this.isVisible = false;
       setTimeout(() => this.$emit('close'), TRANSITION_DURATION);
     },
-    onLeadUpdate() {
+    loadLead() {
       this.isLoading = true;
-      this.http
+      return this.http
         .get(this.leadId)
         .then(({data: lead}) => {
           if (!lead?.id) {
             this.handleClose();
-            return;
+            return null;
           }
           this.lead = lead;
           return this.http
@@ -133,14 +133,26 @@ export default {
               this.actorStatuses = options.actorStatuses || [];
               this.actorStudyLevels = options.actorStudyLevels || [];
               this.defaultColumns = options.defaultColumns || null;
+              return lead;
             });
         })
         .catch(() => {
           this.handleClose();
+          return null;
         })
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    onLeadUpdate(payload) {
+      if (payload && typeof payload === 'object') {
+        this.$emit('update', {id: this.leadId, ...payload});
+      }
+      this.loadLead().then((lead) => {
+        if (lead?.id && !(payload && typeof payload === 'object')) {
+          this.$emit('update', lead);
+        }
+      });
     },
   },
 };

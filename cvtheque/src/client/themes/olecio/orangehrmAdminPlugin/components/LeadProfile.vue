@@ -1113,7 +1113,10 @@ export default {
           data: dataToSend,
         })
         .then(() => {
-          this.$emit('update');
+          this.$emit('update', {
+            id: this.lead.id,
+            ...dataToSend,
+          });
           this.isLoading = false;
           this.editable = false;
           return this.$toast.updateSuccess();

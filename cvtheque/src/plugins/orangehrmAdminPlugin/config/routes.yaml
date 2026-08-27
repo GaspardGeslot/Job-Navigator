@@ -2188,6 +2188,22 @@ apiv2_admin_lead_options:
     id: '\d+'
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_lead_matching_add:
+  path: /{theme}/api/v2/admin/leads/{id}/matching
+  controller: OrangeHRM\Admin\Controller\LeadsController::addLeadMatching
+  methods: [ POST ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+apiv2_admin_lead_matching_remove:
+  path: /{theme}/api/v2/admin/leads/{id}/matching
+  controller: OrangeHRM\Admin\Controller\LeadsController::removeLeadMatching
+  methods: [ DELETE ]
+  requirements:
+    id: '\d+'
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
 apiv2_admin_leads_reprocess:
   path: /{theme}/api/v2/admin/leads/{id}
   controller: OrangeHRM\Admin\Controller\LeadsController::reprocess
@@ -2268,6 +2284,20 @@ subdomain_apiv2_admin_lead_options:
   path: /api/v2/admin/leads/{id}/options
   controller: OrangeHRM\Admin\Controller\LeadsController::getLeadOptions
   methods: [ GET ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_lead_matching_add:
+  path: /api/v2/admin/leads/{id}/matching
+  controller: OrangeHRM\Admin\Controller\LeadsController::addLeadMatching
+  methods: [ POST ]
+  requirements:
+    id: '\d+'
+
+subdomain_apiv2_admin_lead_matching_remove:
+  path: /api/v2/admin/leads/{id}/matching
+  controller: OrangeHRM\Admin\Controller\LeadsController::removeLeadMatching
+  methods: [ DELETE ]
   requirements:
     id: '\d+'
 

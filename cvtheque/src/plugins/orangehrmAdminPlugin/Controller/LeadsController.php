@@ -442,6 +442,62 @@ class LeadsController extends AbstractVueController
         );
     }
 
+    public function addLeadMatching(Request $request): Response
+    {
+        $id = $request->attributes->getInt('id');
+        $matchingId = $request->query->get('matchingId');
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $client->request('POST', "{$clientBaseUrl}/lead/{$id}/matching", [
+                'headers' => [
+                    'Authorization' => $this->getAuthUser()->getUserHedwigeToken(),
+                ],
+                'query' => ['matchingId' => $matchingId],
+            ]);
+            return new Response(
+                json_encode(['message' => 'Matching added successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(
+                $e->getResponse()->getBody(),
+                $e->getResponse()->getStatusCode(),
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
+    public function removeLeadMatching(Request $request): Response
+    {
+        $id = $request->attributes->getInt('id');
+        $matchingId = $request->query->get('matchingId');
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $client->request('DELETE', "{$clientBaseUrl}/lead/{$id}/matching", [
+                'headers' => [
+                    'Authorization' => $this->getAuthUser()->getUserHedwigeToken(),
+                ],
+                'query' => ['matchingId' => $matchingId],
+            ]);
+            return new Response(
+                json_encode(['message' => 'Matching removed successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(
+                $e->getResponse()->getBody(),
+                $e->getResponse()->getStatusCode(),
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
     public function getReportingColumns(string $token, ?string $actor = null): array
     {
         try {
