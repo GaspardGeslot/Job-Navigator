@@ -23,21 +23,24 @@
       {{ $t('auth.login') }}
     </oxd-text>
     <div class="orangehrm-login-form">
+      <olecio-connexion
+        :enabled="olecioAuthEnabled"
+        :auth-url="olecioAuthUrl"
+        :auth-client-id="olecioAuthClientId"
+        oauth-origin="login"
+        :csrf-token="token"
+        @error="onOlecioError"
+        @loading="onOlecioLoading"
+      />
+
       <div class="orangehrm-login-error">
         <oxd-alert
-          :show="error !== null"
-          :message="error?.message || ''"
+          :show="displayError !== null"
+          :message="displayError?.message || ''"
           type="error"
         ></oxd-alert>
-        <oxd-sheet
-          v-if="isDemoMode"
-          type="gray-lighten-2"
-          class="orangehrm-demo-credentials"
-        >
-          <oxd-text tag="p">Username : Admin</oxd-text>
-          <oxd-text tag="p">Password : admin123</oxd-text>
-        </oxd-sheet>
       </div>
+
       <oxd-form
         ref="loginForm"
         method="post"
@@ -76,6 +79,7 @@
             display-type="main"
             :label="$t('auth.login')"
             type="submit"
+            :disabled="olecioLoading"
           />
         </oxd-form-actions>
         <oxd-form-actions class="orangehrm-create-account-action">
@@ -83,6 +87,7 @@
             class="orangehrm-create-account-button"
             display-type="main"
             :label="$t('auth.create_accont')"
+            :disabled="olecioLoading"
             @click="navigateUrlCreateAccount"
           />
         </oxd-form-actions>
@@ -105,18 +110,19 @@
 
 <script>
 import {urlFor} from '@/core/util/helper/url';
-import {OxdAlert, OxdSheet} from '@ohrm/oxd';
+import {OxdAlert} from '@ohrm/oxd';
 import {required} from '@/core/util/validation/rules';
 import {navigate, reloadPage} from '@/core/util/helper/navigation';
 import LoginLayout from '../components/LoginLayout.vue';
 import SocialMediaAuth from '../components/SocialMediaAuth.vue';
+import OlecioConnexion from '../components/OlecioConnexion.vue';
 
 export default {
   components: {
     'oxd-alert': OxdAlert,
-    'oxd-sheet': OxdSheet,
     'login-layout': LoginLayout,
     'social-media-auth': SocialMediaAuth,
+    'olecio-connexion': OlecioConnexion,
   },
 
   props: {
@@ -140,6 +146,18 @@ export default {
       type: Array,
       default: () => [],
     },
+    olecioAuthUrl: {
+      type: String,
+      default: '',
+    },
+    olecioAuthClientId: {
+      type: String,
+      default: '',
+    },
+    olecioAuthEnabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -151,12 +169,17 @@ export default {
         password: [required],
       },
       submitted: false,
+      olecioError: null,
+      olecioLoading: false,
     };
   },
 
   computed: {
     submitUrl() {
       return urlFor(`/${window.appGlobal.theme}/auth/validate/admin`);
+    },
+    displayError() {
+      return this.olecioError || this.error;
     },
   },
 
@@ -168,10 +191,16 @@ export default {
 
   methods: {
     onSubmit() {
-      if (!this.submitted) {
+      if (!this.submitted && !this.olecioLoading) {
         this.submitted = true;
         this.$refs.loginForm.$el.submit();
       }
+    },
+    onOlecioError(message) {
+      this.olecioError = {message};
+    },
+    onOlecioLoading(loading) {
+      this.olecioLoading = loading;
     },
     navigateUrlForgotPassword() {
       navigate(`/${window.appGlobal.theme}/auth/requestPasswordResetCode`);

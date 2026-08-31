@@ -142,24 +142,51 @@ class AuthenticationService
         $clientId = $this->getThemeService()->getClientId($theme);
 
         $client = new Client();
-        $clientToken = getenv('HEDWIGE_CLIENT_TOKEN');
         $clientBaseUrl = getenv('HEDWIGE_URL');
 
         try {
             $url = $isCompany ? "{$clientBaseUrl}/company/{$clientId}" : "{$clientBaseUrl}/user/{$clientId}";
+            $body = [
+                'email' => $credentials->getUsername(),
+                'password' => $credentials->getPassword(),
+            ];
+            if ($credentials->getOauthSource()) {
+                $body['oauthSource'] = $credentials->getOauthSource();
+            }
             $client->request('POST', $url, [
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
-                'body' => json_encode([
-                    'email' => $credentials->getUsername(),
-                    'password' => $credentials->getPassword()
-                ])
+                'body' => json_encode($body)
             ]);
             return true;
-        } catch (\Exceptionon $e) {
+        } catch (\Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * @param string $email
+     * @param string $theme
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function existsHedwigeEmail(string $email, string $theme): bool
+    {
+        $clientId = $this->getThemeService()->getClientId($theme);
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        $response = $client->request('GET', "{$clientBaseUrl}/user/{$clientId}/exists/email", [
+            'query' => ['value' => $email],
+        ]);
+
+        $body = (string) $response->getBody();
+        $decoded = json_decode($body, true);
+        if (is_bool($decoded)) {
+            return $decoded;
+        }
+        return filter_var($body, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

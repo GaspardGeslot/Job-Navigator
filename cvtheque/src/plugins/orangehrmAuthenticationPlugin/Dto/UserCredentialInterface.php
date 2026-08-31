@@ -34,4 +34,9 @@ interface UserCredentialInterface
      * @return string|null
      */
     public function getRole(): ?string;
+
+    /**
+     * @return string|null
+     */
+    public function getOauthSource(): ?string;
 }

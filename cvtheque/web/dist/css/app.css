@@ -22168,6 +22168,77 @@ to {
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAuthenticationPlugin/components/OlecioConnexion.vue?vue&type=style&index=0&id=343f5956&scoped=true&lang=scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Import OXD Globals */
+.olecio-login-container[data-v-343f5956] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 0.75rem;
+}
+.olecio-login-label[data-v-343f5956] {
+  font-size: 0.8rem;
+  text-align: center;
+  color: #666;
+  margin: 0;
+}
+.olecio-login-button[data-v-343f5956] {
+  height: 3.5rem;
+  width: 3.5rem;
+  padding: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.olecio-login-button[data-v-343f5956]:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #202124;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+.olecio-login-button[data-v-343f5956]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.olecio-login-text[data-v-343f5956] {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #202124;
+}
+.olecio-hidden-form[data-v-343f5956] {
+  display: none;
+}
+.loading-spinner[data-v-343f5956] {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #2c3e50;
+  border-radius: 50%;
+  animation: olecio-spin-343f5956 1s linear infinite;
+}
+.olecio-logo[data-v-343f5956] {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+@keyframes olecio-spin-343f5956 {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/orangehrmAuthenticationPlugin/pages/login.scss?vue&type=style&index=0&id=eff9f112&lang=scss&scoped=true ***!
   \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -22906,6 +22977,25 @@ to {
     margin-right: 0.5rem;
 }
 }
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/olecio/orangehrmAuthenticationPlugin/pages/OlecioAuthCallback.vue?vue&type=style&index=0&id=ec405942&scoped=true&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+.olecio-callback[data-v-ec405942] {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #333;
+  padding: 1rem;
+}
+.error[data-v-ec405942] {
+  color: #e74c3c;
+  text-align: center;
+  max-width: 420px;
+}
+
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./themes/olecio/orangehrmDashboardPlugin/components/base-widget.scss?vue&type=style&index=0&id=00a15088&lang=scss&scoped=true ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

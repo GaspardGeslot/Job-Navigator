@@ -49,6 +49,23 @@ subdomain_auth_validate_new_account:
   controller: OrangeHRM\Authentication\Controller\ValidateNewAccountController::handle
   methods: [ POST ]
 
+subdomain_auth_validate_new_account_with_role:
+  path: /auth/validateNewAccount/{role}
+  controller: OrangeHRM\Authentication\Controller\ValidateNewAccountController::handle
+  methods: [ POST ]
+  requirements:
+    role: admin|candidate|maraudes
+
+subdomain_auth_validate_olecio:
+  path: /auth/validateOlecio
+  controller: OrangeHRM\Authentication\Controller\ValidateOlecioController::handle
+  methods: [ POST ]
+
+subdomain_auth_olecio_callback:
+  path: /auth/olecio/callback
+  controller: OrangeHRM\Authentication\Controller\OlecioAuthCallbackController::handle
+  methods: [ GET ]
+
 subdomain_auth_logout:
   path: /auth/logout
   controller: OrangeHRM\Authentication\Controller\LogoutController::handle
@@ -201,6 +218,20 @@ auth_validate_new_account:
   path: /{theme}/auth/validateNewAccount
   controller: OrangeHRM\Authentication\Controller\ValidateNewAccountController::handle
   methods: [ POST ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+auth_validate_olecio:
+  path: /{theme}/auth/validateOlecio
+  controller: OrangeHRM\Authentication\Controller\ValidateOlecioController::handle
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+auth_olecio_callback:
+  path: /{theme}/auth/olecio/callback
+  controller: OrangeHRM\Authentication\Controller\OlecioAuthCallbackController::handle
+  methods: [ GET ]
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 

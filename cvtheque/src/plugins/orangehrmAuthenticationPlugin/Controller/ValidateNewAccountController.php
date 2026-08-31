@@ -70,6 +70,8 @@ class ValidateNewAccountController extends AbstractController implements PublicC
         $password = $request->request->get(self::PARAMETER_PASSWORD, '');
         $theme = $request->attributes->get('theme');
         $useSubdomain = $request->attributes->get('_use_subdomain', false);
+        $role = $request->attributes->get('role');
+        $checkRole = $role === 'admin' ? 'Admin' : 'ESS';
         $credentials = new UserCredential($email, $password, 'ESS');
 
         /** @var UrlGenerator $urlGenerator */
@@ -87,7 +89,7 @@ class ValidateNewAccountController extends AbstractController implements PublicC
             /** @var AuthProviderChain $authProviderChain */
             $authProviderChain = $this->getContainer()->get(Services::AUTH_PROVIDER_CHAIN);
             
-            $token = $authProviderChain->signIn(new AuthParams($credentials, null, $theme));
+            $token = $authProviderChain->signIn(new AuthParams($credentials, null, $theme, $checkRole));
             $success = !is_null($token);
 
             if (!$success)

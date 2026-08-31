@@ -4,13 +4,24 @@
       {{ $t('auth.create_accont') }}
     </oxd-text>
     <div class="orangehrm-login-form">
+      <olecio-connexion
+        :enabled="olecioAuthEnabled"
+        :auth-url="olecioAuthUrl"
+        :auth-client-id="olecioAuthClientId"
+        oauth-origin="createAccount"
+        :csrf-token="token"
+        @error="onOlecioError"
+        @loading="onOlecioLoading"
+      />
+
       <div class="orangehrm-login-error">
         <oxd-alert
-          :show="error !== null"
-          :message="error?.message || ''"
+          :show="displayError !== null"
+          :message="displayError?.message || ''"
           type="error"
         ></oxd-alert>
       </div>
+
       <oxd-form
         ref="createAccountForm"
         method="post"
@@ -77,6 +88,7 @@
             display-type="main"
             :label="$t('auth.create_accont')"
             type="submit"
+            :disabled="olecioLoading"
           />
         </oxd-form-actions>
         <oxd-form-actions class="orangehrm-create-account-action">
@@ -84,6 +96,7 @@
             class="orangehrm-create-account-button"
             display-type="main"
             :label="$t('candidature.login')"
+            :disabled="olecioLoading"
             @click="navigateUrl"
           />
         </oxd-form-actions>
@@ -98,11 +111,13 @@ import {OxdAlert} from '@ohrm/oxd';
 import {required} from '@/core/util/validation/rules';
 import {navigate, reloadPage} from '@/core/util/helper/navigation';
 import LoginLayout from '../components/LoginLayout.vue';
+import OlecioConnexion from '../components/OlecioConnexion.vue';
 
 export default {
   components: {
     'oxd-alert': OxdAlert,
     'login-layout': LoginLayout,
+    'olecio-connexion': OlecioConnexion,
   },
 
   props: {
@@ -113,6 +128,18 @@ export default {
     token: {
       type: String,
       required: true,
+    },
+    olecioAuthUrl: {
+      type: String,
+      default: '',
+    },
+    olecioAuthClientId: {
+      type: String,
+      default: '',
+    },
+    olecioAuthEnabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -129,12 +156,17 @@ export default {
       submitted: false,
       error_password: false,
       error_email_format: false,
+      olecioError: null,
+      olecioLoading: false,
     };
   },
 
   computed: {
     submitUrl() {
-      return urlFor(`/${window.appGlobal.theme}/auth/validateNewAccount`);
+      return urlFor(`/${window.appGlobal.theme}/auth/validateNewAccount/admin`);
+    },
+    displayError() {
+      return this.olecioError || this.error;
     },
   },
 
@@ -153,15 +185,21 @@ export default {
       } else if (this.password !== this.password_confirm) {
         this.error_email_format = false;
         this.error_password = true;
-      } else if (!this.submitted) {
+      } else if (!this.submitted && !this.olecioLoading) {
         this.error_email_format = false;
         this.error_password = false;
         this.submitted = true;
         this.$refs.createAccountForm.$el.submit();
       }
     },
+    onOlecioError(message) {
+      this.olecioError = {message};
+    },
+    onOlecioLoading(loading) {
+      this.olecioLoading = loading;
+    },
     navigateUrl() {
-      navigate(`/${window.appGlobal.theme}/auth/login`);
+      navigate(`/${window.appGlobal.theme}/auth/admin/login`);
     },
   },
 };

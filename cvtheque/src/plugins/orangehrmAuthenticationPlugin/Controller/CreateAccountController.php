@@ -70,6 +70,13 @@ class CreateAccountController extends AbstractVueController implements PublicCon
             new Prop('login-banner-src', Prop::TYPE_STRING, $this->getThemeService()->getLoginBannerURL($request))
         );
 
+        $olecioAuthUrl = getenv('OLECIO_AUTH_URL') ?: '';
+        $olecioAuthClientId = getenv('OLECIO_AUTH_CLIENT_ID') ?: '';
+        $olecioAuthEnabled = $olecioAuthUrl !== '' && $olecioAuthClientId !== '';
+        $component->addProp(new Prop('olecio-auth-url', Prop::TYPE_STRING, $olecioAuthUrl));
+        $component->addProp(new Prop('olecio-auth-client-id', Prop::TYPE_STRING, $olecioAuthClientId));
+        $component->addProp(new Prop('olecio-auth-enabled', Prop::TYPE_BOOLEAN, $olecioAuthEnabled));
+
         $this->setComponent($component);
         $this->setTemplate('no_header.html.twig');
     }

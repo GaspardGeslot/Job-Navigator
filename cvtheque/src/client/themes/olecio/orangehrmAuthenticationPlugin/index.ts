@@ -25,6 +25,7 @@ import AdministratorAccess from './pages/AdministratorAccess.vue';
 import RequestResetPassword from './pages/RequestResetPassword.vue';
 import ResetPasswordSuccess from './pages/ResetPasswordSuccess.vue';
 import EmailConfigurationWarning from './pages/EmailConfigurationWarning.vue';
+import OlecioAuthCallback from './pages/OlecioAuthCallback.vue';
 
 export default {
   'auth-login-admin': LoginAdmin,
@@ -37,4 +38,5 @@ export default {
   'reset-password-success': ResetPasswordSuccess,
   'request-reset-password': RequestResetPassword,
   'email-configuration-warning': EmailConfigurationWarning,
+  'auth-olecio-callback': OlecioAuthCallback,
 };

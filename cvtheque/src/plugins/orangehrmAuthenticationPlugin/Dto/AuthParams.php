@@ -23,17 +23,20 @@ class AuthParams implements AuthParamsInterface
     private ?UserCredentialInterface $credential;
     private ?AuthAttributeBagInterface $attributeBag;
     private ?string $theme;
+    private ?string $checkRole;
 
     /**
      * @param UserCredentialInterface|null $credential
      * @param AuthAttributeBagInterface|null $attributeBag
      * @param string|null $theme
+     * @param string|null $checkRole
      */
-    public function __construct(?UserCredentialInterface $credential, ?AuthAttributeBagInterface $attributeBag = null, ?string $theme = null)
+    public function __construct(?UserCredentialInterface $credential, ?AuthAttributeBagInterface $attributeBag = null, ?string $theme = null, ?string $checkRole = null)
     {
         $this->credential = $credential;
         $this->attributeBag = $attributeBag;
         $this->theme = $theme;
+        $this->checkRole = $checkRole;
     }
     /**
      * @inheritDoc
@@ -57,5 +60,13 @@ class AuthParams implements AuthParamsInterface
     public function getTheme(): ?string
     {
         return $this->theme;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCheckRole(): ?string
+    {
+        return $this->checkRole;
     }
 }
