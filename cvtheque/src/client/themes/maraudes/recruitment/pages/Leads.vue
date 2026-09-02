@@ -139,6 +139,27 @@
     <div v-else class="orangehrm-paper-container">
       <div class="orangehrm-header-container">
         <div class="orangehrm-header-left">
+          <div v-if="!showContactAddMenu" class="leads-contact-actions">
+            <oxd-button
+              display-type="secondary"
+              label="Ajouter un contact"
+              icon-name="plus"
+              @click="showContactAddMenu = true"
+            />
+          </div>
+          <div v-else class="leads-contact-actions">
+            <oxd-button
+              display-type="secondary"
+              label="Individuellement"
+              @click="openCreateContact"
+            />
+            <oxd-button display-type="ghost" label="En masse (Excel)" />
+            <oxd-icon-button
+              name="x-lg"
+              title="Annuler"
+              @click="showContactAddMenu = false"
+            />
+          </div>
           <oxd-button
             display-type="secondary"
             :label="$t('Exporter en Excel')"
@@ -312,6 +333,14 @@
         </table>
       </div>
     </div>
+    <create-contact
+      v-if="showCreateContact"
+      :default-columns="reportingDefaultColumns"
+      :custom-columns="customColumns"
+      :contact-log-types="contactLogTypes"
+      :scope-options="scopeOptions"
+      @close="showCreateContact = false"
+    />
     <view-lead
       v-if="selectedLeadId"
       :lead-id="selectedLeadId"
@@ -351,6 +380,7 @@ import {OxdIcon, OxdSpinner} from '@ohrm/oxd';
 import * as XLSX from 'xlsx';
 import DateInput from '@/core/components/inputs/DateInput';
 import ViewLead from '../components/ViewLead.vue';
+import CreateContact from '../components/CreateContact.vue';
 
 const EMPTY_SELECT_OPTION = {id: null, label: ''};
 
@@ -375,6 +405,7 @@ export default {
     'oxd-loading-spinner': OxdSpinner,
     'date-input': DateInput,
     'view-lead': ViewLead,
+    'create-contact': CreateContact,
   },
   props: {
     defaultColumns: {
@@ -529,6 +560,8 @@ export default {
     const selectedCell = ref({row: null, col: null});
     const selectedRow = ref(null);
     const selectedLeadId = ref(null);
+    const showContactAddMenu = ref(false);
+    const showCreateContact = ref(false);
     const editingCell = ref(null);
     const editingDateValue = ref('');
     const selectEditorStyle = ref({});
@@ -1267,6 +1300,11 @@ export default {
       selectedRow.value = rowIndex;
     };
 
+    const openCreateContact = () => {
+      showContactAddMenu.value = false;
+      showCreateContact.value = true;
+    };
+
     const exportToExcel = () => {
       // Create a worksheet from the leads data
       const worksheet = XLSX.utils.json_to_sheet(
@@ -1369,6 +1407,9 @@ export default {
       selectedCell,
       selectedRow,
       selectedLeadId,
+      showContactAddMenu,
+      showCreateContact,
+      openCreateContact,
       editingCell,
       editingDateValue,
       selectEditorStyle,
@@ -1655,6 +1696,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
+}
+
+.leads-contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .orangehrm-header-left {

@@ -4,13 +4,16 @@
       <div class="orangehrm-header-container">
         <oxd-text tag="h6" class="orangehrm-main-title">
           {{
-            $t(
-              'Profil complet du contact' + (profile ? ' n°' + profile.id : ''),
-            )
+            isCreateMode
+              ? $t('Nouveau contact')
+              : $t(
+                  'Profil complet du contact' +
+                    (profile ? ' n°' + profile.id : ''),
+                )
           }}
         </oxd-text>
         <oxd-switch-input
-          v-if="!isLoading"
+          v-if="!isLoading && !isCreateMode"
           v-model="editable"
           :option-label="$t('general.edit')"
           label-position="left"
@@ -31,7 +34,7 @@
                 v-model:last-name="profile.lastName"
                 :rules="rules"
                 :label="$t('general.full_name')"
-                :disabled="true"
+                :disabled="!isCreateMode"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -45,10 +48,10 @@
                 v-model="profile.email"
                 :label="$t('general.email')"
                 :rules="rules.email"
-                :disabled="true"
+                :disabled="!isCreateMode"
               />
               <oxd-icon-button
-                v-if="profile.email"
+                v-if="!isCreateMode && profile.email"
                 style="height: 1px"
                 display-type="success"
                 name="envelope-fill"
@@ -62,10 +65,10 @@
                 v-model="profile.phoneNumber"
                 :label="$t('recruitment.contact_number')"
                 :rules="rules.phoneNumber"
-                :disabled="true"
+                :disabled="!isCreateMode"
               />
               <oxd-icon-button
-                v-if="profile.phoneNumber"
+                v-if="!isCreateMode && profile.phoneNumber"
                 style="height: 1px"
                 display-type="success"
                 name="telephone-fill"
@@ -91,26 +94,32 @@
                 :label="$t('Civilité')"
                 type="select"
                 :options="civilityOptions"
-                :disabled="!editable"
+                :disabled="!isSwitchEditable"
               />
             </oxd-grid-item>
-            <oxd-grid-item v-if="defaultColumns.birthDate && profile.birthDate">
+            <oxd-grid-item
+              v-if="
+                defaultColumns.birthDate && (isCreateMode || profile.birthDate)
+              "
+            >
               <date-input
                 v-model="profile.birthDate"
                 :label="$t('pim.date_of_birth')"
-                :disabled="true"
+                :disabled="!isCreateMode"
               />
             </oxd-grid-item>
-            <oxd-grid-item v-if="defaultColumns.age && profile.age">
+            <oxd-grid-item
+              v-if="defaultColumns.age && (isCreateMode || profile.age)"
+            >
               <oxd-input-field
                 v-model="profile.age"
                 :label="$t('Âge')"
-                :disabled="true"
+                :disabled="!isCreateMode"
               />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
-        <oxd-form-row>
+        <oxd-form-row v-if="!isCreateMode">
           <oxd-grid :cols="3" class="orangehrm-full-width-grid">
             <oxd-grid-item>
               <oxd-input-field
@@ -146,7 +155,7 @@
                 <oxd-input-field
                   v-model="profile.sector"
                   :label="$t('Secteur')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -160,8 +169,8 @@
                 :key="jobIndex"
               >
                 <oxd-input-field
-                  :value="job"
-                  :disabled="true"
+                  v-model="profile.jobs[jobIndex]"
+                  :disabled="!isCreateMode"
                   :label="$t('Métier n°' + (jobIndex + 1))"
                 />
               </oxd-grid-item>
@@ -180,14 +189,14 @@
                 <oxd-input-field
                   v-model="profile.course"
                   :label="$t('Formation')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="profile.of"
                   :label="$t('OF')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -213,21 +222,21 @@
                 <oxd-input-field
                   v-model="profile.address"
                   :label="$t('pim.street1')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.city">
                 <oxd-input-field
                   v-model="profile.city"
                   :label="$t('general.city')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.postalCode">
                 <oxd-input-field
                   v-model="profile.postalCode"
                   :label="$t('general.zip_postal_code')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                   :rules="rules.postalCode"
                 />
               </oxd-grid-item>
@@ -237,14 +246,14 @@
                 <oxd-input-field
                   v-model="profile.country"
                   :label="$t('Pays')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.mobility">
                 <oxd-input-field
                   v-model="profile.mobility"
                   :label="$t('general.mobility')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -274,63 +283,63 @@
                 <oxd-input-field
                   v-model="profile.need"
                   :label="$t('Besoin')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.status">
                 <oxd-input-field
                   v-model="profile.currentSituation"
                   :label="$t('Situation actuelle')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.studyLevel">
                 <oxd-input-field
                   v-model="profile.studyLevel"
                   :label="$t('general.study_level')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.courseStart">
                 <oxd-input-field
                   v-model="profile.courseStart"
                   :label="$t('Début de formation')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.trainingMethod">
                 <oxd-input-field
                   v-model="profile.trainingMethod"
                   :label="$t('Modalité de formation')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.handicap">
                 <oxd-input-field
                   v-model="profile.handicap"
                   :label="$t('Handicap')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.funding">
                 <oxd-input-field
                   v-model="profile.funding"
                   :label="$t('Financement')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.timeSlot">
                 <oxd-input-field
                   v-model="profile.timeSlot"
                   :label="$t('Disponibilité')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
               <oxd-grid-item v-if="defaultColumns.professionalExperience">
                 <oxd-input-field
                   v-model="profile.professionalExperience"
                   :label="$t('Expérience professionnelle')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -348,7 +357,7 @@
                 <oxd-input-field
                   v-model="profile.source"
                   :label="$t('Source')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -356,7 +365,10 @@
         </div>
 
         <oxd-form-row
-          v-if="defaultColumns.callBackDate || defaultColumns.contactLogs"
+          v-if="
+            !isCreateMode &&
+            (defaultColumns.callBackDate || defaultColumns.contactLogs)
+          "
         >
           <oxd-divider></oxd-divider>
           <div class="orangehrm-telephone-contacts-header">
@@ -377,7 +389,7 @@
                 <date-input
                   v-model="profile.callBackDate"
                   :label="$t('Relancer à partir de')"
-                  :disabled="!editable"
+                  :disabled="!isSwitchEditable"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -418,7 +430,7 @@
           </div>
         </oxd-form-row>
 
-        <oxd-form-row v-if="scopeOptions.length > 0">
+        <oxd-form-row v-if="!isCreateMode && scopeOptions.length > 0">
           <oxd-divider></oxd-divider>
           <div class="orangehrm-telephone-contacts-header">
             <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -491,7 +503,7 @@
                 <oxd-input-field
                   v-model="profile.complement"
                   :label="$t('Complément')"
-                  :disabled="true"
+                  :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -505,7 +517,7 @@
                   v-model="profile.comment"
                   :label="$t('Commentaire')"
                   type="textarea"
-                  :disabled="!editable"
+                  :disabled="!isSwitchEditable"
                   :rules="rules.comment"
                 />
               </oxd-grid-item>
@@ -528,7 +540,7 @@
                 :type="customColumn.type"
                 :options="customColumn.options"
                 :value="getCustomColumnValue(customColumn.id)"
-                :editable="editable"
+                :editable="isSwitchEditable"
                 @update:value="
                   (value) => updateCustomColumnValue(customColumn.id, value)
                 "
@@ -540,7 +552,7 @@
         <oxd-divider></oxd-divider>
         <oxd-form-actions>
           <required-text />
-          <submit-button v-if="editable" />
+          <submit-button v-if="isSwitchEditable" />
         </oxd-form-actions>
       </oxd-form>
     </div>
@@ -698,6 +710,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    isCreateMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['update'],
   setup() {
@@ -751,6 +767,9 @@ export default {
     };
   },
   computed: {
+    isSwitchEditable() {
+      return this.isCreateMode || this.editable;
+    },
     telephoneContactHeaders() {
       const base = [
         {name: 'date', title: this.$t('general.date'), style: {flex: 1}},
@@ -841,14 +860,25 @@ export default {
   },
   watch: {
     lead() {
+      if (this.isCreateMode) {
+        return;
+      }
       this.fetchLead();
     },
   },
   beforeMount() {
+    if (this.isCreateMode) {
+      this.editable = true;
+      this.initCreateProfile();
+      return;
+    }
     this.fetchLead();
   },
   methods: {
     updateLead() {
+      if (this.isCreateMode) {
+        return;
+      }
       this.isLoading = true;
 
       // Préparer les données pour l'API
@@ -913,6 +943,13 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    initCreateProfile() {
+      this.profile = {...LeadProfileModel};
+      this.leadScopes = [];
+      this.isAddingScope = false;
+      this.scopeToAdd = null;
+      this.isLoading = false;
     },
     fetchLead() {
       this.isLoading = true;
