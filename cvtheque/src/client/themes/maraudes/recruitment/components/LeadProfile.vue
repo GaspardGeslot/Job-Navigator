@@ -454,33 +454,30 @@
               />
             </div>
           </div>
-          <div v-if="leadScopes.length > 0" class="orangehrm-lead-scopes">
-            <div
+          <oxd-grid
+            v-if="leadScopes.length > 0"
+            :cols="3"
+            class="orangehrm-full-width-grid"
+          >
+            <oxd-grid-item
               v-for="scope in leadScopes"
               :key="scope.id"
-              class="orangehrm-lead-scope"
+              class="orangehrm-lead-scope-item"
             >
-              <oxd-text tag="p">{{ scope.title }}</oxd-text>
+              <oxd-input-field
+                :model-value="scope.title"
+                :label="''"
+                :disabled="true"
+              />
               <oxd-icon-button
-                v-if="editable"
+                v-if="scope.onlyScope"
+                style="height: 1px"
                 name="trash"
-                :class="{
-                  'orangehrm-lead-scope-remove--locked': !scope.onlyScope,
-                }"
-                :title="
-                  scope.onlyScope
-                    ? $t('general.delete')
-                    : 'Matching issu du moteur de matching, il ne peut pas être retiré'
-                "
+                :title="$t('general.delete')"
                 @click="onClickRemoveScope(scope)"
               />
-            </div>
-          </div>
-          <div v-else class="orangehrm-telephone-contacts-empty">
-            <oxd-text tag="p">
-              Aucun périmètre n'est associé à ce lead.
-            </oxd-text>
-          </div>
+            </oxd-grid-item>
+          </oxd-grid>
         </oxd-form-row>
 
         <div v-if="defaultColumns.complement || defaultColumns.comment">
@@ -839,11 +836,7 @@ export default {
       );
     },
     canAddScope() {
-      return (
-        this.editable &&
-        !this.isAddingScope &&
-        this.availableScopeOptions.length > 0
-      );
+      return !this.isAddingScope && this.availableScopeOptions.length > 0;
     },
   },
   watch: {
@@ -1290,23 +1283,13 @@ export default {
   display: flex;
   gap: 0.5rem;
 }
-.orangehrm-lead-scopes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
-}
-.orangehrm-lead-scope {
+.orangehrm-lead-scope-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  background-color: var(--oxd-background-tint-color);
-  border-radius: 0.5rem;
-}
-.orangehrm-lead-scope-remove--locked {
-  opacity: 0.4;
-  cursor: not-allowed;
+  gap: 1rem;
+
+  .oxd-input-group {
+    flex: 1;
+  }
 }
 </style>

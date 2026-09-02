@@ -806,6 +806,12 @@ export default {
           sortField: 'role',
           style: {flex: 0.5},
         },
+        {
+          name: 'notifyLabel',
+          title: this.$t('Notifié par email'),
+          sortField: 'notifyLabel',
+          style: {flex: 0.5},
+        },
         ...(this.specificMatching
           ? [
               {
