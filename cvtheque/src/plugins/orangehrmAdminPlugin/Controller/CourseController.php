@@ -80,6 +80,30 @@ class CourseController extends AbstractVueController
         );
     }
 
+    public function searchByOF(Request $request, string $ofId): Response
+    {
+        $value = $request->query->get(self::FILTER_VALUE);
+        $courses = $this->searchCoursesByOF(
+            $this->getAuthUser()->getUserHedwigeToken(),
+            $ofId,
+            $value
+        );
+        if (!is_array($courses)) {
+            $courses = [];
+        }
+        $courses = array_map(function($id, $label) {
+            return [
+                'id' => $id,
+                'label' => $id . ' - ' . $label
+            ];
+        }, array_keys($courses), $courses);
+        return new Response(
+            json_encode($courses),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
     private function searchCourses(string $token, ?string $value): array
     {
         $client = new Client();
@@ -95,6 +119,32 @@ class CourseController extends AbstractVueController
             return json_decode($response->getBody(), true);    
         } catch (\Exception $e) {
             return null;
+        }
+    }
+
+    private function searchCoursesByOF(string $token, string $ofId, ?string $value): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $query = [];
+            if ($value !== null && $value !== '') {
+                $query['value'] = $value;
+            }
+            $response = $client->request(
+                'GET',
+                "{$clientBaseUrl}/course/search/of/{$ofId}",
+                [
+                    'headers' => [
+                        'Authorization' => $token,
+                    ],
+                    'query' => $query,
+                ]
+            );
+            return json_decode($response->getBody(), true) ?? [];
+        } catch (\Exception $e) {
+            return [];
         }
     }
 

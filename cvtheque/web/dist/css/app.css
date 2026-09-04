@@ -14445,6 +14445,26 @@ body {
 .orangehrm-lead-scope-item .oxd-input-group[data-v-edd7ad42] {
   flex: 1;
 }
+.orangehrm-selected-course[data-v-edd7ad42],
+.orangehrm-selected-job[data-v-edd7ad42] {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+.orangehrm-selected-course[data-v-edd7ad42] .oxd-input-group,
+.orangehrm-selected-job[data-v-edd7ad42] .oxd-input-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+.orangehrm-selected-course[data-v-edd7ad42] .oxd-input-group__message,
+.orangehrm-selected-job[data-v-edd7ad42] .oxd-input-group__message {
+  display: none;
+}
+.orangehrm-selected-course[data-v-edd7ad42] .oxd-button,
+.orangehrm-selected-job[data-v-edd7ad42] .oxd-button {
+  flex-shrink: 0;
+  height: 45px;
+}
 /*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./themes/maraudes/recruitment/components/ViewLead.vue?vue&type=style&index=0&id=0dcd315f&scoped=true&lang=css ***!
   \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

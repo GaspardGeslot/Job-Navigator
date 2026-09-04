@@ -46,6 +46,45 @@ class OFController extends AbstractVueController
         );
     }
 
+    public function getActorOFs(): Response
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $token = $this->getAuthUser()->getUserHedwigeToken();
+
+        if (!$clientBaseUrl || !$token) {
+            return new Response(
+                json_encode(['data' => []]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        try {
+            $response = $client->request('GET', "{$clientBaseUrl}/of/actor", [
+                'headers' => [
+                    'Authorization' => "Bearer " . $token,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ],
+            ]);
+
+            $ofs = json_decode($response->getBody(), true);
+
+            return new Response(
+                json_encode(['data' => is_array($ofs) ? $ofs : []]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (\Exception $e) {
+            return new Response(
+                json_encode(['data' => []]),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
     public function getEmailByName(Request $request)
     {
         $name = $request->query->get('name');

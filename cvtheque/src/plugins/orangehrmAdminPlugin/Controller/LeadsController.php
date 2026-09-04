@@ -150,6 +150,28 @@ class LeadsController extends AbstractVueController
         );
     }
 
+    public function create(Request $request): Response
+    {
+        try {
+            $data = json_decode($request->getContent(), true) ?? [];
+            $created = $this->createLead(
+                $this->getAuthUser()->getUserHedwigeToken(),
+                $data
+            );
+            return new Response(
+                json_encode($created),
+                Response::HTTP_CREATED,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            $message = json_decode($e->getResponse()->getBody()->getContents())->message ?? $e->getMessage();
+            return new Response(json_encode([
+                'error' => true,
+                'message' => $message
+            ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+        }
+    }
+
     public function update(Request $request): Response
     {
         try {
@@ -653,6 +675,28 @@ class LeadsController extends AbstractVueController
             ]
         ]);
         return json_decode($response->getBody(), true);
+    }
+
+    public function createLead(string $token, array $data)
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $response = $client->request('POST', "{$clientBaseUrl}/lead", [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $data,
+        ]);
+        $body = trim((string) $response->getBody());
+        $decoded = json_decode($body, true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+        if (is_numeric($body)) {
+            return ['id' => (int) $body];
+        }
+        return ['id' => $body];
     }
 
     public function updateLead(string $token, int $id, array $data): void
