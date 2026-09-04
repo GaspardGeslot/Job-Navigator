@@ -21,19 +21,36 @@
         :custom-columns="customColumns"
         :contact-log-types="contactLogTypes"
         :scope-options="scopeOptions"
+        :lead-select-options="leadSelectOptions"
+        :of-options="ofOptions"
+        @created="onCreated"
       />
     </div>
+    <confirmation-dialog
+      ref="confirmCloseDialog"
+      :title="$t('Fermer la création')"
+      :subtitle="
+        $t(
+          'Les informations saisies ne seront pas enregistrées. Voulez-vous vraiment fermer ?',
+        )
+      "
+      :cancel-label="$t('general.no_cancel')"
+      :confirm-label="$t('Oui, fermer')"
+      confirm-button-type="secondary"
+    />
   </div>
 </template>
 
 <script>
 import LeadProfile from './LeadProfile.vue';
+import ConfirmationDialog from '@/core/components/dialogs/ConfirmationDialog';
 
 const TRANSITION_DURATION = 300;
 
 export default {
   components: {
     'lead-profile': LeadProfile,
+    'confirmation-dialog': ConfirmationDialog,
   },
   props: {
     defaultColumns: {
@@ -52,8 +69,28 @@ export default {
       type: Array,
       default: () => [],
     },
+    leadSelectOptions: {
+      type: Object,
+      default: () => ({
+        needs: [],
+        courseStarts: [],
+        studyLevels: [],
+        countries: [],
+        fundings: [],
+        handicaps: [],
+        status: [],
+        trainingMethods: [],
+        sources: [],
+        timeSlots: [],
+        professionalExperiences: [],
+      }),
+    },
+    ofOptions: {
+      type: Array,
+      default: () => [],
+    },
   },
-  emits: ['close'],
+  emits: ['close', 'created'],
   data() {
     return {
       isVisible: false,
@@ -69,8 +106,19 @@ export default {
   },
   methods: {
     handleClose() {
+      this.$refs.confirmCloseDialog.showDialog().then((confirmation) => {
+        if (confirmation === 'ok') {
+          this.closePanel();
+        }
+      });
+    },
+    closePanel() {
       this.isVisible = false;
       setTimeout(() => this.$emit('close'), TRANSITION_DURATION);
+    },
+    onCreated() {
+      this.$emit('created');
+      this.closePanel();
     },
   },
 };

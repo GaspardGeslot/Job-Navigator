@@ -22,7 +22,10 @@
 
       <oxd-divider v-show="!isLoading" />
 
-      <oxd-form :loading="isLoading" @submit-valid="updateLead">
+      <oxd-form
+        :loading="isLoading"
+        @submit-valid="isCreateMode ? createLead() : updateLead()"
+      >
         <oxd-form-row>
           <oxd-text class="orangehrm-sub-title" tag="h6">
             {{ $t('general.candidate_info') }}
@@ -64,7 +67,7 @@
               <oxd-input-field
                 v-model="profile.phoneNumber"
                 :label="$t('recruitment.contact_number')"
-                :rules="rules.phoneNumber"
+                :rules="isCreateMode ? rules.phoneNumber : []"
                 :disabled="!isCreateMode"
               />
               <oxd-icon-button
@@ -131,12 +134,14 @@
           </oxd-grid>
         </oxd-form-row>
 
-        <div v-if="defaultColumns.job || defaultColumns.sector">
+        <div
+          v-if="defaultColumns.job || (defaultColumns.sector && !isCreateMode)"
+        >
           <oxd-divider></oxd-divider>
           <oxd-form-row>
             <div v-if="defaultColumns.job">
               <oxd-text
-                v-if="profile.jobs.length > 1"
+                v-if="!isCreateMode && profile.jobs.length > 1"
                 class="orangehrm-sub-title"
                 tag="h6"
               >
@@ -147,7 +152,7 @@
               </oxd-text>
             </div>
             <oxd-grid
-              v-if="defaultColumns.sector"
+              v-if="defaultColumns.sector && !isCreateMode"
               :cols="3"
               class="orangehrm-full-width-grid"
             >
@@ -160,7 +165,37 @@
               </oxd-grid-item>
             </oxd-grid>
             <oxd-grid
-              v-if="defaultColumns.job"
+              v-if="defaultColumns.job && isCreateMode"
+              :cols="3"
+              class="orangehrm-full-width-grid"
+            >
+              <oxd-grid-item>
+                <div v-if="isJobSelected" class="orangehrm-selected-job">
+                  <oxd-input-field
+                    :model-value="selectedJobLabel"
+                    :label="$t('Métier')"
+                    :disabled="true"
+                  />
+                  <oxd-button
+                    display-type="secondary"
+                    :label="$t('general.edit')"
+                    @click="replaceSelectedJob"
+                  />
+                </div>
+                <oxd-input-field
+                  v-else
+                  v-model="selectedJob"
+                  type="autocomplete"
+                  :label="$t('Métier')"
+                  :clear="true"
+                  :create-options="loadJobs"
+                  :placeholder="$t('Rechercher un métier')"
+                  @update:model-value="onJobSelection"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-grid
+              v-else-if="defaultColumns.job"
               :cols="3"
               class="orangehrm-full-width-grid"
             >
@@ -170,7 +205,7 @@
               >
                 <oxd-input-field
                   v-model="profile.jobs[jobIndex]"
-                  :disabled="!isCreateMode"
+                  :disabled="true"
                   :label="$t('Métier n°' + (jobIndex + 1))"
                 />
               </oxd-grid-item>
@@ -184,19 +219,59 @@
             <oxd-text class="orangehrm-sub-title" tag="h6">
               {{ $t('Formation') }}
             </oxd-text>
-            <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid
+              v-if="isCreateMode"
+              :cols="3"
+              class="orangehrm-full-width-grid"
+            >
+              <oxd-grid-item>
+                <oxd-input-field
+                  v-model="profile.of"
+                  type="select"
+                  :label="$t('OF')"
+                  :options="ofOptions"
+                  @update:model-value="onCreateOfChange"
+                />
+              </oxd-grid-item>
+              <oxd-grid-item>
+                <div v-if="selectedCourseId" class="orangehrm-selected-course">
+                  <oxd-input-field
+                    :model-value="selectedCourseLabel"
+                    :label="$t('Formation')"
+                    :disabled="true"
+                  />
+                  <oxd-button
+                    display-type="secondary"
+                    :label="$t('general.edit')"
+                    @click="replaceSelectedCourse"
+                  />
+                </div>
+                <oxd-input-field
+                  v-else
+                  v-model="profile.course"
+                  type="autocomplete"
+                  :label="$t('Formation')"
+                  :clear="true"
+                  :disabled="!selectedOfId"
+                  :create-options="loadCourses"
+                  :placeholder="$t('Rechercher une formation')"
+                  @update:model-value="onCourseSelection"
+                />
+              </oxd-grid-item>
+            </oxd-grid>
+            <oxd-grid v-else :cols="3" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="profile.course"
                   :label="$t('Formation')"
-                  :disabled="!isCreateMode"
+                  :disabled="true"
                 />
               </oxd-grid-item>
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="profile.of"
                   :label="$t('OF')"
-                  :disabled="!isCreateMode"
+                  :disabled="true"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -246,6 +321,10 @@
                 <oxd-input-field
                   v-model="profile.country"
                   :label="$t('Pays')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode ? sortedSelectOptions('countries') : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -283,6 +362,10 @@
                 <oxd-input-field
                   v-model="profile.need"
                   :label="$t('Besoin')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode ? sortedSelectOptions('needs') : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -290,6 +373,10 @@
                 <oxd-input-field
                   v-model="profile.currentSituation"
                   :label="$t('Situation actuelle')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode ? sortedSelectOptions('status') : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -297,6 +384,12 @@
                 <oxd-input-field
                   v-model="profile.studyLevel"
                   :label="$t('general.study_level')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode
+                      ? sortedSelectOptions('studyLevels')
+                      : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -304,6 +397,12 @@
                 <oxd-input-field
                   v-model="profile.courseStart"
                   :label="$t('Début de formation')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode
+                      ? sortedSelectOptions('courseStarts')
+                      : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -311,6 +410,12 @@
                 <oxd-input-field
                   v-model="profile.trainingMethod"
                   :label="$t('Modalité de formation')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode
+                      ? sortedSelectOptions('trainingMethods')
+                      : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -318,6 +423,10 @@
                 <oxd-input-field
                   v-model="profile.handicap"
                   :label="$t('Handicap')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode ? sortedSelectOptions('handicaps') : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -325,6 +434,10 @@
                 <oxd-input-field
                   v-model="profile.funding"
                   :label="$t('Financement')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode ? sortedSelectOptions('fundings') : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -332,6 +445,10 @@
                 <oxd-input-field
                   v-model="profile.timeSlot"
                   :label="$t('Disponibilité')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode ? sortedSelectOptions('timeSlots') : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -339,6 +456,12 @@
                 <oxd-input-field
                   v-model="profile.professionalExperience"
                   :label="$t('Expérience professionnelle')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode
+                      ? sortedSelectOptions('professionalExperiences')
+                      : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -357,6 +480,10 @@
                 <oxd-input-field
                   v-model="profile.source"
                   :label="$t('Source')"
+                  :type="isCreateMode ? 'select' : undefined"
+                  :options="
+                    isCreateMode ? sortedSelectOptions('sources') : undefined
+                  "
                   :disabled="!isCreateMode"
                 />
               </oxd-grid-item>
@@ -430,7 +557,7 @@
           </div>
         </oxd-form-row>
 
-        <oxd-form-row v-if="!isCreateMode && scopeOptions.length > 0">
+        <oxd-form-row v-if="scopeOptions.length > 0">
           <oxd-divider></oxd-divider>
           <div class="orangehrm-telephone-contacts-header">
             <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -482,7 +609,7 @@
                 :disabled="true"
               />
               <oxd-icon-button
-                v-if="scope.onlyScope"
+                v-if="isCreateMode || scope.onlyScope"
                 style="height: 1px"
                 name="trash"
                 :title="$t('general.delete')"
@@ -552,7 +679,14 @@
         <oxd-divider></oxd-divider>
         <oxd-form-actions>
           <required-text />
-          <submit-button v-if="isSwitchEditable" />
+          <oxd-button
+            v-if="isCreateMode"
+            class="orangehrm-left-space"
+            display-type="secondary"
+            :label="$t('Créer')"
+            type="submit"
+          />
+          <submit-button v-else-if="isSwitchEditable" />
         </oxd-form-actions>
       </oxd-form>
     </div>
@@ -634,6 +768,7 @@ const LeadProfileModel = {
   civility: null,
   comment: '',
   jobs: [],
+  job: null,
   sector: '',
   course: '',
   of: '',
@@ -714,8 +849,28 @@ export default {
       type: Boolean,
       default: false,
     },
+    leadSelectOptions: {
+      type: Object,
+      default: () => ({
+        needs: [],
+        courseStarts: [],
+        studyLevels: [],
+        countries: [],
+        fundings: [],
+        handicaps: [],
+        status: [],
+        trainingMethods: [],
+        sources: [],
+        timeSlots: [],
+        professionalExperiences: [],
+      }),
+    },
+    ofOptions: {
+      type: Array,
+      default: () => [],
+    },
   },
-  emits: ['update'],
+  emits: ['update', 'created'],
   setup() {
     const http = new APIService(window.appGlobal.baseUrl, '/');
     const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
@@ -746,9 +901,11 @@ export default {
       isAddingScope: false,
       isSavingScope: false,
       scopeToAdd: null,
+      selectedJob: null,
       rules: {
         firstName: [shouldNotExceedCharLength(30)],
         lastName: [shouldNotExceedCharLength(30)],
+        phoneNumber: [required],
         postalCode: [shouldNotExceedCharLength(5), numericOnly],
         comment: [shouldNotExceedCharLength(1000)],
         telephoneContactDate: [
@@ -769,6 +926,38 @@ export default {
   computed: {
     isSwitchEditable() {
       return this.isCreateMode || this.editable;
+    },
+    selectedOfId() {
+      const ofValue = this.profile?.of;
+      if (!ofValue) return null;
+      return typeof ofValue === 'object' ? ofValue.id : ofValue;
+    },
+    selectedCourseId() {
+      const courseValue = this.profile?.course;
+      return courseValue && typeof courseValue === 'object'
+        ? courseValue.id
+        : null;
+    },
+    selectedCourseLabel() {
+      return this.selectedCourseId ? this.profile.course.label : '';
+    },
+    selectedJobId() {
+      const job = this.selectedJob;
+      if (
+        !job ||
+        typeof job !== 'object' ||
+        job.id === null ||
+        job.id === undefined
+      ) {
+        return null;
+      }
+      return job.id;
+    },
+    selectedJobLabel() {
+      return this.isJobSelected ? this.selectedJob.label : '';
+    },
+    isJobSelected() {
+      return this.selectedJobId !== null && !!this.selectedJob?.label;
     },
     telephoneContactHeaders() {
       const base = [
@@ -876,9 +1065,6 @@ export default {
   },
   methods: {
     updateLead() {
-      if (this.isCreateMode) {
-        return;
-      }
       this.isLoading = true;
 
       // Préparer les données pour l'API
@@ -929,6 +1115,88 @@ export default {
           return this.$toast.updateSuccess();
         });
     },
+    emptyToNull(value) {
+      if (value === null || value === undefined || value === '') {
+        return null;
+      }
+      return value;
+    },
+    asOptionLabel(value) {
+      const normalized = this.emptyToNull(value);
+      if (normalized && typeof normalized === 'object') {
+        return normalized.label ?? null;
+      }
+      return normalized;
+    },
+    asOptionId(value) {
+      const normalized = this.emptyToNull(value);
+      if (normalized && typeof normalized === 'object') {
+        return normalized.id ?? null;
+      }
+      return normalized;
+    },
+    buildCreatePayload() {
+      return {
+        firstName: this.emptyToNull(this.profile.firstName),
+        lastName: this.emptyToNull(this.profile.lastName),
+        email: this.emptyToNull(this.profile.email),
+        phoneNumber: this.emptyToNull(this.profile.phoneNumber),
+        civility: this.asOptionLabel(this.profile.civility),
+        comment: this.emptyToNull(this.profile.comment),
+        job: this.emptyToNull(this.profile.job),
+        of: this.asOptionId(this.profile.of),
+        courseId: this.asOptionId(this.profile.course),
+        currentSituation: this.asOptionLabel(this.profile.currentSituation),
+        trainingMethod: this.asOptionLabel(this.profile.trainingMethod),
+        handicap: this.asOptionLabel(this.profile.handicap),
+        funding: this.asOptionLabel(this.profile.funding),
+        address: this.emptyToNull(this.profile.address),
+        city: this.emptyToNull(this.profile.city),
+        country: this.asOptionLabel(this.profile.country),
+        postalCode: this.emptyToNull(this.profile.postalCode),
+        need: this.asOptionLabel(this.profile.need),
+        studyLevel: this.asOptionLabel(this.profile.studyLevel),
+        courseStart: this.asOptionLabel(this.profile.courseStart),
+        birthDate: this.emptyToNull(this.profile.birthDate),
+        age: this.emptyToNull(this.profile.age),
+        professionalExperience: this.asOptionLabel(
+          this.profile.professionalExperience,
+        ),
+        mobility: this.emptyToNull(this.profile.mobility),
+        source: this.asOptionLabel(this.profile.source),
+        timeSlot: this.asOptionLabel(this.profile.timeSlot),
+        complement: this.emptyToNull(this.profile.complement),
+        matchingIds: this.leadScopes.map((scope) => scope.id),
+        customColumns: Array.isArray(this.profile.customColumns)
+          ? this.profile.customColumns.map((cc) => ({
+              id: cc.id,
+              value:
+                cc.value !== null && cc.value !== undefined
+                  ? String(cc.value)
+                  : null,
+            }))
+          : [],
+      };
+    },
+    createLead() {
+      this.isLoading = true;
+      this.http
+        .request({
+          method: 'POST',
+          url: '/api/v2/admin/leads',
+          data: this.buildCreatePayload(),
+        })
+        .then(() => {
+          this.$emit('created');
+          return this.$toast.saveSuccess();
+        })
+        .catch((error) => {
+          return this.$toast.unexpectedError(error?.response?.data?.message);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     onDeliver() {
       this.isLoading = true;
       this.http
@@ -945,11 +1213,117 @@ export default {
         });
     },
     initCreateProfile() {
-      this.profile = {...LeadProfileModel};
+      this.profile = {...LeadProfileModel, jobs: []};
+      this.selectedJob = null;
       this.leadScopes = [];
       this.isAddingScope = false;
       this.scopeToAdd = null;
       this.isLoading = false;
+    },
+    sortedSelectOptions(optionsKey) {
+      const options = this.leadSelectOptions?.[optionsKey] || [];
+      return [...options].sort((a, b) =>
+        (a.label || '').localeCompare(b.label || '', 'fr', {
+          sensitivity: 'base',
+        }),
+      );
+    },
+    onCreateOfChange() {
+      this.profile.course = null;
+    },
+    onJobSelection(job) {
+      const option = this.resolveSelectedJob(job);
+      if (option) {
+        this.selectedJob = option;
+        this.profile.job = option.label;
+        return;
+      }
+      this.selectedJob = null;
+      this.profile.job = null;
+    },
+    resolveSelectedJob(job) {
+      if (
+        job &&
+        typeof job === 'object' &&
+        job.id !== null &&
+        job.id !== undefined &&
+        job.label
+      ) {
+        return {id: job.id, label: job.label};
+      }
+      return null;
+    },
+    replaceSelectedJob() {
+      this.selectedJob = null;
+      this.profile.job = null;
+    },
+    replaceSelectedCourse() {
+      this.profile.course = null;
+    },
+    onCourseSelection(course) {
+      if (
+        course !== null &&
+        (typeof course !== 'object' ||
+          course.id === null ||
+          course.id === undefined)
+      ) {
+        this.profile.course = null;
+      }
+    },
+    loadCourses(searchParam) {
+      return new Promise((resolve) => {
+        const query = (searchParam || '').trim();
+        if (!this.selectedOfId || !query || query.length >= 100) {
+          resolve([]);
+          return;
+        }
+        this.http
+          .request({
+            method: 'GET',
+            url: `/api/v2/admin/course/of/${this.selectedOfId}/search`,
+            params: {
+              value: query,
+            },
+          })
+          .then(({data}) => {
+            resolve(Array.isArray(data) ? data : []);
+          })
+          .catch(() => resolve([]));
+      });
+    },
+    loadJobs(searchParam) {
+      return new Promise((resolve) => {
+        const query = (searchParam || '').trim();
+        if (!query || query.length >= 100) {
+          resolve([]);
+          return;
+        }
+        this.http
+          .request({
+            method: 'GET',
+            url: '/api/v2/admin/job/search',
+            params: {title: query},
+          })
+          .then(({data}) => {
+            const items = Array.isArray(data) ? data : [];
+            resolve(
+              items
+                .map((item) => {
+                  if (!item || typeof item !== 'object') {
+                    return null;
+                  }
+                  const id = item.id;
+                  const label = item.label || item.title;
+                  if (id === null || id === undefined || !label) {
+                    return null;
+                  }
+                  return {id, label};
+                })
+                .filter(Boolean),
+            );
+          })
+          .catch(() => resolve([]));
+      });
     },
     fetchLead() {
       this.isLoading = true;
@@ -1027,6 +1401,10 @@ export default {
     onConfirmAddScope() {
       if (!this.scopeToAdd) return;
       const scope = this.scopeToAdd;
+      if (this.isCreateMode) {
+        this.addScopeLocally(scope);
+        return;
+      }
       this.isSavingScope = true;
       this.http
         .request({
@@ -1048,7 +1426,21 @@ export default {
           this.isSavingScope = false;
         });
     },
+    addScopeLocally(scope) {
+      this.leadScopes.push({
+        id: scope.id,
+        title: scope.label,
+        onlyScope: scope.onlyScope ?? true,
+      });
+      this.onCancelAddScope();
+    },
     onClickRemoveScope(scope) {
+      if (this.isCreateMode) {
+        this.leadScopes = this.leadScopes.filter(
+          (item) => String(item.id) !== String(scope.id),
+        );
+        return;
+      }
       if (!scope.onlyScope) return;
       this.$refs.deleteScopeDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
@@ -1327,6 +1719,26 @@ export default {
 
   .oxd-input-group {
     flex: 1;
+  }
+}
+.orangehrm-selected-course,
+.orangehrm-selected-job {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+
+  :deep(.oxd-input-group) {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  :deep(.oxd-input-group__message) {
+    display: none;
+  }
+
+  :deep(.oxd-button) {
+    flex-shrink: 0;
+    height: 45px;
   }
 }
 </style>

@@ -497,6 +497,12 @@ subdomain_apiv2_admin_of:
   methods: [ GET ]
   requirements:
 
+subdomain_apiv2_admin_actor_of:
+  path: /api/v2/admin/of/actor
+  controller: OrangeHRM\Admin\Controller\OFController::getActorOFs
+  methods: [ GET ]
+  requirements:
+
 subdomain_apiv2_admin_of_email:
   path: /api/v2/admin/of/email
   controller: OrangeHRM\Admin\Controller\OFController::getEmailFromOF
@@ -671,10 +677,23 @@ subdomain_apiv2_admin_course_search:
   methods: [ GET ]
   requirements:
 
+subdomain_apiv2_admin_course_search_by_of:
+  path: /api/v2/admin/course/of/{ofId}/search
+  controller: OrangeHRM\Admin\Controller\CourseController::searchByOF
+  methods: [ GET ]
+  requirements:
+    ofId: '\d+'
+
 subdomain_apiv2_admin_leads:
   path: /api/v2/admin/leads
   controller: OrangeHRM\Admin\Controller\LeadsController::getAll
   methods: [ GET ]
+  requirements:
+
+subdomain_apiv2_admin_leads_create:
+  path: /api/v2/admin/leads
+  controller: OrangeHRM\Admin\Controller\LeadsController::create
+  methods: [ POST ]
   requirements:
 
 subdomain_apiv2_admin_leads_reprocess:
@@ -1943,6 +1962,13 @@ apiv2_admin_of:
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_actor_of:
+  path: /{theme}/api/v2/admin/of/actor
+  controller: OrangeHRM\Admin\Controller\OFController::getActorOFs
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
 apiv2_admin_of_email:
   path: /{theme}/api/v2/admin/of/email
   controller: OrangeHRM\Admin\Controller\OFController::getEmailByName
@@ -2158,10 +2184,25 @@ apiv2_admin_course_search:
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_course_search_by_of:
+  path: /{theme}/api/v2/admin/course/of/{ofId}/search
+  controller: OrangeHRM\Admin\Controller\CourseController::searchByOF
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+    ofId: '\d+'
+
 apiv2_admin_leads:
   path: /{theme}/api/v2/admin/leads
   controller: OrangeHRM\Admin\Controller\LeadsController::getAll
   methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+apiv2_admin_leads_create:
+  path: /{theme}/api/v2/admin/leads
+  controller: OrangeHRM\Admin\Controller\LeadsController::create
+  methods: [ POST ]
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 

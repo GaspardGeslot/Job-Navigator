@@ -339,7 +339,10 @@
       :custom-columns="customColumns"
       :contact-log-types="contactLogTypes"
       :scope-options="scopeOptions"
+      :lead-select-options="leadSelectOptions"
+      :of-options="ofOptions"
       @close="showCreateContact = false"
+      @created="onContactCreated"
     />
     <view-lead
       v-if="selectedLeadId"
@@ -566,6 +569,20 @@ export default {
     const editingDateValue = ref('');
     const selectEditorStyle = ref({});
     const contactLogTypes = ref([]);
+    const leadSelectOptions = ref({
+      needs: [],
+      courseStarts: [],
+      studyLevels: [],
+      countries: [],
+      fundings: [],
+      handicaps: [],
+      status: [],
+      trainingMethods: [],
+      sources: [],
+      timeSlots: [],
+      professionalExperiences: [],
+    });
+    const ofOptions = ref([]);
     const rules = {
       fromDate: [
         required,
@@ -1305,6 +1322,10 @@ export default {
       showCreateContact.value = true;
     };
 
+    const onContactCreated = () => {
+      fetchData();
+    };
+
     const exportToExcel = () => {
       // Create a worksheet from the leads data
       const worksheet = XLSX.utils.json_to_sheet(
@@ -1379,7 +1400,34 @@ export default {
           url: '/api/v2/admin/leads/global-options',
         })
         .then(({data}) => {
+          leadSelectOptions.value = {
+            needs: data.needs || [],
+            courseStarts: data.courseStarts || [],
+            studyLevels: data.studyLevels || [],
+            countries: data.countries || [],
+            fundings: data.fundings || [],
+            handicaps: data.handicaps || [],
+            status: data.status || [],
+            trainingMethods: data.trainingMethods || [],
+            sources: data.sources || [],
+            timeSlots: data.timeSlots || [],
+            professionalExperiences: data.professionalExperiences || [],
+          };
           contactLogTypes.value = data.contactLogTypes || [];
+        });
+      http
+        .request({
+          method: 'GET',
+          url: '/api/v2/admin/of/actor',
+        })
+        .then(({data}) => {
+          ofOptions.value = (data?.data || []).map((of) => ({
+            id: of.id,
+            label: of.name,
+          }));
+        })
+        .catch(() => {
+          ofOptions.value = [];
         });
     });
 
@@ -1396,6 +1444,8 @@ export default {
       showContactStatusFilter,
       contactStatusFilter,
       contactLogTypes,
+      leadSelectOptions,
+      ofOptions,
       startDateFilter,
       endDateFilter,
       tableData,
@@ -1410,6 +1460,7 @@ export default {
       showContactAddMenu,
       showCreateContact,
       openCreateContact,
+      onContactCreated,
       editingCell,
       editingDateValue,
       selectEditorStyle,
