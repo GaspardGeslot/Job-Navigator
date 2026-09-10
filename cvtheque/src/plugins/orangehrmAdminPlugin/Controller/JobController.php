@@ -121,6 +121,9 @@ class JobController extends AbstractVueController
             self::FILTER_TITLE
         );
         $jobs = $this->searchJobs($this->getAuthUser()->getUserHedwigeToken(), $title);
+        if (!is_array($jobs)) {
+            $jobs = [];
+        }
         $jobs = array_map(function($id, $label) {
             return [
                 'id' => $id,
