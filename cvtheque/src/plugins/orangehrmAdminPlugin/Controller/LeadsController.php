@@ -8,6 +8,7 @@ use OrangeHRM\Core\Vue\Prop;
 use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Core\Traits\Auth\AuthUserTrait;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
@@ -401,6 +402,112 @@ class LeadsController extends AbstractVueController
         );
     }
 
+    public function massiveImportDocumentation(): Response
+    {
+        try {
+            $archive = $this->getMassiveImportDocumentation(
+                $this->getAuthUser()->getUserHedwigeToken()
+            );
+
+            return new Response(
+                $archive['content'],
+                Response::HTTP_OK,
+                [
+                    'Content-Type' => $archive['contentType'],
+                    'Content-Disposition' => 'attachment; filename="' . $archive['filename'] . '"',
+                ]
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message ?? null,
+            ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+        }
+    }
+
+    public function massiveImport(Request $request): Response
+    {
+        try {
+            /** @var UploadedFile|null $file */
+            $file = $request->files->get('file');
+
+            if (!$file instanceof UploadedFile || !$file->isValid()) {
+                return new Response(json_encode([
+                    'error' => true,
+                    'message' => 'Aucun fichier valide reçu',
+                ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+            }
+
+            if (strtolower($file->getClientOriginalExtension()) !== 'xlsx') {
+                return new Response(json_encode([
+                    'error' => true,
+                    'message' => 'Seuls les fichiers Excel au format .xlsx sont acceptés',
+                ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+            }
+
+            $this->importLeadsFromExcelFile(
+                $this->getAuthUser()->getUserHedwigeToken(),
+                (string) file_get_contents($file->getPathname())
+            );
+
+            return new Response(
+                json_encode(['message' => 'Leads imported successfully']),
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message ?? null,
+            ]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+        } catch (\Exception $e) {
+            return new Response(json_encode([
+                'error' => true,
+                'message' => "Erreur lors de l'import du fichier",
+            ]), Response::HTTP_INTERNAL_SERVER_ERROR, ['Content-Type' => 'application/json']);
+        }
+    }
+
+    private function importLeadsFromExcelFile(string $token, string $content): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/lead/massive-import";
+
+        $client->request('POST', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/octet-stream',
+            ],
+            'body' => $content,
+            'timeout' => 600,
+        ]);
+    }
+
+    private function getMassiveImportDocumentation(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/actor/documentation/massive-import";
+
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
+
+        $filename = 'import-en-masse.zip';
+        if (preg_match('/filename\*?=(?:UTF-8\'\')?"?([^";]+)"?/i', $response->getHeaderLine('Content-Disposition'), $matches)) {
+            $filename = basename(trim($matches[1]));
+        }
+
+        return [
+            'content' => (string) $response->getBody(),
+            'contentType' => $response->getHeaderLine('Content-Type') ?: 'application/zip',
+            'filename' => $filename,
+        ];
+    }
+
     private function mapSelectOptions($values): array
     {
         if (!is_array($values)) {
@@ -679,6 +786,13 @@ class LeadsController extends AbstractVueController
 
     public function createLead(string $token, array $data)
     {
+        if (!empty($data['birthDate'])) {
+            $date = \DateTime::createFromFormat('Y-m-d', $data['birthDate']);
+            if ($date instanceof \DateTime) {
+                $data['birthDate'] = $date->format('d-m-Y');
+            }
+        }
+
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
         $response = $client->request('POST', "{$clientBaseUrl}/lead", [

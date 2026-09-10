@@ -153,7 +153,11 @@
               label="Individuellement"
               @click="openCreateContact"
             />
-            <oxd-button display-type="ghost" label="En masse (Excel)" />
+            <oxd-button
+              display-type="ghost"
+              label="En masse (Excel)"
+              @click="openMassiveImportModal"
+            />
             <oxd-icon-button
               name="x-lg"
               title="Annuler"
@@ -333,6 +337,182 @@
         </table>
       </div>
     </div>
+    <div
+      v-if="showMassiveImportModal"
+      class="modal-overlay"
+      @click="closeMassiveImportModal"
+    >
+      <div class="modal-container" @click.stop>
+        <div class="modal-header">
+          <oxd-icon-button
+            v-if="massiveImportStep === 'upload' && !isUploadingMassiveImport"
+            name="chevron-left"
+            title="Revenir aux explications"
+            class="modal-header__back"
+            @click="backToMassiveImportIntro"
+          />
+          <h3>
+            {{
+              massiveImportStep === 'upload'
+                ? 'Charger vos nouveaux contacts'
+                : 'Ajouter des contacts en masse'
+            }}
+          </h3>
+        </div>
+
+        <template v-if="massiveImportStep === 'intro'">
+          <div class="modal-body">
+            <oxd-text tag="p" class="massive-import-text">
+              L'ajout en masse se fait à partir d'un fichier Excel
+              (<b>.xlsx</b>). Le format de votre fichier doit correspondre
+              <b>exactement</b> à celui du modèle indiqué ci-dessous : mêmes
+              colonnes, dans le même ordre, sans en ajouter ni en retirer.
+            </oxd-text>
+            <oxd-text tag="p" class="massive-import-text">
+              Le modèle se télécharge sous forme d'archive contenant deux
+              fichiers :
+            </oxd-text>
+            <ul class="massive-import-list">
+              <li>
+                un <b>fichier Excel</b> dont les colonnes sont déjà
+                pré-remplies, qu'il vous suffit de compléter avec vos contacts ;
+              </li>
+              <li>
+                un <b>fichier PDF</b> qui détaille, pour chacune de ces
+                colonnes, les options que vous pouvez y renseigner.
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <oxd-button
+              display-type="ghost"
+              icon-name="download"
+              :label="
+                isDownloadingMassiveImport
+                  ? 'Téléchargement...'
+                  : 'Télécharger le modèle'
+              "
+              :disabled="isDownloadingMassiveImport"
+              type="button"
+              @click="downloadMassiveImportDocumentation"
+            />
+            <oxd-button
+              display-type="secondary"
+              label="Charger les nouveaux contacts"
+              type="button"
+              @click="goToMassiveImportUpload"
+            />
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="modal-body">
+            <div
+              v-if="isUploadingMassiveImport"
+              class="massive-import-uploading"
+            >
+              <oxd-loading-spinner />
+              <oxd-text tag="p" class="massive-import-text">
+                Import de vos contacts en cours, merci de ne pas fermer cette
+                fenêtre...
+              </oxd-text>
+            </div>
+            <template v-else>
+              <oxd-text tag="p" class="massive-import-text">
+                Sélectionnez le fichier Excel (<b>.xlsx</b>) que vous avez
+                complété à partir du modèle. Ses colonnes doivent être restées
+                identiques à celles du modèle, sinon l'import sera refusé.
+              </oxd-text>
+              <div
+                class="massive-import-dropzone"
+                :class="{
+                  '--dragging': isDraggingMassiveImportFile,
+                  '--filled': massiveImportFile !== null,
+                  '--error': !!massiveImportError,
+                }"
+                @click="openMassiveImportFilePicker"
+                @dragover.prevent="isDraggingMassiveImportFile = true"
+                @dragleave.prevent="isDraggingMassiveImportFile = false"
+                @drop.prevent="onMassiveImportFileDropped"
+              >
+                <template v-if="massiveImportFile">
+                  <oxd-icon
+                    name="file-earmark-excel"
+                    class="massive-import-dropzone__icon"
+                  />
+                  <div class="massive-import-dropzone__details">
+                    <oxd-text tag="p" class="massive-import-dropzone__name">
+                      {{ massiveImportFile.name }}
+                    </oxd-text>
+                    <oxd-text tag="p" class="massive-import-dropzone__hint">
+                      {{ massiveImportFileSize }} — cliquez pour choisir un
+                      autre fichier
+                    </oxd-text>
+                  </div>
+                  <oxd-icon-button
+                    name="x-lg"
+                    title="Retirer ce fichier"
+                    @click.stop="clearMassiveImportFile"
+                  />
+                </template>
+                <template v-else>
+                  <oxd-icon
+                    name="upload"
+                    class="massive-import-dropzone__icon"
+                  />
+                  <div class="massive-import-dropzone__details">
+                    <oxd-text tag="p" class="massive-import-dropzone__name">
+                      Cliquez pour choisir un fichier
+                    </oxd-text>
+                    <oxd-text tag="p" class="massive-import-dropzone__hint">
+                      ou glissez-le directement dans cette zone
+                    </oxd-text>
+                  </div>
+                </template>
+              </div>
+              <div v-if="massiveImportError" class="massive-import-error">
+                <oxd-icon
+                  name="exclamation-triangle-fill"
+                  class="massive-import-error__icon"
+                />
+                <div class="massive-import-error__content">
+                  <oxd-text tag="p" class="massive-import-error__title">
+                    Import impossible
+                  </oxd-text>
+                  <oxd-text tag="p" class="massive-import-error__message">
+                    {{ massiveImportError }}
+                  </oxd-text>
+                </div>
+              </div>
+            </template>
+          </div>
+          <div class="modal-footer">
+            <oxd-button
+              display-type="ghost"
+              label="Annuler"
+              type="button"
+              :disabled="isUploadingMassiveImport"
+              @click="closeMassiveImportModal"
+            />
+            <oxd-button
+              display-type="secondary"
+              label="Envoyer le fichier"
+              type="button"
+              :disabled="massiveImportFile === null"
+              :loading="isUploadingMassiveImport"
+              @click="submitMassiveImportFile"
+            />
+          </div>
+        </template>
+      </div>
+    </div>
+    <input
+      ref="massiveImportFileInput"
+      type="file"
+      accept=".xlsx"
+      class="massive-import-file-input"
+      @change="onMassiveImportFileSelected"
+    />
     <create-contact
       v-if="showCreateContact"
       :default-columns="reportingDefaultColumns"
@@ -556,7 +736,13 @@ export default {
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
-    const {noRecordsFound, updateSuccess} = useToast();
+    const {
+      noRecordsFound,
+      updateSuccess,
+      error: toastError,
+      success: toastSuccess,
+      clearAll: clearAllToasts,
+    } = useToast();
     const totalRecords = ref(0);
     const itemsPerPage = 50;
     const currentPage = ref(1);
@@ -565,6 +751,14 @@ export default {
     const selectedLeadId = ref(null);
     const showContactAddMenu = ref(false);
     const showCreateContact = ref(false);
+    const showMassiveImportModal = ref(false);
+    const massiveImportStep = ref('intro');
+    const isDownloadingMassiveImport = ref(false);
+    const isUploadingMassiveImport = ref(false);
+    const isDraggingMassiveImportFile = ref(false);
+    const massiveImportFile = ref(null);
+    const massiveImportFileInput = ref(null);
+    const massiveImportError = ref('');
     const editingCell = ref(null);
     const editingDateValue = ref('');
     const selectEditorStyle = ref({});
@@ -607,6 +801,7 @@ export default {
       window.appGlobal.baseUrl,
       `/api/v2/actor/leads`,
     );
+    http.setIgnorePath('api/v2/admin/leads/massive-import');
 
     const reportingDefaultColumns = ref(props.defaultColumns);
 
@@ -1326,6 +1521,155 @@ export default {
       fetchData();
     };
 
+    const massiveImportFileSize = computed(() => {
+      const size = massiveImportFile.value?.size ?? 0;
+      return size < 1024 * 1024
+        ? `${Math.max(1, Math.round(size / 1024))} Ko`
+        : `${(size / (1024 * 1024)).toFixed(1)} Mo`;
+    });
+
+    const clearMassiveImportFile = () => {
+      massiveImportFile.value = null;
+      isDraggingMassiveImportFile.value = false;
+      massiveImportError.value = '';
+    };
+
+    const openMassiveImportModal = () => {
+      showContactAddMenu.value = false;
+      massiveImportStep.value = 'intro';
+      clearMassiveImportFile();
+      massiveImportError.value = '';
+      showMassiveImportModal.value = true;
+    };
+
+    const closeMassiveImportModal = () => {
+      if (isDownloadingMassiveImport.value || isUploadingMassiveImport.value) {
+        return;
+      }
+      showMassiveImportModal.value = false;
+      massiveImportError.value = '';
+    };
+
+    const goToMassiveImportUpload = () => {
+      massiveImportError.value = '';
+      massiveImportStep.value = 'upload';
+    };
+
+    const backToMassiveImportIntro = () => {
+      if (isUploadingMassiveImport.value) return;
+      massiveImportError.value = '';
+      massiveImportStep.value = 'intro';
+    };
+
+    const openMassiveImportFilePicker = () => {
+      massiveImportFileInput.value?.click();
+    };
+
+    const setMassiveImportFile = (file) => {
+      isDraggingMassiveImportFile.value = false;
+      if (!file) return;
+      if (!file.name.toLowerCase().endsWith('.xlsx')) {
+        massiveImportError.value =
+          'Seuls les fichiers Excel au format .xlsx sont acceptés.';
+        return;
+      }
+      massiveImportError.value = '';
+      massiveImportFile.value = file;
+    };
+
+    const onMassiveImportFileSelected = (event) => {
+      const file = event.target.files?.[0];
+      // Permet de re-sélectionner le même fichier après l'avoir retiré.
+      event.target.value = '';
+      setMassiveImportFile(file);
+    };
+
+    const onMassiveImportFileDropped = (event) => {
+      setMassiveImportFile(event.dataTransfer?.files?.[0]);
+    };
+
+    const submitMassiveImportFile = () => {
+      if (!massiveImportFile.value || isUploadingMassiveImport.value) return;
+      isUploadingMassiveImport.value = true;
+      massiveImportError.value = '';
+
+      const formData = new FormData();
+      formData.append('file', massiveImportFile.value);
+
+      http
+        .request({
+          method: 'POST',
+          url: '/api/v2/admin/leads/massive-import',
+          data: formData,
+          // Laisse axios positionner le boundary multipart.
+          headers: {},
+        })
+        .then(() => {
+          showMassiveImportModal.value = false;
+          clearMassiveImportFile();
+          toastSuccess({
+            title: 'Import terminé',
+            message: 'Vos contacts ont bien été importés.',
+          });
+          fetchData();
+        })
+        .catch((err) => {
+          // Avec setIgnorePath, l'intercepteur rejecte parfois
+          // directement la response (err.data) plutôt qu'AxiosError.
+          massiveImportError.value =
+            err?.data?.message ||
+            err?.response?.data?.message ||
+            "Le fichier n'a pas pu être importé. Vérifiez qu'il respecte bien le modèle.";
+          clearAllToasts();
+          toastError({
+            title: 'Import impossible',
+            message:
+              "Une erreur est survenue lors de l'import. Consultez le détail dans la fenêtre.",
+          });
+        })
+        .finally(() => {
+          isUploadingMassiveImport.value = false;
+        });
+    };
+
+    const downloadMassiveImportDocumentation = () => {
+      if (isDownloadingMassiveImport.value) return;
+      isDownloadingMassiveImport.value = true;
+      http
+        .request({
+          method: 'GET',
+          url: '/api/v2/admin/leads/documentation/massive-import',
+          responseType: 'blob',
+        })
+        .then(({data, headers}) => {
+          const contentType = headers?.['content-type'] || 'application/zip';
+          const disposition = headers?.['content-disposition'] || '';
+          const match = disposition.match(/filename="?([^";]+)"?/);
+          const fileName = match ? match[1] : 'import-en-masse.zip';
+
+          const objectUrl = URL.createObjectURL(
+            new Blob([data], {type: contentType}),
+          );
+          const link = document.createElement('a');
+          link.href = objectUrl;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+        })
+        .catch(() => {
+          toastError({
+            title: 'Erreur',
+            message:
+              "Impossible de télécharger le modèle d'import en masse. Veuillez réessayer.",
+          });
+        })
+        .finally(() => {
+          isDownloadingMassiveImport.value = false;
+        });
+    };
+
     const exportToExcel = () => {
       // Create a worksheet from the leads data
       const worksheet = XLSX.utils.json_to_sheet(
@@ -1461,6 +1805,25 @@ export default {
       showCreateContact,
       openCreateContact,
       onContactCreated,
+      showMassiveImportModal,
+      massiveImportStep,
+      isDownloadingMassiveImport,
+      isUploadingMassiveImport,
+      isDraggingMassiveImportFile,
+      massiveImportFile,
+      massiveImportFileInput,
+      massiveImportFileSize,
+      massiveImportError,
+      openMassiveImportModal,
+      closeMassiveImportModal,
+      goToMassiveImportUpload,
+      backToMassiveImportIntro,
+      openMassiveImportFilePicker,
+      onMassiveImportFileSelected,
+      onMassiveImportFileDropped,
+      clearMassiveImportFile,
+      submitMassiveImportFile,
+      downloadMassiveImportDocumentation,
       editingCell,
       editingDateValue,
       selectEditorStyle,
@@ -1753,6 +2116,196 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-container {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  width: 560px;
+  max-width: 90%;
+  z-index: 1001;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--oxd-border-light-color);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 0.75rem 0.75rem 0 0;
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #495057;
+    font-family: Nunito Sans, sans-serif;
+  }
+
+  &__back {
+    flex-shrink: 0;
+    margin-left: -0.5rem;
+  }
+}
+
+.modal-body {
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--oxd-border-light-color);
+  background-color: #f8f9fa;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.massive-import-text {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #495057;
+}
+
+.massive-import-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #495057;
+
+  li + li {
+    margin-top: 0.5rem;
+  }
+}
+
+.massive-import-file-input {
+  display: none;
+}
+
+.massive-import-dropzone {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border: 2px dashed #ced4da;
+  border-radius: 0.75rem;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+
+  &:hover,
+  &.--dragging {
+    border-color: var(--oxd-primary-one-color, #ff7b00);
+    background-color: #fff8f1;
+  }
+
+  &.--filled {
+    border-style: solid;
+    border-color: #ced4da;
+    background-color: #ffffff;
+  }
+
+  &.--error {
+    border-color: #dd2735;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    font-size: 1.75rem;
+    color: #6c757d;
+  }
+
+  &__details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #495057;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__hint {
+    margin: 0.15rem 0 0;
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+}
+
+.massive-import-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #f5c2c7;
+  border-radius: 0.5rem;
+  background-color: #f8d7da;
+  max-height: 8.5rem;
+  overflow-y: auto;
+
+  &__icon {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    font-size: 1rem;
+    color: #842029;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0 0 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #842029;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: #842029;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
+
+.massive-import-uploading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  text-align: center;
 }
 
 .orangehrm-header-left {

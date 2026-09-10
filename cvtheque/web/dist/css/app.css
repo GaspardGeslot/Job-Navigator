@@ -14770,6 +14770,171 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
+.modal-overlay[data-v-3e6ad531] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+}
+.modal-container[data-v-3e6ad531] {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  width: 560px;
+  max-width: 90%;
+  z-index: 1001;
+}
+.modal-header[data-v-3e6ad531] {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--oxd-border-light-color);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+.modal-header h3[data-v-3e6ad531] {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057;
+  font-family: Nunito Sans, sans-serif;
+}
+.modal-header__back[data-v-3e6ad531] {
+  flex-shrink: 0;
+  margin-left: -0.5rem;
+}
+.modal-body[data-v-3e6ad531] {
+  padding: 2rem;
+  background-color: #ffffff;
+}
+.modal-footer[data-v-3e6ad531] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--oxd-border-light-color);
+  background-color: #f8f9fa;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+.massive-import-text[data-v-3e6ad531] {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #495057;
+}
+.massive-import-list[data-v-3e6ad531] {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #495057;
+}
+.massive-import-list li + li[data-v-3e6ad531] {
+  margin-top: 0.5rem;
+}
+.massive-import-file-input[data-v-3e6ad531] {
+  display: none;
+}
+.massive-import-dropzone[data-v-3e6ad531] {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border: 2px dashed #ced4da;
+  border-radius: 0.75rem;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.massive-import-dropzone[data-v-3e6ad531]:hover, .massive-import-dropzone.--dragging[data-v-3e6ad531] {
+  border-color: var(--oxd-primary-one-color, #ff7b00);
+  background-color: #fff8f1;
+}
+.massive-import-dropzone.--filled[data-v-3e6ad531] {
+  border-style: solid;
+  border-color: #ced4da;
+  background-color: #ffffff;
+}
+.massive-import-dropzone.--error[data-v-3e6ad531] {
+  border-color: #dd2735;
+}
+.massive-import-dropzone__icon[data-v-3e6ad531] {
+  flex-shrink: 0;
+  font-size: 1.75rem;
+  color: #6c757d;
+}
+.massive-import-dropzone__details[data-v-3e6ad531] {
+  flex: 1;
+  min-width: 0;
+}
+.massive-import-dropzone__name[data-v-3e6ad531] {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.massive-import-dropzone__hint[data-v-3e6ad531] {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+.massive-import-error[data-v-3e6ad531] {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #f5c2c7;
+  border-radius: 0.5rem;
+  background-color: #f8d7da;
+  max-height: 8.5rem;
+  overflow-y: auto;
+}
+.massive-import-error__icon[data-v-3e6ad531] {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  font-size: 1rem;
+  color: #842029;
+}
+.massive-import-error__content[data-v-3e6ad531] {
+  flex: 1;
+  min-width: 0;
+}
+.massive-import-error__title[data-v-3e6ad531] {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #842029;
+}
+.massive-import-error__message[data-v-3e6ad531] {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #842029;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.massive-import-uploading[data-v-3e6ad531] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  text-align: center;
+}
 .orangehrm-header-left[data-v-3e6ad531] {
   display: flex;
   align-items: center;

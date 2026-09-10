@@ -85,7 +85,7 @@
             v-if="
               defaultColumns.gender ||
               defaultColumns.birthDate ||
-              defaultColumns.age
+              (defaultColumns.age && !isCreateMode)
             "
             :cols="3"
             class="orangehrm-full-width-grid"
@@ -112,12 +112,12 @@
               />
             </oxd-grid-item>
             <oxd-grid-item
-              v-if="defaultColumns.age && (isCreateMode || profile.age)"
+              v-if="defaultColumns.age && !isCreateMode && profile.age"
             >
               <oxd-input-field
                 v-model="profile.age"
                 :label="$t('Âge')"
-                :disabled="!isCreateMode"
+                :disabled="true"
               />
             </oxd-grid-item>
           </oxd-grid>
@@ -873,6 +873,8 @@ export default {
   emits: ['update', 'created'],
   setup() {
     const http = new APIService(window.appGlobal.baseUrl, '/');
+    // Coupe le toast auto de l'intercepteur sur POST /leads (création).
+    http.setIgnorePath('api/v2/admin/leads$');
     const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
     const {jsDateFormat} = useDateFormat();
     const userDateFormat = 'yyyy-MM-dd';
@@ -1158,7 +1160,6 @@ export default {
         studyLevel: this.asOptionLabel(this.profile.studyLevel),
         courseStart: this.asOptionLabel(this.profile.courseStart),
         birthDate: this.emptyToNull(this.profile.birthDate),
-        age: this.emptyToNull(this.profile.age),
         professionalExperience: this.asOptionLabel(
           this.profile.professionalExperience,
         ),
@@ -1190,8 +1191,12 @@ export default {
           this.$emit('created');
           return this.$toast.saveSuccess();
         })
-        .catch((error) => {
-          return this.$toast.unexpectedError(error?.response?.data?.message);
+        .catch(() => {
+          return this.$toast.error({
+            title: 'Création impossible',
+            message:
+              'Une erreur est survenue lors de la création du contact. Vérifiez les informations saisies et réessayez.',
+          });
         })
         .finally(() => {
           this.isLoading = false;

@@ -2221,6 +2221,20 @@ apiv2_admin_leads_global_options:
   requirements:
     theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
 
+apiv2_admin_leads_massive_import_documentation:
+  path: /{theme}/api/v2/admin/leads/documentation/massive-import
+  controller: OrangeHRM\Admin\Controller\LeadsController::massiveImportDocumentation
+  methods: [ GET ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
+apiv2_admin_leads_massive_import:
+  path: /{theme}/api/v2/admin/leads/massive-import
+  controller: OrangeHRM\Admin\Controller\LeadsController::massiveImport
+  methods: [ POST ]
+  requirements:
+    theme: constructys|olecio|maraudes|olecio-demo|maraudes-demo
+
 apiv2_admin_lead_options:
   path: /{theme}/api/v2/admin/leads/{id}/options
   controller: OrangeHRM\Admin\Controller\LeadsController::getLeadOptions
@@ -2320,6 +2334,16 @@ subdomain_apiv2_admin_leads_global_options:
   path: /api/v2/admin/leads/global-options
   controller: OrangeHRM\Admin\Controller\LeadsController::getGlobalOptions
   methods: [ GET ]
+
+subdomain_apiv2_admin_leads_massive_import_documentation:
+  path: /api/v2/admin/leads/documentation/massive-import
+  controller: OrangeHRM\Admin\Controller\LeadsController::massiveImportDocumentation
+  methods: [ GET ]
+
+subdomain_apiv2_admin_leads_massive_import:
+  path: /api/v2/admin/leads/massive-import
+  controller: OrangeHRM\Admin\Controller\LeadsController::massiveImport
+  methods: [ POST ]
 
 subdomain_apiv2_admin_lead_options:
   path: /api/v2/admin/leads/{id}/options
