@@ -488,7 +488,7 @@ class LeadsController extends AbstractVueController
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
-        $url = "{$clientBaseUrl}/actor/documentation/massive-import";
+        $url = "{$clientBaseUrl}/actor/massive-import/documentation";
 
         $response = $client->request('GET', $url, [
             'headers' => [
