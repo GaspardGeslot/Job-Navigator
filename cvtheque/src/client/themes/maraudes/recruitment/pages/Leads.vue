@@ -138,7 +138,7 @@
     </div>
     <div v-else class="orangehrm-paper-container">
       <div class="orangehrm-header-container">
-        <div class="orangehrm-header-left">
+        <div class="leads-header-row leads-header-row--actions">
           <div v-if="!showContactAddMenu" class="leads-contact-actions">
             <oxd-button
               display-type="secondary"
@@ -164,26 +164,30 @@
               @click="showContactAddMenu = false"
             />
           </div>
-          <oxd-button
-            display-type="secondary"
-            :label="$t('Exporter en Excel')"
-            class="export-button"
-            icon-name="download"
-            @click="exportToExcel"
-          />
-          <span class="orangehrm-text">
-            {{
-              totalRecords > 1
-                ? totalRecords + ' contacts trouvés'
-                : totalRecords + ' contact trouvé'
-            }}
-          </span>
         </div>
-        <div class="orangehrm-pagination-wrapper">
-          <oxd-pagination
-            v-model:current="currentPage"
-            :length="paginationLength"
-          />
+        <div class="leads-header-row leads-header-row--tools">
+          <div class="orangehrm-header-left">
+            <oxd-button
+              display-type="secondary"
+              :label="$t('Exporter en Excel')"
+              class="export-button"
+              icon-name="download"
+              @click="exportToExcel"
+            />
+            <span class="orangehrm-text">
+              {{
+                totalRecords > 1
+                  ? totalRecords + ' contacts trouvés'
+                  : totalRecords + ' contact trouvé'
+              }}
+            </span>
+          </div>
+          <div class="orangehrm-pagination-wrapper">
+            <oxd-pagination
+              v-model:current="currentPage"
+              :length="paginationLength"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -366,7 +370,7 @@
               L'ajout en masse se fait à partir d'un fichier Excel
               (<b>.xlsx</b>). Le format de votre fichier doit correspondre
               <b>exactement</b> à celui du modèle indiqué ci-dessous : mêmes
-              colonnes, dans le même ordre, sans en ajouter ni en retirer.
+              colonnes, sans en ajouter ni en retirer, avec 1 contact par ligne.
             </oxd-text>
             <oxd-text tag="p" class="massive-import-text">
               Le modèle se télécharge sous forme d'archive contenant deux
@@ -2107,15 +2111,54 @@ export default {
 
 .orangehrm-header-container {
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.leads-header-row--actions {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.leads-header-row--tools {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem;
+  gap: 1rem;
+  width: 100%;
 }
 
 .leads-contact-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .leads-header-row--tools {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .leads-header-row--actions {
+    justify-content: center;
+  }
+
+  .orangehrm-header-left {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .orangehrm-pagination-wrapper {
+    justify-content: center;
+  }
 }
 
 .modal-overlay {
@@ -2311,7 +2354,10 @@ export default {
 .orangehrm-header-left {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 1rem;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .export-button {
@@ -2329,6 +2375,9 @@ export default {
 .orangehrm-pagination-wrapper {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  margin-left: auto;
 }
 
 .records-count {

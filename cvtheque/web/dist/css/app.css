@@ -14767,14 +14767,47 @@ body {
 }
 .orangehrm-header-container[data-v-3e6ad531] {
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.leads-header-row--actions[data-v-3e6ad531] {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+.leads-header-row--tools[data-v-3e6ad531] {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem;
+  gap: 1rem;
+  width: 100%;
 }
 .leads-contact-actions[data-v-3e6ad531] {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+@media (max-width: 768px) {
+.leads-header-row--tools[data-v-3e6ad531] {
+    flex-direction: column;
+    align-items: stretch;
+}
+.leads-header-row--actions[data-v-3e6ad531] {
+    justify-content: center;
+}
+.orangehrm-header-left[data-v-3e6ad531] {
+    flex-direction: column;
+    align-items: stretch;
+}
+.orangehrm-pagination-wrapper[data-v-3e6ad531] {
+    justify-content: center;
+}
 }
 .modal-overlay[data-v-3e6ad531] {
   position: fixed;
@@ -14944,7 +14977,10 @@ body {
 .orangehrm-header-left[data-v-3e6ad531] {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 1rem;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .export-button[data-v-3e6ad531] {
   display: flex;
@@ -14959,6 +14995,9 @@ body {
 .orangehrm-pagination-wrapper[data-v-3e6ad531] {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  margin-left: auto;
 }
 .records-count[data-v-3e6ad531] {
   font-size: 0.9rem;

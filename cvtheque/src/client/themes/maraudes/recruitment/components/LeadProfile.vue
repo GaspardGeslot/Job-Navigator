@@ -36,7 +36,7 @@
                 v-model:first-name="profile.firstName"
                 v-model:last-name="profile.lastName"
                 :rules="rules"
-                :label="$t('general.full_name')"
+                :required="true"
                 :disabled="!isCreateMode"
               />
             </oxd-grid-item>
@@ -50,7 +50,8 @@
               <oxd-input-field
                 v-model="profile.email"
                 :label="$t('general.email')"
-                :rules="rules.email"
+                :rules="isCreateMode ? rules.email : []"
+                :required="isCreateMode"
                 :disabled="!isCreateMode"
               />
               <oxd-icon-button
@@ -69,6 +70,7 @@
                 :label="$t('recruitment.contact_number')"
                 :rules="isCreateMode ? rules.phoneNumber : []"
                 :disabled="!isCreateMode"
+                :required="isCreateMode"
               />
               <oxd-icon-button
                 v-if="!isCreateMode && profile.phoneNumber"
@@ -469,7 +471,7 @@
           </oxd-form-row>
         </div>
 
-        <div v-if="defaultColumns.source">
+        <div v-if="defaultColumns.source && !isCreateMode">
           <oxd-divider></oxd-divider>
           <oxd-form-row>
             <oxd-text class="orangehrm-sub-title" tag="h6">
@@ -741,6 +743,7 @@ import {
   validTimeFormat,
   shouldBeCurrentOrPreviousDate,
   numericOnly,
+  validEmailFormat,
 } from '@/core/util/validation/rules';
 import DateInput from '@/core/components/inputs/DateInput';
 import {APIService} from '@/core/util/services/api.service';
@@ -905,9 +908,10 @@ export default {
       scopeToAdd: null,
       selectedJob: null,
       rules: {
-        firstName: [shouldNotExceedCharLength(30)],
-        lastName: [shouldNotExceedCharLength(30)],
+        firstName: [required, shouldNotExceedCharLength(30)],
+        lastName: [required, shouldNotExceedCharLength(30)],
         phoneNumber: [required],
+        email: [required, validEmailFormat],
         postalCode: [shouldNotExceedCharLength(5), numericOnly],
         comment: [shouldNotExceedCharLength(1000)],
         telephoneContactDate: [

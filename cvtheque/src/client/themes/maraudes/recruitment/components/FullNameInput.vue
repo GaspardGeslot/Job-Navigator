@@ -19,14 +19,16 @@
 
 <template>
   <!-- Always use inside OXD-Form -->
-  <oxd-input-group :label="localizedLabel" :classes="classes">
+  <oxd-input-group :classes="classes">
     <oxd-input-field
       class="orangehrm-firstname"
       name="firstName"
+      :label="$t('general.first_name')"
       :placeholder="$t('general.first_name')"
       :model-value="firstName"
       :rules="rules.firstName"
       :disabled="disabled"
+      :required="required"
       @update:model-value="$emit('update:firstName', $event)"
     />
     <!--<oxd-input-field
@@ -41,10 +43,12 @@
     <oxd-input-field
       class="orangehrm-lastname"
       name="lastName"
+      :label="$t('general.last_name')"
       :placeholder="$t('general.last_name')"
       :model-value="lastName"
       :rules="rules.lastName"
       :disabled="disabled"
+      :required="required"
       @update:model-value="$emit('update:lastName', $event)"
     />
   </oxd-input-group>
@@ -55,6 +59,10 @@ export default {
   name: 'FullNameInput',
   inheritAttrs: false,
   props: {
+    required: {
+      type: Boolean,
+      default: false,
+    },
     firstName: {
       type: String,
       required: true,

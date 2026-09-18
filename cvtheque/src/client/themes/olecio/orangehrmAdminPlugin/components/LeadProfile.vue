@@ -454,6 +454,21 @@
               />
             </oxd-grid-item>
           </oxd-grid>
+          <oxd-grid
+            v-if="isColumnVisible('assignee')"
+            :cols="3"
+            class="orangehrm-full-width-grid"
+          >
+            <oxd-grid-item>
+              <oxd-input-field
+                v-model="profile.assignee"
+                type="select"
+                :label="$t('Assigné à')"
+                :options="assigneeOptions"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
         </oxd-form-row>
 
         <oxd-form-row
@@ -732,6 +747,7 @@ const LeadProfileModel = {
   callBackDate: null,
   franceTravailRecordDate: null,
   franceTravailAgency: null,
+  assignee: null,
   rqth: null,
   ko: null,
 };
@@ -925,6 +941,11 @@ export default {
         {id: 16, label: 'PARIS'},
         {id: 17, label: '-'},
       ],
+      assigneeOptions: [
+        {id: 0, label: 'FACE'},
+        {id: 1, label: 'AFPA'},
+        {id: 2, label: 'E2C'},
+      ],
       rqthOptions: [
         {id: 0, label: 'Non, je ne suis pas concerné·e'},
         {id: 1, label: "Oui, je bénéficie d'une RQTH"},
@@ -1096,6 +1117,7 @@ export default {
         dataToSend.studyLevel = this.profile.studyLevel?.label;
       if (dataToSend.franceTravailAgency)
         dataToSend.franceTravailAgency = dataToSend.franceTravailAgency?.label;
+      if (dataToSend.assignee) dataToSend.assignee = dataToSend.assignee?.label;
 
       Object.keys(LEAD_SELECT_FIELD_OPTIONS).forEach((field) => {
         const value = this.profile[field];
@@ -1233,6 +1255,11 @@ export default {
       if (this.lead.franceTravailAgency)
         this.profile.franceTravailAgency = this.franceTravailAgencyOptions.find(
           (option) => option.label === this.lead.franceTravailAgency,
+        );
+
+      if (this.lead.assignee)
+        this.profile.assignee = this.assigneeOptions.find(
+          (option) => option.label === this.lead.assignee,
         );
 
       if (this.lead.rqth)
