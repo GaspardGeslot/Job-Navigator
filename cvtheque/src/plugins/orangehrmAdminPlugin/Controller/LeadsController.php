@@ -23,6 +23,7 @@ class LeadsController extends AbstractVueController
     public const FILTER_DEPARTMENT_CODES = 'departmentCodes';
     public const FILTER_JOBS = 'jobs';
     public const FILTER_COURSE_ONLY = 'courseOnly';
+    public const FILTER_HIDE_DUPLICATES = 'hideDuplicates';
     public const FILTER_HIDE_TESTS = 'hideTests';
 
     /**
@@ -125,14 +126,18 @@ class LeadsController extends AbstractVueController
         $departmentCodes = $request->query->get(self::FILTER_DEPARTMENT_CODES);
         $jobs = $request->query->get(self::FILTER_JOBS);
         $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
+        $hideDuplicates = $request->query->get(self::FILTER_HIDE_DUPLICATES);
         $hideTests = $request->query->get(self::FILTER_HIDE_TESTS);
         if ($courseOnly !== null) {
             $courseOnly = filter_var($courseOnly, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
+        if ($hideDuplicates !== null) {
+            $hideDuplicates = filter_var($hideDuplicates, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        }
         if ($hideTests !== null) {
             $hideTests = filter_var($hideTests, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideTests, $departmentCodes);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideDuplicates, $hideTests, $departmentCodes);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -647,7 +652,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideTests, ?array $departmentCodes): array
+    public function getLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideDuplicates, ?bool $hideTests, ?array $departmentCodes): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -666,6 +671,9 @@ class LeadsController extends AbstractVueController
                 $url .= 'jobs=' . urlencode(implode(',', $jobs)) . '&';
             if ($courseOnly !== null) {
                 $url .= 'courseOnly=' . ($courseOnly ? 'true' : 'false') . '&';
+            }
+            if ($hideDuplicates !== null) {
+                $url .= 'hideDuplicate=' . ($hideDuplicates ? 'true' : 'false') . '&';
             }
             if ($hideTests !== null) {
                 $url .= 'hideTests=' . ($hideTests ? 'true' : 'false') . '&';
