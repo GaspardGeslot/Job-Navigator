@@ -93,8 +93,29 @@
                 :multiple="true"
               />
             </oxd-grid-item>
-            <oxd-grid :cols="2" class="orangehrm-full-width-grid"
-              ><oxd-grid-item
+            <oxd-grid :cols="2" class="orangehrm-full-width-grid">
+              <oxd-grid-item
+                class="orangehrm-switch-wrapper"
+                style="display: flex; flex-direction: row; margin-top: 0.5rem"
+              >
+                <oxd-switch-input
+                  v-model="hideDuplicates"
+                  :label="$t(`Masquer les doublons`)"
+                />
+                <oxd-text
+                  class="oxd-label"
+                  :style="{
+                    fontFamily: 'Nunito Sans, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    color: 'var(--oxd-interface-gray-darken-1-color, #64728c)',
+                    marginBottom: '0.5rem',
+                  }"
+                >
+                  Masquer les doublons
+                </oxd-text>
+              </oxd-grid-item>
+              <oxd-grid-item
                 class="orangehrm-switch-wrapper"
                 style="display: flex; flex-direction: row; margin-top: 0.5rem"
               >
@@ -514,6 +535,10 @@ export default {
             departmentCodesFilter: filters.departmentCodesFilter || [],
             jobsFilter: filters.jobsFilter || [],
             courseOnly: filters.courseOnly || false,
+            hideDuplicates:
+              typeof filters.hideDuplicates === 'boolean'
+                ? filters.hideDuplicates
+                : true,
             hideTests:
               typeof filters.hideTests === 'boolean'
                 ? filters.hideTests
@@ -536,6 +561,7 @@ export default {
         departmentCodesFilter: [],
         jobsFilter: [],
         courseOnly: false,
+        hideDuplicates: true,
         hideTests: false,
       };
     };
@@ -549,6 +575,7 @@ export default {
       departmentCodes,
       jobs,
       course,
+      hideDup,
       hide,
     ) => {
       try {
@@ -567,6 +594,7 @@ export default {
           departmentCodesFilter: departmentCodes,
           jobsFilter: jobs,
           courseOnly: course,
+          hideDuplicates: hideDup,
           hideTests: hide,
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
@@ -596,6 +624,7 @@ export default {
     const departmentCodesFilter = ref(loadedFilters.departmentCodesFilter);
     const jobsFilter = ref(loadedFilters.jobsFilter);
     const courseOnly = ref(loadedFilters.courseOnly);
+    const hideDuplicates = ref(loadedFilters.hideDuplicates);
     const hideTests = ref(loadedFilters.hideTests);
     const tableData = ref([]);
     const leads = ref([]);
@@ -1257,6 +1286,7 @@ export default {
           : [],
         jobs: jobsFilter.value ? jobsFilter.value.map((job) => job.label) : [],
         courseOnly: courseOnly.value,
+        hideDuplicates: hideDuplicates.value,
         hideTests: hideTests.value,
       };
 
@@ -1323,6 +1353,7 @@ export default {
         departmentCodesFilter.value,
         jobsFilter.value,
         courseOnly.value,
+        hideDuplicates.value,
         hideTests.value,
       );
       fetchData();
@@ -1339,6 +1370,7 @@ export default {
       departmentCodesFilter.value = [];
       jobsFilter.value = [];
       courseOnly.value = false;
+      hideDuplicates.value = true;
       hideTests.value = false;
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
@@ -1350,6 +1382,7 @@ export default {
         departmentCodesFilter.value,
         jobsFilter.value,
         courseOnly.value,
+        hideDuplicates.value,
         hideTests.value,
       );
       if (jobAutocomplete.value) {
@@ -1407,6 +1440,7 @@ export default {
         departmentCodesFilter.value,
         jobsFilter.value,
         courseOnly.value,
+        hideDuplicates.value,
         hideTests.value,
       );
     };
@@ -1421,6 +1455,7 @@ export default {
         departmentCodesFilter,
         jobsFilter,
         courseOnly,
+        hideDuplicates,
         hideTests,
       ],
       () => {
@@ -1432,6 +1467,7 @@ export default {
           departmentCodesFilter.value,
           jobsFilter.value,
           courseOnly.value,
+          hideDuplicates.value,
           hideTests.value,
         );
       },
@@ -1513,6 +1549,7 @@ export default {
       departmentCodesFilter,
       jobsFilter,
       courseOnly,
+      hideDuplicates,
       hideTests,
       tableData,
       tableHeaders,
@@ -1575,6 +1612,7 @@ export default {
         this.departmentCodesFilter,
         this.jobsFilter,
         this.courseOnly,
+        this.hideDuplicates,
         this.hideTests,
       );
       navigate(`/${window.appGlobal.theme}/admin/viewLeads/{id}`, {

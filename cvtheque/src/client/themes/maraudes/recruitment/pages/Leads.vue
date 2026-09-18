@@ -1074,6 +1074,15 @@ export default {
         callBackDate: profile.callBackDate,
       };
 
+      if (Array.isArray(profile.matchingShorts)) {
+        row.otherActors = profile.matchingShorts
+          .map((matching) => matching?.title)
+          .filter(Boolean)
+          .join(' - ');
+      } else if (profile.otherActors != null) {
+        row.otherActors = profile.otherActors;
+      }
+
       if (Array.isArray(profile.customColumns)) {
         const existingCustomColumns = existingLead?.customColumns || [];
         row.customColumns = existingCustomColumns.map((column) => {

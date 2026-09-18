@@ -1428,7 +1428,7 @@ export default {
             onlyScope: scope.onlyScope ?? true,
           });
           this.onCancelAddScope();
-          this.$emit('update');
+          this.emitScopesUpdate();
           return this.$toast.saveSuccess();
         })
         .finally(() => {
@@ -1442,6 +1442,16 @@ export default {
         onlyScope: scope.onlyScope ?? true,
       });
       this.onCancelAddScope();
+    },
+    emitScopesUpdate() {
+      this.$emit('update', {
+        id: this.lead.id,
+        matchingShorts: this.leadScopes.map((scope) => ({
+          id: scope.id,
+          title: scope.title,
+          onlyScope: scope.onlyScope,
+        })),
+      });
     },
     onClickRemoveScope(scope) {
       if (this.isCreateMode) {
@@ -1464,7 +1474,7 @@ export default {
               this.leadScopes = this.leadScopes.filter(
                 (item) => String(item.id) !== String(scope.id),
               );
-              this.$emit('update');
+              this.emitScopesUpdate();
               return this.$toast.deleteSuccess();
             })
             .finally(() => {
