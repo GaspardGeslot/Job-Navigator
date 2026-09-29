@@ -31,6 +31,13 @@
                 :label="$t('Etat de contact')"
                 :options="contactStatusOptions"
               />
+              <date-input
+                v-if="isARelancerSelected"
+                v-model="relanceDateFilter"
+                :label="$t('Date de relance')"
+                :rules="rules.relanceDate"
+                required
+              />
             </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
@@ -683,6 +690,9 @@ export default {
             endDateFilter:
               convertDateFromStorage(filters.endDateFilter) ||
               formatDate(defaultEndDate, userDateFormat),
+            relanceDateFilter:
+              convertDateFromStorage(filters.relanceDateFilter) ||
+              formatDate(defaultStartDate, userDateFormat),
           };
         }
       } catch (error) {
@@ -695,12 +705,13 @@ export default {
       return {
         startDateFilter: formatDate(defaultStartDate, userDateFormat),
         endDateFilter: formatDate(defaultEndDate, userDateFormat),
+        relanceDateFilter: formatDate(defaultStartDate, userDateFormat),
       };
     };
 
     // Fonction pour sauvegarder les filtres dans localStorage
     // Sauvegarder au format API (yyyy-MM-dd) pour la compatibilité
-    const saveFiltersToLocalStorage = (startDate, endDate) => {
+    const saveFiltersToLocalStorage = (startDate, endDate, relanceDate) => {
       try {
         // Convertir du format utilisateur vers le format API pour le stockage
         const startDateApi = startDate
@@ -709,9 +720,13 @@ export default {
         const endDateApi = endDate
           ? formatDate(parseDate(endDate, userDateFormat), 'yyyy-MM-dd')
           : null;
+        const relanceDateApi = relanceDate
+          ? formatDate(parseDate(relanceDate, userDateFormat), 'yyyy-MM-dd')
+          : null;
         const filters = {
           startDateFilter: startDateApi,
           endDateFilter: endDateApi,
+          relanceDateFilter: relanceDateApi,
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
       } catch (error) {
@@ -734,6 +749,10 @@ export default {
     const endDateFilter = ref(
       loadedFilters?.endDateFilter ||
         formatDate(defaultEndDate, userDateFormat),
+    );
+    const relanceDateFilter = ref(
+      loadedFilters?.relanceDateFilter ||
+        formatDate(defaultStartDate, userDateFormat),
     );
     const contactStatusOptions = computed(() => props.matchingStatusFilters);
     const contactStatusFilter = ref(null);
@@ -800,6 +819,7 @@ export default {
           {allowSameDate: true, dateFormat: userDateFormat},
         ),
       ],
+      relanceDate: [required, validDateFormat(userDateFormat)],
     };
     const http = new APIService(
       window.appGlobal.baseUrl,
@@ -808,7 +828,7 @@ export default {
     http.setIgnorePath('api/v2/admin/leads/massive-import');
 
     const reportingDefaultColumns = ref(props.defaultColumns);
-
+    console.log('columns ', reportingDefaultColumns);
     const COLUMN_CONFIG = [
       {
         label: 'ID',
@@ -968,6 +988,16 @@ export default {
         label: 'Complément',
         key: 'complement',
         condition: (cols) => !!cols.complement,
+      },
+      {
+        label: 'Dernier contact',
+        key: 'lastContact',
+        condition: (cols) => !!cols.lastContact,
+      },
+      {
+        label: 'Relancer à partir de',
+        key: 'callBackDate',
+        condition: (cols) => !!cols.callBackDate,
       },
       {
         label: 'Périmètre',
@@ -1403,6 +1433,16 @@ export default {
       return !!cols.callBackDate || !!cols.contactLogs;
     });
 
+    const isARelancerSelected = computed(
+      () => contactStatusFilter.value?.label === 'A relancer',
+    );
+
+    const getDefaultRelanceDate = () => {
+      const defaultRelanceDate = new Date();
+      defaultRelanceDate.setDate(defaultRelanceDate.getDate() - 2);
+      return formatDate(defaultRelanceDate, userDateFormat);
+    };
+
     // OXD pagination n'accepte pas current < 1 ou current > length
     watch([totalRecords, currentPage], () => {
       const length = paginationLength.value;
@@ -1466,6 +1506,13 @@ export default {
         ...customFiltersParams,
       };
 
+      if (isARelancerSelected.value && relanceDateFilter.value) {
+        params.relanceDate = formatDate(
+          parseDate(relanceDateFilter.value, userDateFormat),
+          'yyyy-MM-dd',
+        );
+      }
+
       http
         .getAll(params)
         .then((response) => {
@@ -1496,7 +1543,11 @@ export default {
     const filterItems = () => {
       currentPage.value = 1;
       // Sauvegarder les filtres avant de filtrer
-      saveFiltersToLocalStorage(startDateFilter.value, endDateFilter.value);
+      saveFiltersToLocalStorage(
+        startDateFilter.value,
+        endDateFilter.value,
+        relanceDateFilter.value,
+      );
       fetchData();
     };
 
@@ -1506,6 +1557,7 @@ export default {
       const defaultEndDate = new Date();
       startDateFilter.value = formatDate(defaultStartDate, userDateFormat);
       endDateFilter.value = formatDate(defaultEndDate, userDateFormat);
+      relanceDateFilter.value = getDefaultRelanceDate();
       // Réinitialiser les filtres des colonnes personnalisées
       filterableColumns.value.forEach((col) => {
         if (col.type === 'SELECT') customColumnFilters[col.id] = [];
@@ -1516,7 +1568,11 @@ export default {
       contactStatusFilter.value = null;
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
-      saveFiltersToLocalStorage(startDateFilter.value, endDateFilter.value);
+      saveFiltersToLocalStorage(
+        startDateFilter.value,
+        endDateFilter.value,
+        relanceDateFilter.value,
+      );
       fetchData();
     };
 
@@ -1716,8 +1772,18 @@ export default {
     });
 
     // Watch pour sauvegarder automatiquement les changements de filtres
-    watch([startDateFilter, endDateFilter], () => {
-      saveFiltersToLocalStorage(startDateFilter.value, endDateFilter.value);
+    watch([startDateFilter, endDateFilter, relanceDateFilter], () => {
+      saveFiltersToLocalStorage(
+        startDateFilter.value,
+        endDateFilter.value,
+        relanceDateFilter.value,
+      );
+    });
+
+    watch(isARelancerSelected, (isSelected) => {
+      if (isSelected && !relanceDateFilter.value) {
+        relanceDateFilter.value = getDefaultRelanceDate();
+      }
     });
 
     const updateUrlLeadId = (leadId) => {
@@ -1800,11 +1866,13 @@ export default {
       contactStatusOptions,
       showContactStatusFilter,
       contactStatusFilter,
+      isARelancerSelected,
       contactLogTypes,
       leadSelectOptions,
       ofOptions,
       startDateFilter,
       endDateFilter,
+      relanceDateFilter,
       tableData,
       tableHeaders,
       totalRecords,
@@ -1884,7 +1952,11 @@ export default {
       if (leadId == null) {
         return;
       }
-      this.saveFiltersToLocalStorage(this.startDateFilter, this.endDateFilter);
+      this.saveFiltersToLocalStorage(
+        this.startDateFilter,
+        this.endDateFilter,
+        this.relanceDateFilter,
+      );
       navigate(`/recruitment/viewLeads/{id}`, {
         id: leadId,
       });

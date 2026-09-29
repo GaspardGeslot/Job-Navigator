@@ -29,27 +29,27 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
     );
 
     public static $prefixLengthsPsr4 = array (
-        'p' => 
+        'p' =>
         array (
             'phpseclib3\\' => 11,
         ),
-        'e' => 
+        'e' =>
         array (
             'enshrined\\svgSanitize\\' => 22,
         ),
-        'Z' => 
+        'Z' =>
         array (
             'ZxcvbnPhp\\' => 10,
         ),
-        'W' => 
+        'W' =>
         array (
             'Webmozart\\Assert\\' => 17,
         ),
-        'T' => 
+        'T' =>
         array (
             'Twig\\' => 5,
         ),
-        'S' => 
+        'S' =>
         array (
             'Symfony\\Polyfill\\Php81\\' => 23,
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -95,12 +95,12 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             'StellaMaris\\Clock\\' => 18,
             'ScssPhp\\ScssPhp\\' => 16,
         ),
-        'R' => 
+        'R' =>
         array (
             'Respect\\Validation\\' => 19,
             'Respect\\Stringifier\\' => 20,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
@@ -112,7 +112,7 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             'PhpParser\\' => 10,
             'ParagonIE\\ConstantTime\\' => 23,
         ),
-        'O' => 
+        'O' =>
         array (
             'OrangeHRM\\Time\\' => 15,
             'OrangeHRM\\Tests\\Time\\' => 21,
@@ -165,15 +165,15 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             'OrangeHRM\\Admin\\' => 16,
             'OpenApi\\' => 8,
         ),
-        'N' => 
+        'N' =>
         array (
             'Nyholm\\Psr7\\' => 12,
         ),
-        'M' => 
+        'M' =>
         array (
             'Monolog\\' => 8,
         ),
-        'L' => 
+        'L' =>
         array (
             'League\\Uri\\' => 11,
             'League\\OAuth2\\Server\\' => 21,
@@ -182,21 +182,21 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             'Lcobucci\\Clock\\' => 15,
             'Laravel\\SerializableClosure\\' => 28,
         ),
-        'H' => 
+        'H' =>
         array (
             'Home\\' => 5,
         ),
-        'G' => 
+        'G' =>
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
-        'E' => 
+        'E' =>
         array (
             'Egulias\\EmailValidator\\' => 23,
         ),
-        'D' => 
+        'D' =>
         array (
             'Doctrine\\Persistence\\' => 21,
             'Doctrine\\ORM\\' => 13,
@@ -212,7 +212,7 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             'Defuse\\Crypto\\' => 14,
             'DeepCopy\\' => 9,
         ),
-        'C' => 
+        'C' =>
         array (
             'Crunz\\' => 6,
             'Cron\\' => 5,
@@ -222,396 +222,396 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
     );
 
     public static $prefixDirsPsr4 = array (
-        'phpseclib3\\' => 
+        'phpseclib3\\' =>
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
         ),
-        'enshrined\\svgSanitize\\' => 
+        'enshrined\\svgSanitize\\' =>
         array (
             0 => __DIR__ . '/..' . '/enshrined/svg-sanitize/src',
         ),
-        'ZxcvbnPhp\\' => 
+        'ZxcvbnPhp\\' =>
         array (
             0 => __DIR__ . '/..' . '/bjeavons/zxcvbn-php/src',
         ),
-        'Webmozart\\Assert\\' => 
+        'Webmozart\\Assert\\' =>
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
-        'Twig\\' => 
+        'Twig\\' =>
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
         ),
-        'Symfony\\Polyfill\\Php81\\' => 
+        'Symfony\\Polyfill\\Php81\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php81',
         ),
-        'Symfony\\Polyfill\\Php80\\' => 
+        'Symfony\\Polyfill\\Php80\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
         ),
-        'Symfony\\Polyfill\\Php73\\' => 
+        'Symfony\\Polyfill\\Php73\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php73',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
+        'Symfony\\Polyfill\\Mbstring\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
-        'Symfony\\Polyfill\\Intl\\MessageFormatter\\' => 
+        'Symfony\\Polyfill\\Intl\\MessageFormatter\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-messageformatter',
         ),
-        'Symfony\\Polyfill\\Intl\\Idn\\' => 
+        'Symfony\\Polyfill\\Intl\\Idn\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-idn',
         ),
-        'Symfony\\Polyfill\\Intl\\Grapheme\\' => 
+        'Symfony\\Polyfill\\Intl\\Grapheme\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
         ),
-        'Symfony\\Polyfill\\Ctype\\' => 
+        'Symfony\\Polyfill\\Ctype\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Symfony\\Contracts\\Translation\\' => 
+        'Symfony\\Contracts\\Translation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/translation-contracts',
         ),
-        'Symfony\\Contracts\\Service\\' => 
+        'Symfony\\Contracts\\Service\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
         ),
-        'Symfony\\Contracts\\EventDispatcher\\' => 
+        'Symfony\\Contracts\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
         ),
-        'Symfony\\Contracts\\Cache\\' => 
+        'Symfony\\Contracts\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/cache-contracts',
         ),
-        'Symfony\\Component\\Yaml\\' => 
+        'Symfony\\Component\\Yaml\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
-        'Symfony\\Component\\VarExporter\\' => 
+        'Symfony\\Component\\VarExporter\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/var-exporter',
         ),
-        'Symfony\\Component\\VarDumper\\' => 
+        'Symfony\\Component\\VarDumper\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
-        'Symfony\\Component\\Translation\\' => 
+        'Symfony\\Component\\Translation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
         ),
-        'Symfony\\Component\\String\\' => 
+        'Symfony\\Component\\String\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
         ),
-        'Symfony\\Component\\Security\\Csrf\\' => 
+        'Symfony\\Component\\Security\\Csrf\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/security-csrf',
         ),
-        'Symfony\\Component\\Security\\Core\\' => 
+        'Symfony\\Component\\Security\\Core\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/security-core',
         ),
-        'Symfony\\Component\\Routing\\' => 
+        'Symfony\\Component\\Routing\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/routing',
         ),
-        'Symfony\\Component\\Process\\' => 
+        'Symfony\\Component\\Process\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
         ),
-        'Symfony\\Component\\PasswordHasher\\' => 
+        'Symfony\\Component\\PasswordHasher\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/password-hasher',
         ),
-        'Symfony\\Component\\OptionsResolver\\' => 
+        'Symfony\\Component\\OptionsResolver\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
-        'Symfony\\Component\\Mime\\' => 
+        'Symfony\\Component\\Mime\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/mime',
         ),
-        'Symfony\\Component\\Mailer\\' => 
+        'Symfony\\Component\\Mailer\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/mailer',
         ),
-        'Symfony\\Component\\Lock\\' => 
+        'Symfony\\Component\\Lock\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/lock',
         ),
-        'Symfony\\Component\\Ldap\\' => 
+        'Symfony\\Component\\Ldap\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/ldap',
         ),
-        'Symfony\\Component\\HttpKernel\\' => 
+        'Symfony\\Component\\HttpKernel\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-kernel',
         ),
-        'Symfony\\Component\\HttpFoundation\\' => 
+        'Symfony\\Component\\HttpFoundation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
         ),
-        'Symfony\\Component\\Finder\\' => 
+        'Symfony\\Component\\Finder\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
         ),
-        'Symfony\\Component\\Filesystem\\' => 
+        'Symfony\\Component\\Filesystem\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/filesystem',
         ),
-        'Symfony\\Component\\EventDispatcher\\' => 
+        'Symfony\\Component\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
         ),
-        'Symfony\\Component\\ErrorHandler\\' => 
+        'Symfony\\Component\\ErrorHandler\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/error-handler',
         ),
-        'Symfony\\Component\\DependencyInjection\\' => 
+        'Symfony\\Component\\DependencyInjection\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/dependency-injection',
         ),
-        'Symfony\\Component\\Console\\' => 
+        'Symfony\\Component\\Console\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
-        'Symfony\\Component\\Config\\' => 
+        'Symfony\\Component\\Config\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/config',
         ),
-        'Symfony\\Component\\Cache\\' => 
+        'Symfony\\Component\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
         ),
-        'Symfony\\Bundle\\MonologBundle\\' => 
+        'Symfony\\Bundle\\MonologBundle\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/monolog-bundle',
         ),
-        'Symfony\\Bridge\\PsrHttpMessage\\' => 
+        'Symfony\\Bridge\\PsrHttpMessage\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/psr-http-message-bridge',
         ),
-        'Symfony\\Bridge\\Monolog\\' => 
+        'Symfony\\Bridge\\Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/monolog-bridge',
         ),
-        'StellaMaris\\Clock\\' => 
+        'StellaMaris\\Clock\\' =>
         array (
             0 => __DIR__ . '/..' . '/stella-maris/clock/src',
         ),
-        'ScssPhp\\ScssPhp\\' => 
+        'ScssPhp\\ScssPhp\\' =>
         array (
             0 => __DIR__ . '/..' . '/scssphp/scssphp/src',
         ),
-        'Respect\\Validation\\' => 
+        'Respect\\Validation\\' =>
         array (
             0 => __DIR__ . '/..' . '/respect/validation/library',
         ),
-        'Respect\\Stringifier\\' => 
+        'Respect\\Stringifier\\' =>
         array (
             0 => __DIR__ . '/..' . '/respect/stringifier/src',
         ),
-        'Psr\\Log\\' => 
+        'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
             1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Http\\Client\\' => 
+        'Psr\\Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'Psr\\EventDispatcher\\' => 
+        'Psr\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
         ),
-        'Psr\\Container\\' => 
+        'Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Psr\\Clock\\' => 
+        'Psr\\Clock\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/clock/src',
         ),
-        'Psr\\Cache\\' => 
+        'Psr\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
-        'PhpParser\\' => 
+        'PhpParser\\' =>
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
-        'ParagonIE\\ConstantTime\\' => 
+        'ParagonIE\\ConstantTime\\' =>
         array (
             0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
         ),
-        'OrangeHRM\\Time\\' => 
+        'OrangeHRM\\Time\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmTimePlugin',
         ),
-        'OrangeHRM\\Tests\\Time\\' => 
+        'OrangeHRM\\Tests\\Time\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmTimePlugin/test',
         ),
-        'OrangeHRM\\Tests\\Recruitment\\' => 
+        'OrangeHRM\\Tests\\Recruitment\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmRecruitmentPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Pim\\' => 
+        'OrangeHRM\\Tests\\Pim\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmPimPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Performance\\' => 
+        'OrangeHRM\\Tests\\Performance\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmPerformancePlugin/test',
         ),
-        'OrangeHRM\\Tests\\OpenidAuthentication\\' => 
+        'OrangeHRM\\Tests\\OpenidAuthentication\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmOpenidAuthenticationPlugin/test',
         ),
-        'OrangeHRM\\Tests\\OAuth\\' => 
+        'OrangeHRM\\Tests\\OAuth\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCoreOAuthPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Mobile\\' => 
+        'OrangeHRM\\Tests\\Mobile\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmMobilePlugin/test',
         ),
-        'OrangeHRM\\Tests\\Maintenance\\' => 
+        'OrangeHRM\\Tests\\Maintenance\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmMaintenancePlugin/test',
         ),
-        'OrangeHRM\\Tests\\Leave\\' => 
+        'OrangeHRM\\Tests\\Leave\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmLeavePlugin/test',
         ),
-        'OrangeHRM\\Tests\\LDAP\\' => 
+        'OrangeHRM\\Tests\\LDAP\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmLDAPAuthenticationPlugin/test',
         ),
-        'OrangeHRM\\Tests\\I18N\\' => 
+        'OrangeHRM\\Tests\\I18N\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmI18NPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Help\\' => 
+        'OrangeHRM\\Tests\\Help\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmHelpPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Dashboard\\' => 
+        'OrangeHRM\\Tests\\Dashboard\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmDashboardPlugin/test',
         ),
-        'OrangeHRM\\Tests\\CorporateDirectory\\' => 
+        'OrangeHRM\\Tests\\CorporateDirectory\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCorporateDirectoryPlugin/test',
         ),
-        'OrangeHRM\\Tests\\CorporateBranding\\' => 
+        'OrangeHRM\\Tests\\CorporateBranding\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCorporateBrandingPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Core\\' => 
+        'OrangeHRM\\Tests\\Core\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCorePlugin/test',
         ),
-        'OrangeHRM\\Tests\\Claim\\' => 
+        'OrangeHRM\\Tests\\Claim\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmClaimPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Buzz\\' => 
+        'OrangeHRM\\Tests\\Buzz\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmBuzzPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Authentication\\' => 
+        'OrangeHRM\\Tests\\Authentication\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmAuthenticationPlugin/test',
         ),
-        'OrangeHRM\\Tests\\Attendance\\' => 
+        'OrangeHRM\\Tests\\Attendance\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmAttendancePlugin/test',
         ),
-        'OrangeHRM\\Tests\\Admin\\' => 
+        'OrangeHRM\\Tests\\Admin\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmAdminPlugin/test',
         ),
-        'OrangeHRM\\Tests\\' => 
+        'OrangeHRM\\Tests\\' =>
         array (
             0 => __DIR__ . '/../..' . '/test/phpunit',
         ),
-        'OrangeHRM\\SystemCheck\\' => 
+        'OrangeHRM\\SystemCheck\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmSystemCheckPlugin',
         ),
-        'OrangeHRM\\Recruitment\\' => 
+        'OrangeHRM\\Recruitment\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmRecruitmentPlugin',
         ),
-        'OrangeHRM\\Pim\\' => 
+        'OrangeHRM\\Pim\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmPimPlugin',
         ),
-        'OrangeHRM\\Performance\\' => 
+        'OrangeHRM\\Performance\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmPerformancePlugin',
         ),
-        'OrangeHRM\\OpenidAuthentication\\' => 
+        'OrangeHRM\\OpenidAuthentication\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmOpenidAuthenticationPlugin',
         ),
-        'OrangeHRM\\ORM\\' => 
+        'OrangeHRM\\ORM\\' =>
         array (
             0 => __DIR__ . '/../..' . '/lib/orm',
         ),
-        'OrangeHRM\\OAuth\\' => 
+        'OrangeHRM\\OAuth\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCoreOAuthPlugin',
         ),
-        'OrangeHRM\\Mobile\\' => 
+        'OrangeHRM\\Mobile\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmMobilePlugin',
         ),
-        'OrangeHRM\\Maintenance\\' => 
+        'OrangeHRM\\Maintenance\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmMaintenancePlugin',
         ),
-        'OrangeHRM\\Leave\\' => 
+        'OrangeHRM\\Leave\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmLeavePlugin',
         ),
-        'OrangeHRM\\LDAP\\' => 
+        'OrangeHRM\\LDAP\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmLDAPAuthenticationPlugin',
         ),
-        'OrangeHRM\\Installer\\' => 
+        'OrangeHRM\\Installer\\' =>
         array (
             0 => __DIR__ . '/../..' . '/../installer',
         ),
-        'OrangeHRM\\I18N\\' => 
+        'OrangeHRM\\I18N\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmI18NPlugin',
         ),
-        'OrangeHRM\\Help\\' => 
+        'OrangeHRM\\Help\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmHelpPlugin',
         ),
-        'OrangeHRM\\Framework\\' => 
+        'OrangeHRM\\Framework\\' =>
         array (
             0 => __DIR__ . '/../..' . '/lib/framework',
         ),
-        'OrangeHRM\\Entity\\' => 
+        'OrangeHRM\\Entity\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmAdminPlugin/entity',
             1 => __DIR__ . '/../..' . '/plugins/orangehrmPerformancePlugin/entity',
@@ -630,169 +630,169 @@ class ComposerStaticInit86af9c71c771b73a9bac1a261c3edcdb
             14 => __DIR__ . '/../..' . '/plugins/orangehrmClaimPlugin/entity',
             15 => __DIR__ . '/../..' . '/plugins/orangehrmOpenidAuthenticationPlugin/entity',
         ),
-        'OrangeHRM\\Dashboard\\' => 
+        'OrangeHRM\\Dashboard\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmDashboardPlugin',
         ),
-        'OrangeHRM\\CorporateDirectory\\' => 
+        'OrangeHRM\\CorporateDirectory\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCorporateDirectoryPlugin',
         ),
-        'OrangeHRM\\CorporateBranding\\' => 
+        'OrangeHRM\\CorporateBranding\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCorporateBrandingPlugin',
         ),
-        'OrangeHRM\\Core\\' => 
+        'OrangeHRM\\Core\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmCorePlugin',
         ),
-        'OrangeHRM\\Config\\' => 
+        'OrangeHRM\\Config\\' =>
         array (
             0 => __DIR__ . '/../..' . '/lib/config',
         ),
-        'OrangeHRM\\Claim\\' => 
+        'OrangeHRM\\Claim\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmClaimPlugin',
         ),
-        'OrangeHRM\\Buzz\\' => 
+        'OrangeHRM\\Buzz\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmBuzzPlugin',
         ),
-        'OrangeHRM\\Authentication\\' => 
+        'OrangeHRM\\Authentication\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmAuthenticationPlugin',
         ),
-        'OrangeHRM\\Attendance\\' => 
+        'OrangeHRM\\Attendance\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmAttendancePlugin',
         ),
-        'OrangeHRM\\Admin\\' => 
+        'OrangeHRM\\Admin\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/orangehrmAdminPlugin',
         ),
-        'OpenApi\\' => 
+        'OpenApi\\' =>
         array (
             0 => __DIR__ . '/..' . '/zircote/swagger-php/src',
         ),
-        'Nyholm\\Psr7\\' => 
+        'Nyholm\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/nyholm/psr7/src',
         ),
-        'Monolog\\' => 
+        'Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
-        'League\\Uri\\' => 
+        'League\\Uri\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/uri/src',
             1 => __DIR__ . '/..' . '/league/uri-interfaces/src',
         ),
-        'League\\OAuth2\\Server\\' => 
+        'League\\OAuth2\\Server\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/oauth2-server/src',
         ),
-        'League\\Event\\' => 
+        'League\\Event\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/event/src',
         ),
-        'Lcobucci\\JWT\\' => 
+        'Lcobucci\\JWT\\' =>
         array (
             0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
         ),
-        'Lcobucci\\Clock\\' => 
+        'Lcobucci\\Clock\\' =>
         array (
             0 => __DIR__ . '/..' . '/lcobucci/clock/src',
         ),
-        'Laravel\\SerializableClosure\\' => 
+        'Laravel\\SerializableClosure\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
         ),
-        'Home\\' => 
+        'Home\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/homePlugin',
         ),
-        'GuzzleHttp\\Psr7\\' => 
+        'GuzzleHttp\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' => 
+        'GuzzleHttp\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\' => 
+        'GuzzleHttp\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
-        'Egulias\\EmailValidator\\' => 
+        'Egulias\\EmailValidator\\' =>
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
         ),
-        'Doctrine\\Persistence\\' => 
+        'Doctrine\\Persistence\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/persistence/src/Persistence',
         ),
-        'Doctrine\\ORM\\' => 
+        'Doctrine\\ORM\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/orm/src',
         ),
-        'Doctrine\\Instantiator\\' => 
+        'Doctrine\\Instantiator\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
-        'Doctrine\\Inflector\\' => 
+        'Doctrine\\Inflector\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector',
         ),
-        'Doctrine\\Deprecations\\' => 
+        'Doctrine\\Deprecations\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/deprecations/src',
         ),
-        'Doctrine\\DBAL\\' => 
+        'Doctrine\\DBAL\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/dbal/src',
         ),
-        'Doctrine\\Common\\Lexer\\' => 
+        'Doctrine\\Common\\Lexer\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/src',
         ),
-        'Doctrine\\Common\\Collections\\' => 
+        'Doctrine\\Common\\Collections\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/collections/lib/Doctrine/Common/Collections',
         ),
-        'Doctrine\\Common\\Cache\\' => 
+        'Doctrine\\Common\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
         ),
-        'Doctrine\\Common\\Annotations\\' => 
+        'Doctrine\\Common\\Annotations\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
         ),
-        'Doctrine\\Common\\' => 
+        'Doctrine\\Common\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/common/src',
             1 => __DIR__ . '/..' . '/doctrine/event-manager/src',
         ),
-        'Defuse\\Crypto\\' => 
+        'Defuse\\Crypto\\' =>
         array (
             0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
         ),
-        'DeepCopy\\' => 
+        'DeepCopy\\' =>
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-        'Crunz\\' => 
+        'Crunz\\' =>
         array (
             0 => __DIR__ . '/..' . '/crunzphp/crunz/src',
         ),
-        'Cron\\' => 
+        'Cron\\' =>
         array (
             0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
         ),
-        'Candidature\\' => 
+        'Candidature\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/candidaturePlugin',
         ),
-        'CGU\\' => 
+        'CGU\\' =>
         array (
             0 => __DIR__ . '/../..' . '/plugins/cguPlugin',
         ),

@@ -17,6 +17,7 @@ class ActorLeadsController extends AbstractVueController
 
     public const FILTER_FROM_DATE = 'from';
     public const FILTER_TO_DATE = 'to';
+    public const FILTER_RELANCE_DATE = 'relanceDate';
     public const FILTER_MATCHING_STATUS = 'matchingStatus';
 
     /**
@@ -147,9 +148,10 @@ class ActorLeadsController extends AbstractVueController
     {
         $from = $request->query->get(self::FILTER_FROM_DATE);
         $to = $request->query->get(self::FILTER_TO_DATE);
+        $relanceDate = $request->query->get(self::FILTER_RELANCE_DATE);
         $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
         $customFilters = $request->query->all('customFilter');
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters, $matchingStatus);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters, $matchingStatus, $relanceDate);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -157,7 +159,7 @@ class ActorLeadsController extends AbstractVueController
         );
     }
 
-    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = [], ?string $matchingStatus): array
+    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = [], ?string $matchingStatus = null, ?string $relanceDate = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -170,6 +172,9 @@ class ActorLeadsController extends AbstractVueController
             }
             if ($to !== null && $to !== '') {
                 $queryParams['to'] = $to;
+            }
+            if ($relanceDate !== null && $relanceDate !== '') {
+                $queryParams['relanceDate'] = $relanceDate;
             }
             if ($matchingStatus !== null && $matchingStatus !== '') {
                 $queryParams['matchingStatus'] = $matchingStatus;

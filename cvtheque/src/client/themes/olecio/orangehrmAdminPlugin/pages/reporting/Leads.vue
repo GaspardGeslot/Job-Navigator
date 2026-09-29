@@ -92,6 +92,13 @@
                 :options="matchingStatusFilters"
                 :multiple="true"
               />
+              <date-input
+                v-if="isARelancerSelected"
+                v-model="relanceDateFilter"
+                :label="$t('Date de relance')"
+                :rules="rules.relanceDate"
+                required
+              />
             </oxd-grid-item>
             <oxd-grid :cols="2" class="orangehrm-full-width-grid">
               <oxd-grid-item
@@ -488,7 +495,7 @@ export default {
     const {$t} = usei18n();
     const instance = getCurrentInstance();
     const jobAutocomplete = ref(null);
-
+    console.log(props.matchingStatusFilters);
     const userDateFormat = 'yyyy-MM-dd';
 
     // Clé pour le localStorage
@@ -530,6 +537,9 @@ export default {
             endDateFilter:
               convertDateFromStorage(filters.endDateFilter) ||
               formatDate(defaultEndDate, userDateFormat),
+            relanceDateFilter:
+              convertDateFromStorage(filters.relanceDateFilter) ||
+              formatDate(defaultStartDate, userDateFormat),
             matchingStatusFilter: filters.matchingStatusFilter || [],
             actorsFilter: filters.actorsFilter || [],
             departmentCodesFilter: filters.departmentCodesFilter || [],
@@ -556,6 +566,7 @@ export default {
       return {
         startDateFilter: formatDate(defaultStartDate, userDateFormat),
         endDateFilter: formatDate(defaultEndDate, userDateFormat),
+        relanceDateFilter: formatDate(defaultStartDate, userDateFormat),
         matchingStatusFilter: [],
         actorsFilter: [],
         departmentCodesFilter: [],
@@ -577,6 +588,7 @@ export default {
       course,
       hideDup,
       hide,
+      relanceDate,
     ) => {
       try {
         // Convertir du format utilisateur vers le format API pour le stockage
@@ -586,9 +598,13 @@ export default {
         const endDateApi = endDate
           ? formatDate(parseDate(endDate, userDateFormat), 'yyyy-MM-dd')
           : null;
+        const relanceDateApi = relanceDate
+          ? formatDate(parseDate(relanceDate, userDateFormat), 'yyyy-MM-dd')
+          : null;
         const filters = {
           startDateFilter: startDateApi,
           endDateFilter: endDateApi,
+          relanceDateFilter: relanceDateApi,
           matchingStatusFilter: matchingStatusFilter,
           actorsFilter: actors,
           departmentCodesFilter: departmentCodes,
@@ -618,6 +634,10 @@ export default {
     const endDateFilter = ref(
       loadedFilters?.endDateFilter ||
         formatDate(defaultEndDate, userDateFormat),
+    );
+    const relanceDateFilter = ref(
+      loadedFilters?.relanceDateFilter ||
+        formatDate(defaultStartDate, userDateFormat),
     );
     const matchingStatusFilter = ref(loadedFilters.matchingStatusFilter);
     const actorsFilter = ref(loadedFilters.actorsFilter);
@@ -681,6 +701,7 @@ export default {
           {allowSameDate: true, dateFormat: userDateFormat},
         ),
       ],
+      relanceDate: [required, validDateFormat(userDateFormat)],
     };
     const http = new APIService(
       window.appGlobal.baseUrl,
@@ -1257,6 +1278,12 @@ export default {
       );
     });
 
+    const getDefaultRelanceDate = () => {
+      const defaultRelanceDate = new Date();
+      defaultRelanceDate.setDate(defaultRelanceDate.getDate() - 2);
+      return formatDate(defaultRelanceDate, userDateFormat);
+    };
+
     const fetchData = async () => {
       isLoading.value = true;
 
@@ -1289,6 +1316,13 @@ export default {
         hideDuplicates: hideDuplicates.value,
         hideTests: hideTests.value,
       };
+
+      if (isARelancerSelected.value && relanceDateFilter.value) {
+        params.relanceDate = formatDate(
+          parseDate(relanceDateFilter.value, userDateFormat),
+          'yyyy-MM-dd',
+        );
+      }
 
       const leadsPromise = http.getAll(params).then((response) => {
         leads.value = response.data;
@@ -1355,6 +1389,7 @@ export default {
         courseOnly.value,
         hideDuplicates.value,
         hideTests.value,
+        relanceDateFilter.value,
       );
       fetchData();
     };
@@ -1365,6 +1400,7 @@ export default {
       const defaultEndDate = new Date();
       startDateFilter.value = formatDate(defaultStartDate, userDateFormat);
       endDateFilter.value = formatDate(defaultEndDate, userDateFormat);
+      relanceDateFilter.value = getDefaultRelanceDate();
       matchingStatusFilter.value = [];
       actorsFilter.value = [];
       departmentCodesFilter.value = [];
@@ -1384,6 +1420,7 @@ export default {
         courseOnly.value,
         hideDuplicates.value,
         hideTests.value,
+        relanceDateFilter.value,
       );
       if (jobAutocomplete.value) {
         jobAutocomplete.value.reset();
@@ -1442,6 +1479,7 @@ export default {
         courseOnly.value,
         hideDuplicates.value,
         hideTests.value,
+        relanceDateFilter.value,
       );
     };
 
@@ -1450,6 +1488,7 @@ export default {
       [
         startDateFilter,
         endDateFilter,
+        relanceDateFilter,
         matchingStatusFilter,
         actorsFilter,
         departmentCodesFilter,
@@ -1469,9 +1508,17 @@ export default {
           courseOnly.value,
           hideDuplicates.value,
           hideTests.value,
+          relanceDateFilter.value,
         );
       },
     );
+
+    // Réinitialiser la date de relance à la valeur par défaut quand "A relancer" est sélectionné
+    watch(isARelancerSelected, (isSelected) => {
+      if (isSelected && !relanceDateFilter.value) {
+        relanceDateFilter.value = getDefaultRelanceDate();
+      }
+    });
 
     const updateUrlLeadId = (leadId) => {
       const url = new URL(window.location.href);
@@ -1543,6 +1590,7 @@ export default {
       jobAutocomplete,
       startDateFilter,
       endDateFilter,
+      relanceDateFilter,
       matchingStatusFilter,
       isARelancerSelected,
       actorsFilter,
@@ -1614,6 +1662,7 @@ export default {
         this.courseOnly,
         this.hideDuplicates,
         this.hideTests,
+        this.relanceDateFilter,
       );
       navigate(`/${window.appGlobal.theme}/admin/viewLeads/{id}`, {
         id: leadId,

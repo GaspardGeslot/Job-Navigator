@@ -18,6 +18,7 @@ class LeadsController extends AbstractVueController
 
     public const FILTER_FROM_DATE = 'from';
     public const FILTER_TO_DATE = 'to';
+    public const FILTER_RELANCE_DATE = 'relanceDate';
     public const FILTER_MATCHING_STATUS = 'matchingStatuses';
     public const FILTER_ACTORS = 'actors';
     public const FILTER_DEPARTMENT_CODES = 'departmentCodes';
@@ -121,6 +122,7 @@ class LeadsController extends AbstractVueController
     {
         $from = $request->query->get(self::FILTER_FROM_DATE);
         $to = $request->query->get(self::FILTER_TO_DATE);
+        $relanceDate = $request->query->get(self::FILTER_RELANCE_DATE);
         $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
         $actors = $request->query->get(self::FILTER_ACTORS);
         $departmentCodes = $request->query->get(self::FILTER_DEPARTMENT_CODES);
@@ -137,7 +139,7 @@ class LeadsController extends AbstractVueController
         if ($hideTests !== null) {
             $hideTests = filter_var($hideTests, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideDuplicates, $hideTests, $departmentCodes);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideDuplicates, $hideTests, $departmentCodes, $relanceDate);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -652,7 +654,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideDuplicates, ?bool $hideTests, ?array $departmentCodes): array
+    public function getLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideDuplicates, ?bool $hideTests, ?array $departmentCodes, ?string $relanceDate = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -663,6 +665,8 @@ class LeadsController extends AbstractVueController
                 $url .= 'from=' . urlencode($from) . '&';
             if ($to != null && $to !== '')
                 $url .= 'to=' . urlencode($to) . '&';
+            if ($relanceDate != null && $relanceDate !== '')
+                $url .= 'relanceDate=' . urlencode($relanceDate) . '&';
             if ($matchingStatus != null && $matchingStatus !== [])
                 $url .= 'matchingStatuses=' . urlencode(implode(',', $matchingStatus)) . '&';
             if ($actors != null && $actors !== [])
