@@ -95,7 +95,7 @@
               <date-input
                 v-if="isARelancerSelected"
                 v-model="relanceDateFilter"
-                :label="$t('Date de relance')"
+                :label="$t('Date de relance (dernier contact avant le)')"
                 :rules="rules.relanceDate"
                 required
               />
