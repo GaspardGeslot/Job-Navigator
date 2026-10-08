@@ -1568,6 +1568,54 @@ export default {
           }
         });
     },
+    resolveContactLogTypeLabel(typeValue, typeOrdinal) {
+      if (
+        typeValue != null &&
+        typeof typeValue === 'object' &&
+        typeValue.label
+      ) {
+        return typeValue.label;
+      }
+      if (typeOrdinal != null && this.contactLogTypes?.length) {
+        const option = this.contactLogTypes.find(
+          (opt) =>
+            opt.id === typeOrdinal || String(opt.id) === String(typeOrdinal),
+        );
+        if (option?.label) {
+          return option.label;
+        }
+      }
+      if (typeValue != null && typeof typeValue !== 'object') {
+        return String(typeValue);
+      }
+      return '';
+    },
+    sortTelephoneContacts(contacts) {
+      return [...contacts].sort((a, b) => {
+        const dateA = a.date || '';
+        const dateB = b.date || '';
+        return dateA.localeCompare(dateB);
+      });
+    },
+    applyTelephoneContactLocally(contact, previousDate = null) {
+      const contacts = [...(this.profile.telephoneContacts || [])];
+      if (previousDate) {
+        const index = contacts.findIndex((c) => c.date === previousDate);
+        if (index !== -1) {
+          contacts.splice(index, 1, contact);
+        } else {
+          contacts.push(contact);
+        }
+      } else {
+        contacts.push(contact);
+      }
+      this.profile.telephoneContacts = this.sortTelephoneContacts(contacts);
+    },
+    removeTelephoneContactLocally(date) {
+      this.profile.telephoneContacts = this.sortTelephoneContacts(
+        (this.profile.telephoneContacts || []).filter((c) => c.date !== date),
+      );
+    },
     onSaveContactLog(form) {
       this.isSavingTelephoneContact = true;
       const dateTime = parseDate(
@@ -1594,7 +1642,16 @@ export default {
         typeOrdinal: type,
       };
 
+      const localContact = {
+        date: formattedDateTime,
+        phoneNumber: contactValue,
+        successful: form.successful === true,
+        comment: form.comment || '',
+        type: this.resolveContactLogTypeLabel(form.type, type),
+      };
+
       if (this.isEditingTelephoneContact) {
+        const previousDate = this.editingTelephoneContactDate;
         this.http
           .request({
             method: 'PUT',
@@ -1602,7 +1659,7 @@ export default {
             data: contactData,
           })
           .then(() => {
-            this.$emit('update');
+            this.applyTelephoneContactLocally(localContact, previousDate);
             this.onCancelTelephoneContact();
             return this.$toast.updateSuccess();
           })
@@ -1620,7 +1677,7 @@ export default {
             data: contactData,
           })
           .then(() => {
-            this.$emit('update');
+            this.applyTelephoneContactLocally(localContact);
             this.onCancelTelephoneContact();
             return this.$toast.saveSuccess();
           })
@@ -1639,7 +1696,7 @@ export default {
           }/contact-log?date=${encodeURIComponent(date)}`,
         })
         .then(() => {
-          this.$emit('update');
+          this.removeTelephoneContactLocally(date);
           return this.$toast.deleteSuccess();
         })
         .catch((error) => {
