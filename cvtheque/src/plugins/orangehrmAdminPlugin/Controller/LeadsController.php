@@ -147,6 +147,32 @@ class LeadsController extends AbstractVueController
         );
     }
 
+    public function exportAll(Request $request): Response
+    {
+        $from = $request->query->get(self::FILTER_FROM_DATE);
+        $to = $request->query->get(self::FILTER_TO_DATE);
+        $relanceDate = $request->query->get(self::FILTER_RELANCE_DATE);
+        $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
+        $actors = $request->query->get(self::FILTER_ACTORS);
+        $departmentCodes = $request->query->get(self::FILTER_DEPARTMENT_CODES);
+        $jobs = $request->query->get(self::FILTER_JOBS);
+        $courseOnly = $request->query->get(self::FILTER_COURSE_ONLY);
+        $hideDuplicates = $request->query->get(self::FILTER_HIDE_DUPLICATES);
+        $hideTests = $request->query->get(self::FILTER_HIDE_TESTS);
+        if ($courseOnly !== null)
+            $courseOnly = filter_var($courseOnly, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($hideDuplicates !== null)
+            $hideDuplicates = filter_var($hideDuplicates, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($hideTests !== null)
+            $hideTests = filter_var($hideTests, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        $leads = $this->exportLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideDuplicates, $hideTests, $departmentCodes, $relanceDate);
+        return new Response(
+            json_encode($leads),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
     public function getOne(Request $request): Response
     {
         $id = $request->attributes->get('id');
@@ -661,6 +687,47 @@ class LeadsController extends AbstractVueController
 
         try {
             $url = "{$clientBaseUrl}/lead?";
+            if ($from != null && $from !== '')
+                $url .= 'from=' . urlencode($from) . '&';
+            if ($to != null && $to !== '')
+                $url .= 'to=' . urlencode($to) . '&';
+            if ($relanceDate != null && $relanceDate !== '')
+                $url .= 'relanceDate=' . urlencode($relanceDate) . '&';
+            if ($matchingStatus != null && $matchingStatus !== [])
+                $url .= 'matchingStatuses=' . urlencode(implode(',', $matchingStatus)) . '&';
+            if ($actors != null && $actors !== [])
+                $url .= 'actors=' . urlencode(implode(',', $actors)) . '&';
+            if ($jobs != null && $jobs !== [])
+                $url .= 'jobs=' . urlencode(implode(',', $jobs)) . '&';
+            if ($courseOnly !== null) {
+                $url .= 'courseOnly=' . ($courseOnly ? 'true' : 'false') . '&';
+            }
+            if ($hideDuplicates !== null) {
+                $url .= 'hideDuplicate=' . ($hideDuplicates ? 'true' : 'false') . '&';
+            }
+            if ($hideTests !== null) {
+                $url .= 'hideTests=' . ($hideTests ? 'true' : 'false') . '&';
+            }
+            if ($departmentCodes != null && $departmentCodes !== [])
+                $url .= 'departmentCodes=' . urlencode(implode(',', $departmentCodes)) . '&';
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ]
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (ClientException $e) {
+            return [];
+        }
+    }
+
+    public function exportLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideDuplicates, ?bool $hideTests, ?array $departmentCodes, ?string $relanceDate = null): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/lead/export?";
             if ($from != null && $from !== '')
                 $url .= 'from=' . urlencode($from) . '&';
             if ($to != null && $to !== '')

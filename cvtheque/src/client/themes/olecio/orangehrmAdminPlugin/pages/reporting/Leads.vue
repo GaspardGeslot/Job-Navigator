@@ -173,7 +173,13 @@
     <div v-else class="orangehrm-paper-container">
       <div class="orangehrm-header-container">
         <div class="orangehrm-header-left">
+          <oxd-loading-spinner
+            v-if="isExporting"
+            class="export-button-loader"
+            :with-container="false"
+          />
           <oxd-button
+            v-else
             display-type="secondary"
             :label="$t('Exporter en Excel')"
             class="export-button"
@@ -650,6 +656,7 @@ export default {
     const leads = ref([]);
     const defaultColumns = ref(null);
     const isLoading = ref(false);
+    const isExporting = ref(false);
     const {noRecordsFound, updateSuccess} = useToast();
     const totalRecords = ref(0);
     const itemsPerPage = 50;
@@ -875,7 +882,183 @@ export default {
       },
     ];
 
+    const EXPORT_TABLE_HEADERS = [
+      {
+        label: 'ID',
+        key: 'id',
+      },
+      {
+        label: 'Date de réception',
+        key: 'date',
+      },
+      {
+        label: 'Civilité',
+        key: 'civility',
+      },
+      {
+        label: 'Prénom',
+        key: 'firstName',
+      },
+      {
+        label: 'Nom',
+        key: 'lastName',
+      },
+      {
+        label: 'Email',
+        key: 'email',
+      },
+      {
+        label: 'Téléphone',
+        key: 'phoneNumber',
+      },
+      {
+        label: 'Date de naissance',
+        key: 'birthDate',
+      },
+      {
+        label: 'Age',
+        key: 'age',
+      },
+      {
+        label: 'Secteur',
+        key: 'sector',
+      },
+      {
+        label: 'Métiers',
+        key: 'jobs',
+      },
+      {
+        label: 'Formation',
+        key: 'course',
+      },
+      {
+        label: 'OF',
+        key: 'of',
+      },
+      {
+        label: 'Adresse',
+        key: 'address',
+      },
+      {
+        label: 'Ville',
+        key: 'city',
+      },
+      {
+        label: 'Code Postal',
+        key: 'postalCode',
+      },
+      {
+        label: 'Pays',
+        key: 'country',
+      },
+      {
+        label: 'Mobilité géographique',
+        key: 'mobility',
+      },
+      {
+        label: 'Besoin',
+        key: 'need',
+      },
+      {
+        label: 'Situation actuelle',
+        key: 'currentSituation',
+      },
+      {
+        label: "Niveau d'études",
+        key: 'studyLevel',
+      },
+      {
+        label: 'Début de formation',
+        key: 'courseStart',
+      },
+      {
+        label: 'Modalité de formation',
+        key: 'trainingMethod',
+      },
+      {
+        label: 'Handicap',
+        key: 'handicap',
+      },
+      {
+        label: 'Financement',
+        key: 'funding',
+      },
+      {
+        label: 'Disponibilité',
+        key: 'timeSlot',
+      },
+      {
+        label: 'Expérience professionnelle',
+        key: 'professionalExperience',
+      },
+      {
+        label: 'Source',
+        key: 'source',
+      },
+      {
+        label: 'Campagne UTM',
+        key: 'utmCampaign',
+      },
+      {
+        label: 'Groupe UTM',
+        key: 'utmGroup',
+      },
+      {
+        label: 'Source UTM',
+        key: 'utmSource',
+      },
+      {
+        label: 'Partenaire',
+        key: 'actor',
+      },
+      {
+        label: "Etat d'envoi",
+        key: 'matchingState',
+      },
+      {
+        label: 'KO',
+        key: 'ko',
+      },
+      {
+        label: "Date d'envoi",
+        key: 'sentDate',
+      },
+      {
+        label: "Message d'erreur / API",
+        key: 'apiMessage',
+      },
+      {
+        label: 'Assigné à',
+        key: 'assignee',
+      },
+      {
+        label: 'Relancer à partir de',
+        key: 'callBackDate',
+      },
+      {
+        label: "France Travail - Date d'inscription",
+        key: 'franceTravailRecordDate',
+      },
+      {
+        label: 'France Travail - Agence',
+        key: 'franceTravailAgency',
+      },
+      {
+        label: 'RQTH',
+        key: 'rqth',
+      },
+      {
+        label: 'Complément',
+        key: 'complement',
+      },
+      {
+        label: 'Commentaire',
+        key: 'comment',
+      },
+    ];
+
     const tableHeaders = ref([...ALL_TABLE_HEADERS]);
+    const exportTableHeaders = ref([...EXPORT_TABLE_HEADERS]);
 
     const ALWAYS_VISIBLE_KEYS = [
       'id',
@@ -944,6 +1127,20 @@ export default {
     const getCellValue = (item, headerKey) => {
       if (headerKey === 'status') {
         return item.status ?? item.currentSituation ?? '';
+      }
+      if (headerKey === 'jobs') {
+        const jobs = item.jobs;
+        if (Array.isArray(jobs)) {
+          return jobs
+            .map((job) =>
+              job && typeof job === 'object'
+                ? job.label ?? job.name ?? ''
+                : job,
+            )
+            .filter(Boolean)
+            .join(' - ');
+        }
+        return jobs ?? '';
       }
       return item[headerKey];
     };
@@ -1284,9 +1481,7 @@ export default {
       return formatDate(defaultRelanceDate, userDateFormat);
     };
 
-    const fetchData = async () => {
-      isLoading.value = true;
-
+    const buildLeadsFilterParams = () => {
       const params = {
         from: startDateFilter.value
           ? formatDate(
@@ -1323,6 +1518,14 @@ export default {
           'yyyy-MM-dd',
         );
       }
+
+      return params;
+    };
+
+    const fetchData = async () => {
+      isLoading.value = true;
+
+      const params = buildLeadsFilterParams();
 
       const leadsPromise = http.getAll(params).then((response) => {
         leads.value = response.data;
@@ -1433,28 +1636,90 @@ export default {
       selectedRow.value = rowIndex;
     };
 
-    const exportToExcel = () => {
-      // Create a worksheet from the leads data
-      const worksheet = XLSX.utils.json_to_sheet(
-        leads.value.map((item) => {
-          const row = {};
-          tableHeaders.value.forEach((header) => {
-            row[header.label] = getCellValue(item, header.key);
-          });
-          return row;
-        }),
+    const getSortedTelephoneContacts = (item) => {
+      const contacts = Array.isArray(item?.telephoneContacts)
+        ? item.telephoneContacts
+        : [];
+      return [...contacts].sort((a, b) =>
+        (a?.date || '').localeCompare(b?.date || ''),
       );
+    };
 
-      const columnWidths = tableHeaders.value.map(() => ({wch: 15}));
-      worksheet['!cols'] = columnWidths;
+    const formatTelephoneContactForExport = (contact) => {
+      if (!contact) {
+        return '';
+      }
+      return [
+        contact.date || '',
+        contact.type || '',
+        contact.successful ? 'Succès' : 'Echec',
+        contact.comment || '',
+      ].join(' - ');
+    };
 
-      // Create a workbook
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Leads');
+    const exportToExcel = async () => {
+      if (isExporting.value) {
+        return;
+      }
+      try {
+        isExporting.value = true;
+        const {data: exportLeads} = await http.request({
+          method: 'GET',
+          url: `/api/v2/admin/leads/export`,
+          params: buildLeadsFilterParams(),
+        });
 
-      // Generate the file and trigger download
-      const fileName = `leads_${startDateFilter.value}_${endDateFilter.value}.xlsx`;
-      XLSX.writeFile(workbook, fileName);
+        const leadsToExport = Array.isArray(exportLeads)
+          ? exportLeads.sort((a, b) => {
+              return new Date(b.date) - new Date(a.date);
+            })
+          : [];
+
+        const maxContacts = Math.max(
+          1,
+          ...leadsToExport.map(
+            (item) => getSortedTelephoneContacts(item).length,
+          ),
+        );
+        const contactHeaders = Array.from(
+          {length: maxContacts},
+          (_, index) => ({
+            label: `Prise de contact - ${index + 1}`,
+          }),
+        );
+        const headersForExport = [...EXPORT_TABLE_HEADERS, ...contactHeaders];
+
+        const worksheet = XLSX.utils.json_to_sheet(
+          leadsToExport.map((item) => {
+            const row = {};
+            EXPORT_TABLE_HEADERS.forEach((header) => {
+              row[header.label] = getCellValue(item, header.key);
+            });
+            const contacts = getSortedTelephoneContacts(item);
+            contactHeaders.forEach((header, index) => {
+              row[header.label] = formatTelephoneContactForExport(
+                contacts[index],
+              );
+            });
+            return row;
+          }),
+        );
+
+        const columnWidths = headersForExport.map(() => ({wch: 15}));
+        worksheet['!cols'] = columnWidths;
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Leads');
+
+        const fileName = `leads_${startDateFilter.value}_${endDateFilter.value}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+      } catch (error) {
+        instance?.proxy?.$toast?.unexpectedError(
+          error?.response?.data?.message,
+        );
+      } finally {
+        isExporting.value = false;
+      }
     };
 
     watch(currentPage, (newPage, oldPage) => {
@@ -1601,6 +1866,7 @@ export default {
       hideTests,
       tableData,
       tableHeaders,
+      exportTableHeaders,
       totalRecords,
       currentPage,
       totalPages,
@@ -1629,6 +1895,7 @@ export default {
       rules,
       departmentCodeOptions,
       isLoading,
+      isExporting,
       exportToExcel,
       updateJobs,
       fetchData,
@@ -1915,6 +2182,14 @@ export default {
   align-items: center;
   gap: 0.5rem;
   font-size: 12px;
+  height: 32px;
+}
+
+.export-button-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
   height: 32px;
 }
 

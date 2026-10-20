@@ -16926,6 +16926,13 @@ to {
   font-size: 12px;
   height: 32px;
 }
+.export-button-loader[data-v-3932e0c0] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  height: 32px;
+}
 .export-icon[data-v-3932e0c0] {
   margin-right: 4px;
 }

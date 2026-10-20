@@ -690,6 +690,11 @@ subdomain_apiv2_admin_leads:
   methods: [ GET ]
   requirements:
 
+subdomain_apiv2_admin_leads_export:
+  path: /api/v2/admin/leads/export
+  controller: OrangeHRM\Admin\Controller\LeadsController::exportAll
+  methods: [ GET ]
+
 subdomain_apiv2_admin_leads_create:
   path: /api/v2/admin/leads
   controller: OrangeHRM\Admin\Controller\LeadsController::create
