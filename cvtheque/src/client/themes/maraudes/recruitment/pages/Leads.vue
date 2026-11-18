@@ -39,6 +39,15 @@
                 required
               />
             </oxd-grid-item>
+            <oxd-grid-item v-if="isKoSelected">
+              <oxd-input-field
+                v-model="koStatusFilter"
+                type="multiselect"
+                :label="$t('Motif du KO')"
+                :options="koStatusOptions"
+                :multiple="true"
+              />
+            </oxd-grid-item>
           </oxd-grid>
         </oxd-form-row>
         <!-- Standard filter rows for STRING, SELECT, BOOLEAN types -->
@@ -542,6 +551,7 @@
       :custom-columns="customColumns"
       :contact-log-types="contactLogTypes"
       :scope-options="scopeOptions"
+      :ko-options="koOptions"
       @close="selectedLeadId = null"
       @open-full-page="openLeadInFullPage"
       @update="onViewLeadUpdate"
@@ -619,6 +629,10 @@ export default {
       default: null,
     },
     scopeOptions: {
+      type: Array,
+      default: () => [],
+    },
+    koOptions: {
       type: Array,
       default: () => [],
     },
@@ -756,6 +770,16 @@ export default {
     );
     const contactStatusOptions = computed(() => props.matchingStatusFilters);
     const contactStatusFilter = ref(null);
+    const koStatusFilter = ref([]);
+    const koStatusOptions = computed(() =>
+      (props.koOptions || []).map((option) => ({
+        id: option?.id,
+        label:
+          typeof option?.label === 'string'
+            ? option.label
+            : option?.label?.title || option?.title || '',
+      })),
+    );
     const tableData = ref([]);
     const leads = ref([]);
     const isLoading = ref(false);
@@ -1024,6 +1048,14 @@ export default {
       }
     }
 
+    // Colonne KO juste avant les colonnes personnalisées
+    if (reportingDefaultColumns.value?.ko) {
+      tableHeaders.push({
+        label: 'KO',
+        key: 'koStatuses',
+      });
+    }
+
     // Ajouter les colonnes personnalisées à la fin
     if (props.customColumns && Array.isArray(props.customColumns)) {
       props.customColumns.forEach((customCol) => {
@@ -1065,6 +1097,22 @@ export default {
         }
         return '';
       }
+      if (headerKey === 'koStatuses') {
+        const koStatuses = item.koStatuses;
+        const labels = Array.isArray(koStatuses)
+          ? koStatuses
+              .map((status) =>
+                status && typeof status === 'object'
+                  ? status.title ?? status.label ?? ''
+                  : status,
+              )
+              .filter(Boolean)
+          : [];
+        if (labels.length > 0) {
+          return labels.join(' - ');
+        }
+        return 'Oui';
+      }
       // Colonne standard
       return item[headerKey];
     };
@@ -1102,6 +1150,8 @@ export default {
         timeSlot: asLabel(profile.timeSlot),
         complement: profile.complement,
         callBackDate: profile.callBackDate,
+        ko: profile.ko === true,
+        koStatuses: profile.koStatuses,
       };
 
       if (Array.isArray(profile.matchingShorts)) {
@@ -1437,6 +1487,10 @@ export default {
       () => contactStatusFilter.value?.label === 'A relancer',
     );
 
+    const isKoSelected = computed(
+      () => contactStatusFilter.value?.label === 'KO',
+    );
+
     const getDefaultRelanceDate = () => {
       const defaultRelanceDate = new Date();
       defaultRelanceDate.setDate(defaultRelanceDate.getDate() - 2);
@@ -1513,6 +1567,10 @@ export default {
         );
       }
 
+      if (isKoSelected.value && koStatusFilter.value?.length) {
+        params.koStatusIds = koStatusFilter.value.map((status) => status.id);
+      }
+
       http
         .getAll(params)
         .then((response) => {
@@ -1566,6 +1624,7 @@ export default {
         else customColumnFilters[col.id] = null;
       });
       contactStatusFilter.value = null;
+      koStatusFilter.value = [];
       currentPage.value = 1;
       // Sauvegarder les filtres réinitialisés
       saveFiltersToLocalStorage(
@@ -1786,6 +1845,12 @@ export default {
       }
     });
 
+    watch(isKoSelected, (isSelected) => {
+      if (!isSelected) {
+        koStatusFilter.value = [];
+      }
+    });
+
     const updateUrlLeadId = (leadId) => {
       const url = new URL(window.location.href);
       if (leadId != null) {
@@ -1867,6 +1932,9 @@ export default {
       showContactStatusFilter,
       contactStatusFilter,
       isARelancerSelected,
+      isKoSelected,
+      koStatusFilter,
+      koStatusOptions,
       contactLogTypes,
       leadSelectOptions,
       ofOptions,

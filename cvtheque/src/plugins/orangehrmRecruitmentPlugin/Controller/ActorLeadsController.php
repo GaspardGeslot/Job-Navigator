@@ -19,6 +19,7 @@ class ActorLeadsController extends AbstractVueController
     public const FILTER_TO_DATE = 'to';
     public const FILTER_RELANCE_DATE = 'relanceDate';
     public const FILTER_MATCHING_STATUS = 'matchingStatus';
+    public const FILTER_KO_STATUS_IDS = 'koStatusIds';
 
     /**
      * @inheritDoc
@@ -44,6 +45,7 @@ class ActorLeadsController extends AbstractVueController
         } else {
             $component = new Component('leads-list');
             $matchingStatusFilterOptions = $this->getHedwigeMatchingStatusFilterOptions($token, true);
+            
             $component->addProp(new Prop('matching-status-filters', Prop::TYPE_ARRAY, array_map(function($id, $label) {
                 return [
                     'id' => $id,
@@ -51,6 +53,14 @@ class ActorLeadsController extends AbstractVueController
                 ];
             }, array_keys($matchingStatusFilterOptions), $matchingStatusFilterOptions)));
         }
+
+        $koOptions = $this->getHedwigeKoOptions($token);
+        $component->addProp(new Prop('ko-options', Prop::TYPE_ARRAY, array_map(function ($option) {
+            return [
+                'id' => is_array($option) ? ($option['id'] ?? null) : null,
+                'label' => is_array($option) ? ($option['title'] ?? '') : (string) $option,
+            ];
+        }, is_array($koOptions) ? $koOptions : [])));
 
         $component->addProp(new Prop('scope-options', Prop::TYPE_ARRAY, $scopeOptions));
 
@@ -99,6 +109,24 @@ class ActorLeadsController extends AbstractVueController
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
+    }
+
+    public function getHedwigeKoOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+
+        try {
+            $url = "{$clientBaseUrl}/client/ko-status";
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => $token,
+                ],
+            ]);
+            return json_decode($response->getBody(), true) ?? [];
+        } catch (ClientException $e) {
+            return [];
+        }
     }
 
     public function getHedwigeContactOptions(string $token): array
@@ -150,8 +178,19 @@ class ActorLeadsController extends AbstractVueController
         $to = $request->query->get(self::FILTER_TO_DATE);
         $relanceDate = $request->query->get(self::FILTER_RELANCE_DATE);
         $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
+        $koStatusIds = $request->query->all(self::FILTER_KO_STATUS_IDS);
+        if ($koStatusIds === []) {
+            $rawKoStatusIds = $request->query->get(self::FILTER_KO_STATUS_IDS);
+            if (is_string($rawKoStatusIds) && $rawKoStatusIds !== '') {
+                $koStatusIds = array_filter(explode(',', $rawKoStatusIds));
+            } elseif (is_array($rawKoStatusIds)) {
+                $koStatusIds = $rawKoStatusIds;
+            } else {
+                $koStatusIds = null;
+            }
+        }
         $customFilters = $request->query->all('customFilter');
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters, $matchingStatus, $relanceDate);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $customFilters, $matchingStatus, $relanceDate, $koStatusIds);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -159,7 +198,7 @@ class ActorLeadsController extends AbstractVueController
         );
     }
 
-    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = [], ?string $matchingStatus = null, ?string $relanceDate = null): array
+    public function getLeads(string $token, ?string $from, ?string $to, array $customFilters = [], ?string $matchingStatus = null, ?string $relanceDate = null, ?array $koStatusIds = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -178,6 +217,9 @@ class ActorLeadsController extends AbstractVueController
             }
             if ($matchingStatus !== null && $matchingStatus !== '') {
                 $queryParams['matchingStatus'] = $matchingStatus;
+            }
+            if ($koStatusIds != null && $koStatusIds !== []) {
+                $queryParams['koStatusIds'] = implode(',', $koStatusIds);
             }
 
             // Construire la liste de CustomFilterDto

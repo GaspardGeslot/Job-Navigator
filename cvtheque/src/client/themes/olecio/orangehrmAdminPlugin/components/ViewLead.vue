@@ -33,6 +33,7 @@
         :all-study-levels="allStudyLevels"
         :actor-study-levels="actorStudyLevels"
         :lead-select-options="leadSelectOptions"
+        :ko-options="koOptions"
         @update="onLeadUpdate"
       />
     </div>
@@ -71,6 +72,10 @@ export default {
     leadSelectOptions: {
       type: Object,
       default: () => ({}),
+    },
+    koOptions: {
+      type: Array,
+      default: () => [],
     },
   },
   emits: ['close', 'open-full-page', 'update'],

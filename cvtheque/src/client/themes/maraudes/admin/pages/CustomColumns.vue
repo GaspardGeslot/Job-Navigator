@@ -78,7 +78,10 @@
                     <oxd-text class="oxd-label">
                       {{ $t('Afficher dans les filtres ?') }}
                     </oxd-text>
-                    <oxd-switch-input v-model="hasFilter" />
+                    <oxd-switch-input
+                      v-model="hasFilter"
+                      :disabled="isKoStatusColumn"
+                    />
                   </div>
                 </oxd-grid-item>
                 <oxd-grid-item style="margin-top: 1rem">
@@ -104,12 +107,15 @@
                         </span>
                       </div>
                     </div>
-                    <oxd-switch-input v-model="allowExternalSet" />
+                    <oxd-switch-input
+                      v-model="allowExternalSet"
+                      :disabled="isKoStatusColumn"
+                    />
                   </div>
                 </oxd-grid-item>
                 <oxd-divider />
                 <oxd-grid-item
-                  v-if="selectedTypeIsSelect"
+                  v-if="selectedTypeIsSelect || isKoStatusColumn"
                   style="margin-top: 1rem"
                 >
                   <oxd-text class="orangehrm-text">
@@ -125,13 +131,14 @@
                         v-model="selectOptions[index]"
                         :label="$t('Option ' + (index + 1))"
                         :rules="rules.option"
-                        :disabled="isEditing"
+                        :disabled="
+                          isKoStatusColumn && koStatusIds[index] != null
+                        "
                       />
                       <oxd-icon-button
                         name="trash"
                         display-type="danger"
                         class="option-delete-button"
-                        :disabled="isEditing"
                         @click="removeOption(index)"
                       />
                     </div>
@@ -139,7 +146,6 @@
                       :label="$t('Ajouter une option')"
                       icon-name="plus"
                       display-type="secondary"
-                      :disabled="isEditing"
                       @click="addOption"
                     />
                   </div>
@@ -218,6 +224,8 @@ export default {
       columnTitle: '',
       columnType: null,
       selectOptions: [],
+      koStatusIds: [],
+      isKoStatusColumn: false,
       hasFilter: false,
       allowExternalSet: false,
       editingItem: null,
@@ -229,9 +237,23 @@ export default {
         .getAll()
         .then((response) => {
           state.items = response.data.map((item) => {
+            const isKoStatusColumn = item.id == null;
+            const koStatuses =
+              isKoStatusColumn && Array.isArray(item.koStatuses)
+                ? item.koStatuses.map((status) => ({
+                    id: status.id,
+                    title: status.title || '',
+                  }))
+                : [];
+
             // Parser les options si elles existent
             let optionsDisplay = '';
-            if (item.options && item.options.trim() !== '') {
+            if (isKoStatusColumn) {
+              optionsDisplay = koStatuses
+                .map((status) => status.title)
+                .filter(Boolean)
+                .join(' | ');
+            } else if (item.options && item.options.trim() !== '') {
               try {
                 const parsedOptions = JSON.parse(item.options);
                 if (Array.isArray(parsedOptions)) {
@@ -271,6 +293,8 @@ export default {
               typeOrdinal: item.typeOrdinal,
               options: optionsDisplay,
               rawOptions: item.options,
+              isKoStatusColumn,
+              koStatuses,
               hasFilter: item.hasFilter ?? false,
               filter: filterDisplay,
               allowExternalSet,
@@ -324,10 +348,11 @@ export default {
 
       // Préparer les options pour le type SELECT
       let optionsString = null;
-      const selectedTypeOption = props.typeOptions.find(
-        (type) => type.id === state.columnType.id,
-      );
-      if (selectedTypeOption && selectedTypeOption.label === 'Choix multiple') {
+      const selectedTypeOption = findTypeOption(state.columnType);
+      if (
+        state.isKoStatusColumn ||
+        (selectedTypeOption && selectedTypeOption.label === 'Choix multiple')
+      ) {
         // Filtrer les options vides et créer le JSON string
         const validOptions = state.selectOptions.filter(
           (opt) => opt && opt.trim() !== '',
@@ -346,11 +371,31 @@ export default {
 
       let requestPromise;
 
-      if (state.isEditing && state.editingItem) {
-        requestPromise = http.update(state.editingItem.id, {
+      if (state.isEditing && state.editingItem?.isKoStatusColumn) {
+        const koStatuses = state.selectOptions
+          .map((title, index) => ({
+            id: state.koStatusIds[index] ?? null,
+            title: title ? title.trim() : '',
+          }))
+          .filter((status) => status.title !== '');
+        requestPromise = http.request({
+          method: 'PUT',
+          url: '/api/v2/admin/custom-column/ko-statuses',
+          data: koStatuses,
+        });
+      } else if (state.isEditing && state.editingItem) {
+        const payload = {
+          id: state.editingItem.id,
+          title: state.columnTitle,
+          type: state.columnType.label,
+          typeOrdinal: state.columnType.id,
           hasFilter: state.hasFilter,
           allowExternalSet: state.allowExternalSet,
-        });
+        };
+        if (optionsString !== null) {
+          payload.options = optionsString;
+        }
+        requestPromise = http.update(state.editingItem.id, payload);
       } else {
         const payload = {
           title: state.columnTitle,
@@ -376,7 +421,9 @@ export default {
         .catch(() => {
           error({
             title: 'Erreur',
-            message: "Impossible d'ajouter la colonne personnalisée",
+            message: state.isEditing
+              ? 'Impossible de mettre à jour la colonne personnalisée'
+              : "Impossible d'ajouter la colonne personnalisée",
           });
         })
         .finally(() => {
@@ -388,6 +435,8 @@ export default {
       state.columnTitle = '';
       state.columnType = null;
       state.selectOptions = [];
+      state.koStatusIds = [];
+      state.isKoStatusColumn = false;
       state.hasFilter = false;
       state.allowExternalSet = false;
       state.isModalOpen = false;
@@ -397,10 +446,16 @@ export default {
 
     const addOption = () => {
       state.selectOptions.push('');
+      if (state.isKoStatusColumn) {
+        state.koStatusIds.push(null);
+      }
     };
 
     const removeOption = (index) => {
       state.selectOptions.splice(index, 1);
+      if (state.isKoStatusColumn) {
+        state.koStatusIds.splice(index, 1);
+      }
     };
 
     const sort = () => {
@@ -409,23 +464,25 @@ export default {
       else state.items.sort((a, b) => b.title.localeCompare(a.title));
     };
 
+    const findTypeOption = (columnType) => {
+      if (!columnType || !props.typeOptions) return null;
+      return (
+        props.typeOptions.find((type) => type.label === columnType.label) ||
+        props.typeOptions.find(
+          (type) => String(type.id) === String(columnType.id),
+        ) ||
+        null
+      );
+    };
+
     // Computed pour vérifier si le type sélectionné est SELECT
     const selectedTypeIsSelect = computed(() => {
-      if (!state.columnType) return false;
-      const selectedTypeOption = props.typeOptions.find(
-        (type) => type.id === state.columnType.id,
-      );
-      return (
-        selectedTypeOption && selectedTypeOption.label === 'Choix multiple'
-      );
+      const selectedTypeOption = findTypeOption(state.columnType);
+      return selectedTypeOption?.label === 'Choix multiple';
     });
 
     const selectedTypeIsNumber = computed(() => {
-      if (!state.columnType) return false;
-      const selectedTypeOption = props.typeOptions.find(
-        (type) => type.id === state.columnType.id,
-      );
-      return selectedTypeOption && selectedTypeOption.label === 'Nombre';
+      return findTypeOption(state.columnType)?.label === 'Nombre';
     });
 
     // Formater les options pour le select
@@ -555,6 +612,8 @@ export default {
       this.columnTitle = '';
       this.columnType = null;
       this.selectOptions = [];
+      this.koStatusIds = [];
+      this.isKoStatusColumn = false;
       this.hasFilter = false;
       this.allowExternalSet = false;
     },
@@ -563,20 +622,32 @@ export default {
       this.isEditing = true;
       this.editingItem = item;
       this.columnTitle = item.title;
-      this.columnType = {
-        id: item.typeOrdinal,
-        label: item.type,
-      };
+      const matchedType =
+        (this.typeOptions || []).find((type) => type.label === item.type) ||
+        (this.typeOptions || []).find(
+          (type) => String(type.id) === String(item.typeOrdinal),
+        );
+      this.columnType = matchedType
+        ? {id: matchedType.id, label: matchedType.label}
+        : {id: item.typeOrdinal, label: item.type};
+      this.isKoStatusColumn = item.isKoStatusColumn === true;
 
-      if (item.rawOptions && item.rawOptions.trim() !== '') {
-        try {
-          const parsed = JSON.parse(item.rawOptions);
-          this.selectOptions = Array.isArray(parsed) ? parsed : [];
-        } catch (e) {
+      if (item.isKoStatusColumn) {
+        const statuses = Array.isArray(item.koStatuses) ? item.koStatuses : [];
+        this.koStatusIds = statuses.map((status) => status.id ?? null);
+        this.selectOptions = statuses.map((status) => status.title || '');
+      } else {
+        this.koStatusIds = [];
+        if (item.rawOptions && item.rawOptions.trim() !== '') {
+          try {
+            const parsed = JSON.parse(item.rawOptions);
+            this.selectOptions = Array.isArray(parsed) ? parsed : [];
+          } catch (e) {
+            this.selectOptions = [];
+          }
+        } else {
           this.selectOptions = [];
         }
-      } else {
-        this.selectOptions = [];
       }
 
       this.hasFilter = item.hasFilter ?? false;
@@ -585,9 +656,31 @@ export default {
     onClickDelete(item) {
       this.$refs.deleteDialog.showDialog().then((confirmation) => {
         if (confirmation === 'ok') {
-          this.deleteItems(item.id);
+          if (item.isKoStatusColumn) {
+            this.deleteKoStatus();
+          } else {
+            this.deleteItems(item.id);
+          }
         }
       });
+    },
+    deleteKoStatus() {
+      this.isLoading = true;
+      this.http
+        .request({
+          method: 'DELETE',
+          url: '/api/v2/admin/custom-column/ko-status',
+        })
+        .then(() => {
+          return this.$toast.deleteSuccess();
+        })
+        .then(() => {
+          this.isLoading = false;
+          this.resetDataTable();
+        })
+        .catch(() => {
+          this.isLoading = false;
+        });
     },
     deleteItems(id) {
       this.isLoading = true;

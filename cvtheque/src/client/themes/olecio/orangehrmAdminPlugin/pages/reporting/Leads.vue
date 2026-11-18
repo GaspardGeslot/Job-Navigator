@@ -100,6 +100,15 @@
                 required
               />
             </oxd-grid-item>
+            <oxd-grid-item v-if="isKoSelected">
+              <oxd-input-field
+                v-model="koStatusFilter"
+                type="multiselect"
+                :label="$t('Motif du KO')"
+                :options="koStatusOptions"
+                :multiple="true"
+              />
+            </oxd-grid-item>
             <oxd-grid :cols="2" class="orangehrm-full-width-grid">
               <oxd-grid-item
                 class="orangehrm-switch-wrapper"
@@ -375,6 +384,7 @@
       :all-study-levels="leadSelectOptions.studyLevels"
       :lead-select-options="leadSelectOptions"
       :contact-log-types="contactLogTypes"
+      :ko-options="koOptions"
       @close="selectedLeadId = null"
       @open-full-page="openLeadInFullPage"
       @update="onViewLeadUpdate"
@@ -496,12 +506,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    koOptions: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup(props) {
     const {$t} = usei18n();
     const instance = getCurrentInstance();
     const jobAutocomplete = ref(null);
-    console.log(props.matchingStatusFilters);
     const userDateFormat = 'yyyy-MM-dd';
 
     // Clé pour le localStorage
@@ -547,6 +560,7 @@ export default {
               convertDateFromStorage(filters.relanceDateFilter) ||
               formatDate(defaultStartDate, userDateFormat),
             matchingStatusFilter: filters.matchingStatusFilter || [],
+            koStatusFilter: filters.koStatusFilter || [],
             actorsFilter: filters.actorsFilter || [],
             departmentCodesFilter: filters.departmentCodesFilter || [],
             jobsFilter: filters.jobsFilter || [],
@@ -574,6 +588,7 @@ export default {
         endDateFilter: formatDate(defaultEndDate, userDateFormat),
         relanceDateFilter: formatDate(defaultStartDate, userDateFormat),
         matchingStatusFilter: [],
+        koStatusFilter: [],
         actorsFilter: [],
         departmentCodesFilter: [],
         jobsFilter: [],
@@ -595,6 +610,7 @@ export default {
       hideDup,
       hide,
       relanceDate,
+      koStatusFilter,
     ) => {
       try {
         // Convertir du format utilisateur vers le format API pour le stockage
@@ -612,6 +628,7 @@ export default {
           endDateFilter: endDateApi,
           relanceDateFilter: relanceDateApi,
           matchingStatusFilter: matchingStatusFilter,
+          koStatusFilter: koStatusFilter || [],
           actorsFilter: actors,
           departmentCodesFilter: departmentCodes,
           jobsFilter: jobs,
@@ -646,7 +663,17 @@ export default {
         formatDate(defaultStartDate, userDateFormat),
     );
     const matchingStatusFilter = ref(loadedFilters.matchingStatusFilter);
+    const koStatusFilter = ref(loadedFilters.koStatusFilter || []);
     const actorsFilter = ref(loadedFilters.actorsFilter);
+    const koStatusOptions = computed(() =>
+      (props.koOptions || []).map((option) => ({
+        id: option?.id,
+        label:
+          typeof option?.label === 'string'
+            ? option.label
+            : option?.label?.title || option?.title || '',
+      })),
+    );
     const departmentCodesFilter = ref(loadedFilters.departmentCodesFilter);
     const jobsFilter = ref(loadedFilters.jobsFilter);
     const courseOnly = ref(loadedFilters.courseOnly);
@@ -880,6 +907,10 @@ export default {
         label: 'Partenaire - Autres matchings',
         key: 'otherActors',
       },
+      {
+        label: 'Motif du KO',
+        key: 'koStatuses',
+      },
     ];
 
     const EXPORT_TABLE_HEADERS = [
@@ -1055,6 +1086,10 @@ export default {
         label: 'Commentaire',
         key: 'comment',
       },
+      {
+        label: 'Motif du KO',
+        key: 'koStatuses',
+      },
     ];
 
     const tableHeaders = ref([...ALL_TABLE_HEADERS]);
@@ -1072,6 +1107,7 @@ export default {
       'matchingState',
       'matchingStatus',
       'otherActors',
+      'koStatuses',
     ];
 
     const CONDITIONAL_COLUMNS = {
@@ -1142,6 +1178,20 @@ export default {
         }
         return jobs ?? '';
       }
+      if (headerKey === 'koStatuses') {
+        const koStatuses = item.koStatuses;
+        if (!Array.isArray(koStatuses) || koStatuses.length === 0) {
+          return '';
+        }
+        return koStatuses
+          .map((status) =>
+            status && typeof status === 'object'
+              ? status.title ?? status.label ?? ''
+              : status,
+          )
+          .filter(Boolean)
+          .join(' - ');
+      }
       return item[headerKey];
     };
 
@@ -1180,6 +1230,7 @@ export default {
       timeSlot: asLabel(profile.timeSlot),
       complement: profile.complement,
       callBackDate: profile.callBackDate,
+      koStatuses: profile.koStatuses,
     });
 
     const refreshTablePage = () => {
@@ -1475,6 +1526,11 @@ export default {
       );
     });
 
+    const isKoSelected = computed(() => {
+      const selectedMatchingStatuses = matchingStatusFilter.value || [];
+      return selectedMatchingStatuses.some((status) => status?.label === 'KO');
+    });
+
     const getDefaultRelanceDate = () => {
       const defaultRelanceDate = new Date();
       defaultRelanceDate.setDate(defaultRelanceDate.getDate() - 2);
@@ -1517,6 +1573,10 @@ export default {
           parseDate(relanceDateFilter.value, userDateFormat),
           'yyyy-MM-dd',
         );
+      }
+
+      if (isKoSelected.value && koStatusFilter.value?.length) {
+        params.koStatusIds = koStatusFilter.value.map((status) => status.id);
       }
 
       return params;
@@ -1593,6 +1653,7 @@ export default {
         hideDuplicates.value,
         hideTests.value,
         relanceDateFilter.value,
+        koStatusFilter.value,
       );
       fetchData();
     };
@@ -1605,6 +1666,7 @@ export default {
       endDateFilter.value = formatDate(defaultEndDate, userDateFormat);
       relanceDateFilter.value = getDefaultRelanceDate();
       matchingStatusFilter.value = [];
+      koStatusFilter.value = [];
       actorsFilter.value = [];
       departmentCodesFilter.value = [];
       jobsFilter.value = [];
@@ -1624,6 +1686,7 @@ export default {
         hideDuplicates.value,
         hideTests.value,
         relanceDateFilter.value,
+        koStatusFilter.value,
       );
       if (jobAutocomplete.value) {
         jobAutocomplete.value.reset();
@@ -1745,6 +1808,7 @@ export default {
         hideDuplicates.value,
         hideTests.value,
         relanceDateFilter.value,
+        koStatusFilter.value,
       );
     };
 
@@ -1755,6 +1819,7 @@ export default {
         endDateFilter,
         relanceDateFilter,
         matchingStatusFilter,
+        koStatusFilter,
         actorsFilter,
         departmentCodesFilter,
         jobsFilter,
@@ -1774,6 +1839,7 @@ export default {
           hideDuplicates.value,
           hideTests.value,
           relanceDateFilter.value,
+          koStatusFilter.value,
         );
       },
     );
@@ -1782,6 +1848,12 @@ export default {
     watch(isARelancerSelected, (isSelected) => {
       if (isSelected && !relanceDateFilter.value) {
         relanceDateFilter.value = getDefaultRelanceDate();
+      }
+    });
+
+    watch(isKoSelected, (isSelected) => {
+      if (!isSelected) {
+        koStatusFilter.value = [];
       }
     });
 
@@ -1858,6 +1930,9 @@ export default {
       relanceDateFilter,
       matchingStatusFilter,
       isARelancerSelected,
+      isKoSelected,
+      koStatusFilter,
+      koStatusOptions,
       actorsFilter,
       departmentCodesFilter,
       jobsFilter,
@@ -1930,6 +2005,7 @@ export default {
         this.hideDuplicates,
         this.hideTests,
         this.relanceDateFilter,
+        this.koStatusFilter,
       );
       navigate(`/${window.appGlobal.theme}/admin/viewLeads/{id}`, {
         id: leadId,

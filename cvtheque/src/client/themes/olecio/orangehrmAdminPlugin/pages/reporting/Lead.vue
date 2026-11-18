@@ -10,6 +10,7 @@
     :all-study-levels="allStudyLevels"
     :actor-study-levels="actorStudyLevels"
     :lead-select-options="leadSelectOptions"
+    :ko-options="koOptions"
     @update="onLeadUpdate"
   ></lead-profile>
 </template>
@@ -53,6 +54,10 @@ export default {
     actorStudyLevels: {
       type: Array,
       required: true,
+    },
+    koOptions: {
+      type: Array,
+      default: () => [],
     },
   },
   setup() {

@@ -117,6 +117,45 @@ class CustomColumnsController extends AbstractVueController
         }
     }
 
+    public function deleteKoStatusColumn()
+    {
+        try {
+            $this->deleteActorKoStatusColumn($this->getAuthUser()->getUserHedwigeToken());
+            return new Response(
+                null,
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            $body = json_decode($e->getResponse()->getBody()->getContents());
+            return new Response(
+                json_encode(['error' => $body->message ?? $e->getMessage()]),
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
+    public function updateKoStatuses(Request $request)
+    {
+        try {
+            $koStatuses = json_decode($request->getContent(), true) ?? [];
+            $this->updateActorKoStatuses($koStatuses, $this->getAuthUser()->getUserHedwigeToken());
+            return new Response(
+                null,
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (ClientException $e) {
+            $body = json_decode($e->getResponse()->getBody()->getContents());
+            return new Response(
+                json_encode(['error' => $body->message ?? $e->getMessage()]),
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+    }
+
     public function update(Request $request)
     {
         try {
@@ -125,7 +164,7 @@ class CustomColumnsController extends AbstractVueController
             $hasFilter = array_key_exists('hasFilter', $data) ? (bool) $data['hasFilter'] : null;
             $allowExternalSet = array_key_exists('allowExternalSet', $data) ? (bool) $data['allowExternalSet'] : null;
 
-            $this->updateCustomColumn($id, $hasFilter, $allowExternalSet, $this->getAuthUser()->getUserHedwigeToken());
+            $this->updateCustomColumn($id, $hasFilter, $allowExternalSet, $data, $this->getAuthUser()->getUserHedwigeToken());
 
             return new Response(
                 null,
@@ -198,7 +237,33 @@ class CustomColumnsController extends AbstractVueController
         ]);
     }
 
-    private function updateCustomColumn(int $id, ?bool $hasFilter, ?bool $allowExternalSet, string $token): void
+    private function deleteActorKoStatusColumn(string $token): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/actor/ko-status";
+        $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ],
+        ]);
+    }
+
+    private function updateActorKoStatuses(array $koStatuses, string $token): void
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/actor/ko-statuses";
+        $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode($koStatuses),
+        ]);
+    }
+
+    private function updateCustomColumn(int $id, ?bool $hasFilter, ?bool $allowExternalSet, array $data, string $token): void
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -216,8 +281,10 @@ class CustomColumnsController extends AbstractVueController
         $client->request('PUT', $url, [
             'headers' => [
                 'Authorization' => $token,
+                'Content-Type' => 'application/json',
             ],
             'query' => $query,
+            'body' => json_encode($data),
         ]);
     }
 }

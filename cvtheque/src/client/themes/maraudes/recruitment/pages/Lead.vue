@@ -7,6 +7,7 @@
     :custom-columns="customColumns"
     :contact-log-types="contactLogTypes"
     :scope-options="scopeOptions"
+    :ko-options="koOptions"
     @update="onLeadUpdate"
   ></lead-profile>
 </template>
@@ -39,6 +40,10 @@ export default {
       default: () => [],
     },
     scopeOptions: {
+      type: Array,
+      default: () => [],
+    },
+    koOptions: {
       type: Array,
       default: () => [],
     },

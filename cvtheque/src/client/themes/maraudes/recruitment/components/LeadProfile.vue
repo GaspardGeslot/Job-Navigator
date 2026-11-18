@@ -559,6 +559,28 @@
           </div>
         </oxd-form-row>
 
+        <oxd-form-row v-if="!isCreateMode && defaultColumns.ko">
+          <oxd-divider></oxd-divider>
+          <oxd-grid :cols="3" class="orangehrm-full-width-grid">
+            <oxd-grid-item>
+              <oxd-text class="orangehrm-input-title" tag="h6">
+                {{ $t('KO') }}
+              </oxd-text>
+              <oxd-switch-input v-model="profile.ko" :disabled="!editable" />
+            </oxd-grid-item>
+            <oxd-grid-item v-show="profile.ko === true">
+              <oxd-input-field
+                v-model="profile.koStatuses"
+                type="multiselect"
+                :label="$t('Motif du KO')"
+                :options="koStatusOptions"
+                :multiple="true"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
+          </oxd-grid>
+        </oxd-form-row>
+
         <oxd-form-row v-if="scopeOptions.length > 0">
           <oxd-divider></oxd-divider>
           <div class="orangehrm-telephone-contacts-header">
@@ -801,6 +823,8 @@ const LeadProfileModel = {
   telephoneContacts: [],
   customColumns: [],
   callBackDate: null,
+  ko: false,
+  koStatuses: [],
 };
 
 const TelephoneContactModel = {
@@ -869,6 +893,10 @@ export default {
       }),
     },
     ofOptions: {
+      type: Array,
+      default: () => [],
+    },
+    koOptions: {
       type: Array,
       default: () => [],
     },
@@ -1052,6 +1080,15 @@ export default {
     canAddScope() {
       return !this.isAddingScope && this.availableScopeOptions.length > 0;
     },
+    koStatusOptions() {
+      return (this.koOptions || []).map((option) => ({
+        id: option?.id,
+        label:
+          typeof option?.label === 'string'
+            ? option.label
+            : option?.label?.title || option?.title || '',
+      }));
+    },
   },
   watch: {
     lead() {
@@ -1104,6 +1141,15 @@ export default {
               : null,
         }));
       }
+
+      dataToSend.ko = dataToSend.ko === true;
+      dataToSend.koStatuses =
+        dataToSend.ko && Array.isArray(this.profile.koStatuses)
+          ? this.profile.koStatuses.map((status) => ({
+              id: status.id,
+              title: status.label || status.title || null,
+            }))
+          : [];
 
       this.http
         .request({
@@ -1390,6 +1436,15 @@ export default {
         : [];
       this.profile.customColumns = this.lead.customColumns || [];
       this.profile.callBackDate = this.lead.callBackDate || null;
+      // Côté actor/maraudes, l'API peut renvoyer ko: null → on force un booléen
+      // pour toujours afficher le switch (olecio reçoit déjà true/false).
+      this.profile.ko = this.lead.ko === true;
+      this.profile.koStatuses = Array.isArray(this.lead.koStatuses)
+        ? this.lead.koStatuses.map((status) => ({
+            id: status.id,
+            label: status.title || status.label || '',
+          }))
+        : [];
       this.leadScopes = Array.isArray(this.lead.matchingShorts)
         ? this.lead.matchingShorts.map((matching) => ({
             id: matching.id,

@@ -20,6 +20,7 @@ class LeadsController extends AbstractVueController
     public const FILTER_TO_DATE = 'to';
     public const FILTER_RELANCE_DATE = 'relanceDate';
     public const FILTER_MATCHING_STATUS = 'matchingStatuses';
+    public const FILTER_KO_STATUS_IDS = 'koStatusIds';
     public const FILTER_ACTORS = 'actors';
     public const FILTER_DEPARTMENT_CODES = 'departmentCodes';
     public const FILTER_JOBS = 'jobs';
@@ -81,6 +82,9 @@ class LeadsController extends AbstractVueController
                 ];
             }, array_keys($contactLogOptions), $contactLogOptions)));
 
+            $koOptions = $this->getHedwigeKoOptions($token);
+            $component->addProp(new Prop('ko-options', Prop::TYPE_ARRAY, $this->mapKoOptionsForProp($koOptions)));
+
             $reportingColumns = $this->getReportingColumns($token, $actor);
 
             if (!empty($reportingColumns))
@@ -91,7 +95,10 @@ class LeadsController extends AbstractVueController
             
             $actorOptions = $this->getHedwigeActorOptions($this->getAuthUser()->getUserHedwigeToken());
             $matchingStatusFilterOptions = $this->getHedwigeMatchingStatusFilterOptions($this->getAuthUser()->getUserHedwigeToken());
-            $departmentCodeOptions = $this->getHedwigeDepartmentCodeOptions($this->getAuthUser()->getUserHedwigeToken());	
+            $departmentCodeOptions = $this->getHedwigeDepartmentCodeOptions($this->getAuthUser()->getUserHedwigeToken());
+            $koOptions = $this->getHedwigeKoOptions($this->getAuthUser()->getUserHedwigeToken());
+
+            $component->addProp(new Prop('ko-options', Prop::TYPE_ARRAY, $this->mapKoOptionsForProp($koOptions)));
 
             $component->addProp(new Prop('actors', Prop::TYPE_ARRAY, array_map(function($label, $index) {
                 return [
@@ -124,6 +131,7 @@ class LeadsController extends AbstractVueController
         $to = $request->query->get(self::FILTER_TO_DATE);
         $relanceDate = $request->query->get(self::FILTER_RELANCE_DATE);
         $matchingStatus = $request->query->get(self::FILTER_MATCHING_STATUS);
+        $koStatusIds = $request->query->get(self::FILTER_KO_STATUS_IDS);
         $actors = $request->query->get(self::FILTER_ACTORS);
         $departmentCodes = $request->query->get(self::FILTER_DEPARTMENT_CODES);
         $jobs = $request->query->get(self::FILTER_JOBS);
@@ -139,7 +147,7 @@ class LeadsController extends AbstractVueController
         if ($hideTests !== null) {
             $hideTests = filter_var($hideTests, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
-        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideDuplicates, $hideTests, $departmentCodes, $relanceDate);
+        $leads = $this->getLeads($this->getAuthUser()->getUserHedwigeToken(), $from, $to, $matchingStatus, $actors, $jobs, $courseOnly, $hideDuplicates, $hideTests, $departmentCodes, $relanceDate, $koStatusIds);
         return new Response(
             json_encode($leads),
             Response::HTTP_OK,
@@ -680,7 +688,7 @@ class LeadsController extends AbstractVueController
         }
     }
 
-    public function getLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideDuplicates, ?bool $hideTests, ?array $departmentCodes, ?string $relanceDate = null): array
+    public function getLeads(string $token, string $from, string $to, ?array $matchingStatus, ?array $actors, ?array $jobs, ?bool $courseOnly, ?bool $hideDuplicates, ?bool $hideTests, ?array $departmentCodes, ?string $relanceDate = null, ?array $koStatusIds = null): array
     {
         $client = new Client();
         $clientBaseUrl = getenv('HEDWIGE_URL');
@@ -695,6 +703,9 @@ class LeadsController extends AbstractVueController
                 $url .= 'relanceDate=' . urlencode($relanceDate) . '&';
             if ($matchingStatus != null && $matchingStatus !== [])
                 $url .= 'matchingStatuses=' . urlencode(implode(',', $matchingStatus)) . '&';
+            if ($koStatusIds != null && $koStatusIds !== [])
+                $url .= 'koStatusIds=' . urlencode(implode(',', $koStatusIds)) . '&';
+
             if ($actors != null && $actors !== [])
                 $url .= 'actors=' . urlencode(implode(',', $actors)) . '&';
             if ($jobs != null && $jobs !== [])
@@ -772,7 +783,7 @@ class LeadsController extends AbstractVueController
                 'Authorization' => $token,
             ]
         ]);
-        return json_decode($response->getBody(), true);
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function getHedwigeOptions(string $token, ?string $actor = null): array
@@ -835,6 +846,29 @@ class LeadsController extends AbstractVueController
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function getHedwigeKoOptions(string $token): array
+    {
+        $client = new Client();
+        $clientBaseUrl = getenv('HEDWIGE_URL');
+        $url = "{$clientBaseUrl}/client/ko-status/default";
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => $token,
+            ]
+        ]);
+        return json_decode($response->getBody(), true) ?? [];
+    }
+
+    private function mapKoOptionsForProp($koOptions): array
+    {
+        return array_map(function ($option) {
+            return [
+                'id' => is_array($option) ? ($option['id'] ?? null) : null,
+                'label' => is_array($option) ? ($option['title'] ?? '') : (string) $option,
+            ];
+        }, is_array($koOptions) ? $koOptions : []);
     }
 
     public function getHedwigeMatchingStatusFilterOptions(string $token): array

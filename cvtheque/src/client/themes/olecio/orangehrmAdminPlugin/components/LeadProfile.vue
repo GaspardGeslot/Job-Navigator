@@ -424,6 +424,16 @@
               </oxd-text>
               <oxd-switch-input v-model="profile.ko" :disabled="!editable" />
             </oxd-grid-item>
+            <oxd-grid-item v-show="profile.ko === true">
+              <oxd-input-field
+                v-model="profile.koStatuses"
+                type="multiselect"
+                :label="$t('Motif du KO')"
+                :options="koStatusOptions"
+                :multiple="true"
+                :disabled="!editable"
+              />
+            </oxd-grid-item>
           </oxd-grid>
           <oxd-grid
             v-if="profile.matching"
@@ -750,6 +760,7 @@ const LeadProfileModel = {
   assignee: null,
   rqth: null,
   ko: null,
+  koStatuses: [],
 };
 
 const TelephoneContactModel = {
@@ -822,9 +833,14 @@ export default {
         professionalExperiences: [],
       }),
     },
+    koOptions: {
+      type: Array,
+      default: () => [],
+    },
   },
   emits: ['update'],
-  setup() {
+  setup(props) {
+    console.log('props', props);
     const http = new APIService(window.appGlobal.baseUrl, '/');
     const noContentPic = `${window.appGlobal.publicPath}/images/empty-box.png`;
     const {jsDateFormat} = useDateFormat();
@@ -1021,6 +1037,15 @@ export default {
         return labelA.localeCompare(labelB);
       });
     },
+    koStatusOptions() {
+      return (this.koOptions || []).map((option) => ({
+        id: option?.id,
+        label:
+          typeof option?.label === 'string'
+            ? option.label
+            : option?.label?.title || option?.title || '',
+      }));
+    },
     formattedTelephoneContacts() {
       if (
         !this.profile.telephoneContacts ||
@@ -1128,6 +1153,14 @@ export default {
         }
       });
 
+      dataToSend.koStatuses =
+        dataToSend.ko === true && Array.isArray(this.profile.koStatuses)
+          ? this.profile.koStatuses.map((status) => ({
+              id: status.id,
+              title: status.label || status.title || null,
+            }))
+          : [];
+
       this.http
         .request({
           method: 'PUT',
@@ -1206,6 +1239,12 @@ export default {
       this.profile.apiMessage = this.lead.apiMessage;
       this.profile.manualDelivery = this.lead.manualDelivery;
       this.profile.ko = this.lead.ko;
+      this.profile.koStatuses = Array.isArray(this.lead.koStatuses)
+        ? this.lead.koStatuses.map((status) => ({
+            id: status.id,
+            label: status.title || status.label || '',
+          }))
+        : [];
       this.profile.telephoneContacts = this.lead.telephoneContacts
         ? [...this.lead.telephoneContacts].sort((a, b) => {
             // Trier par date (du plus ancien au plus récent)
